@@ -46,7 +46,7 @@ function App() {
     }
   };
 
-  return <>{renderPage()}</>;
+  return renderPage();
 }
 
 export default App;
