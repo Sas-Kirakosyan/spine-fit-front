@@ -61,7 +61,7 @@ export function Registration({
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email) === false) {
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Please enter a valid email";
     }
 
@@ -101,7 +101,7 @@ export function Registration({
       if (onNavigateToGeneral) {
         onNavigateToGeneral();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Google registration error:", error);
     }
   };
