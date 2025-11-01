@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "email": "user@mail.com",
+  "gender": "male",
+  "training_experience": "beginner",
+  "training_frequency": 3,
+  "back_assessments": [],
+  "created_at": "2025-10-26T10:00:00Z"
+}

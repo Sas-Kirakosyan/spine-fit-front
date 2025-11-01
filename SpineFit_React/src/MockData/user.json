@@ -1,0 +1,40 @@
+{
+  "id": 1,
+  "email": "user@mail.com",
+  "first_name": "Alex",
+  "last_name": "Smith",
+  "date_of_birth": "1992-08-14T00:00:00Z",
+  "gender": "male",
+  "height": 180.5,
+  "current_weight": 82.4,
+  "goal_weight": 78.0,
+  "body_fat_percent": 17.2,
+  "training_experience": "intermediate",
+  "training_frequency": 4,
+  "back_assessments": [
+    {
+      "id": 5,
+      "user_id": 1,
+      "back_pain_type": "l5_s1",
+      "pain_level": 6,
+      "pain_point": "spine",
+      "triggers": ["squats", "deadlifts", "long_sitting"],
+      "can_squat_pain_free": false,
+      "is_active": true,
+      "created_at": "2025-10-25T13:12:00Z",
+      "updated_at": "2025-10-26T09:05:00Z"
+    }
+  ],
+  "workout_plans": [
+    {
+      "id": 12,
+      "user_id": 1,
+      "name": "Lower-Back Safe 4-Day Split",
+      "is_active": true,
+      "created_at": "2025-10-25T13:15:00Z",
+      "updated_at": "2025-10-26T09:10:00Z"
+    }
+  ],
+  "created_at": "2025-10-25T12:00:00Z",
+  "updated_at": "2025-10-26T09:00:00Z"
+}
