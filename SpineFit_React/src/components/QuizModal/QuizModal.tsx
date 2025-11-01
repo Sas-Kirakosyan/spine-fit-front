@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import userData from "../../MockData/user.json";
 
 interface QuizQuestion {
   id: number;
@@ -34,7 +33,6 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
     "bending",
     "lifting",
   ];
-  const userTriggers = userData.back_assessments[0]?.triggers || [];
 
   const questions: QuizQuestion[] = [
     {
@@ -150,8 +148,9 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
 
   const handleInputChange = (value: string) => {
     const question = questions[currentQuestion];
+    // For pain level question (id 10), limit to max 10
     if (
-      question.id === 9 &&
+      question.id === 10 &&
       question.type === "input" &&
       question.inputType === "number"
     ) {
@@ -429,14 +428,14 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-lg"
                   min={
                     questions[currentQuestion].inputType === "number"
-                      ? questions[currentQuestion].id === 9
+                      ? questions[currentQuestion].id === 10
                         ? 0
                         : undefined
                       : undefined
                   }
                   max={
                     questions[currentQuestion].inputType === "number"
-                      ? questions[currentQuestion].id === 9
+                      ? questions[currentQuestion].id === 10
                         ? 10
                         : undefined
                       : undefined
