@@ -15,9 +15,15 @@ interface QuizModalProps {
   isOpen: boolean;
   onClose: () => void;
   workoutType: "home" | "gym";
+  onQuizComplete?: () => void;
 }
 
-export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
+export function QuizModal({
+  isOpen,
+  onClose,
+  workoutType,
+  onQuizComplete,
+}: QuizModalProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<number[]>([]);
@@ -311,6 +317,9 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
       setHeightUnit("cm");
       setWeightUnit("kg");
       onClose();
+      if (onQuizComplete) {
+        onQuizComplete();
+      }
     }
   };
 
@@ -361,6 +370,9 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
       setHeightUnit("cm");
       setWeightUnit("kg");
       onClose();
+      if (onQuizComplete) {
+        onQuizComplete();
+      }
     }
   };
 

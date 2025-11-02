@@ -5,11 +5,13 @@ import muscleIcon from "../../assets/muscle.png";
 interface HomePageProps {
   onNavigateToLogin: () => void;
   onNavigateToRegister: () => void;
+  onNavigateToWorkout: () => void;
 }
 
 export function HomePage({
   onNavigateToLogin,
   onNavigateToRegister,
+  onNavigateToWorkout,
 }: HomePageProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [workoutType, setWorkoutType] = useState<"home" | "gym">("home");
@@ -144,6 +146,7 @@ export function HomePage({
         isOpen={isQuizOpen}
         onClose={handleCloseQuiz}
         workoutType={workoutType}
+        onQuizComplete={onNavigateToWorkout}
       />
     </div>
   );

@@ -4,8 +4,9 @@ import { HomePage } from "./components/HomePage/HomePage";
 import { Registration } from "./components/RegistrationForm/Registration";
 import { Login } from "./components/LoginForm/Login";
 import { GeneralPage } from "./components/GeneralPage/GeneralPage";
+import { WorkoutPage } from "./components/WorkoutPage/WorkoutPage";
 
-type Page = "home" | "login" | "register" | "general";
+type Page = "home" | "login" | "register" | "general" | "workout";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
@@ -14,7 +15,6 @@ function App() {
     return savedPage || "home";
   });
 
-  // Сохраняем текущую страницу в localStorage при каждом изменении
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
   }, [currentPage]);
@@ -23,6 +23,7 @@ function App() {
   const navigateToLogin = () => setCurrentPage("login");
   const navigateToRegister = () => setCurrentPage("register");
   const navigateToGeneral = () => setCurrentPage("general");
+  const navigateToWorkout = () => setCurrentPage("workout");
 
   const renderPage = () => {
     switch (currentPage) {
@@ -31,6 +32,7 @@ function App() {
           <HomePage
             onNavigateToLogin={navigateToLogin}
             onNavigateToRegister={navigateToRegister}
+            onNavigateToWorkout={navigateToWorkout}
           />
         );
       case "login":
@@ -51,11 +53,14 @@ function App() {
         );
       case "general":
         return <GeneralPage onLogout={navigateToHome} />;
+      case "workout":
+        return <WorkoutPage onNavigateToHome={navigateToHome} />;
       default:
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
             onNavigateToRegister={navigateToRegister}
+            onNavigateToWorkout={navigateToWorkout}
           />
         );
     }
