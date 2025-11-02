@@ -84,7 +84,7 @@ export function HomePage({
                 those who prefer to exercise in a comfortable environment.
               </p>
               <div className="flex items-center text-blue-600 font-semibold group-hover:text-blue-700">
-                Start quiz
+                Let’s personalize your plan
                 <svg
                   className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
                   fill="none"
@@ -120,7 +120,7 @@ export function HomePage({
                 achieve maximum results.
               </p>
               <div className="flex items-center text-blue-600 font-semibold">
-                Start quiz
+                Let’s personalize your plan
                 <svg
                   className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
                   fill="none"

@@ -8,6 +8,7 @@ interface QuizQuestion {
   correctAnswer?: number | number[] | string | number;
   inputType?: "number" | "text";
   placeholder?: string;
+  optional?: boolean;
 }
 
 interface QuizModalProps {
@@ -21,8 +22,13 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<number[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
+  const [heightUnit, setHeightUnit] = useState<"cm" | "ft">("cm");
+  const [weightUnit, setWeightUnit] = useState<"kg" | "lbs">("kg");
   const [answers, setAnswers] = useState<
     Record<number, number | number[] | string>
+  >({});
+  const [units, setUnits] = useState<
+    Record<number, "cm" | "ft" | "kg" | "lbs">
   >({});
 
   const allTriggers = [
@@ -37,7 +43,7 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
   const questions: QuizQuestion[] = [
     {
       id: 1,
-      question: "What is your gender?",
+      question: "What’s your gender?",
       type: "radio",
       options: ["Male", "Female", "Other"],
     },
@@ -50,31 +56,33 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
     },
     {
       id: 3,
-      question: "What is your height?",
+      question: "What’s your height?",
       type: "input",
       inputType: "number",
       placeholder: "Enter height in cm",
     },
     {
       id: 4,
-      question: "What is your current weight?",
+      question: "What’s your current weight?",
       type: "input",
       inputType: "number",
       placeholder: "Enter weight in kg",
     },
     {
       id: 5,
-      question: "What is your weight goal?",
+      question: "What's your weight goal?",
       type: "input",
       inputType: "number",
       placeholder: "Enter weight goal in kg",
+      optional: true,
     },
     {
       id: 6,
-      question: "What is your body fat percent?",
+      question: "What's your body fat percent?",
       type: "input",
       inputType: "number",
       placeholder: "Enter body fat percent",
+      optional: true,
     },
     {
       id: 7,
@@ -91,13 +99,13 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
     },
     {
       id: 9,
-      question: "What is your pain point?",
+      question: "What’s your pain point?",
       type: "checkbox",
       options: ["Spine", "Back", "Legs", "Shoulders", "Other"],
     },
     {
       id: 10,
-      question: "What is your pain level?",
+      question: "What’s your pain level?",
       type: "input",
       inputType: "number",
       placeholder: "Enter pain level (0-10)",
@@ -168,6 +176,10 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
 
   const isAnswerValid = () => {
     const question = questions[currentQuestion];
+    // Optional questions can be skipped, so empty answer is valid
+    if (question.optional) {
+      return true;
+    }
     if (question.type === "radio") {
       return selectedAnswer !== null;
     } else if (question.type === "checkbox") {
@@ -181,6 +193,7 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
   const loadAnswerForQuestion = (questionIndex: number) => {
     const question = questions[questionIndex];
     const savedAnswer = answers[question.id];
+    const savedUnit = units[question.id];
 
     if (question.type === "radio") {
       setSelectedAnswer(
@@ -198,6 +211,13 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
       setInputValue(savedAnswer !== undefined ? String(savedAnswer) : "");
       setSelectedAnswer(null);
       setSelectedCheckboxes([]);
+
+      // Load units for height and weight questions
+      if (question.id === 3) {
+        setHeightUnit(savedUnit === "ft" ? "ft" : "cm");
+      } else if (question.id === 4 || question.id === 5) {
+        setWeightUnit(savedUnit === "lbs" ? "lbs" : "kg");
+      }
     }
   };
 
@@ -211,6 +231,19 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
       answerValue = selectedCheckboxes;
     } else {
       answerValue = inputValue;
+
+      // Save units for height and weight questions
+      if (question.id === 3) {
+        setUnits((prev) => ({
+          ...prev,
+          [question.id]: heightUnit,
+        }));
+      } else if (question.id === 4 || question.id === 5) {
+        setUnits((prev) => ({
+          ...prev,
+          [question.id]: weightUnit,
+        }));
+      }
     }
 
     setAnswers((prev) => ({
@@ -240,27 +273,26 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
     }
   };
 
-  const handleSubmit = () => {
-    if (isAnswerValid()) {
-      const question = questions[currentQuestion];
-      let currentAnswerValue: number | number[] | string;
+  const handleSkip = () => {
+    const question = questions[currentQuestion];
+    // Save empty answer for optional question
+    const updatedAnswers = {
+      ...answers,
+      [question.id]: "",
+    };
+    setAnswers(updatedAnswers);
 
-      if (question.type === "radio") {
-        currentAnswerValue = selectedAnswer!;
-      } else if (question.type === "checkbox") {
-        currentAnswerValue = selectedCheckboxes;
-      } else {
-        currentAnswerValue = inputValue;
-      }
-
-      const allAnswers = {
-        ...answers,
-        [question.id]: currentAnswerValue,
-      };
-
+    // Move to next question
+    if (currentQuestion < questions.length - 1) {
+      const nextQuestion = currentQuestion + 1;
+      setCurrentQuestion(nextQuestion);
+      setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
+    } else {
+      const finalUnits = { ...units };
       const quizData = {
         workoutType,
-        answers: allAnswers,
+        answers: updatedAnswers,
+        units: finalUnits,
         timestamp: new Date().toISOString(),
       };
 
@@ -275,6 +307,59 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
       setSelectedCheckboxes([]);
       setInputValue("");
       setAnswers({});
+      setUnits({});
+      setHeightUnit("cm");
+      setWeightUnit("kg");
+      onClose();
+    }
+  };
+
+  const handleSubmit = () => {
+    if (isAnswerValid()) {
+      const question = questions[currentQuestion];
+      let currentAnswerValue: number | number[] | string;
+      let finalUnits = { ...units };
+
+      if (question.type === "radio") {
+        currentAnswerValue = selectedAnswer!;
+      } else if (question.type === "checkbox") {
+        currentAnswerValue = selectedCheckboxes;
+      } else {
+        currentAnswerValue = inputValue;
+
+        if (question.id === 3) {
+          finalUnits[question.id] = heightUnit;
+        } else if (question.id === 4 || question.id === 5) {
+          finalUnits[question.id] = weightUnit;
+        }
+      }
+
+      const allAnswers = {
+        ...answers,
+        [question.id]: currentAnswerValue,
+      };
+
+      const quizData = {
+        workoutType,
+        answers: allAnswers,
+        units: finalUnits,
+        timestamp: new Date().toISOString(),
+      };
+
+      const savedQuizzes = JSON.parse(
+        localStorage.getItem("quizAnswers") || "[]"
+      );
+      savedQuizzes.push(quizData);
+      localStorage.setItem("quizAnswers", JSON.stringify(savedQuizzes));
+
+      setCurrentQuestion(0);
+      setSelectedAnswer(null);
+      setSelectedCheckboxes([]);
+      setInputValue("");
+      setAnswers({});
+      setUnits({});
+      setHeightUnit("cm");
+      setWeightUnit("kg");
       onClose();
     }
   };
@@ -292,6 +377,9 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
       setSelectedCheckboxes([]);
       setInputValue("");
       setAnswers({});
+      setUnits({});
+      setHeightUnit("cm");
+      setWeightUnit("kg");
     }
   }, [isOpen]);
 
@@ -305,7 +393,9 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-2xl font-bold">
-                {workoutType === "home" ? "Home Workout" : "Gym Workout"}
+                {workoutType === "home"
+                  ? "Personalizing your plan "
+                  : "Personalizing your plan"}
               </h2>
               <p className="text-blue-100 mt-1">
                 Question {currentQuestion + 1} / {questions.length}
@@ -417,42 +507,142 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
 
             {questions[currentQuestion].type === "input" && (
               <div>
-                <input
-                  type={questions[currentQuestion].inputType || "text"}
-                  value={inputValue}
-                  onChange={(e) => handleInputChange(e.target.value)}
-                  placeholder={
-                    questions[currentQuestion].placeholder ||
-                    "Enter your answer"
-                  }
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-lg"
-                  min={
-                    questions[currentQuestion].inputType === "number"
-                      ? questions[currentQuestion].id === 10
-                        ? 0
-                        : undefined
-                      : undefined
-                  }
-                  max={
-                    questions[currentQuestion].inputType === "number"
-                      ? questions[currentQuestion].id === 10
-                        ? 10
-                        : undefined
-                      : undefined
-                  }
-                />
+                {/* Height question (id: 3) - show cm/ft selector */}
+                {questions[currentQuestion].id === 3 && (
+                  <div className="flex gap-3">
+                    <input
+                      type={questions[currentQuestion].inputType || "text"}
+                      value={inputValue}
+                      onChange={(e) => handleInputChange(e.target.value)}
+                      placeholder={
+                        heightUnit === "cm"
+                          ? "Enter height in cm"
+                          : "Enter height in ft"
+                      }
+                      className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-lg"
+                    />
+                    <select
+                      value={heightUnit}
+                      onChange={(e) => {
+                        setHeightUnit(e.target.value as "cm" | "ft");
+                        setUnits((prev) => ({
+                          ...prev,
+                          [questions[currentQuestion].id]: e.target.value as
+                            | "cm"
+                            | "ft",
+                        }));
+                      }}
+                      className="px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-lg bg-white"
+                    >
+                      <option value="cm">cm</option>
+                      <option value="ft">ft</option>
+                    </select>
+                  </div>
+                )}
+
+                {/* Weight questions (id: 4, 5) - show kg/lbs selector */}
+                {(questions[currentQuestion].id === 4 ||
+                  questions[currentQuestion].id === 5) && (
+                  <div className="flex gap-3">
+                    <input
+                      type={questions[currentQuestion].inputType || "text"}
+                      value={inputValue}
+                      onChange={(e) => handleInputChange(e.target.value)}
+                      placeholder={
+                        weightUnit === "kg"
+                          ? questions[currentQuestion].id === 4
+                            ? "Enter weight in kg"
+                            : "Enter weight goal in kg"
+                          : questions[currentQuestion].id === 4
+                          ? "Enter weight in lbs"
+                          : "Enter weight goal in lbs"
+                      }
+                      className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-lg"
+                    />
+                    <select
+                      value={weightUnit}
+                      onChange={(e) => {
+                        setWeightUnit(e.target.value as "kg" | "lbs");
+                        setUnits((prev) => ({
+                          ...prev,
+                          [questions[currentQuestion].id]: e.target.value as
+                            | "kg"
+                            | "lbs",
+                        }));
+                      }}
+                      className="px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-lg bg-white"
+                    >
+                      <option value="kg">kg</option>
+                      <option value="lbs">lbs</option>
+                    </select>
+                  </div>
+                )}
+
+                {/* Body fat percent question (id: 6) - show % sign */}
+                {questions[currentQuestion].id === 6 && (
+                  <div className="flex gap-3">
+                    <input
+                      type={questions[currentQuestion].inputType || "text"}
+                      value={inputValue}
+                      onChange={(e) => handleInputChange(e.target.value)}
+                      placeholder={
+                        questions[currentQuestion].placeholder ||
+                        "Enter your answer"
+                      }
+                      className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-lg"
+                    />
+                    <div className="px-4 py-3 border-2 border-gray-300 rounded-lg bg-gray-50 text-gray-700 text-lg font-medium flex items-center">
+                      %
+                    </div>
+                  </div>
+                )}
+
+                {/* Other input questions without unit selector */}
+                {questions[currentQuestion].id !== 3 &&
+                  questions[currentQuestion].id !== 4 &&
+                  questions[currentQuestion].id !== 5 &&
+                  questions[currentQuestion].id !== 6 && (
+                    <input
+                      type={questions[currentQuestion].inputType || "text"}
+                      value={inputValue}
+                      onChange={(e) => handleInputChange(e.target.value)}
+                      placeholder={
+                        questions[currentQuestion].placeholder ||
+                        "Enter your answer"
+                      }
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-lg"
+                      min={
+                        questions[currentQuestion].inputType === "number"
+                          ? questions[currentQuestion].id === 10
+                            ? 0
+                            : undefined
+                          : undefined
+                      }
+                      max={
+                        questions[currentQuestion].inputType === "number"
+                          ? questions[currentQuestion].id === 10
+                            ? 10
+                            : undefined
+                          : undefined
+                      }
+                    />
+                  )}
               </div>
             )}
           </div>
 
           {/* Navigation */}
           <div className="flex justify-between mt-6">
-            <button
-              onClick={onClose}
-              className="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              Cancel
-            </button>
+            {questions[currentQuestion].optional ? (
+              <button
+                onClick={handleSkip}
+                className="px-6 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Skip
+              </button>
+            ) : (
+              <div></div>
+            )}
             <div className="flex gap-3">
               {currentQuestion > 0 && (
                 <button
@@ -484,7 +674,7 @@ export function QuizModal({ isOpen, onClose, workoutType }: QuizModalProps) {
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
-                  Submit
+                  Finish
                 </button>
               )}
             </div>
