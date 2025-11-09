@@ -3,16 +3,23 @@ import "./App.css";
 import { HomePage } from "./components/HomePage/HomePage";
 import { Registration } from "./components/RegistrationForm/Registration";
 import { Login } from "./components/LoginForm/Login";
-import { GeneralPage } from "./components/GeneralPage/GeneralPage";
 import { WorkoutPage } from "./components/WorkoutPage/WorkoutPage";
 
-type Page = "home" | "login" | "register" | "general" | "workout";
+type Page = "home" | "login" | "register" | "workout";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     // Восстанавливаем страницу из localStorage при инициализации
-    const savedPage = localStorage.getItem("currentPage") as Page;
-    return savedPage || "home";
+    const savedPage = localStorage.getItem("currentPage");
+    if (
+      savedPage === "home" ||
+      savedPage === "login" ||
+      savedPage === "register" ||
+      savedPage === "workout"
+    ) {
+      return savedPage;
+    }
+    return "home";
   });
 
   useEffect(() => {
@@ -22,7 +29,6 @@ function App() {
   const navigateToHome = () => setCurrentPage("home");
   const navigateToLogin = () => setCurrentPage("login");
   const navigateToRegister = () => setCurrentPage("register");
-  const navigateToGeneral = () => setCurrentPage("general");
   const navigateToWorkout = () => setCurrentPage("workout");
 
   const renderPage = () => {
@@ -40,7 +46,7 @@ function App() {
           <Login
             onSwitchToRegister={navigateToRegister}
             onNavigateToHome={navigateToHome}
-            onNavigateToGeneral={navigateToGeneral}
+            onNavigateToWorkout={navigateToWorkout}
           />
         );
       case "register":
@@ -48,11 +54,9 @@ function App() {
           <Registration
             onSwitchToLogin={navigateToLogin}
             onNavigateToHome={navigateToHome}
-            onNavigateToGeneral={navigateToGeneral}
+            onNavigateToWorkout={navigateToWorkout}
           />
         );
-      case "general":
-        return <GeneralPage onLogout={navigateToHome} />;
       case "workout":
         return <WorkoutPage onNavigateToHome={navigateToHome} />;
       default:

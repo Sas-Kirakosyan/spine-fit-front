@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../firebase/config";
 import type { RegistrationFormData } from "../types";
+import { PageContainer } from "../Layout/PageContainer";
 
 interface RegistrationProps {
   onSwitchToLogin?: () => void;
   onNavigateToHome?: () => void;
-  onNavigateToGeneral?: () => void;
+  onNavigateToWorkout?: () => void;
 }
 
 export function Registration({
   onSwitchToLogin,
   onNavigateToHome,
-  onNavigateToGeneral,
+  onNavigateToWorkout,
 }: RegistrationProps) {
   const [formData, setFormData] = useState<RegistrationFormData>({
     username: "",
@@ -86,8 +87,8 @@ export function Registration({
 
     if (validateForm()) {
       console.log("Registration data:", formData);
-      if (onNavigateToGeneral) {
-        onNavigateToGeneral();
+      if (onNavigateToWorkout) {
+        onNavigateToWorkout();
       }
     }
   };
@@ -98,8 +99,8 @@ export function Registration({
       const user = result.user;
 
       console.log("Google registration successful:", user);
-      if (onNavigateToGeneral) {
-        onNavigateToGeneral();
+      if (onNavigateToWorkout) {
+        onNavigateToWorkout();
       }
     } catch (error: unknown) {
       console.error("Google registration error:", error);
@@ -107,46 +108,34 @@ export function Registration({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="bg-white rounded-xl shadow-2xl p-8">
+    <PageContainer contentClassName="justify-between">
+      <div className="flex items-start justify-between">
+        <span className="text-[28px] font-semibold uppercase tracking-[0.3em] text-white">
+          SpineFit
+        </span>
+        {onNavigateToHome && (
+          <button
+            onClick={onNavigateToHome}
+            className="rounded-[14px] bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-white/20"
+          >
+            Home
+          </button>
+        )}
+      </div>
+
+      <div className="mt-8 flex-1 overflow-y-auto">
+        <div className="rounded-[14px] bg-white p-6 shadow-lg backdrop-blur">
           <div className="text-center">
-            <div className="flex justify-between items-center mb-4">
-              {onNavigateToHome && (
-                <button
-                  onClick={onNavigateToHome}
-                  className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                    />
-                  </svg>
-                  Back to Home
-                </button>
-              )}
-              <div className="flex-1"></div>
-            </div>
-            <h2 className="text-3xl font-bold text-blue-700 mb-2">
-              Registration
-            </h2>
-            <p className="text-gray-600">Create your account</p>
+            <h2 className="text-3xl font-bold text-[#0000E7]">Registration</h2>
+            <p className="mt-1 text-gray-900">Create your account</p>
           </div>
 
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="mb-1 block text-sm font-medium text-gray-700"
                 >
                   First Name
                 </label>
@@ -156,13 +145,13 @@ export function Registration({
                   type="text"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
                     errors.firstName ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Enter first name"
                 />
                 {errors.firstName && (
-                  <p className="text-red-500 text-xs mt-1">
+                  <p className="mt-1 text-xs text-red-500">
                     {errors.firstName}
                   </p>
                 )}
@@ -171,7 +160,7 @@ export function Registration({
               <div>
                 <label
                   htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="mb-1 block text-sm font-medium text-gray-700"
                 >
                   Last Name
                 </label>
@@ -181,13 +170,13 @@ export function Registration({
                   type="text"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
                     errors.lastName ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Enter last name"
                 />
                 {errors.lastName && (
-                  <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+                  <p className="mt-1 text-xs text-red-500">{errors.lastName}</p>
                 )}
               </div>
             </div>
@@ -195,7 +184,7 @@ export function Registration({
             <div>
               <label
                 htmlFor="username"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-sm font-medium text-gray-700"
               >
                 Username
               </label>
@@ -205,20 +194,20 @@ export function Registration({
                 type="text"
                 value={formData.username}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
                   errors.username ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter username"
               />
               {errors.username && (
-                <p className="text-red-500 text-xs mt-1">{errors.username}</p>
+                <p className="mt-1 text-xs text-red-500">{errors.username}</p>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-sm font-medium text-gray-700"
               >
                 Email
               </label>
@@ -228,20 +217,20 @@ export function Registration({
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
                   errors.email ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter email"
               />
               {errors.email && (
-                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                <p className="mt-1 text-xs text-red-500">{errors.email}</p>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-sm font-medium text-gray-700"
               >
                 Password
               </label>
@@ -252,7 +241,7 @@ export function Registration({
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full rounded-lg border px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
                     errors.password ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Enter password"
@@ -260,11 +249,11 @@ export function Registration({
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition hover:text-gray-600"
                 >
                   {showPassword ? (
                     <svg
-                      className="w-5 h-5"
+                      className="h-5 w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -278,7 +267,7 @@ export function Registration({
                     </svg>
                   ) : (
                     <svg
-                      className="w-5 h-5"
+                      className="h-5 w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -300,14 +289,14 @@ export function Registration({
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                <p className="mt-1 text-xs text-red-500">{errors.password}</p>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-sm font-medium text-gray-700"
               >
                 Confirm Password
               </label>
@@ -318,7 +307,7 @@ export function Registration({
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full rounded-lg border px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition ${
                     errors.confirmPassword
                       ? "border-red-500"
                       : "border-gray-300"
@@ -328,11 +317,11 @@ export function Registration({
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition hover:text-gray-600"
                 >
                   {showConfirmPassword ? (
                     <svg
-                      className="w-5 h-5"
+                      className="h-5 w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -346,7 +335,7 @@ export function Registration({
                     </svg>
                   ) : (
                     <svg
-                      className="w-5 h-5"
+                      className="h-5 w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -368,7 +357,7 @@ export function Registration({
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p className="text-red-500 text-xs mt-1">
+                <p className="mt-1 text-xs text-red-500">
                   {errors.confirmPassword}
                 </p>
               )}
@@ -377,7 +366,7 @@ export function Registration({
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                className="w-full rounded-lg bg-[#0000E7] py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 Register
               </button>
@@ -385,10 +374,10 @@ export function Registration({
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
+                <span className="bg-white px-2 text-gray-900">
                   Or continue with
                 </span>
               </div>
@@ -398,9 +387,9 @@ export function Registration({
               <button
                 type="button"
                 onClick={handleGoogleSignUp}
-                className="w-full flex justify-center items-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-3 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
-                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                <svg className="h-5 w-5" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -418,25 +407,23 @@ export function Registration({
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                Регистрация с помощью Google
+                Registration with Google
               </button>
-            </div>
-
-            <div className="text-center">
-              <p className="text-sm text-gray-600">
-                Already have an account?{" "}
-                <button
-                  type="button"
-                  onClick={onSwitchToLogin}
-                  className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
-                >
-                  Login
-                </button>
-              </p>
             </div>
           </form>
         </div>
       </div>
-    </div>
+
+      <div className="mt-6 text-center text-sm text-white">
+        Already have an account?{" "}
+        <button
+          type="button"
+          onClick={onSwitchToLogin}
+          className="font-medium text-white underline-offset-4 transition hover:underline"
+        >
+          Login
+        </button>
+      </div>
+    </PageContainer>
   );
 }
