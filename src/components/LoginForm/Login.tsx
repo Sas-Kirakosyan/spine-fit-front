@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../firebase/config";
 import { Button } from "../Buttons/Button";
-import { PageContainer } from "../Layout/PageContainer";
+import { PageContainer } from "../../Layout/PageContainer";
 
 interface LoginFormData {
   email: string;

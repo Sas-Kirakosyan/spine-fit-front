@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PageContainer } from "../Layout/PageContainer";
+import { PageContainer } from "../../Layout/PageContainer";
 import { Button } from "../Buttons/Button";
 
 interface QuizQuestion {

@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { QuizModal } from "../QuizModal/QuizModal";
-import { PageContainer } from "../Layout/PageContainer";
+import { PageContainer } from "../../Layout/PageContainer";
 
 interface HomePageProps {
   onNavigateToLogin: () => void;
-  onNavigateToRegister: () => void;
+  // onNavigateToRegister: () => void;
   onNavigateToWorkout: () => void;
 }
 
 export function HomePage({
   onNavigateToLogin,
-  onNavigateToRegister: _onNavigateToRegister,
+  // onNavigateToRegister,
   onNavigateToWorkout,
 }: HomePageProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
