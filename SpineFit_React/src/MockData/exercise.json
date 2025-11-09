@@ -1,0 +1,91 @@
+[
+  {
+    "id": 301,
+    "name": "Seated Leg Press",
+    "description": "A compound exercise for quadriceps, glutes, and hamstrings using a leg press machine.",
+    "category": "strength",
+    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "equipment": "leg_press_machine",
+    "difficulty": "intermediate",
+    "instructions": "Sit on the leg press machine with feet shoulder-width apart. Push the platform away by extending your knees, then slowly return.",
+    "video_url": "https://cdn.spinefit.app/videos/leg_press.mp4",
+    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz8ajjE_Th1WDFqOap2Kf8GWf_0Mq-xubPHg&s",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 2,
+        "exercise_id": 301,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Keep lower back flat against the seat pad and avoid excessive depth.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 4,
+    "reps": 12,
+    "weight": 80,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 301,
+    "name": "Seated Leg Press",
+    "description": "A compound exercise for quadriceps, glutes, and hamstrings using a leg press machine.",
+    "category": "strength",
+    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "equipment": "leg_press_machine",
+    "difficulty": "intermediate",
+    "instructions": "Sit on the leg press machine with feet shoulder-width apart. Push the platform away by extending your knees, then slowly return.",
+    "video_url": "https://cdn.spinefit.app/videos/leg_press.mp4",
+    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz8ajjE_Th1WDFqOap2Kf8GWf_0Mq-xubPHg&s",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 2,
+        "exercise_id": 301,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Keep lower back flat against the seat pad and avoid excessive depth.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 4,
+    "reps": 12,
+    "weight": 80,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 301,
+    "name": "Seated Leg Press",
+    "description": "A compound exercise for quadriceps, glutes, and hamstrings using a leg press machine.",
+    "category": "strength",
+    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "equipment": "leg_press_machine",
+    "difficulty": "intermediate",
+    "instructions": "Sit on the leg press machine with feet shoulder-width apart. Push the platform away by extending your knees, then slowly return.",
+    "video_url": "https://cdn.spinefit.app/videos/leg_press.mp4",
+    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz8ajjE_Th1WDFqOap2Kf8GWf_0Mq-xubPHg&s",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 2,
+        "exercise_id": 301,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Keep lower back flat against the seat pad and avoid excessive depth.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 4,
+    "reps": 12,
+    "weight": 80,
+    "weight_unit": "kg"
+  }]
