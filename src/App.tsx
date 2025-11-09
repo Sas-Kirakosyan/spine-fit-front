@@ -37,7 +37,7 @@ function App() {
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
-            onNavigateToRegister={navigateToRegister}
+            // onNavigateToRegister={navigateToRegister}
             onNavigateToWorkout={navigateToWorkout}
           />
         );
@@ -63,7 +63,7 @@ function App() {
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
-            onNavigateToRegister={navigateToRegister}
+            // onNavigateToRegister={navigateToRegister}
             onNavigateToWorkout={navigateToWorkout}
           />
         );
