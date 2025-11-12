@@ -1,10 +1,10 @@
-import { useEffect } from "react";
-import { createPortal } from "react-dom";
+import { PageContainer } from "../../Layout/PageContainer";
 import type { Exercise } from "../../types/exercise";
 
 interface ExerciseDetailsProps {
   exercise: Exercise;
-  onClose: () => void;
+  onNavigateBack: () => void;
+  onStartWorkout?: (exercise: Exercise) => void;
 }
 
 const formatLabel = (value: string) =>
@@ -31,30 +31,17 @@ const detailPills = (exercise: Exercise) => [
   },
 ];
 
-export function ExerciseDetails({ exercise, onClose }: ExerciseDetailsProps) {
-  useEffect(() => {
-    const handleEsc = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleEsc);
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
-  }, [onClose]);
-
-  const content = (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-      <button
-        type="button"
-        aria-label="Close details"
-        onClick={onClose}
-        className="absolute inset-0 h-full w-full cursor-default"
-      />
-
-      <div className="relative z-10 w-full max-w-3xl overflow-hidden rounded-3xl bg-[#161827] text-slate-100 shadow-2xl ring-1 ring-white/10">
+export function ExerciseDetails({
+  exercise,
+  onNavigateBack,
+  onStartWorkout,
+}: ExerciseDetailsProps) {
+  return (
+    <PageContainer
+      contentClassName="bg-[#161827] rounded-[32px] overflow-hidden ring-1 ring-white/10"
+      minHeightClassName="min-h-[680px]"
+    >
+      <div className="flex h-full flex-col">
         <div className="relative h-56 w-full overflow-hidden">
           <img
             src={exercise.image_url}
@@ -64,8 +51,9 @@ export function ExerciseDetails({ exercise, onClose }: ExerciseDetailsProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-[#161827] via-transparent to-black/40" />
           <button
             type="button"
-            onClick={onClose}
-            className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-slate-200 transition hover:bg-black/70"
+            onClick={onNavigateBack}
+            className="absolute left-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-slate-200 transition hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+            aria-label="Вернуться к списку упражнений"
           >
             <svg
               aria-hidden="true"
@@ -77,8 +65,7 @@ export function ExerciseDetails({ exercise, onClose }: ExerciseDetailsProps) {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
+              <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
           <div className="absolute bottom-6 left-6">
@@ -94,7 +81,7 @@ export function ExerciseDetails({ exercise, onClose }: ExerciseDetailsProps) {
           </div>
         </div>
 
-        <div className="space-y-8 p-6 sm:p-8">
+        <div className="flex flex-1 flex-col space-y-8 overflow-y-auto p-6">
           <div className="grid gap-4 sm:grid-cols-3">
             {detailPills(exercise).map((pill) => (
               <div
@@ -194,19 +181,29 @@ export function ExerciseDetails({ exercise, onClose }: ExerciseDetailsProps) {
             <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
               Ready to perform?
             </p>
-            <a
-              href={exercise.video_url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-full bg-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
-            >
-              Watch Demo
-            </a>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+              <a
+                href={exercise.video_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+              >
+                Watch Demo
+              </a>
+              {onStartWorkout && (
+                <button
+                  type="button"
+                  onClick={() => onStartWorkout(exercise)}
+                  className="inline-flex items-center justify-center rounded-full border border-blue-500/60 px-5 py-3 text-sm font-semibold text-blue-300 transition hover:border-blue-400 hover:text-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+                >
+                  View Sets
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
-
-  return createPortal(content, document.body);
 }
+

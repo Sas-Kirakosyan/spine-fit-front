@@ -4,13 +4,11 @@ import { PageContainer } from "../../Layout/PageContainer";
 
 interface HomePageProps {
   onNavigateToLogin: () => void;
-  // onNavigateToRegister: () => void;
   onNavigateToWorkout: () => void;
 }
 
 export function HomePage({
   onNavigateToLogin,
-  // onNavigateToRegister,
   onNavigateToWorkout,
 }: HomePageProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
