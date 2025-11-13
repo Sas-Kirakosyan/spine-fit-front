@@ -35,7 +35,7 @@ export function PageContainer({
         <div className={`absolute inset-0 ${overlayClassName}`} />
       )}
       <div
-        className={`relative z-10 flex flex-col h-full ${minHeightClassName} px-3 py-10`}
+        className={`relative z-10 flex flex-col h-full ${minHeightClassName} `}
       >
         <div className={`flex flex-col flex-1 ${contentClassName}`}>
           {children}
