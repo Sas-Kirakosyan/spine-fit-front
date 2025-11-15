@@ -165,7 +165,7 @@ export function ExerciseDetails({
                   <p className="text-xs font-semibold uppercase tracking-widest text-amber-300">
                     {formatLabel(restriction.issue_type)}
                   </p>
-                  <p className="mt-2 text-sm text-amber-100/90">
+                      <p className="mt-2 text-sm text-amber-100/90">
                     Recommendation: {restriction.recommendation}
                   </p>
                   <p className="mt-1 text-xs uppercase tracking-wider text-amber-300/80">

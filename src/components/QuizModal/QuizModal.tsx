@@ -323,7 +323,7 @@ export function QuizModal({
     if (isAnswerValid()) {
       const question = questions[currentQuestion];
       let currentAnswerValue: number | number[] | string;
-      let finalUnits = { ...units };
+      const finalUnits = { ...units };
 
       if (question.type === "radio") {
         currentAnswerValue = selectedAnswer!;

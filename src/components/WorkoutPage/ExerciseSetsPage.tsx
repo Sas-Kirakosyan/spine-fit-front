@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { PageContainer } from "../../Layout/PageContainer";
 import type { Exercise } from "../../types/exercise";
+import { ExerciseSet } from "./ExerciseSet";
 
 interface ExerciseSetsPageProps {
   exercise: Exercise;
@@ -127,7 +128,7 @@ export function ExerciseSetsPage({
   };
 
   const activeSetIndex = 0;
-
+  console.log(sets);
   return (
     <PageContainer
       backgroundImage={`url(${exercise.image_url})`}
@@ -235,112 +236,16 @@ export function ExerciseSetsPage({
 
         <section className="flex-1 rounded-[26px] border border-white/12 bg-[#13172A] p-3 shadow-xl ring-1 ring-white/5">
           <div className="space-y-3">
-            {sets.map((setEntry, index) => {
-              const isActive = index === activeSetIndex;
-              return (
-                <div key={`exercise-set-${index}`} className="flex gap-4">
-                  <div className="flex justify-center w-10 flex-col items-center">
-                    <div
-                      className={`flex h-7 w-7 items-center justify-center border-[1px] text-[16px] font-semibold text-[#000000] justify-center items-center ${
-                        isActive
-                          ? "border-[#000000] bg-[#ffffff]"
-                          : "border-[#A9A9A9] bg-[#A9A9A9]"
-                      }`}
-                      style={{
-                        clipPath:
-                          "polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)",
-                      }}
-                    >
-                      {index + 1}
-                    </div>
-                    {index !== sets.length && (
-                      <div className="absolute mt-28 border-l h-[86px] border-white" />
-                    )}
-                  </div>
-                  <div
-                    className={`flex flex-1 flex-col gap-4 rounded-[22px] border px-4 py-3 shadow-inner ${
-                      isActive
-                        ? "border-white/40 bg-[#171C34]"
-                        : "border-white/6 bg-[#101326]/80"
-                    }`}
-                  >
-                    {isActive ? (
-                      <div className="grid grid-cols-2 gap-4">
-                        <label className="flex flex-col gap-2 text-left">
-                          <span className="relative text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-300">
-                            Reps
-                          </span>
-                          <input
-                            type="number"
-                            inputMode="numeric"
-                            min={0}
-                            value={setEntry.reps}
-                            onChange={(event) =>
-                              handleSetValueChange(
-                                index,
-                                "reps",
-                                event.target.value
-                              )
-                            }
-                            className="h-12 rounded-[18px] border border-white/80 bg-transparent px-5 text-lg font-semibold text-white outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/40"
-                          />
-                        </label>
-                        <label className="flex flex-col gap-2 text-left">
-                          <span className="relative text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-300">
-                            Weight{" "}
-                            {exercise.weight_unit ? (
-                              <span className="text-[10px] uppercase text-slate-400">
-                                ({exercise.weight_unit})
-                              </span>
-                            ) : null}
-                          </span>
-                          <input
-                            type="number"
-                            inputMode="decimal"
-                            min={0}
-                            value={setEntry.weight}
-                            onChange={(event) =>
-                              handleSetValueChange(
-                                index,
-                                "weight",
-                                event.target.value
-                              )
-                            }
-                            className="h-12 rounded-[18px] border border-white/80 bg-transparent px-5 text-lg font-semibold text-white outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/40"
-                          />
-                        </label>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="flex flex-col gap-2 text-left">
-                            <span className="relative text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-600">
-                              Reps
-                            </span>
-                            <div className="flex h-12 items-center justify-center rounded-[18px] border border-white/8 bg-white/5 text-lg font-semibold text-white/35">
-                              {setEntry.reps || "—"}
-                            </div>
-                          </div>
-                          <div className="flex flex-col gap-2 text-left">
-                            <span className="relative text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-600">
-                              Weight{" "}
-                              {exercise.weight_unit ? (
-                                <span className="text-[10px] uppercase text-slate-500">
-                                  ({exercise.weight_unit})
-                                </span>
-                              ) : null}
-                            </span>
-                            <div className="flex h-12 items-center justify-center rounded-[18px] border border-white/8 bg-white/5 text-lg font-semibold text-white/35">
-                              {setEntry.weight || "—"}
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+            {sets.map((setEntry, index) => (
+              <ExerciseSet
+                key={index}
+                index={index}
+                setEntry={setEntry}
+                exercise={exercise}
+                isActive={index === activeSetIndex}
+                onValueChange={handleSetValueChange}
+              />
+            ))}
             <button
               type="button"
               onClick={handleAddSet}
