@@ -6,6 +6,7 @@ export type SetField = "reps" | "weight";
 export interface ExerciseSetRow {
   reps: string;
   weight: string;
+  completed: boolean;
 }
 
 export interface ExerciseSetProps {
@@ -13,12 +14,17 @@ export interface ExerciseSetProps {
   setEntry: ExerciseSetRow;
   exercise: Exercise;
   isActive: boolean;
+  isCompleted: boolean;
+  onActivate: (index: number) => void;
   onValueChange: (index: number, field: SetField, value: string) => void;
 }
 
 export interface ExerciseSetsPageProps {
   exercise: Exercise;
   onNavigateBack: () => void;
+  onStartWorkoutSession: () => void;
+  onMarkExerciseComplete?: (exerciseId: number) => void;
+  isDuringActiveWorkout?: boolean;
 }
 
 export interface WorkoutPageProps {
@@ -51,5 +57,5 @@ export interface ActiveWorkoutPageProps {
   onNavigateBack: () => void;
   onOpenExerciseSets: (exercise: Exercise) => void;
   onFinishWorkout: () => void;
+  completedExerciseIds?: number[];
 }
-

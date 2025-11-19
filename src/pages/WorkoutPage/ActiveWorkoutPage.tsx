@@ -5,7 +5,7 @@ import type { Exercise } from "../../types/exercise";
 import type { ActiveWorkoutPageProps } from "../../types/workout";
 import { iconButtonClass, secondaryButtonClass } from "../../constants/workout";
 import { Button } from "../../components/Buttons/Button";
-import { ExerciseActionSheet } from "./ExerciseActionSheet";
+import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopup";
 
 const exercises: Exercise[] = exerciseData as Exercise[];
 const ONE_HOUR_SECONDS = 60 * 60;
@@ -26,10 +26,15 @@ export function ActiveWorkoutPage({
   onNavigateBack,
   onOpenExerciseSets,
   onFinishWorkout,
+  completedExerciseIds = [],
 }: ActiveWorkoutPageProps) {
   const [remainingSeconds, setRemainingSeconds] = useState(ONE_HOUR_SECONDS);
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const completedExerciseIdsSet = useMemo(
+    () => new Set(completedExerciseIds),
+    [completedExerciseIds]
+  );
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -102,55 +107,84 @@ export function ActiveWorkoutPage({
 
         <section>
           <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
-            {exercises.map((exercise) => (
-              <div
-                key={exercise.id}
-                role="button"
-                tabIndex={0}
-                onClick={() => onOpenExerciseSets(exercise)}
-                className={`${secondaryButtonClass} group flex w-full cursor-pointer items-center justify-between gap-4 bg-[#171B30]/70 text-left`}
-              >
-                <div className="flex flex-1 items-center gap-4">
-                  <div className="relative h-16 w-16 overflow-hidden rounded-[10px]">
-                    <img
-                      src={exercise.image_url}
-                      alt={exercise.name}
-                      className="h-full w-full object-cover"
-                    />
-                    <div className="pointer-events-none absolute inset-0" />
-                  </div>
-                  <div>
-                    <p className="text-lg font-semibold text-white">
-                      {exercise.name}
-                    </p>
-                    <p className="text-[12px] text-slate-300">
-                      {exercise.sets} set • {exercise.reps} reps •{" "}
-                      {exercise.weight} {exercise.weight_unit}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  aria-label="open exercise actions"
-                  className="rounded-full p-1 text-slate-200"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setActionExercise(exercise);
-                  }}
+            {exercises.map((exercise) => {
+              const isCompleted = completedExerciseIdsSet.has(exercise.id);
+              return (
+                <div
+                  key={exercise.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => onOpenExerciseSets(exercise)}
+                  className={`${secondaryButtonClass} group flex w-full cursor-pointer items-center justify-between gap-4 text-left ${
+                    isCompleted
+                      ? "border-emerald-400/80 bg-emerald-900/10"
+                      : "bg-[#171B30]/70"
+                  }`}
                 >
-                  <svg
-                    aria-hidden="true"
-                    className="h-5 w-5"
-                    viewBox="0 0 16 4"
-                    fill="currentColor"
+                  <div className="flex flex-1 items-center gap-4">
+                    <div className="relative h-16 w-16 overflow-hidden rounded-[10px]">
+                      <img
+                        src={exercise.image_url}
+                        alt={exercise.name}
+                        className="h-full w-full object-cover"
+                      />
+                      {isCompleted && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-emerald-900/60 text-white">
+                          <svg
+                            aria-hidden="true"
+                            viewBox="0 0 20 20"
+                            className="h-6 w-6"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                          >
+                            <path d="M5 10.5 8.2 14 15 6" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-white">
+                        {exercise.name}
+                      </p>
+                      <p className="text-[12px] text-slate-300">
+                        {exercise.sets} set • {exercise.reps} reps •{" "}
+                        {exercise.weight} {exercise.weight_unit}
+                      </p>
+                      {isCompleted && (
+                        <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-300">
+                          Done
+                          <span className="h-1 w-1 rounded-full bg-emerald-300" />
+                          Logged
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="open exercise actions"
+                    className="rounded-full p-1 text-slate-200"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setActionExercise(exercise);
+                    }}
                   >
-                    <circle cx="2" cy="2" r="2" />
-                    <circle cx="8" cy="2" r="2" />
-                    <circle cx="14" cy="2" r="2" />
-                  </svg>
-                </button>
-              </div>
-            ))}
+                    <svg
+                      aria-hidden="true"
+                      className="h-5 w-5"
+                      viewBox="0 0 16 4"
+                      fill="currentColor"
+                    >
+                      <circle cx="2" cy="2" r="2" />
+                      <circle cx="8" cy="2" r="2" />
+                      <circle cx="14" cy="2" r="2" />
+                    </svg>
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </section>
         <Button

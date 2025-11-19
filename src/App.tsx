@@ -5,7 +5,7 @@ import { Login } from "./pages/LoginPage/Login";
 import { WorkoutPage } from "./pages/WorkoutPage/WorkoutPage";
 import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { ExerciseSetsPage } from "./pages/WorkoutPage/ExerciseSetsPage";
-import { ExerciseDetails } from "./pages/WorkoutPage/ExerciseDetails";
+import { ExerciseDetails } from "./pages/WorkoutPage/ExerciseHowTo";
 import { ActiveWorkoutPage } from "./pages/WorkoutPage/ActiveWorkoutPage";
 import type { Exercise } from "./types/exercise";
 import type { Page } from "./types/navigation";
@@ -30,6 +30,12 @@ function App() {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
     null
   );
+  const [exerciseSetsMode, setExerciseSetsMode] = useState<
+    "preWorkout" | "activeWorkout"
+  >("preWorkout");
+  const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
+    []
+  );
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -38,18 +44,29 @@ function App() {
   const navigateToHome = () => setCurrentPage("home");
   const navigateToLogin = () => setCurrentPage("login");
   const navigateToRegister = () => setCurrentPage("register");
-  const navigateToWorkout = () => setCurrentPage("workout");
+  const navigateToWorkout = () => {
+    setCompletedExerciseIds([]);
+    setCurrentPage("workout");
+  };
   const navigateToProfile = () => setCurrentPage("profile");
-  const navigateToActiveWorkout = () => {
+  const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
+    if (options?.resetCompleted !== false) {
+      setCompletedExerciseIds([]);
+    }
     setSelectedExercise(null);
+    setExerciseSetsMode("preWorkout");
     setCurrentPage("activeWorkout");
   };
   const navigateToExerciseDetails = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCurrentPage("exerciseDetails");
   };
-  const navigateToExerciseSets = (exercise: Exercise) => {
+  const navigateToExerciseSets = (
+    exercise: Exercise,
+    mode: "preWorkout" | "activeWorkout" = "preWorkout"
+  ) => {
     setSelectedExercise(exercise);
+    setExerciseSetsMode(mode);
     setCurrentPage("exerciseSets");
   };
   const backFromExerciseDetails = () => {
@@ -58,7 +75,15 @@ function App() {
   };
   const backFromExerciseSets = () => {
     setSelectedExercise(null);
+    setExerciseSetsMode("preWorkout");
     setCurrentPage("workout");
+  };
+
+  const markExerciseComplete = (exerciseId: number) => {
+    setCompletedExerciseIds((prev) =>
+      prev.includes(exerciseId) ? prev : [...prev, exerciseId]
+    );
+    navigateToActiveWorkout({ resetCompleted: false });
   };
 
   const renderPage = () => {
@@ -116,6 +141,9 @@ function App() {
           <ExerciseSetsPage
             exercise={selectedExercise}
             onNavigateBack={backFromExerciseSets}
+            onStartWorkoutSession={navigateToActiveWorkout}
+            onMarkExerciseComplete={markExerciseComplete}
+            isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
           />
         );
       case "exerciseDetails":
@@ -134,8 +162,11 @@ function App() {
         return (
           <ActiveWorkoutPage
             onNavigateBack={navigateToWorkout}
-            onOpenExerciseSets={navigateToExerciseSets}
+            onOpenExerciseSets={(exercise) =>
+              navigateToExerciseSets(exercise, "activeWorkout")
+            }
             onFinishWorkout={navigateToWorkout}
+            completedExerciseIds={completedExerciseIds}
           />
         );
       default:

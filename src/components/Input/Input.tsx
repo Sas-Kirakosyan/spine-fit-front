@@ -4,6 +4,7 @@ interface InputProps {
   label?: string;
   value: string;
   onChange?: (value: string) => void;
+  onFocus?: () => void;
   placeholder?: string;
   unit?: string;
   type?: string;
@@ -17,6 +18,7 @@ export const Input: React.FC<InputProps> = ({
   label,
   value,
   onChange,
+  onFocus,
   placeholder,
   unit,
   type = "text",
@@ -61,6 +63,7 @@ export const Input: React.FC<InputProps> = ({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
+          onFocus={onFocus}
           disabled={disabled}
           className={`h-12 rounded-[18px] border border-white/80 bg-transparent px-5 text-lg font-semibold text-white outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/40 ${inputClassName}`}
         />

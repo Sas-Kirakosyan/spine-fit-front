@@ -11,6 +11,7 @@ import {
   primaryButtonClass,
   secondaryButtonClass,
 } from "../../constants/workout";
+import { Button } from "../../components/Buttons/Button";
 
 const toolbarButtons = [
   {
@@ -79,11 +80,15 @@ const toolbarButtons = [
 export function ExerciseSetsPage({
   exercise,
   onNavigateBack,
+  onStartWorkoutSession,
+  onMarkExerciseComplete,
+  isDuringActiveWorkout = false,
 }: ExerciseSetsPageProps) {
   const initialSetTemplate = useMemo(
     () => ({
       reps: exercise.reps ? String(exercise.reps) : "",
       weight: exercise.weight ? String(exercise.weight) : "",
+      completed: false,
     }),
     [exercise.reps, exercise.weight]
   );
@@ -93,17 +98,52 @@ export function ExerciseSetsPage({
     const count = Math.max(exercise.sets || 1, 1);
     return Array.from({ length: count }, () => ({ ...initialSetTemplate }));
   });
+  const [activeSetIndex, setActiveSetIndex] = useState(0);
+  const [painLevel, setPainLevel] = useState(2);
 
   useEffect(() => {
     const count = Math.max(exercise.sets || 1, 1);
     setSets(Array.from({ length: count }, () => ({ ...initialSetTemplate })));
+    setActiveSetIndex(0);
   }, [exercise, initialSetTemplate]);
+
+  useEffect(() => {
+    setActiveSetIndex((prev) => {
+      if (prev === -1) {
+        return prev;
+      }
+      return Math.min(prev, Math.max(sets.length - 1, 0));
+    });
+  }, [sets.length]);
+
+  const findNextPendingIndex = (
+    list: ExerciseSetRow[],
+    startFrom = 0
+  ): number => {
+    for (let i = startFrom; i < list.length; i += 1) {
+      if (!list[i].completed) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  const handleActivateSet = (index: number) => {
+    if (sets[index]?.completed) {
+      return;
+    }
+    setActiveSetIndex(index);
+  };
 
   const handleSetValueChange = (
     index: number,
     field: SetField,
     value: string
   ) => {
+    if (sets[index]?.completed) {
+      return;
+    }
+    setActiveSetIndex(index);
     setSets((prev) =>
       prev.map((item, itemIndex) =>
         itemIndex === index ? { ...item, [field]: value } : item
@@ -112,10 +152,65 @@ export function ExerciseSetsPage({
   };
 
   const handleAddSet = () => {
-    setSets((prev) => [...prev, { ...initialSetTemplate }]);
+    setSets((prev) => {
+      const next = [...prev, { ...initialSetTemplate }];
+      if (activeSetIndex === -1) {
+        setActiveSetIndex(next.length - 1);
+      }
+      return next;
+    });
   };
 
-  const activeSetIndex = 3;
+  const handleLogSet = () => {
+    if (sets.length === 0 || sets.every((item) => item.completed)) {
+      return;
+    }
+    const targetIndex =
+      activeSetIndex >= 0 && activeSetIndex < sets.length ? activeSetIndex : -1;
+    if (targetIndex === -1 || sets[targetIndex]?.completed) {
+      return;
+    }
+
+    console.log("Logging set entries", sets[targetIndex]);
+
+    setSets((prev) => {
+      const updated = prev.map((item, index) =>
+        index === targetIndex ? { ...item, completed: true } : item
+      );
+      const nextAfter = findNextPendingIndex(updated, targetIndex + 1);
+      const fallback =
+        nextAfter !== -1 ? nextAfter : findNextPendingIndex(updated, 0);
+      setActiveSetIndex(fallback);
+      return updated;
+    });
+  };
+
+  const handleLogAllSets = () => {
+    console.log("Logging all set entries", sets);
+    setSets((prev) => prev.map((item) => ({ ...item, completed: true })));
+    setActiveSetIndex(-1);
+  };
+
+  const handleCompleteExercise = () => {
+    if (sets.length === 0) {
+      return;
+    }
+    onMarkExerciseComplete?.(exercise.id);
+    if (!onMarkExerciseComplete) {
+      onStartWorkoutSession();
+    }
+  };
+
+  const allSetsCompleted =
+    sets.length > 0 && sets.every((setEntry) => setEntry.completed);
+  const sliderProgress = ((painLevel - 1) / 9) * 100;
+  const painFaces = [
+    { id: 1, label: "🙂", value: 1 },
+    { id: 2, label: "😊", value: 3 },
+    { id: 3, label: "😐", value: 5 },
+    { id: 4, label: "🙁", value: 7 },
+    { id: 5, label: "😣", value: 9 },
+  ];
 
   return (
     <PageContainer
@@ -231,6 +326,8 @@ export function ExerciseSetsPage({
                 setEntry={setEntry}
                 exercise={exercise}
                 isActive={index === activeSetIndex}
+                isCompleted={setEntry.completed}
+                onActivate={handleActivateSet}
                 onValueChange={handleSetValueChange}
               />
             ))}
@@ -264,6 +361,92 @@ export function ExerciseSetsPage({
             </button>
           </div>
         </section>
+
+        {allSetsCompleted && (
+          <section className="rounded-[24px] border border-white/12 bg-[#161A30] p-5 shadow-inner shadow-white/5">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
+                  Pain Level
+                </span>
+                <div className="rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
+                  {painLevel}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-2xl">
+                {painFaces.map((face) => (
+                  <span
+                    key={face.id}
+                    className={`transition-opacity ${
+                      Math.abs(face.value - painLevel) <= 1
+                        ? "opacity-100"
+                        : "opacity-30"
+                    }`}
+                  >
+                    {face.label}
+                  </span>
+                ))}
+              </div>
+              <div className="relative mt-2">
+                <input
+                  type="range"
+                  min={1}
+                  max={10}
+                  step={1}
+                  value={painLevel}
+                  onChange={(event) => setPainLevel(Number(event.target.value))}
+                  className="h-2 w-full appearance-none rounded-full bg-white/10"
+                  style={{
+                    background: `linear-gradient(to right, #3B82F6 ${sliderProgress}%, rgba(59,130,246,0.15) ${sliderProgress}%)`,
+                  }}
+                />
+                <div
+                  className="pointer-events-none absolute -top-4 flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white shadow-lg"
+                  style={{
+                    left: `calc(${sliderProgress}% - 14px)`,
+                  }}
+                >
+                  {painLevel}
+                </div>
+                <div className="mt-3 flex justify-between text-xs font-semibold uppercase tracking-[0.32em] text-white/40">
+                  <span>1</span>
+                  <span>1-10</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {allSetsCompleted ? (
+          <Button
+            onClick={handleCompleteExercise}
+            className="mr-[20px] ml-[20px] h-[44px] rounded-[12px] bg-emerald-500 text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30"
+          >
+            DONE
+          </Button>
+        ) : isDuringActiveWorkout ? (
+          <div className="mr-[20px] ml-[20px] flex flex-col gap-3 sm:flex-row">
+            <Button
+              onClick={handleLogAllSets}
+              className="h-[40px] flex-1 rounded-[10px] bg-orange-500 text-white uppercase"
+            >
+              LOG ALL SETS
+            </Button>
+            <Button
+              onClick={handleLogSet}
+              className="h-[40px] flex-1 rounded-[10px] bg-red-500 text-white uppercase"
+            >
+              LOG SET
+            </Button>
+          </div>
+        ) : (
+          <Button
+            onClick={onStartWorkoutSession}
+            className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-blue-600 text-white uppercase"
+          >
+            START Workout
+          </Button>
+        )}
       </div>
     </PageContainer>
   );

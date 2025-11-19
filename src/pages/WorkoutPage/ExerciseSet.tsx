@@ -9,79 +9,83 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   setEntry,
   exercise,
   isActive,
+  isCompleted,
+  onActivate,
   onValueChange,
 }) => {
   return (
     <div key={`exercise-set-${index}`} className="flex gap-4">
-      {/* Hexagonal Set Number */}
       <div className="flex justify-center w-10 flex-col items-center">
         <div
-          className={`flex h-7 w-7 items-center justify-center border-[1px] text-[16px] font-semibold text-[#000000] ${
-            isActive
-              ? "border-[#000000] bg-[#ffffff]"
-              : "border-[#A9A9A9] bg-[#A9A9A9]"
+          className={`flex h-7 w-7 items-center justify-center border-[1px] text-[16px] font-semibold transition-colors ${
+            isCompleted
+              ? "border-emerald-400 bg-emerald-500/70 text-[#04050B]"
+              : isActive
+              ? "border-white bg-white text-[#05060C]"
+              : "border-white/40 bg-white/10 text-white/60"
           }`}
           style={{
             clipPath:
               "polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)",
           }}
         >
-          {index + 1}
+          {isCompleted ? (
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 16 16"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 8.5L6.5 11 12 5" />
+            </svg>
+          ) : (
+            index + 1
+          )}
         </div>
       </div>
       <div
-        className={`flex flex-1 flex-col gap-4 rounded-[22px] border px-4 py-3 shadow-inner ${
-          isActive
-            ? "border-white/40 bg-[#171C34]"
-            : "border-white/6 bg-[#101326]/80"
+        className={`flex flex-1 flex-col gap-4 rounded-[22px] border px-4 py-3 shadow-inner transition-colors ${
+          isCompleted
+            ? "border-emerald-400/70 bg-emerald-600/5 text-white/60 opacity-70"
+            : isActive
+            ? "border-white/60 bg-[#1D2342]"
+            : "border-white/10 bg-[#0F142A]/80"
         }`}
+        onClick={() => {
+          if (!isCompleted) {
+            onActivate(index);
+          }
+        }}
+        role="button"
+        tabIndex={-1}
       >
-        {isActive ? (
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="Reps"
-              value={setEntry.reps}
-              type="number"
-              onChange={(value) => onValueChange(index, "reps", value)}
-              inputClassName="bg-[#101326]/80 border-white/40"
-              wrapperClassName="max-w-[150px]"
-            />
-            <Input
-              label="Weight"
-              unit={exercise.weight_unit}
-              value={setEntry.weight}
-              type="number"
-              onChange={(value) => onValueChange(index, "weight", value)}
-              inputClassName="bg-[#101326]/80 border-white/40"
-              wrapperClassName="max-w-[150px]"
-            />
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2 text-left">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-600">
-                Reps
-              </span>
-              <div className="flex h-12 items-center justify-center rounded-[18px] border border-white/8 bg-white/5 text-lg font-semibold text-white/35">
-                {setEntry.reps || "—"}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2 text-left">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-600">
-                Weight{" "}
-                {exercise.weight_unit && (
-                  <span className="text-[10px] uppercase text-slate-500">
-                    ({exercise.weight_unit})
-                  </span>
-                )}
-              </span>
-              <div className="flex h-12 items-center justify-center rounded-[18px] border border-white/8 bg-white/5 text-lg font-semibold text-white/35">
-                {setEntry.weight || "—"}
-              </div>
-            </div>
-          </div>
-        )}
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="Reps"
+            value={setEntry.reps}
+            type="number"
+            disabled={isCompleted}
+            onFocus={() => onActivate(index)}
+            onChange={(value) => onValueChange(index, "reps", value)}
+            inputClassName="bg-[#101326]/80 border-white/40"
+            wrapperClassName="max-w-[150px]"
+          />
+          <Input
+            label="Weight"
+            unit={exercise.weight_unit}
+            value={setEntry.weight}
+            type="number"
+            disabled={isCompleted}
+            onFocus={() => onActivate(index)}
+            onChange={(value) => onValueChange(index, "weight", value)}
+            inputClassName="bg-[#101326]/80 border-white/40"
+            wrapperClassName="max-w-[150px]"
+          />
+        </div>
       </div>
     </div>
   );
