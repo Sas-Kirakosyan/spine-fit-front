@@ -1,21 +1,8 @@
 import React from "react";
-import type { Exercise } from "../../types/exercise";
-import { Input } from "../Input/Input";
+import type { ExerciseSetProps } from "../../types/workout";
+import { Input } from "../../components/Input/Input";
 
-type SetField = "reps" | "weight";
-
-export interface ExerciseSetRow {
-  reps: string;
-  weight: string;
-}
-
-interface ExerciseSetProps {
-  index: number;
-  setEntry: ExerciseSetRow;
-  exercise: Exercise;
-  isActive: boolean;
-  onValueChange: (index: number, field: SetField, value: string) => void;
-}
+export type { ExerciseSetRow, SetField } from "../../types/workout";
 
 export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   index,

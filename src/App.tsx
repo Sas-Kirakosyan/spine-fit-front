@@ -1,22 +1,14 @@
 import { useState, useEffect } from "react";
-import "./App.css";
-import { HomePage } from "./components/HomePage/HomePage";
-import { Registration } from "./components/RegistrationForm/Registration";
-import { Login } from "./components/LoginForm/Login";
-import { WorkoutPage } from "./components/WorkoutPage/WorkoutPage";
-import { ProfilePage } from "./components/ProfilePage/ProfilePage";
-import { ExerciseSetsPage } from "./components/WorkoutPage/ExerciseSetsPage";
-import { ExerciseDetails } from "./components/WorkoutPage/ExerciseDetails";
+import { HomePage } from "./pages/HomePage/HomePage";
+import { Registration } from "./pages/RegistrationPage/Registration";
+import { Login } from "./pages/LoginPage/Login";
+import { WorkoutPage } from "./pages/WorkoutPage/WorkoutPage";
+import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
+import { ExerciseSetsPage } from "./pages/WorkoutPage/ExerciseSetsPage";
+import { ExerciseDetails } from "./pages/WorkoutPage/ExerciseDetails";
+import { ActiveWorkoutPage } from "./pages/WorkoutPage/ActiveWorkoutPage";
 import type { Exercise } from "./types/exercise";
-
-type Page =
-  | "home"
-  | "login"
-  | "register"
-  | "workout"
-  | "profile"
-  | "exerciseSets"
-  | "exerciseDetails";
+import type { Page } from "./types/navigation";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
@@ -28,7 +20,8 @@ function App() {
       savedPage === "workout" ||
       savedPage === "profile" ||
       savedPage === "exerciseSets" ||
-      savedPage === "exerciseDetails"
+      savedPage === "exerciseDetails" ||
+      savedPage === "activeWorkout"
     ) {
       return savedPage;
     }
@@ -47,6 +40,10 @@ function App() {
   const navigateToRegister = () => setCurrentPage("register");
   const navigateToWorkout = () => setCurrentPage("workout");
   const navigateToProfile = () => setCurrentPage("profile");
+  const navigateToActiveWorkout = () => {
+    setSelectedExercise(null);
+    setCurrentPage("activeWorkout");
+  };
   const navigateToExerciseDetails = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCurrentPage("exerciseDetails");
@@ -70,7 +67,6 @@ function App() {
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
-            // onNavigateToRegister={navigateToRegister}
             onNavigateToWorkout={navigateToWorkout}
           />
         );
@@ -99,6 +95,7 @@ function App() {
             activePage="workout"
             onOpenExerciseDetails={navigateToExerciseDetails}
             onOpenExerciseSets={navigateToExerciseSets}
+            onStartWorkoutSession={navigateToActiveWorkout}
           />
         );
       case "profile":
@@ -131,6 +128,14 @@ function App() {
             exercise={selectedExercise}
             onNavigateBack={backFromExerciseDetails}
             onStartWorkout={navigateToExerciseSets}
+          />
+        );
+      case "activeWorkout":
+        return (
+          <ActiveWorkoutPage
+            onNavigateBack={navigateToWorkout}
+            onOpenExerciseSets={navigateToExerciseSets}
+            onFinishWorkout={navigateToWorkout}
           />
         );
       default:

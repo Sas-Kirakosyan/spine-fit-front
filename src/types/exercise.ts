@@ -28,3 +28,4 @@ export interface Exercise {
   weight: number;
   weight_unit: string;
 }
+

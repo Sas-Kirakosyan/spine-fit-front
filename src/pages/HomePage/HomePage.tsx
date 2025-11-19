@@ -1,11 +1,8 @@
 import { useState } from "react";
-import { QuizModal } from "../QuizModal/QuizModal";
-import { PageContainer } from "../../Layout/PageContainer";
-
-interface HomePageProps {
-  onNavigateToLogin: () => void;
-  onNavigateToWorkout: () => void;
-}
+import { QuizModal } from "../QuizPage/QuizModal";
+import { PageContainer } from "../../layout/PageContainer";
+import { Logo } from "../../components/Logo/Logo";
+import type { HomePageProps } from "../../types/pages";
 
 export function HomePage({
   onNavigateToLogin,
@@ -30,9 +27,7 @@ export function HomePage({
         overlayClassName="bg-black/30"
       >
         <div className="flex justify-start">
-          <span className="text-[32px] font-semibold uppercase tracking-[0.4em] text-white">
-            SpineFit
-          </span>
+          <Logo size="lg" />
         </div>
 
         <div className="mt-auto">

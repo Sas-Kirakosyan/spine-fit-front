@@ -1,11 +1,6 @@
-import { PageContainer } from "../../Layout/PageContainer";
+import { PageContainer } from "../../layout/PageContainer";
+import type { ExerciseDetailsProps } from "../../types/workout";
 import type { Exercise } from "../../types/exercise";
-
-interface ExerciseDetailsProps {
-  exercise: Exercise;
-  onNavigateBack: () => void;
-  onStartWorkout?: (exercise: Exercise) => void;
-}
 
 const formatLabel = (value: string) =>
   value
@@ -165,7 +160,7 @@ export function ExerciseDetails({
                   <p className="text-xs font-semibold uppercase tracking-widest text-amber-300">
                     {formatLabel(restriction.issue_type)}
                   </p>
-                      <p className="mt-2 text-sm text-amber-100/90">
+                  <p className="mt-2 text-sm text-amber-100/90">
                     Recommendation: {restriction.recommendation}
                   </p>
                   <p className="mt-1 text-xs uppercase tracking-wider text-amber-300/80">
@@ -206,4 +201,3 @@ export function ExerciseDetails({
     </PageContainer>
   );
 }
-

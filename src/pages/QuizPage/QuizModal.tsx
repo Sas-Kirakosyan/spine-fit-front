@@ -1,24 +1,7 @@
 import { useState, useEffect } from "react";
-import { PageContainer } from "../../Layout/PageContainer";
-import { Button } from "../Buttons/Button";
-
-interface QuizQuestion {
-  id: number;
-  question: string;
-  type: "radio" | "checkbox" | "input";
-  options?: string[];
-  correctAnswer?: number | number[] | string | number;
-  inputType?: "number" | "text";
-  placeholder?: string;
-  optional?: boolean;
-}
-
-interface QuizModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  workoutType: "home" | "gym";
-  onQuizComplete?: () => void;
-}
+import { PageContainer } from "../../layout/PageContainer";
+import { Button } from "../../components/Buttons/Button";
+import type { QuizQuestion, QuizModalProps } from "../../types/quiz";
 
 export function QuizModal({
   isOpen,

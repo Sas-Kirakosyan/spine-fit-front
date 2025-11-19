@@ -1,24 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { PageContainer } from "../../Layout/PageContainer";
-import type { Exercise } from "../../types/exercise";
+import { PageContainer } from "../../layout/PageContainer";
+import type {
+  ExerciseSetsPageProps,
+  SetField,
+  ExerciseSetRow,
+} from "../../types/workout";
 import { ExerciseSet } from "./ExerciseSet";
 import {
   iconButtonClass,
   primaryButtonClass,
   secondaryButtonClass,
 } from "../../constants/workout";
-
-interface ExerciseSetsPageProps {
-  exercise: Exercise;
-  onNavigateBack: () => void;
-}
-
-type SetField = "reps" | "weight";
-
-interface ExerciseSetRow {
-  reps: string;
-  weight: string;
-}
 
 const toolbarButtons = [
   {
