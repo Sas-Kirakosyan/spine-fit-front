@@ -1,11 +1,5 @@
-import { PageContainer } from "../../Layout/PageContainer";
-
-interface ProfilePageProps {
-  onNavigateToHome: () => void;
-  onNavigateToWorkout: () => void;
-  onNavigateToProfile: () => void;
-  activePage: "workout" | "profile";
-}
+import { PageContainer } from "../../layout/PageContainer";
+import type { ProfilePageProps } from "../../types/pages";
 
 const baseNavButtonClass =
   "flex flex-1 flex-col items-center py-4 text-xs font-semibold uppercase tracking-[0.2em] transition-colors";
