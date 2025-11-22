@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { PageContainer } from "../../layout/PageContainer";
 import type {
   ExerciseSetsPageProps,
   SetField,
-  ExerciseSetRow,
 } from "../../types/workout";
 import { ExerciseSet } from "./ExerciseSet";
 import {
@@ -12,6 +11,7 @@ import {
   secondaryButtonClass,
 } from "../../constants/workout";
 import { Button } from "../../components/Buttons/Button";
+import { useWorkout } from "../../providers/WorkoutContext";
 
 const toolbarButtons = [
   {
@@ -84,55 +84,45 @@ export function ExerciseSetsPage({
   onMarkExerciseComplete,
   isDuringActiveWorkout = false,
 }: ExerciseSetsPageProps) {
-  const initialSetTemplate = useMemo(
-    () => ({
-      reps: exercise.reps ? String(exercise.reps) : "",
-      weight: exercise.weight ? String(exercise.weight) : "",
-      completed: false,
-    }),
-    [exercise.reps, exercise.weight]
-  );
+  const {
+    initializeExerciseSets,
+    getExerciseSets,
+    updateExerciseSet,
+    addExerciseSet,
+    logExerciseSet,
+    logAllExerciseSets,
+    setActiveSetIndex,
+    getActiveSetIndex,
+    toggleRestTimer,
+    isRestTimerEnabled,
+    setPainLevel,
+    getPainLevel,
+    markExerciseComplete,
+  } = useWorkout();
 
-  const [restTimerEnabled, setRestTimerEnabled] = useState(false);
-  const [sets, setSets] = useState<ExerciseSetRow[]>(() => {
-    const count = Math.max(exercise.sets || 1, 1);
-    return Array.from({ length: count }, () => ({ ...initialSetTemplate }));
-  });
-  const [activeSetIndex, setActiveSetIndex] = useState(0);
-  const [painLevel, setPainLevel] = useState(2);
-
+  // Инициализация сетов при монтировании или изменении упражнения
   useEffect(() => {
-    const count = Math.max(exercise.sets || 1, 1);
-    setSets(Array.from({ length: count }, () => ({ ...initialSetTemplate })));
-    setActiveSetIndex(0);
-  }, [exercise, initialSetTemplate]);
+    initializeExerciseSets(exercise);
+  }, [exercise, initializeExerciseSets]);
 
+  const sets = getExerciseSets(exercise.id);
+  const activeSetIndex = getActiveSetIndex(exercise.id);
+  const restTimerEnabled = isRestTimerEnabled(exercise.id);
+  const painLevel = getPainLevel(exercise.id);
+
+  // Обновление активного индекса при изменении количества сетов
   useEffect(() => {
-    setActiveSetIndex((prev) => {
-      if (prev === -1) {
-        return prev;
-      }
-      return Math.min(prev, Math.max(sets.length - 1, 0));
-    });
-  }, [sets.length]);
-
-  const findNextPendingIndex = (
-    list: ExerciseSetRow[],
-    startFrom = 0
-  ): number => {
-    for (let i = startFrom; i < list.length; i += 1) {
-      if (!list[i].completed) {
-        return i;
-      }
-    }
-    return -1;
-  };
-
-  const handleActivateSet = (index: number) => {
-    if (sets[index]?.completed) {
+    if (activeSetIndex === -1) {
       return;
     }
-    setActiveSetIndex(index);
+    const maxIndex = Math.max(sets.length - 1, 0);
+    if (activeSetIndex > maxIndex) {
+      setActiveSetIndex(exercise.id, maxIndex);
+    }
+  }, [sets.length, activeSetIndex, exercise.id, setActiveSetIndex]);
+
+  const handleActivateSet = (index: number) => {
+    setActiveSetIndex(exercise.id, index);
   };
 
   const handleSetValueChange = (
@@ -140,25 +130,11 @@ export function ExerciseSetsPage({
     field: SetField,
     value: string
   ) => {
-    if (sets[index]?.completed) {
-      return;
-    }
-    setActiveSetIndex(index);
-    setSets((prev) =>
-      prev.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [field]: value } : item
-      )
-    );
+    updateExerciseSet(exercise.id, index, field, value);
   };
 
   const handleAddSet = () => {
-    setSets((prev) => {
-      const next = [...prev, { ...initialSetTemplate }];
-      if (activeSetIndex === -1) {
-        setActiveSetIndex(next.length - 1);
-      }
-      return next;
-    });
+    addExerciseSet(exercise.id);
   };
 
   const handleLogSet = () => {
@@ -172,31 +148,22 @@ export function ExerciseSetsPage({
     }
 
     console.log("Logging set entries", sets[targetIndex]);
-
-    setSets((prev) => {
-      const updated = prev.map((item, index) =>
-        index === targetIndex ? { ...item, completed: true } : item
-      );
-      const nextAfter = findNextPendingIndex(updated, targetIndex + 1);
-      const fallback =
-        nextAfter !== -1 ? nextAfter : findNextPendingIndex(updated, 0);
-      setActiveSetIndex(fallback);
-      return updated;
-    });
+    logExerciseSet(exercise.id, targetIndex);
   };
 
   const handleLogAllSets = () => {
     console.log("Logging all set entries", sets);
-    setSets((prev) => prev.map((item) => ({ ...item, completed: true })));
-    setActiveSetIndex(-1);
+    logAllExerciseSets(exercise.id);
   };
 
   const handleCompleteExercise = () => {
     if (sets.length === 0) {
       return;
     }
-    onMarkExerciseComplete?.(exercise.id);
-    if (!onMarkExerciseComplete) {
+    if (onMarkExerciseComplete) {
+      onMarkExerciseComplete(exercise.id);
+      markExerciseComplete(exercise.id);
+    } else {
       onStartWorkoutSession();
     }
   };
@@ -290,7 +257,7 @@ export function ExerciseSetsPage({
                 type="button"
                 onClick={
                   isTimer
-                    ? () => setRestTimerEnabled((prev) => !prev)
+                    ? () => toggleRestTimer(exercise.id)
                     : undefined
                 }
                 className={`${secondaryButtonClass} ${
@@ -394,7 +361,7 @@ export function ExerciseSetsPage({
                   max={10}
                   step={1}
                   value={painLevel}
-                  onChange={(event) => setPainLevel(Number(event.target.value))}
+                  onChange={(event) => setPainLevel(exercise.id, Number(event.target.value))}
                   className="h-2 w-full appearance-none rounded-full bg-white/10"
                   style={{
                     background: `linear-gradient(to right, #3B82F6 ${sliderProgress}%, rgba(59,130,246,0.15) ${sliderProgress}%)`,
