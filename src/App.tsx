@@ -7,7 +7,7 @@ import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { ExerciseSetsPage } from "./pages/WorkoutPage/ExerciseSetsPage";
 import { ExerciseDetails } from "./pages/WorkoutPage/ExerciseHowTo";
 import { ActiveWorkoutPage } from "./pages/WorkoutPage/ActiveWorkoutPage";
-import { WorkoutProvider, useWorkout } from "./pages/WorkoutPage/WorkoutContext";
+import { WorkoutProvider, useWorkout } from "./providers/WorkoutContext";
 import type { Exercise } from "./types/exercise";
 import type { Page } from "./types/navigation";
 
