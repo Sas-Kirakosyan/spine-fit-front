@@ -7,10 +7,11 @@ import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { ExerciseSetsPage } from "./pages/WorkoutPage/ExerciseSetsPage";
 import { ExerciseDetails } from "./pages/WorkoutPage/ExerciseHowTo";
 import { ActiveWorkoutPage } from "./pages/WorkoutPage/ActiveWorkoutPage";
+import { WorkoutProvider, useWorkout } from "./providers/WorkoutContext";
 import type { Exercise } from "./types/exercise";
 import type { Page } from "./types/navigation";
 
-function App() {
+function AppContent() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const savedPage = localStorage.getItem("currentPage");
     if (
@@ -27,15 +28,16 @@ function App() {
     }
     return "home";
   });
-  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
-    null
-  );
-  const [exerciseSetsMode, setExerciseSetsMode] = useState<
-    "preWorkout" | "activeWorkout"
-  >("preWorkout");
-  const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
-    []
-  );
+
+  const {
+    selectedExercise,
+    exerciseSetsMode,
+    completedExerciseIds,
+    setSelectedExercise,
+    setExerciseSetsMode,
+    clearCompletedExercises,
+    resetWorkoutTimer,
+  } = useWorkout();
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -45,16 +47,17 @@ function App() {
   const navigateToLogin = () => setCurrentPage("login");
   const navigateToRegister = () => setCurrentPage("register");
   const navigateToWorkout = () => {
-    setCompletedExerciseIds([]);
+    clearCompletedExercises();
     setCurrentPage("workout");
   };
   const navigateToProfile = () => setCurrentPage("profile");
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
-      setCompletedExerciseIds([]);
+      clearCompletedExercises();
     }
     setSelectedExercise(null);
     setExerciseSetsMode("preWorkout");
+    resetWorkoutTimer();
     setCurrentPage("activeWorkout");
   };
   const navigateToExerciseDetails = (exercise: Exercise) => {
@@ -80,9 +83,6 @@ function App() {
   };
 
   const markExerciseComplete = (exerciseId: number) => {
-    setCompletedExerciseIds((prev) =>
-      prev.includes(exerciseId) ? prev : [...prev, exerciseId]
-    );
     navigateToActiveWorkout({ resetCompleted: false });
   };
 
@@ -181,6 +181,14 @@ function App() {
   };
 
   return renderPage();
+}
+
+function App() {
+  return (
+    <WorkoutProvider>
+      <AppContent />
+    </WorkoutProvider>
+  );
 }
 
 export default App;

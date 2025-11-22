@@ -1,13 +1,14 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import exerciseData from "../../MockData/exercise.json";
 import { PageContainer } from "../../layout/PageContainer";
 import type { Exercise } from "../../types/exercise";
 import type { WorkoutPageProps } from "../../types/workout";
-import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopup";
+import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopUp";
 import { Button } from "../../components/Buttons/Button";
 import { PageHeader } from "../../components/PageHeader/PageHeader";
 import { ExerciseCard } from "../../components/ExerciseCard/ExerciseCard";
 import { BottomNav } from "../../components/BottomNav/BottomNav";
+import { useWorkout } from "../../providers/WorkoutContext";
 
 const exercises: Exercise[] = exerciseData as Exercise[];
 
@@ -20,7 +21,7 @@ export function WorkoutPage({
   onOpenExerciseSets,
   onStartWorkoutSession,
 }: WorkoutPageProps) {
-  const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
+  const { actionExercise, setActionExercise } = useWorkout();
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   return (
