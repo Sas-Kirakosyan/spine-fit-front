@@ -7,11 +7,10 @@ import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { ExerciseSetsPage } from "./pages/WorkoutPage/ExerciseSetsPage";
 import { ExerciseDetails } from "./pages/WorkoutPage/ExerciseHowTo";
 import { ActiveWorkoutPage } from "./pages/WorkoutPage/ActiveWorkoutPage";
-import { WorkoutProvider, useWorkout } from "./providers/WorkoutContext";
 import type { Exercise } from "./types/exercise";
 import type { Page } from "./types/navigation";
 
-function AppContent() {
+function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const savedPage = localStorage.getItem("currentPage");
     if (
@@ -28,16 +27,15 @@ function AppContent() {
     }
     return "home";
   });
-
-  const {
-    selectedExercise,
-    exerciseSetsMode,
-    completedExerciseIds,
-    setSelectedExercise,
-    setExerciseSetsMode,
-    clearCompletedExercises,
-    resetWorkoutTimer,
-  } = useWorkout();
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
+    null
+  );
+  const [exerciseSetsMode, setExerciseSetsMode] = useState<
+    "preWorkout" | "activeWorkout"
+  >("preWorkout");
+  const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
+    []
+  );
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -47,17 +45,16 @@ function AppContent() {
   const navigateToLogin = () => setCurrentPage("login");
   const navigateToRegister = () => setCurrentPage("register");
   const navigateToWorkout = () => {
-    clearCompletedExercises();
+    setCompletedExerciseIds([]);
     setCurrentPage("workout");
   };
   const navigateToProfile = () => setCurrentPage("profile");
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
-      clearCompletedExercises();
+      setCompletedExerciseIds([]);
     }
     setSelectedExercise(null);
     setExerciseSetsMode("preWorkout");
-    resetWorkoutTimer();
     setCurrentPage("activeWorkout");
   };
   const navigateToExerciseDetails = (exercise: Exercise) => {
@@ -83,6 +80,9 @@ function AppContent() {
   };
 
   const markExerciseComplete = (exerciseId: number) => {
+    setCompletedExerciseIds((prev) =>
+      prev.includes(exerciseId) ? prev : [...prev, exerciseId]
+    );
     navigateToActiveWorkout({ resetCompleted: false });
   };
 
@@ -181,14 +181,6 @@ function AppContent() {
   };
 
   return renderPage();
-}
-
-function App() {
-  return (
-    <WorkoutProvider>
-      <AppContent />
-    </WorkoutProvider>
-  );
 }
 
 export default App;
