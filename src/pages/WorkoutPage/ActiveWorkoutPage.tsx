@@ -1,12 +1,11 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import exerciseData from "../../MockData/exercise.json";
 import { PageContainer } from "../../layout/PageContainer";
 import type { Exercise } from "../../types/exercise";
 import type { ActiveWorkoutPageProps } from "../../types/workout";
 import { iconButtonClass, secondaryButtonClass } from "../../constants/workout";
 import { Button } from "../../components/Buttons/Button";
-import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopUp";
-import { useWorkout } from "../../providers/WorkoutContext";
+import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopup";
 
 const exercises: Exercise[] = exerciseData as Exercise[];
 const ONE_HOUR_SECONDS = 60 * 60;
@@ -29,20 +28,34 @@ export function ActiveWorkoutPage({
   onFinishWorkout,
   completedExerciseIds = [],
 }: ActiveWorkoutPageProps) {
-  const { workoutTimer, actionExercise, setActionExercise, completedExerciseIds: contextCompletedIds } = useWorkout();
+  const [remainingSeconds, setRemainingSeconds] = useState(ONE_HOUR_SECONDS);
+  const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
-  
-  // Используем completedExerciseIds из пропсов, если они переданы, иначе из контекста
-  const finalCompletedIds = completedExerciseIds.length > 0 ? completedExerciseIds : contextCompletedIds;
   const completedExerciseIdsSet = useMemo(
-    () => new Set(finalCompletedIds),
-    [finalCompletedIds]
+    () => new Set(completedExerciseIds),
+    [completedExerciseIds]
   );
 
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setRemainingSeconds((prev) => {
+        if (prev <= 0) {
+          window.clearInterval(intervalId);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
   const progress = useMemo(() => {
-    const clamped = Math.max(workoutTimer, 0);
+    const clamped = Math.max(remainingSeconds, 0);
     return (clamped / ONE_HOUR_SECONDS) * 100;
-  }, [workoutTimer]);
+  }, [remainingSeconds]);
 
   return (
     <PageContainer
@@ -81,7 +94,7 @@ export function ActiveWorkoutPage({
 
         <section className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center shadow-xl">
           <p className="mt-4 text-6xl font-semibold tabular-nums">
-            {formatTime(workoutTimer)}
+            {formatTime(remainingSeconds)}
           </p>
           <div className="mt-8 h-2 rounded-full bg-white/10">
             <div
