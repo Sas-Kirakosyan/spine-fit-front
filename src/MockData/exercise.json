@@ -28,7 +28,7 @@
     "sets": 3,
     "reps": 15,
     "weight": 0,
-    "weight_unit": "bodyweight"
+    "weight_unit": "kg"
   },
   {
     "id": 2,
@@ -59,7 +59,7 @@
     "sets": 3,
     "reps": 12,
     "weight": 0,
-    "weight_unit": "bodyweight"
+    "weight_unit": "kg"
   },
   {
     "id": 3,
@@ -71,7 +71,7 @@
     "difficulty": "intermediate",
     "instructions": "Hang from a bar with shoulders active. Bend your knees and lift them toward your chest while keeping your core braced. Avoid swinging and keep your spine neutral. Lower slowly with control.",
     "video_url": "https://cdn.spinefit.app/videos/hanging_leg_raise_bent_knee.mp4",
-    "image_url": "https://www.burnthefatinnercircle.com/members/images/1789d.png?cb=20250701050339",
+    "image_url": "https://www.muscletech.com/cdn/shop/articles/how-to-perfect-hanging-leg-raises_5a36b98d-aec0-4bbc-b5e1-9007bb029a25.jpg?v=1731600039",
     "equipment_image_url": "https://xmarkfitness.com/cdn/shop/products/4437.2-1.jpg?v=1718890756&width=3000",
     "is_back_friendly": true,
     "back_issue_restrictions": [
@@ -90,7 +90,7 @@
     "sets": 3,
     "reps": 10,
     "weight": 0,
-    "weight_unit": "bodyweight"
+    "weight_unit": "kg"
   },
   {
     "id": 4,

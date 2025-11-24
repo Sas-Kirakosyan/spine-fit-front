@@ -36,6 +36,7 @@ function App() {
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
     []
   );
+  const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(null);
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -46,12 +47,16 @@ function App() {
   const navigateToRegister = () => setCurrentPage("register");
   const navigateToWorkout = () => {
     setCompletedExerciseIds([]);
+    setWorkoutStartTime(null);
     setCurrentPage("workout");
   };
   const navigateToProfile = () => setCurrentPage("profile");
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
+    }
+    if (workoutStartTime === null) {
+      setWorkoutStartTime(Date.now());
     }
     setSelectedExercise(null);
     setExerciseSetsMode("preWorkout");
@@ -74,9 +79,14 @@ function App() {
     setCurrentPage("workout");
   };
   const backFromExerciseSets = () => {
+    const previousMode = exerciseSetsMode;
     setSelectedExercise(null);
     setExerciseSetsMode("preWorkout");
-    setCurrentPage("workout");
+    if (previousMode === "activeWorkout") {
+      setCurrentPage("activeWorkout");
+    } else {
+      setCurrentPage("workout");
+    }
   };
 
   const markExerciseComplete = (exerciseId: number) => {
@@ -167,13 +177,13 @@ function App() {
             }
             onFinishWorkout={navigateToWorkout}
             completedExerciseIds={completedExerciseIds}
+            workoutStartTime={workoutStartTime || undefined}
           />
         );
       default:
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
-            // onNavigateToRegister={navigateToRegister}
             onNavigateToWorkout={navigateToWorkout}
           />
         );
