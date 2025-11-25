@@ -5,10 +5,10 @@ import type { Exercise } from "../../types/exercise";
 import type { ActiveWorkoutPageProps } from "../../types/workout";
 import { iconButtonClass, secondaryButtonClass } from "../../constants/workout";
 import { Button } from "../../components/Buttons/Button";
-import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopup";
+import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopUp";
+import { FinishWorkoutModal } from "./FinishWorkoutModal";
 
 const exercises: Exercise[] = exerciseData as Exercise[];
-const ONE_HOUR_SECONDS = 60 * 60;
 
 const formatTime = (totalSeconds: number) => {
   const clampedSeconds = Math.max(totalSeconds, 0);
@@ -27,35 +27,88 @@ export function ActiveWorkoutPage({
   onOpenExerciseSets,
   onFinishWorkout,
   completedExerciseIds = [],
+  workoutStartTime,
 }: ActiveWorkoutPageProps) {
-  const [remainingSeconds, setRemainingSeconds] = useState(ONE_HOUR_SECONDS);
+  const [elapsedSeconds, setElapsedSeconds] = useState(() => {
+    if (workoutStartTime) {
+      return Math.floor((Date.now() - workoutStartTime) / 1000);
+    }
+    return 0;
+  });
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
+  const [showFinishModal, setShowFinishModal] = useState(false);
+  const [fixedDuration, setFixedDuration] = useState<string>("00:00:00");
+  const [adjustedStartTime, setAdjustedStartTime] = useState<number | null>(
+    workoutStartTime || null
+  );
   const cardRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (workoutStartTime) {
+      setAdjustedStartTime(workoutStartTime);
+      const elapsed = Math.floor((Date.now() - workoutStartTime) / 1000);
+      setElapsedSeconds(elapsed);
+    }
+  }, [workoutStartTime]);
   const completedExerciseIdsSet = useMemo(
     () => new Set(completedExerciseIds),
     [completedExerciseIds]
   );
 
+  const allExercisesCompleted = useMemo(() => {
+    return (
+      exercises.length > 0 &&
+      exercises.every((exercise) => completedExerciseIdsSet.has(exercise.id))
+    );
+  }, [exercises, completedExerciseIdsSet]);
+
+  const completedExercises = useMemo(() => {
+    return exercises.filter((exercise) =>
+      completedExerciseIdsSet.has(exercise.id)
+    );
+  }, [exercises, completedExerciseIdsSet]);
+
+  const handleFinishWorkout = () => {
+    if (allExercisesCompleted) {
+      const currentDuration = formatTime(elapsedSeconds);
+      setFixedDuration(currentDuration);
+      setShowFinishModal(true);
+    } else {
+      onFinishWorkout();
+    }
+  };
+
+  const handleResume = () => {
+    const pausedElapsedSeconds = elapsedSeconds;
+    const newStartTime = Date.now() - pausedElapsedSeconds * 1000;
+    setAdjustedStartTime(newStartTime);
+    setShowFinishModal(false);
+  };
+
+  const handleLogWorkout = () => {
+    setShowFinishModal(false);
+    onFinishWorkout();
+  };
+
   useEffect(() => {
-    const intervalId = window.setInterval(() => {
-      setRemainingSeconds((prev) => {
-        if (prev <= 0) {
-          window.clearInterval(intervalId);
-          return 0;
-        }
-        return prev - 1;
-      });
+    const effectiveStartTime = adjustedStartTime || workoutStartTime;
+
+    if (!effectiveStartTime || showFinishModal) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - effectiveStartTime) / 1000);
+      setElapsedSeconds(elapsed);
     }, 1000);
 
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, []);
+    const elapsed = Math.floor((Date.now() - effectiveStartTime) / 1000);
+    setElapsedSeconds(elapsed);
 
-  const progress = useMemo(() => {
-    const clamped = Math.max(remainingSeconds, 0);
-    return (clamped / ONE_HOUR_SECONDS) * 100;
-  }, [remainingSeconds]);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [adjustedStartTime, workoutStartTime, showFinishModal]);
 
   return (
     <PageContainer
@@ -94,15 +147,8 @@ export function ActiveWorkoutPage({
 
         <section className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center shadow-xl">
           <p className="mt-4 text-6xl font-semibold tabular-nums">
-            {formatTime(remainingSeconds)}
+            {formatTime(elapsedSeconds)}
           </p>
-          <div className="mt-8 h-2 rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-blue-500 transition-all"
-              style={{ width: `${progress}%` }}
-              aria-hidden="true"
-            />
-          </div>
         </section>
 
         <section>
@@ -122,7 +168,7 @@ export function ActiveWorkoutPage({
                   }`}
                 >
                   <div className="flex flex-1 items-center gap-4">
-                    <div className="relative h-16 w-16 overflow-hidden rounded-[10px]">
+                    <div className="relative h-20 w-20 flex-shrink-0 aspect-square overflow-hidden rounded-[10px]">
                       <img
                         src={exercise.image_url}
                         alt={exercise.name}
@@ -188,7 +234,7 @@ export function ActiveWorkoutPage({
           </div>
         </section>
         <Button
-          onClick={onFinishWorkout}
+          onClick={handleFinishWorkout}
           className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-red-600 text-white uppercase"
         >
           Finish Workout
@@ -212,6 +258,14 @@ export function ActiveWorkoutPage({
             containerRef={cardRef}
           />
         )}
+        <FinishWorkoutModal
+          isOpen={showFinishModal}
+          onClose={handleResume}
+          onLogWorkout={handleLogWorkout}
+          completedExercises={completedExercises}
+          duration={fixedDuration}
+          containerRef={cardRef}
+        />
       </div>
     </PageContainer>
   );

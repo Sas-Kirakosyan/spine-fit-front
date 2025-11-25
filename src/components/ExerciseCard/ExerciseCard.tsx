@@ -26,7 +26,7 @@ export function ExerciseCard({
           event.stopPropagation();
           onDetailsClick();
         }}
-        className="relative h-20 w-20 overflow-hidden rounded-[14px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+        className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
         aria-label={`Открыть детали упражнения ${exercise.name}`}
       >
         <img

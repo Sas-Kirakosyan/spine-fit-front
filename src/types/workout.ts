@@ -58,4 +58,5 @@ export interface ActiveWorkoutPageProps {
   onOpenExerciseSets: (exercise: Exercise) => void;
   onFinishWorkout: () => void;
   completedExerciseIds?: number[];
+  workoutStartTime?: number;
 }

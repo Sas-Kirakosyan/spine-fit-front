@@ -171,8 +171,6 @@ export function ExerciseSetsPage({
       return;
     }
 
-    console.log("Logging set entries", sets[targetIndex]);
-
     setSets((prev) => {
       const updated = prev.map((item, index) =>
         index === targetIndex ? { ...item, completed: true } : item
@@ -186,7 +184,6 @@ export function ExerciseSetsPage({
   };
 
   const handleLogAllSets = () => {
-    console.log("Logging all set entries", sets);
     setSets((prev) => prev.map((item) => ({ ...item, completed: true })));
     setActiveSetIndex(-1);
   };
