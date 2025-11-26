@@ -15,6 +15,7 @@ export function WorkoutPage({
   onNavigateToHome,
   onNavigateToWorkout,
   onNavigateToProfile,
+  onNavigateToHistory,
   activePage,
   onOpenExerciseDetails,
   onOpenExerciseSets,
@@ -55,6 +56,7 @@ export function WorkoutPage({
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}
           onProfileClick={onNavigateToProfile}
+          onHistoryClick={onNavigateToHistory}
         />
 
         {actionExercise && (

@@ -4,6 +4,7 @@ export type Page =
   | "register"
   | "workout"
   | "profile"
+  | "history"
   | "exerciseSets"
   | "exerciseDetails"
   | "activeWorkout";

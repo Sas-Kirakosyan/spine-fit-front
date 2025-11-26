@@ -192,10 +192,14 @@ export function ExerciseSetsPage({
     if (sets.length === 0) {
       return;
     }
-    onMarkExerciseComplete?.(exercise.id);
-    if (!onMarkExerciseComplete) {
-      onStartWorkoutSession();
+    if (onMarkExerciseComplete) {
+      onMarkExerciseComplete(
+        exercise.id,
+        sets.map((setEntry) => ({ ...setEntry }))
+      );
+      return;
     }
+    onStartWorkoutSession();
   };
 
   const allSetsCompleted =

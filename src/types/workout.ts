@@ -23,7 +23,10 @@ export interface ExerciseSetsPageProps {
   exercise: Exercise;
   onNavigateBack: () => void;
   onStartWorkoutSession: () => void;
-  onMarkExerciseComplete?: (exerciseId: number) => void;
+  onMarkExerciseComplete?: (
+    exerciseId: number,
+    sets: ExerciseSetRow[]
+  ) => void;
   isDuringActiveWorkout?: boolean;
 }
 
@@ -31,7 +34,8 @@ export interface WorkoutPageProps {
   onNavigateToHome: () => void;
   onNavigateToWorkout: () => void;
   onNavigateToProfile: () => void;
-  activePage: "workout" | "profile";
+  onNavigateToHistory: () => void;
+  activePage: "workout" | "profile" | "history";
   onOpenExerciseDetails: (exercise: Exercise) => void;
   onOpenExerciseSets: (exercise: Exercise) => void;
   onStartWorkoutSession: () => void;
@@ -53,10 +57,22 @@ export interface ExerciseActionSheetProps {
   containerRef: RefObject<HTMLDivElement | null>;
 }
 
+export interface FinishedWorkoutSummary {
+  id: string;
+  finishedAt: string;
+  duration: string;
+  totalVolume: number;
+  exerciseCount: number;
+  caloriesBurned: number;
+  completedExercises: Exercise[];
+  completedExerciseLogs: Record<number, ExerciseSetRow[]>;
+}
+
 export interface ActiveWorkoutPageProps {
   onNavigateBack: () => void;
   onOpenExerciseSets: (exercise: Exercise) => void;
-  onFinishWorkout: () => void;
+  onFinishWorkout: (summary?: FinishedWorkoutSummary) => void;
   completedExerciseIds?: number[];
   workoutStartTime?: number;
+  exerciseLogs?: Record<number, ExerciseSetRow[]>;
 }
