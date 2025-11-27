@@ -1,0 +1,333 @@
+[
+  {
+    "id": 1,
+    "name": "Back Hyperextension",
+    "description": "A controlled spinal extension exercise performed on a hyperextension bench. Primarily targets the lower back (erector spinae), glutes, and hamstrings.",
+    "category": "strength",
+    "muscle_groups": ["erector_spinae", "glutes", "hamstrings"],
+    "equipment": "hyperextension_bench",
+    "difficulty": "beginner",
+    "instructions": "Position your hips on the pad with feet secured. Lower your torso under control while keeping a neutral spine. Raise your upper body until aligned with your legs. Avoid overextending your lower back.",
+    "video_url": "https://cdn.spinefit.app/videos/hyperextension.mp4",
+    "image_url": "https://expertfitnesssupply.com/wp-content/uploads/2018/10/GHYP345B-IMGL0134.jpg",
+    "equipment_image_url": "https://image.made-in-china.com/202f0j00ThMcNkpRJgoG/Professional-Exercise-Strength-Trainer-Back-Extension-Bench-Roman-Chair.webp",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 12,
+        "exercise_id": 402,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Keep spine neutral and avoid hyperextending at the top. Move slowly and avoid jerky motions.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 2,
+    "name": "Single-Leg Glute Bridge",
+    "description": "A unilateral glute activation exercise performed on the floor. It strengthens the glutes, stabilizers, hamstrings, and improves lumbopelvic control.",
+    "category": "strength",
+    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Lie on your back with one knee bent and the other leg extended. Press through your heel and lift your hips while keeping your core engaged. Avoid arching your lower back. Lower slowly with control.",
+    "video_url": "https://cdn.spinefit.app/videos/single_leg_glute_bridge.mp4",
+    "image_url": "https://www.shutterstock.com/image-photo/female-fitness-instructor-demonstrates-singleleg-260nw-2538969509.jpg",
+    "equipment_image_url": "https://www.shutterstock.com/image-photo/female-fitness-instructor-demonstrates-singleleg-260nw-2538969509.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 13,
+        "exercise_id": 403,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Do not overextend hips. Keep ribs down and avoid pushing through lower back. Move slowly.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 3,
+    "name": "Hanging Leg Raises (Bent-Knee or Single-Leg)",
+    "description": "A core exercise performed while hanging from a bar. The bent-knee or single-leg variation targets the abdominals and hip flexors while reducing lumbar strain.",
+    "category": "strength",
+    "muscle_groups": ["abdominals", "hip_flexors", "obliques"],
+    "equipment": "pull_up_bar",
+    "difficulty": "intermediate",
+    "instructions": "Hang from a bar with shoulders active. Bend your knees and lift them toward your chest while keeping your core braced. Avoid swinging and keep your spine neutral. Lower slowly with control.",
+    "video_url": "https://cdn.spinefit.app/videos/hanging_leg_raise_bent_knee.mp4",
+    "image_url": "https://www.muscletech.com/cdn/shop/articles/how-to-perfect-hanging-leg-raises_5a36b98d-aec0-4bbc-b5e1-9007bb029a25.jpg?v=1731600039",
+    "equipment_image_url": "https://xmarkfitness.com/cdn/shop/products/4437.2-1.jpg?v=1718890756&width=3000",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 14,
+        "exercise_id": 404,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Use bent-knee or single-leg only. Avoid straight-leg raises. Keep pelvis neutral and avoid lumbar rounding.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 4,
+    "name": "One-Arm Crossover Cable Pull",
+    "description": "A unilateral cable pulling exercise that targets the lats, upper back, and deep stabilizers. This movement also improves core control and supports a healthy spine.",
+    "category": "strength",
+    "muscle_groups": ["lats", "upper_back", "rear_delts", "core_stabilizers"],
+    "equipment": "cable_machine",
+    "difficulty": "intermediate",
+    "instructions": "Stand sideways to the cable machine with the handle set slightly above shoulder level. Grab the handle with the outside arm. Pull the cable across your body while keeping your torso stable and ribs down. Focus on driving the elbow toward the hip. Avoid rotating the spine.",
+    "video_url": "https://www.garagegymreviews.com/wp-content/uploads/2023/06/single-arm-cable-row.gif",
+    "image_url": "https://www.garagegymreviews.com/wp-content/uploads/2023/06/single-arm-cable-row.gif",
+    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg?x-oss-process=image/resize,m_lfit,w_768/format,webp/quality,80",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 15,
+        "exercise_id": 405,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Keep core braced and avoid twisting the lower back. Use light to moderate weight and move with control.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 10,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 5,
+    "name": "Cable Kickbacks",
+    "description": "A controlled cable kickback exercise focusing on glutes, hamstrings, spinal stabilizers, and leg biceps. Great for strength without loading the lumbar spine.",
+    "category": "strength",
+    "muscle_groups": ["glutes", "hamstrings", "erector_spinae", "leg_biceps"],
+    "equipment": "cable_machine_ankle_attachment",
+    "instructions": "Attach the ankle strap to the cable. Stand tall, brace your core, keep ribs down. Kick the leg backward slowly, avoid leaning forward or arching the back. Return with control.",
+    "difficulty": "beginner",
+    "video_url": "/videos/cable_kickbacks.mp4",
+    "image_url": "/images/exercises/cable_kickbacks.jpg",
+    "equipment_image_url": "/images/equipment/ankle_cable_attachment.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 16,
+        "exercise_id": 5,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Do not bend forward. Keep posture upright. Use light resistance and prioritize slow controlled movement.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 5,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 6,
+    "name": "Bird Dog (Bench or Stability Ball)",
+    "description": "A cable-free core stabilization exercise that strengthens the spine, back muscles, and deep stabilizers with minimal lumbar load.",
+    "category": "core",
+    "muscle_groups": [
+      "core_stabilizers",
+      "erector_spinae",
+      "glutes",
+      "obliques",
+      "upper_back"
+    ],
+    "equipment": "bench_or_stability_ball",
+    "instructions": "On a bench or stability ball, keep pelvis neutral. Extend opposite arm and leg slowly. Avoid shifting hips or arching lower back. Hold 2 seconds, switch sides.",
+    "difficulty": "beginner",
+    "video_url": "/videos/bird_dog_variation.mp4",
+    "image_url": "/images/exercises/bird_dog.jpg",
+    "equipment_image_url": "/images/equipment/bench_stability_ball.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 17,
+        "exercise_id": 6,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Do not raise leg too high. Keep abdomen braced, ribs down, and move slow for stability.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 7,
+    "name": "Lying Cable Knee Drive",
+    "description": "A controlled cable knee drive focusing on hip flexors (iliopsoas), quadriceps, and core control while keeping the spine safe.",
+    "category": "strength",
+    "muscle_groups": ["hip_flexors", "quadriceps", "core_stabilizers"],
+    "equipment": "cable_machine_low_pull_handle",
+    "instructions": "Lie on your back, attach foot/handle to cable set at low pull. Brace core, drive one knee toward chest without lumbar rounding. Extend back slowly. Do not swing.",
+    "difficulty": "intermediate",
+    "video_url": "/videos/lying_cable_knee_drive.mp4",
+    "image_url": "/images/exercises/lying_cable_knee_drive.jpg",
+    "equipment_image_url": "/images/equipment/cable_machine_low_pull.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 18,
+        "exercise_id": 7,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Perform single-leg only. Keep lower back on floor and pelvis neutral. Avoid lumbar rounding. Use light load.",
+        "created_at": "2025-10-26T12:00:00Z",
+        "updated_at": "2025-10-26T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:30:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 7,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 406,
+    "name": "Bodyweight/Light Dumbbell Bulgarian Split Squats",
+    "description": "A back-friendly unilateral leg builder that avoids axial spinal loading while still building muscle effectively.",
+    "category": "strength",
+    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "equipment": "bench_bodyweight_or_light_dumbbell",
+    "image_url": "/assets/exercises/bulgarian_split_squats.jpg",
+    "equipment_image_url": "/assets/equipment/bench.jpg",
+    "difficulty": "beginner",
+    "instructions": "Place rear foot on bench, step forward, brace core. Lower under control without leaning torso forward aggressively.",
+    "video_url": "https://cdn.spinefit.app/videos/bulgarian_split.mp4",
+    "sets": 3,
+    "reps": 10,
+    "weight": 4,
+    "weight_unit": "kg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 26,
+        "exercise_id": 406,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Keep torso upright, avoid deep forward bend. No added weight if pain increases."
+      }
+    ]
+  },
+  {
+    "id": 407,
+    "name": "Leg Extension",
+    "description": "Quadriceps isolation using a machine with zero compression through the lumbar spine.",
+    "category": "strength",
+    "muscle_groups": ["quadriceps"],
+    "equipment": "leg_extension_machine",
+    "image_url": "/assets/exercises/leg_extension.jpg",
+    "equipment_image_url": "/assets/equipment/leg_extension_machine.jpg",
+    "difficulty": "beginner",
+    "instructions": "Sit tall, hold handles, extend knees under control. Avoid leaning back aggressively.",
+    "video_url": "https://cdn.spinefit.app/videos/leg_extension.mp4",
+    "sets": 4,
+    "reps": 12,
+    "weight": 25,
+    "weight_unit": "kg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 27,
+        "exercise_id": 407,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Do not slam the pad, keep movement smooth. Reduce range if nerve pain flares."
+      }
+    ]
+  },
+  {
+    "id": 408,
+    "name": "Seated Hip Abduction",
+    "description": "Glute medius and outer-leg isolation improving hip stability and pelvis control, which supports spine health.",
+    "category": "strength",
+    "muscle_groups": ["glutes", "hip_abductors"],
+    "equipment": "hip_abductor_machine",
+    "image_url": "/assets/exercises/seated_hip_abduction.jpg",
+    "equipment_image_url": "/assets/equipment/hip_abductor_machine.jpg",
+    "difficulty": "beginner",
+    "instructions": "Sit tall, press knees outward slowly, avoid lumbar movement while spreading.",
+    "video_url": "https://cdn.spinefit.app/videos/hip_abduction.mp4",
+    "sets": 3,
+    "reps": 15,
+    "weight": 30,
+    "weight_unit": "kg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 28,
+        "exercise_id": 408,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Keep pelvis neutral, avoid leaning sideways or arching."
+      }
+    ]
+  },
+  {
+    "id": 409,
+    "name": "Bench or Machine Hip Thrust",
+    "description": "A glute and hamstring builder with external support that avoids spinal compression and trains hip hinge strength safely.",
+    "category": "strength",
+    "muscle_groups": ["glutes", "hamstrings"],
+    "equipment": "bench_or_smith_machine",
+    "image_url": "/assets/exercises/hip_thrust.jpg",
+    "equipment_image_url": "/assets/equipment/smith_machine.jpg",
+    "difficulty": "intermediate",
+    "instructions": "Upper back on bench or supported pad, drive hips up without lumbar arch. Ribs down, chin tucked slightly.",
+    "video_url": "https://cdn.spinefit.app/videos/hip_thrust.mp4",
+    "sets": 3,
+    "reps": 12,
+    "weight": 40,
+    "weight_unit": "kg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 29,
+        "exercise_id": 409,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "No top-position lumbar arching. Reduce load if compression or nerve pain increases."
+      }
+    ]
+  }
+]
