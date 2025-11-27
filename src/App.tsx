@@ -9,10 +9,12 @@ import { ExerciseDetails } from "./pages/WorkoutPage/ExerciseHowTo";
 import { ActiveWorkoutPage } from "./pages/WorkoutPage/ActiveWorkoutPage";
 import type { Exercise } from "./types/exercise";
 import type { Page } from "./types/navigation";
+import type { ExerciseSetRow, FinishedWorkoutSummary } from "./types/workout";
+import { HistoryPage } from "./pages/HistoryPage/HistoryPage";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
-    const savedPage = localStorage.getItem("currentPage");
+    const savedPage = localStorage.getItem("currentPage") as Page | null;
     if (
       savedPage === "home" ||
       savedPage === "login" ||
@@ -21,7 +23,8 @@ function App() {
       savedPage === "profile" ||
       savedPage === "exerciseSets" ||
       savedPage === "exerciseDetails" ||
-      savedPage === "activeWorkout"
+      savedPage === "activeWorkout" ||
+      savedPage === "history"
     ) {
       return savedPage;
     }
@@ -37,23 +40,54 @@ function App() {
     []
   );
   const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(null);
+  const [exerciseLogs, setExerciseLogs] = useState<
+    Record<number, ExerciseSetRow[]>
+  >({});
+  const [workoutHistory, setWorkoutHistory] = useState<
+    FinishedWorkoutSummary[]
+  >(() => {
+    const savedHistory = localStorage.getItem("workoutHistory");
+    if (!savedHistory) {
+      return [];
+    }
+    try {
+      const parsed = JSON.parse(savedHistory);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+    } catch {
+      // ignore parse errors
+    }
+    return [];
+  });
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
   }, [currentPage]);
 
+  useEffect(() => {
+    localStorage.setItem("workoutHistory", JSON.stringify(workoutHistory));
+  }, [workoutHistory]);
+
   const navigateToHome = () => setCurrentPage("home");
   const navigateToLogin = () => setCurrentPage("login");
   const navigateToRegister = () => setCurrentPage("register");
-  const navigateToWorkout = () => {
+  const resetWorkoutState = () => {
     setCompletedExerciseIds([]);
+    setExerciseLogs({});
     setWorkoutStartTime(null);
+  };
+
+  const navigateToWorkout = () => {
+    resetWorkoutState();
     setCurrentPage("workout");
   };
   const navigateToProfile = () => setCurrentPage("profile");
+  const navigateToHistory = () => setCurrentPage("history");
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
+      setExerciseLogs({});
     }
     if (workoutStartTime === null) {
       setWorkoutStartTime(Date.now());
@@ -89,11 +123,29 @@ function App() {
     }
   };
 
-  const markExerciseComplete = (exerciseId: number) => {
+  const markExerciseComplete = (exerciseId: number, sets: ExerciseSetRow[]) => {
+    const completedSets = sets
+      .filter((setEntry) => setEntry.completed)
+      .map((setEntry) => ({ ...setEntry }));
+    setExerciseLogs((prev) => ({
+      ...prev,
+      [exerciseId]: completedSets,
+    }));
     setCompletedExerciseIds((prev) =>
       prev.includes(exerciseId) ? prev : [...prev, exerciseId]
     );
     navigateToActiveWorkout({ resetCompleted: false });
+  };
+
+  const handleFinishWorkout = (summary?: FinishedWorkoutSummary) => {
+    if (summary) {
+      setWorkoutHistory((prev) => [...prev, summary]);
+      resetWorkoutState();
+      setCurrentPage("history");
+      return;
+    }
+    resetWorkoutState();
+    setCurrentPage("workout");
   };
 
   const renderPage = () => {
@@ -127,6 +179,7 @@ function App() {
             onNavigateToHome={navigateToHome}
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProfile={navigateToProfile}
+            onNavigateToHistory={navigateToHistory}
             activePage="workout"
             onOpenExerciseDetails={navigateToExerciseDetails}
             onOpenExerciseSets={navigateToExerciseSets}
@@ -139,6 +192,7 @@ function App() {
             onNavigateToHome={navigateToHome}
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProfile={navigateToProfile}
+            onNavigateToHistory={navigateToHistory}
             activePage="profile"
           />
         );
@@ -175,9 +229,20 @@ function App() {
             onOpenExerciseSets={(exercise) =>
               navigateToExerciseSets(exercise, "activeWorkout")
             }
-            onFinishWorkout={navigateToWorkout}
+            onFinishWorkout={handleFinishWorkout}
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
+            exerciseLogs={exerciseLogs}
+          />
+        );
+      case "history":
+        return (
+          <HistoryPage
+            onNavigateToWorkout={navigateToWorkout}
+            onNavigateToProfile={navigateToProfile}
+            onNavigateToHistory={navigateToHistory}
+            activePage="history"
+            workouts={workoutHistory}
           />
         );
       default:

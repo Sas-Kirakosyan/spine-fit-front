@@ -1,9 +1,8 @@
-import React from "react";
-
 interface BottomNavProps {
-  activePage: "workout" | "profile";
+  activePage: "workout" | "profile" | "history";
   onWorkoutClick: () => void;
   onProfileClick: () => void;
+  onHistoryClick: () => void;
 }
 
 const baseNavButtonClass =
@@ -20,6 +19,7 @@ export function BottomNav({
   activePage,
   onWorkoutClick,
   onProfileClick,
+  onHistoryClick,
 }: BottomNavProps) {
   return (
     <nav className="bg-[#1B1E2B] flex justify-evenly gap-4 rounded-[10px]">
@@ -36,6 +36,13 @@ export function BottomNav({
         onClick={onProfileClick}
       >
         Profile
+      </button>
+      <button
+        type="button"
+        className={getNavButtonClassName(activePage === "history")}
+        onClick={onHistoryClick}
+      >
+        History
       </button>
     </nav>
   );

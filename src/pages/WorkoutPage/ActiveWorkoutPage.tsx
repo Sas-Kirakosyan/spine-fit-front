@@ -2,11 +2,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import exerciseData from "../../MockData/exercise.json";
 import { PageContainer } from "../../layout/PageContainer";
 import type { Exercise } from "../../types/exercise";
-import type { ActiveWorkoutPageProps } from "../../types/workout";
+import type {
+  ActiveWorkoutPageProps,
+  FinishedWorkoutSummary,
+} from "../../types/workout";
 import { iconButtonClass, secondaryButtonClass } from "../../constants/workout";
 import { Button } from "../../components/Buttons/Button";
 import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopUp";
 import { FinishWorkoutModal } from "./FinishWorkoutModal";
+import { calculateWorkoutVolume } from "../../utils/workoutStats";
 
 const exercises: Exercise[] = exerciseData as Exercise[];
 
@@ -28,6 +32,7 @@ export function ActiveWorkoutPage({
   onFinishWorkout,
   completedExerciseIds = [],
   workoutStartTime,
+  exerciseLogs = {},
 }: ActiveWorkoutPageProps) {
   const [elapsedSeconds, setElapsedSeconds] = useState(() => {
     if (workoutStartTime) {
@@ -86,8 +91,23 @@ export function ActiveWorkoutPage({
   };
 
   const handleLogWorkout = () => {
+    const caloriesBurned = 100;
+    const totalVolume = calculateWorkoutVolume(
+      completedExercises,
+      exerciseLogs
+    );
+    const summary: FinishedWorkoutSummary = {
+      id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
+      finishedAt: new Date().toISOString(),
+      duration: fixedDuration,
+      totalVolume,
+      exerciseCount: completedExercises.length,
+      caloriesBurned,
+      completedExercises,
+      completedExerciseLogs: exerciseLogs,
+    };
     setShowFinishModal(false);
-    onFinishWorkout();
+    onFinishWorkout(summary);
   };
 
   useEffect(() => {
@@ -263,6 +283,7 @@ export function ActiveWorkoutPage({
           onClose={handleResume}
           onLogWorkout={handleLogWorkout}
           completedExercises={completedExercises}
+          completedExerciseLogs={exerciseLogs}
           duration={fixedDuration}
           containerRef={cardRef}
         />
