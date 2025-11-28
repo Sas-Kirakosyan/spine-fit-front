@@ -1,46 +1,10 @@
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
-import { PageContainer } from "../../layout/PageContainer";
-import { BottomNav } from "../../components/BottomNav/BottomNav";
-import type { HistoryPageProps } from "../../types/pages";
-
-const formatDateTime = (isoDate: string) => {
-  const date = new Date(isoDate);
-  if (Number.isNaN(date.getTime())) {
-    return isoDate;
-  }
-  return date.toLocaleString(undefined, {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
-const isSameDay = (date1: Date, date2: Date): boolean => {
-  return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
-  );
-};
-
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
+import { months } from "@/utils/date";
+import { PageContainer } from "@/layout/PageContainer";
+import { BottomNav } from "@/components/BottomNav/BottomNav";
+import type { HistoryPageProps } from "@/types/pages";
+import { WorkoutHistoryList } from "@/pages/HistoryPage/WorkoutHistoryList";
 export function HistoryPage({
   onNavigateToWorkout,
   onNavigateToProfile,
@@ -50,18 +14,6 @@ export function HistoryPage({
 }: HistoryPageProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-
-  const sortedWorkouts = [...workouts].sort(
-    (a, b) =>
-      new Date(b.finishedAt).getTime() - new Date(a.finishedAt).getTime()
-  );
-
-  const filteredWorkouts = selectedDate
-    ? sortedWorkouts.filter((workout) => {
-        const workoutDate = new Date(workout.finishedAt);
-        return isSameDay(workoutDate, selectedDate);
-      })
-    : sortedWorkouts;
 
   const currentYear = currentMonth.getFullYear();
   const currentMonthIndex = currentMonth.getMonth();
@@ -212,80 +164,7 @@ export function HistoryPage({
             }}
           />
         </div>
-
-        <div className="flex flex-col gap-4">
-          {filteredWorkouts.length === 0 ? (
-            <div className="rounded-[12px] border border-white/10 bg-[#111427]/80 p-8 text-center">
-              <p className="text-slate-400">
-                {selectedDate
-                  ? "No workouts on selected date"
-                  : "No completed workouts"}
-              </p>
-            </div>
-          ) : (
-            filteredWorkouts.map((workout) => (
-              <article
-                key={workout.id}
-                className="rounded-[12px] border border-white/10 bg-[#111427]/80 p-5"
-              >
-                <div className="flex flex-wrap items-center justify-between text-sm text-white">
-                  <span>{formatDateTime(workout.finishedAt)}</span>
-                  <span className="font-semibold text-white">
-                    Duration: {workout.duration}
-                  </span>
-                </div>
-
-                <div className="mt-4 grid grid-cols-2 gap-4 text-white sm:grid-cols-4">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
-                      Volume
-                    </p>
-                    <p className="text-lg font-semibold">
-                      {workout.totalVolume.toLocaleString()} kg
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
-                      Calories
-                    </p>
-                    <p className="text-lg font-semibold">
-                      {workout.caloriesBurned} kcal
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
-                      Exercises
-                    </p>
-                    <p className="text-lg font-semibold">
-                      {workout.exerciseCount}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
-                      Records
-                    </p>
-                    <p className="text-lg font-semibold">
-                      {Object.keys(workout.completedExerciseLogs).length}
-                    </p>
-                  </div>
-                </div>
-
-                <ul className="mt-4 flex flex-col gap-0.5">
-                  {workout.completedExercises.map((exercise) => (
-                    <li
-                      key={`${workout.id}-${exercise.id}`}
-                      className="rounded-[10px] border border-white/30 bg-[#15182A]/80 p-3"
-                    >
-                      <p className="text-sm font-semibold text-white">
-                        {exercise.name}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))
-          )}
-        </div>
+        <WorkoutHistoryList workouts={workouts} selectedDate={selectedDate} />
       </section>
 
       <BottomNav
