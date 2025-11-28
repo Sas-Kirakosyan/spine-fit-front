@@ -39,6 +39,9 @@ export interface WorkoutPageProps {
   onOpenExerciseDetails: (exercise: Exercise) => void;
   onOpenExerciseSets: (exercise: Exercise) => void;
   onStartWorkoutSession: () => void;
+  onNavigateToAllExercise?: () => void;
+  exercises?: Exercise[];
+  onRemoveExercise?: (exerciseId: number) => void;
 }
 
 export interface ExerciseDetailsProps {

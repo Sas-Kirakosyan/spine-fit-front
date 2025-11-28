@@ -195,7 +195,7 @@ export function HistoryPage({
               head_cell:
                 "text-slate-400 rounded-md w-9 font-normal text-[0.8rem]",
               row: "flex w-full mt-2",
-              cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-slate-800/50 [&:has([aria-selected])]:bg-slate-800 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+              cell: "h-9 w-9 text-center text-sm relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-slate-800/50 [&:has([aria-selected])]:bg-slate-800 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
               day: "h-9 w-12 font-normal text-center aria-selected:opacity-100 text-white hover:bg-blue-600 rounded-md",
               day_selected:
                 "bg-blue-600 text-white hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white",

@@ -7,5 +7,6 @@ export type Page =
   | "history"
   | "exerciseSets"
   | "exerciseDetails"
-  | "activeWorkout";
+  | "activeWorkout"
+  | "allExercise";
 

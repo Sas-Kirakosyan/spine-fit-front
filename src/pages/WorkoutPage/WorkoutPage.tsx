@@ -9,7 +9,7 @@ import { PageHeader } from "../../components/PageHeader/PageHeader";
 import { ExerciseCard } from "../../components/ExerciseCard/ExerciseCard";
 import { BottomNav } from "../../components/BottomNav/BottomNav";
 
-const exercises: Exercise[] = exerciseData as Exercise[];
+const defaultExercises: Exercise[] = exerciseData as Exercise[];
 
 export function WorkoutPage({
   onNavigateToHome,
@@ -20,6 +20,9 @@ export function WorkoutPage({
   onOpenExerciseDetails,
   onOpenExerciseSets,
   onStartWorkoutSession,
+  onNavigateToAllExercise,
+  exercises = defaultExercises,
+  onRemoveExercise,
 }: WorkoutPageProps) {
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
@@ -43,6 +46,40 @@ export function WorkoutPage({
               onActionClick={() => setActionExercise(exercise)}
             />
           ))}
+
+          <div
+            className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B]/90 p-3 text-left shadow-xl ring-1 ring-white/5"
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              if (onNavigateToAllExercise) {
+                onNavigateToAllExercise();
+              }
+            }}
+          >
+            <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[10px] border-2 border-stone-500 bg-transparent">
+              <svg
+                className="h-10 w-10 text-red-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </div>
+
+            <div className="flex flex-1 flex-col justify-center">
+              <span className="text-lg font-semibold text-red-500 sm:text-xl">
+                Add Exercise
+              </span>
+            </div>
+          </div>
         </section>
 
         <Button
@@ -72,6 +109,12 @@ export function WorkoutPage({
             onStartWorkout={() => {
               if (actionExercise) {
                 onOpenExerciseSets(actionExercise);
+              }
+              setActionExercise(null);
+            }}
+            onDelete={() => {
+              if (actionExercise && onRemoveExercise) {
+                onRemoveExercise(actionExercise.id);
               }
               setActionExercise(null);
             }}
