@@ -1,5 +1,3 @@
-import React from "react";
-
 interface FormHeaderProps {
   title: string;
   subtitle?: string;
@@ -13,4 +11,3 @@ export function FormHeader({ title, subtitle }: FormHeaderProps) {
     </div>
   );
 }
-

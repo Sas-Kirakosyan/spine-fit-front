@@ -1,5 +1,3 @@
-import React from "react";
-
 interface GoogleAuthButtonProps {
   onClick: () => void;
   text?: string;
@@ -37,4 +35,3 @@ export function GoogleAuthButton({
     </button>
   );
 }
-

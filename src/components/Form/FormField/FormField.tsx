@@ -1,5 +1,3 @@
-import React from "react";
-
 interface FormFieldProps {
   label: string;
   id: string;
@@ -46,4 +44,3 @@ export function FormField({
     </div>
   );
 }
-

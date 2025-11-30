@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PageContainer } from "@/layout/PageContainer";
+import { PageContainer } from "@/Layout/PageContainer"; // TODO: check if needed
 import { Button } from "@/components/Buttons/Button";
 import type { QuizQuestion, QuizModalProps } from "@/types/quiz";
 

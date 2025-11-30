@@ -1,5 +1,3 @@
-import React from "react";
-
 interface SubmitButtonProps {
   text: string;
   className?: string;
@@ -15,4 +13,3 @@ export function SubmitButton({
     </button>
   );
 }
-

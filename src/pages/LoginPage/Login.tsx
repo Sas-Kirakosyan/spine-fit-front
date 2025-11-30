@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/firebase/config";
-import { PageContainer } from "@/layout/PageContainer";
+import { PageContainer } from "@/Layout/PageContainer";
 import { FormCard } from "@/components/Form/FormCard/FormCard";
 import { FormHeader } from "@/components/Form/FormHeader/FormHeader";
 import { FormField } from "@/components/Form/FormField/FormField";

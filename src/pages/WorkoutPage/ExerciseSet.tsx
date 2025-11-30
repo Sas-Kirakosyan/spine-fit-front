@@ -1,4 +1,3 @@
-import React from "react";
 import type { ExerciseSetProps } from "@/types/workout";
 import { Input } from "@/components/Input/Input";
 

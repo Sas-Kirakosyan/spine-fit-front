@@ -1,5 +1,3 @@
-import React from "react";
-
 interface AuthSwitchLinkProps {
   question: string;
   linkText: string;
@@ -24,4 +22,3 @@ export function AuthSwitchLink({
     </div>
   );
 }
-

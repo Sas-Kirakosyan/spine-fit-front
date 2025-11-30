@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { months } from "@/utils/date";
-import { PageContainer } from "@/layout/PageContainer";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
+import { PageContainer } from "@/Layout/PageContainer";
 import type { HistoryPageProps } from "@/types/pages";
 import { WorkoutHistoryList } from "@/pages/HistoryPage/WorkoutHistoryList";
 export function HistoryPage({

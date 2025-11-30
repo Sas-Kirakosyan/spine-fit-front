@@ -1,5 +1,3 @@
-import React from "react";
-
 export function EyeIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg
@@ -123,4 +121,3 @@ export function ChevronRightIcon({
     </svg>
   );
 }
-

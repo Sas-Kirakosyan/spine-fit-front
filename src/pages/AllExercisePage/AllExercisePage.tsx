@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import { PageContainer } from "@/layout/PageContainer";
 import allExercisesData from "@/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
+import { PageContainer } from "@/Layout/PageContainer";
 import { useExerciseGrouping } from "./useExerciseGrouping";
 import { useExerciseSelection } from "./useExerciseSelection";
 import { AllExercisePageHeader } from "@/components/AllExercise/AllExercisePageHeader";

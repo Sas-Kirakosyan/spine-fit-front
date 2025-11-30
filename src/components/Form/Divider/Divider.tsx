@@ -1,5 +1,3 @@
-import React from "react";
-
 interface DividerProps {
   text?: string;
 }
@@ -16,4 +14,3 @@ export function Divider({ text = "Or continue with" }: DividerProps) {
     </div>
   );
 }
-

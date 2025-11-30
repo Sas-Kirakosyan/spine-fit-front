@@ -1,5 +1,5 @@
-import { PageContainer } from "@/layout/PageContainer";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
+import { PageContainer } from "@/Layout/PageContainer";
 import type { ProfilePageProps } from "@/types/pages";
 
 export function ProfilePage({

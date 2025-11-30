@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import exerciseData from "@/MockData/exercise.json";
-import { PageContainer } from "@/layout/PageContainer";
+import { PageContainer } from "@/Layout/PageContainer";
 import type { Exercise } from "@/types/exercise";
 import type {
   ActiveWorkoutPageProps,

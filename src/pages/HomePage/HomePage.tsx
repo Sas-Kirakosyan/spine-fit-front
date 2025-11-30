@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { QuizModal } from "@/pages/QuizPage/QuizModal";
-import { PageContainer } from "@/layout/PageContainer";
 import { Logo } from "@/components/Logo/Logo";
+import { PageContainer } from "@/Layout/PageContainer";
 import type { HomePageProps } from "@/types/pages";
 
 export function HomePage({

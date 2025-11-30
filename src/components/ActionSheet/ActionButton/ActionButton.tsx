@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ActionButtonProps {
   icon: React.ReactNode;
   text: string;
@@ -33,8 +31,8 @@ export function ActionButton({
         variant === "default"
           ? "focus-visible:ring-blue-400/80"
           : variant === "blue"
-            ? "focus-visible:ring-blue-400/80"
-            : "focus-visible:ring-rose-400/80"
+          ? "focus-visible:ring-blue-400/80"
+          : "focus-visible:ring-rose-400/80"
       } ${variantClasses[variant]}`}
     >
       <span className="flex items-center gap-3 text-sm font-semibold">
@@ -60,4 +58,3 @@ export function ActionButton({
     </button>
   );
 }
-
