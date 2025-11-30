@@ -1,0 +1,40 @@
+import { useState } from "react";
+import type { Exercise } from "../../types/exercise";
+
+export function useExerciseSelection() {
+  const [selectedExercises, setSelectedExercises] = useState<Set<number>>(
+    new Set()
+  );
+
+  const toggleExercise = (exerciseId: number) => {
+    setSelectedExercises((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(exerciseId)) {
+        newSet.delete(exerciseId);
+      } else {
+        newSet.add(exerciseId);
+      }
+      return newSet;
+    });
+  };
+
+  const clearSelection = () => {
+    setSelectedExercises(new Set());
+  };
+
+  const getSelectedExercises = (allExercises: Exercise[]): Exercise[] => {
+    return allExercises.filter((exercise) =>
+      selectedExercises.has(exercise.id)
+    );
+  };
+
+  const selectedCount = selectedExercises.size;
+
+  return {
+    selectedExercises,
+    toggleExercise,
+    clearSelection,
+    getSelectedExercises,
+    selectedCount,
+  };
+}

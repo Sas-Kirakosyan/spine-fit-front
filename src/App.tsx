@@ -11,6 +11,8 @@ import type { Exercise } from "./types/exercise";
 import type { Page } from "./types/navigation";
 import type { ExerciseSetRow, FinishedWorkoutSummary } from "./types/workout";
 import { HistoryPage } from "./pages/HistoryPage/HistoryPage";
+import { AllExercisePage } from "./pages/AllExercisePage/AllExercisePage";
+import exerciseData from "./MockData/exercise.json";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
@@ -24,7 +26,8 @@ function App() {
       savedPage === "exerciseSets" ||
       savedPage === "exerciseDetails" ||
       savedPage === "activeWorkout" ||
-      savedPage === "history"
+      savedPage === "history" ||
+      savedPage === "allExercise"
     ) {
       return savedPage;
     }
@@ -56,9 +59,23 @@ function App() {
         return parsed;
       }
     } catch {
-      // ignore parse errors
     }
     return [];
+  });
+
+  const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>(() => {
+    const savedExercises = localStorage.getItem("workoutExercises");
+    if (!savedExercises) {
+      return (exerciseData as Exercise[]) || [];
+    }
+    try {
+      const parsed = JSON.parse(savedExercises);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+    } catch {
+    }
+    return (exerciseData as Exercise[]) || [];
   });
 
   useEffect(() => {
@@ -69,6 +86,10 @@ function App() {
     localStorage.setItem("workoutHistory", JSON.stringify(workoutHistory));
   }, [workoutHistory]);
 
+  useEffect(() => {
+    localStorage.setItem("workoutExercises", JSON.stringify(workoutExercises));
+  }, [workoutExercises]);
+
   const navigateToHome = () => setCurrentPage("home");
   const navigateToLogin = () => setCurrentPage("login");
   const navigateToRegister = () => setCurrentPage("register");
@@ -78,12 +99,21 @@ function App() {
     setWorkoutStartTime(null);
   };
 
+  const handleAddExercises = (exercises: Exercise[]) => {
+    setWorkoutExercises((prev) => {
+      const existingIds = new Set(prev.map((ex) => ex.id));
+      const newExercises = exercises.filter((ex) => !existingIds.has(ex.id));
+      return [...prev, ...newExercises];
+    });
+  };
+
   const navigateToWorkout = () => {
     resetWorkoutState();
     setCurrentPage("workout");
   };
   const navigateToProfile = () => setCurrentPage("profile");
   const navigateToHistory = () => setCurrentPage("history");
+  const navigateToAllExercise = () => setCurrentPage("allExercise");
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
@@ -184,6 +214,13 @@ function App() {
             onOpenExerciseDetails={navigateToExerciseDetails}
             onOpenExerciseSets={navigateToExerciseSets}
             onStartWorkoutSession={navigateToActiveWorkout}
+            onNavigateToAllExercise={navigateToAllExercise}
+            exercises={workoutExercises}
+            onRemoveExercise={(exerciseId) => {
+              setWorkoutExercises((prev) =>
+                prev.filter((ex) => ex.id !== exerciseId)
+              );
+            }}
           />
         );
       case "profile":
@@ -243,6 +280,13 @@ function App() {
             onNavigateToHistory={navigateToHistory}
             activePage="history"
             workouts={workoutHistory}
+          />
+        );
+      case "allExercise":
+        return (
+          <AllExercisePage
+            onClose={navigateToWorkout}
+            onAddExercises={handleAddExercises}
           />
         );
       default:
