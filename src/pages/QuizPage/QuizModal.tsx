@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { PageContainer } from "../../layout/PageContainer";
-import { Button } from "../../components/Buttons/Button";
-import type { QuizQuestion, QuizModalProps } from "../../types/quiz";
+import { PageContainer } from "@/layout/PageContainer";
+import { Button } from "@/components/Buttons/Button";
+import type { QuizQuestion, QuizModalProps } from "@/types/quiz";
 
 export function QuizModal({
   isOpen,

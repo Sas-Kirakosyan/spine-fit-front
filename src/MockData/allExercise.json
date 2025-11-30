@@ -283,7 +283,7 @@
     "category": "strength",
     "muscle_groups": ["glutes", "hip_abductors"],
     "equipment": "hip_abductor_machine",
-    "image_url": "/assets/exercises/seated_hip_abduction.jpg",
+    "image_url": "",
     "equipment_image_url": "/assets/equipment/hip_abductor_machine.jpg",
     "difficulty": "beginner",
     "instructions": "Sit tall, press knees outward slowly, avoid lumbar movement while spreading.",

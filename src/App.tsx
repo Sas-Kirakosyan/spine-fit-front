@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
-import { HomePage } from "./pages/HomePage/HomePage";
-import { Registration } from "./pages/RegistrationPage/Registration";
-import { Login } from "./pages/LoginPage/Login";
-import { WorkoutPage } from "./pages/WorkoutPage/WorkoutPage";
-import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
-import { ExerciseSetsPage } from "./pages/WorkoutPage/ExerciseSetsPage";
-import { ExerciseDetails } from "./pages/WorkoutPage/ExerciseHowTo";
-import { ActiveWorkoutPage } from "./pages/WorkoutPage/ActiveWorkoutPage";
-import type { Exercise } from "./types/exercise";
-import type { Page } from "./types/navigation";
-import type { ExerciseSetRow, FinishedWorkoutSummary } from "./types/workout";
-import { HistoryPage } from "./pages/HistoryPage/HistoryPage";
-import { AllExercisePage } from "./pages/AllExercisePage/AllExercisePage";
-import exerciseData from "./MockData/exercise.json";
+import { HomePage } from "@/pages/HomePage/HomePage";
+import { Registration } from "@/pages/RegistrationPage/Registration";
+import { Login } from "@/pages/LoginPage/Login";
+import { WorkoutPage } from "@/pages/WorkoutPage/WorkoutPage";
+import { ProfilePage } from "@/pages/ProfilePage/ProfilePage";
+import { ExerciseSetsPage } from "@/pages/WorkoutPage/ExerciseSetsPage";
+import { ExerciseDetails } from "@/pages/WorkoutPage/ExerciseHowTo";
+import { ActiveWorkoutPage } from "@/pages/WorkoutPage/ActiveWorkoutPage";
+import type { Exercise } from "@/types/exercise";
+import type { Page } from "@/types/navigation";
+import type { ExerciseSetRow, FinishedWorkoutSummary } from "@/types/workout";
+import { HistoryPage } from "@/pages/HistoryPage/HistoryPage";
+import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
+import exerciseData from "@/MockData/exercise.json";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
@@ -58,8 +58,7 @@ function App() {
       if (Array.isArray(parsed)) {
         return parsed;
       }
-    } catch {
-    }
+    } catch {}
     return [];
   });
 
@@ -73,8 +72,7 @@ function App() {
       if (Array.isArray(parsed)) {
         return parsed;
       }
-    } catch {
-    }
+    } catch {}
     return (exerciseData as Exercise[]) || [];
   });
 

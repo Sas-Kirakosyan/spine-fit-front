@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import type { ExerciseActionSheetProps } from "../../types/workout";
-import { ActionButton } from "../../components/ActionSheet/ActionButton/ActionButton";
-import { InfoIcon, PlayIcon, TrashIcon } from "../../components/Icons/Icons";
+import type { ExerciseActionSheetProps } from "@/types/workout";
+import { ActionButton } from "@/components/ActionSheet/ActionButton/ActionButton";
+import { InfoIcon, PlayIcon, TrashIcon } from "@/components/Icons/Icons";
 
 export function ExerciseActionSheet({
   exercise,

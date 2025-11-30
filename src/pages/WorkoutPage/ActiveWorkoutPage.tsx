@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import exerciseData from "../../MockData/exercise.json";
-import { PageContainer } from "../../layout/PageContainer";
-import type { Exercise } from "../../types/exercise";
+import exerciseData from "@/MockData/exercise.json";
+import { PageContainer } from "@/layout/PageContainer";
+import type { Exercise } from "@/types/exercise";
 import type {
   ActiveWorkoutPageProps,
   FinishedWorkoutSummary,
-} from "../../types/workout";
-import { iconButtonClass, secondaryButtonClass } from "../../constants/workout";
-import { Button } from "../../components/Buttons/Button";
-import { ExerciseActionSheet } from "../../pages/WorkoutPage/ExercisePopUp";
+} from "@/types/workout";
+import { iconButtonClass, secondaryButtonClass } from "@/constants/workout";
+import { Button } from "@/components/Buttons/Button";
+import { ExerciseActionSheet } from "@/pages/WorkoutPage/ExercisePopUp";
 import { FinishWorkoutModal } from "./FinishWorkoutModal";
-import { calculateWorkoutVolume } from "../../utils/workoutStats";
+import { calculateWorkoutVolume } from "@/utils/workoutStats";
 
 const exercises: Exercise[] = exerciseData as Exercise[];
 

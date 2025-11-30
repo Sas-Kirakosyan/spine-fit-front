@@ -1,5 +1,6 @@
-import type { Exercise } from "../../types/exercise";
-import { ExerciseItem } from "./ExerciseItem";
+import { memo } from "react";
+import type { Exercise } from "@/types/exercise";
+import { ExerciseItem } from "@/components/AllExercise/ExerciseItem";
 
 interface ExerciseGroupProps {
   groupKey: string;
@@ -33,3 +34,5 @@ export function ExerciseGroup({
     </div>
   );
 }
+
+export default memo(ExerciseGroup);

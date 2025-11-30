@@ -1,6 +1,6 @@
 import React from "react";
-import { Logo } from "../Logo/Logo";
-import { Button } from "../Buttons/Button";
+import { Logo } from "@/components/Logo/Logo";
+import { Button } from "@/components/Buttons/Button";
 
 interface PageHeaderProps {
   onNavigateToHome?: () => void;
@@ -24,9 +24,7 @@ export function PageHeader({
         {title && (
           <h1 className="mt-3 text-3xl font-semibold text-white">{title}</h1>
         )}
-        {subtitle && (
-          <p className="mt-1 text-sm text-slate-200">{subtitle}</p>
-        )}
+        {subtitle && <p className="mt-1 text-sm text-slate-200">{subtitle}</p>}
         {showBackButton && (
           <button type="button" onClick={onBack}>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-200">
@@ -46,4 +44,3 @@ export function PageHeader({
     </div>
   );
 }
-

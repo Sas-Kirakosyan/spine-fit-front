@@ -1,12 +1,12 @@
-import { useState } from "react";
-import type { Exercise } from "../../types/exercise";
+import { useCallback, useState } from "react";
+import type { Exercise } from "@/types/exercise";
 
 export function useExerciseSelection() {
   const [selectedExercises, setSelectedExercises] = useState<Set<number>>(
     new Set()
   );
 
-  const toggleExercise = (exerciseId: number) => {
+  const toggleExercise = useCallback((exerciseId: number) => {
     setSelectedExercises((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(exerciseId)) {
@@ -16,17 +16,17 @@ export function useExerciseSelection() {
       }
       return newSet;
     });
-  };
+  }, []);
 
-  const clearSelection = () => {
+  const clearSelection = useCallback(() => {
     setSelectedExercises(new Set());
-  };
+  }, []);
 
-  const getSelectedExercises = (allExercises: Exercise[]): Exercise[] => {
+  const getSelectedExercises = useCallback((allExercises: Exercise[]): Exercise[] => {
     return allExercises.filter((exercise) =>
       selectedExercises.has(exercise.id)
     );
-  };
+  }, [selectedExercises]);
 
   const selectedCount = selectedExercises.size;
 

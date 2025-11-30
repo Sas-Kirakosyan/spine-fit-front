@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { formatDateTime, isSameDay } from "../../utils/date";
-import type { FinishedWorkoutSummary } from "../../types/workout";
+import { formatDateTime, isSameDay } from "@/utils/date";
+import type { FinishedWorkoutSummary } from "@/types/workout";
 
 interface WorkoutHistoryListProps {
   workouts: FinishedWorkoutSummary[];

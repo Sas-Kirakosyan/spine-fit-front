@@ -1,8 +1,8 @@
 import React from "react";
-import type { ExerciseSetProps } from "../../types/workout";
-import { Input } from "../../components/Input/Input";
+import type { ExerciseSetProps } from "@/types/workout";
+import { Input } from "@/components/Input/Input";
 
-export type { ExerciseSetRow, SetField } from "../../types/workout";
+export type { ExerciseSetRow, SetField } from "@/types/workout";
 
 export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   index,

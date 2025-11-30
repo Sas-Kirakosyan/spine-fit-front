@@ -1,14 +1,17 @@
-import { useState } from "react";
-import { PageContainer } from "../../layout/PageContainer";
-import allExercisesData from "../../mockData/allExercise.json";
-import type { Exercise } from "../../types/exercise";
+import { useCallback, useState } from "react";
+import { PageContainer } from "@/layout/PageContainer";
+import allExercisesData from "@/MockData/allExercise.json";
+import type { Exercise } from "@/types/exercise";
 import { useExerciseGrouping } from "./useExerciseGrouping";
 import { useExerciseSelection } from "./useExerciseSelection";
-import { AllExercisePageHeader } from "../../components/AllExercise/AllExercisePageHeader";
-import { ExerciseSearchBar } from "../../components/AllExercise/ExerciseSearchBar";
-import { ExerciseTabs, type TabType } from "../../components/AllExercise/ExerciseTabs";
-import { ExerciseGroup } from "../../components/AllExercise/ExerciseGroup";
-import { ExerciseActionBar } from "../../components/AllExercise/ExerciseActionBar";
+import { AllExercisePageHeader } from "@/components/AllExercise/AllExercisePageHeader";
+import { ExerciseSearchBar } from "@/components/AllExercise/ExerciseSearchBar";
+import {
+  ExerciseTabs,
+  type TabType,
+} from "@/components/AllExercise/ExerciseTabs";
+import { ExerciseGroup } from "@/components/AllExercise/ExerciseGroup";
+import ExerciseActionBar from "@/components/AllExercise/ExerciseActionBar";
 
 interface AllExercisePageProps {
   onClose: () => void;
@@ -35,18 +38,27 @@ export function AllExercisePage({
     selectedCount,
   } = useExerciseSelection();
 
-  const handleExerciseClick = (exercise: Exercise) => {
-    toggleExercise(exercise.id);
-  };
+  const handleExerciseClick = useCallback(
+    (exercise: Exercise) => {
+      toggleExercise(exercise.id);
+    },
+    [toggleExercise]
+  );
 
-  const handleAddExercises = () => {
+  const handleAddExercises = useCallback(() => {
     const exercisesToAdd = getSelectedExercises(exercises);
     if (onAddExercises && exercisesToAdd.length > 0) {
       onAddExercises(exercisesToAdd);
       clearSelection();
       onClose();
     }
-  };
+  }, [
+    getSelectedExercises,
+    onAddExercises,
+    exercises,
+    clearSelection,
+    onClose,
+  ]);
 
   return (
     <PageContainer contentClassName="px-4 py-6 relative">

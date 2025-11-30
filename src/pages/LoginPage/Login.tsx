@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../../firebase/config";
-import { PageContainer } from "../../layout/PageContainer";
-import { FormCard } from "../../components/Form/FormCard/FormCard";
-import { FormHeader } from "../../components/Form/FormHeader/FormHeader";
-import { FormField } from "../../components/Form/FormField/FormField";
-import { PasswordInput } from "../../components/Form/PasswordInput/PasswordInput";
-import { SubmitButton } from "../../components/Form/SubmitButton/SubmitButton";
-import { Divider } from "../../components/Form/Divider/Divider";
-import { GoogleAuthButton } from "../../components/Form/GoogleAuthButton/GoogleAuthButton";
-import { AuthSwitchLink } from "../../components/Form/AuthSwitchLink/AuthSwitchLink";
-import { PageHeader } from "../../components/PageHeader/PageHeader";
+import { auth, googleProvider } from "@/firebase/config";
+import { PageContainer } from "@/layout/PageContainer";
+import { FormCard } from "@/components/Form/FormCard/FormCard";
+import { FormHeader } from "@/components/Form/FormHeader/FormHeader";
+import { FormField } from "@/components/Form/FormField/FormField";
+import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
+import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
+import { Divider } from "@/components/Form/Divider/Divider";
+import { GoogleAuthButton } from "@/components/Form/GoogleAuthButton/GoogleAuthButton";
+import { AuthSwitchLink } from "@/components/Form/AuthSwitchLink/AuthSwitchLink";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 
-import type { LoginFormData, LoginProps } from "../../types/auth";
+import type { LoginFormData, LoginProps } from "@/types/auth";
 
 export function Login({
   onSwitchToRegister,
   onNavigateToHome,
   onNavigateToWorkout,
-}: LoginProps): JSX.Element {
+}: LoginProps) {
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",

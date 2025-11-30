@@ -1,8 +1,8 @@
 import { createPortal } from "react-dom";
-import { Button } from "../../components/Buttons/Button";
-import type { Exercise } from "../../types/exercise";
-import type { ExerciseSetRow } from "../../types/workout";
-import { calculateWorkoutVolume } from "../../utils/workoutStats";
+import { Button } from "@/components/Buttons/Button";
+import type { Exercise } from "@/types/exercise";
+import type { ExerciseSetRow } from "@/types/workout";
+import { calculateWorkoutVolume } from "@/utils/workoutStats";
 
 interface FinishWorkoutModalProps {
   isOpen: boolean;

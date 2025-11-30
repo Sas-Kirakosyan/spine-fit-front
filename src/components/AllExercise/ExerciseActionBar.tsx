@@ -1,10 +1,11 @@
+import { memo } from "react";
 interface ExerciseActionBarProps {
   selectedCount: number;
   onGroupAs?: () => void;
   onAddExercises: () => void;
 }
 
-export function ExerciseActionBar({
+function ExerciseActionBar({
   selectedCount,
   onGroupAs,
   onAddExercises,
@@ -33,3 +34,4 @@ export function ExerciseActionBar({
   );
 }
 
+export default memo(ExerciseActionBar);

@@ -1,6 +1,6 @@
-import { PageContainer } from "../../layout/PageContainer";
-import type { ExerciseDetailsProps } from "../../types/workout";
-import type { Exercise } from "../../types/exercise";
+import { PageContainer } from "@/layout/PageContainer";
+import type { ExerciseDetailsProps } from "@/types/workout";
+import type { Exercise } from "@/types/exercise";
 
 const formatLabel = (value: string) =>
   value

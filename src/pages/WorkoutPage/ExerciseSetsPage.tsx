@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-import { PageContainer } from "../../layout/PageContainer";
+import { PageContainer } from "@/layout/PageContainer";
 import type {
   ExerciseSetsPageProps,
   SetField,
   ExerciseSetRow,
-} from "../../types/workout";
+} from "@/types/workout";
 import { ExerciseSet } from "./ExerciseSet";
 import {
   iconButtonClass,
   primaryButtonClass,
   secondaryButtonClass,
-} from "../../constants/workout";
-import { Button } from "../../components/Buttons/Button";
+} from "@/constants/workout";
+import { Button } from "@/components/Buttons/Button";
 
 const toolbarButtons = [
   {

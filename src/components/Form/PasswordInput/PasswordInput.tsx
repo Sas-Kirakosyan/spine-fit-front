@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "../../Icons/Icons";
+import { EyeIcon, EyeOffIcon } from "@/components/Icons/Icons";
 
 interface PasswordInputProps {
   label: string;
@@ -56,4 +56,3 @@ export function PasswordInput({
     </div>
   );
 }
-

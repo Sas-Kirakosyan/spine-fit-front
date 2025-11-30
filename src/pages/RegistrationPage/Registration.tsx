@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../../firebase/config";
-import type { RegistrationFormData, RegistrationProps } from "../../types/auth";
-import { PageContainer } from "../../layout/PageContainer";
-import { PageHeader } from "../../components/PageHeader/PageHeader";
-import { FormCard } from "../../components/Form/FormCard/FormCard";
-import { FormHeader } from "../../components/Form/FormHeader/FormHeader";
-import { FormField } from "../../components/Form/FormField/FormField";
-import { PasswordInput } from "../../components/Form/PasswordInput/PasswordInput";
-import { SubmitButton } from "../../components/Form/SubmitButton/SubmitButton";
-import { Divider } from "../../components/Form/Divider/Divider";
-import { GoogleAuthButton } from "../../components/Form/GoogleAuthButton/GoogleAuthButton";
-import { AuthSwitchLink } from "../../components/Form/AuthSwitchLink/AuthSwitchLink";
+import { auth, googleProvider } from "@/firebase/config";
+import type { RegistrationFormData, RegistrationProps } from "@/types/auth";
+import { PageContainer } from "@/layout/PageContainer";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
+import { FormCard } from "@/components/Form/FormCard/FormCard";
+import { FormHeader } from "@/components/Form/FormHeader/FormHeader";
+import { FormField } from "@/components/Form/FormField/FormField";
+import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
+import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
+import { Divider } from "@/components/Form/Divider/Divider";
+import { GoogleAuthButton } from "@/components/Form/GoogleAuthButton/GoogleAuthButton";
+import { AuthSwitchLink } from "@/components/Form/AuthSwitchLink/AuthSwitchLink";
 
 export function Registration({
   onSwitchToLogin,

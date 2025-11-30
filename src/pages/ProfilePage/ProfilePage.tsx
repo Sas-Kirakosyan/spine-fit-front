@@ -1,6 +1,6 @@
-import { PageContainer } from "../../layout/PageContainer";
-import { BottomNav } from "../../components/BottomNav/BottomNav";
-import type { ProfilePageProps } from "../../types/pages";
+import { PageContainer } from "@/layout/PageContainer";
+import { BottomNav } from "@/components/BottomNav/BottomNav";
+import type { ProfilePageProps } from "@/types/pages";
 
 export function ProfilePage({
   onNavigateToWorkout,
