@@ -1,0 +1,1172 @@
+[
+  {
+    "id": "eq_lat_pulldown_01",
+    "key": "lat_pulldown",
+    "type": "machine",
+    "name": "Lat Pulldown Machine",
+    "aliases": ["lat pull-down station"],
+    "load_type": "cable",
+    "selectorized": true,
+    "pulley_ratio": {
+      "default": "2:1",
+      "alternatives": ["1:1"],
+      "notes": "Typically 2:1."
+    },
+    "weight_stack_kg": 110,
+    "height_range_cm": { "min": 30, "max": 210, "increment_cm": 5 },
+    "attachments_supported": ["straight_bar", "wide_bar", "v_bar", "rope"],
+    "primary_muscles": ["lats", "biceps", "rear_delt"],
+    "movement_patterns": [
+      "vertical_pull",
+      "scapular_depression",
+      "core_stability"
+    ],
+    "execution_cues": ["Low shoulders", "Pull elbows down", "Neutral spine"],
+    "safety_notes": {
+      "l5_s1": ["Do not over-arch", "Keep ribs down"],
+      "sciatica": ["Stop if radiating symptoms", "Use lighter load"]
+    },
+    "media": {
+      "thumbnail": "https://olijoy.com.au/cdn/shop/files/5353_2_1024x1024@2x.jpg?v=1688973500",
+      "images": [
+        "https://samsfitness.com.au/wp-content/uploads/2023/03/equipment-back-lat-machines-category.jpg",
+        "https://olijoy.com.au/cdn/shop/files/5353_2_1024x1024@2x.jpg?v=1688973500"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A strength machine using an adjustable seat with a wide or straight bar, enabling vertical pulling motion by contracting the lats. Supports different body sizes. Usually cable-based, most often with 2:1 pulley ratio. Main use is for Lat Pulldown and shoulder shrug variations, directly training lats and trapezius with moderate upward motion under controlled load",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_seated_row_01",
+    "key": "seated_cable_row",
+    "type": "machine",
+    "name": "Seated Cable Row",
+    "aliases": ["mid row cable station"],
+    "load_type": "cable",
+    "selectorized": true,
+    "pulley_ratio": {
+      "default": "2:1",
+      "alternatives": ["1:1"],
+      "notes": "Most use 2:1 ratio."
+    },
+    "weight_stack_kg": 100,
+    "height_range_cm": { "min": 20, "max": 210, "increment_cm": 5 },
+    "attachments_supported": ["v_bar", "d_handle", "straight_bar", "rope"],
+    "primary_muscles": ["upper_back", "lats", "biceps"],
+    "movement_patterns": [
+      "horizontal_pull",
+      "scapular_retraction",
+      "anti_rotation"
+    ],
+    "execution_cues": ["No momentum", "Pull to belly button", "Tall posture"],
+    "safety_notes": {
+      "l5_s1": ["Avoid flexion under load"],
+      "sciatica": ["Avoid long seated duration if symptoms"]
+    },
+    "media": {
+      "thumbnail": "https://images.squarespace-cdn.com/content/v1/5ffcea9416aee143500ea103/1638351904146-GDGXXL9IHXKQKTXULLHF/Seated%2BCable%2BRow.jpeg",
+      "images": [
+        "https://images.squarespace-cdn.com/content/v1/5ffcea9416aee143500ea103/1638351904146-GDGXXL9IHXKQKTXULLHF/Seated%2BCable%2BRow.jpeg",
+        "seated row side"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A seated strength cable station for controlled horizontal pulling to train lats, trapezius, and mid-back. User braces core, avoids trunk rotation, and pulls toward the abdomen with elbows driving back. Commonly selectorized but some gyms support plate-loaded variations. The machine accommodates a range of body sizes and strength levels, especially effective for posture and upper-back stability when movement is slow and controlled.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_chest_press_01",
+    "key": "chest_press",
+    "type": "machine",
+    "name": "Chest Press Machine",
+    "aliases": ["machine chest press"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 90,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["chest", "triceps", "front_delt"],
+    "movement_patterns": ["horizontal_push", "horizontal_adduction"],
+    "execution_cues": ["Feet planted", "No lumbar arch drive", "Scaps back"],
+    "safety_notes": {
+      "l5_s1": ["Avoid excessive arching"],
+      "sciatica": ["Reduce range if irritation"]
+    },
+    "media": {
+      "thumbnail": "Chest Press Thumbnail",
+      "images": ["chest press front", "chest press side"],
+      "video_overview": null
+    },
+    "details_overview": "A seated chest-press machine that provides a stable, guided horizontal pressing movement to train the pectoralis major and triceps. Useful for users who need a supported pressing pattern without free-weight balance demand; adjust seat and handles to keep the spine neutral and avoid excessive lumbar arch.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_shoulder_press_01",
+    "key": "shoulder_press",
+    "type": "machine",
+    "name": "Shoulder Press Machine",
+    "aliases": ["machine overhead press"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 80,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["front_delt", "triceps"],
+    "movement_patterns": ["overhead_push", "core_stability"],
+    "execution_cues": ["Ribs down", "Head neutral", "No low-back assist"],
+    "safety_notes": {
+      "l5_s1": ["No over-arching"],
+      "sciatica": ["Try seated vertical posture"]
+    },
+    "media": {
+      "thumbnail": "https://cdn.fitshop.co.uk/pictures/lifefitness/single_station_machines/SESS4177/insigniaseries-shoulder-press-titanium-l_1600.jpg",
+      "images": [
+        "https://cdn.fitshop.co.uk/pictures/lifefitness/single_station_machines/SESS4177/insigniaseries-shoulder-press-titanium-l_1600.jpg",
+        "https://cdn.fitshop.co.uk/pictures/lifefitness/single_station_machines/SESS4177/insigniaseries-shoulder-press-titanium-l_1600.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A seated shoulder-press machine that guides vertical pressing to target the deltoids and triceps while supporting the torso. It reduces need for core/bracing compared to free weights; adjust seat height so handles align with mid-shoulder and avoid excessive lumbar extension.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_leg_extension_01",
+    "key": "leg_extension",
+    "type": "machine",
+    "name": "Leg Extension Machine",
+    "aliases": ["quad extension"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 95,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["quadriceps"],
+    "movement_patterns": ["knee_extension"],
+    "execution_cues": [
+      "Don’t slam lockout",
+      "Control lowering",
+      "Neutral pelvis"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Fine if pelvis neutral"],
+      "sciatica": ["No issue expected"]
+    },
+    "media": {
+      "thumbnail": "https://fitnessexperience.ca/cdn/shop/files/GCEC340-Black_2000x.jpg?v=1734728165",
+      "images": [
+        "https://fitnessexperience.ca/cdn/shop/files/GCEC340-Black_2000x.jpg?v=1734728165",
+        "https://fitnessexperience.ca/cdn/shop/files/GCEC340-Black_2000x.jpg?v=1734728165"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A leg-extension machine that isolates the quadriceps by extending the knee against a padded lever. Useful for targeted quad strengthening but should be used with controlled range and moderate load to protect the knee joint; avoid locking out aggressively.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_hip_abduction_01",
+    "key": "hip_abduction",
+    "type": "machine",
+    "name": "Hip Abduction Machine",
+    "aliases": ["hip abductor"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 80,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["glute_med", "tensor_fascia_latae"],
+    "movement_patterns": ["hip_abduction"],
+    "execution_cues": ["No lumbar sway", "Sit tall", "Don’t overload ego"],
+    "safety_notes": {
+      "l5_s1": ["Very safe"],
+      "sciatica": ["Safe, stop if irritation"]
+    },
+    "media": {
+      "thumbnail": "https://s3assets.skimble.com/assets/2740518/image_iphone.jpg",
+      "images": [
+        "https://s3assets.skimble.com/assets/2740518/image_iphone.jpg",
+        "https://s3assets.skimble.com/assets/2740518/image_iphone.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A hip-abduction machine (hip abductor) designed to strengthen the gluteus medius and other hip abductors through controlled lateral leg movement. Typically performed seated with pads resisting outward movement; adjust range and load to maintain pelvic stability.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_cable_crossover_02",
+    "key": "cable_crossover",
+    "type": "machine",
+    "name": "Cable Crossover Machine",
+    "aliases": ["functional trainer chest crossover"],
+    "load_type": "cable",
+    "selectorized": true,
+    "pulley_ratio": {
+      "default": "2:1",
+      "alternatives": ["1:1"],
+      "notes": "Commercial functional trainers vary."
+    },
+    "weight_stack_kg": 100,
+    "height_range_cm": { "min": 20, "max": 210, "increment_cm": 5 },
+    "attachments_supported": ["d_handle", "rope", "straight_bar", "ankle_cuff"],
+    "primary_muscles": ["chest", "lats", "core"],
+    "movement_patterns": [
+      "horizontal_adduction",
+      "diagonal_pull",
+      "anti_rotation"
+    ],
+    "execution_cues": [
+      "Scaps back and down",
+      "Slight hinge with neutral spine",
+      "No jerky eccentrics"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Do not over-arch", "Use staggered stance"],
+      "sciatica": ["Stop if nerve pain", "Reduce ROM"]
+    },
+    "media": {
+      "thumbnail": "https://inflightfitness.com/wp-content/uploads/2023/08/InFlight-Fitness-Tiff-4572-Final-1.webp",
+      "images": [
+        "https://inflightfitness.com/wp-content/uploads/2023/08/InFlight-Fitness-Tiff-4572-Final-1.webp",
+        ""
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 2
+  },
+  {
+    "id": "eq_pec_deck_01",
+    "key": "pec_deck",
+    "type": "machine",
+    "name": "Pec Deck (Chest Fly) Machine",
+    "aliases": ["butterfly chest machine"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 85,
+    "height_range_cm": { "min": 40, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["chest", "front_delt"],
+    "movement_patterns": ["horizontal_adduction"],
+    "execution_cues": [
+      "No lumbar arch",
+      "Elbows slightly bent",
+      "Don’t slam the pads"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Safe if pelvis neutral"],
+      "sciatica": ["Safe, reduce stretch if sensitive"]
+    },
+    "media": {
+      "thumbnail": "https://www.inspireusafoundation.org/wp-content/uploads/2023/11/pec-deck-machine-benefits.png",
+      "images": [
+        "https://www.inspireusafoundation.org/wp-content/uploads/2023/11/pec-deck-machine-benefits.png",
+        ""
+      ],
+      "video_overview": null
+    },
+    "details_overview": "The pec-deck (chest fly) machine isolates horizontal adduction of the shoulders to target the chest muscles with a fixed arc. It allows controlled fly movement with reduced need for stabilisation compared to dumbbell flyes; keep a slight elbow bend and avoid overstretching the shoulder.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_hyperextension_01",
+    "key": "hyperextension",
+    "type": "machine",
+    "name": "Hyperextension (Back Extension) Machine",
+    "aliases": ["roman chair", "back extension bench"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": 50, "max": 140, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["erector_spinae", "glutes", "hamstrings"],
+    "movement_patterns": ["spinal_extension", "hip_hinge"],
+    "execution_cues": [
+      "Move from hips, not lower back only",
+      "Neutral pelvis, avoid aggressive lumbar arch",
+      "Slow controlled eccentrics"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Avoid deep bottom rounding", "Do not overshoot into pain"],
+      "sciatica": [
+        "Reduce ROM if nerve tension appears",
+        "Stop on sharp radiating pain"
+      ]
+    },
+    "media": {
+      "thumbnail": "https://titan.fitness/cdn/shop/files/400572_01.jpg?v=1763478950",
+      "images": [
+        "https://titan.fitness/cdn/shop/files/400572_01.jpg?v=1763478950",
+        ""
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A hyperextension (back extension) bench used to train the erector spinae and posterior chain through controlled spinal extension and hip hinge. Use with a neutral spine and controlled range to avoid aggressive lumbar loading; it's effective for strengthening lower-back resilience when performed correctly.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_abs_crunch_01",
+    "key": "seated_abs_crunch",
+    "type": "machine",
+    "name": "Seated Abs Crunch Machine",
+    "aliases": ["ab crunch machine", "seated abdominal crunch"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 70,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["abs", "obliques"],
+    "movement_patterns": ["spinal_flexion_controlled"],
+    "execution_cues": [
+      "Crunch by contracting abs, not pulling with arms",
+      "Do not over-bend lumbar spine aggressively",
+      "Control the eccentric without dropping the stack"
+    ],
+    "safety_notes": {
+      "l5_s1": [
+        "Avoid excessive rounding under heavy load",
+        "Keep pelvis neutral"
+      ],
+      "sciatica": [
+        "Stop if symptoms radiate to legs",
+        "Use light, pain-free ROM"
+      ]
+    },
+    "media": {
+      "thumbnail": "https://ik.imagekit.io/02fmeo4exvw/exercise-library/large/291-1.jpg",
+      "images": [
+        "https://ik.imagekit.io/02fmeo4exvw/exercise-library/large/291-1.jpg",
+        "https://ik.imagekit.io/02fmeo4exvw/exercise-library/large/291-1.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A seated abdominal crunch machine that guides trunk flexion to target the rectus abdominis. It provides resistance and support for isolated ab work; cue diaphragmatic breathing and avoid aggressive lumbar flexion under heavy load.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_shoulder_shrug_01",
+    "key": "shoulder_shrug",
+    "type": "machine",
+    "name": "Shoulder Shrug Machine",
+    "aliases": ["trap shrug machine", "seated trap trainer"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": [],
+    "primary_muscles": ["trapezius"],
+    "movement_patterns": ["vertical_shrug"],
+    "execution_cues": [
+      "Train traps with moderate upward motion",
+      "Elbows locked with no arm-assisted pull",
+      "Slow controlled movement without stack drop"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Safe seated motion, avoid bracing with low-back"],
+      "sciatica": ["Safe, stop if discomfort increases"]
+    },
+    "media": {
+      "thumbnail": "Shoulder Shrug Machine Thumbnail",
+      "images": ["shoulder shrug machine front", "shoulder shrug machine side"],
+      "video_overview": null
+    },
+    "details_overview": "A shoulder shrug machine that focuses on trapezius elevation through a vertical shrugging movement. Typically plate-loaded; maintain neutral spine and controlled range to train traps without excessive neck or low-back tension.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_shoulder_shrug_01",
+    "key": "shoulder_shrug",
+    "type": "machine",
+    "name": "Shoulder Shrug Machine",
+    "aliases": ["trap shrug machine", "seated trapezius trainer"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": [],
+    "primary_muscles": ["trapezius"],
+    "movement_patterns": ["vertical_shrug"],
+    "execution_cues": [
+      "Raise shoulders upward moderately by contracting the traps",
+      "Keep elbows locked to avoid arm-assisted pulling",
+      "Control the lowering phase without dropping the weight"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Safe seated movement, avoid bracing with the lower back"],
+      "sciatica": ["Safe, stop if nerve discomfort increases"]
+    },
+    "media": {
+      "thumbnail": "Shoulder Shrug Machine Thumbnail",
+      "images": ["shoulder shrug machine front", "shoulder shrug machine side"],
+      "video_overview": null
+    },
+    "details_overview": "A Shoulder Shrug Machine is a seated strength exercise station designed to train the trapezius muscles. The machine features a vertical seat with handles placed on both sides, allowing the user to perform moderate upward shrugging motions. Most models are plate-loaded, meaning resistance is added manually using weight plates rather than a selectorized stack. It's used for shoulder elevation training, targeting trap development, posture support, and neck-shoulder stability. The exercise can also be performed carefully for partners with back-pain considerations, as long as the pelvis and spine remain neutral without aggressive rounding.",
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_preacher_curl_01",
+    "key": "preacher_curl",
+    "type": "machine",
+    "name": "Preacher Curl Machine",
+    "aliases": ["machine preacher curl", "arm-pad bicep curl station"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 75,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["biceps"],
+    "movement_patterns": ["seated_arm_flexion", "elbow_flexion"],
+    "execution_cues": [
+      "Curl handles toward the body by contracting the biceps",
+      "Keep upper arms fixed on the arm-pad",
+      "Avoid swinging or jerking the motion",
+      "Lower the stack with controlled tempo"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Keep lower back relaxed, no bracing with lumbar"],
+      "sciatica": ["Seated is safe, stop if discomfort increases"]
+    },
+    "media": {
+      "thumbnail": "Preacher Curl Machine Thumbnail",
+      "images": [
+        "preacher curl machine front",
+        "preacher curl machine side",
+        "arm-pad seat close-up"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A Preacher Curl Machine is a seated bicep training station where handles are positioned in front of an arm-pad. The user curls the handles toward the body while keeping the upper arms fixed on the pad. Resistance is commonly provided by a weight stack, and most models support seat-height adjustment to accommodate different body sizes and strength levels. This machine trains a different section of the biceps compared to a standard curl machine, placing greater emphasis on the peak and mid-range contraction. It is safe for spinal-sensitive lifters when seated upright without bracing the lumbar spine for force, and when movement is smooth and controlled without swinging."
+  },
+  {
+    "id": "eq_t_bar_01",
+    "key": "t_bar",
+    "type": "machine",
+    "name": "T-Bar Row Machine",
+    "aliases": ["t-bar row station", "leaning t-bar row"],
+    "load_type": "plate",
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": ["wide_handles", "narrow_handles"],
+    "primary_muscles": ["biceps", "back", "trapezius"],
+    "movement_patterns": ["horizontal_pull", "hip_hinge_controlled"],
+    "execution_cues": [
+      "Stand on foot plates",
+      "Hinge forward from hips, keep spine neutral",
+      "Pull T-Bar toward torso, elbows drive back",
+      "Plates loaded between 2.5LB and 45LB each side depending on strength"
+    ],
+    "safety_notes": {
+      "l5_s1": [
+        "Avoid excessive lumbar rounding",
+        "Do not jerk the bar from bottom"
+      ],
+      "sciatica": ["Use smooth tempo", "Reduce load if nerve symptoms appear"]
+    },
+    "media": {
+      "thumbnail": "https://www.ukgymequipment.com/images/t-bar-row-p4257-50213_medium.jpg",
+      "images": [
+        "https://www.ukgymequipment.com/images/t-bar-row-p4257-50213_medium.jpg",
+        "https://cdn11.bigcommerce.com/s-3whbtyk9rd/images/stencil/1280x1280/products/3278/7475/STRB500_DSF9948_cut_1500px__84291.1729034301.jpg?c=1"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": "2025-10-26T12:00:00Z",
+    "updated_at": "2025-10-26T12:00:00Z",
+    "version": 1,
+    "details_overview": "The T-Bar Row Machine is a plate-loaded strength station built for barbell-style rowing in a leaning or bent-over hinge posture. It features one or two foot plates to stand on while hinging forward, then rowing the T-Bar toward the torso. Plates between 2.5LB and 45LB (≈1.25kg–20kg each) or heavier up to 45LB+45LB can be stacked depending on level. Handles vary in width—wide grips emphasize back muscles while narrower grips emphasize biceps, but regardless of grip the biceps, back, and trapezius are all trained together with core stability demand. It is a posture-controlled compound pull that remains spinal-friendly when movement is independent of low-back bracing force, tempo is smooth, and lumbar rounding or momentum jerking is avoided."
+  },
+  {
+    "id": "eq_preacher_curl_bench_01",
+    "key": "preacher_curl_bench",
+    "type": "bench",
+    "name": "Preacher Curl Bench",
+    "aliases": ["preacher curl rack bench", "bicep arm-pad bench"],
+    "load_type": "plate",
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["biceps"],
+    "movement_patterns": ["elbow_flexion"],
+    "execution_cues": [
+      "Rest upper arms on the 30–45° angled pad",
+      "Keep chest close to pad, shoulders neutral",
+      "Curl barbell or dumbbell upward without swinging"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Seated or standing neutral spine is safe"],
+      "sciatica": ["Safe, avoid long seated pressure if irritated"]
+    },
+    "media": {
+      "thumbnail": "https://www.ukgymequipment.com/images/preacher-curl-bench-p1876-19167_image.jpg",
+      "images": [
+        "https://www.ukgymequipment.com/images/preacher-curl-bench-p1876-19167_image.jpg",
+        "https://www.bodybuilding.com/images/2020/january/preacher-curl-bench-1-700xh.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Preacher Curl Bench is a strength-focused arm training bench consisting of a firmly angled pad (≈30–45°) with a small front rack to safely rest a barbell between sets. Some versions include a seat, while others require standing. Because of the awkward position of the arms, lowering a barbell without front rack support is difficult, so the rack exists as the primary safety rest point. This equipment isolates the biceps differently compared to a standard curl machine, emphasizing stronger mid-range contraction and peak activation. It supports a variety of exerciser body sizes using natural pad and seat height adjustments (if present). It is spine-friendly when the lifter maintains a neutral pelvis, avoids aggressive low-back bracing to force the movement, never jerks the load from the bottom, and works within a smooth, controlled range of motion. Most gyms use this bench for barbell preacher curls, dumbbell preacher curls, and single-arm curls to build arm strength and stabilizer control."
+  },
+  {
+    "id": "eq_weight_plate_01",
+    "key": "weight_plate",
+    "type": "free_weight",
+    "name": "Weight Plate",
+    "aliases": ["barbell plate", "olympic plate", "bumper plate"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": null,
+    "movement_patterns": null,
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "//barbellstandard.com/cdn/shop/files/180-pound-iron-weight-set_62716022-0806-4f61-83a3-985c7d93fd6c.jpg?v=1732741752&width=1946",
+      "images": [
+        "//barbellstandard.com/cdn/shop/files/180-pound-iron-weight-set_62716022-0806-4f61-83a3-985c7d93fd6c.jpg?v=1732741752&width=1946",
+        "//barbellstandard.com/cdn/shop/files/180-pound-iron-weight-set_62716022-0806-4f61-83a3-985c7d93fd6c.jpg?v=1732741752&width=1946"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": null,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "Weight plates are circular resistance disks with a center hole to mount on barbells or plate-loaded machines, also usable independently for exercises. Standard increments range from 2.5 lbs to 45 lbs (≈1.25 kg to 20 kg or 20 kg+20 kg in pairs for heavy loads). Plates may be iron, rubber-coated, or 'bumper' plates designed for impact-safe dropping. In gyms, plates are used for front plate raises (shoulders/upper chest), standing oblique crunches (core/side abs), and plate pinches (grip/forearm strength). For spine-sensitive users (e.g., L5–S1 or sciatica), plates are safe when lifted without jerky momentum, avoiding lumbar bracing to compensate, and keeping motion pain-free and well-controlled. Many commercial gyms stock both iron and rubber-coated versions, while fitness studios and functional training areas often use bumper plates to reduce noise and joint impact."
+  },
+  {
+    "id": "eq_ez_bar_01",
+    "key": "ez_bar",
+    "type": "free_weight",
+    "name": "EZ / Curl Bar",
+    "aliases": ["ez curl bar", "curl barbell"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["biceps", "triceps"],
+    "movement_patterns": ["arm_flexion", "elbow_flexion"],
+    "execution_cues": [
+      "Grip hands inward or outward depending on target emphasis",
+      "Keep elbows close to torso",
+      "Curl or press using smooth controlled motion"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Keep standing or seated neutral spine"],
+      "sciatica": ["Safe, avoid jerky momentum"]
+    },
+    "media": {
+      "thumbnail": "https://americanbarbell.com/cdn/shop/files/stainless_curl_AB_Logo_1.jpg?v=1700578579",
+      "images": [
+        "https://americanbarbell.com/cdn/shop/files/stainless_curl_AB_Logo_1.jpg?v=1700578579",
+        "https://americanbarbell.com/cdn/shop/files/stainless_curl_AB_Logo_1.jpg?v=1700578579"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": null,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The EZ / Curl Bar is a moderately long curved free-weight barbell used for arm flexion (curls) and elbow-extension presses. It can be fixed-weight or adjustable. When adjustable, standard plate loads range from 15LB to 35LB (≈7kg–16kg on the bar itself, not the plates). Plate increments loaded onto it commonly range from 2.5LB to 45LB per plate (≈1.25kg–20kg). Grip orientation changes emphasis: inward-angled grip reduces wrist strain and shifts focus across different zones of the biceps or triceps. Used most for direct arm-training movements like EZ-Bar Curl, close-grip extensions, and triceps presses. Spine-friendly when maintaining neutral pelvis and avoiding lumbar bracing to create momentum."
+  },
+  {
+    "id": "eq_pull_up_bar_01",
+    "key": "pull_up_bar",
+    "type": "free_weight",
+    "name": "Pull Up Bar",
+    "aliases": ["chin up bar", "overhead pull bar"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["back", "biceps"],
+    "movement_patterns": ["vertical_pull"],
+    "execution_cues": [
+      "Hands further apart to emphasize back",
+      "Hands closer to emphasize biceps",
+      "Hammer grip engages forearms with back and biceps"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Safe for spine when core stays braced without swinging"],
+      "sciatica": ["Safe, stop if nerve symptoms appear"]
+    },
+    "media": {
+      "thumbnail": "https://www.sideaita.it/wp-content/uploads/2021/03/9048_1-PULL-UP-BAR-outdoor_micaceo.jpg",
+      "images": [
+        "https://www.sideaita.it/wp-content/uploads/2021/03/9048_1-PULL-UP-BAR-outdoor_micaceo.jpg",
+        "https://www.sideaita.it/wp-content/uploads/2021/03/9048_1-PULL-UP-BAR-outdoor_micaceo.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": null,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Pull Up Bar is a simple overhead training bar mounted to a frame, rack, or wall that allows multiple handgrip options. The grip width and style directly influence muscle emphasis: wider grips shift more load to the back (lats, upper back), close grips emphasize the biceps (chin-up pattern), and hammer or parallel grips add strong forearm engagement while still training the back and biceps together. Movements on this bar are primarily vertical pull patterns including Pull Ups, Chin Ups, and Bar Muscle Ups. This equipment does not provide built-in resistance or a weight stack — the user loads resistance externally using bodyweight or plates/dip belts if added later. It is considered spine-friendly when the lifter avoids swinging, maintains a braced core during the pull, and stops immediately if nerve or sharp lumbar discomfort appears. Many gyms have versions with parallel handles for neutral/hammer grip pull ups to train forearms along with back and biceps."
+  },
+  {
+    "id": "eq_back_extension_01",
+    "key": "back_extension",
+    "type": "machine",
+    "name": "Back Extension Machine",
+    "aliases": ["seated back extension", "lower-back isolation machine"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 100,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": [],
+    "primary_muscles": ["lower_back", "erector_spinae"],
+    "movement_patterns": ["spinal_extension_controlled"],
+    "execution_cues": [
+      "Sit upright and press torso into the back pad",
+      "Drive from lower-back contraction, not legs",
+      "Avoid explosive backward thrusting",
+      "Use smooth, controlled reps"
+    ],
+    "safety_notes": {
+      "l5_s1": [
+        "Avoid excessive lumbar arch pressure",
+        "Keep movement moderate and symptom-free"
+      ],
+      "sciatica": [
+        "Safe if pain-free",
+        "Stop if tingling or radiating discomfort increases"
+      ]
+    },
+    "media": {
+      "thumbnail": "https://s3assets.skimble.com/assets/2139681/image_iphone.jpg",
+      "images": [
+        "https://s3assets.skimble.com/assets/2139681/image_iphone.jpg",
+        "https://s3assets.skimble.com/assets/2139681/image_iphone.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Back Extension Machine is a **seated, lower-back strength machine** with a support pad positioned behind the exerciser’s torso. The user pushes their upper body **backward against resistance** to train the **lower back (erector spinae)** using a controlled spinal-extension motion. Most gym models use a **selectorized adjustable weight stack** to accommodate various strength levels, but the station **does not attach cable-based accessories**. Seat height is typically adjustable on many commercial versions, allowing the machine to fit a wide range of body sizes and training experience. Wider torso pads help spread pressure evenly, while a tall supported posture reduces the need for low-back bracing compensation. This machine is commonly used for **Seated Back Extension** sets that isolate and strengthen lumbar extensors, support posture, and improve gym pressing stability. It is considered **L5–S1 and sciatica-friendly** when: reps remain moderate in range, the lifter avoids aggressive arching or explosive thrusting, and they stop immediately if nerve tension, tingling, or radiating symptoms increase."
+  },
+  {
+    "id": "eq_row_machine_01",
+    "key": "row_machine",
+    "type": "machine",
+    "name": "Row Machine",
+    "aliases": ["machine row", "seated row station", "chest-pad row machine"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 100,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["back", "trapezius", "biceps"],
+    "movement_patterns": ["horizontal_pull"],
+    "execution_cues": [
+      "Adjust seat height and chest pad to match torso length",
+      "Grab handles with preferred grip width",
+      "Keep chest lightly fixed against pad, spine tall and neutral",
+      "Pull toward lower ribs or upper abdomen, elbows drive back",
+      "No momentum at the start, controlled range"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Avoid forcing lumbar rounding", "Start braced, no jerky pull"],
+      "sciatica": ["Stay in pain-free ROM", "Stop if symptoms increase"]
+    },
+    "media": {
+      "thumbnail": "https://images.aasaan.shop/stores/b3412024/products/product_images/product_1762145243582.jpeg",
+      "images": [
+        "https://images.aasaan.shop/stores/b3412024/products/product_images/product_1762145243582.jpeg",
+        "https://images.aasaan.shop/stores/b3412024/products/product_images/product_1762145243582.jpeg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Row Machine is a **seated horizontal pull strength station** with a **chest pad behind the torso and gripped handles** in front. It primarily trains the **Back, Trapezius, and Biceps together**. Most gym models support **multiple grip positions** (wide, narrow, neutral/parallel) to vary muscle emphasis. Wider grips favor back and traps, while closer or inward-angled grips increase biceps and forearm load. Many commercial versions allow adjustment of both **seat height and chest-pad distance**, so the machine fits a **range of body sizes, shapes, and strength levels**. Some gyms provide **plate-loaded resistance**, while others use a **selectorized weight stack**—this schema keeps the field uniform for consistency. Adjusting the chest pad changes the **distance between the exerciser and handles at the start of the movement**, altering leverage. The machine is considered **spine-friendly when the user maintains a tall neutral spine, avoids jerky momentum, doesn’t brace-lift using the lumbar, and works within a smooth, controlled ROM**."
+  },
+  {
+    "id": "eq_calf_raise_01",
+    "key": "calf_raise_machine",
+    "type": "machine",
+    "name": "Calf Raise Machine",
+    "aliases": [
+      "seated calf press",
+      "seated calf raise station",
+      "calf isolator machine"
+    ],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 100,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["calves"],
+    "movement_patterns": ["plantar_flexion"],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://fitnessmasters.com.au/wp-content/uploads/2016/06/seated-calf-raise-machine.webp",
+      "images": [
+        "https://fitnessmasters.com.au/wp-content/uploads/2016/06/seated-calf-raise-machine.webp",
+        "https://fitnessmasters.com.au/wp-content/uploads/2016/06/seated-calf-raise-machine.webp"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Calf Raise Machine is a seated lower-leg strength station that anchors the thighs using support pads or a fixed seat frame to remove balance demands and enable focused calf training. The user performs calf raises through controlled plantar flexion (ankles pressing downward then rising upward) to isolate and strengthen the calves. Unlike standing calf exercises, this machine shifts emphasis into a different portion of the calves by fixing the upper-leg position, often reducing knee-momentum compensation. Most commercial gym models support seat-height and pad adjustment to fit a range of body sizes, shapes, and strength experience. Some stations offer a non-standardized adjustable weight stack, while others require external weight plates to be loaded instead; this model keeps fields uniform for backend and frontend logic. The movement is considered spinally safe when the user stays tall and relaxed through the lumbar, keeps force generated from the ankles (not the low-back or knees), avoids jerky momentum, and stops if nerve or sharp knee-back discomfort appears. The machine is commonly used for both Standing Machine Calf Press and Seated Machine Calf Press sets, helping develop calf strength, ankle stability, posture support, and controlled strength endurance across varying loads."
+  },
+  {
+    "id": "eq_leg_press_01",
+    "key": "leg_press",
+    "type": "machine",
+    "name": "Leg Press Machine",
+    "aliases": ["45 degree leg press", "sled leg press station"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["glutes", "quadriceps"],
+    "movement_patterns": [
+      "inclined_horizontal_push",
+      "knee_extension",
+      "hip_extension"
+    ],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://gmwdfitness.com/cdn/shop/files/gmwd-leg-press-machine-lp05-product-size-16sqft.jpg?v=1749872866&width=1600",
+      "images": [
+        "https://gmwdfitness.com/cdn/shop/files/gmwd-leg-press-machine-lp05-product-size-16sqft.jpg?v=1749872866&width=1600",
+        "https://gmwdfitness.com/cdn/shop/files/gmwd-leg-press-machine-lp05-product-size-16sqft.jpg?v=1749872866&width=1600"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Leg Press Machine is a lower-body strength station built in a **45-degree seated sled position** where the lifter pushes a plate or sled **away from the body** by extending the ankles, knees, and hips. It primarily trains the **glutes and quadriceps** by focusing on **hip and knee extension** without overhead spine load. Resistance is usually **plate-loaded**, commonly added in increments **between 2.5 LB and 45 LB per plate** (≈1.25 kg – 20 kg each, often paired). Most commercial gym models include **safety stop-stoppers that lock the plate/sled in place**, which are activated by **rotating or pulling a handle near the seat**, allowing users to safely exit. The start position of the plate/sled and backrest angle are often adjustable to fit different torso and leg lengths. This movement is considered spinally safe when the user keeps the pelvis neutral, avoids excessive lumbar bracing to create force, never jerks the bottom press, and works within a smooth controlled motion. The station is commonly used for both **Leg Press and Calf Press variations** to increase lower-body strength, positional stability, and controlled strength endurance."
+  },
+  {
+    "id": "eq_assisted_weight_01",
+    "key": "assisted_weight_machine",
+    "type": "machine",
+    "name": "Assisted Weight Machine",
+    "aliases": [
+      "assisted dip station",
+      "assisted pull-up station",
+      "assisted chin up machine"
+    ],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 100,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["back", "biceps", "chest", "triceps"],
+    "movement_patterns": ["vertical_pull", "horizontal_push"],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://truefitness.com/wp-content/uploads/2024/07/Hero-84.png",
+      "images": [
+        "https://truefitness.com/wp-content/uploads/2024/07/Hero-84.png",
+        "https://truefitness.com/wp-content/uploads/2024/07/Hero-84.png"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Assisted Weight Machine is a combined upper-body strength station used for **chest dips, pull-ups, chin-ups, and grip variations**. It includes a **selectorized adjustable weight stack** that lifts a support platform under the user’s knees or feet. The selected assistance weight is **subtracted from the lifter’s bodyweight**, making the movement easier. The more assistance weight chosen, the easier the exercise feels. Most models feature handles for dip pressing and overhead pulling, plus a **knee-support pad or a bar platform** for parallel/hammer grip variants. Some models require exercisers to rest their knees on a pad, while others use a lower bar instead, where users brace their feet on the bar instead of kneeling. This machine is ideal for users who are not strong enough to perform unassisted dips or pull-up variations safely. It is considered spine-safe when the user keeps the core braced, avoids swinging, and stops immediately if discomfort increases. It helps gradually build strength endurance, shoulder stability, forearm grip power, and controlled pushing/pulling mechanics while reducing wrist and spinal strain by guiding posture. Common gym usage includes **assisted chin-ups, assisted pull-ups, machine dips, and vertical grip variants** for a safe, progressive strength path."
+  },
+  {
+    "id": "eq_tricep_dip_01",
+    "key": "tricep_dip_machine",
+    "type": "machine",
+    "name": "Triceps Dip Machine",
+    "aliases": [
+      "machine tricep dip",
+      "seated tricep press down",
+      "vertical tricep dip station"
+    ],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["triceps"],
+    "movement_patterns": ["vertical_push", "elbow_extension"],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://www.ukgymequipment.com/images/impact-seated-dip-tricep-press-p1213-67282_image.jpg",
+      "images": [
+        "https://www.ukgymequipment.com/images/impact-seated-dip-tricep-press-p1213-67282_image.jpg",
+        "https://www.ukgymequipment.com/images/impact-seated-dip-tricep-press-p1213-67282_image.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Triceps Dip Machine is a **seated upper-body strength station** built in a **vertical posture** with **two parallel handles at arm-side height**. The user performs a dip-style push **downward by extending the elbows**, keeping the arm path parallel and independent from shoulder horizontal adduction. It isolates the **triceps**, putting strong emphasis on the **mid-range and peak contraction** of the muscle without activating the legs or lower back to create force. Most gym models include an **adjustable assistance/load weight stack**, but some leverage-based sled versions also exist—schema stays uniform for consistency. Grip width and handle orientation may vary across models to emphasize different regions of the triceps, but the motion goal stays identical: **elbows press downward while chest stays tall and pelvis neutral**. This machine is considered spine-safe when the user avoids driving the movement with lumbar bracing, never jerks the handles from the bottom, and stops immediately if shoulder or nerve discomfort increases. Gym use includes: **Machine Triceps Dip, inward-press elbow focus, slow controlled push-downs, and progressive triceps strength endurance with guided posture.** Helps improve arm pushing mechanics, lockout stability, and triceps-focused hypertrophy progression without spinal overload."
+  },
+  {
+    "id": "eq_bench_press_machine_01",
+    "key": "bench_press_machine",
+    "type": "machine",
+    "name": "Bench Press Machine",
+    "aliases": [
+      "machine bench press",
+      "machine chest press",
+      "seated horizontal press station"
+    ],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["chest", "triceps", "shoulders"],
+    "movement_patterns": [
+      "horizontal_push",
+      "horizontal_adduction",
+      "elbow_extension"
+    ],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://www.ukgymequipment.com/images/r2-seated-chest-press-p1306-13604_medium.jpg",
+      "images": [
+        "https://www.ukgymequipment.com/images/r2-seated-chest-press-p1306-13604_medium.jpg",
+        "https://www.ukgymequipment.com/images/r2-seated-chest-press-p1306-13604_medium.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Bench Press Machine is a **seated, commercial-grade upper-body strength station** built in a vertical-supported posture that removes overhead spinal load, making it ideal for horizontal pressing by contracting the chest, triceps, and anterior deltoids. It is commonly selectorized using an adjustable weight stack, but some gyms provide sled or plate-loaded variations—schema stays uniform for backend and frontend logic. Many commercial versions support seat-height and chest-pad distance adjustment, allowing the machine to fit a **wide range of body sizes, shapes, and strength experience**. The user presses handles **forward away from the body**, keeping elbows extending without dropping or jerking the stack. The movement emphasizes the **mid-range and peak chest contraction**, often with horizontal adduction demand, but without leg or hip downward force activation. The exerciser keeps the **head firmly pressed against the backrest** to limit leverage risk, reduce neck rotation tension, and prevent lumbar-overarching compensation. This machine is considered **spine and nerve safe** for L5–S1 or sciatica-sensitive lifters when avoiding lumbar push-drive compensation at bottom press, keeping the pelvis neutral, using controlled tempo, and stopping immediately if discomfort increases. Gyms primarily use it for: **Machine Bench Press, inward-focused elbow pressing for triceps, moderate chest-shoulder hypertrophy progression, and lockout-stability strength endurance without spinal overload**."
+  },
+  {
+    "id": "eq_row_cable_01",
+    "key": "row_cable",
+    "type": "machine",
+    "name": "Row Cable Machine",
+    "aliases": ["cable row", "seated cable row bench station"],
+    "load_type": "plate",
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": [
+      "straight_bar",
+      "wide_bar",
+      "narrow_handles",
+      "parallel_handles",
+      "rope"
+    ],
+    "primary_muscles": ["back", "trapezius", "biceps"],
+    "movement_patterns": ["horizontal_pull", "elbow_flexion"],
+    "execution_cues": [
+      "Sit on the long bench and place feet on foot plates",
+      "Grab desired cable handle or attachment",
+      "Pull handle toward lower ribs or upper abdomen by contracting back and biceps",
+      "Use wide attachments to emphasize back, narrow grips to emphasize biceps",
+      "Keep spine tall and neutral, avoid swinging or jerky momentum"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Avoid loaded lumbar rounding", "Do not use low-back to yank"],
+      "sciatica": ["Stay in pain-free ROM", "Stop if radiating symptoms appear"]
+    },
+    "media": {
+      "thumbnail": "https://images.ctfassets.net/0k812o62ndtw/5k7i7GHcKgHpH2sKy7g3YG/1784a4909c2bbcef758707e55d1d6f9b/exercise20170428-24118-m2h9is065439a9684380fa61436f78cc2a7831.png",
+      "images": [
+        "https://images.ctfassets.net/0k812o62ndtw/5k7i7GHcKgHpH2sKy7g3YG/1784a4909c2bbcef758707e55d1d6f9b/exercise20170428-24118-m2h9is065439a9684380fa61436f78cc2a7831.png",
+        "https://static.strengthlevel.com/images/exercises/seated-cable-row/seated-cable-row-800.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Row Cable Machine is a **seated, cable-based strength station** featuring a long bench, a resistance system (often weight stack or plate-loaded), and **foot plates for bracing**. The lifter pulls a cable handle **toward the torso while thighs and hips stay fixed**, isolating a compound **horizontal pull pattern** that trains the **back, trapezius, biceps, and forearms depending on grip/attachment**. Different cable attachments change muscle emphasis: **wide bars and parallel handles emphasize lats and traps**, while **narrow handles increase biceps load and forearm demand**. Resistance is set either via a selectable stack or by adding plates depending on model, but the **training force is always generated from the back and arms, not the lower spine or knees**. It is ideal for progressive pulling strength endurance without overhead spinal load. This equipment is considered **spine-safe and back-friendly when the user maintains a tall neutral spine, braces without swinging, avoids lumbar compensation to create momentum, pulls in smooth tempo, controls the eccentric without dropping the load, and stops immediately if any sharp nerve or back discomfort increases**."
+  },
+  {
+    "id": "eq_lat_pulldown_cable_01",
+    "key": "lat_pulldown_cable",
+    "type": "machine",
+    "name": "Lat Pulldown Cable",
+    "aliases": ["lat pulldown station", "overhead cable pull trainer"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["back", "biceps"],
+    "movement_patterns": [
+      "vertical_pull",
+      "scapular_depression",
+      "elbow_flexion"
+    ],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://shop.lifefitness.com/cdn/shop/files/outlet-hammer-strength-select-lat-pulldown-charcoal-black-1000x1000_1200x1200.jpg?v=1748945131",
+      "images": [
+        "https://shop.lifefitness.com/cdn/shop/files/outlet-hammer-strength-select-lat-pulldown-charcoal-black-1000x1000_1200x1200.jpg?v=1748945131",
+        "https://shop.lifefitness.com/cdn/shop/files/outlet-hammer-strength-select-lat-pulldown-charcoal-black-1000x1000_1200x1200.jpg?v=1748945131"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "A type of cable machine, the **Lat Pulldown Cable** is an apparatus with an **adjustable weight stack** and an **overhead handle** where multiple cable attachments can be affixed. The handles are pulled **downward toward the body using the lats and biceps only**, while keeping the upper body and thighs **locked and fixed using a leg pad**. Wide bars or neutral parallel grips emphasize different regions of the back, while narrow grips shift more load to the biceps, but all vertical pull patterns train the **back and arms without knee- or lumbar force-drive compensation**. The user must avoid **bending the head back or yanking from the bottom** to reduce risk of **neck injury**. The machine is considered **spine-safe and back-friendly when the user stays tall through the lumbar, locks thighs into the pad, keeps force generated from lats and arms only, pulls in smooth controlled tempo, never jerks the bottom load, controls the eccentric without dropping the stack, and stops immediately if nerve discomfort increases**. Commonly used for **Single-Arm Lat Pulldown and Straight-Arm Pulldown variations** to progressively increase pulling strength endurance, trap-to-lat stability, posture support, and arm hypertrophy development without spinal overload."
+  },
+  {
+    "id": "eq_dip_parallel_bar_01",
+    "key": "dip_parallel_bar",
+    "type": "free_weight",
+    "name": "Dip (Parallel) Bar",
+    "aliases": [
+      "parallel dip handles",
+      "chest dip station",
+      "functional trainer dip bar"
+    ],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["chest", "triceps", "shoulders"],
+    "movement_patterns": [
+      "vertical_push",
+      "horizontal_adduction",
+      "elbow_extension"
+    ],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://5.imimg.com/data5/XQ/GG/MY-754773/chinning-and-dipping-bar-500x500.jpg",
+      "images": [
+        "https://5.imimg.com/data5/XQ/GG/MY-754773/chinning-and-dipping-bar-500x500.jpg",
+        "https://welcarefitness.com/image/cache/catalog/WR008%20PARALLEL%20BAR%20%20DIP-1500x1500.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "A type of bar, the **Dip (Parallel) Bar** is a strength station consisting of **two parallel overhead handles/gripped bars** that allow users to perform **chest-focused dips and triceps push patterns** while removing overhead spinal load. Most commercial gym versions also include **vertical bench pressing and Pull Up Bars on the same frame**, making the station extremely versatile for combined Back, Chest, Trap, and Elbow-extension training sets. Resistance is not selectorized — the user uses **bodyweight, external plates, or studio-style dip belts if added later**. Dips are performed by **pressing the torso downward/upward by contracting the chest, triceps, shoulders, and forearms depending on grip orientation**. To reduce injury risk, users should never dip **beyond the point where the upper arms are parallel to the floor**; lowering past parallel **increases shoulder and chest-tie risk**. The station is considered **spine-safe and back-friendly when the user avoids swinging, keeps core braced, never yanks out of the bottom position, maintains neutral pelvis, pushes in smooth, controlled tempo, and stops immediately if shoulder or nerve discomfort increases**. Gym use includes: **Machine Dip, Chest Dip, Triceps-dominant Peak push sets, wide or narrow horizontal adduction presses (if supported), posture-safe progressive strength endurance, arm-pad guided dips, and vertical grip variations to support forearm+biceps+traps+lower-chest training without spinal overload**."
+  },
+  {
+    "id": "eq_flat_bench_01",
+    "key": "flat_bench",
+    "type": "bench",
+    "name": "Flat Bench",
+    "aliases": [
+      "flat gym bench",
+      "barbell bench press bench",
+      "rack-supported bench"
+    ],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["chest", "triceps", "shoulders"],
+    "movement_patterns": ["horizontal_push"],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://vulcanfitness.com.au/cdn/shop/files/1-1670912125878.webp?v=1684391248&width=1280",
+      "images": [
+        "https://vulcanfitness.com.au/cdn/shop/files/1-1670912125878.webp?v=1684391248&width=1280",
+        "https://vulcanfitness.com.au/cdn/shop/files/1-1670912125878.webp?v=1684391248&width=1280"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "A type of bench, the Flat Bench is a fundamental gym training seat used for horizontal pressing movements that primarily train the Chest, Triceps, and Shoulders. Many commercial gym models come equipped with a barbell rack, while others do not. A rack-supported version is intended for safe barbell bench pressing, reducing the risk of dropping the bar or starting the press from an unsafe bottom position. Bench pressing without a rack can be dangerous and increases shoulder, chest, and wrist tie-strain risks, so non-rack models are more versatile and used for dumbbell pressing, chest flies, core stabilizer sets, step-ups, and posture-controlled rehab variations (if supported later in v2). This bench fits a range of body sizes through seat height and backrest positioning (when available in commercial partner skins or sled-mounted setups). It is considered spine-friendly when the lifter avoids lumbar arch-drive compensation, keeps the pelvis and ribs neutral, presses using the chest and arms smoothly in controlled tempo, lowers the load without slamming, and stops immediately if any nerve or lumbar discomfort increases. Gym use includes: Barbell Bench Press (on rack-supported models), dumbbell pressing, inward-angled elbow-overview sets, Machine-Shrug Leverage-Style pressing (if supported on some premium sled models), chest–shoulder hypertrophy progression, posture-safe horizontal push endurance, and core-supported pressing mechanics without spinal overload."
+  },
+  {
+    "id": "eq_dumbbells_01",
+    "key": "dumbbells",
+    "type": "free_weight",
+    "name": "Dumbbells",
+    "aliases": ["fixed dumbbell", "adjustable dumbbell"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": null,
+    "movement_patterns": null,
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://www.bullrockfitness.com/wp-content/uploads/2021/05/urethane_round_dumbbells.jpg",
+      "images": [
+        "https://www.bullrockfitness.com/wp-content/uploads/2021/05/urethane_round_dumbbells.jpg",
+        "https://www.bullrockfitness.com/wp-content/uploads/2021/05/urethane_round_dumbbells.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": null,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "A type of free weight, Dumbbells are short straight bars used for strength training. Some dumbbells are adjustable and can load external plates, but the majority in gyms are fixed-weight and not adjustable. Adjustable dumbbells without plates typically weigh about 5LB (≈2.25 kg). Many exercises use two dumbbells simultaneously, one per hand, moving at equal speed to maintain balance. Some exercises also use one dumbbell at a time with increased core and abs emphasis. When lifting, avoid swinging or uneven tempo, keep both sides of the body balanced, control the lowering phase smoothly, and stop if any sharp pain or nerve tension increases. Gym use includes: dumbbell presses (like the one shown in USED FOR), curls, core stabilizer work, and abs-dominant single-side loaded movements."
+  },
+  {
+    "id": "eq_leg_press_01",
+    "key": "leg_press_machine",
+    "type": "machine",
+    "name": "Leg Press Machine",
+    "aliases": [
+      "machine leg press",
+      "sled leg press",
+      "45 degree press station"
+    ],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["glutes", "quadriceps"],
+    "movement_patterns": ["horizontal_push", "knee_extension", "hip_extension"],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://training.fit/wp-content/uploads/2020/03/beinpresse.png",
+      "images": [
+        "https://training.fit/wp-content/uploads/2020/03/beinpresse.png",
+        "https://training.fit/wp-content/uploads/2020/03/beinpresse.png"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Leg Press Machine is a vertical-seated lower-body strength station with a foot plate that can be pushed horizontally away from the seat using knee and hip extension. Most gym versions are plate-loaded or sled-based rather than selectorized, so resistance plates are added externally in increments (e.g., 2.5LB to 45LB ≈ 1.25kg to 20kg+20kg pairs). The seat, backrest angle, or foot-plate starting distance can be adjusted to accommodate a wide range of body sizes and strength levels. When pressing, the user keeps the core braced, avoids forcing the movement with lumbar arch drive, pushes smoothly without bottom jerks, controls the lowering eccentric, and stops if any sharp pain or nerve tension increases. This machine is commonly used for machine leg press, inward-press elbow positioning for quad isolation, 45° leverage-safe presses, and calf-press variations (when supported). It enables progressive glute and quadriceps hypertrophy with minimal spinal loading when posture stays tall and pelvis neutral."
+  },
+  {
+    "id": "eq_bicep_curl_01",
+    "key": "bicep_curl",
+    "type": "machine",
+    "name": "Bicep Curl Machine",
+    "aliases": [
+      "machine bicep curl",
+      "seated bicep curl station",
+      "parallel handle bicep trainer"
+    ],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
+    "attachments_supported": null,
+    "primary_muscles": ["biceps"],
+    "movement_patterns": ["arm_flexion", "elbow_flexion"],
+    "execution_cues": null,
+    "safety_notes": null,
+    "media": {
+      "thumbnail": "https://www.ukgymequipment.com/images/seated-bicep-curl-preacher-p4202-49522_image.jpg",
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBNUBaAPizBSAuyAGVyHZDMTHBZ7IJzNuEJw&s",
+        "https://www.ukgymequipment.com/images/seated-bicep-curl-preacher-p4202-49522_image.jpg"
+      ],
+      "video_overview": null
+    },
+    "is_back_friendly": true,
+    "created_at": null,
+    "updated_at": null,
+    "version": 1,
+    "details_overview": "The Bicep Curl Machine is a seated upper-body strength station with two parallel handles that can be curled upward using elbow flexion. It primarily trains the biceps, emphasizing a different region of the biceps compared to the preacher curl machine. Most commercial gym models allow seat height and resistance (weight stack or external plates depending on version) to be adjusted to fit a wide range of exerciser body sizes, shapes, and strength levels. Some models also support grip-position or handle-angle changes to further isolate or bias different zones of biceps contraction. To reduce injury leverage and neck compensation risk, the user keeps their head pressed firmly into the backrest while curling in smooth controlled tempo, avoiding swinging from the bottom, and stopping immediately if sharp pain or nerve tension increases."
+  }
+]
