@@ -1,30 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import exerciseData from "@/MockData/exercise.json";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { Exercise } from "@/types/exercise";
 import type {
   ActiveWorkoutPageProps,
   FinishedWorkoutSummary,
 } from "@/types/workout";
+import { formatTime } from "@/utils/date";
 import { iconButtonClass, secondaryButtonClass } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
 import { ExerciseActionSheet } from "@/pages/WorkoutPage/ExercisePopUp";
 import { FinishWorkoutModal } from "./FinishWorkoutModal";
 import { calculateWorkoutVolume } from "@/utils/workoutStats";
-
-const exercises: Exercise[] = exerciseData as Exercise[];
-
-const formatTime = (totalSeconds: number) => {
-  const clampedSeconds = Math.max(totalSeconds, 0);
-  const hours = Math.floor(clampedSeconds / 3600);
-  const minutes = Math.floor((clampedSeconds % 3600) / 60);
-  const seconds = clampedSeconds % 60;
-
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-    2,
-    "0"
-  )}:${String(seconds).padStart(2, "0")}`;
-};
+import { ActiveWorkoutHeader } from "./ActiveWorkoutHeader";
+import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
+import { TreeDotButton } from "@/components/TreeDotButton/TreeDotButton";
 
 export function ActiveWorkoutPage({
   onNavigateBack,
@@ -33,6 +22,7 @@ export function ActiveWorkoutPage({
   completedExerciseIds = [],
   workoutStartTime,
   exerciseLogs = {},
+  exercises = [],
 }: ActiveWorkoutPageProps) {
   const [elapsedSeconds, setElapsedSeconds] = useState(() => {
     if (workoutStartTime) {
@@ -65,13 +55,13 @@ export function ActiveWorkoutPage({
       exercises.length > 0 &&
       exercises.every((exercise) => completedExerciseIdsSet.has(exercise.id))
     );
-  }, [exercises, completedExerciseIdsSet]);
+  }, [completedExerciseIdsSet, exercises]);
 
   const completedExercises = useMemo(() => {
     return exercises.filter((exercise) =>
       completedExerciseIdsSet.has(exercise.id)
     );
-  }, [exercises, completedExerciseIdsSet]);
+  }, [completedExerciseIdsSet, exercises]);
 
   const handleFinishWorkout = () => {
     if (allExercisesCompleted) {
@@ -136,41 +126,16 @@ export function ActiveWorkoutPage({
       fallbackBackgroundClassName="bg-[#080A14]"
     >
       <div ref={cardRef} className="flex flex-1 flex-col gap-6">
-        <header className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={onNavigateBack}
-            className={iconButtonClass}
-            aria-label="back to workout list"
-          >
-            <svg
-              aria-hidden="true"
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-          <div className="text-center">
-            <p className="text-sm uppercase tracking-[0.3em] text-slate-300">
-              Active workout
-            </p>
-          </div>
-          <div className="w-10" />
-        </header>
-
+        replace the inline header with:
+        <ActiveWorkoutHeader
+          onNavigateBack={onNavigateBack}
+          buttonClass={iconButtonClass}
+        />
         <section className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center shadow-xl">
           <p className="mt-4 text-6xl font-semibold tabular-nums">
             {formatTime(elapsedSeconds)}
           </p>
         </section>
-
         <section>
           <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
             {exercises.map((exercise) => {
@@ -194,22 +159,7 @@ export function ActiveWorkoutPage({
                         alt={exercise.name}
                         className="h-full w-full object-cover"
                       />
-                      {isCompleted && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-emerald-900/60 text-white">
-                          <svg
-                            aria-hidden="true"
-                            viewBox="0 0 20 20"
-                            className="h-6 w-6"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                          >
-                            <path d="M5 10.5 8.2 14 15 6" />
-                          </svg>
-                        </div>
-                      )}
+                      {isCompleted && <CompletedCheckmark />}
                     </div>
                     <div>
                       <p className="text-lg font-semibold text-white">
@@ -228,26 +178,10 @@ export function ActiveWorkoutPage({
                       )}
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    aria-label="open exercise actions"
-                    className="rounded-full p-1 text-slate-200"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      setActionExercise(exercise);
-                    }}
-                  >
-                    <svg
-                      aria-hidden="true"
-                      className="h-5 w-5"
-                      viewBox="0 0 16 4"
-                      fill="currentColor"
-                    >
-                      <circle cx="2" cy="2" r="2" />
-                      <circle cx="8" cy="2" r="2" />
-                      <circle cx="14" cy="2" r="2" />
-                    </svg>
-                  </button>
+                  <TreeDotButton
+                    ariaLabel="open exercise actions"
+                    onClick={() => setActionExercise(exercise)}
+                  />
                 </div>
               );
             })}

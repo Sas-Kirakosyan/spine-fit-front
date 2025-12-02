@@ -21,6 +21,18 @@ export const isSameDay = (date1: Date, date2: Date): boolean => {
   );
 };
 
+export const formatTime = (totalSeconds: number) => {
+  const clampedSeconds = Math.max(totalSeconds, 0);
+  const hours = Math.floor(clampedSeconds / 3600);
+  const minutes = Math.floor((clampedSeconds % 3600) / 60);
+  const seconds = clampedSeconds % 60;
+
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+    2,
+    "0"
+  )}:${String(seconds).padStart(2, "0")}`;
+};
+
 export const months = [
   "January",
   "February",

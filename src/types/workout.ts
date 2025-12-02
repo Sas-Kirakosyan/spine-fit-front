@@ -78,4 +78,5 @@ export interface ActiveWorkoutPageProps {
   completedExerciseIds?: number[];
   workoutStartTime?: number;
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
+  exercises: Exercise[];
 }

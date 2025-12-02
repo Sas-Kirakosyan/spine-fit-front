@@ -268,6 +268,7 @@ function App() {
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
             exerciseLogs={exerciseLogs}
+            exercises={workoutExercises}
           />
         );
       case "history":
