@@ -11,12 +11,17 @@ export function TreeDotButton({
   className = "rounded-full p-1 text-slate-200",
   svgClassName = "h-5 w-5",
 }: TreeDotButtonProps) {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    onClick();
+  };
+
   return (
     <button
       type="button"
       aria-label={ariaLabel}
       className={className}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <svg
         aria-hidden="true"
