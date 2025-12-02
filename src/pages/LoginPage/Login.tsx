@@ -128,7 +128,7 @@ export function Login({
 
               <a
                 href="#"
-                className="text-sm font-medium text-[#0000E7] transition hover:text-blue-400"
+                className="text-sm font-medium text-main transition hover:text-main/80"
               >
                 Forgot your password?
               </a>

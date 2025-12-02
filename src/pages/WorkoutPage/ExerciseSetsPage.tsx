@@ -256,7 +256,7 @@ export function ExerciseSetsPage({
                   window.open(exercise.video_url, "_blank", "noopener");
                 }
               }}
-              className={`${primaryButtonClass} bg-blue-500 text-white shadow-lg`}
+              className={`${primaryButtonClass} bg-main text-white shadow-lg`}
             >
               <svg
                 aria-hidden="true"
@@ -296,14 +296,14 @@ export function ExerciseSetsPage({
                 }
                 className={`${secondaryButtonClass} ${
                   isActive
-                    ? "border-blue-500/70 text-blue-300 shadow-inner shadow-blue-500/20"
+                    ? "border-main/70 text-main/70 shadow-inner shadow-main/20"
                     : ""
                 }`}
               >
                 <span className="flex items-center gap-2">
                   <span
                     className={`flex h-7 w-7 items-center justify-center rounded-full bg-black/40 ${
-                      isActive ? "text-blue-300" : "text-slate-200"
+                      isActive ? "text-main/70" : "text-slate-200"
                     }`}
                   >
                     {item.icon}
@@ -370,7 +370,7 @@ export function ExerciseSetsPage({
                 <span className="text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
                   Pain Level
                 </span>
-                <div className="rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
+                <div className="rounded-full bg-main px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
                   {painLevel}
                 </div>
               </div>
@@ -398,11 +398,11 @@ export function ExerciseSetsPage({
                   onChange={(event) => setPainLevel(Number(event.target.value))}
                   className="h-2 w-full appearance-none rounded-full bg-white/10"
                   style={{
-                    background: `linear-gradient(to right, #3B82F6 ${sliderProgress}%, rgba(59,130,246,0.15) ${sliderProgress}%)`,
+                    background: `linear-gradient(to right, #e77d10 ${sliderProgress}%, rgba(231,125,16,0.15) ${sliderProgress}%)`,
                   }}
                 />
                 <div
-                  className="pointer-events-none absolute -top-4 flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white shadow-lg"
+                  className="pointer-events-none absolute -top-4 flex h-7 w-7 items-center justify-center rounded-full bg-main text-sm font-semibold text-white shadow-lg"
                   style={{
                     left: `calc(${sliderProgress}% - 14px)`,
                   }}
@@ -443,7 +443,7 @@ export function ExerciseSetsPage({
         ) : (
           <Button
             onClick={onStartWorkoutSession}
-            className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-blue-600 text-white uppercase"
+            className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-main text-white uppercase"
           >
             START Workout
           </Button>

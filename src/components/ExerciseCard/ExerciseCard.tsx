@@ -26,7 +26,7 @@ export function ExerciseCard({
           event.stopPropagation();
           onDetailsClick();
         }}
-        className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+        className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
         aria-label={`Открыть детали упражнения ${exercise.name}`}
       >
         <img
@@ -57,7 +57,7 @@ export function ExerciseCard({
 
       <button
         type="button"
-        className="ml-2 rounded-full p-2 text-slate-200 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
+        className="ml-2 rounded-full p-2 text-slate-200 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-main/60"
         aria-label="Открыть действия упражнения"
         onClick={(event) => {
           event.stopPropagation();

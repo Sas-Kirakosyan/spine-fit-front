@@ -11,7 +11,7 @@ const baseNavButtonClass =
 const getNavButtonClassName = (isActive: boolean) =>
   `${baseNavButtonClass} ${
     isActive
-      ? "bg-blue-600 text-white"
+      ? "bg-main text-white"
       : "bg-[#1B1E2B] text-slate-200 hover:text-white"
   }`;
 
@@ -47,4 +47,3 @@ export function BottomNav({
     </nav>
   );
 }
-

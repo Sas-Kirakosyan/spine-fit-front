@@ -99,7 +99,7 @@ export function FinishWorkoutModal({
               </Button>
               <Button
                 onClick={onLogWorkout}
-                className="flex-1 h-[48px] rounded-[10px] bg-blue-600 text-white font-semibold uppercase tracking-[0.1em]"
+                className="flex-1 h-[48px] rounded-[10px] bg-main text-white font-semibold uppercase tracking-[0.1em]"
               >
                 Log Workout
               </Button>

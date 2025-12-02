@@ -63,7 +63,7 @@ export const Input: React.FC<InputProps> = ({
           onChange={(e) => onChange?.(e.target.value)}
           onFocus={onFocus}
           disabled={disabled}
-          className={`h-12 rounded-[18px] border border-white/80 bg-transparent px-5 text-lg font-semibold text-white outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/40 ${inputClassName}`}
+          className={`h-12 rounded-[18px] border border-white/80 bg-transparent px-5 text-lg font-semibold text-white outline-none transition focus:border-main focus:ring-2 focus:ring-main/40 ${inputClassName}`}
         />
       )}
     </label>

@@ -84,7 +84,7 @@ export function WorkoutPage({
 
         <Button
           onClick={onStartWorkoutSession}
-          className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-blue-600 text-white uppercase"
+          className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-main text-white uppercase"
         >
           START Workout
         </Button>

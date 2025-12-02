@@ -35,7 +35,7 @@ export function FormField({
         type={type}
         value={value}
         onChange={onChange}
-        className={`w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0000E7] focus:border-transparent transition ${
+        className={`w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-main focus:border-transparent transition ${
           error ? "border-red-500" : "border-gray-300"
         }`}
         placeholder={placeholder}
