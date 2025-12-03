@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QuizModal } from "@/pages/QuizPage/QuizModal";
+import { QuizModal } from "@/pages/HomePage/Modal/QuizModal";
 import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { HomePageProps } from "@/types/pages";
@@ -38,10 +38,10 @@ export function HomePage({
           </h2>
         </div>
 
-        <div className="mt-10 space-y-6">
+        <div className="flex flex-col items-center justify-center mt-10 space-y-6">
           <button
             onClick={handleStartQuiz}
-            className="w-full rounded-[18px] bg-[#0000E7] py-4 text-lg font-semibold text-white shadow-lg shadow-blue-500/40 transition-transform duration-200 hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+            className="w-[370px] rounded-[18px] bg-main py-4 text-lg font-semibold text-white"
           >
             START
           </button>

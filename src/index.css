@@ -1,15 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-main: #e77d10;
+}
+
 /* Make react-day-picker day buttons fill their table cell so clicks on cell edges register */
 .rdp-day_button {
-	display: block;
-	width: 100%;
-	height: 100%;
-	padding: 0.25rem; /* keep a bit of inner spacing similar to previous layout */
-	box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0.25rem; /* keep a bit of inner spacing similar to previous layout */
+  box-sizing: border-box;
 }
 
 /* Optional: ensure full-height rows keep consistent alignment */
 .rdp-table .rdp-row > .rdp-cell {
-	vertical-align: middle;
+  vertical-align: middle;
 }

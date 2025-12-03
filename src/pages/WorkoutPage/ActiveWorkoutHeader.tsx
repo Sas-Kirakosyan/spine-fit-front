@@ -6,7 +6,7 @@ interface ActiveWorkoutHeaderProps {
 
 export function ActiveWorkoutHeader({
   onNavigateBack,
-  buttonClass = "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-blue-600 transition-colors",
+  buttonClass = "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-main transition-colors",
   title = "Active workout",
 }: ActiveWorkoutHeaderProps) {
   return (

@@ -67,7 +67,7 @@ export function HistoryPage({
               <select
                 value={currentMonthIndex}
                 onChange={handleMonthChange}
-                className="bg-[#1B1E2B] border border-white/10 rounded-md px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+                className="bg-[#1B1E2B] border border-white/10 rounded-md px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-main cursor-pointer"
               >
                 {months.map((month, index) => (
                   <option key={index} value={index}>
@@ -78,7 +78,7 @@ export function HistoryPage({
               <select
                 value={currentYear}
                 onChange={handleYearChange}
-                className="bg-[#1B1E2B] border border-white/10 rounded-md px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+                className="bg-[#1B1E2B] border border-white/10 rounded-md px-3 py-1.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-main cursor-pointer"
               >
                 {years.map((year) => (
                   <option key={year} value={year}>
@@ -90,7 +90,7 @@ export function HistoryPage({
             <div className="flex items-center gap-1">
               <button
                 onClick={handlePreviousMonth}
-                className="h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-blue-600 transition-colors"
+                className="h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-main transition-colors"
                 aria-label="Previous month"
               >
                 <svg
@@ -109,7 +109,7 @@ export function HistoryPage({
               </button>
               <button
                 onClick={handleNextMonth}
-                className="h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-blue-600 transition-colors"
+                className="h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-main transition-colors"
                 aria-label="Next month"
               >
                 <svg
@@ -148,9 +148,9 @@ export function HistoryPage({
                 "text-slate-400 rounded-md w-9 font-normal text-[0.8rem]",
               row: "flex w-full mt-2",
               cell: "h-9 w-9 text-center text-sm relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-slate-800/50 [&:has([aria-selected])]:bg-slate-800 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-              day: "h-9 w-12 font-normal text-center aria-selected:opacity-100 text-white hover:bg-blue-600 rounded-md",
+              day: "h-9 w-12 font-normal text-center aria-selected:opacity-100 text-white hover:bg-main rounded-md",
               day_selected:
-                "bg-blue-600 text-white hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white",
+                "bg-main text-white hover:bg-main hover:text-white focus:bg-main focus:text-white",
               day_outside:
                 "day-outside text-slate-400 opacity-50 aria-selected:bg-slate-800/50 aria-selected:text-slate-400 aria-selected:opacity-30",
               day_disabled: "text-slate-400 opacity-50",
@@ -159,8 +159,8 @@ export function HistoryPage({
               day_hidden: "invisible",
             }}
             modifiersClassNames={{
-              selected: "bg-blue-600 text-white",
-              today: "bg-blue-900 text-white font-semibold",
+              selected: "bg-main text-white",
+              today: "bg-main/80 text-white font-semibold",
             }}
           />
         </div>

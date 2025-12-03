@@ -12,7 +12,7 @@ const detailPills = (exercise: Exercise) => [
   {
     label: "Difficulty",
     value: formatLabel(exercise.difficulty),
-    color: "from-blue-500/70 to-blue-600/80",
+    color: "from-main/70 to-main/80",
   },
   {
     label: "Equipment",
@@ -47,7 +47,7 @@ export function ExerciseDetails({
           <button
             type="button"
             onClick={onNavigateBack}
-            className="absolute left-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-slate-200 transition hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+            className="absolute left-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-slate-200 transition hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
             aria-label="Вернуться к списку упражнений"
           >
             <svg
@@ -64,7 +64,7 @@ export function ExerciseDetails({
             </svg>
           </button>
           <div className="absolute bottom-6 left-6">
-            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-300">
+            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-main/70">
               Technique Breakdown
             </span>
             <h2 className="mt-3 text-3xl font-semibold text-white">
@@ -181,7 +181,7 @@ export function ExerciseDetails({
                 href={exercise.video_url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+                className="inline-flex items-center justify-center rounded-full bg-main px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-main/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
               >
                 Watch Demo
               </a>
@@ -189,7 +189,7 @@ export function ExerciseDetails({
                 <button
                   type="button"
                   onClick={() => onStartWorkout(exercise)}
-                  className="inline-flex items-center justify-center rounded-full border border-blue-500/60 px-5 py-3 text-sm font-semibold text-blue-300 transition hover:border-blue-400 hover:text-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+                  className="inline-flex items-center justify-center rounded-full border border-main/60 px-5 py-3 text-sm font-semibold text-main/70 transition hover:border-main/80 hover:text-main/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
                 >
                   View Sets
                 </button>
