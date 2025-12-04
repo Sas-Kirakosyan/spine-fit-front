@@ -6,14 +6,13 @@ import type {
   FinishedWorkoutSummary,
 } from "@/types/workout";
 import { formatTime } from "@/utils/date";
-import { iconButtonClass, secondaryButtonClass } from "@/constants/workout";
+import { iconButtonClass } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
 import { ExerciseActionSheet } from "@/pages/WorkoutPage/ExercisePopUp";
-import { FinishWorkoutModal } from "./FinishWorkoutModal";
+import { FinishWorkoutModal } from "@/pages/WorkoutPage/FinishWorkoutModal";
 import { calculateWorkoutVolume } from "@/utils/workoutStats";
-import { ActiveWorkoutHeader } from "./ActiveWorkoutHeader";
-import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
-import { TreeDotButton } from "@/components/TreeDotButton/TreeDotButton";
+import { ActiveWorkoutHeader } from "@/pages/WorkoutPage/ActiveWorkoutHeader";
+import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
 
 export function ActiveWorkoutPage({
   onNavigateBack,
@@ -136,57 +135,19 @@ export function ActiveWorkoutPage({
             {formatTime(elapsedSeconds)}
           </p>
         </section>
-        <section>
-          <div className="mt-4 flex flex-col gap-4 overflow-y-auto">
-            {exercises.map((exercise) => {
-              const isCompleted = completedExerciseIdsSet.has(exercise.id);
-              return (
-                <div
-                  key={exercise.id}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => onOpenExerciseSets(exercise)}
-                  className={`${secondaryButtonClass} group flex w-full cursor-pointer items-center justify-between gap-4 text-left ${
-                    isCompleted
-                      ? "border-emerald-400/80 bg-emerald-900/10"
-                      : "bg-[#171B30]/70"
-                  }`}
-                >
-                  <div className="flex flex-1 items-center gap-4">
-                    <div className="relative h-20 w-20 flex-shrink-0 aspect-square overflow-hidden rounded-[10px]">
-                      <img
-                        src={exercise.image_url}
-                        alt={exercise.name}
-                        className="h-full w-full object-cover"
-                      />
-                      {isCompleted && <CompletedCheckmark />}
-                    </div>
-                    <div>
-                      <p className="text-lg font-semibold text-white">
-                        {exercise.name}
-                      </p>
-                      <p className="text-[12px] text-slate-300">
-                        {exercise.sets} set • {exercise.reps} reps •{" "}
-                        {exercise.weight} {exercise.weight_unit}
-                      </p>
-                      {isCompleted && (
-                        <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-300">
-                          Done
-                          <span className="h-1 w-1 rounded-full bg-emerald-300" />
-                          Logged
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <TreeDotButton
-                    ariaLabel="open exercise actions"
-                    onClick={() => setActionExercise(exercise)}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </section>
+        {exercises.map((exercise, index) => {
+          const isCompleted = completedExerciseIdsSet.has(exercise.id);
+          return (
+            <ExerciseCard
+              key={`${exercise.id}-${index}`}
+              exercise={exercise}
+              isCompleted={isCompleted}
+              onCardClick={() => onOpenExerciseSets(exercise)}
+              onDetailsClick={() => onOpenExerciseSets(exercise)}
+              onActionClick={() => setActionExercise(exercise)}
+            />
+          );
+        })}
         <Button
           onClick={handleFinishWorkout}
           className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-red-600 text-white uppercase"

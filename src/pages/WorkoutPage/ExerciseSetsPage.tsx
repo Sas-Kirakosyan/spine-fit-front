@@ -5,7 +5,7 @@ import type {
   ExerciseSetRow,
 } from "@/types/workout";
 import { PageContainer } from "@/Layout/PageContainer";
-import { ExerciseSet } from "./ExerciseSet";
+import { ExerciseSet } from "@/pages/WorkoutPage/ExerciseSet";
 import {
   iconButtonClass,
   primaryButtonClass,

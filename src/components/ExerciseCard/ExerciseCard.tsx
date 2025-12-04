@@ -1,10 +1,13 @@
 import type { Exercise } from "@/types/exercise";
+import TreeDotButton from "@/components/TreeDotButton/TreeDotButton";
+import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
 
 interface ExerciseCardProps {
   exercise: Exercise;
   onCardClick: () => void;
   onDetailsClick: () => void;
   onActionClick: () => void;
+  isCompleted?: boolean;
 }
 
 export function ExerciseCard({
@@ -12,6 +15,7 @@ export function ExerciseCard({
   onCardClick,
   onDetailsClick,
   onActionClick,
+  isCompleted = false,
 }: ExerciseCardProps) {
   return (
     <div
@@ -35,6 +39,12 @@ export function ExerciseCard({
           className="h-full w-full object-cover"
         />
         <div className="pointer-events-none absolute inset-0 rounded-3xl border border-white/10" />
+        {isCompleted && (
+          <CompletedCheckmark
+            containerClassName="absolute inset-0 flex items-center justify-center bg-emerald-900/60"
+            className="h-6 w-6"
+          />
+        )}
       </button>
 
       <div className="flex flex-1 flex-col justify-between gap-3">
@@ -53,35 +63,18 @@ export function ExerciseCard({
             {exercise.weight} {exercise.weight_unit}
           </span>
         </div>
+        {isCompleted && (
+          <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-300">
+            Done
+            <span className="h-1 w-1 rounded-full bg-emerald-300" />
+            Logged
+          </span>
+        )}
       </div>
-
-      <button
-        type="button"
-        className="ml-2 rounded-full p-2 text-slate-200 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-main/60"
-        aria-label="Открыть действия упражнения"
-        onClick={(event) => {
-          event.stopPropagation();
-          onActionClick();
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            event.stopPropagation();
-            onActionClick();
-          }
-        }}
-      >
-        <svg
-          aria-hidden="true"
-          className="h-5 w-5"
-          viewBox="0 0 16 4"
-          fill="currentColor"
-        >
-          <circle cx="2" cy="2" r="2" />
-          <circle cx="8" cy="2" r="2" />
-          <circle cx="14" cy="2" r="2" />
-        </svg>
-      </button>
+      <TreeDotButton
+        ariaLabel="open exercise actions"
+        onClick={() => onActionClick()}
+      />
     </div>
   );
 }
