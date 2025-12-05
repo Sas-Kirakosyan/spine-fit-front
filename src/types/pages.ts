@@ -21,3 +21,12 @@ export interface HistoryPageProps {
   workouts: FinishedWorkoutSummary[];
 }
 
+export interface MyPlanPageProps {
+  onNavigateBack: () => void;
+  onNavigateToAvailableEquipment?: () => void;
+}
+
+export interface AvailableEquipmentPageProps {
+  onNavigateBack: () => void;
+}
+
