@@ -19,6 +19,7 @@ export interface Exercise {
   instructions: string;
   video_url: string;
   image_url: string;
+  equipment_image_url?: string;
   is_back_friendly: boolean;
   back_issue_restrictions: ExerciseRestriction[];
   created_at: string;

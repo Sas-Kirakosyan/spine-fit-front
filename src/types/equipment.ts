@@ -8,6 +8,7 @@ export interface EquipmentItem {
   id: string;
   name: string;
   icon?: string;
+  imageUrl?: string;
   weights: EquipmentWeight[];
   selected: boolean;
   category: "small_weights" | "bars_plates";

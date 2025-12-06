@@ -4,64 +4,13 @@ import type { AvailableEquipmentPageProps } from "@/types/pages";
 import type {
   EquipmentTab,
   EquipmentCategory,
-  EquipmentItem,
+  EquipmentItem as EquipmentItemType,
 } from "@/types/equipment";
 import equipmentsData from "@/MockData/equipments.json";
-
-const createEquipmentData = (): EquipmentCategory[] => {
-  const groupedByType = equipmentsData.reduce((acc, equipment) => {
-    const type = equipment.type || "other";
-    if (!acc[type]) {
-      acc[type] = [];
-    }
-    acc[type].push(equipment);
-    return acc;
-  }, {} as Record<string, typeof equipmentsData>);
-
-  const categories: EquipmentCategory[] = Object.entries(groupedByType).map(
-    ([type, items]) => {
-      const categoryName =
-        type === "machine"
-          ? "Machines"
-          : type === "bench"
-          ? "Benches"
-          : type === "free_weight"
-          ? "Free Weights"
-          : "Other";
-
-      const categoryId =
-        type === "machine"
-          ? "machines"
-          : type === "bench"
-          ? "benches"
-          : type === "free_weight"
-          ? "free_weights"
-          : "other";
-
-      const equipmentItems: EquipmentItem[] = items.map((eq) => {
-        const weights: EquipmentItem["weights"] = eq.weight_stack_kg
-          ? [{ id: `${eq.id}_weight`, weight: eq.weight_stack_kg, unit: "kg" }]
-          : [];
-
-        return {
-          id: eq.id,
-          name: eq.name,
-          weights,
-          selected: false,
-          category: categoryId as "small_weights" | "bars_plates",
-        };
-      });
-
-      return {
-        id: categoryId,
-        name: categoryName,
-        items: equipmentItems,
-      };
-    }
-  );
-
-  return categories;
-};
+import { Button } from "@/components/Buttons/Button";
+import { ChevronLeftIcon } from "@/components/Icons/Icons";
+import { EquipmentItem } from "@/components/EquipmentItem/EquipmentItem";
+import { createEquipmentData } from "@/utils/equipment";
 
 export function AvailableEquipmentPage({
   onNavigateBack,
@@ -69,18 +18,7 @@ export function AvailableEquipmentPage({
   const [activeTab, setActiveTab] = useState<EquipmentTab>("all");
 
   const loadEquipmentData = (): EquipmentCategory[] => {
-    try {
-      const saved = localStorage.getItem("equipmentData");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
-        }
-      }
-    } catch (error) {
-      console.error("Error loading equipment data:", error);
-    }
-    return createEquipmentData();
+    return createEquipmentData(equipmentsData as RawEquipmentData[]);
   };
 
   const [equipmentData, setEquipmentData] = useState<EquipmentCategory[]>(
@@ -124,7 +62,7 @@ export function AvailableEquipmentPage({
     return equipmentData;
   }, [equipmentData, activeTab]);
 
-  const formatWeights = (weights: EquipmentItem["weights"]) => {
+  const formatWeights = (weights: EquipmentItemType["weights"]) => {
     if (weights.length === 0) {
       return "No weights";
     }
@@ -136,32 +74,22 @@ export function AvailableEquipmentPage({
       .join(", ");
     return remaining > 0 ? `${displayText}...` : displayText;
   };
-
+  console.log({ filteredData });
   return (
     <PageContainer contentClassName="gap-0 px-0">
       {/* Header */}
       <header className="flex items-center gap-2 mt-2 px-3">
-        <button
+        <Button
           onClick={onNavigateBack}
           className="flex items-center justify-center w-8 h-8 text-white"
+          ariaLabel="Go back"
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-        </button>
+          <ChevronLeftIcon />
+        </Button>
         <div className="text-2xl font-semibold text-white flex-1">
           Available Equipment
         </div>
-        <button className="flex items-center justify-center w-8 h-8 text-white hover:bg-white/10 rounded-full transition-colors">
+        <Button className="flex items-center justify-center w-8 h-8 text-white hover:bg-white/10 rounded-full transition-colors">
           <svg
             width="20"
             height="20"
@@ -175,13 +103,13 @@ export function AvailableEquipmentPage({
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.35-4.35" />
           </svg>
-        </button>
+        </Button>
       </header>
 
       {/* Tabs */}
       <div className="flex gap-2 px-3 mt-4">
         {(["all", "selected"] as EquipmentTab[]).map((tab) => (
-          <button
+          <Button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -191,7 +119,7 @@ export function AvailableEquipmentPage({
             }`}
           >
             {tab === "all" ? "All" : "Selected"}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -204,55 +132,14 @@ export function AvailableEquipmentPage({
             </h2>
             <div className="space-y-3">
               {category.items.map((item) => (
-                <div
+                <EquipmentItem
                   key={item.id}
-                  className="flex items-start gap-3 p-3 rounded-lg bg-[#1B1E2B]/90"
-                >
-                  {/* Image placeholder */}
-                  <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center">
-                    {/* Placeholder for future images */}
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="text-base font-medium text-white mb-1">
-                      {item.name}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-400">
-                      <span>{formatWeights(item.weights)}</span>
-                      <button className="text-white hover:text-white/80 transition-colors font-medium">
-                        Edit
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Checkbox */}
-                  <button
-                    onClick={() =>
-                      toggleEquipmentSelection(category.id, item.id)
-                    }
-                    className={`flex-shrink-0 w-6 h-6 flex items-center justify-center border-2 rounded ${
-                      item.selected
-                        ? "border-white bg-white"
-                        : "border-gray-600 hover:border-gray-500"
-                    } transition-colors`}
-                  >
-                    {item.selected && (
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="black"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M20 6L9 17l-5-5" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
+                  item={item}
+                  onToggleSelection={() =>
+                    toggleEquipmentSelection(category.id, item.id)
+                  }
+                  formatWeights={formatWeights}
+                />
               ))}
             </div>
           </div>

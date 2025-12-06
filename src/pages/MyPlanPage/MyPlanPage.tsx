@@ -2,6 +2,13 @@ import { useState, useEffect } from "react";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { MyPlanPageProps } from "@/types/pages";
 import type { EquipmentCategory } from "@/types/equipment";
+import { Button } from "@/components/Buttons/Button";
+import {
+  ChevronRightIcon,
+  ChevronDownIcon,
+  ThreeDotsIcon,
+} from "@/components/Icons/Icons";
+import { MyPlanPageHeader } from "./MyPlanPageHeader";
 
 export function MyPlanPage({
   onNavigateBack,
@@ -53,47 +60,17 @@ export function MyPlanPage({
 
   return (
     <PageContainer contentClassName="gap-8 px-3">
-      <header className="flex items-center gap-2 mt-2">
-        <button
-          onClick={onNavigateBack}
-          className="flex items-center justify-center w-8 h-8 text-white"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-        </button>
-        <div className="text-2xl font-semibold text-white">My Plan</div>
-      </header>
+      <MyPlanPageHeader onNavigateBack={onNavigateBack} />
 
       <div className="flex flex-col flex-1 gap-6">
         {/* Goal Section */}
-        <button className="w-full rounded-[14px] bg-main p-4 flex items-center justify-between text-white">
+        <Button className="w-full rounded-[14px] bg-main p-4 flex items-center justify-between text-white">
           <span className="text-lg font-semibold">Goal</span>
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold">Reduce Bodyweight</span>
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m9 18 6-6-6-6" />
-            </svg>
+            <ChevronRightIcon className="h-5 w-5" />
           </div>
-        </button>
+        </Button>
 
         {/* Location Section */}
         <div className="flex flex-col gap-3">
@@ -101,43 +78,19 @@ export function MyPlanPage({
             LOCATION
           </h2>
           <div className="flex items-center justify-between">
-            <button className="text-lg font-semibold text-white flex items-center gap-2 hover:text-white/80 transition-colors">
+            <Button className="text-lg font-semibold text-white flex items-center gap-2 hover:text-white/80 transition-colors">
               My Gym
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-            <button className="text-white hover:bg-white/10 rounded-full p-2 transition-colors">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="19" cy="12" r="1" />
-                <circle cx="5" cy="12" r="1" />
-              </svg>
-            </button>
+              <ChevronDownIcon />
+            </Button>
+            <Button className="text-white hover:bg-white/10 rounded-full p-2 transition-colors">
+              <ThreeDotsIcon />
+            </Button>
           </div>
 
           {/* Equipment Card */}
           <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
             <div className="space-y-4">
-              <button
+              <Button
                 onClick={onNavigateToAvailableEquipment}
                 className="w-full flex items-center justify-between text-left"
               >
@@ -148,26 +101,15 @@ export function MyPlanPage({
                   <span className="text-base font-medium text-white">
                     {selectedCount} Selected
                   </span>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
+                  <ChevronRightIcon className="h-5 w-5" />
                 </div>
-              </button>
+              </Button>
 
               <div className="flex items-center justify-between">
                 <span className="text-base font-medium text-white">
                   Bodyweight-Only
                 </span>
-                <button
+                <Button
                   onClick={() => setBodyweightOnly(!bodyweightOnly)}
                   className={`relative w-12 h-7 rounded-full transition-colors ${
                     bodyweightOnly ? "bg-main" : "bg-gray-600"
@@ -178,7 +120,7 @@ export function MyPlanPage({
                       bodyweightOnly ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -191,49 +133,27 @@ export function MyPlanPage({
           </h2>
           <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
             <div className="space-y-4">
-              <button className="w-full flex items-center justify-between text-left">
+              <Button className="w-full flex items-center justify-between text-left">
                 <span className="text-base font-medium text-white">
                   Workouts / Week
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">3</span>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
+                  <ChevronRightIcon className="h-5 w-5" />
                 </div>
-              </button>
+              </Button>
 
-              <button className="w-full flex items-center justify-between text-left">
+              <Button className="w-full flex items-center justify-between text-left">
                 <span className="text-base font-medium text-white">
                   Duration
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">1 hr</span>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
+                  <ChevronRightIcon className="h-5 w-5" />
                 </div>
-              </button>
+              </Button>
 
-              <button className="w-full flex items-center justify-between text-left">
+              <Button className="w-full flex items-center justify-between text-left">
                 <span className="text-base font-medium text-white">
                   Experience
                 </span>
@@ -241,20 +161,9 @@ export function MyPlanPage({
                   <span className="text-base font-medium text-white">
                     Intermediate
                   </span>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
+                  <ChevronRightIcon className="h-5 w-5" />
                 </div>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -266,7 +175,7 @@ export function MyPlanPage({
           </h2>
           <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
             <div className="space-y-4">
-              <button className="w-full flex items-center justify-between text-left">
+              <Button className="w-full flex items-center justify-between text-left">
                 <span className="text-base font-medium text-white">
                   Training Split
                 </span>
@@ -274,22 +183,11 @@ export function MyPlanPage({
                   <span className="text-base font-medium text-white">
                     Push/Pull/Legs
                   </span>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
+                  <ChevronRightIcon className="h-5 w-5" />
                 </div>
-              </button>
+              </Button>
 
-              <button className="w-full flex items-center justify-between text-left">
+              <Button className="w-full flex items-center justify-between text-left">
                 <span className="text-base font-medium text-white">
                   Exercise Variability
                 </span>
@@ -297,26 +195,15 @@ export function MyPlanPage({
                   <span className="text-base font-medium text-white">
                     Balanced
                   </span>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
+                  <ChevronRightIcon className="h-5 w-5" />
                 </div>
-              </button>
+              </Button>
 
               <div className="flex items-center justify-between">
                 <span className="text-base font-medium text-white">
                   Warm-Up Sets
                 </span>
-                <button
+                <Button
                   onClick={() => setWarmUpSets(!warmUpSets)}
                   className={`relative w-12 h-7 rounded-full transition-colors ${
                     warmUpSets ? "bg-main" : "bg-gray-600"
@@ -327,7 +214,7 @@ export function MyPlanPage({
                       warmUpSets ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
-                </button>
+                </Button>
               </div>
             </div>
           </div>

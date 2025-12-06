@@ -101,8 +101,11 @@
       "sciatica": ["Reduce range if irritation"]
     },
     "media": {
-      "thumbnail": "Chest Press Thumbnail",
-      "images": ["chest press front", "chest press side"],
+      "thumbnail": "https://gymleco.com/cdn/shop/files/321-gymleco-seated-wide-chest-press-selectorized-machine-sittande-bred-brostpress-viktmagasinsmaskin_1.jpg?v=1760616768&width=1920",
+      "images": [
+        "https://gymleco.com/cdn/shop/files/321-gymleco-seated-wide-chest-press-selectorized-machine-sittande-bred-brostpress-viktmagasinsmaskin_1.jpg?v=1760616768&width=1920",
+        "https://gymleco.com/cdn/shop/files/321-gymleco-seated-wide-chest-press-selectorized-machine-sittande-bred-brostpress-viktmagasinsmaskin_1.jpg?v=1760616768&width=1920"
+      ],
       "video_overview": null
     },
     "details_overview": "A seated chest-press machine that provides a stable, guided horizontal pressing movement to train the pectoralis major and triceps. Useful for users who need a supported pressing pattern without free-weight balance demand; adjust seat and handles to keep the spine neutral and avoid excessive lumbar arch.",
@@ -215,7 +218,7 @@
     "version": 1
   },
   {
-    "id": "eq_cable_crossover_02",
+    "id": "eq_cable_crossover_01",
     "key": "cable_crossover",
     "type": "machine",
     "name": "Cable Crossover Machine",
@@ -379,74 +382,6 @@
     "version": 1
   },
   {
-    "id": "eq_shoulder_shrug_01",
-    "key": "shoulder_shrug",
-    "type": "machine",
-    "name": "Shoulder Shrug Machine",
-    "aliases": ["trap shrug machine", "seated trap trainer"],
-    "load_type": null,
-    "selectorized": false,
-    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
-    "weight_stack_kg": null,
-    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
-    "attachments_supported": [],
-    "primary_muscles": ["trapezius"],
-    "movement_patterns": ["vertical_shrug"],
-    "execution_cues": [
-      "Train traps with moderate upward motion",
-      "Elbows locked with no arm-assisted pull",
-      "Slow controlled movement without stack drop"
-    ],
-    "safety_notes": {
-      "l5_s1": ["Safe seated motion, avoid bracing with low-back"],
-      "sciatica": ["Safe, stop if discomfort increases"]
-    },
-    "media": {
-      "thumbnail": "Shoulder Shrug Machine Thumbnail",
-      "images": ["shoulder shrug machine front", "shoulder shrug machine side"],
-      "video_overview": null
-    },
-    "details_overview": "A shoulder shrug machine that focuses on trapezius elevation through a vertical shrugging movement. Typically plate-loaded; maintain neutral spine and controlled range to train traps without excessive neck or low-back tension.",
-    "is_back_friendly": true,
-    "created_at": "2025-10-26T12:00:00Z",
-    "updated_at": "2025-10-26T12:00:00Z",
-    "version": 1
-  },
-  {
-    "id": "eq_shoulder_shrug_01",
-    "key": "shoulder_shrug",
-    "type": "machine",
-    "name": "Shoulder Shrug Machine",
-    "aliases": ["trap shrug machine", "seated trapezius trainer"],
-    "load_type": null,
-    "selectorized": false,
-    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
-    "weight_stack_kg": null,
-    "height_range_cm": { "min": null, "max": null, "increment_cm": null },
-    "attachments_supported": [],
-    "primary_muscles": ["trapezius"],
-    "movement_patterns": ["vertical_shrug"],
-    "execution_cues": [
-      "Raise shoulders upward moderately by contracting the traps",
-      "Keep elbows locked to avoid arm-assisted pulling",
-      "Control the lowering phase without dropping the weight"
-    ],
-    "safety_notes": {
-      "l5_s1": ["Safe seated movement, avoid bracing with the lower back"],
-      "sciatica": ["Safe, stop if nerve discomfort increases"]
-    },
-    "media": {
-      "thumbnail": "Shoulder Shrug Machine Thumbnail",
-      "images": ["shoulder shrug machine front", "shoulder shrug machine side"],
-      "video_overview": null
-    },
-    "details_overview": "A Shoulder Shrug Machine is a seated strength exercise station designed to train the trapezius muscles. The machine features a vertical seat with handles placed on both sides, allowing the user to perform moderate upward shrugging motions. Most models are plate-loaded, meaning resistance is added manually using weight plates rather than a selectorized stack. It's used for shoulder elevation training, targeting trap development, posture support, and neck-shoulder stability. The exercise can also be performed carefully for partners with back-pain considerations, as long as the pelvis and spine remain neutral without aggressive rounding.",
-    "is_back_friendly": true,
-    "created_at": "2025-10-26T12:00:00Z",
-    "updated_at": "2025-10-26T12:00:00Z",
-    "version": 1
-  },
-  {
     "id": "eq_preacher_curl_01",
     "key": "preacher_curl",
     "type": "machine",
@@ -471,11 +406,10 @@
       "sciatica": ["Seated is safe, stop if discomfort increases"]
     },
     "media": {
-      "thumbnail": "Preacher Curl Machine Thumbnail",
+      "thumbnail": "https://www.gymequip.eu/wp-content/uploads/2025/09/Nautilus-2ST-Preacher-Curl.jpg",
       "images": [
-        "preacher curl machine front",
-        "preacher curl machine side",
-        "arm-pad seat close-up"
+        "https://www.gymequip.eu/wp-content/uploads/2025/09/Nautilus-2ST-Preacher-Curl.jpg",
+        "https://www.gymequip.eu/wp-content/uploads/2025/09/Nautilus-2ST-Preacher-Curl.jpg"
       ],
       "video_overview": null
     },
@@ -1102,7 +1036,7 @@
     "details_overview": "A type of free weight, Dumbbells are short straight bars used for strength training. Some dumbbells are adjustable and can load external plates, but the majority in gyms are fixed-weight and not adjustable. Adjustable dumbbells without plates typically weigh about 5LB (≈2.25 kg). Many exercises use two dumbbells simultaneously, one per hand, moving at equal speed to maintain balance. Some exercises also use one dumbbell at a time with increased core and abs emphasis. When lifting, avoid swinging or uneven tempo, keep both sides of the body balanced, control the lowering phase smoothly, and stop if any sharp pain or nerve tension increases. Gym use includes: dumbbell presses (like the one shown in USED FOR), curls, core stabilizer work, and abs-dominant single-side loaded movements."
   },
   {
-    "id": "eq_leg_press_01",
+    "id": "eq_leg_press_02",
     "key": "leg_press_machine",
     "type": "machine",
     "name": "Leg Press Machine",

@@ -1,3 +1,4 @@
+
 import type { Exercise } from "@/types/exercise";
 import type { ExerciseSetRow } from "@/types/workout";
 
