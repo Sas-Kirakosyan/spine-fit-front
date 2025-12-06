@@ -27,7 +27,15 @@ export function WorkoutPage({
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <PageContainer contentClassName="">
+    <PageContainer contentClassName="gap-8">
+      <header className="flex items-start justify-between">
+        <div>
+          <p className="text-[32px] font-semibold uppercase tracking-[0.4em] text-white">
+            SpineFit
+          </p>
+          <h1 className="mt-3 text-3xl font-semibold text-white">Workout</h1>
+        </div>
+      </header>
       <div ref={cardRef} className="relative flex flex-1 flex-col gap-8">
         <button
           onClick={() => {
@@ -36,7 +44,7 @@ export function WorkoutPage({
             }
           }}
         >
-          <header className="flex mt-2">
+          <div className="flex">
             <div className="w-8 h-8 border-3 border-main rounded-full mr-1"></div>
             <div className="text-2xl font-semibold text-white">My Plan</div>
             <svg
@@ -52,7 +60,7 @@ export function WorkoutPage({
             >
               <path d="m9 18 6-6-6-6" />
             </svg>
-          </header>
+          </div>
         </button>
 
         <section className="flex-1 space-y-3">
