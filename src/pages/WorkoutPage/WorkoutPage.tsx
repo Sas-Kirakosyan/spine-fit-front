@@ -5,14 +5,12 @@ import { PageContainer } from "@/Layout/PageContainer";
 import type { WorkoutPageProps } from "@/types/workout";
 import { ExerciseActionSheet } from "@/pages/WorkoutPage/ExercisePopUp";
 import { Button } from "@/components/Buttons/Button";
-import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 
 const defaultExercises: Exercise[] = exerciseData as Exercise[];
 
 export function WorkoutPage({
-  onNavigateToHome,
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,
@@ -21,6 +19,7 @@ export function WorkoutPage({
   onOpenExerciseSets,
   onStartWorkoutSession,
   onNavigateToAllExercise,
+  onNavigateToMyPlan,
   exercises = defaultExercises,
   onRemoveExercise,
 }: WorkoutPageProps) {
@@ -30,11 +29,31 @@ export function WorkoutPage({
   return (
     <PageContainer contentClassName="">
       <div ref={cardRef} className="relative flex flex-1 flex-col gap-8">
-        <PageHeader
-          title="Exercise List"
-          showBackButton
-          onBack={onNavigateToHome}
-        />
+        <button
+          onClick={() => {
+            if (onNavigateToMyPlan) {
+              onNavigateToMyPlan();
+            }
+          }}
+        >
+          <header className="flex mt-2">
+            <div className="w-8 h-8 border-3 border-main rounded-full mr-1"></div>
+            <div className="text-2xl font-semibold text-white">My Plan</div>
+            <svg
+              className="text-main"
+              width="30"
+              height="30"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </header>
+        </button>
 
         <section className="flex-1 space-y-3">
           {exercises.map((exercise, index) => (

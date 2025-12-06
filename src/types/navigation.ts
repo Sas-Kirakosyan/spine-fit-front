@@ -8,5 +8,7 @@ export type Page =
   | "exerciseSets"
   | "exerciseDetails"
   | "activeWorkout"
-  | "allExercise";
+  | "allExercise"
+  | "myPlan"
+  | "availableEquipment";
 

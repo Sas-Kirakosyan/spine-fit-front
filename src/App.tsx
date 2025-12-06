@@ -12,6 +12,8 @@ import type { Page } from "@/types/navigation";
 import type { ExerciseSetRow, FinishedWorkoutSummary } from "@/types/workout";
 import { HistoryPage } from "@/pages/HistoryPage/HistoryPage";
 import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
+import { MyPlanPage } from "@/pages/MyPlanPage/MyPlanPage";
+import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPage";
 import exerciseData from "@/MockData/exercise.json";
 
 function App() {
@@ -27,7 +29,9 @@ function App() {
       savedPage === "exerciseDetails" ||
       savedPage === "activeWorkout" ||
       savedPage === "history" ||
-      savedPage === "allExercise"
+      savedPage === "allExercise" ||
+      savedPage === "myPlan" ||
+      savedPage === "availableEquipment"
     ) {
       return savedPage;
     }
@@ -112,6 +116,8 @@ function App() {
   const navigateToProfile = () => setCurrentPage("profile");
   const navigateToHistory = () => setCurrentPage("history");
   const navigateToAllExercise = () => setCurrentPage("allExercise");
+  const navigateToMyPlan = () => setCurrentPage("myPlan");
+  const navigateToAvailableEquipment = () => setCurrentPage("availableEquipment");
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
@@ -213,6 +219,7 @@ function App() {
             onOpenExerciseSets={navigateToExerciseSets}
             onStartWorkoutSession={navigateToActiveWorkout}
             onNavigateToAllExercise={navigateToAllExercise}
+            onNavigateToMyPlan={navigateToMyPlan}
             exercises={workoutExercises}
             onRemoveExercise={(exerciseId) => {
               setWorkoutExercises((prev) =>
@@ -286,6 +293,19 @@ function App() {
           <AllExercisePage
             onClose={navigateToWorkout}
             onAddExercises={handleAddExercises}
+          />
+        );
+      case "myPlan":
+        return (
+          <MyPlanPage
+            onNavigateBack={navigateToWorkout}
+            onNavigateToAvailableEquipment={navigateToAvailableEquipment}
+          />
+        );
+      case "availableEquipment":
+        return (
+          <AvailableEquipmentPage
+            onNavigateBack={navigateToMyPlan}
           />
         );
       default:
