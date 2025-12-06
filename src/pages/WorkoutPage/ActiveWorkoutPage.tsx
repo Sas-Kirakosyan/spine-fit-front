@@ -125,7 +125,6 @@ export function ActiveWorkoutPage({
       fallbackBackgroundClassName="bg-[#080A14]"
     >
       <div ref={cardRef} className="flex flex-1 flex-col gap-6">
-        replace the inline header with:
         <ActiveWorkoutHeader
           onNavigateBack={onNavigateBack}
           buttonClass={iconButtonClass}
@@ -172,7 +171,7 @@ export function ActiveWorkoutPage({
             }}
             containerRef={cardRef}
           />
-        )}
+        )}                                  
         <FinishWorkoutModal
           isOpen={showFinishModal}
           onClose={handleResume}

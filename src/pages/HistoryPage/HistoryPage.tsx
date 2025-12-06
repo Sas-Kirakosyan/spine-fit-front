@@ -5,6 +5,7 @@ import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { HistoryPageProps } from "@/types/pages";
 import { WorkoutHistoryList } from "@/pages/HistoryPage/WorkoutHistoryList";
+import { Logo } from "@/components/Logo/Logo";
 export function HistoryPage({
   onNavigateToWorkout,
   onNavigateToProfile,
@@ -51,15 +52,7 @@ export function HistoryPage({
 
   return (
     <PageContainer contentClassName="gap-8">
-      <header className="flex items-start justify-between">
-        <div>
-          <p className="text-[32px] font-semibold uppercase tracking-[0.4em] text-white">
-            SpineFit
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold text-white">History</h1>
-        </div>
-      </header>
-
+      <Logo />
       <section className="flex flex-1 flex-col gap-5 rounded-[14px] bg-[#1B1E2B]/80 p-5 text-slate-100 shadow-xl ring-1 ring-white/5">
         <div className="rounded-[12px] border border-white/10 bg-[#111427]/80 p-4">
           <div className="flex items-center justify-between mb-4">

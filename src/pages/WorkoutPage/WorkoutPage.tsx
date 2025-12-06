@@ -7,6 +7,7 @@ import { ExerciseActionSheet } from "@/pages/WorkoutPage/ExercisePopUp";
 import { Button } from "@/components/Buttons/Button";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
+import { Logo } from "@/components/Logo/Logo";
 
 const defaultExercises: Exercise[] = exerciseData as Exercise[];
 
@@ -15,11 +16,11 @@ export function WorkoutPage({
   onNavigateToProfile,
   onNavigateToHistory,
   activePage,
+  onNavigateToMyPlan,
   onOpenExerciseDetails,
   onOpenExerciseSets,
   onStartWorkoutSession,
   onNavigateToAllExercise,
-  onNavigateToMyPlan,
   exercises = defaultExercises,
   onRemoveExercise,
 }: WorkoutPageProps) {
@@ -27,8 +28,9 @@ export function WorkoutPage({
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <PageContainer contentClassName="">
-      <div ref={cardRef} className="relative flex flex-1 flex-col gap-8">
+    <PageContainer>
+      <Logo />
+      <div ref={cardRef} className="flex flex-col gap-3 pb-20">
         <button
           onClick={() => {
             if (onNavigateToMyPlan) {

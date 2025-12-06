@@ -4,6 +4,7 @@ interface ButtonProps {
   className?: string;
   type?: "button" | "submit" | "reset";
   ariaLabel?: string;
+  disabled?: boolean;
 }
 
 export function Button({
@@ -12,6 +13,7 @@ export function Button({
   className = "",
   type = "button",
   ariaLabel,
+  disabled = false,
 }: ButtonProps) {
   return (
     <button
@@ -19,6 +21,7 @@ export function Button({
       onClick={onClick}
       aria-label={ariaLabel}
       className={className}
+      disabled={disabled}
     >
       {children}
     </button>

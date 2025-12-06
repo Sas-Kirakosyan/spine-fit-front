@@ -128,6 +128,17 @@ export function ExerciseSetsPage({
     return -1;
   };
 
+  const isSetValid = (setEntry: ExerciseSetRow): boolean => {
+    return (
+      setEntry.reps.trim() !== "" &&
+      setEntry.weight.trim() !== "" &&
+      !isNaN(Number(setEntry.reps)) &&
+      !isNaN(Number(setEntry.weight)) &&
+      Number(setEntry.reps) > 0 &&
+      Number(setEntry.weight) > 0
+    );
+  };
+
   const handleActivateSet = (index: number) => {
     if (sets[index]?.completed) {
       return;
@@ -171,6 +182,11 @@ export function ExerciseSetsPage({
       return;
     }
 
+    const targetSet = sets[targetIndex];
+    if (!isSetValid(targetSet)) {
+      return;
+    }
+
     setSets((prev) => {
       const updated = prev.map((item, index) =>
         index === targetIndex ? { ...item, completed: true } : item
@@ -184,6 +200,18 @@ export function ExerciseSetsPage({
   };
 
   const handleLogAllSets = () => {
+    const incompleteSets = sets.filter((item) => !item.completed);
+    if (incompleteSets.length === 0) {
+      return;
+    }
+
+    const allIncompleteSetsValid = incompleteSets.every((setEntry) =>
+      isSetValid(setEntry)
+    );
+    if (!allIncompleteSetsValid) {
+      return;
+    }
+
     setSets((prev) => prev.map((item) => ({ ...item, completed: true })));
     setActiveSetIndex(-1);
   };
@@ -204,6 +232,27 @@ export function ExerciseSetsPage({
 
   const allSetsCompleted =
     sets.length > 0 && sets.every((setEntry) => setEntry.completed);
+
+  const canLogCurrentSet = useMemo(() => {
+    if (sets.length === 0 || sets.every((item) => item.completed)) {
+      return false;
+    }
+    const targetIndex =
+      activeSetIndex >= 0 && activeSetIndex < sets.length ? activeSetIndex : -1;
+    if (targetIndex === -1 || sets[targetIndex]?.completed) {
+      return false;
+    }
+    return isSetValid(sets[targetIndex]);
+  }, [sets, activeSetIndex]);
+
+  const canLogAllSets = useMemo(() => {
+    const incompleteSets = sets.filter((item) => !item.completed);
+    if (incompleteSets.length === 0) {
+      return false;
+    }
+    return incompleteSets.every((setEntry) => isSetValid(setEntry));
+  }, [sets]);
+
   const sliderProgress = ((painLevel - 1) / 9) * 100;
   const painFaces = [
     { id: 1, label: "🙂", value: 1 },
@@ -429,13 +478,15 @@ export function ExerciseSetsPage({
           <div className="mr-[20px] ml-[20px] flex flex-col gap-3 sm:flex-row">
             <Button
               onClick={handleLogAllSets}
-              className="h-[40px] flex-1 rounded-[10px] bg-orange-500 text-white uppercase"
+              disabled={!canLogAllSets}
+              className="h-[40px] flex-1 rounded-[10px] bg-orange-500 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
             >
               LOG ALL SETS
             </Button>
             <Button
               onClick={handleLogSet}
-              className="h-[40px] flex-1 rounded-[10px] bg-red-500 text-white uppercase"
+              disabled={!canLogCurrentSet}
+              className="h-[40px] flex-1 rounded-[10px] bg-red-500 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
             >
               LOG SET
             </Button>

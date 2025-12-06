@@ -15,14 +15,14 @@ export function PageContainer({
   backgroundImage,
   overlayClassName = "bg-black/40",
   contentClassName = "",
-  minHeightClassName = "min-h-[640px]",
+  minHeightClassName = "min-h-[690px]",
   isStandalone = true,
   fallbackBackgroundClassName = "bg-gray-700",
 }: PageContainerProps) {
   const hasBackgroundImage = Boolean(backgroundImage);
 
   const card = (
-    <div className="relative w-full max-w-[400px] ">
+    <div className="relative w-[400px] h-full min-h-[690px]">
       <div
         className={`absolute inset-0 ${
           hasBackgroundImage
@@ -35,9 +35,9 @@ export function PageContainer({
         <div className={`absolute inset-0 ${overlayClassName}`} />
       )}
       <div
-        className={`relative z-10 flex flex-col h-full ${minHeightClassName} `}
+        className={`relative z-10 flex flex-col h-full ${minHeightClassName} overflow-y-auto`}
       >
-        <div className={`flex flex-col flex-1 ${contentClassName}`}>
+        <div className={`relative flex flex-col flex-1 ${contentClassName}`}>
           {children}
         </div>
       </div>
@@ -49,8 +49,6 @@ export function PageContainer({
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center ">
-      {card}
-    </div>
+    <div className="bg-white flex items-center justify-center ">{card}</div>
   );
 }
