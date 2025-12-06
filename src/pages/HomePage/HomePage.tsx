@@ -27,7 +27,7 @@ export function HomePage({
         overlayClassName="bg-black/30"
       >
         <div className="flex justify-start">
-          <Logo size="lg" />
+          <Logo/>
         </div>
 
         <div className="mt-auto">

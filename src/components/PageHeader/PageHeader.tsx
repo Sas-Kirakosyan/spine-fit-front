@@ -19,7 +19,7 @@ export function PageHeader({
   return (
     <div className="flex items-start justify-between">
       <div>
-        <Logo size="lg" />
+        <Logo />
         {title && (
           <h1 className="mt-3 text-3xl font-semibold text-white">{title}</h1>
         )}

@@ -1,4 +1,5 @@
 import { BottomNav } from "@/components/BottomNav/BottomNav";
+import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ProfilePageProps } from "@/types/pages";
 
@@ -12,9 +13,7 @@ export function ProfilePage({
     <PageContainer contentClassName="gap-8">
       <header className="flex items-start justify-between">
         <div>
-          <p className="text-[32px] font-semibold uppercase tracking-[0.4em] text-white">
-            SpineFit
-          </p>
+          <Logo />
           <h1 className="mt-3 text-3xl font-semibold text-white">Profile</h1>
         </div>
       </header>
@@ -23,7 +22,7 @@ export function ProfilePage({
         <h2 className="text-2xl font-semibold">Ваш профиль</h2>
         <p className="text-sm text-slate-300">
           Здесь в дальнейшем появится информация о вашем прогрессе, статистика
-          тренировок и персональные рекомендации.
+          тренировок и персональные рекомендации
         </p>
       </section>
 
