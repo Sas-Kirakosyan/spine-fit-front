@@ -15,9 +15,27 @@ import { createEquipmentData } from "@/utils/equipment";
 export function AvailableEquipmentPage({
   onNavigateBack,
 }: AvailableEquipmentPageProps) {
-  const [activeTab, setActiveTab] = useState<EquipmentTab>("all");
+  const [activeTab, setActiveTab] = useState<EquipmentTab>(() => {
+    try {
+      const saved = localStorage.getItem("equipmentActiveTab");
+      return (saved as EquipmentTab) || "all";
+    } catch {
+      return "all";
+    }
+  });
 
   const loadEquipmentData = (): EquipmentCategory[] => {
+    try {
+      const saved = localStorage.getItem("equipmentData");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (error) {
+      console.error("Error loading equipment data:", error);
+    }
     return createEquipmentData(equipmentsData as RawEquipmentData[]);
   };
 
@@ -62,6 +80,14 @@ export function AvailableEquipmentPage({
     return equipmentData;
   }, [equipmentData, activeTab]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem("equipmentActiveTab", activeTab);
+    } catch (error) {
+      console.error("Error saving active tab:", error);
+    }
+  }, [activeTab]);
+
   const formatWeights = (weights: EquipmentItemType["weights"]) => {
     if (weights.length === 0) {
       return "No weights";
@@ -74,7 +100,7 @@ export function AvailableEquipmentPage({
       .join(", ");
     return remaining > 0 ? `${displayText}...` : displayText;
   };
-  console.log({ filteredData });
+
   return (
     <PageContainer contentClassName="gap-0 px-0">
       {/* Header */}
