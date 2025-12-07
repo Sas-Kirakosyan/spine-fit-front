@@ -57,7 +57,7 @@ export function ExerciseItem({
 
       <div className="flex flex-1 items-center justify-between min-w-0">
         <span
-          className={`text-base font-medium truncate ${
+          className={`text-base font-medium break-words ${
             isSelected ? "text-red-500" : "text-white"
           }`}
         >

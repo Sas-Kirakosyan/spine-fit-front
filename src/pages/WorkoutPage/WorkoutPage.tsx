@@ -8,6 +8,7 @@ import { Button } from "@/components/Buttons/Button";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
+import { WorkoutPageHeader } from "./WorkoutPageHeader";
 
 const defaultExercises: Exercise[] = exerciseData as Exercise[];
 
@@ -31,31 +32,13 @@ export function WorkoutPage({
     <PageContainer>
       <Logo />
       <div ref={cardRef} className="flex flex-col gap-3 pb-20">
-        <button
-          onClick={() => {
+        <WorkoutPageHeader
+          onNavigateToMyPlan={() => {
             if (onNavigateToMyPlan) {
               onNavigateToMyPlan();
             }
           }}
-        >
-          <header className="flex mt-2">
-            <div className="w-8 h-8 border-3 border-main rounded-full mr-1"></div>
-            <div className="text-2xl font-semibold text-white">My Plan</div>
-            <svg
-              className="text-main"
-              width="30"
-              height="30"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </header>
-        </button>
+        />
 
         <section className="flex-1 space-y-3">
           {exercises.map((exercise, index) => (
@@ -102,14 +85,14 @@ export function WorkoutPage({
             </div>
           </div>
         </section>
-
-        <Button
-          onClick={onStartWorkoutSession}
-          className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-main text-white uppercase"
-        >
-          START Workout
-        </Button>
-
+        <div className="fixed bottom-16 left-0 right-0 z-40 px-4 pb-2 bg-gradient-to-t from-[#0F1117] via-[#0F1117] to-transparent pt-4">
+          <Button
+            onClick={onStartWorkoutSession}
+            className="w-full h-[40px] rounded-[10px] bg-main text-white uppercase"
+          >
+            START Workout
+          </Button>
+        </div>
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}

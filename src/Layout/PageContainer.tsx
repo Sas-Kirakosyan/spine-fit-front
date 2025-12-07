@@ -22,7 +22,7 @@ export function PageContainer({
   const hasBackgroundImage = Boolean(backgroundImage);
 
   const card = (
-    <div className="relative w-[400px] h-full min-h-[690px]">
+    <div className="relative w-[400px] min-h-screen">
       <div
         className={`absolute inset-0 ${
           hasBackgroundImage
@@ -35,7 +35,7 @@ export function PageContainer({
         <div className={`absolute inset-0 ${overlayClassName}`} />
       )}
       <div
-        className={`relative z-10 flex flex-col h-full ${minHeightClassName} overflow-y-auto`}
+        className={`relative z-10 flex flex-col min-h-screen ${minHeightClassName} overflow-y-auto`}
       >
         <div className={`relative flex flex-col flex-1 ${contentClassName}`}>
           {children}
@@ -49,6 +49,8 @@ export function PageContainer({
   }
 
   return (
-    <div className="bg-white flex items-center justify-center ">{card}</div>
+    <div className="bg-white flex items-center justify-center min-h-screen">
+      {card}
+    </div>
   );
 }
