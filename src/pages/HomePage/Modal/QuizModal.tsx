@@ -53,6 +53,9 @@ export function QuizModal({
 
   const isAnswerValid = () => {
     const question = questions[currentQuestion];
+    if (question.type === "info") {
+      return true;
+    }
     if (question.optional) {
       return true;
     }
@@ -71,7 +74,11 @@ export function QuizModal({
     const savedAnswer = answers[question.id];
     const savedUnit = units[question.id];
 
-    if (question.type === "radio") {
+    if (question.type === "info") {
+      setSelectedAnswer(null);
+      setSelectedCheckboxes([]);
+      setInputValue("");
+    } else if (question.type === "radio") {
       setSelectedAnswer(
         savedAnswer !== undefined ? (savedAnswer as number) : null
       );
@@ -98,6 +105,9 @@ export function QuizModal({
 
   const saveCurrentAnswer = () => {
     const question = questions[currentQuestion];
+    if (question.type === "info") {
+      return;
+    }
     let answerValue: number | number[] | string;
 
     if (question.type === "radio") {
@@ -302,9 +312,20 @@ export function QuizModal({
                 </div>
 
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold">
-                    {questions[currentQuestion].question}
-                  </h3>
+                  {questions[currentQuestion].type === "info" ? (
+                    <div className="space-y-4">
+                      <h3 className="text-2xl font-bold text-gray-900">
+                        {questions[currentQuestion].title}
+                      </h3>
+                      <p className="text-base text-gray-600 leading-relaxed">
+                        {questions[currentQuestion].description}
+                      </p>
+                    </div>
+                  ) : (
+                    <h3 className="text-xl font-semibold">
+                      {questions[currentQuestion].question}
+                    </h3>
+                  )}
 
                   {questions[currentQuestion].type === "radio" && (
                     <div className="space-y-3">
@@ -544,7 +565,9 @@ export function QuizModal({
                         : "bg-white/10 text-white/60 cursor-not-allowed"
                     }`}
                   >
-                    Next
+                    {questions[currentQuestion].type === "info"
+                      ? questions[currentQuestion].buttonText || "Next"
+                      : "Next"}
                   </button>
                 ) : (
                   <button
