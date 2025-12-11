@@ -267,7 +267,7 @@ export function QuizModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="relative w-full max-w-[400px]">
         <div className="absolute inset-0 bg-gray-700" />
-        <div className="relative z-10 flex flex-col min-h-[640px]">
+        <div className="relative z-10 flex flex-col min-h-[700px]">
           <div className="flex flex-col flex-1 justify-between min-h-0">
             <div className="flex items-start justify-between mt-5 text-white">
               <div>
@@ -286,7 +286,7 @@ export function QuizModal({
               </Button>
             </div>
 
-            <div className="mt-6 flex-1 overflow-y-auto">
+            <div className="mt-6 ml-[10px] mr-[10px] flex-1 overflow-y-auto">
               <div className="rounded-2xl bg-white/95 p-6 text-gray-800 shadow-lg backdrop-blur">
                 <div className="mb-6">
                   <div className="h-2 w-full rounded-full bg-gray-200">

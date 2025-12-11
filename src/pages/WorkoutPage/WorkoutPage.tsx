@@ -13,6 +13,7 @@ import { WorkoutPageHeader } from "./WorkoutPageHeader";
 const defaultExercises: Exercise[] = exerciseData as Exercise[];
 
 export function WorkoutPage({
+  onNavigateToHome,
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,
@@ -30,8 +31,18 @@ export function WorkoutPage({
 
   return (
     <PageContainer>
-      <Logo />
-      <div ref={cardRef} className="flex flex-col gap-3 pb-20">
+      <div className="flex items-center justify-between">
+        <Logo />
+        {onNavigateToHome && (
+          <Button
+            onClick={onNavigateToHome}
+            className="flex items-center gap-2 rounded-[14px] bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-white/20"
+          >
+            Back to Home
+          </Button>
+        )}
+      </div>
+      <div ref={cardRef} className="flex flex-col gap-3 pb-[140px]">
         <WorkoutPageHeader
           onNavigateToMyPlan={() => {
             if (onNavigateToMyPlan) {
@@ -85,47 +96,48 @@ export function WorkoutPage({
             </div>
           </div>
         </section>
-        <div className="fixed bottom-16 left-0 right-0 z-40 px-4 pb-2 bg-gradient-to-t from-[#0F1117] via-[#0F1117] to-transparent pt-4">
-          <Button
-            onClick={onStartWorkoutSession}
-            className="w-full h-[40px] rounded-[10px] bg-main text-white uppercase"
-          >
-            START Workout
-          </Button>
-        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-[400px]">
+        <Button
+          onClick={onStartWorkoutSession}
+          className="w-[360px] mr-[20px] ml-[20px] mb-[30px] h-[40px] rounded-[10px] bg-main text-white uppercase"
+        >
+          START Workout
+        </Button>
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}
           onProfileClick={onNavigateToProfile}
           onHistoryClick={onNavigateToHistory}
         />
-
-        {actionExercise && (
-          <ExerciseActionSheet
-            exercise={actionExercise}
-            onClose={() => setActionExercise(null)}
-            onShowDetails={() => {
-              if (actionExercise) {
-                onOpenExerciseDetails(actionExercise);
-              }
-              setActionExercise(null);
-            }}
-            onStartWorkout={() => {
-              if (actionExercise) {
-                onOpenExerciseSets(actionExercise);
-              }
-              setActionExercise(null);
-            }}
-            onDelete={() => {
-              if (actionExercise && onRemoveExercise) {
-                onRemoveExercise(actionExercise.id);
-              }
-              setActionExercise(null);
-            }}
-            containerRef={cardRef}
-          />
-        )}
       </div>
+
+      {actionExercise && (
+        <ExerciseActionSheet
+          exercise={actionExercise}
+          onClose={() => setActionExercise(null)}
+          onShowDetails={() => {
+            if (actionExercise) {
+              onOpenExerciseDetails(actionExercise);
+            }
+            setActionExercise(null);
+          }}
+          onStartWorkout={() => {
+            if (actionExercise) {
+              onOpenExerciseSets(actionExercise);
+            }
+            setActionExercise(null);
+          }}
+          onDelete={() => {
+            if (actionExercise && onRemoveExercise) {
+              onRemoveExercise(actionExercise.id);
+            }
+            setActionExercise(null);
+          }}
+          containerRef={cardRef}
+        />
+      )}
     </PageContainer>
   );
 }

@@ -26,7 +26,7 @@ export function ExerciseActionSheet({
   }, [onClose]);
 
   const sheetContent = (
-    <div className="absolute h-full w-full inset-0 z-40 flex flex-col justify-end">
+    <div className="absolute h-full w-full z-1000 inset-0 z-40 flex flex-col justify-end">
       <div
         role="button"
         tabIndex={-1}

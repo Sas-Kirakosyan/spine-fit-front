@@ -26,15 +26,15 @@ export function HomePage({
         backgroundImage="url('https://ignitefitness.com/wp-content/uploads/2024/06/Gym-Equipment.jpg')"
         overlayClassName="bg-black/30"
       >
-        <div className="flex justify-start">
-          <Logo/>
+        <div className="flex justify-between items-center">
+          <Logo />
+        <p className="text-white text-[24px] font-semibold">Traning app</p>
         </div>
-
         <div className="mt-auto">
           <h2 className="text-white text-4xl font-semibold leading-tight">
-            Train safe
+          Strength instead 
             <br />
-            Without back pain
+            Of pain
           </h2>
         </div>
 
@@ -43,7 +43,7 @@ export function HomePage({
             onClick={handleStartQuiz}
             className="w-[370px] rounded-[18px] bg-main py-4 text-lg font-semibold text-white"
           >
-            START
+            START PROGRAM
           </button>
 
           <button
