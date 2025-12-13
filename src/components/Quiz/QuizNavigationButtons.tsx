@@ -4,6 +4,7 @@ interface QuizNavigationButtonsProps {
   isAnswered: boolean;
   isOptional: boolean;
   isInfoScreen: boolean;
+  hideNextButton?: boolean;
   buttonText?: string;
   onBack: () => void;
   onNext: () => void;
@@ -17,6 +18,7 @@ export function QuizNavigationButtons({
   isAnswered,
   isOptional,
   isInfoScreen,
+  hideNextButton = false,
   buttonText,
   onBack,
   onNext,
@@ -46,7 +48,7 @@ export function QuizNavigationButtons({
             Back
           </button>
         )}
-        {!isLastQuestion ? (
+        {!hideNextButton && !isLastQuestion ? (
           <button
             onClick={onNext}
             disabled={!isAnswered}
@@ -58,7 +60,7 @@ export function QuizNavigationButtons({
           >
             {isInfoScreen ? buttonText || "Next" : "Next"}
           </button>
-        ) : (
+        ) : !hideNextButton && isLastQuestion ? (
           <button
             onClick={onSubmit}
             disabled={!isAnswered}
@@ -70,7 +72,7 @@ export function QuizNavigationButtons({
           >
             Finish
           </button>
-        )}
+        ) : null}
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import { QuizRadioOption } from "./QuizRadioOption";
 import { QuizImageRadioOption } from "./QuizImageRadioOption";
 import { QuizCheckboxOption } from "./QuizCheckboxOption";
 import { QuizInputWithUnit } from "./QuizInputWithUnit";
+import { QuizSlider } from "./QuizSlider";
 import { QuizNavigationButtons } from "./QuizNavigationButtons";
 
 export function QuizModal({
@@ -65,6 +66,29 @@ export function QuizModal({
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
+
+    // Auto-advance for radio and image_radio types
+    const question = filteredQuestions[currentQuestion];
+    if (question.type === "radio" || question.type === "image_radio") {
+      // Save answer first
+      const answerValue = answerIndex;
+      setAnswers((prev) => ({
+        ...prev,
+        [question.id]: answerValue,
+      }));
+
+      // Move to next question after a short delay
+      setTimeout(() => {
+        if (currentQuestion < filteredQuestions.length - 1) {
+          const nextQuestion = currentQuestion + 1;
+          setCurrentQuestion(nextQuestion);
+          setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
+        } else {
+          // If last question, trigger submit
+          handleSubmitWithAnswer(answerValue);
+        }
+      }, 300);
+    }
   };
 
   const handleCheckboxToggle = (index: number) => {
@@ -100,11 +124,11 @@ export function QuizModal({
     if (question.optional) {
       return true;
     }
-    if (question.type === "radio") {
+    if (question.type === "radio" || question.type === "image_radio") {
       return selectedAnswer !== null;
     } else if (question.type === "checkbox") {
       return selectedCheckboxes.length > 0;
-    } else if (question.type === "input") {
+    } else if (question.type === "input" || question.type === "slider") {
       return inputValue.trim() !== "";
     }
     return false;
@@ -132,7 +156,7 @@ export function QuizModal({
         );
         setSelectedAnswer(null);
         setInputValue("");
-      } else if (question.type === "input") {
+      } else if (question.type === "input" || question.type === "slider") {
         setInputValue(savedAnswer !== undefined ? String(savedAnswer) : "");
         setSelectedAnswer(null);
         setSelectedCheckboxes([]);
@@ -154,11 +178,11 @@ export function QuizModal({
     }
     let answerValue: number | number[] | string;
 
-    if (question.type === "radio") {
+    if (question.type === "radio" || question.type === "image_radio") {
       answerValue = selectedAnswer!;
     } else if (question.type === "checkbox") {
       answerValue = selectedCheckboxes;
-    } else {
+    } else if (question.type === "input" || question.type === "slider") {
       answerValue = inputValue;
 
       if (question.fieldName === "height") {
@@ -243,17 +267,59 @@ export function QuizModal({
     }
   };
 
+  const handleSubmitWithAnswer = (answerValue: number | number[] | string) => {
+    const question = filteredQuestions[currentQuestion];
+    const finalUnits = { ...units };
+
+    if (question.fieldName === "height") {
+      finalUnits[question.id] = heightUnit;
+    } else if (question.fieldName === "weight") {
+      finalUnits[question.id] = weightUnit;
+    }
+
+    const allAnswers = {
+      ...answers,
+      [question.id]: answerValue,
+    };
+
+    const quizData = {
+      workoutType,
+      answers: allAnswers,
+      units: finalUnits,
+      timestamp: new Date().toISOString(),
+    };
+
+    const savedQuizzes = JSON.parse(
+      localStorage.getItem("quizAnswers") || "[]"
+    );
+    savedQuizzes.push(quizData);
+    localStorage.setItem("quizAnswers", JSON.stringify(savedQuizzes));
+
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+    setSelectedCheckboxes([]);
+    setInputValue("");
+    setAnswers({});
+    setUnits({});
+    setHeightUnit("cm");
+    setWeightUnit("kg");
+    onClose();
+    if (onQuizComplete) {
+      onQuizComplete();
+    }
+  };
+
   const handleSubmit = () => {
     if (isAnswered()) {
       const question = filteredQuestions[currentQuestion];
-      let currentAnswerValue: number | number[] | string;
+      let currentAnswerValue: number | number[] | string = "";
       const finalUnits = { ...units };
 
-      if (question.type === "radio") {
+      if (question.type === "radio" || question.type === "image_radio") {
         currentAnswerValue = selectedAnswer!;
       } else if (question.type === "checkbox") {
         currentAnswerValue = selectedCheckboxes;
-      } else {
+      } else if (question.type === "input" || question.type === "slider") {
         currentAnswerValue = inputValue;
 
         if (question.fieldName === "height") {
@@ -263,36 +329,7 @@ export function QuizModal({
         }
       }
 
-      const allAnswers = {
-        ...answers,
-        [question.id]: currentAnswerValue,
-      };
-
-      const quizData = {
-        workoutType,
-        answers: allAnswers,
-        units: finalUnits,
-        timestamp: new Date().toISOString(),
-      };
-
-      const savedQuizzes = JSON.parse(
-        localStorage.getItem("quizAnswers") || "[]"
-      );
-      savedQuizzes.push(quizData);
-      localStorage.setItem("quizAnswers", JSON.stringify(savedQuizzes));
-
-      setCurrentQuestion(0);
-      setSelectedAnswer(null);
-      setSelectedCheckboxes([]);
-      setInputValue("");
-      setAnswers({});
-      setUnits({});
-      setHeightUnit("cm");
-      setWeightUnit("kg");
-      onClose();
-      if (onQuizComplete) {
-        onQuizComplete();
-      }
+      handleSubmitWithAnswer(currentAnswerValue);
     }
   };
 
@@ -486,6 +523,15 @@ export function QuizModal({
                         )}
                     </div>
                   )}
+
+                  {filteredQuestions[currentQuestion].type === "slider" && (
+                    <QuizSlider
+                      value={inputValue}
+                      min={filteredQuestions[currentQuestion].min || 0}
+                      max={filteredQuestions[currentQuestion].max || 10}
+                      onChange={handleInputChange}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -496,6 +542,10 @@ export function QuizModal({
               isAnswered={isAnswered()}
               isOptional={filteredQuestions[currentQuestion].optional || false}
               isInfoScreen={filteredQuestions[currentQuestion].type === "info"}
+              hideNextButton={
+                filteredQuestions[currentQuestion].type === "radio" ||
+                filteredQuestions[currentQuestion].type === "image_radio"
+              }
               buttonText={filteredQuestions[currentQuestion].buttonText}
               onBack={handleBack}
               onNext={handleNext}

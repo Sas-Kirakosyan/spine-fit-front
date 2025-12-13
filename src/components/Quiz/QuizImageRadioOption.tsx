@@ -22,11 +22,11 @@ export function QuizImageRadioOption({
     >
       <div className="flex items-start gap-4">
         {option.image && (
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 bg-gray-100 rounded-lg p-3">
             <img
               src={option.image}
               alt={option.label}
-              className="h-16 w-16 rounded-lg object-cover"
+              className="h-28 w-28 object-contain"
             />
           </div>
         )}

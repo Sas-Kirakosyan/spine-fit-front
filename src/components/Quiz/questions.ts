@@ -38,6 +38,7 @@ export const questions: QuizQuestion[] = [
     question: "What's your gender?",
     type: "radio",
     options: ["Male", "Female", "Other"],
+
   },
 
   {
@@ -49,6 +50,7 @@ export const questions: QuizQuestion[] = [
     placeholder: "Enter your age",
     min: 12,
     max: 90,
+    optional: true
   },
 
   {
@@ -58,6 +60,7 @@ export const questions: QuizQuestion[] = [
     type: "input",
     inputType: "number",
     placeholder: "Height in cm",
+    optional: true
   },
 
   {
@@ -77,25 +80,25 @@ export const questions: QuizQuestion[] = [
       {
         value: "8-15",
         label: "8–15% (Lean / Athletic)",
-        image: "/assets/bodyfat/male_8_15.png",
+        image: "quiz/8-15.png",
         description: "Visible muscle definition"
       },
       {
         value: "16-22",
         label: "16–22% (Average)",
-        image: "/assets/bodyfat/male_16_22.png",
+        image: "quiz/16-22.png",
         description: "Some definition, slight fat around waist"
       },
       {
         value: "23-30",
         label: "23–30% (Overfat)",
-        image: "/assets/bodyfat/male_23_30.png",
+        image: "quiz/23-30.png",
         description: "Soft midsection, limited muscle definition"
       },
       {
         value: "30+",
         label: "30%+ (High body fat)",
-        image: "/assets/bodyfat/male_30_plus.png",
+        image: "quiz/30-plus.png",
         description: "Higher fat storage around waist and hips"
       }
     ],
