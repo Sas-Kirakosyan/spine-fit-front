@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QuizModal } from "@/pages/HomePage/Modal/QuizModal";
+import { QuizModal } from "@/components/Quiz/QuizModal";
 import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { HomePageProps } from "@/types/pages";
@@ -28,11 +28,11 @@ export function HomePage({
       >
         <div className="flex justify-between items-center">
           <Logo />
-        <p className="text-white text-[24px] font-semibold">Traning app</p>
+          <p className="text-white text-[24px] font-semibold">Traning app</p>
         </div>
         <div className="mt-auto">
           <h2 className="text-white text-4xl font-semibold leading-tight">
-          Strength instead 
+            Strength instead
             <br />
             Of pain
           </h2>
