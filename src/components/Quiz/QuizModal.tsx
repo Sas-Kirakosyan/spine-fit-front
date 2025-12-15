@@ -29,7 +29,6 @@ export function QuizModal({
     Record<number, "cm" | "ft" | "kg" | "lbs">
   >({});
 
-  // Filter questions based on showIf conditions
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
       if (!question.showIf) return true;
@@ -45,7 +44,6 @@ export function QuizModal({
 
       if (dependentAnswer === undefined) return false;
 
-      // Handle different answer types
       if (dependentQuestion.type === "radio") {
         const optionIndex = dependentAnswer as number;
         const selectedOption = dependentQuestion.options?.[optionIndex];
@@ -64,27 +62,34 @@ export function QuizModal({
     });
   }, [answers]);
 
+  const actualQuestionsCount = useMemo(() => {
+    return filteredQuestions.filter((q) => q.type !== "info").length;
+  }, [filteredQuestions]);
+
+  const currentQuestionNumber = useMemo(() => {
+    const nonInfoQuestions = filteredQuestions
+      .slice(0, currentQuestion + 1)
+      .filter((q) => q.type !== "info").length;
+    return nonInfoQuestions;
+  }, [filteredQuestions, currentQuestion]);
+
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
 
-    // Auto-advance for radio and image_radio types
     const question = filteredQuestions[currentQuestion];
     if (question.type === "radio" || question.type === "image_radio") {
-      // Save answer first
       const answerValue = answerIndex;
       setAnswers((prev) => ({
         ...prev,
         [question.id]: answerValue,
       }));
 
-      // Move to next question after a short delay
       setTimeout(() => {
         if (currentQuestion < filteredQuestions.length - 1) {
           const nextQuestion = currentQuestion + 1;
           setCurrentQuestion(nextQuestion);
           setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
         } else {
-          // If last question, trigger submit
           handleSubmitWithAnswer(answerValue);
         }
       }, 300);
@@ -354,23 +359,31 @@ export function QuizModal({
 
   if (!isOpen) return null;
 
+  const optionListClass = "space-y-3 max-h-[360px] overflow-y-auto pr-1 -mr-1";
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="relative w-full max-w-[400px]">
-        <div className="absolute inset-0 bg-gray-700" />
-        <div className="relative z-10 flex flex-col min-h-[700px]">
+    <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
+      <div className="relative w-full h-full md:max-w-[400px] md:h-auto">
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,#132F54_20%,#E77D10_80%)]" />
+        <div className="relative z-10 flex flex-col h-full md:min-h-[700px]">
           <div className="flex flex-col flex-1 justify-between min-h-0">
             <QuizHeader
               currentQuestion={currentQuestion}
-              totalQuestions={filteredQuestions.length}
+              currentQuestionNumber={currentQuestionNumber}
+              totalQuestions={actualQuestionsCount}
+              isInfoScreen={filteredQuestions[currentQuestion].type === "info"}
               onClose={onClose}
             />
 
-            <div className="mt-6 ml-[10px] mr-[10px] flex-1 overflow-y-auto">
-              <div className="rounded-2xl bg-white/95 p-6 text-gray-800 shadow-lg backdrop-blur">
+            <div className="mt-6 px-2 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
+              <div className="rounded-2xl bg-white/95 p-4 md:p-6 text-gray-800 shadow-lg backdrop-blur">
                 <QuizProgressBar
                   currentQuestion={currentQuestion}
-                  totalQuestions={filteredQuestions.length}
+                  currentQuestionNumber={currentQuestionNumber}
+                  totalQuestions={actualQuestionsCount}
+                  isInfoScreen={
+                    filteredQuestions[currentQuestion].type === "info"
+                  }
                 />
 
                 <div className="space-y-6">
@@ -390,7 +403,7 @@ export function QuizModal({
                   )}
 
                   {filteredQuestions[currentQuestion].type === "radio" && (
-                    <div className="space-y-3">
+                    <div className={optionListClass}>
                       {filteredQuestions[currentQuestion].options?.map(
                         (option, index) => (
                           <QuizRadioOption
@@ -407,7 +420,7 @@ export function QuizModal({
 
                   {filteredQuestions[currentQuestion].type ===
                     "image_radio" && (
-                    <div className="space-y-3">
+                    <div className={optionListClass}>
                       {filteredQuestions[currentQuestion].options?.map(
                         (option, index) => (
                           <QuizImageRadioOption
@@ -430,7 +443,7 @@ export function QuizModal({
                   )}
 
                   {filteredQuestions[currentQuestion].type === "checkbox" && (
-                    <div className="space-y-3">
+                    <div className={optionListClass}>
                       {filteredQuestions[currentQuestion].options?.map(
                         (option, index) => (
                           <QuizCheckboxOption

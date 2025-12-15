@@ -26,11 +26,11 @@ export function HomePage({
         backgroundImage="url('https://ignitefitness.com/wp-content/uploads/2024/06/Gym-Equipment.jpg')"
         overlayClassName="bg-black/30"
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center px-4 py-4">
           <Logo />
           <p className="text-white text-[24px] font-semibold">Traning app</p>
         </div>
-        <div className="mt-auto">
+        <div className="mt-auto px-4 py-4">
           <h2 className="text-white text-4xl font-semibold leading-tight">
             Strength instead
             <br />
@@ -48,7 +48,7 @@ export function HomePage({
 
           <button
             onClick={onNavigateToLogin}
-            className="w-full text-center text-md font-medium text-white hover:text-white/50"
+            className="w-full py-2 text-center text-md font-medium text-white hover:text-white/50"
           >
             Log In
           </button>
