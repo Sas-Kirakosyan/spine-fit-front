@@ -1,12 +1,10 @@
 interface QuizProgressBarProps {
-  currentQuestion: number;
   currentQuestionNumber: number;
   totalQuestions: number;
   isInfoScreen: boolean;
 }
 
 export function QuizProgressBar({
-  currentQuestion,
   currentQuestionNumber,
   totalQuestions,
   isInfoScreen,

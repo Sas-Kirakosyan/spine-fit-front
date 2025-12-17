@@ -1,7 +1,6 @@
 import { Button } from "@/components/Buttons/Button";
 
 interface QuizHeaderProps {
-  currentQuestion: number;
   currentQuestionNumber: number;
   totalQuestions: number;
   isInfoScreen: boolean;
@@ -9,7 +8,6 @@ interface QuizHeaderProps {
 }
 
 export function QuizHeader({
-  currentQuestion,
   currentQuestionNumber,
   totalQuestions,
   isInfoScreen,

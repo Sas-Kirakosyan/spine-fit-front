@@ -368,7 +368,6 @@ export function QuizModal({
         <div className="relative z-10 flex flex-col h-full md:min-h-[700px]">
           <div className="flex flex-col flex-1 justify-between min-h-0">
             <QuizHeader
-              currentQuestion={currentQuestion}
               currentQuestionNumber={currentQuestionNumber}
               totalQuestions={actualQuestionsCount}
               isInfoScreen={filteredQuestions[currentQuestion].type === "info"}
@@ -378,7 +377,6 @@ export function QuizModal({
             <div className="mt-6 px-2 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
               <div className="rounded-2xl bg-white/95 p-4 md:p-6 text-gray-800 shadow-lg backdrop-blur">
                 <QuizProgressBar
-                  currentQuestion={currentQuestion}
                   currentQuestionNumber={currentQuestionNumber}
                   totalQuestions={actualQuestionsCount}
                   isInfoScreen={
