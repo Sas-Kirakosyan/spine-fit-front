@@ -33,7 +33,7 @@ export function QuizModal({
     return questions.filter((question) => {
       if (!question.showIf) return true;
 
-      const { fieldName, equals } = question.showIf;
+      const { fieldName, equals, in: inArray } = question.showIf;
       const dependentQuestion = questions.find(
         (q) => q.fieldName === fieldName
       );
@@ -47,15 +47,35 @@ export function QuizModal({
       if (dependentQuestion.type === "radio") {
         const optionIndex = dependentAnswer as number;
         const selectedOption = dependentQuestion.options?.[optionIndex];
-        return selectedOption === equals;
+        
+        if (equals !== undefined) {
+          return selectedOption === equals;
+        }
+        
+        if (inArray !== undefined) {
+          return inArray.includes(selectedOption as string);
+        }
       } else if (dependentQuestion.type === "checkbox") {
         const selectedIndices = dependentAnswer as number[];
         const selectedOptions = selectedIndices.map(
           (i) => dependentQuestion.options?.[i]
         );
-        return selectedOptions.includes(equals as string);
+        
+        if (equals !== undefined) {
+          return selectedOptions.includes(equals as string);
+        }
+        
+        if (inArray !== undefined) {
+          return selectedOptions.some((option) => inArray.includes(option as string));
+        }
       } else if (dependentQuestion.type === "input") {
-        return dependentAnswer === equals;
+        if (equals !== undefined) {
+          return dependentAnswer === equals;
+        }
+        
+        if (inArray !== undefined) {
+          return inArray.includes(dependentAnswer as string);
+        }
       }
 
       return true;

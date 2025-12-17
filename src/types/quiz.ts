@@ -15,7 +15,8 @@ export interface QuizQuestion {
   max?: number;
   showIf?: {
     fieldName: string;
-    equals: string | number;
+    equals?: string | number;
+    in?: string[];
   };
 }
 
