@@ -112,7 +112,7 @@ export function ChevronRightIcon({
       className={className}
       viewBox="0 0 16 16"
       fill="none"
-      stroke="currentColor"
+      stroke="white"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"

@@ -9,6 +9,13 @@ import {
   ThreeDotsIcon,
 } from "@/components/Icons/Icons";
 import { MyPlanPageHeader } from "./MyPlanPageHeader";
+import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
+import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
+import {
+  planFieldsConfig,
+  loadPlanSettings,
+  savePlanSettings,
+} from "@/types/planSettings";
 
 export function MyPlanPage({
   onNavigateBack,
@@ -16,7 +23,13 @@ export function MyPlanPage({
 }: MyPlanPageProps) {
   const [bodyweightOnly, setBodyweightOnly] = useState(false);
   const [warmUpSets, setWarmUpSets] = useState(true);
+  const [circuitsAndSupersets, setCircuitsAndSupersets] = useState(true);
   const [selectedCount, setSelectedCount] = useState(0);
+  const [planSettings, setPlanSettings] = useState<PlanSettings>(
+    loadPlanSettings()
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentField, setCurrentField] = useState<PlanFieldId | null>(null);
 
   useEffect(() => {
     const calculateSelectedCount = () => {
@@ -58,16 +71,42 @@ export function MyPlanPage({
     };
   }, []);
 
+  const handleFieldClick = (fieldId: PlanFieldId) => {
+    setCurrentField(fieldId);
+    setIsModalOpen(true);
+  };
+
+  const handleFieldSelect = (value: string) => {
+    if (currentField) {
+      const newSettings = {
+        ...planSettings,
+        [currentField]: value,
+      };
+      setPlanSettings(newSettings);
+      savePlanSettings(newSettings);
+    }
+    setIsModalOpen(false);
+    setCurrentField(null);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setCurrentField(null);
+  };
+
   return (
     <PageContainer contentClassName="gap-8 px-3">
       <MyPlanPageHeader onNavigateBack={onNavigateBack} />
 
       <div className="flex flex-col flex-1 gap-6">
         {/* Goal Section */}
-        <Button className="w-full rounded-[14px] bg-main p-4 flex items-center justify-between text-white">
+        <Button
+          onClick={() => handleFieldClick("goal")}
+          className="w-full rounded-[14px] bg-main p-4 flex items-center justify-between text-white"
+        >
           <span className="text-lg font-semibold">Goal</span>
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold">Reduce Bodyweight</span>
+            <span className="text-l ml-10 font-semibold">{planSettings.goal}</span>
             <ChevronRightIcon className="h-5 w-5" />
           </div>
         </Button>
@@ -133,33 +172,46 @@ export function MyPlanPage({
           </h2>
           <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
             <div className="space-y-4">
-              <Button className="w-full flex items-center justify-between text-left">
+              <Button
+                onClick={() => handleFieldClick("workoutsPerWeek")}
+                className="w-full flex items-center justify-between text-left"
+              >
                 <span className="text-base font-medium text-white">
                   Workouts / Week
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-base font-medium text-white">3</span>
+                  <span className="text-base font-medium text-white">
+                    {planSettings.workoutsPerWeek}
+                  </span>
                   <ChevronRightIcon className="h-5 w-5" />
                 </div>
               </Button>
 
-              <Button className="w-full flex items-center justify-between text-left">
+              <Button
+                onClick={() => handleFieldClick("duration")}
+                className="w-full flex items-center justify-between text-left"
+              >
                 <span className="text-base font-medium text-white">
                   Duration
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-base font-medium text-white">1 hr</span>
+                  <span className="text-base font-medium text-white">
+                    {planSettings.duration}
+                  </span>
                   <ChevronRightIcon className="h-5 w-5" />
                 </div>
               </Button>
 
-              <Button className="w-full flex items-center justify-between text-left">
+              <Button
+                onClick={() => handleFieldClick("experience")}
+                className="w-full flex items-center justify-between text-left"
+              >
                 <span className="text-base font-medium text-white">
                   Experience
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
-                    Intermediate
+                    {planSettings.experience}
                   </span>
                   <ChevronRightIcon className="h-5 w-5" />
                 </div>
@@ -175,25 +227,31 @@ export function MyPlanPage({
           </h2>
           <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
             <div className="space-y-4">
-              <Button className="w-full flex items-center justify-between text-left">
+              <Button
+                onClick={() => handleFieldClick("trainingSplit")}
+                className="w-full flex items-center justify-between text-left"
+              >
                 <span className="text-base font-medium text-white">
                   Training Split
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
-                    Push/Pull/Legs
+                    {planSettings.trainingSplit}
                   </span>
                   <ChevronRightIcon className="h-5 w-5" />
                 </div>
               </Button>
 
-              <Button className="w-full flex items-center justify-between text-left">
+              <Button
+                onClick={() => handleFieldClick("exerciseVariability")}
+                className="w-full flex items-center justify-between text-left"
+              >
                 <span className="text-base font-medium text-white">
                   Exercise Variability
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
-                    Balanced
+                    {planSettings.exerciseVariability}
                   </span>
                   <ChevronRightIcon className="h-5 w-5" />
                 </div>
@@ -216,10 +274,100 @@ export function MyPlanPage({
                   />
                 </Button>
               </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-base font-medium text-white">
+                  Circuits & Supersets
+                </span>
+                <Button
+                  onClick={() => setCircuitsAndSupersets(!circuitsAndSupersets)}
+                  className={`relative w-12 h-7 rounded-full transition-colors ${
+                    circuitsAndSupersets ? "bg-main" : "bg-gray-600"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full transition-transform ${
+                      circuitsAndSupersets ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Preferences Section */}
+        <div className="flex flex-col gap-3">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">
+            PREFERENCES
+          </h2>
+          <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
+            <div className="space-y-4">
+              <Button
+                onClick={() => handleFieldClick("units")}
+                className="w-full flex items-center justify-between text-left"
+              >
+                <span className="text-base font-medium text-white">Units</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-medium text-white">
+                    {planSettings.units}
+                  </span>
+                  <ChevronRightIcon className="h-5 w-5" />
+                </div>
+              </Button>
+
+              <Button
+                onClick={() => handleFieldClick("cardio")}
+                className="w-full flex items-center justify-between text-left"
+              >
+                <span className="text-base font-medium text-white">Cardio</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-medium text-white">
+                    {planSettings.cardio}
+                  </span>
+                  <ChevronRightIcon className="h-5 w-5" />
+                </div>
+              </Button>
+
+              <Button
+                onClick={() => handleFieldClick("stretching")}
+                className="w-full flex items-center justify-between text-left"
+              >
+                <span className="text-base font-medium text-white">
+                  Stretching
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-medium text-white">
+                    {planSettings.stretching}
+                  </span>
+                  <ChevronRightIcon className="h-5 w-5" />
+                </div>
+              </Button>
+
+              <Button className="w-full flex items-center justify-between text-left">
+                <span className="text-base font-medium text-white">
+                  Manage Exercises
+                </span>
+                <ChevronRightIcon className="h-5 w-5" />
+              </Button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Selection Modal */}
+      {currentField && (
+        <SelectionModal
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          title={planFieldsConfig[currentField].title}
+          options={planFieldsConfig[currentField].options}
+          descriptions={planFieldsConfig[currentField].description}
+          headerDescription={planFieldsConfig[currentField].headerDescription}
+          selectedValue={planSettings[currentField]}
+          onSelect={handleFieldSelect}
+        />
+      )}
     </PageContainer>
   );
 }

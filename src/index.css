@@ -2,6 +2,7 @@
 
 @theme {
   --color-main: #e77d10;
+  --color-background: #132f54;
 }
 
 /* Make react-day-picker day buttons fill their table cell so clicks on cell edges register */
