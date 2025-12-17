@@ -364,7 +364,7 @@ export function QuizModal({
   return (
     <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
       <div className="relative w-full h-full md:max-w-[400px] md:h-auto">
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,#132F54_20%,#E77D10_80%)]" />
+        <div className="absolute inset-0 bg-background" />
         <div className="relative z-10 flex flex-col h-full md:min-h-[700px]">
           <div className="flex flex-col flex-1 justify-between min-h-0">
             <QuizHeader
