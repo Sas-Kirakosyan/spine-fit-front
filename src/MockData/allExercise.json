@@ -329,5 +329,54 @@
         "recommendation": "No top-position lumbar arching. Reduce load if compression or nerve pain increases."
       }
     ]
+  },
+  {
+    "id": 11,
+    "name": "Belt Squats",
+    "description": "A squat variation using a dip belt or dedicated belt-squat machine where weight hangs from the hips instead of resting on the shoulders. Removes spinal compression and is ideal for people with lower back concerns, herniated disc history, or shoulder injuries who want to load legs without compressing the spine.",
+    "category": "strength",
+    "muscle_groups": ["quads", "glutes", "hamstrings", "calves"],
+    "equipment": "belt_squat_machine",
+    "difficulty": "beginner",
+    "instructions": "Stand on the platform with the belt secured around your hips and weight attached. Keep your torso upright and core engaged. Lower into a squat by bending your knees and hips, keeping your chest up. Push through your feet to return to the starting position. The load stays on your pelvis/hips with minimal pressure on the lower back.",
+    "video_url": "https://cdn.spinefit.app/videos/belt_squat.mp4",
+    "image_url": "https://www.stack.com/wp-content/uploads/2020/09/Belt-Squat.jpg",
+    "equipment_image_url": "https://www.roguefitness.com/media/catalog/product/r/h/rhino-belt-squat-h1.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 30,
+        "exercise_id": 410,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Keep torso upright and avoid excessive forward lean. Load is on pelvis, not spine. Great alternative for those with lumbar pain (L4-L5/L5-S1), herniated discs, or sciatica.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      },
+      {
+        "id": 31,
+        "exercise_id": 410,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Excellent choice as it removes spinal compression. Weight hangs from hips, not shoulders. Maintain neutral spine throughout the movement.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      },
+      {
+        "id": 32,
+        "exercise_id": 410,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Minimal pressure on lower back and discs. Keep movements controlled and avoid bouncing at the bottom. Stop if any nerve pain occurs.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 50,
+    "weight_unit": "kg"
   }
 ]

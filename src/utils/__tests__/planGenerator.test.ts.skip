@@ -1,0 +1,432 @@
+import { describe, test, expect, beforeEach } from 'vitest';
+import { generateTrainingPlan, getTodaysWorkout, savePlanToLocalStorage, loadPlanFromLocalStorage } from '../planGenerator';
+import { filterExercisesByProfile } from '../exerciseFilter';
+import { calculateVolume, calculateExercisesPerWorkout } from '../volumeCalculator';
+import { generateProgressionSuggestion, checkTrainingConsistency } from '../progressiveOverload';
+import type { Exercise } from '@/types/exercise';
+import type { PlanSettings } from '@/types/planSettings';
+import type { FinishedWorkoutSummary } from '@/types/workout';
+
+// Mock exercises for testing
+const mockExercises: Exercise[] = [
+  {
+    id: 1,
+    name: "Back Hyperextension",
+    description: "Safe lower back exercise",
+    category: "strength",
+    muscle_groups: ["erector_spinae", "glutes", "hamstrings"],
+    equipment: "hyperextension_bench",
+    difficulty: "beginner",
+    instructions: "Test instructions",
+    video_url: "",
+    image_url: "",
+    equipment_image_url: "",
+    is_back_friendly: true,
+    back_issue_restrictions: [
+      {
+        id: 1,
+        exercise_id: 1,
+        issue_type: "l5_s1",
+        restriction_level: "low",
+        recommendation: "Keep spine neutral",
+        created_at: "",
+        updated_at: ""
+      }
+    ],
+    created_at: "",
+    updated_at: "",
+    sets: 3,
+    reps: 15,
+    weight: 0,
+    weight_unit: "kg"
+  },
+  {
+    id: 2,
+    name: "Single-Leg Glute Bridge",
+    description: "Unilateral glute exercise",
+    category: "strength",
+    muscle_groups: ["glutes", "hamstrings", "core_stabilizers"],
+    equipment: "bodyweight",
+    difficulty: "beginner",
+    instructions: "Test instructions",
+    video_url: "",
+    image_url: "",
+    equipment_image_url: "",
+    is_back_friendly: true,
+    back_issue_restrictions: [],
+    created_at: "",
+    updated_at: "",
+    sets: 3,
+    reps: 12,
+    weight: 0,
+    weight_unit: "kg"
+  },
+  {
+    id: 3,
+    name: "Barbell Squat",
+    description: "Heavy compound leg exercise",
+    category: "strength",
+    muscle_groups: ["quadriceps", "glutes", "hamstrings"],
+    equipment: "barbell",
+    difficulty: "intermediate",
+    instructions: "Test instructions",
+    video_url: "",
+    image_url: "",
+    equipment_image_url: "",
+    is_back_friendly: false,
+    back_issue_restrictions: [
+      {
+        id: 2,
+        exercise_id: 3,
+        issue_type: "l5_s1",
+        restriction_level: "high",
+        recommendation: "Avoid if pain is present",
+        created_at: "",
+        updated_at: ""
+      }
+    ],
+    created_at: "",
+    updated_at: "",
+    sets: 4,
+    reps: 8,
+    weight: 60,
+    weight_unit: "kg"
+  },
+  {
+    id: 4,
+    name: "Cable Pull",
+    description: "Upper back exercise",
+    category: "strength",
+    muscle_groups: ["lats", "upper_back", "rear_delts"],
+    equipment: "cable_machine",
+    difficulty: "intermediate",
+    instructions: "Test instructions",
+    video_url: "",
+    image_url: "",
+    equipment_image_url: "",
+    is_back_friendly: true,
+    back_issue_restrictions: [],
+    created_at: "",
+    updated_at: "",
+    sets: 3,
+    reps: 12,
+    weight: 20,
+    weight_unit: "kg"
+  }
+];
+
+describe('Plan Generator - Full Integration Tests', () => {
+  beforeEach(() => {
+    // Clear localStorage before each test
+    localStorage.clear();
+  });
+
+  test('should generate a complete training plan for beginner with no pain', () => {
+    // Setup plan settings
+    const planSettings: PlanSettings = {
+      goal: "Build muscle safely (gym-goer with back or sciatic pain)",
+      workoutsPerWeek: "3 days per week",
+      duration: "45 min",
+      experience: "Beginner",
+      trainingSplit: "Full Body",
+      exerciseVariability: "Balanced",
+      units: "kg",
+      cardio: "Off",
+      stretching: "Off"
+    };
+
+    // Setup quiz answers (no pain)
+    const quizAnswers = {
+      workoutType: "gym" as const,
+      answers: {
+        10: "Never" // painStatus
+      }
+    };
+
+    const availableEquipment = ["bodyweight", "hyperextension_bench", "cable_machine"];
+
+    // Generate plan
+    const plan = generateTrainingPlan(
+      mockExercises,
+      planSettings,
+      quizAnswers,
+      availableEquipment,
+      []
+    );
+
+    // Assertions
+    expect(plan).toBeDefined();
+    expect(plan.id).toBeDefined();
+    expect(plan.name).toContain("Full Body");
+    expect(plan.workoutDays.length).toBeGreaterThan(0);
+    expect(plan.workoutDays[0].exercises.length).toBeGreaterThan(0);
+
+    console.log('✅ Generated plan:', {
+      name: plan.name,
+      workoutDays: plan.workoutDays.length,
+      exercisesPerDay: plan.workoutDays[0]?.exercises.length,
+      firstExercise: plan.workoutDays[0]?.exercises[0]?.name
+    });
+  });
+
+  test('should filter out unsafe exercises for user with high pain', () => {
+    const painProfile = {
+      painStatus: "Yes, currently" as const,
+      painLevel: 8,
+      painLocation: ["Lower back (L5–S1)"],
+      painTriggers: ["Deadlifts / squats with weight"],
+      canSquat: "No"
+    };
+
+    const filtered = filterExercisesByProfile(mockExercises, {
+      availableEquipment: ["bodyweight", "barbell"],
+      painProfile,
+      experience: "Intermediate",
+      goal: "Build muscle safely"
+    });
+
+    // Should exclude Barbell Squat (high restriction + can't squat)
+    expect(filtered.find(e => e.id === 3)).toBeUndefined();
+
+    // Should include safe exercises
+    expect(filtered.find(e => e.id === 2)).toBeDefined();
+
+    console.log('✅ Filtered exercises:', filtered.map(e => e.name));
+  });
+
+  test('should calculate appropriate volume for different experience levels', () => {
+    const beginnerVolume = calculateVolume({
+      workoutDuration: "45 min",
+      experience: "Beginner",
+      goal: "Build muscle safely",
+      painLevel: 0
+    });
+
+    const advancedVolume = calculateVolume({
+      workoutDuration: "45 min",
+      experience: "Advanced",
+      goal: "Build muscle safely",
+      painLevel: 0
+    });
+
+    expect(advancedVolume.totalSetsPerWorkout).toBeGreaterThan(beginnerVolume.totalSetsPerWorkout);
+    expect(beginnerVolume.setsPerExercise).toBe(2);
+    expect(advancedVolume.setsPerExercise).toBe(4);
+
+    console.log('✅ Volume calculations:', {
+      beginner: beginnerVolume,
+      advanced: advancedVolume
+    });
+  });
+
+  test('should reduce volume when pain level is high', () => {
+    const noPainVolume = calculateVolume({
+      workoutDuration: "45 min",
+      experience: "Intermediate",
+      goal: "Build muscle safely",
+      painLevel: 0
+    });
+
+    const highPainVolume = calculateVolume({
+      workoutDuration: "45 min",
+      experience: "Intermediate",
+      goal: "Build muscle safely",
+      painLevel: 8
+    });
+
+    expect(highPainVolume.totalSetsPerWorkout).toBeLessThan(noPainVolume.totalSetsPerWorkout);
+    expect(highPainVolume.repsPerSet).toBe(15); // Higher reps for pain
+
+    console.log('✅ Pain-adjusted volume:', {
+      noPain: noPainVolume.totalSetsPerWorkout,
+      highPain: highPainVolume.totalSetsPerWorkout
+    });
+  });
+
+  test('should save and load plan from localStorage', () => {
+    const planSettings: PlanSettings = {
+      goal: "Build muscle safely",
+      workoutsPerWeek: "3 days per week",
+      duration: "30 min",
+      experience: "Beginner",
+      trainingSplit: "Full Body",
+      exerciseVariability: "Balanced",
+      units: "kg",
+      cardio: "Off",
+      stretching: "Off"
+    };
+
+    const plan = generateTrainingPlan(
+      mockExercises,
+      planSettings,
+      null,
+      ["bodyweight"],
+      []
+    );
+
+    // Save to localStorage
+    savePlanToLocalStorage(plan);
+
+    // Load from localStorage
+    const loadedPlan = loadPlanFromLocalStorage();
+
+    expect(loadedPlan).toBeDefined();
+    expect(loadedPlan?.id).toBe(plan.id);
+    expect(loadedPlan?.name).toBe(plan.name);
+
+    console.log('✅ Plan saved and loaded successfully');
+  });
+
+  test('should get today\'s workout from plan', () => {
+    const planSettings: PlanSettings = {
+      goal: "Build muscle safely",
+      workoutsPerWeek: "3 days per week",
+      duration: "30 min",
+      experience: "Intermediate",
+      trainingSplit: "Full Body",
+      exerciseVariability: "Balanced",
+      units: "kg",
+      cardio: "Off",
+      stretching: "Off"
+    };
+
+    const plan = generateTrainingPlan(
+      mockExercises,
+      planSettings,
+      null,
+      ["bodyweight", "cable_machine"],
+      []
+    );
+
+    const todaysWorkout = getTodaysWorkout(plan);
+
+    // May be null if today is a rest day
+    if (todaysWorkout) {
+      expect(todaysWorkout.exercises.length).toBeGreaterThan(0);
+      console.log('✅ Today\'s workout:', {
+        day: todaysWorkout.dayName,
+        exercises: todaysWorkout.exercises.length
+      });
+    } else {
+      console.log('✅ Today is a rest day');
+    }
+  });
+});
+
+describe('Progressive Overload Tests', () => {
+  test('should suggest weight increase for consistent training', () => {
+    const exercise = mockExercises[3]; // Cable Pull
+
+    const workoutHistory: FinishedWorkoutSummary[] = [
+      {
+        id: "workout1",
+        finishedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
+        duration: "00:45:00",
+        totalVolume: 720,
+        exerciseCount: 4,
+        caloriesBurned: 250,
+        completedExercises: [exercise],
+        completedExerciseLogs: {
+          4: [
+            { reps: "12", weight: "20", completed: true },
+            { reps: "12", weight: "20", completed: true },
+            { reps: "13", weight: "20", completed: true }
+          ]
+        }
+      }
+    ];
+
+    const progression = generateProgressionSuggestion(exercise, workoutHistory);
+
+    expect(progression.lastPerformed).toBeDefined();
+    expect(progression.suggestion.weight).toBeGreaterThanOrEqual(20);
+
+    console.log('✅ Progression suggestion:', progression.suggestion);
+  });
+
+  test('should suggest deload after missed training', () => {
+    const exercise = mockExercises[3];
+
+    const workoutHistory: FinishedWorkoutSummary[] = [
+      {
+        id: "workout1",
+        finishedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days ago
+        duration: "00:45:00",
+        totalVolume: 720,
+        exerciseCount: 4,
+        caloriesBurned: 250,
+        completedExercises: [exercise],
+        completedExerciseLogs: {
+          4: [
+            { reps: "12", weight: "20", completed: true }
+          ]
+        }
+      }
+    ];
+
+    const progression = generateProgressionSuggestion(exercise, workoutHistory);
+
+    expect(progression.suggestion.reason).toContain("Missed");
+    expect(progression.suggestion.weight).toBeLessThanOrEqual(20);
+
+    console.log('✅ Deload suggestion:', progression.suggestion);
+  });
+
+  test('should check training consistency', () => {
+    const consistentHistory: FinishedWorkoutSummary[] = [
+      {
+        id: "1",
+        finishedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        duration: "00:45:00",
+        totalVolume: 500,
+        exerciseCount: 4,
+        caloriesBurned: 200,
+        completedExercises: [],
+        completedExerciseLogs: {}
+      },
+      {
+        id: "2",
+        finishedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        duration: "00:45:00",
+        totalVolume: 500,
+        exerciseCount: 4,
+        caloriesBurned: 200,
+        completedExercises: [],
+        completedExerciseLogs: {}
+      },
+      {
+        id: "3",
+        finishedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        duration: "00:45:00",
+        totalVolume: 500,
+        exerciseCount: 4,
+        caloriesBurned: 200,
+        completedExercises: [],
+        completedExerciseLogs: {}
+      }
+    ];
+
+    const consistency = checkTrainingConsistency(consistentHistory, 14);
+
+    expect(consistency.isConsistent).toBe(true);
+    expect(consistency.longestGap).toBeLessThanOrEqual(7);
+
+    console.log('✅ Training consistency:', consistency);
+  });
+});
+
+describe('Exercise Per Workout Calculation', () => {
+  test('should calculate correct number of exercises', () => {
+    const totalSets = 12;
+    const setsPerExercise = 3;
+
+    const exercisesCount = calculateExercisesPerWorkout(totalSets, setsPerExercise);
+
+    expect(exercisesCount).toBe(4);
+
+    console.log('✅ Exercises per workout:', exercisesCount);
+  });
+});
+
+// Run all tests
+console.log('🧪 Starting Plan Generator Tests...\n');

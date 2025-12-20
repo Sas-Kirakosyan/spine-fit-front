@@ -13,6 +13,10 @@ import { FinishWorkoutModal } from "@/pages/WorkoutPage/FinishWorkoutModal";
 import { calculateWorkoutVolume } from "@/utils/workoutStats";
 import { ActiveWorkoutHeader } from "@/pages/WorkoutPage/ActiveWorkoutHeader";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
+import {
+  loadPlanFromLocalStorage,
+  getTodaysWorkout,
+} from "@/utils/planGenerator";
 
 export function ActiveWorkoutPage({
   onNavigateBack,
@@ -37,6 +41,24 @@ export function ActiveWorkoutPage({
   );
   const cardRef = useRef<HTMLDivElement | null>(null);
 
+  // Load today's workout from generated plan if no exercises are provided
+  const effectiveExercises = useMemo(() => {
+    if (exercises && exercises.length > 0) {
+      return exercises;
+    }
+
+    // Try to load from generated plan
+    const generatedPlan = loadPlanFromLocalStorage();
+    if (generatedPlan) {
+      const todaysWorkout = getTodaysWorkout(generatedPlan);
+      if (todaysWorkout && todaysWorkout.exercises.length > 0) {
+        return todaysWorkout.exercises;
+      }
+    }
+
+    return exercises;
+  }, [exercises]);
+
   useEffect(() => {
     if (workoutStartTime) {
       setAdjustedStartTime(workoutStartTime);
@@ -51,16 +73,18 @@ export function ActiveWorkoutPage({
 
   const allExercisesCompleted = useMemo(() => {
     return (
-      exercises.length > 0 &&
-      exercises.every((exercise) => completedExerciseIdsSet.has(exercise.id))
+      effectiveExercises.length > 0 &&
+      effectiveExercises.every((exercise) =>
+        completedExerciseIdsSet.has(exercise.id)
+      )
     );
-  }, [completedExerciseIdsSet, exercises]);
+  }, [completedExerciseIdsSet, effectiveExercises]);
 
   const completedExercises = useMemo(() => {
-    return exercises.filter((exercise) =>
+    return effectiveExercises.filter((exercise) =>
       completedExerciseIdsSet.has(exercise.id)
     );
-  }, [completedExerciseIdsSet, exercises]);
+  }, [completedExerciseIdsSet, effectiveExercises]);
 
   const handleFinishWorkout = () => {
     if (allExercisesCompleted) {
@@ -134,7 +158,15 @@ export function ActiveWorkoutPage({
             {formatTime(elapsedSeconds)}
           </p>
         </section>
-        {exercises.map((exercise, index) => {
+        {effectiveExercises.length === 0 && (
+          <div className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center">
+            <p className="text-white/60">No exercises for today's workout.</p>
+            <p className="text-sm text-white/40 mt-2">
+              Generate a plan in My Plan page to get started.
+            </p>
+          </div>
+        )}
+        {effectiveExercises.map((exercise, index) => {
           const isCompleted = completedExerciseIdsSet.has(exercise.id);
           return (
             <ExerciseCard
@@ -171,7 +203,7 @@ export function ActiveWorkoutPage({
             }}
             containerRef={cardRef}
           />
-        )}                                  
+        )}
         <FinishWorkoutModal
           isOpen={showFinishModal}
           onClose={handleResume}

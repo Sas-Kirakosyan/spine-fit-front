@@ -16,6 +16,15 @@ import {
   loadPlanSettings,
   savePlanSettings,
 } from "@/types/planSettings";
+import {
+  generateTrainingPlan,
+  savePlanToLocalStorage,
+  type GeneratedPlan,
+} from "@/utils/planGenerator";
+import allExercisesData from "@/MockData/allExercise.json";
+import type { Exercise } from "@/types/exercise";
+import type { FinishedWorkoutSummary } from "@/types/workout";
+import type { QuizAnswers } from "@/types/quiz";
 
 export function MyPlanPage({
   onNavigateBack,
@@ -30,6 +39,10 @@ export function MyPlanPage({
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentField, setCurrentField] = useState<PlanFieldId | null>(null);
+  const [generatedPlan, setGeneratedPlan] = useState<GeneratedPlan | null>(
+    null
+  );
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     const calculateSelectedCount = () => {
@@ -94,6 +107,65 @@ export function MyPlanPage({
     setCurrentField(null);
   };
 
+  const handleGeneratePlan = () => {
+    setIsGenerating(true);
+
+    try {
+      // Load quiz answers from localStorage
+      const quizDataString = localStorage.getItem("quizAnswers");
+      const quizData: QuizAnswers | null = quizDataString
+        ? JSON.parse(quizDataString)
+        : null;
+
+      // Load equipment data
+      const equipmentDataString = localStorage.getItem("equipmentData");
+      const equipmentData: EquipmentCategory[] = equipmentDataString
+        ? JSON.parse(equipmentDataString)
+        : [];
+
+      // Extract available equipment names
+      const availableEquipment = equipmentData.flatMap((category) =>
+        category.items.filter((item) => item.selected).map((item) => item.name)
+      );
+
+      // Load workout history
+      const historyString = localStorage.getItem("workoutHistory");
+      const workoutHistory: FinishedWorkoutSummary[] = historyString
+        ? JSON.parse(historyString)
+        : [];
+
+      // Generate the plan
+      const plan = generateTrainingPlan(
+        allExercisesData as Exercise[],
+        planSettings,
+        quizData,
+        bodyweightOnly ? ["bodyweight"] : availableEquipment,
+        workoutHistory
+      );
+
+      // Save to localStorage
+      savePlanToLocalStorage(plan);
+
+      // Update state
+      setGeneratedPlan(plan);
+
+      alert(
+        `✅ Plan Generated!\n\n${plan.name}\n\n${
+          plan.workoutDays.length
+        } workouts per week with ${
+          plan.workoutDays[0]?.exercises.length || 0
+        } exercises per day.`
+      );
+    } catch (error) {
+      console.error("Error generating plan:", error);
+      alert(
+        "Failed to generate plan. Please check your settings and try again."
+      );
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <PageContainer contentClassName="gap-8 px-3">
       <MyPlanPageHeader onNavigateBack={onNavigateBack} />
@@ -106,7 +178,9 @@ export function MyPlanPage({
         >
           <span className="text-lg font-semibold">Goal</span>
           <div className="flex items-center gap-2">
-            <span className="text-l ml-10 font-semibold">{planSettings.goal}</span>
+            <span className="text-l ml-10 font-semibold">
+              {planSettings.goal}
+            </span>
             <ChevronRightIcon className="h-5 w-5" />
           </div>
         </Button>
@@ -353,6 +427,69 @@ export function MyPlanPage({
             </div>
           </div>
         </div>
+
+        {/* Generate Plan Button */}
+        <Button
+          onClick={handleGeneratePlan}
+          disabled={isGenerating}
+          className="w-full rounded-[14px] bg-main p-4 text-white font-semibold text-lg hover:bg-main/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isGenerating ? "Generating..." : "Generate Plan"}
+        </Button>
+
+        {/* Generated Plan Preview */}
+        {generatedPlan && (
+          <div className="flex flex-col gap-3">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">
+              GENERATED PLAN
+            </h2>
+            <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
+              <div className="space-y-3">
+                <div>
+                  <p className="text-lg font-semibold text-white">
+                    {generatedPlan.name}
+                  </p>
+                  <p className="text-sm text-white/60 mt-1">
+                    Created:{" "}
+                    {new Date(generatedPlan.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+
+                {generatedPlan.workoutDays.map((day) => (
+                  <div
+                    key={day.dayNumber}
+                    className="border-t border-white/10 pt-3"
+                  >
+                    <p className="text-base font-medium text-white mb-1">
+                      {day.dayName}
+                    </p>
+                    <p className="text-sm text-white/60">
+                      {day.exercises.length} exercises •{" "}
+                      {day.exercises[0]?.sets || 0} sets each
+                    </p>
+                  </div>
+                ))}
+
+                {generatedPlan.missingMuscleGroups.length > 0 && (
+                  <div className="mt-3 p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
+                    <p className="text-sm font-medium text-yellow-500 mb-1">
+                      ⚠️ Missing Muscle Groups
+                    </p>
+                    <p className="text-xs text-white/60">
+                      {generatedPlan.missingMuscleGroups.join(", ")}
+                    </p>
+                    {generatedPlan.alternativeExercises.length > 0 && (
+                      <p className="text-xs text-white/60 mt-2">
+                        {generatedPlan.alternativeExercises.length} alternative
+                        exercises suggested
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Selection Modal */}

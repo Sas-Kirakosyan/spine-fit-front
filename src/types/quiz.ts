@@ -27,3 +27,9 @@ export interface QuizModalProps {
   onQuizComplete?: () => void;
 }
 
+export interface QuizAnswers {
+  workoutType: "home" | "gym";
+  answers: Record<number, number | number[] | string>;
+  units?: Record<number, string>;
+  timestamp?: string;
+}

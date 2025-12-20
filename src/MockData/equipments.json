@@ -1102,5 +1102,55 @@
     "updated_at": null,
     "version": 1,
     "details_overview": "The Bicep Curl Machine is a seated upper-body strength station with two parallel handles that can be curled upward using elbow flexion. It primarily trains the biceps, emphasizing a different region of the biceps compared to the preacher curl machine. Most commercial gym models allow seat height and resistance (weight stack or external plates depending on version) to be adjusted to fit a wide range of exerciser body sizes, shapes, and strength levels. Some models also support grip-position or handle-angle changes to further isolate or bias different zones of biceps contraction. To reduce injury leverage and neck compensation risk, the user keeps their head pressed firmly into the backrest while curling in smooth controlled tempo, avoiding swinging from the bottom, and stopping immediately if sharp pain or nerve tension increases."
+  },
+  {
+    "id": "eq_belt_squat_01",
+    "key": "belt_squat_machine",
+    "type": "machine",
+    "name": "Belt Squat Machine",
+    "aliases": ["belt squat", "hip belt squat machine"],
+    "load_type": "lever",
+    "selectorized": false,
+    "pulley_ratio": {
+      "default": null,
+      "alternatives": [],
+      "notes": "Weight hangs directly from belt via cable or lever system."
+    },
+    "weight_stack_kg": null,
+    "height_range_cm": { "min": 140, "max": 200, "increment_cm": null },
+    "attachments_supported": ["dip_belt", "hip_belt"],
+    "primary_muscles": ["quads", "glutes", "hamstrings", "calves"],
+    "movement_patterns": ["vertical_squat", "hip_extension", "knee_extension"],
+    "execution_cues": [
+      "Upright torso",
+      "Weight on hips",
+      "Feet planted",
+      "Controlled descent"
+    ],
+    "safety_notes": {
+      "l5_s1": [
+        "Minimal spinal load",
+        "Keep torso upright",
+        "Avoid excessive forward lean"
+      ],
+      "herniated_disc": [
+        "Excellent choice - removes spinal compression",
+        "Load is on pelvis, not spine"
+      ],
+      "sciatica": ["No direct disc pressure", "Stop if nerve pain occurs"]
+    },
+    "media": {
+      "thumbnail": "https://www.roguefitness.com/media/catalog/product/r/h/rhino-belt-squat-h1.jpg",
+      "images": [
+        "https://www.roguefitness.com/media/catalog/product/r/h/rhino-belt-squat-h1.jpg",
+        "https://www.stack.com/wp-content/uploads/2020/09/Belt-Squat.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A specialized lower-body strength machine where weight hangs from a belt secured around the hips rather than resting on the shoulders like traditional barbell squats. This unique loading pattern removes spinal compression and makes it ideal for individuals with lower back concerns including lumbar pain (L4-L5/L5-S1), herniated disc history, sciatica tendencies, or shoulder injuries preventing barbell use. The machine targets the same muscle groups as traditional squats (quads, glutes, hamstrings, and calves) while promoting a more upright torso position with less forward lean, resulting in safer mechanics for the spine. Athletes and lifters use belt squats to build leg strength and muscle hypertrophy when barbell squats pose injury risk. Most belt squat machines use plate-loaded systems where weight is added directly to a lever arm or cable pulley, and some specialized models include adjustable platforms to accommodate different user heights and squat depths.",
+    "is_back_friendly": true,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
   }
 ]
