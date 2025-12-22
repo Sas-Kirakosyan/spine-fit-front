@@ -101,6 +101,36 @@ export const questions: QuizQuestion[] = [
         description: "Higher fat storage around waist and hips",
       },
     ],
+    optionsFemale: [
+      {
+        value: "18-24",
+        label: "18–24% (Lean / Athletic)",
+        image: "/quiz/female-18-24.png",
+        description: "Visible muscle definition, athletic build",
+      },
+      {
+        value: "25-31",
+        label: "25–31% (Fit/Average)",
+        image: "/quiz/female-25-31.png",
+        description: "Healthy, balanced physique",
+      },
+      {
+        value: "32-38",
+        label: "32–38% (Overfat)",
+        image: "/quiz/female-32-38.png",
+        description: "Soft midsection, limited muscle definition",
+      },
+      {
+        value: "38+",
+        label: "38%+ (High body fat)",
+        image: "/quiz/female-38-plus.png",
+        description: "Higher fat storage around waist and hips",
+      },
+    ],
+    showIf: {
+      fieldName: "gender",
+      showOptionsBasedOn: true,
+    },
     optional: true,
   },
 
@@ -165,11 +195,13 @@ export const questions: QuizQuestion[] = [
     question: "What movements trigger or triggered your pain?",
     type: "checkbox",
     options: [
+      "walking",
       "Bending forward",
       "Lifting heavy objects",
       "Long sitting",
       "Running or jumping",
       "Deadlifts / squats with weight",
+      "Other activities",
     ],
     showIf: {
       fieldName: "painStatus",

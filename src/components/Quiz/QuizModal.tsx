@@ -47,11 +47,11 @@ export function QuizModal({
       if (dependentQuestion.type === "radio") {
         const optionIndex = dependentAnswer as number;
         const selectedOption = dependentQuestion.options?.[optionIndex];
-        
+
         if (equals !== undefined) {
           return selectedOption === equals;
         }
-        
+
         if (inArray !== undefined) {
           return inArray.includes(selectedOption as string);
         }
@@ -60,19 +60,21 @@ export function QuizModal({
         const selectedOptions = selectedIndices.map(
           (i) => dependentQuestion.options?.[i]
         );
-        
+
         if (equals !== undefined) {
           return selectedOptions.includes(equals as string);
         }
-        
+
         if (inArray !== undefined) {
-          return selectedOptions.some((option) => inArray.includes(option as string));
+          return selectedOptions.some((option) =>
+            inArray.includes(option as string)
+          );
         }
       } else if (dependentQuestion.type === "input") {
         if (equals !== undefined) {
           return dependentAnswer === equals;
         }
-        
+
         if (inArray !== undefined) {
           return inArray.includes(dependentAnswer as string);
         }
@@ -276,7 +278,7 @@ export function QuizModal({
       );
       savedQuizzes.push(quizData);
       localStorage.setItem("quizAnswers", JSON.stringify(savedQuizzes));
-
+      console.log("quizData:", quizData);
       setCurrentQuestion(0);
       setSelectedAnswer(null);
       setSelectedCheckboxes([]);
@@ -379,6 +381,25 @@ export function QuizModal({
 
   if (!isOpen) return null;
 
+  const question = filteredQuestions[currentQuestion];
+  
+  // Determine which options to show for body type question
+  const getDisplayOptions = () => {
+    if (question.fieldName === "bodyType" && question.type === "image_radio") {
+      const genderQuestion = questions.find((q) => q.fieldName === "gender");
+      if (genderQuestion) {
+        const genderAnswer = answers[genderQuestion.id];
+        // Female selected (index 1)
+        if (genderAnswer === 1 && question.optionsFemale) {
+          return question.optionsFemale;
+        }
+      }
+    }
+    return question.options;
+  };
+
+  const displayOptions = getDisplayOptions();
+
   const optionListClass = "space-y-3 max-h-[360px] overflow-y-auto pr-1 -mr-1";
 
   return (
@@ -422,7 +443,7 @@ export function QuizModal({
 
                   {filteredQuestions[currentQuestion].type === "radio" && (
                     <div className={optionListClass}>
-                      {filteredQuestions[currentQuestion].options?.map(
+                      {displayOptions?.map(
                         (option, index) => (
                           <QuizRadioOption
                             key={index}
@@ -439,7 +460,7 @@ export function QuizModal({
                   {filteredQuestions[currentQuestion].type ===
                     "image_radio" && (
                     <div className={optionListClass}>
-                      {filteredQuestions[currentQuestion].options?.map(
+                      {displayOptions?.map(
                         (option, index) => (
                           <QuizImageRadioOption
                             key={index}

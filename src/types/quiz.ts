@@ -7,6 +7,7 @@ export interface QuizQuestion {
   description?: string;
   buttonText?: string;
   options?: string[] | { value: string; label: string; image: string; description: string }[];
+  optionsFemale?: { value: string; label: string; image: string; description: string }[];
   correctAnswer?: number | number[] | string | number;
   inputType?: "number" | "text";
   placeholder?: string;
@@ -17,6 +18,7 @@ export interface QuizQuestion {
     fieldName: string;
     equals?: string | number;
     in?: string[];
+    showOptionsBasedOn?: boolean;
   };
 }
 
