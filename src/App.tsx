@@ -117,7 +117,8 @@ function App() {
   const navigateToHistory = () => setCurrentPage("history");
   const navigateToAllExercise = () => setCurrentPage("allExercise");
   const navigateToMyPlan = () => setCurrentPage("myPlan");
-  const navigateToAvailableEquipment = () => setCurrentPage("availableEquipment");
+  const navigateToAvailableEquipment = () =>
+    setCurrentPage("availableEquipment");
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
@@ -303,11 +304,7 @@ function App() {
           />
         );
       case "availableEquipment":
-        return (
-          <AvailableEquipmentPage
-            onNavigateBack={navigateToMyPlan}
-          />
-        );
+        return <AvailableEquipmentPage onNavigateBack={navigateToMyPlan} />;
       default:
         return (
           <HomePage

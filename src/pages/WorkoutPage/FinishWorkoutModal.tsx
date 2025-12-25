@@ -45,12 +45,12 @@ export function FinishWorkoutModal({
       />
 
       <div className="relative z-50 w-full">
-        <div className="bg-[#0E1224] border-t border-slate-700 rounded-t-[30px]">
+        <div className="bg-[#0E1224] border-t border-slate-700 rounded-t-[30px] max-h-[90vh] overflow-y-auto">
           <div className="flex justify-center pt-4">
             <span className="h-1 w-10 rounded-full bg-slate-700" />
           </div>
 
-          <div className="space-y-6 px-6 pb-8 pt-6">
+          <div className="space-y-6 px-6 pb-8 pt-6 safe-area-bottom">
             <div className="text-center">
               <h2 className="text-xl font-semibold text-white">
                 Finish and log your workout?

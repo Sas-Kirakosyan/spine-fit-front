@@ -167,10 +167,10 @@ export function MyPlanPage({
   };
 
   return (
-    <PageContainer contentClassName="gap-8 px-3">
+    <PageContainer contentClassName="gap-8 px-2.5">
       <MyPlanPageHeader onNavigateBack={onNavigateBack} />
 
-      <div className="flex flex-col flex-1 gap-6">
+      <div className="flex flex-col flex-1 gap-6 pb-24">
         {/* Goal Section */}
         <Button
           onClick={() => handleFieldClick("goal")}
@@ -432,7 +432,7 @@ export function MyPlanPage({
         <Button
           onClick={handleGeneratePlan}
           disabled={isGenerating}
-          className="w-full rounded-[14px] bg-main p-4 text-white font-semibold text-lg hover:bg-main/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[420px] rounded-[14px] bg-main p-4 text-white font-semibold text-lg"
         >
           {isGenerating ? "Generating..." : "Generate Plan"}
         </Button>

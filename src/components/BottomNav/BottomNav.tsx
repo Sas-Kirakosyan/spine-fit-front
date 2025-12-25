@@ -22,7 +22,7 @@ export function BottomNav({
   onHistoryClick,
 }: BottomNavProps) {
   return (
-    <nav className="bg-[#1B1E2B] flex justify-evenly gap-4 rounded-[10px] w-[400px]">
+    <nav className="bg-[#1B1E2B] flex justify-evenly gap-4 rounded-[10px] w-full max-w-[440px]">
       <button
         type="button"
         className={getNavButtonClassName(activePage === "workout")}

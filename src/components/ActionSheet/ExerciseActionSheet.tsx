@@ -10,7 +10,7 @@ export function ExerciseActionSheet({
   onShowDetails,
   onStartWorkout,
   onDelete,
-  containerRef,
+  containerRef: _containerRef,
 }: ExerciseActionSheetProps) {
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
@@ -26,7 +26,7 @@ export function ExerciseActionSheet({
   }, [onClose]);
 
   const sheetContent = (
-    <div className="absolute h-full w-full z-1000 inset-0 z-40 flex flex-col justify-end">
+    <div className="fixed inset-0 z-40 flex flex-col justify-end">
       <div
         role="button"
         tabIndex={-1}
@@ -35,13 +35,13 @@ export function ExerciseActionSheet({
         className="absolute inset-0 cursor-default bg-black/50"
       />
 
-      <div className="relative z-50 w-full">
-        <div className="bg-[#161827] h-[420px] border-t rounded-t-[30px]">
+      <div className="relative z-50 w-full max-w-[440px] mx-auto">
+        <div className="bg-[#161827] min-h-[300px] max-h-[85vh] border-t rounded-t-[30px] flex flex-col">
           <div className="flex justify-center pt-4">
             <span className="h-1 w-10 rounded-full bg-slate-700" />
           </div>
 
-          <div className="space-y-6 px-5 pb-8 pt-4 sm:px-6">
+          <div className="space-y-6 px-5 pb-8 pt-4 sm:px-6 flex-1 overflow-y-auto">
             <div>
               <h2 className="mt-2 text-2xl text-center font-semibold text-white">
                 {exercise.name}
@@ -82,5 +82,5 @@ export function ExerciseActionSheet({
     </div>
   );
 
-  return createPortal(sheetContent, containerRef.current ?? document.body);
+  return createPortal(sheetContent, document.body);
 }

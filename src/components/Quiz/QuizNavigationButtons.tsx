@@ -28,11 +28,11 @@ export function QuizNavigationButtons({
   const isLastQuestion = currentQuestion >= totalQuestions - 1;
 
   return (
-    <div className="mt-6 mr-4 flex items-center justify-between text-white">
+    <div className="mt-6 mx-4 flex items-center justify-between text-white">
       {isOptional ? (
         <button
           onClick={onSkip}
-          className="rounded-full ml-4 mb-5 bg-white/10 px-6 py-2 text-sm font-medium transition hover:bg-white/20"
+          className="rounded-full mb-5 bg-white/10 px-4 py-2 text-sm font-medium transition hover:bg-white/20 sm:px-6"
         >
           Skip
         </button>

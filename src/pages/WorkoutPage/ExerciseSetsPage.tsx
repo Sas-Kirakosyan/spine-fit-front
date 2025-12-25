@@ -470,12 +470,12 @@ export function ExerciseSetsPage({
         {allSetsCompleted ? (
           <Button
             onClick={handleCompleteExercise}
-            className="mr-[20px] ml-[20px] h-[44px] rounded-[12px] bg-emerald-500 text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30"
+            className="mx-5 h-[44px] rounded-[12px] bg-emerald-500 text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30"
           >
             DONE
           </Button>
         ) : isDuringActiveWorkout ? (
-          <div className="mr-[20px] ml-[20px] flex flex-col gap-3 sm:flex-row">
+          <div className="mx-5 flex flex-col gap-3 sm:flex-row">
             <Button
               onClick={handleLogAllSets}
               disabled={!canLogAllSets}
@@ -494,7 +494,7 @@ export function ExerciseSetsPage({
         ) : (
           <Button
             onClick={onStartWorkoutSession}
-            className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-main text-white uppercase"
+            className="mx-5 h-[40px] rounded-[10px] bg-main text-white uppercase"
           >
             START Workout
           </Button>

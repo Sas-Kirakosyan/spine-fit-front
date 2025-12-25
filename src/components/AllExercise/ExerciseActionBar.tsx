@@ -17,7 +17,7 @@ function ExerciseActionBar({
   }
 
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 pb-6 flex">
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 pb-6 flex w-full max-w-[400px] px-5 gap-3 safe-area-bottom">
       {onGroupAs && (
         <Button
           onClick={onGroupAs}
@@ -28,7 +28,7 @@ function ExerciseActionBar({
       )}
       <Button
         onClick={onAddExercises}
-        className="flex-1 px-4 py-3 w-[360px] rounded-[10px] bg-red-500 text-white font-medium"
+        className="flex-1 px-4 py-3 rounded-[10px] bg-red-500 text-white font-medium"
       >
         Add {selectedCount} {selectedCount === 1 ? "Exercise" : "Exercises"}
       </Button>

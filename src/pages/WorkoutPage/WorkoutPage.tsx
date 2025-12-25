@@ -3,12 +3,13 @@ import exerciseData from "@/MockData/exercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { WorkoutPageProps } from "@/types/workout";
-import { ExerciseActionSheet } from "@/pages/WorkoutPage/ExercisePopUp";
+import { ExerciseActionSheet } from "@/components/ActionSheet/ExerciseActionSheet";
 import { Button } from "@/components/Buttons/Button";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { WorkoutPageHeader } from "./WorkoutPageHeader";
+import { WorkoutPlanCard } from "@/pages/WorkoutPage/WorkoutPlanCard";
 
 const defaultExercises: Exercise[] = exerciseData as Exercise[];
 
@@ -31,12 +32,12 @@ export function WorkoutPage({
 
   return (
     <PageContainer>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pr-2.5">
         <Logo />
         {onNavigateToHome && (
           <Button
             onClick={onNavigateToHome}
-            className="flex items-center gap-2 rounded-[14px] bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-white/20"
+            className="flex items-center gap-2 rounded-[14px] bg-white/10 px-2.5 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-white/20"
           >
             Back to Home
           </Button>
@@ -51,7 +52,9 @@ export function WorkoutPage({
           }}
         />
 
-        <section className="flex-1 space-y-3">
+        <WorkoutPlanCard containerRef={cardRef} />
+
+        <section className="flex-1 space-y-3 mx-2.5">
           {exercises.map((exercise, index) => (
             <ExerciseCard
               key={`${exercise.id}-${index}`}
@@ -98,10 +101,10 @@ export function WorkoutPage({
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-[400px]">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
         <Button
           onClick={onStartWorkoutSession}
-          className="w-[360px] mr-[20px] ml-[20px] mb-[30px] h-[40px] rounded-[10px] bg-main text-white uppercase"
+          className="w-[420px] flex justify-center items-center mx-auto mb-[30px] h-[44px] rounded-[10px] bg-main text-white uppercase"
         >
           START Workout
         </Button>

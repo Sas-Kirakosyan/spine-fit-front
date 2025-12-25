@@ -31,9 +31,14 @@ export function ExerciseDetails({
   onNavigateBack,
   onStartWorkout,
 }: ExerciseDetailsProps) {
+  const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onNavigateBack();
+  };
+
   return (
     <PageContainer
-      contentClassName="bg-[#161827] rounded-[32px] overflow-hidden ring-1 ring-white/10"
+      contentClassName="bg-[#161827] overflow-hidden ring-1 ring-white/10"
       minHeightClassName="min-h-[680px]"
     >
       <div className="flex h-full flex-col">
@@ -46,9 +51,9 @@ export function ExerciseDetails({
           <div className="absolute inset-0 bg-gradient-to-t from-[#161827] via-transparent to-black/40" />
           <button
             type="button"
-            onClick={onNavigateBack}
-            className="absolute left-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-slate-200 transition hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
-            aria-label="Вернуться к списку упражнений"
+            onClick={handleBackClick}
+            className="absolute left-6 top-6 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-slate-200 transition hover:bg-black/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
+            aria-label="back to workout list"
           >
             <svg
               aria-hidden="true"
