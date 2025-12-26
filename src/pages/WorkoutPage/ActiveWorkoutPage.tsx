@@ -8,7 +8,7 @@ import type {
 import { formatTime } from "@/utils/date";
 import { iconButtonClass } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
-import { ExerciseActionSheet } from "@/pages/WorkoutPage/ExercisePopUp";
+import { ExerciseActionSheet } from "@/components/ActionSheet/ExerciseActionSheet";
 import { FinishWorkoutModal } from "@/pages/WorkoutPage/FinishWorkoutModal";
 import { calculateWorkoutVolume } from "@/utils/workoutStats";
 import { ActiveWorkoutHeader } from "@/pages/WorkoutPage/ActiveWorkoutHeader";
@@ -181,7 +181,7 @@ export function ActiveWorkoutPage({
         })}
         <Button
           onClick={handleFinishWorkout}
-          className="mr-[20px] ml-[20px] h-[40px] rounded-[10px] bg-red-600 text-white uppercase"
+          className="mx-5 h-[40px] rounded-[10px] bg-red-600 text-white uppercase"
         >
           Finish Workout
         </Button>

@@ -17,12 +17,12 @@ export function PageContainer({
   contentClassName = "",
   minHeightClassName = "min-h-[690px]",
   isStandalone = true,
-  fallbackBackgroundClassName = "bg-gray-700",
+  fallbackBackgroundClassName = "bg-background",
 }: PageContainerProps) {
   const hasBackgroundImage = Boolean(backgroundImage);
 
   const card = (
-    <div className="relative w-[400px] min-h-screen">
+    <div className="relative w-full max-w-[440px] min-h-screen">
       <div
         className={`absolute inset-0 ${
           hasBackgroundImage

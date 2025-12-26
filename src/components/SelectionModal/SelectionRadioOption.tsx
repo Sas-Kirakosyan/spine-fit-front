@@ -14,9 +14,9 @@ export function SelectionRadioOption({
   onSelect,
 }: SelectionRadioOptionProps) {
   return (
-    <button
+    <div
       onClick={() => onSelect(index)}
-      className={`w-full rounded-lg border-2 p-4 text-left transition ${
+      className={`w-full rounded-lg border-2 p-4 text-left transition cursor-pointer ${
         isSelected
           ? "border-main bg-main/10 text-white"
           : "border-gray-200 hover:border-main/50 "
@@ -37,6 +37,6 @@ export function SelectionRadioOption({
           )}
         </div>
       </div>
-    </button>
+    </div>
   );
 }

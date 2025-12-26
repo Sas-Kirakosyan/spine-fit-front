@@ -381,6 +381,8 @@ export function QuizModal({
 
   if (!isOpen) return null;
 
+  const optionListClass =
+    "space-y-3 max-h-[50vh] md:max-h-[360px] overflow-y-auto pr-1 -mr-1";
   const question = filteredQuestions[currentQuestion];
   
   // Determine which options to show for body type question
@@ -400,13 +402,11 @@ export function QuizModal({
 
   const displayOptions = getDisplayOptions();
 
-  const optionListClass = "space-y-3 max-h-[360px] overflow-y-auto pr-1 -mr-1";
-
   return (
     <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
-      <div className="relative w-full h-full md:max-w-[400px] md:h-auto">
+      <div className="relative w-full h-full max-w-full md:max-w-[400px] md:h-auto md:max-h-[90vh]">
         <div className="absolute inset-0 bg-background" />
-        <div className="relative z-10 flex flex-col h-full md:min-h-[700px]">
+        <div className="relative z-10 flex flex-col h-full md:min-h-[700px] md:max-h-[90vh]">
           <div className="flex flex-col flex-1 justify-between min-h-0">
             <QuizHeader
               currentQuestionNumber={currentQuestionNumber}
@@ -415,7 +415,7 @@ export function QuizModal({
               onClose={onClose}
             />
 
-            <div className="mt-6 px-2 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
+            <div className="mt-6 px-2.5 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
               <div className="rounded-2xl bg-white/95 p-4 md:p-6 text-gray-800 shadow-lg backdrop-blur">
                 <QuizProgressBar
                   currentQuestionNumber={currentQuestionNumber}

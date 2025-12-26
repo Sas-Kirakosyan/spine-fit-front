@@ -160,12 +160,14 @@ export function HistoryPage({
         <WorkoutHistoryList workouts={workouts} selectedDate={selectedDate} />
       </section>
 
-      <BottomNav
-        activePage={activePage}
-        onWorkoutClick={onNavigateToWorkout}
-        onProfileClick={onNavigateToProfile}
-        onHistoryClick={onNavigateToHistory}
-      />
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
+        <BottomNav
+          activePage={activePage}
+          onWorkoutClick={onNavigateToWorkout}
+          onProfileClick={onNavigateToProfile}
+          onHistoryClick={onNavigateToHistory}
+        />
+      </div>
     </PageContainer>
   );
 }

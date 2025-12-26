@@ -10,7 +10,7 @@ export function AuthSwitchLink({
   onClick,
 }: AuthSwitchLinkProps) {
   return (
-    <div className="mt-6 text-center text-sm text-white">
+    <div className="mt-6 mb-4 text-center text-sm text-white">
       {question}{" "}
       <button
         type="button"

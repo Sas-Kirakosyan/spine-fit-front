@@ -71,7 +71,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
             onFocus={() => onActivate(index)}
             onChange={(value) => onValueChange(index, "reps", value)}
             inputClassName="bg-[#101326]/80 border-white/40"
-            wrapperClassName="max-w-[150px]"
+            wrapperClassName="w-full"
           />
           <Input
             label="Weight"
@@ -82,7 +82,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
             onFocus={() => onActivate(index)}
             onChange={(value) => onValueChange(index, "weight", value)}
             inputClassName="bg-[#101326]/80 border-white/40"
-            wrapperClassName="max-w-[150px]"
+            wrapperClassName="w-full"
           />
         </div>
       </div>
