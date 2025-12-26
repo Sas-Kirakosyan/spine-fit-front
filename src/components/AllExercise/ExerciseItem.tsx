@@ -1,4 +1,6 @@
+import { useState } from "react";
 import type { Exercise } from "@/types/exercise";
+import { TreeDotButton } from "@/components/TreeDotButton/TreeDotButton";
 
 interface ExerciseItemProps {
   exercise: Exercise;
@@ -6,11 +8,18 @@ interface ExerciseItemProps {
   onSelect: (exercise: Exercise) => void;
 }
 
+// Fallback SVG data URI for failed images
+const FALLBACK_IMAGE =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23374151'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='12' fill='%239CA3AF' text-anchor='middle' dominant-baseline='middle'%3EExercise%3C/text%3E%3C/svg%3E";
+
 export function ExerciseItem({
   exercise,
   isSelected,
   onSelect,
 }: ExerciseItemProps) {
+  const [imgSrc, setImgSrc] = useState(exercise.image_url);
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div
       className="group flex w-full cursor-pointer items-center gap-4 rounded-[14px] bg-[#1B1E2B]/90 p-3 text-left shadow-xl ring-1 ring-white/5 hover:bg-[#1B1E2B] transition-colors"
@@ -25,13 +34,16 @@ export function ExerciseItem({
     >
       <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-[10px]">
         <img
-          src={exercise.image_url}
+          src={imgError ? FALLBACK_IMAGE : imgSrc}
           alt={exercise.name}
           className="h-full w-full object-cover"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              "https://via.placeholder.com/64x64?text=Exercise";
+          onError={() => {
+            if (!imgError) {
+              setImgError(true);
+              setImgSrc(FALLBACK_IMAGE);
+            }
           }}
+          loading="lazy"
         />
         <div className="pointer-events-none absolute inset-0 rounded-[10px] border border-white/10" />
         {isSelected && (
@@ -65,25 +77,11 @@ export function ExerciseItem({
         </span>
       </div>
 
-      <button
-        type="button"
+      <TreeDotButton
+        onClick={() => {}}
+        ariaLabel={`Actions for ${exercise.name}`}
         className="ml-2 flex-shrink-0 rounded-full p-2 text-slate-400 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/60"
-        aria-label={`Actions for ${exercise.name}`}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <svg
-          aria-hidden="true"
-          className="h-5 w-5"
-          viewBox="0 0 16 4"
-          fill="currentColor"
-        >
-          <circle cx="2" cy="2" r="1.5" />
-          <circle cx="8" cy="2" r="1.5" />
-          <circle cx="14" cy="2" r="1.5" />
-        </svg>
-      </button>
+      />
     </div>
   );
 }

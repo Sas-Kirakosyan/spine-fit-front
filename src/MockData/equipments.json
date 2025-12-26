@@ -1152,5 +1152,201 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "version": 1
+  },
+  {
+    "id": "eq_barbell_01",
+    "key": "barbell",
+    "type": "free_weight",
+    "name": "Barbell",
+    "aliases": ["olympic bar", "standard bar"],
+    "load_type": "plate_loaded",
+    "selectorized": false,
+    "pulley_ratio": {
+      "default": null,
+      "alternatives": [],
+      "notes": "Direct load, no pulley system."
+    },
+    "weight_stack_kg": null,
+    "height_range_cm": null,
+    "attachments_supported": ["weight_plates"],
+    "primary_muscles": ["full_body"],
+    "movement_patterns": ["squat", "hinge", "press", "pull", "carry"],
+    "execution_cues": [
+      "Neutral spine",
+      "Core braced",
+      "Controlled tempo",
+      "Full ROM"
+    ],
+    "safety_notes": {
+      "l5_s1": [
+        "Master form before loading",
+        "Use spotter for heavy lifts",
+        "Avoid rounding spine"
+      ],
+      "herniated_disc": [
+        "Get medical clearance first",
+        "Start very light",
+        "Consider alternatives"
+      ],
+      "sciatica": [
+        "Stop if nerve pain",
+        "Keep spine neutral",
+        "Avoid heavy loads"
+      ]
+    },
+    "media": {
+      "thumbnail": "https://nwscdn.com/media/catalog/product/cache/h900xw900/2/5/25kg_1_5.jpg",
+      "images": [
+        "https://www.rivalstrength.co.uk/cdn/shop/products/with-weights.jpg?v=1742837529&width=2048",
+        "https://www.rivalstrength.co.uk/cdn/shop/products/with-weights.jpg?v=1742837529&width=2048"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "The barbell is a foundational free-weight training tool consisting of a long metal bar (typically 20kg/45lbs for Olympic bars or 15kg for women's bars) that accepts weight plates on both ends. Used for compound movements like squats, deadlifts, bench press, rows, and overhead press, the barbell allows for progressive overload and bilateral strength development. Olympic barbells are 7 feet long with rotating sleeves to reduce wrist strain during Olympic lifts. Standard barbells are shorter and lighter, common in home gyms. Proper form is critical for spinal safety - maintaining neutral spine alignment, bracing the core, and using appropriate loads. For individuals with back issues, barbell exercises require careful progression, medical clearance, and consideration of alternatives like machines or cables that provide more stability and less spinal loading.",
+    "is_back_friendly": false,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_glute_bridge_machine_01",
+    "key": "glute_bridge_machine",
+    "type": "machine",
+    "name": "Glute Bridge Machine",
+    "aliases": ["hip thrust machine", "glute thruster"],
+    "load_type": "lever",
+    "selectorized": true,
+    "pulley_ratio": {
+      "default": null,
+      "alternatives": [],
+      "notes": "Direct lever resistance or weight stack."
+    },
+    "weight_stack_kg": 100,
+    "height_range_cm": { "min": 140, "max": 190, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["glutes", "hamstrings"],
+    "movement_patterns": ["hip_extension", "glute_activation"],
+    "execution_cues": [
+      "Drive through heels",
+      "Squeeze glutes at top",
+      "Ribs down",
+      "No lumbar arch"
+    ],
+    "safety_notes": {
+      "l5_s1": [
+        "Avoid overextending at top",
+        "Keep pelvis neutral",
+        "Control eccentric"
+      ],
+      "sciatica": ["Stop if nerve symptoms", "Use moderate load"],
+      "herniated_disc": ["Safe when form is perfect", "No excessive arching"]
+    },
+    "media": {
+      "thumbnail": "https://i5.walmartimages.com/seo/Syedee-Hip-Thrust-Machine-Plate-Loaded-Glute-Bridge-Machine-with-Blanced-Hip-Pad-Butt-Exercise-Equipment-with-3-Adjustable-Height-Positions_069d7d58-fb6b-40fc-8a4b-a565ed9304de.16df8a9c157042762361adc16127bb82.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF",
+      "images": [
+        "https://m.media-amazon.com/images/I/71bs+dVFWVL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/71bs+dVFWVL._AC_SL1500_.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "The Glute Bridge Machine is a specialized lower-body strength station designed to isolate and strengthen the glutes and hamstrings through hip extension. The user sits with their upper back supported against a pad, feet planted on the floor, and drives their hips upward against resistance (typically a padded lever arm or weight stack). This machine provides a safer, more controlled alternative to barbell hip thrusts, eliminating the need to balance a loaded barbell across the hips. The supported position reduces spinal compression and allows users to focus on glute activation without compensating through the lower back. Most commercial models offer adjustable resistance via weight stacks and adjustable back pad positions to accommodate different body sizes. The exercise is particularly effective for building glute strength and size while being back-friendly when performed with proper form - keeping ribs down, avoiding excessive lumbar extension at the top position, and controlling the movement throughout the full range of motion.",
+    "is_back_friendly": true,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_chest_fly_machine_01",
+    "key": "chest_fly_machine",
+    "type": "machine",
+    "name": "Chest Fly Machine",
+    "aliases": ["pec deck", "pec fly", "chest fly"],
+    "load_type": "lever",
+    "selectorized": true,
+    "pulley_ratio": {
+      "default": null,
+      "alternatives": [],
+      "notes": "Direct lever or cam-based resistance."
+    },
+    "weight_stack_kg": 90,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["chest", "front_delts"],
+    "movement_patterns": ["horizontal_adduction", "chest_isolation"],
+    "execution_cues": [
+      "Slight elbow bend",
+      "Squeeze chest",
+      "Controlled return",
+      "Back against pad"
+    ],
+    "safety_notes": {
+      "l5_s1": [
+        "Keep lower back pressed to pad",
+        "No driving through back",
+        "Feet planted"
+      ],
+      "sciatica": ["Maintain neutral spine", "Avoid arching"],
+      "shoulder_injury": ["Reduce range if shoulder pain", "Stop if sharp pain"]
+    },
+    "media": {
+      "thumbnail": "https://cpimg.tistatic.com/05838155/b/4/M9-Pec-Fly-Machine.jpg",
+      "images": [
+        "https://cpimg.tistatic.com/05838155/b/4/M9-Pec-Fly-Machine.jpg",
+        "https://cdn.mos.cms.futurecdn.net/wqmZpRgEg5kY4Pn9yvBJeE.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "The Chest Fly Machine (also known as Pec Deck) is a seated upper-body isolation machine that targets the pectoral muscles through a horizontal adduction movement pattern. The user sits upright with their back supported against a pad, grips two handles or pads positioned at chest level, and brings them together in front of the body in a hugging motion. This machine provides a safer alternative to dumbbell flyes by supporting the spine and eliminating balance requirements, allowing users to focus purely on chest contraction. Most models feature adjustable seats to accommodate different torso heights and adjustable starting positions to control the stretch at the beginning of the movement. The selectorized weight stack allows for easy resistance adjustments. The exercise is considered back-friendly when proper posture is maintained - keeping the lower back pressed against the pad, avoiding excessive arching to move the weight, and using controlled tempo throughout. Some models offer both neutral and pronated grip options to vary muscle emphasis and reduce shoulder stress.",
+    "is_back_friendly": true,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_incline_bench_01",
+    "key": "incline_bench",
+    "type": "bench",
+    "name": "Incline Bench",
+    "aliases": ["adjustable bench", "incline ab bench", "decline bench"],
+    "load_type": null,
+    "selectorized": false,
+    "pulley_ratio": {
+      "default": null,
+      "alternatives": [],
+      "notes": "No resistance system, bodyweight or added weight."
+    },
+    "weight_stack_kg": null,
+    "height_range_cm": null,
+    "attachments_supported": ["ankle_strap", "foot_rollers"],
+    "primary_muscles": ["abdominals", "chest", "shoulders"],
+    "movement_patterns": ["core_flexion", "pressing", "isolation"],
+    "execution_cues": [
+      "Secure feet",
+      "Controlled movements",
+      "Full ROM",
+      "No momentum"
+    ],
+    "safety_notes": {
+      "l5_s1": [
+        "Keep lower back pressed to bench",
+        "Avoid excessive range",
+        "Control eccentric"
+      ],
+      "sciatica": ["Bend knees if needed", "Stop if nerve pain"],
+      "neck_injury": ["Support head properly", "No pulling on neck"]
+    },
+    "media": {
+      "thumbnail": "https://watsongym.co.uk/wp-content/uploads/2023/03/Adjustable-Decline-Bench-9.jpg",
+      "images": [
+        "https://watsongym.co.uk/wp-content/uploads/2023/03/Adjustable-Decline-Bench-9.jpg",
+        "https://www.roguefitness.com/media/catalog/product/a/b/ab-3-adjustable-bench-h1_2.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "The Incline Bench is a versatile piece of equipment featuring an adjustable backrest that can be set at various angles (typically 15-85 degrees) to modify exercise difficulty and muscle emphasis. When set at a decline (head lower than hips), it's commonly used for decline crunches, leg raises, and sit-ups that increase core challenge through gravity. The bench typically includes foot rollers or ankle straps to secure the lower body during decline movements. When set at an incline (30-45 degrees), it's used for incline dumbbell press, incline flyes, and incline curls that target upper chest and shoulders differently than flat bench exercises. Most quality incline benches feature thick padding for comfort, adjustable seat positions, and sturdy construction to handle heavy loads. For core exercises on a decline setting, the increased angle adds intensity compared to floor-based movements. Users with back concerns should maintain proper form - keeping the lower back pressed to the pad during leg raises, using controlled movements without momentum, and potentially bending knees to reduce hip flexor and lumbar strain. The bench is back-friendly when exercises are performed with appropriate technique and range of motion is kept within comfortable limits.",
+    "is_back_friendly": true,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
   }
 ]

@@ -278,7 +278,7 @@ export function QuizModal({
       );
       savedQuizzes.push(quizData);
       localStorage.setItem("quizAnswers", JSON.stringify(savedQuizzes));
-
+      console.log("quizData:", quizData);
       setCurrentQuestion(0);
       setSelectedAnswer(null);
       setSelectedCheckboxes([]);
@@ -383,6 +383,24 @@ export function QuizModal({
 
   const optionListClass =
     "space-y-3 max-h-[50vh] md:max-h-[360px] overflow-y-auto pr-1 -mr-1";
+  const question = filteredQuestions[currentQuestion];
+  
+  // Determine which options to show for body type question
+  const getDisplayOptions = () => {
+    if (question.fieldName === "bodyType" && question.type === "image_radio") {
+      const genderQuestion = questions.find((q) => q.fieldName === "gender");
+      if (genderQuestion) {
+        const genderAnswer = answers[genderQuestion.id];
+        // Female selected (index 1)
+        if (genderAnswer === 1 && question.optionsFemale) {
+          return question.optionsFemale;
+        }
+      }
+    }
+    return question.options;
+  };
+
+  const displayOptions = getDisplayOptions();
 
   return (
     <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
@@ -425,7 +443,7 @@ export function QuizModal({
 
                   {filteredQuestions[currentQuestion].type === "radio" && (
                     <div className={optionListClass}>
-                      {filteredQuestions[currentQuestion].options?.map(
+                      {displayOptions?.map(
                         (option, index) => (
                           <QuizRadioOption
                             key={index}
@@ -442,7 +460,7 @@ export function QuizModal({
                   {filteredQuestions[currentQuestion].type ===
                     "image_radio" && (
                     <div className={optionListClass}>
-                      {filteredQuestions[currentQuestion].options?.map(
+                      {displayOptions?.map(
                         (option, index) => (
                           <QuizImageRadioOption
                             key={index}

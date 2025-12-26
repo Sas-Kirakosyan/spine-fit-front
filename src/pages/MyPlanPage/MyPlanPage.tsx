@@ -142,7 +142,7 @@ export function MyPlanPage({
         bodyweightOnly ? ["bodyweight"] : availableEquipment,
         workoutHistory
       );
-
+      console.log("plan:", plan);
       // Save to localStorage
       savePlanToLocalStorage(plan);
 
