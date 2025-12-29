@@ -9,10 +9,8 @@ export function HomePage({
   onNavigateToWorkout,
 }: HomePageProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
-  const [workoutType, setWorkoutType] = useState<"home" | "gym">("home");
 
   const handleStartQuiz = () => {
-    setWorkoutType("home");
     setIsQuizOpen(true);
   };
 
@@ -58,7 +56,6 @@ export function HomePage({
       <QuizModal
         isOpen={isQuizOpen}
         onClose={handleCloseQuiz}
-        workoutType={workoutType}
         onQuizComplete={onNavigateToWorkout}
       />
     </>

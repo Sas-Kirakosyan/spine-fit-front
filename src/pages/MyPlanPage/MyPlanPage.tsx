@@ -117,6 +117,15 @@ export function MyPlanPage({
         ? JSON.parse(quizDataString)
         : null;
 
+      // Validate that quiz/onboarding was completed
+      if (!quizData) {
+        alert(
+          "⚠️ Please complete the onboarding quiz first to generate a personalized plan."
+        );
+        setIsGenerating(false);
+        return;
+      }
+
       // Load equipment data
       const equipmentDataString = localStorage.getItem("equipmentData");
       const equipmentData: EquipmentCategory[] = equipmentDataString
@@ -127,6 +136,13 @@ export function MyPlanPage({
       const availableEquipment = equipmentData.flatMap((category) =>
         category.items.filter((item) => item.selected).map((item) => item.name)
       );
+
+      // If no equipment selected and workoutType is gym, use common gym equipment
+      const finalEquipment = availableEquipment.length > 0 
+        ? availableEquipment 
+        : quizData.workoutType === "gym"
+        ? ["barbell", "dumbbell", "cable_machine", "leg_press", "chest_fly_machine", "lat_pulldown", "seated_cable_row", "leg_extension_machine", "leg_curl_machine"]
+        : ["bodyweight"];
 
       // Load workout history
       const historyString = localStorage.getItem("workoutHistory");
@@ -139,10 +155,12 @@ export function MyPlanPage({
         allExercisesData as Exercise[],
         planSettings,
         quizData,
-        bodyweightOnly ? ["bodyweight"] : availableEquipment,
+        bodyweightOnly ? ["bodyweight"] : finalEquipment,
         workoutHistory
       );
-      console.log("plan:", plan);
+
+      console.log("Generated plan:", plan);
+
       // Save to localStorage
       savePlanToLocalStorage(plan);
 

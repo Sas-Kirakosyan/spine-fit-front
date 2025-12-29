@@ -132,13 +132,18 @@ export function assignExercisesToDays(
 ): WorkoutDay[] {
   const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const workoutDays: WorkoutDay[] = [];
+  const globalUsedExerciseIds = new Set<number>(); // Track across all days
 
   muscleGroupsByDay.forEach((muscleGroups, index) => {
     const dayExercises = selectExercisesForMuscleGroups(
       exercises,
       muscleGroups,
-      exercisesPerDay
+      exercisesPerDay,
+      globalUsedExerciseIds // Pass global tracker
     );
+
+    // Add selected exercises to global tracker
+    dayExercises.forEach((ex) => globalUsedExerciseIds.add(ex.id));
 
     workoutDays.push({
       dayNumber: index,
@@ -157,10 +162,11 @@ export function assignExercisesToDays(
 function selectExercisesForMuscleGroups(
   exercises: Exercise[],
   targetMuscleGroups: string[],
-  maxExercises: number
+  maxExercises: number,
+  globalUsedIds: Set<number> = new Set()
 ): Exercise[] {
   const selected: Exercise[] = [];
-  const usedExerciseIds = new Set<number>();
+  const usedExerciseIds = new Set<number>(globalUsedIds); // Start with globally used IDs
 
   // Prioritize compound movements
   const sortedExercises = [...exercises].sort((a, b) => {

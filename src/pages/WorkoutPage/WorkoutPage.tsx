@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import exerciseData from "@/MockData/exercise.json";
+import allExercisesData from "@/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { WorkoutPageProps } from "@/types/workout";
@@ -10,6 +11,15 @@ import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { WorkoutPageHeader } from "./WorkoutPageHeader";
 import { WorkoutPlanCard } from "@/pages/WorkoutPage/WorkoutPlanCard";
+import {
+  generateTrainingPlan,
+  savePlanToLocalStorage,
+  getTodaysWorkout,
+} from "@/utils/planGenerator";
+import { loadPlanSettings } from "@/types/planSettings";
+import type { EquipmentCategory } from "@/types/equipment";
+import type { QuizAnswers } from "@/types/quiz";
+import type { FinishedWorkoutSummary } from "@/types/workout";
 
 const defaultExercises: Exercise[] = exerciseData as Exercise[];
 
@@ -28,7 +38,98 @@ export function WorkoutPage({
   onRemoveExercise,
 }: WorkoutPageProps) {
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
+  const [workoutExercises, setWorkoutExercises] =
+    useState<Exercise[]>(exercises);
+  const [isLoadingPlan, setIsLoadingPlan] = useState(true);
   const cardRef = useRef<HTMLDivElement | null>(null);
+
+  // Load or generate plan when component mounts
+  useEffect(() => {
+    const initializePlan = () => {
+      try {
+        // Load quiz answers from localStorage
+        const quizDataString = localStorage.getItem("quizAnswers");
+        const quizData: QuizAnswers | null = quizDataString
+          ? JSON.parse(quizDataString)
+          : null;
+
+        if (!quizData) {
+          setIsLoadingPlan(false);
+          return;
+        }
+
+        // User completed onboarding, generate plan
+        const planSettings = loadPlanSettings();
+
+        // Load equipment data
+        const equipmentDataString = localStorage.getItem("equipmentData");
+        const equipmentData: EquipmentCategory[] = equipmentDataString
+          ? JSON.parse(equipmentDataString)
+          : [];
+
+        // Extract available equipment names
+        const availableEquipment = equipmentData.flatMap((category) =>
+          category.items
+            .filter((item) => item.selected)
+            .map((item) => item.name)
+        );
+
+        // If no equipment selected and workoutType is gym, use common gym equipment
+        const finalEquipment = availableEquipment.length > 0 
+          ? availableEquipment 
+          : quizData.workoutType === "gym"
+          ? ["barbell", "dumbbell", "cable_machine", "leg_press", "chest_fly_machine", "lat_pulldown", "seated_cable_row", "leg_extension_machine", "leg_curl_machine"]
+          : ["bodyweight"];
+
+        // Load workout history
+        const historyString = localStorage.getItem("workoutHistory");
+        const workoutHistory: FinishedWorkoutSummary[] = historyString
+          ? JSON.parse(historyString)
+          : [];
+
+        // Check if bodyweight-only mode is enabled
+        const bodyweightOnly =
+          localStorage.getItem("bodyweightOnly") === "true";
+
+        // Generate the plan
+        const plan = generateTrainingPlan(
+          allExercisesData as Exercise[],
+          planSettings,
+          quizData,
+          bodyweightOnly ? ["bodyweight"] : finalEquipment,
+          workoutHistory
+        );
+
+        // Save the generated plan
+        savePlanToLocalStorage(plan);
+        console.log("Plan generated after onboarding:", plan);
+
+        // Load today's workout exercises from the plan
+        const todaysWorkout = getTodaysWorkout(plan);
+        if (todaysWorkout && todaysWorkout.exercises.length > 0) {
+          setWorkoutExercises(todaysWorkout.exercises);
+        } else {
+          // Fallback to first workout day if today's workout is not found
+          if (
+            plan.workoutDays.length > 0 &&
+            plan.workoutDays[0].exercises.length > 0
+          ) {
+            setWorkoutExercises(plan.workoutDays[0].exercises);
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing workout plan:", error);
+      } finally {
+        setIsLoadingPlan(false);
+      }
+    };
+
+    initializePlan();
+  }, []);
+
+  // Use the prop exercises if explicitly provided, otherwise use loaded exercises
+  const displayExercises =
+    exercises !== defaultExercises ? exercises : workoutExercises;
 
   return (
     <PageContainer>
@@ -55,15 +156,35 @@ export function WorkoutPage({
         <WorkoutPlanCard containerRef={cardRef} />
 
         <section className="flex-1 space-y-3 mx-2.5">
-          {exercises.map((exercise, index) => (
-            <ExerciseCard
-              key={`${exercise.id}-${index}`}
-              exercise={exercise}
-              onCardClick={() => onOpenExerciseSets(exercise)}
-              onDetailsClick={() => onOpenExerciseDetails(exercise)}
-              onActionClick={() => setActionExercise(exercise)}
-            />
-          ))}
+          {isLoadingPlan ? (
+            <div className="flex items-center justify-center py-10">
+              <span className="text-white/60">Loading workout plan...</span>
+            </div>
+          ) : displayExercises.length > 0 ? (
+            displayExercises.map((exercise, index) => (
+              <ExerciseCard
+                key={`${exercise.id}-${index}`}
+                exercise={exercise}
+                onCardClick={() => onOpenExerciseSets(exercise)}
+                onDetailsClick={() => onOpenExerciseDetails(exercise)}
+                onActionClick={() => setActionExercise(exercise)}
+              />
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-3 py-10">
+              <span className="text-white/60 text-center">
+                No exercises available. Generate a plan first!
+              </span>
+              {onNavigateToMyPlan && (
+                <Button
+                  onClick={onNavigateToMyPlan}
+                  className="rounded-[10px] bg-main px-6 py-2 text-white"
+                >
+                  Go to My Plan
+                </Button>
+              )}
+            </div>
+          )}
 
           <div
             className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B]/90 p-3 text-left shadow-xl ring-1 ring-white/5"

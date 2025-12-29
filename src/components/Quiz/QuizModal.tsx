@@ -10,12 +10,8 @@ import { QuizInputWithUnit } from "./QuizInputWithUnit";
 import { QuizSlider } from "./QuizSlider";
 import { QuizNavigationButtons } from "./QuizNavigationButtons";
 
-export function QuizModal({
-  isOpen,
-  onClose,
-  workoutType,
-  onQuizComplete,
-}: QuizModalProps) {
+export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
+  const [workoutType, setWorkoutType] = useState<"home" | "gym">("home");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<number[]>([]);
@@ -101,10 +97,23 @@ export function QuizModal({
     const question = filteredQuestions[currentQuestion];
     if (question.type === "radio" || question.type === "image_radio") {
       const answerValue = answerIndex;
-      setAnswers((prev) => ({
-        ...prev,
-        [question.id]: answerValue,
-      }));
+
+      // Dynamically set workout type based on workoutType answer
+      if (question.fieldName === "workoutType") {
+        const selectedOption = question.options?.[answerValue];
+        if (selectedOption === "home") {
+          setWorkoutType("home");
+        } else if (selectedOption === "gym") {
+          setWorkoutType("gym");
+        }
+        // Don't save workoutType to answers - it's stored separately
+      } else {
+        // Save answer for all other questions
+        setAnswers((prev) => ({
+          ...prev,
+          [question.id]: answerValue,
+        }));
+      }
 
       setTimeout(() => {
         if (currentQuestion < filteredQuestions.length - 1) {
@@ -266,6 +275,7 @@ export function QuizModal({
       setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
     } else {
       const finalUnits = { ...units };
+
       const quizData = {
         workoutType,
         answers: updatedAnswers,
@@ -273,11 +283,8 @@ export function QuizModal({
         timestamp: new Date().toISOString(),
       };
 
-      const savedQuizzes = JSON.parse(
-        localStorage.getItem("quizAnswers") || "[]"
-      );
-      savedQuizzes.push(quizData);
-      localStorage.setItem("quizAnswers", JSON.stringify(savedQuizzes));
+      // Overwrite any existing quiz data instead of appending
+      localStorage.setItem("quizAnswers", JSON.stringify(quizData));
       console.log("quizData:", quizData);
       setCurrentQuestion(0);
       setSelectedAnswer(null);
@@ -316,11 +323,8 @@ export function QuizModal({
       timestamp: new Date().toISOString(),
     };
 
-    const savedQuizzes = JSON.parse(
-      localStorage.getItem("quizAnswers") || "[]"
-    );
-    savedQuizzes.push(quizData);
-    localStorage.setItem("quizAnswers", JSON.stringify(savedQuizzes));
+    // Overwrite any existing quiz data instead of appending
+    localStorage.setItem("quizAnswers", JSON.stringify(quizData));
 
     setCurrentQuestion(0);
     setSelectedAnswer(null);
@@ -360,6 +364,25 @@ export function QuizModal({
     }
   };
 
+  // Clear old array-based quiz data on component mount
+  useEffect(() => {
+    if (isOpen) {
+      const stored = localStorage.getItem("quizAnswers");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          // If it's an array (old format), get the last entry and convert to single object
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const latestQuiz = parsed[parsed.length - 1];
+            localStorage.setItem("quizAnswers", JSON.stringify(latestQuiz));
+          }
+        } catch (error) {
+          console.error("Error migrating quiz data:", error);
+        }
+      }
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     if (isOpen) {
       loadAnswerForQuestion(currentQuestion);
@@ -384,7 +407,7 @@ export function QuizModal({
   const optionListClass =
     "space-y-3 max-h-[50vh] md:max-h-[360px] overflow-y-auto pr-1 -mr-1";
   const question = filteredQuestions[currentQuestion];
-  
+
   // Determine which options to show for body type question
   const getDisplayOptions = () => {
     if (question.fieldName === "bodyType" && question.type === "image_radio") {
@@ -443,41 +466,37 @@ export function QuizModal({
 
                   {filteredQuestions[currentQuestion].type === "radio" && (
                     <div className={optionListClass}>
-                      {displayOptions?.map(
-                        (option, index) => (
-                          <QuizRadioOption
-                            key={index}
-                            option={option}
-                            index={index}
-                            isSelected={selectedAnswer === index}
-                            onSelect={handleAnswerSelect}
-                          />
-                        )
-                      )}
+                      {displayOptions?.map((option, index) => (
+                        <QuizRadioOption
+                          key={index}
+                          option={option}
+                          index={index}
+                          isSelected={selectedAnswer === index}
+                          onSelect={handleAnswerSelect}
+                        />
+                      ))}
                     </div>
                   )}
 
                   {filteredQuestions[currentQuestion].type ===
                     "image_radio" && (
                     <div className={optionListClass}>
-                      {displayOptions?.map(
-                        (option, index) => (
-                          <QuizImageRadioOption
-                            key={index}
-                            option={
-                              option as {
-                                value: string;
-                                label: string;
-                                image: string;
-                                description: string;
-                              }
+                      {displayOptions?.map((option, index) => (
+                        <QuizImageRadioOption
+                          key={index}
+                          option={
+                            option as {
+                              value: string;
+                              label: string;
+                              image: string;
+                              description: string;
                             }
-                            index={index}
-                            isSelected={selectedAnswer === index}
-                            onSelect={handleAnswerSelect}
-                          />
-                        )
-                      )}
+                          }
+                          index={index}
+                          isSelected={selectedAnswer === index}
+                          onSelect={handleAnswerSelect}
+                        />
+                      ))}
                     </div>
                   )}
 

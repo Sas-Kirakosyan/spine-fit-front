@@ -25,7 +25,6 @@ export interface QuizQuestion {
 export interface QuizModalProps {
   isOpen: boolean;
   onClose: () => void;
-  workoutType: "home" | "gym";
   onQuizComplete?: () => void;
 }
 

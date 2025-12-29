@@ -28,6 +28,11 @@ export function generateTrainingPlan(
   availableEquipment: string[],
   workoutHistory: FinishedWorkoutSummary[] = []
 ): GeneratedPlan {
+  // Override plan settings with quiz answers if available
+  const effectivePlanSettings = quizAnswers
+    ? mergePlanSettingsWithQuizAnswers(planSettings, quizAnswers)
+    : planSettings;
+
   // 1. Extract pain profile from quiz answers
   const painProfile = extractPainProfile(quizAnswers);
 
@@ -35,12 +40,15 @@ export function generateTrainingPlan(
   const filterCriteria: FilterCriteria = {
     availableEquipment,
     painProfile,
-    experience: planSettings.experience as "Beginner" | "Intermediate" | "Advanced",
-    goal: planSettings.goal,
+    experience: effectivePlanSettings.experience as "Beginner" | "Intermediate" | "Advanced",
+    goal: effectivePlanSettings.goal,
   };
 
   // 3. Filter exercises based on user profile
   let filteredExercises = filterExercisesByProfile(allExercises, filterCriteria);
+  console.log("Filtered exercises count:", filteredExercises.length);
+  console.log("Available equipment:", availableEquipment);
+  console.log("Filter criteria:", filterCriteria);
 
   // 4. Apply progressive overload based on workout history
   if (workoutHistory.length > 0) {
@@ -49,9 +57,9 @@ export function generateTrainingPlan(
 
   // 5. Calculate volume recommendations
   const volumeRecommendation = calculateVolume({
-    workoutDuration: planSettings.duration,
-    experience: planSettings.experience as "Beginner" | "Intermediate" | "Advanced",
-    goal: planSettings.goal,
+    workoutDuration: effectivePlanSettings.duration,
+    experience: effectivePlanSettings.experience as "Beginner" | "Intermediate" | "Advanced",
+    goal: effectivePlanSettings.goal,
     painLevel: painProfile.painLevel,
   });
 
@@ -62,17 +70,17 @@ export function generateTrainingPlan(
   );
 
   // 7. Parse workouts per week from plan settings
-  const workoutsPerWeek = parseWorkoutsPerWeek(planSettings.workoutsPerWeek);
+  const workoutsPerWeek = parseWorkoutsPerWeek(effectivePlanSettings.workoutsPerWeek);
 
   // 8. Create weekly schedule structure
   const weeklySchedule = createWeeklySchedule(
-    planSettings.trainingSplit,
+    effectivePlanSettings.trainingSplit,
     workoutsPerWeek
   );
 
   // 9. Map training split to muscle groups per day
   const muscleGroupsByDay = mapSplitToMuscleGroups(
-    planSettings.trainingSplit,
+    effectivePlanSettings.trainingSplit,
     workoutsPerWeek
   );
 
@@ -82,6 +90,9 @@ export function generateTrainingPlan(
     muscleGroupsByDay,
     exercisesPerWorkout
   );
+  console.log("Workout days with assigned exercises:", workoutDays);
+  console.log("Exercises per workout:", exercisesPerWorkout);
+  console.log("Muscle groups by day:", muscleGroupsByDay);
 
   // 11. Apply sets and reps to each exercise
   const workoutDaysWithVolume = workoutDays.map((day) => ({
@@ -107,16 +118,105 @@ export function generateTrainingPlan(
 
   // 14. Generate plan metadata
   const planId = generatePlanId();
-  const planName = generatePlanName(planSettings);
+  const planName = generatePlanName(effectivePlanSettings);
 
   return {
     id: planId,
     name: planName,
     createdAt: new Date().toISOString(),
-    settings: planSettings,
+    settings: effectivePlanSettings,
     workoutDays: workoutDaysWithVolume,
     missingMuscleGroups,
     alternativeExercises,
+  };
+}
+
+/**
+ * Merge plan settings with quiz answers
+ * Maps quiz answers to plan settings format
+ * 
+ * Quiz Answer IDs:
+ * - 1.5: workoutType (not in answers, handled separately)
+ * - 2: goal
+ * - 3: gender
+ * - 4: ageRange
+ * - 5: height
+ * - 6: weight
+ * - 7: bodyType
+ * - 8: experience
+ * - 9: trainingFrequency
+ * - 10: painStatus
+ * - 11: painLocation
+ * - 12: painLevel (conditional)
+ * - 13: painTriggers
+ * - 14: canSquat
+ * - 15: workoutDuration
+ */
+function mergePlanSettingsWithQuizAnswers(
+  planSettings: PlanSettings,
+  quizAnswers: QuizAnswers
+): PlanSettings {
+  const answers = quizAnswers.answers;
+
+  // Map quiz answers to plan settings
+  const goalAnswer = answers[2]; // question id 2: goal
+  const experienceAnswer = answers[8]; // question id 8: experience
+  const trainingFrequencyAnswer = answers[9]; // question id 9: trainingFrequency
+  const workoutDurationAnswer = answers[15]; // question id 15: workoutDuration (was 16, now 15)
+
+  // Goal mapping
+  const goalOptions = [
+    "Build muscle safely (gym-goer with back or sciatic pain)",
+    "Reduce pain and improve back health",
+  ];
+  const goal = typeof goalAnswer === "number" ? goalOptions[goalAnswer] : planSettings.goal;
+
+  // Experience mapping
+  const experienceOptions = ["Beginner", "Intermediate", "Advanced"];
+  const experience = typeof experienceAnswer === "number"
+    ? experienceOptions[experienceAnswer]
+    : planSettings.experience;
+
+  // Training frequency mapping
+  const frequencyOptions = ["2", "3", "4", "5+"];
+  const frequencyValue = typeof trainingFrequencyAnswer === "number"
+    ? frequencyOptions[trainingFrequencyAnswer]
+    : "3";
+  const workoutsPerWeek = `${frequencyValue.replace("+", "")} days per week`;
+
+  // Workout duration mapping
+  const durationOptions = ["10–20 min", "20–30 min", "30–45 min", "45–60 min"];
+  const durationValue = typeof workoutDurationAnswer === "number"
+    ? durationOptions[workoutDurationAnswer]
+    : "30–45 min";
+
+  // Map duration to plan settings format
+  let duration = "1 hr";
+  if (durationValue.includes("10–20")) duration = "30 min";
+  else if (durationValue.includes("20–30")) duration = "30 min";
+  else if (durationValue.includes("30–45")) duration = "45 min";
+  else if (durationValue.includes("45–60")) duration = "1 hr";
+
+  // Determine appropriate training split based on frequency
+  let trainingSplit = planSettings.trainingSplit;
+  const numWorkouts = parseInt(frequencyValue);
+  if (numWorkouts <= 2) {
+    trainingSplit = "Full Body";
+  } else if (numWorkouts === 3) {
+    trainingSplit = "Full Body"; // or "Push/Pull/Legs"
+  } else if (numWorkouts === 4) {
+    trainingSplit = "Upper/Lower";
+  } else if (numWorkouts >= 5) {
+    trainingSplit = "Push/Pull/Legs";
+  }
+
+  return {
+    ...planSettings,
+    goal,
+    experience,
+    workoutsPerWeek,
+    duration,
+    trainingSplit,
   };
 }
 
@@ -132,19 +232,59 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
 
   const answers = quizAnswers.answers;
 
-  // Find question IDs based on fieldName (from questions.ts)
-  const painStatusAnswer = findAnswerByFieldName(answers, 10); // painStatus question
-  const painLocationAnswer = findAnswerByFieldName(answers, 11); // painLocation question
-  const painLevelAnswer = findAnswerByFieldName(answers, 12); // painLevel question
-  const painTriggersAnswer = findAnswerByFieldName(answers, 13); // painTriggers question
-  const canSquatAnswer = findAnswerByFieldName(answers, 14); // canSquat question
+  // Question 10: painStatus - radio (returns index)
+  const painStatusAnswer = findAnswerByFieldName(answers, 10);
+  const painStatusOptions = ["Never", "In the past", "Yes, currently"];
+  const painStatus = typeof painStatusAnswer === "number"
+    ? (painStatusOptions[painStatusAnswer] as "Never" | "In the past" | "Yes, currently")
+    : "Never";
+
+  // Question 11: painLocation - checkbox (returns array of indices)
+  const painLocationAnswer = findAnswerByFieldName(answers, 11);
+  const painLocationOptions = [
+    "Lower back (L5–S1)",
+    "Middle back",
+    "Upper back",
+    "Sciatica",
+    "Leg",
+    "Shoulder",
+    "Other",
+  ];
+  const painLocation = Array.isArray(painLocationAnswer)
+    ? painLocationAnswer.map((idx) => painLocationOptions[Number(idx)])
+    : undefined;
+
+  // Question 12: painLevel - slider (returns number 0-10)
+  const painLevel = findAnswerByFieldName(answers, 12) as number | undefined;
+
+  // Question 13: painTriggers - checkbox (returns array of indices)
+  const painTriggersAnswer = findAnswerByFieldName(answers, 13);
+  const painTriggersOptions = [
+    "walking",
+    "Bending forward",
+    "Lifting heavy objects",
+    "Long sitting",
+    "Running or jumping",
+    "Deadlifts / squats with weight",
+    "Other activities",
+  ];
+  const painTriggers = Array.isArray(painTriggersAnswer)
+    ? painTriggersAnswer.map((idx) => painTriggersOptions[Number(idx)])
+    : undefined;
+
+  // Question 14: canSquat - radio (returns index)
+  const canSquatAnswer = findAnswerByFieldName(answers, 14);
+  const canSquatOptions = ["Yes", "Sometimes", "No", "Haven't tried"];
+  const canSquat = typeof canSquatAnswer === "number"
+    ? canSquatOptions[canSquatAnswer]
+    : undefined;
 
   return {
-    painStatus: (painStatusAnswer as "Never" | "In the past" | "Yes, currently") || "Never",
-    painLocation: Array.isArray(painLocationAnswer) ? painLocationAnswer.map(String) : undefined,
-    painLevel: typeof painLevelAnswer === "number" ? painLevelAnswer : undefined,
-    painTriggers: Array.isArray(painTriggersAnswer) ? painTriggersAnswer.map(String) : undefined,
-    canSquat: canSquatAnswer as string | undefined,
+    painStatus,
+    painLocation,
+    painLevel,
+    painTriggers,
+    canSquat,
   };
 }
 

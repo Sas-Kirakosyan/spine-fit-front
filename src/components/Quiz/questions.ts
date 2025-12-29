@@ -19,7 +19,13 @@ export const questions: QuizQuestion[] = [
       "Answer a few quick questions so we can build a safe and effective workout plan tailored to you.",
     buttonText: "Start",
   },
-
+  {
+    id: 1.5,
+    fieldName: "workoutType",
+    question: "Where do you plan to work out?",
+    type: "radio",
+    options: ["gym", "home"],
+  },
   {
     id: 2,
     fieldName: "goal",
@@ -149,7 +155,6 @@ export const questions: QuizQuestion[] = [
     type: "radio",
     options: ["2", "3", "4", "5+"],
   },
-
   // 🔥 Improved pain logic
   {
     id: 10,
@@ -178,7 +183,6 @@ export const questions: QuizQuestion[] = [
       in: ["In the past", "Yes, currently"],
     },
   },
-
   {
     id: 12,
     fieldName: "painLevel",
@@ -188,7 +192,6 @@ export const questions: QuizQuestion[] = [
     max: 10,
     showIf: { fieldName: "painStatus", equals: "Yes, currently" },
   },
-
   {
     id: 13,
     fieldName: "painTriggers",
@@ -208,7 +211,6 @@ export const questions: QuizQuestion[] = [
       in: ["In the past", "Yes, currently"],
     },
   },
-
   {
     id: 14,
     fieldName: "canSquat",
@@ -220,17 +222,8 @@ export const questions: QuizQuestion[] = [
       in: ["In the past", "Yes, currently"],
     },
   },
-
   {
     id: 15,
-    fieldName: "trainLocation",
-    question: "Where do you train most often?",
-    type: "radio",
-    options: ["Gym", "Home"],
-  },
-
-  {
-    id: 16,
     fieldName: "workoutDuration",
     question: "How long should your workouts be?",
     type: "radio",
