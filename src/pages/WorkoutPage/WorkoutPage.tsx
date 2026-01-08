@@ -75,11 +75,22 @@ export function WorkoutPage({
         );
 
         // If no equipment selected and workoutType is gym, use common gym equipment
-        const finalEquipment = availableEquipment.length > 0 
-          ? availableEquipment 
-          : quizData.workoutType === "gym"
-          ? ["barbell", "dumbbell", "cable_machine", "leg_press", "chest_fly_machine", "lat_pulldown", "seated_cable_row", "leg_extension_machine", "leg_curl_machine"]
-          : ["bodyweight"];
+        const finalEquipment =
+          availableEquipment.length > 0
+            ? availableEquipment
+            : quizData.workoutType === "gym"
+            ? [
+                "barbell",
+                "dumbbell",
+                "cable_machine",
+                "leg_press",
+                "chest_fly_machine",
+                "lat_pulldown",
+                "seated_cable_row",
+                "leg_extension_machine",
+                "leg_curl_machine",
+              ]
+            : ["bodyweight"];
 
         // Load workout history
         const historyString = localStorage.getItem("workoutHistory");
@@ -127,9 +138,13 @@ export function WorkoutPage({
     initializePlan();
   }, []);
 
-  // Use the prop exercises if explicitly provided, otherwise use loaded exercises
-  const displayExercises =
-    exercises !== defaultExercises ? exercises : workoutExercises;
+  // Prioritize plan exercises if a plan exists, otherwise use prop exercises
+  const hasGeneratedPlan = localStorage.getItem("generatedPlan") !== null;
+  const displayExercises = hasGeneratedPlan
+    ? workoutExercises
+    : exercises !== defaultExercises
+    ? exercises
+    : workoutExercises;
 
   return (
     <PageContainer>
