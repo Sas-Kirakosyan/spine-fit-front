@@ -47,7 +47,28 @@ export function WorkoutPage({
   useEffect(() => {
     const initializePlan = () => {
       try {
-        // Load quiz answers from localStorage
+        // Check if plan already exists
+        const existingPlan = localStorage.getItem("generatedPlan");
+        if (existingPlan) {
+          // Load existing plan
+          const plan = JSON.parse(existingPlan);
+          const todaysWorkout = getTodaysWorkout(plan);
+          if (todaysWorkout && todaysWorkout.exercises.length > 0) {
+            setWorkoutExercises(todaysWorkout.exercises);
+          } else {
+            // Fallback to first workout day
+            if (
+              plan.workoutDays.length > 0 &&
+              plan.workoutDays[0].exercises.length > 0
+            ) {
+              setWorkoutExercises(plan.workoutDays[0].exercises);
+            }
+          }
+          setIsLoadingPlan(false);
+          return;
+        }
+
+        // No existing plan, check if user completed quiz
         const quizDataString = localStorage.getItem("quizAnswers");
         const quizData: QuizAnswers | null = quizDataString
           ? JSON.parse(quizDataString)

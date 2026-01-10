@@ -41,23 +41,25 @@ export function ActiveWorkoutPage({
   );
   const cardRef = useRef<HTMLDivElement | null>(null);
 
-  // Load today's workout from generated plan if no exercises are provided
-  const effectiveExercises = useMemo(() => {
-    if (exercises && exercises.length > 0) {
-      return exercises;
-    }
-
-    // Try to load from generated plan
+  // Always load today's workout from generated plan
+  const todaysExercises = useMemo(() => {
     const generatedPlan = loadPlanFromLocalStorage();
+
     if (generatedPlan) {
       const todaysWorkout = getTodaysWorkout(generatedPlan);
       if (todaysWorkout && todaysWorkout.exercises.length > 0) {
         return todaysWorkout.exercises;
       }
+      // Fallback to first workout day if today's workout is not found
+      if (
+        generatedPlan.workoutDays.length > 0 &&
+        generatedPlan.workoutDays[0].exercises.length > 0
+      ) {
+        return generatedPlan.workoutDays[0].exercises;
+      }
     }
-
-    return exercises;
-  }, [exercises]);
+    return [];
+  }, []);
 
   useEffect(() => {
     if (workoutStartTime) {
@@ -73,18 +75,18 @@ export function ActiveWorkoutPage({
 
   const allExercisesCompleted = useMemo(() => {
     return (
-      effectiveExercises.length > 0 &&
-      effectiveExercises.every((exercise) =>
+      todaysExercises.length > 0 &&
+      todaysExercises.every((exercise) =>
         completedExerciseIdsSet.has(exercise.id)
       )
     );
-  }, [completedExerciseIdsSet, effectiveExercises]);
+  }, [completedExerciseIdsSet, todaysExercises]);
 
   const completedExercises = useMemo(() => {
-    return effectiveExercises.filter((exercise) =>
+    return todaysExercises.filter((exercise) =>
       completedExerciseIdsSet.has(exercise.id)
     );
-  }, [completedExerciseIdsSet, effectiveExercises]);
+  }, [completedExerciseIdsSet, todaysExercises]);
 
   const handleFinishWorkout = () => {
     if (allExercisesCompleted) {
@@ -158,7 +160,7 @@ export function ActiveWorkoutPage({
             {formatTime(elapsedSeconds)}
           </p>
         </section>
-        {effectiveExercises.length === 0 && (
+        {todaysExercises.length === 0 && (
           <div className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center">
             <p className="text-white/60">No exercises for today's workout.</p>
             <p className="text-sm text-white/40 mt-2">
@@ -166,7 +168,7 @@ export function ActiveWorkoutPage({
             </p>
           </div>
         )}
-        {effectiveExercises.map((exercise, index) => {
+        {todaysExercises.map((exercise, index) => {
           const isCompleted = completedExerciseIdsSet.has(exercise.id);
           return (
             <ExerciseCard
