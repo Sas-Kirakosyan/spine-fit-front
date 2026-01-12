@@ -15,6 +15,7 @@ import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
 import { MyPlanPage } from "@/pages/MyPlanPage/MyPlanPage";
 import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPage";
 import exerciseData from "@/MockData/exercise.json";
+import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
@@ -62,7 +63,9 @@ function App() {
       if (Array.isArray(parsed)) {
         return parsed;
       }
-    } catch {}
+    } catch {
+      return [];
+    }
     return [];
   });
 
@@ -76,9 +79,18 @@ function App() {
       if (Array.isArray(parsed)) {
         return parsed;
       }
-    } catch {}
+    } catch {
+      console.error("Error parsing saved workout exercises");
+    }
     return (exerciseData as Exercise[]) || [];
   });
+
+  const [completedWorkoutIds, setCompletedWorkoutIds] = useState<Set<string>>(
+    () => {
+      const saved = localStorage.getItem("completedWorkoutIds");
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    }
+  );
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -91,6 +103,13 @@ function App() {
   useEffect(() => {
     localStorage.setItem("workoutExercises", JSON.stringify(workoutExercises));
   }, [workoutExercises]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "completedWorkoutIds",
+      JSON.stringify([...completedWorkoutIds])
+    );
+  }, [completedWorkoutIds]);
 
   const navigateToHome = () => setCurrentPage("home");
   const navigateToLogin = () => setCurrentPage("login");
@@ -107,6 +126,58 @@ function App() {
       const newExercises = exercises.filter((ex) => !existingIds.has(ex.id));
       return [...prev, ...newExercises];
     });
+
+    // Also update the generated plan in localStorage for the current active workout
+    try {
+      const planString = localStorage.getItem("generatedPlan");
+      if (planString) {
+        const plan = JSON.parse(planString);
+
+        // Find the current active workout (next uncompleted workout)
+        const activeWorkout = getNextAvailableWorkout(
+          plan,
+          completedWorkoutIds
+        );
+
+        if (activeWorkout) {
+          // Find the index of this workout in the plan
+          const workoutIndex = plan.workoutDays.findIndex(
+            (day: any) =>
+              day.dayNumber === activeWorkout.dayNumber &&
+              day.dayName === activeWorkout.dayName
+          );
+
+          if (workoutIndex !== -1) {
+            const existingExerciseIds = new Set(
+              plan.workoutDays[workoutIndex].exercises.map((ex: any) => ex.id)
+            );
+            const newExercisesToAdd = exercises.filter(
+              (ex) => !existingExerciseIds.has(ex.id)
+            );
+
+            if (newExercisesToAdd.length > 0) {
+              plan.workoutDays[workoutIndex].exercises.push(
+                ...newExercisesToAdd
+              );
+              localStorage.setItem("generatedPlan", JSON.stringify(plan));
+              console.log(
+                `✅ Added ${newExercisesToAdd.length} exercises to ${activeWorkout.dayName} workout:`,
+                newExercisesToAdd.map((ex) => ex.name)
+              );
+            }
+          }
+        } else {
+          console.warn(
+            "⚠️ No active workout found (all workouts may be completed)"
+          );
+        }
+      }
+    } catch (error) {
+      console.error(
+        "❌ Error updating generated plan with new exercises:",
+        error
+      );
+    }
   };
 
   const navigateToWorkout = () => {
@@ -227,6 +298,7 @@ function App() {
                 prev.filter((ex) => ex.id !== exerciseId)
               );
             }}
+            completedWorkoutIds={completedWorkoutIds}
           />
         );
       case "profile":
@@ -276,7 +348,8 @@ function App() {
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
             exerciseLogs={exerciseLogs}
-            exercises={workoutExercises}
+            completedWorkoutIds={completedWorkoutIds}
+            setCompletedWorkoutIds={setCompletedWorkoutIds}
           />
         );
       case "history":

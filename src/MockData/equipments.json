@@ -1348,5 +1348,157 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "version": 1
+  },
+  {
+    "id": "eq_leg_curl_01",
+    "key": "leg_curl_machine",
+    "type": "machine",
+    "name": "Leg Curl Machine",
+    "aliases": ["lying leg curl", "prone leg curl", "hamstring curl"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 80,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["hamstrings", "calves"],
+    "movement_patterns": ["knee_flexion"],
+    "execution_cues": [
+      "Keep hips down",
+      "Control the descent",
+      "Full range of motion"
+    ],
+    "safety_notes": {
+      "l5_s1": ["No spinal loading - safe for most back conditions"],
+      "sciatica": ["Excellent choice - no nerve compression risk"]
+    },
+    "media": {
+      "thumbnail": "https://www.lifefitness.com/assets/hashed/product/leg-curl-machine.jpg",
+      "images": [
+        "https://www.lifefitness.com/assets/hashed/product/leg-curl-machine.jpg",
+        "https://www.bodybuilding.com/images/2016/july/master-the-seated-leg-curl-2.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A machine for isolating the hamstrings performed lying face down. The user lies prone with ankles secured under a padded lever, then curls legs toward glutes by bending knees. This exercise provides zero spinal loading, making it one of the safest options for hamstring development in users with back concerns. The machine typically features adjustable length to accommodate different body sizes and a weight stack for progressive resistance.",
+    "is_back_friendly": true,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_chest_press_machine_01",
+    "key": "chest_press_machine",
+    "type": "machine",
+    "name": "Chest Press Machine",
+    "aliases": ["machine chest press", "seated chest press"],
+    "load_type": null,
+    "selectorized": true,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 90,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["chest", "front_delts", "triceps"],
+    "movement_patterns": ["horizontal_push", "horizontal_adduction"],
+    "execution_cues": [
+      "Back pressed to pad",
+      "No arching",
+      "Controlled movement"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Excellent with back support - avoid excessive arching"],
+      "sciatica": ["Safe choice with proper posture"]
+    },
+    "media": {
+      "thumbnail": "https://www.lifefitness.com/assets/hashed/product/chest-press-machine.jpg",
+      "images": [
+        "https://www.lifefitness.com/assets/hashed/product/chest-press-machine.jpg",
+        "https://gymleco.com/cdn/shop/files/321-gymleco-seated-wide-chest-press-selectorized-machine-sittande-bred-brostpress-viktmagasinsmaskin_1.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "A seated machine providing a stable, guided horizontal pressing movement to train the pectoralis major, front deltoids, and triceps. The back support makes this significantly safer than bench pressing for users with back issues, as it prevents excessive arching and provides spinal support throughout the movement. Adjustable seat height ensures proper alignment.",
+    "is_back_friendly": true,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_assisted_dip_01",
+    "key": "assisted_dip_machine",
+    "type": "machine",
+    "name": "Assisted Dip Machine",
+    "aliases": ["assisted dip/chin", "gravitron", "assisted pull-up dip"],
+    "load_type": "counterweight",
+    "selectorized": true,
+    "pulley_ratio": {
+      "default": "1:1",
+      "alternatives": [],
+      "notes": "Counterweight assists upward movement"
+    },
+    "weight_stack_kg": 100,
+    "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
+    "attachments_supported": [],
+    "primary_muscles": ["chest", "triceps", "front_delts"],
+    "movement_patterns": ["vertical_push", "shoulder_extension"],
+    "execution_cues": [
+      "Lean forward for chest",
+      "Keep core tight",
+      "Controlled descent"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Use adequate assistance to reduce load"],
+      "sciatica": ["Safe with proper core bracing"]
+    },
+    "media": {
+      "thumbnail": "https://www.lifefitness.com/assets/hashed/product/assisted-dip-machine.jpg",
+      "images": [
+        "https://www.lifefitness.com/assets/hashed/product/assisted-dip-machine.jpg",
+        "https://www.inspireusafitness.com/cdn/shop/articles/assisted-dips-machine.jpg"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "An assisted dip machine uses a counterweight system to reduce the effective bodyweight load during dips and pull-ups. Users kneel or stand on a platform that assists the upward movement, making these exercises accessible to those who cannot yet perform full bodyweight versions. The assistance can be progressively reduced as strength improves. Excellent for building chest, triceps, and shoulder strength with reduced stress on the lower back compared to traditional dips.",
+    "is_back_friendly": true,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
+  },
+  {
+    "id": "eq_bodyweight_01",
+    "key": "bodyweight",
+    "type": "bodyweight",
+    "name": "Bodyweight",
+    "aliases": ["no equipment", "calisthenics", "bodyweight only"],
+    "load_type": "bodyweight",
+    "selectorized": false,
+    "pulley_ratio": { "default": null, "alternatives": [], "notes": null },
+    "weight_stack_kg": 0,
+    "height_range_cm": { "min": 0, "max": 300, "increment_cm": 1 },
+    "attachments_supported": [],
+    "primary_muscles": ["full_body"],
+    "movement_patterns": ["various"],
+    "execution_cues": [
+      "Maintain proper form",
+      "Control movement",
+      "Engage core"
+    ],
+    "safety_notes": {
+      "l5_s1": ["Exercise-dependent - maintain neutral spine"],
+      "sciatica": ["Avoid excessive flexion or rotation"]
+    },
+    "media": {
+      "thumbnail": "https://m.media-amazon.com/images/I/71Q3vC5JFZL.jpg",
+      "images": [
+        "https://m.media-amazon.com/images/I/71Q3vC5JFZL.jpg",
+        "https://hips.hearstapps.com/hmg-prod/images/mh-trainer-2-1533576998.png"
+      ],
+      "video_overview": null
+    },
+    "details_overview": "Bodyweight exercises use no external equipment - only the weight of your own body for resistance. This category includes exercises like push-ups, pull-ups, planks, squats, lunges, crunches, and various calisthenics movements. Bodyweight training is highly accessible, requires no equipment, and can be performed anywhere. It's excellent for building functional strength, improving body control, and developing core stability. The intensity can be modified through tempo, range of motion, leverage changes (incline/decline), and progression to more advanced variations.",
+    "is_back_friendly": true,
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "version": 1
   }
 ]

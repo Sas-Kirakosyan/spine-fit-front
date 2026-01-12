@@ -43,6 +43,7 @@ export interface WorkoutPageProps {
   onNavigateToMyPlan?: () => void;
   exercises?: Exercise[];
   onRemoveExercise?: (exerciseId: number) => void;
+  completedWorkoutIds?: Set<string>;
 }
 
 export interface ExerciseDetailsProps {
@@ -79,5 +80,6 @@ export interface ActiveWorkoutPageProps {
   completedExerciseIds?: number[];
   workoutStartTime?: number;
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
-  exercises: Exercise[];
+  completedWorkoutIds?: Set<string>;
+  setCompletedWorkoutIds?: (ids: Set<string>) => void;
 }

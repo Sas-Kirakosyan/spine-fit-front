@@ -13,10 +13,8 @@ import { FinishWorkoutModal } from "@/pages/WorkoutPage/FinishWorkoutModal";
 import { calculateWorkoutVolume } from "@/utils/workoutStats";
 import { ActiveWorkoutHeader } from "@/pages/WorkoutPage/ActiveWorkoutHeader";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
-import {
-  loadPlanFromLocalStorage,
-  getTodaysWorkout,
-} from "@/utils/planGenerator";
+import { loadPlanFromLocalStorage } from "@/utils/planGenerator";
+import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 
 export function ActiveWorkoutPage({
   onNavigateBack,
@@ -25,7 +23,8 @@ export function ActiveWorkoutPage({
   completedExerciseIds = [],
   workoutStartTime,
   exerciseLogs = {},
-  exercises = [],
+  completedWorkoutIds = new Set(),
+  setCompletedWorkoutIds,
 }: ActiveWorkoutPageProps) {
   const [elapsedSeconds, setElapsedSeconds] = useState(() => {
     if (workoutStartTime) {
@@ -41,16 +40,20 @@ export function ActiveWorkoutPage({
   );
   const cardRef = useRef<HTMLDivElement | null>(null);
 
-  // Always load today's workout from generated plan
+  // Always load current active workout from generated plan
   const todaysExercises = useMemo(() => {
     const generatedPlan = loadPlanFromLocalStorage();
 
     if (generatedPlan) {
-      const todaysWorkout = getTodaysWorkout(generatedPlan);
-      if (todaysWorkout && todaysWorkout.exercises.length > 0) {
-        return todaysWorkout.exercises;
+      // Get the next available workout based on completion status
+      const activeWorkout = getNextAvailableWorkout(
+        generatedPlan,
+        completedWorkoutIds
+      );
+      if (activeWorkout && activeWorkout.exercises.length > 0) {
+        return activeWorkout.exercises;
       }
-      // Fallback to first workout day if today's workout is not found
+      // Fallback to first workout day if no workout is found
       if (
         generatedPlan.workoutDays.length > 0 &&
         generatedPlan.workoutDays[0].exercises.length > 0
@@ -59,7 +62,7 @@ export function ActiveWorkoutPage({
       }
     }
     return [];
-  }, []);
+  }, [completedWorkoutIds]);
 
   useEffect(() => {
     if (workoutStartTime) {
@@ -76,14 +79,14 @@ export function ActiveWorkoutPage({
   const allExercisesCompleted = useMemo(() => {
     return (
       todaysExercises.length > 0 &&
-      todaysExercises.every((exercise) =>
+      todaysExercises.every((exercise: Exercise) =>
         completedExerciseIdsSet.has(exercise.id)
       )
     );
   }, [completedExerciseIdsSet, todaysExercises]);
 
   const completedExercises = useMemo(() => {
-    return todaysExercises.filter((exercise) =>
+    return todaysExercises.filter((exercise: Exercise) =>
       completedExerciseIdsSet.has(exercise.id)
     );
   }, [completedExerciseIdsSet, todaysExercises]);
@@ -122,6 +125,42 @@ export function ActiveWorkoutPage({
       completedExerciseLogs: exerciseLogs,
     };
     setShowFinishModal(false);
+
+    // Mark current workout as completed
+    const generatedPlan = loadPlanFromLocalStorage();
+    if (generatedPlan && todaysExercises.length > 0) {
+      // Find the current active workout by matching exercises
+      const currentWorkout = getNextAvailableWorkout(
+        generatedPlan,
+        completedWorkoutIds
+      );
+
+      if (currentWorkout) {
+        const workoutId = `${generatedPlan.id}_${currentWorkout.dayNumber}_${currentWorkout.dayName}`;
+        const updatedIds = new Set(completedWorkoutIds);
+        updatedIds.add(workoutId);
+
+        if (setCompletedWorkoutIds) {
+          setCompletedWorkoutIds(updatedIds);
+        }
+
+        console.log(
+          `✅ Marked workout complete: ${currentWorkout.dayName} (${workoutId})`
+        );
+
+        // Check if there's another workout available
+        const nextWorkout = getNextAvailableWorkout(generatedPlan, updatedIds);
+
+        if (nextWorkout) {
+          // There's another workout available - show alert
+          console.log("Next workout available:", nextWorkout.dayName);
+          alert(`Great job! Next workout available: ${nextWorkout.dayName}`);
+        } else {
+          console.log("🎉 All workouts completed!");
+        }
+      }
+    }
+
     onFinishWorkout(summary);
   };
 
@@ -168,7 +207,7 @@ export function ActiveWorkoutPage({
             </p>
           </div>
         )}
-        {todaysExercises.map((exercise, index) => {
+        {todaysExercises.map((exercise: Exercise, index: number) => {
           const isCompleted = completedExerciseIdsSet.has(exercise.id);
           return (
             <ExerciseCard

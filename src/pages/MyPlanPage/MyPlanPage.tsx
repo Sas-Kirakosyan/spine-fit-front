@@ -132,17 +132,24 @@ export function MyPlanPage({
         ? JSON.parse(equipmentDataString)
         : [];
 
-      // Extract available equipment names
+      // Extract available equipment names from configured equipment
       const availableEquipment = equipmentData.flatMap((category) =>
         category.items.filter((item) => item.selected).map((item) => item.name)
       );
 
-      // If no equipment selected and workoutType is gym, use common gym equipment
-      const finalEquipment = availableEquipment.length > 0 
-        ? availableEquipment 
-        : quizData.workoutType === "gym"
-        ? ["barbell", "dumbbell", "cable_machine", "leg_press", "chest_fly_machine", "lat_pulldown", "seated_cable_row", "leg_extension_machine", "leg_curl_machine"]
-        : ["bodyweight"];
+      // If no equipment configured yet, assume all equipment exists (extract from exercise database)
+      // Once user configures equipment preferences, only selected equipment will be used
+      const finalEquipment =
+        availableEquipment.length > 0
+          ? availableEquipment
+          : equipmentData.length === 0
+          ? // No equipment data configured - assume all equipment exists
+            Array.from(
+              new Set(
+                (allExercisesData as Exercise[]).map((ex) => ex.equipment)
+              )
+            ).filter((eq) => eq && eq !== "none")
+          : ["bodyweight"];
 
       // Load workout history
       const historyString = localStorage.getItem("workoutHistory");

@@ -14,8 +14,8 @@ import { WorkoutPlanCard } from "@/pages/WorkoutPage/WorkoutPlanCard";
 import {
   generateTrainingPlan,
   savePlanToLocalStorage,
-  getTodaysWorkout,
 } from "@/utils/planGenerator";
+import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { loadPlanSettings } from "@/types/planSettings";
 import type { EquipmentCategory } from "@/types/equipment";
 import type { QuizAnswers } from "@/types/quiz";
@@ -36,15 +36,18 @@ export function WorkoutPage({
   onNavigateToAllExercise,
   exercises = defaultExercises,
   onRemoveExercise,
+  completedWorkoutIds = new Set(),
 }: WorkoutPageProps) {
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const [workoutExercises, setWorkoutExercises] =
     useState<Exercise[]>(exercises);
   const [isLoadingPlan, setIsLoadingPlan] = useState(true);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const [c, setC] = useState(0); // counter to trigger re-generation
 
   // Load or generate plan when component mounts
   useEffect(() => {
+    console.log("Initializing workout plan...");
     const initializePlan = () => {
       try {
         // Check if plan already exists
@@ -52,9 +55,18 @@ export function WorkoutPage({
         if (existingPlan) {
           // Load existing plan
           const plan = JSON.parse(existingPlan);
-          const todaysWorkout = getTodaysWorkout(plan);
-          if (todaysWorkout && todaysWorkout.exercises.length > 0) {
-            setWorkoutExercises(todaysWorkout.exercises);
+          // Get next uncompleted workout based on completion status
+
+          const nextWorkout = getNextAvailableWorkout(
+            plan,
+            completedWorkoutIds
+          );
+          console.log("nextWorkout:", nextWorkout);
+          if (nextWorkout && nextWorkout.exercises.length > 0) {
+            setWorkoutExercises(nextWorkout.exercises);
+            console.log(
+              `📋 Loaded ${nextWorkout.dayName} workout (${nextWorkout.exercises.length} exercises)`
+            );
           } else {
             // Fallback to first workout day
             if (
@@ -88,29 +100,25 @@ export function WorkoutPage({
           ? JSON.parse(equipmentDataString)
           : [];
 
-        // Extract available equipment names
+        // Extract available equipment names from configured equipment
         const availableEquipment = equipmentData.flatMap((category) =>
           category.items
             .filter((item) => item.selected)
             .map((item) => item.name)
         );
 
-        // If no equipment selected and workoutType is gym, use common gym equipment
+        // If no equipment configured yet, assume all equipment exists (extract from exercise database)
+        // Once user configures equipment preferences, only selected equipment will be used
         const finalEquipment =
           availableEquipment.length > 0
             ? availableEquipment
-            : quizData.workoutType === "gym"
-            ? [
-                "barbell",
-                "dumbbell",
-                "cable_machine",
-                "leg_press",
-                "chest_fly_machine",
-                "lat_pulldown",
-                "seated_cable_row",
-                "leg_extension_machine",
-                "leg_curl_machine",
-              ]
+            : equipmentData.length === 0
+            ? // No equipment data configured - assume all equipment exists
+              Array.from(
+                new Set(
+                  (allExercisesData as Exercise[]).map((ex) => ex.equipment)
+                )
+              ).filter((eq) => eq && eq !== "none")
             : ["bodyweight"];
 
         // Load workout history
@@ -136,12 +144,13 @@ export function WorkoutPage({
         savePlanToLocalStorage(plan);
         console.log("Plan generated after onboarding:", plan);
 
-        // Load today's workout exercises from the plan
-        const todaysWorkout = getTodaysWorkout(plan);
-        if (todaysWorkout && todaysWorkout.exercises.length > 0) {
-          setWorkoutExercises(todaysWorkout.exercises);
+        // Load next available workout exercises from the plan
+        const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
+        if (nextWorkout && nextWorkout.exercises.length > 0) {
+          setWorkoutExercises(nextWorkout.exercises);
+   
         } else {
-          // Fallback to first workout day if today's workout is not found
+          // Fallback to first workout day if no workout is found
           if (
             plan.workoutDays.length > 0 &&
             plan.workoutDays[0].exercises.length > 0
@@ -157,20 +166,104 @@ export function WorkoutPage({
     };
 
     initializePlan();
-  }, []);
+  }, [completedWorkoutIds]);
 
-  // Prioritize plan exercises if a plan exists, otherwise use prop exercises
+  // Listen for plan changes via storage events (when exercises are added from AllExercisePage)
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "generatedPlan" && e.newValue) {
+        try {
+          const plan = JSON.parse(e.newValue);
+          const nextWorkout = getNextAvailableWorkout(
+            plan,
+            completedWorkoutIds
+          );
+          if (nextWorkout && nextWorkout.exercises.length > 0) {
+            setWorkoutExercises(nextWorkout.exercises);
+            console.log(
+              `Updated to ${nextWorkout.dayName} workout from storage event:`,
+              nextWorkout.exercises.map((e: any) => e.name)
+            );
+          }
+        } catch (error) {
+          console.error("Error updating exercises from storage event:", error);
+        }
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [completedWorkoutIds]);
+
+  // Reload exercises when plan changes (e.g., when exercises are added)
+  useEffect(() => {
+    const reloadExercisesFromPlan = () => {
+      try {
+        const planString = localStorage.getItem("generatedPlan");
+        if (planString) {
+          const plan = JSON.parse(planString);
+          const nextWorkout = getNextAvailableWorkout(
+            plan,
+            completedWorkoutIds
+          );
+          if (nextWorkout && nextWorkout.exercises.length > 0) {
+            // Only update if exercises have actually changed (compare IDs)
+            setWorkoutExercises((prev) => {
+              const prevIds = prev
+                .map((e) => e.id)
+                .sort()
+                .join(",");
+              const nextIds = nextWorkout.exercises
+                .map((e: any) => e.id)
+                .sort()
+                .join(",");
+              if (prevIds !== nextIds) {
+                console.log(
+                  `Reloaded ${nextWorkout.dayName} workout:`,
+                  nextWorkout.exercises.map((e) => e.name)
+                );
+                return nextWorkout.exercises;
+              }
+              return prev;
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error reloading exercises from plan:", error);
+      }
+    };
+
+    // Check for plan changes periodically (every 500ms)
+    const interval = setInterval(reloadExercisesFromPlan, 500);
+
+    // Also reload immediately
+    reloadExercisesFromPlan();
+
+    return () => clearInterval(interval);
+  }, [completedWorkoutIds]);
+
+  // Only show exercises from generated plans - no default exercises
   const hasGeneratedPlan = localStorage.getItem("generatedPlan") !== null;
-  const displayExercises = hasGeneratedPlan
-    ? workoutExercises
-    : exercises !== defaultExercises
-    ? exercises
-    : workoutExercises;
+  const displayExercises = hasGeneratedPlan ? workoutExercises : [];
 
+  console.log(
+    "plan",
+    JSON.parse(localStorage.getItem("generatedPlan") || "{}")
+  ); // dont remove this log
   return (
     <PageContainer>
       <div className="flex items-center justify-between pr-2.5">
         <Logo />
+        <div
+          onClick={() => {
+            localStorage.removeItem("generatedPlan");
+            localStorage.removeItem("completedWorkoutIds");
+            setC(c + 1);
+          }}
+          className="cursor-pointer text-xs text-white/50 hover:text-white"
+        >
+          🔄 regenerate plan
+        </div>
         {onNavigateToHome && (
           <Button
             onClick={onNavigateToHome}

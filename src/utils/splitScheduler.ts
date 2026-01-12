@@ -168,10 +168,26 @@ function selectExercisesForMuscleGroups(
   const selected: Exercise[] = [];
   const usedExerciseIds = new Set<number>(globalUsedIds); // Start with globally used IDs
 
-  // Prioritize compound movements
+  const lowerBodyGroups = new Set(["quadriceps", "glutes", "hamstrings"]);
+
+  console.log("  [Selecting for muscle groups]", targetMuscleGroups, "Max:", maxExercises, "Available exercises:", exercises.length);
+
+  // Prioritize compound movements, especially for Full Body splits
   const sortedExercises = [...exercises].sort((a, b) => {
     const aCompound = a.muscle_groups.length;
     const bCompound = b.muscle_groups.length;
+
+    // For Full Body splits, prioritize multi-joint leg exercises for hamstring coverage
+    const isFullBodyLegExercise = (ex: Exercise) =>
+      (ex.name.includes("Belt Squat") || ex.name.includes("Bulgarian")) &&
+      targetMuscleGroups.includes("hamstrings");
+
+    const aIsFullBodyLeg = isFullBodyLegExercise(a);
+    const bIsFullBodyLeg = isFullBodyLegExercise(b);
+
+    if (aIsFullBodyLeg && !bIsFullBodyLeg) return -1;
+    if (!aIsFullBodyLeg && bIsFullBodyLeg) return 1;
+
     return bCompound - aCompound;
   });
 
@@ -184,8 +200,11 @@ function selectExercisesForMuscleGroups(
     );
 
     if (exercise && selected.length < maxExercises) {
+      console.log(`    ✓ Found for ${muscleGroup}: ${exercise.name}`);
       selected.push(exercise);
       usedExerciseIds.add(exercise.id);
+    } else {
+      console.log(`    ✗ NO exercise found for ${muscleGroup}`);
     }
   }
 
@@ -200,11 +219,83 @@ function selectExercisesForMuscleGroups(
     );
 
     if (targetsRelevantMuscles && !usedExerciseIds.has(exercise.id)) {
+      console.log(`    ✓ Additional: ${exercise.name}`);
       selected.push(exercise);
       usedExerciseIds.add(exercise.id);
     }
   }
 
+  // Ensure we have at least one lower-body movement (quads/glutes/hamstrings)
+  const hasLowerBody = selected.some((ex) =>
+    ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg))
+  );
+
+  if (!hasLowerBody) {
+    const lowerBodyExercise = sortedExercises.find(
+      (ex) =>
+        ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg)) &&
+        !usedExerciseIds.has(ex.id)
+    );
+
+    if (lowerBodyExercise) {
+      if (selected.length < maxExercises) {
+        selected.push(lowerBodyExercise);
+      } else if (selected.length > 0) {
+        // Replace the last non-lower-body exercise to maintain count
+        const replaceIndex = selected.findIndex(
+          (ex) => !ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg))
+        );
+        if (replaceIndex !== -1) {
+          selected[replaceIndex] = lowerBodyExercise;
+        }
+      }
+      usedExerciseIds.add(lowerBodyExercise.id);
+    }
+  }
+
+  // Ensure at least one quadriceps and one hamstrings/glute posterior-chain movement when targeted
+  const needsQuads = targetMuscleGroups.includes("quadriceps");
+  const needsHam = targetMuscleGroups.includes("hamstrings") || targetMuscleGroups.includes("glutes");
+
+  const hasQuads = selected.some((ex) => ex.muscle_groups.includes("quadriceps"));
+  const hasHam = selected.some((ex) =>
+    ex.muscle_groups.includes("hamstrings") || ex.muscle_groups.includes("glutes")
+  );
+
+  const ensureGroup = (muscleGroup: string, allowGlutes: boolean) => {
+    const candidate = sortedExercises.find(
+      (ex) =>
+        ex.muscle_groups.includes(muscleGroup) ||
+        (allowGlutes && ex.muscle_groups.includes("glutes"))
+    );
+
+    if (!candidate) return;
+
+    if (!selected.includes(candidate)) {
+      if (selected.length < maxExercises) {
+        selected.push(candidate);
+      } else {
+        const replaceIndex = selected.findIndex(
+          (ex) =>
+            !ex.muscle_groups.includes(muscleGroup) &&
+            !(allowGlutes && ex.muscle_groups.includes("glutes"))
+        );
+        if (replaceIndex !== -1) {
+          selected[replaceIndex] = candidate;
+        }
+      }
+    }
+  };
+
+  if (needsQuads && !hasQuads) {
+    ensureGroup("quadriceps", false);
+  }
+
+  if (needsHam && !hasHam) {
+    ensureGroup("hamstrings", true);
+  }
+
+  console.log(`  [Result] Selected ${selected.length} exercises`);
   return selected;
 }
 

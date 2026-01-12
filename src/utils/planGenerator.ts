@@ -46,9 +46,13 @@ export function generateTrainingPlan(
 
   // 3. Filter exercises based on user profile
   let filteredExercises = filterExercisesByProfile(allExercises, filterCriteria);
+  console.log("=== PLAN GENERATION DEBUG ===");
+  console.log("Total exercises in database:", allExercises.length);
   console.log("Filtered exercises count:", filteredExercises.length);
   console.log("Available equipment:", availableEquipment);
   console.log("Filter criteria:", filterCriteria);
+  console.log("Filtered exercise names:", filteredExercises.slice(0, 10).map(e => `${e.name} (${e.muscle_groups.join(", ")})`));
+  console.log("Pain profile:", painProfile);
 
   // 4. Apply progressive overload based on workout history
   if (workoutHistory.length > 0) {
@@ -64,10 +68,13 @@ export function generateTrainingPlan(
   });
 
   // 6. Calculate how many exercises per workout
-  const exercisesPerWorkout = calculateExercisesPerWorkout(
+  const rawExercisesPerWorkout = calculateExercisesPerWorkout(
     volumeRecommendation.totalSetsPerWorkout,
     volumeRecommendation.setsPerExercise
   );
+
+  // Ensure enough slots to cover all major muscle groups on Full Body days
+  const exercisesPerWorkout = Math.min(Math.max(rawExercisesPerWorkout, 4), 6);
 
   // 7. Parse workouts per week from plan settings
   const workoutsPerWeek = parseWorkoutsPerWeek(effectivePlanSettings.workoutsPerWeek);
@@ -90,9 +97,18 @@ export function generateTrainingPlan(
     muscleGroupsByDay,
     exercisesPerWorkout
   );
-  console.log("Workout days with assigned exercises:", workoutDays);
-  console.log("Exercises per workout:", exercisesPerWorkout);
   console.log("Muscle groups by day:", muscleGroupsByDay);
+  console.log("Exercises per workout:", exercisesPerWorkout);
+  console.log("Filtered exercises before assignment:", filteredExercises.length);
+  console.log("Workout days after assignment:", workoutDays.map(d => ({
+    day: d.dayName,
+    exerciseCount: d.exercises.length,
+    muscleGroups: d.muscleGroups
+  })));
+  if (workoutDays.length > 0 && workoutDays[0].exercises.length === 0) {
+    console.error("❌ ERROR: No exercises assigned to any day!");
+    console.log("First day exercises:", workoutDays[0].exercises);
+  }
 
   // 11. Apply sets and reps to each exercise
   const workoutDaysWithVolume = workoutDays.map((day) => ({

@@ -22,7 +22,9 @@ export function filterExercisesByProfile(
   exercises: Exercise[],
   criteria: FilterCriteria
 ): Exercise[] {
-  return exercises.filter((exercise) => {
+  console.log("[filterExercisesByProfile] Starting with", exercises.length, "exercises");
+
+  const filtered = exercises.filter((exercise) => {
     // Filter by equipment availability
     if (!isEquipmentAvailable(exercise.equipment, criteria.availableEquipment)) {
       return false;
@@ -35,16 +37,21 @@ export function filterExercisesByProfile(
 
     // Filter by back safety restrictions
     if (!isBackSafe(exercise, criteria.painProfile)) {
+      console.log(`  ❌ Filtered out: ${exercise.name} (back safety)`);
       return false;
     }
 
     // Filter by pain triggers
     if (!isPainTriggerSafe(exercise, criteria.painProfile)) {
+      console.log(`  ❌ Filtered out: ${exercise.name} (pain trigger)`);
       return false;
     }
 
     return true;
   });
+
+  console.log("[filterExercisesByProfile] Result:", filtered.length, "exercises");
+  return filtered;
 }
 
 /**
@@ -117,6 +124,15 @@ function isBackSafe(exercise: Exercise, painProfile: PainProfile): boolean {
           return false;
         }
 
+        // For past pain in sensitive areas, also avoid "high" restriction exercises
+        if (
+          painProfile.painStatus === "In the past" &&
+          restriction.restriction_level === "high" &&
+          (restriction.issue_type === "l5_s1" || restriction.issue_type === "sciatica" || restriction.issue_type === "herniated_disc")
+        ) {
+          return false;
+        }
+
         // If current pain is high (>7), avoid "high" restriction exercises
         if (
           painProfile.painStatus === "Yes, currently" &&
@@ -174,11 +190,14 @@ function isPainTriggerSafe(exercise: Exercise, painProfile: PainProfile): boolea
     return false;
   }
 
-  // Avoid lifting-heavy exercises if lifting is a trigger and pain is current
+  // Avoid lifting-heavy exercises if lifting is a trigger
+  // Only filter out heavy compound movements and barbell exercises
   if (
-    painProfile.painStatus === "Yes, currently" &&
     triggers.some((t) => t.includes("lifting")) &&
-    (exerciseName.includes("lift") || exerciseName.includes("press"))
+    (exerciseName.includes("deadlift") ||
+      exerciseName.includes("squat") ||
+      (exerciseName.includes("press") &&
+        (exerciseName.includes("bench") || exerciseName.includes("floor") || exerciseName.includes("barbell"))))
   ) {
     return false;
   }

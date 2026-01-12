@@ -285,6 +285,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
       // Overwrite any existing quiz data instead of appending
       localStorage.setItem("quizAnswers", JSON.stringify(quizData));
+
+      // Clear any existing generated plan so a new one gets created with updated answers
+      localStorage.removeItem("generatedPlan");
+
       console.log("quizData:", quizData);
       setCurrentQuestion(0);
       setSelectedAnswer(null);
@@ -325,6 +329,9 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
     // Overwrite any existing quiz data instead of appending
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
+
+    // Clear any existing generated plan so a new one gets created with updated answers
+    localStorage.removeItem("generatedPlan");
 
     setCurrentQuestion(0);
     setSelectedAnswer(null);

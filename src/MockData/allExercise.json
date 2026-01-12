@@ -765,5 +765,262 @@
     "reps": 15,
     "weight": 0,
     "weight_unit": "kg"
+  },
+  {
+    "id": 24,
+    "name": "Leg Press",
+    "description": "A machine-based compound leg exercise that targets quadriceps, glutes, and hamstrings with no spinal compression. Excellent alternative to squats for those with back issues.",
+    "category": "strength",
+    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "equipment": "leg_press",
+    "difficulty": "beginner",
+    "instructions": "Sit in leg press machine with back and head against pad. Place feet shoulder-width apart on platform. Push platform away by extending knees and hips. Lower with control, keeping knees aligned with toes. Avoid locking knees at top or rounding lower back at bottom.",
+    "video_url": "https://cdn.spinefit.app/videos/leg_press.mp4",
+    "image_url": "https://fitnessprogramer.com/wp-content/uploads/2015/11/Leg-Press.gif",
+    "equipment_image_url": "https://fitnessprogramer.com/wp-content/uploads/2015/11/Leg-Press.gif",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 46,
+        "exercise_id": 24,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Keep lower back pressed against pad throughout. Avoid excessive depth that causes tailbone to lift. Use moderate weight.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      },
+      {
+        "id": 47,
+        "exercise_id": 24,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Excellent choice - no spinal loading. Stop if any nerve symptoms occur. Keep smooth controlled movements.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 80,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 25,
+    "name": "Lying Leg Curl",
+    "description": "An isolation exercise for the hamstrings performed on a leg curl machine while lying face down. Targets hamstrings with zero spinal loading.",
+    "category": "strength",
+    "muscle_groups": ["hamstrings"],
+    "equipment": "leg_curl_machine",
+    "difficulty": "beginner",
+    "instructions": "Lie face down on leg curl machine with pad behind ankles. Keep hips pressed to pad. Curl legs up toward glutes by bending knees. Squeeze hamstrings at top. Lower with control. Avoid lifting hips or arching back.",
+    "video_url": "https://cdn.spinefit.app/videos/leg_curl.mp4",
+    "image_url": "https://s3assets.skimble.com/assets/2172103/image_full.jpg",
+    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/leg-curl-machine.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 48,
+        "exercise_id": 25,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Keep hips and pelvis pressed to pad. No spinal movement or loading. Safe for most back conditions.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 20,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 26,
+    "name": "Single-Leg Romanian Deadlift",
+    "description": "A unilateral hip hinge movement with light dumbbells that targets hamstrings, glutes, and balance. Reduces spinal load compared to barbell variations.",
+    "category": "strength",
+    "muscle_groups": ["hamstrings", "glutes", "erector_spinae"],
+    "equipment": "dumbbells",
+    "difficulty": "intermediate",
+    "instructions": "Stand on one leg holding light dumbbell in opposite hand. Hinge at hip, lowering dumbbell toward floor while extending free leg behind for balance. Keep back neutral, core braced. Return to standing by driving through heel. Use light weight and focus on form.",
+    "video_url": "https://cdn.spinefit.app/videos/single_leg_rdl.mp4",
+    "image_url": "https://s3assets.skimble.com/assets/2286951/image_full.jpg",
+    "equipment_image_url": "https://sbdireland.com/cdn/shop/articles/single_leg_Romanian_Deadlift.png?v=1716216874",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 49,
+        "exercise_id": 26,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Use very light weight (5-8kg max). Keep spine neutral throughout. Stop if any pain occurs. Excellent for hamstring strengthening with minimal load.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 8,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 27,
+    "name": "Goblet Squat",
+    "description": "A front-loaded squat holding a dumbbell or kettlebell at chest level. The front load promotes upright torso positioning and reduces lower back stress compared to back squats.",
+    "category": "strength",
+    "muscle_groups": ["quadriceps", "glutes", "core_stabilizers"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Hold dumbbell vertically at chest level with both hands. Stand with feet shoulder-width apart. Squat down by bending knees and hips, keeping chest up and elbows inside knees. Lower to comfortable depth. Drive through heels to stand. Keep torso upright throughout.",
+    "video_url": "https://cdn.spinefit.app/videos/goblet_squat.mp4",
+    "image_url": "https://ca.ironbullstrength.com/cdn/shop/articles/ea15b7b44c2032cfeae6685e160bc02e_7788ffa8-a063-4c51-a0ea-aa474c2a3e5d.jpg?v=1756366811",
+    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/dumbbells-thumbnail.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 50,
+        "exercise_id": 27,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Start with light weight (8-12kg). Front load keeps torso upright reducing lower back stress. Stop at comfortable depth - avoid excessive flexion.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 12,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 28,
+    "name": "Machine Chest Press",
+    "description": "A machine-based horizontal pushing exercise targeting the chest, front delts, and triceps. Provides back support and stable movement path, safer than free weight bench press for those with back issues.",
+    "category": "strength",
+    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "equipment": "chest_press_machine",
+    "difficulty": "beginner",
+    "instructions": "Sit in machine with back pressed firmly against pad. Grip handles at chest level. Push handles forward by extending arms until nearly straight. Return with control. Keep lower back pressed to pad throughout. Avoid arching back or driving through lower back.",
+    "video_url": "https://cdn.spinefit.app/videos/machine_chest_press.mp4",
+    "image_url": "https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Chest-Press-Machine.gif",
+    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/chest-press-machine.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 51,
+        "exercise_id": 28,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent choice with back support. Keep lower back pressed to pad. Avoid excessive arching. Safe for most back conditions.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 40,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 29,
+    "name": "Push-ups",
+    "description": "A fundamental bodyweight exercise targeting chest, shoulders, and triceps while engaging the core. Can be modified with incline or knee variations for different difficulty levels.",
+    "category": "strength",
+    "muscle_groups": ["chest", "front_delts", "triceps", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Start in plank position with hands slightly wider than shoulders. Keep body in straight line from head to heels, core engaged. Lower chest toward floor by bending elbows. Push back up to starting position. Maintain neutral spine throughout - avoid sagging hips or piking up.",
+    "video_url": "https://cdn.spinefit.app/videos/pushups.mp4",
+    "image_url": "https://training.fit/wp-content/uploads/2020/02/liegestuetze.png",
+    "equipment_image_url": "https://m.media-amazon.com/images/I/71Q3vC5JFZL.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 52,
+        "exercise_id": 29,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Requires good core stability. Keep neutral spine - avoid sagging or excessive arching. Start with incline push-ups if needed. Stop if any lower back pain occurs.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 30,
+    "name": "Assisted Dips",
+    "description": "A compound upper body exercise targeting chest, triceps, and front delts using an assisted dip machine or resistance bands. The assistance reduces load on the lower back.",
+    "category": "strength",
+    "muscle_groups": ["chest", "triceps", "front_delts"],
+    "equipment": "assisted_dip_machine",
+    "difficulty": "intermediate",
+    "instructions": "Position yourself on assisted dip machine with hands on handles, arms straight. Lean slightly forward for chest emphasis. Lower body by bending elbows until upper arms are parallel to floor. Push back up to starting position. Keep core engaged and avoid excessive swinging.",
+    "video_url": "https://cdn.spinefit.app/videos/assisted_dips.mp4",
+    "image_url": "https://www.inspireusafitness.com/cdn/shop/articles/assisted-dips-machine.jpg",
+    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/assisted-dip-machine.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 53,
+        "exercise_id": 30,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Use adequate assistance to reduce load. Keep core braced and avoid excessive swinging. Stop if lower back discomfort occurs.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 31,
+    "name": "Incline Dumbbell Press",
+    "description": "An upper chest pressing exercise performed on an incline bench with dumbbells. The incline angle reduces lower back stress compared to flat pressing.",
+    "category": "strength",
+    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "equipment": "dumbbells",
+    "difficulty": "intermediate",
+    "instructions": "Set bench to 30-45 degree incline. Sit with back against pad, dumbbells at shoulder level. Press dumbbells up and slightly inward until arms are extended. Lower with control to shoulder level. Keep lower back pressed to pad, avoid excessive arching.",
+    "video_url": "https://cdn.spinefit.app/videos/incline_db_press.mp4",
+    "image_url": "https://weighttraining.guide/wp-content/uploads/2017/07/Incline-reverse-grip-dumbbell-bench-press-resized.png",
+    "equipment_image_url": "https://sbdireland.com/cdn/shop/articles/dumbbells.png?v=1716216874",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 54,
+        "exercise_id": 31,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Incline reduces lower back stress. Use moderate weight. Keep back pressed to bench throughout. Avoid excessive arching.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 16,
+    "weight_unit": "kg"
   }
 ]
