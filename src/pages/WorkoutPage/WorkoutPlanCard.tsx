@@ -32,7 +32,7 @@ export function WorkoutPlanCard({
 
   return (
     <>
-      <div className="relative rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
+      <div className="relative rounded-[14px] bg-[#1B1E2B]/90 p-4 mx-2.5 shadow-xl ring-1 ring-white/5">
         {/* Top right buttons */}
         <div className="absolute top-4 right-4 flex items-center gap-2">
           <button

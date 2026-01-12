@@ -26,6 +26,22 @@ export function QuizNavigationButtons({
   onSubmit,
 }: QuizNavigationButtonsProps) {
   const isLastQuestion = currentQuestion >= totalQuestions - 1;
+  const isStartScreen =
+    currentQuestion === 0 && isInfoScreen && buttonText === "Start";
+
+  if (isStartScreen) {
+    return (
+      <div className="flex flex-col items-center text-white absolute bottom-50 left-0 right-0">
+        <button
+          onClick={onNext}
+          className="w-full max-w-[300px] mx-auto rounded-[18px] bg-main py-4 text-lg font-semibold text-white transition hover:bg-main/90"
+        >
+          {buttonText}
+        </button>
+        <p className="mt-2 text-sm text-gray-400">Takes less than 1 minute</p>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-6 mx-4 flex items-center justify-between text-white">

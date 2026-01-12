@@ -138,11 +138,22 @@ export function MyPlanPage({
       );
 
       // If no equipment selected and workoutType is gym, use common gym equipment
-      const finalEquipment = availableEquipment.length > 0 
-        ? availableEquipment 
-        : quizData.workoutType === "gym"
-        ? ["barbell", "dumbbell", "cable_machine", "leg_press", "chest_fly_machine", "lat_pulldown", "seated_cable_row", "leg_extension_machine", "leg_curl_machine"]
-        : ["bodyweight"];
+      const finalEquipment =
+        availableEquipment.length > 0
+          ? availableEquipment
+          : quizData.workoutType === "gym"
+          ? [
+              "barbell",
+              "dumbbell",
+              "cable_machine",
+              "leg_press",
+              "chest_fly_machine",
+              "lat_pulldown",
+              "seated_cable_row",
+              "leg_extension_machine",
+              "leg_curl_machine",
+            ]
+          : ["bodyweight"];
 
       // Load workout history
       const historyString = localStorage.getItem("workoutHistory");
@@ -185,10 +196,10 @@ export function MyPlanPage({
   };
 
   return (
-    <PageContainer contentClassName="gap-8 px-2.5">
+    <PageContainer contentClassName="gap-8">
       <MyPlanPageHeader onNavigateBack={onNavigateBack} />
 
-      <div className="flex flex-col flex-1 gap-6 pb-24">
+      <div className="flex flex-col flex-1 gap-6 pb-24 px-2.5">
         {/* Goal Section */}
         <Button
           onClick={() => handleFieldClick("goal")}
@@ -447,13 +458,15 @@ export function MyPlanPage({
         </div>
 
         {/* Generate Plan Button */}
-        <Button
-          onClick={handleGeneratePlan}
-          disabled={isGenerating}
-          className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[420px] rounded-[14px] bg-main p-4 text-white font-semibold text-lg"
-        >
-          {isGenerating ? "Generating..." : "Generate Plan"}
-        </Button>
+        <div className="flex justify-center items-center mx-2.5">
+          <Button
+            onClick={handleGeneratePlan}
+            disabled={isGenerating}
+            className="w-full max-w-[380px] fixed bottom-0 left-1/2 -translate-x-1/2 z-50 rounded-[10px] bg-main h-[46px] text-white font-semibold text-lg"
+          >
+            {isGenerating ? "Generating..." : "Generate Plan"}
+          </Button>
+        </div>
 
         {/* Generated Plan Preview */}
         {generatedPlan && (
