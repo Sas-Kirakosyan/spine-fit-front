@@ -352,12 +352,14 @@ export function WorkoutPage({
       </div>
 
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
-        <Button
-          onClick={onStartWorkoutSession}
-          className="w-[420px] flex justify-center items-center mx-auto mb-[30px] h-[44px] rounded-[10px] bg-main text-white uppercase"
-        >
-          START Workout
-        </Button>
+        <div className="flex justify-center items-center">
+          <Button
+            onClick={onStartWorkoutSession}
+            className="w-full mx-2.5 flex justify-center items-center mb-[30px] h-[46px] rounded-[10px] bg-main text-white uppercase"
+          >
+            START Workout
+          </Button>
+        </div>
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}
