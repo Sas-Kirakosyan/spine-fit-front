@@ -14,6 +14,7 @@ import { WorkoutPlanCard } from "@/pages/WorkoutPage/WorkoutPlanCard";
 import {
   generateTrainingPlan,
   savePlanToLocalStorage,
+  loadPlanFromLocalStorage,
 } from "@/utils/planGenerator";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { loadPlanSettings } from "@/types/planSettings";
@@ -148,7 +149,6 @@ export function WorkoutPage({
         const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
         if (nextWorkout && nextWorkout.exercises.length > 0) {
           setWorkoutExercises(nextWorkout.exercises);
-   
         } else {
           // Fallback to first workout day if no workout is found
           if (
@@ -166,7 +166,7 @@ export function WorkoutPage({
     };
 
     initializePlan();
-  }, [completedWorkoutIds]);
+  }, [completedWorkoutIds, c]);
 
   // Listen for plan changes via storage events (when exercises are added from AllExercisePage)
   useEffect(() => {
@@ -220,7 +220,7 @@ export function WorkoutPage({
               if (prevIds !== nextIds) {
                 console.log(
                   `Reloaded ${nextWorkout.dayName} workout:`,
-                  nextWorkout.exercises.map((e) => e.name)
+                  nextWorkout.exercises.map((e: any) => e.name)
                 );
                 return nextWorkout.exercises;
               }
@@ -385,8 +385,58 @@ export function WorkoutPage({
             setActionExercise(null);
           }}
           onDelete={() => {
-            if (actionExercise && onRemoveExercise) {
-              onRemoveExercise(actionExercise.id);
+            if (actionExercise) {
+              try {
+                // Load plan from localStorage
+                const plan = loadPlanFromLocalStorage();
+                if (plan) {
+                  // Find current workout
+                  const currentWorkout = getNextAvailableWorkout(
+                    plan,
+                    completedWorkoutIds
+                  );
+
+                  if (currentWorkout) {
+                    // Remove exercise from current workout
+                    currentWorkout.exercises = currentWorkout.exercises.filter(
+                      (ex: Exercise) => ex.id !== actionExercise.id
+                    );
+
+                    // Save updated plan to localStorage
+                    savePlanToLocalStorage(plan);
+
+                    // Update local state
+                    setWorkoutExercises((prev) =>
+                      prev.filter((ex) => ex.id !== actionExercise.id)
+                    );
+                  } else {
+                    // Fallback: if no current workout found, try to remove from all workouts
+                    let removed = false;
+                    for (const workoutDay of plan.workoutDays) {
+                      const beforeCount = workoutDay.exercises.length;
+                      workoutDay.exercises = workoutDay.exercises.filter(
+                        (ex: Exercise) => ex.id !== actionExercise.id
+                      );
+                      if (workoutDay.exercises.length < beforeCount) {
+                        removed = true;
+                      }
+                    }
+                    if (removed) {
+                      savePlanToLocalStorage(plan);
+                      setWorkoutExercises((prev) =>
+                        prev.filter((ex) => ex.id !== actionExercise.id)
+                      );
+                    }
+                  }
+                }
+
+                // Also call parent's onRemoveExercise if provided (for backward compatibility)
+                if (onRemoveExercise) {
+                  onRemoveExercise(actionExercise.id);
+                }
+              } catch (error) {
+                console.error("Error removing exercise:", error);
+              }
             }
             setActionExercise(null);
           }}
