@@ -83,6 +83,7 @@ export function ExerciseSetsPage({
   onStartWorkoutSession,
   onMarkExerciseComplete,
   isDuringActiveWorkout = false,
+  exerciseLogs = {},
 }: ExerciseSetsPageProps) {
   const initialSetTemplate = useMemo(
     () => ({
@@ -92,9 +93,19 @@ export function ExerciseSetsPage({
     }),
     [exercise.reps, exercise.weight]
   );
+  const isBodyweight = exercise.equipment === "bodyweight";
 
   const [restTimerEnabled, setRestTimerEnabled] = useState(false);
+
+  // Get saved logs for this exercise if they exist
+  const savedLogs = exerciseLogs[exercise.id];
+
   const [sets, setSets] = useState<ExerciseSetRow[]>(() => {
+    // If we have saved logs, use them; otherwise create new sets from template
+    if (savedLogs && savedLogs.length > 0) {
+      return savedLogs.map((log) => ({ ...log }));
+    }
+
     const count = Math.max(exercise.sets || 1, 1);
     return Array.from({ length: count }, () => ({ ...initialSetTemplate }));
   });
@@ -102,10 +113,18 @@ export function ExerciseSetsPage({
   const [painLevel, setPainLevel] = useState(2);
 
   useEffect(() => {
-    const count = Math.max(exercise.sets || 1, 1);
-    setSets(Array.from({ length: count }, () => ({ ...initialSetTemplate })));
-    setActiveSetIndex(0);
-  }, [exercise, initialSetTemplate]);
+    // Restore saved logs if they exist, otherwise reset to template
+    if (savedLogs && savedLogs.length > 0) {
+      setSets(savedLogs.map((log) => ({ ...log })));
+      // Find first incomplete set or set to -1 if all completed
+      const firstIncomplete = savedLogs.findIndex((s) => !s.completed);
+      setActiveSetIndex(firstIncomplete !== -1 ? firstIncomplete : -1);
+    } else {
+      const count = Math.max(exercise.sets || 1, 1);
+      setSets(Array.from({ length: count }, () => ({ ...initialSetTemplate })));
+      setActiveSetIndex(0);
+    }
+  }, [exercise, initialSetTemplate, savedLogs]);
 
   useEffect(() => {
     setActiveSetIndex((prev) => {
@@ -129,12 +148,17 @@ export function ExerciseSetsPage({
   };
 
   const isSetValid = (setEntry: ExerciseSetRow): boolean => {
+    const reps = Number(setEntry.reps);
+    const hasValidReps =
+      setEntry.reps.trim() !== "" && !Number.isNaN(reps) && reps > 0;
+    if (isBodyweight) {
+      return hasValidReps;
+    }
+
     return (
-      setEntry.reps.trim() !== "" &&
+      hasValidReps &&
       setEntry.weight.trim() !== "" &&
-      !isNaN(Number(setEntry.reps)) &&
-      !isNaN(Number(setEntry.weight)) &&
-      Number(setEntry.reps) > 0 &&
+      !Number.isNaN(Number(setEntry.weight)) &&
       Number(setEntry.weight) > 0
     );
   };

@@ -12,6 +12,8 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   onActivate,
   onValueChange,
 }) => {
+  const isBodyweight = exercise.equipment === "bodyweight";
+
   return (
     <div key={`exercise-set-${index}`} className="flex gap-4">
       <div className="flex justify-center w-10 flex-col items-center">
@@ -78,7 +80,8 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
             unit={exercise.weight_unit}
             value={setEntry.weight}
             type="number"
-            disabled={isCompleted}
+            disabled={isCompleted || isBodyweight}
+            placeholder={isBodyweight ? "Bodyweight" : undefined}
             onFocus={() => onActivate(index)}
             onChange={(value) => onValueChange(index, "weight", value)}
             inputClassName="bg-[#101326]/80 border-white/40"

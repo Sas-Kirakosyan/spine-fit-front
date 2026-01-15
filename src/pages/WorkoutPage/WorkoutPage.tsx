@@ -254,24 +254,26 @@ export function WorkoutPage({
     <PageContainer>
       <div className="flex items-center justify-between pr-2.5">
         <Logo />
-        <div
-          onClick={() => {
-            localStorage.removeItem("generatedPlan");
-            localStorage.removeItem("completedWorkoutIds");
-            setC(c + 1);
-          }}
-          className="cursor-pointer text-xs text-white/50 hover:text-white"
-        >
-          🔄 regenerate plan
-        </div>
-        {onNavigateToHome && (
-          <Button
-            onClick={onNavigateToHome}
-            className="flex items-center gap-2 rounded-[14px] bg-white/10 px-2.5 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-white/20"
+        <div className="text-[12px] font-semibold text-white">
+          <div
+            onClick={() => {
+              localStorage.removeItem("generatedPlan");
+              localStorage.removeItem("completedWorkoutIds");
+              setC(c + 1);
+            }}
+            className="border border-2 border-white/50 rounded-full p-1 mb-1"
           >
-            Back to Home
-          </Button>
-        )}
+            Regenerate Plan
+          </div>
+          {onNavigateToHome && (
+            <Button
+              onClick={onNavigateToHome}
+              className="border border-2 border-white/50 rounded-full p-1"
+            >
+              Back to Home
+            </Button>
+          )}
+        </div>
       </div>
       <div ref={cardRef} className="flex flex-col gap-3 pb-[140px]">
         <WorkoutPageHeader
