@@ -23,11 +23,9 @@ export interface ExerciseSetsPageProps {
   exercise: Exercise;
   onNavigateBack: () => void;
   onStartWorkoutSession: () => void;
-  onMarkExerciseComplete?: (
-    exerciseId: number,
-    sets: ExerciseSetRow[]
-  ) => void;
+  onMarkExerciseComplete?: (exerciseId: number, sets: ExerciseSetRow[]) => void;
   isDuringActiveWorkout?: boolean;
+  exerciseLogs?: Record<number, ExerciseSetRow[]>;
 }
 
 export interface WorkoutPageProps {

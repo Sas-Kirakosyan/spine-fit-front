@@ -52,7 +52,7 @@ export const Input: React.FC<InputProps> = ({
         <div
           className={`flex h-12 items-center justify-center rounded-[18px] border border-white/8 bg-white/5 text-lg font-semibold text-white/35 ${inputClassName}`}
         >
-          {value || "—"}
+          {value || placeholder || "—"}
         </div>
       ) : (
         <input

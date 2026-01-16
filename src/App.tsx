@@ -323,6 +323,7 @@ function App() {
             onStartWorkoutSession={navigateToActiveWorkout}
             onMarkExerciseComplete={markExerciseComplete}
             isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
+            exerciseLogs={exerciseLogs}
           />
         );
       case "exerciseDetails":

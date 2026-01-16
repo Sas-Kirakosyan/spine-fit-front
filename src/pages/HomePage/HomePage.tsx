@@ -24,16 +24,7 @@ export function HomePage({
         backgroundImage="url('https://ignitefitness.com/wp-content/uploads/2024/06/Gym-Equipment.jpg')"
         overlayClassName="bg-black/30"
       >
-        <div className="flex flex-col items-start py-4">
-          <div className="flex items-center">
-            <img
-              src="../public/logo/logo.png"
-              alt="logo"
-              className="w-22 h-22"
-            />
-            <Logo />
-          </div>
-        </div>
+        <Logo text="Traning app" />
         <div className="mt-auto px-4 py-4">
           <h2 className="text-white text-4xl font-semibold leading-tight">
             Strength instead
