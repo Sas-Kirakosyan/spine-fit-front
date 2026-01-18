@@ -14,7 +14,6 @@ import { HistoryPage } from "@/pages/HistoryPage/HistoryPage";
 import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
 import { MyPlanPage } from "@/pages/MyPlanPage/MyPlanPage";
 import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPage";
-import exerciseData from "@/MockData/exercise.json";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 
 function App() {
@@ -72,7 +71,7 @@ function App() {
   const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>(() => {
     const savedExercises = localStorage.getItem("workoutExercises");
     if (!savedExercises) {
-      return (exerciseData as Exercise[]) || [];
+      return [];
     }
     try {
       const parsed = JSON.parse(savedExercises);
@@ -82,7 +81,7 @@ function App() {
     } catch {
       console.error("Error parsing saved workout exercises");
     }
-    return (exerciseData as Exercise[]) || [];
+    return [];
   });
 
   const [completedWorkoutIds, setCompletedWorkoutIds] = useState<Set<string>>(

@@ -128,9 +128,25 @@ export function mapSplitToMuscleGroups(
 export function assignExercisesToDays(
   exercises: Exercise[],
   muscleGroupsByDay: string[][],
-  exercisesPerDay: number
+  exercisesPerDay: number,
+  splitLabel: string
 ): WorkoutDay[] {
-  const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const dayNamesBySplit: Record<string, string[]> = {
+    "push/pull/legs": ["Push A", "Pull A", "Legs A", "Push B", "Pull B", "Legs B", "Push C"],
+    "upper/lower": ["Upper A", "Lower A", "Upper B", "Lower B", "Upper C", "Lower C", "Upper D"],
+    "full body": Array(7).fill("Full Body"),
+  };
+
+  const splitKey = splitLabel.toLowerCase();
+  const dayNames = dayNamesBySplit[splitKey] || [
+    "Day 1",
+    "Day 2",
+    "Day 3",
+    "Day 4",
+    "Day 5",
+    "Day 6",
+    "Day 7",
+  ];
   const workoutDays: WorkoutDay[] = [];
   const globalUsedExerciseIds = new Set<number>(); // Track across all days
 
@@ -169,6 +185,7 @@ function selectExercisesForMuscleGroups(
   const usedExerciseIds = new Set<number>(globalUsedIds); // Start with globally used IDs
 
   const lowerBodyGroups = new Set(["quadriceps", "glutes", "hamstrings"]);
+  const targetsCore = targetMuscleGroups.includes("core_stabilizers");
 
   console.log("  [Selecting for muscle groups]", targetMuscleGroups, "Max:", maxExercises, "Available exercises:", exercises.length);
 
@@ -176,6 +193,16 @@ function selectExercisesForMuscleGroups(
   const sortedExercises = [...exercises].sort((a, b) => {
     const aCompound = a.muscle_groups.length;
     const bCompound = b.muscle_groups.length;
+
+    const isCore = (ex: Exercise) =>
+      ex.category === "core" || ex.muscle_groups.includes("core_stabilizers");
+    const aIsCore = isCore(a);
+    const bIsCore = isCore(b);
+
+    // When day does not target core, push core/rehab-style moves later
+    if (!targetsCore && aIsCore !== bIsCore) {
+      return aIsCore ? 1 : -1; // non-core first
+    }
 
     // For Full Body splits, prioritize multi-joint leg exercises for hamstring coverage
     const isFullBodyLegExercise = (ex: Exercise) =>
@@ -196,7 +223,9 @@ function selectExercisesForMuscleGroups(
     const exercise = sortedExercises.find(
       (ex) =>
         ex.muscle_groups.includes(muscleGroup) &&
-        !usedExerciseIds.has(ex.id)
+        !usedExerciseIds.has(ex.id) &&
+        // avoid core moves on non-core days
+        (targetsCore || (ex.category !== "core" && !ex.muscle_groups.includes("core_stabilizers")))
     );
 
     if (exercise && selected.length < maxExercises) {
@@ -218,6 +247,12 @@ function selectExercisesForMuscleGroups(
       targetMuscleGroups.includes(mg)
     );
 
+    // skip core if day doesn't target core
+    const isCore = exercise.category === "core" || exercise.muscle_groups.includes("core_stabilizers");
+    if (!targetsCore && isCore) {
+      continue;
+    }
+
     if (targetsRelevantMuscles && !usedExerciseIds.has(exercise.id)) {
       console.log(`    ✓ Additional: ${exercise.name}`);
       selected.push(exercise);
@@ -225,31 +260,82 @@ function selectExercisesForMuscleGroups(
     }
   }
 
-  // Ensure we have at least one lower-body movement (quads/glutes/hamstrings)
-  const hasLowerBody = selected.some((ex) =>
-    ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg))
-  );
+  // Only ensure lower-body coverage if the day actually targets lower body muscles
+  const dayTargetsLowerBody = targetMuscleGroups.some((mg) => lowerBodyGroups.has(mg));
 
-  if (!hasLowerBody) {
-    const lowerBodyExercise = sortedExercises.find(
-      (ex) =>
-        ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg)) &&
-        !usedExerciseIds.has(ex.id)
+  if (dayTargetsLowerBody) {
+    // Ensure we have at least one lower-body movement (quads/glutes/hamstrings)
+    const hasLowerBody = selected.some((ex) =>
+      ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg))
     );
 
-    if (lowerBodyExercise) {
-      if (selected.length < maxExercises) {
-        selected.push(lowerBodyExercise);
-      } else if (selected.length > 0) {
-        // Replace the last non-lower-body exercise to maintain count
-        const replaceIndex = selected.findIndex(
-          (ex) => !ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg))
-        );
-        if (replaceIndex !== -1) {
-          selected[replaceIndex] = lowerBodyExercise;
+    if (!hasLowerBody) {
+      const lowerBodyExercise = sortedExercises.find(
+        (ex) =>
+          ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg)) &&
+          !usedExerciseIds.has(ex.id)
+      );
+
+      if (lowerBodyExercise) {
+        if (selected.length < maxExercises) {
+          selected.push(lowerBodyExercise);
+        } else if (selected.length > 0) {
+          // Replace the last non-lower-body exercise to maintain count
+          const replaceIndex = selected.findIndex(
+            (ex) => !ex.muscle_groups.some((mg) => lowerBodyGroups.has(mg))
+          );
+          if (replaceIndex !== -1) {
+            selected[replaceIndex] = lowerBodyExercise;
+          }
         }
+        usedExerciseIds.add(lowerBodyExercise.id);
       }
-      usedExerciseIds.add(lowerBodyExercise.id);
+    }
+  }
+
+  // For Upper days, ensure push/pull balance - must have at least one major back compound
+  const dayTargetsUpperBody =
+    targetMuscleGroups.includes("chest") ||
+    targetMuscleGroups.includes("lats") ||
+    targetMuscleGroups.includes("upper_back");
+
+  if (dayTargetsUpperBody) {
+    const backMuscles = new Set(["lats", "upper_back"]);
+    const hasMajorBackCompound = selected.some((ex) =>
+      ex.muscle_groups.some((mg) => backMuscles.has(mg)) &&
+      (ex.name.toLowerCase().includes("row") ||
+        ex.name.toLowerCase().includes("pull") ||
+        ex.name.toLowerCase().includes("lat"))
+    );
+
+    if (!hasMajorBackCompound && targetMuscleGroups.some(mg => backMuscles.has(mg))) {
+      const backCompound = sortedExercises.find(
+        (ex) =>
+          ex.muscle_groups.some((mg) => backMuscles.has(mg)) &&
+          (ex.name.toLowerCase().includes("row") ||
+            ex.name.toLowerCase().includes("pull") ||
+            ex.name.toLowerCase().includes("lat")) &&
+          !usedExerciseIds.has(ex.id)
+      );
+
+      if (backCompound) {
+        if (selected.length < maxExercises) {
+          selected.push(backCompound);
+          console.log(`    ✓ Added back compound for balance: ${backCompound.name}`);
+        } else if (selected.length > 0) {
+          // Replace a redundant push exercise to maintain balance
+          const pushIndex = selected.findIndex(
+            (ex) =>
+              (ex.muscle_groups.includes("chest") || ex.muscle_groups.includes("triceps")) &&
+              !ex.muscle_groups.some((mg) => backMuscles.has(mg))
+          );
+          if (pushIndex !== -1 && pushIndex > 0) { // Keep at least the first push exercise
+            selected[pushIndex] = backCompound;
+            console.log(`    ✓ Replaced push exercise with back compound: ${backCompound.name}`);
+          }
+        }
+        usedExerciseIds.add(backCompound.id);
+      }
     }
   }
 

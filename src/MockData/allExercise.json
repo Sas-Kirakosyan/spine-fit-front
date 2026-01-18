@@ -705,6 +705,37 @@
     "weight_unit": "kg"
   },
   {
+    "id": 32,
+    "name": "French Bench Press (EZ-Bar Skullcrusher)",
+    "description": "A lying triceps extension using an EZ-bar on a flat bench. Emphasizes long-head triceps with stable torso support, reducing lower-back demand.",
+    "category": "strength",
+    "muscle_groups": ["triceps"],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Lie on a flat bench, feet planted. Grip an EZ-bar with a narrow, comfortable angle. Start with arms extended above shoulders. Bend elbows to lower the bar toward the forehead, keeping upper arms mostly vertical. Stop just before the bar reaches your forehead, then extend elbows to return. Keep elbows tucked and wrists neutral. Avoid arching the lower back.",
+    "video_url": "https://cdn.spinefit.app/videos/ez_bar_skullcrusher.mp4",
+    "image_url": "https://steelsupplements.com/blogs/steel-blog/how-to-do-the-french-press-exercise-form-benefits?srsltid=AfmBOoquzcKYXa5l8GKm2zloD6hrn7_VVy1qPUO2W-kovqFa7_VdGmKT",
+    "equipment_image_url": "https://www.roguefitness.com/media/catalog/product/o/h/ohio-power-bar-black-zinc-th_1.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 62,
+        "exercise_id": 32,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Keep hips and ribs down on the bench. Use moderate load and controlled tempo. Stop if any low-back discomfort occurs.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 20,
+    "weight_unit": "kg"
+  },
+  {
     "id": 22,
     "name": "Floor Crunches",
     "description": "A basic core exercise targeting the abdominals while lying on the floor or mat. Safer for the spine than sit-ups due to limited range of motion.",
@@ -971,7 +1002,7 @@
     "difficulty": "intermediate",
     "instructions": "Position yourself on assisted dip machine with hands on handles, arms straight. Lean slightly forward for chest emphasis. Lower body by bending elbows until upper arms are parallel to floor. Push back up to starting position. Keep core engaged and avoid excessive swinging.",
     "video_url": "https://cdn.spinefit.app/videos/assisted_dips.mp4",
-    "image_url": "https://www.inspireusafitness.com/cdn/shop/articles/assisted-dips-machine.jpg",
+    "image_url": "https://weighttraining.guide/wp-content/uploads/2017/08/assisted-triceps-dip-resized-1.png",
     "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/assisted-dip-machine.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
@@ -1021,6 +1052,207 @@
     "sets": 3,
     "reps": 10,
     "weight": 16,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 33,
+    "name": "Lat Pulldown (Neutral Grip)",
+    "description": "A vertical pulling exercise using a lat pulldown machine with a neutral (palms facing) grip attachment. Targets the lats, upper back, and biceps while maintaining a stable seated position. Excellent for building back width and shoulder health with zero spinal compression.",
+    "category": "strength",
+    "muscle_groups": ["lats", "upper_back", "biceps", "rear_delts"],
+    "equipment": "lat_pulldown",
+    "difficulty": "beginner",
+    "instructions": "Sit at lat pulldown machine with thighs secured under pad. Grip neutral handles with palms facing each other. Pull handles down toward upper chest by driving elbows down and back. Squeeze shoulder blades together at bottom. Return with control. Keep torso upright, avoid leaning back excessively.",
+    "video_url": "https://cdn.spinefit.app/videos/lat_pulldown_neutral.mp4",
+    "image_url": "https://s3assets.skimble.com/assets/694648/image_iphone.jpg",
+    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/lat-pulldown-machine.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 55,
+        "exercise_id": 33,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent choice - no spinal loading. Keep torso upright and core braced. Avoid excessive leaning back.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      },
+      {
+        "id": 56,
+        "exercise_id": 33,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Safe exercise with seated support. Stop if any nerve symptoms occur.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 40,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 34,
+    "name": "Lat Pulldown (Wide Grip)",
+    "description": "A vertical pulling exercise using a lat pulldown machine with a wide overhand grip. Emphasizes lat width and upper back development. The wide grip increases lat activation while the seated position provides stability.",
+    "category": "strength",
+    "muscle_groups": ["lats", "upper_back", "biceps", "rear_delts"],
+    "equipment": "lat_pulldown",
+    "difficulty": "beginner",
+    "instructions": "Sit at lat pulldown machine with thighs secured. Grip wide bar with hands wider than shoulder-width, palms facing away. Pull bar down toward upper chest, focusing on driving elbows down. Squeeze lats at bottom. Return with control. Avoid pulling behind neck.",
+    "video_url": "https://cdn.spinefit.app/videos/lat_pulldown_wide.mp4",
+    "image_url": "https://www.skimble.com/exercises/102906-lat-pulldown-how-to-do-exercise",
+    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/lat-pulldown-machine.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 57,
+        "exercise_id": 34,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "No spinal compression. Keep core engaged and avoid excessive torso lean.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 35,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 35,
+    "name": "Pull-Up",
+    "description": "A bodyweight vertical pulling exercise performed on a pull-up bar using an overhand grip. One of the most effective exercises for building back strength, lat development, and grip strength. Requires good upper body strength.",
+    "category": "strength",
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "forearms",
+      "core_stabilizers"
+    ],
+    "equipment": "pull_up_bar",
+    "difficulty": "advanced",
+    "instructions": "Hang from pull-up bar with overhand grip slightly wider than shoulders. Engage core and pull body up by driving elbows down until chin clears bar. Lower with control to full arm extension. Keep shoulders active at bottom, avoid dead hang. Use assistance or negative reps if needed.",
+    "video_url": "https://cdn.spinefit.app/videos/pull_up.mp4",
+    "image_url": "https://velocitywestchester.com/wp-content/uploads/2025/06/rsw_1280-9.webp",
+    "equipment_image_url": "https://xmarkfitness.com/cdn/shop/products/4437.2-1.jpg?v=1718890756&width=3000",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 58,
+        "exercise_id": 35,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "No spinal compression but requires core stability. Keep core braced to avoid swinging. Use assisted version if needed.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 8,
+    "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 36,
+    "name": "Chin-Up",
+    "description": "A bodyweight vertical pulling exercise performed with an underhand (supinated) grip. Similar to pull-ups but with increased bicep activation. The underhand grip often makes this slightly easier than standard pull-ups.",
+    "category": "strength",
+    "muscle_groups": ["lats", "upper_back", "biceps", "forearms"],
+    "equipment": "pull_up_bar",
+    "difficulty": "intermediate",
+    "instructions": "Hang from bar with underhand grip, hands shoulder-width apart, palms facing you. Pull body up until chin clears bar, focusing on driving elbows down. Lower with control to full extension. Keep core engaged and avoid excessive swinging.",
+    "video_url": "https://cdn.spinefit.app/videos/chin_up.mp4",
+    "image_url": "https://outlift.com/wp-content/uploads/2020/05/chin-up-hypertrophy-illustration.jpg",
+    "equipment_image_url": "https://xmarkfitness.com/cdn/shop/products/4437.2-1.jpg?v=1718890756&width=3000",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 59,
+        "exercise_id": 36,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Requires core control. Keep body stable and avoid kipping. Use assisted version if needed.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 8,
+    "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 37,
+    "name": "Straight-Arm Pulldown",
+    "description": "A lat isolation exercise using a cable machine with straight arms throughout the movement. Emphasizes lat engagement with minimal bicep involvement. Excellent for improving mind-muscle connection with the lats.",
+    "category": "strength",
+    "muscle_groups": ["lats", "upper_back", "core_stabilizers"],
+    "equipment": "cable_machine",
+    "difficulty": "intermediate",
+    "instructions": "Stand facing high cable with rope or straight bar attachment. Grip handle with arms extended overhead, slight elbow bend. Keeping arms nearly straight, pull handle down toward thighs by contracting lats. Focus on driving elbows down. Return with control. Keep torso stable and core braced.",
+    "video_url": "https://cdn.spinefit.app/videos/straight_arm_pulldown.mp4",
+    "image_url": "https://www.inspireusafitness.com/cdn/shop/articles/straight-arm-pulldown_1100x.jpg",
+    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 60,
+        "exercise_id": 37,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Keep upright posture and avoid leaning back excessively. Core should stay engaged throughout.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 25,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 38,
+    "name": "Assisted Pull-Up",
+    "description": "A machine-assisted version of pull-ups that reduces the amount of bodyweight lifted. Allows beginners or those with back concerns to build pulling strength safely while working toward unassisted pull-ups.",
+    "category": "strength",
+    "muscle_groups": ["lats", "upper_back", "biceps", "core_stabilizers"],
+    "equipment": "assisted_pull_up_machine",
+    "difficulty": "beginner",
+    "instructions": "Set assistance weight on machine. Kneel or stand on platform, grip handles with overhand grip. Pull body up until chin clears handles, focusing on driving elbows down. Lower with control. Gradually reduce assistance over time as strength improves.",
+    "video_url": "https://cdn.spinefit.app/videos/assisted_pull_up.mp4",
+    "image_url": "https://www.inspireusafitness.com/cdn/shop/articles/assisted-pull-up_1100x.jpg",
+    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/assisted-dip-machine.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 61,
+        "exercise_id": 38,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent option for building back strength with reduced load. Keep core engaged and movement controlled.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 0,
     "weight_unit": "kg"
   }
 ]

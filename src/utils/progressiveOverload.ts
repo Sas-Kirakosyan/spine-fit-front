@@ -93,6 +93,14 @@ export function generateProgressionSuggestion(
 ): ProgressionSuggestion {
   const lastPerformed = getLastPerformedData(exercise.id, workoutHistory);
 
+  // Check if exercise can be loaded (e.g., Bulgarian split squats, glute bridges)
+  const canBeLoaded =
+    exercise.equipment?.toLowerCase().includes("bodyweight") &&
+    (exercise.name.toLowerCase().includes("bulgarian") ||
+      exercise.name.toLowerCase().includes("split squat") ||
+      exercise.name.toLowerCase().includes("glute bridge") ||
+      exercise.name.toLowerCase().includes("lunge"));
+
   // If no history, use exercise defaults
   if (!lastPerformed) {
     return {
@@ -100,7 +108,9 @@ export function generateProgressionSuggestion(
       suggestion: {
         weight: exercise.weight || 0,
         reps: exercise.reps || 10,
-        reason: "Starting weight - no previous history",
+        reason: canBeLoaded
+          ? "Start bodyweight - progress to light DBs (2-4kg) after 3x12"
+          : "Starting weight - no previous history",
       },
     };
   }
@@ -135,6 +145,44 @@ function suggestProgressiveOverload(
   lastPerformed: NonNullable<ProgressionSuggestion["lastPerformed"]>
 ): ProgressionSuggestion {
   const { averageWeight, averageReps } = lastPerformed;
+
+  // Check if this is a bodyweight exercise that can be loaded
+  const canBeLoaded =
+    exercise.equipment?.toLowerCase().includes("bodyweight") &&
+    (exercise.name.toLowerCase().includes("bulgarian") ||
+      exercise.name.toLowerCase().includes("split squat") ||
+      exercise.name.toLowerCase().includes("glute bridge") ||
+      exercise.name.toLowerCase().includes("lunge"));
+
+  // Special progression for bodyweight exercises that can be loaded
+  if (canBeLoaded && averageWeight === 0 && averageReps > 12) {
+    return {
+      exerciseId: exercise.id,
+      lastPerformed,
+      suggestion: {
+        weight: 2, // Start with 2kg dumbbells
+        reps: 10,
+        reason: "Progress to light dumbbells - you mastered bodyweight",
+      },
+    };
+  }
+
+  // For assisted exercises (negative weight relationship), reverse logic
+  if (exercise.load_mode === "assistance") {
+    // More assistance weight = easier, so decrease assistance to progress
+    if (averageReps > 12) {
+      const newWeight = Math.max(0, Math.round((averageWeight - 2.5) * 2) / 2);
+      return {
+        exerciseId: exercise.id,
+        lastPerformed,
+        suggestion: {
+          weight: newWeight,
+          reps: Math.max(8, Math.floor(averageReps * 0.8)),
+          reason: "Reduce assistance - you completed high reps (less help = harder)",
+        },
+      };
+    }
+  }
 
   // Strategy 1: If reps are high (>12), increase weight
   if (averageReps > 12) {
@@ -186,9 +234,13 @@ export function applyProgressionToExercises(
   return exercises.map((exercise) => {
     const progression = generateProgressionSuggestion(exercise, workoutHistory);
 
+    // Zero out load for true bodyweight movements to avoid showing weights where none apply
+    const isBodyweight = (exercise.equipment || "").toLowerCase().includes("bodyweight");
+    const safeWeight = isBodyweight ? 0 : progression.suggestion.weight;
+
     return {
       ...exercise,
-      weight: progression.suggestion.weight,
+      weight: safeWeight,
       reps: progression.suggestion.reps,
       // Store progression info for UI display
       progressionInfo: progression,

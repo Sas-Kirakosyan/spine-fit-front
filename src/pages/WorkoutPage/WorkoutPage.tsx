@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import exerciseData from "@/MockData/exercise.json";
 import allExercisesData from "@/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -22,8 +21,6 @@ import type { EquipmentCategory } from "@/types/equipment";
 import type { QuizAnswers } from "@/types/quiz";
 import type { FinishedWorkoutSummary } from "@/types/workout";
 
-const defaultExercises: Exercise[] = exerciseData as Exercise[];
-
 export function WorkoutPage({
   onNavigateToHome,
   onNavigateToWorkout,
@@ -35,13 +32,11 @@ export function WorkoutPage({
   onOpenExerciseSets,
   onStartWorkoutSession,
   onNavigateToAllExercise,
-  exercises = defaultExercises,
   onRemoveExercise,
   completedWorkoutIds = new Set(),
 }: WorkoutPageProps) {
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
-  const [workoutExercises, setWorkoutExercises] =
-    useState<Exercise[]>(exercises);
+  const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>([]);
   const [isLoadingPlan, setIsLoadingPlan] = useState(true);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [c, setC] = useState(0); // counter to trigger re-generation

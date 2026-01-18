@@ -28,5 +28,6 @@ export interface Exercise {
   reps: number;
   weight: number;
   weight_unit: string;
+  load_mode?: "external" | "assistance"; // external = add weight makes harder, assistance = add weight makes easier
 }
 
