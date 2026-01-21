@@ -14,6 +14,7 @@ import { HistoryPage } from "@/pages/HistoryPage/HistoryPage";
 import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
 import { MyPlanPage } from "@/pages/MyPlanPage/MyPlanPage";
 import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPage";
+import { AIPage } from "@/pages/AIPage/AIPage";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
       savedPage === "exerciseDetails" ||
       savedPage === "activeWorkout" ||
       savedPage === "history" ||
+      savedPage === "ai" ||
       savedPage === "allExercise" ||
       savedPage === "myPlan" ||
       savedPage === "availableEquipment"
@@ -185,6 +187,7 @@ function App() {
   };
   const navigateToProfile = () => setCurrentPage("profile");
   const navigateToHistory = () => setCurrentPage("history");
+  const navigateToAI = () => setCurrentPage("ai");
   const navigateToAllExercise = () => setCurrentPage("allExercise");
   const navigateToMyPlan = () => setCurrentPage("myPlan");
   const navigateToAvailableEquipment = () =>
@@ -285,6 +288,7 @@ function App() {
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProfile={navigateToProfile}
             onNavigateToHistory={navigateToHistory}
+            onNavigateToAI={navigateToAI}
             activePage="workout"
             onOpenExerciseDetails={navigateToExerciseDetails}
             onOpenExerciseSets={navigateToExerciseSets}
@@ -307,6 +311,7 @@ function App() {
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProfile={navigateToProfile}
             onNavigateToHistory={navigateToHistory}
+            onNavigateToAI={navigateToAI}
             activePage="profile"
           />
         );
@@ -358,8 +363,19 @@ function App() {
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProfile={navigateToProfile}
             onNavigateToHistory={navigateToHistory}
+            onNavigateToAI={navigateToAI}
             activePage="history"
             workouts={workoutHistory}
+          />
+        );
+      case "ai":
+        return (
+          <AIPage
+            onNavigateToWorkout={navigateToWorkout}
+            onNavigateToProfile={navigateToProfile}
+            onNavigateToHistory={navigateToHistory}
+            onNavigateToAI={navigateToAI}
+            activePage="ai"
           />
         );
       case "allExercise":

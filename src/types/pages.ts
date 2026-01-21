@@ -10,14 +10,16 @@ export interface ProfilePageProps {
   onNavigateToWorkout: () => void;
   onNavigateToProfile: () => void;
   onNavigateToHistory: () => void;
-  activePage: "workout" | "profile" | "history";
+  onNavigateToAI?: () => void;
+  activePage: "workout" | "profile" | "history" | "ai";
 }
 
 export interface HistoryPageProps {
   onNavigateToWorkout: () => void;
   onNavigateToProfile: () => void;
   onNavigateToHistory: () => void;
-  activePage: "workout" | "profile" | "history";
+  onNavigateToAI?: () => void;
+  activePage: "workout" | "profile" | "history" | "ai";
   workouts: FinishedWorkoutSummary[];
 }
 
@@ -30,3 +32,10 @@ export interface AvailableEquipmentPageProps {
   onNavigateBack: () => void;
 }
 
+export interface AIPageProps {
+  onNavigateToWorkout: () => void;
+  onNavigateToProfile: () => void;
+  onNavigateToHistory: () => void;
+  onNavigateToAI: () => void;
+  activePage: "workout" | "profile" | "history" | "ai";
+}

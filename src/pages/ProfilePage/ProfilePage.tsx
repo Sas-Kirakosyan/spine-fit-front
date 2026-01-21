@@ -7,6 +7,7 @@ export function ProfilePage({
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,
+  onNavigateToAI,
   activePage,
 }: ProfilePageProps) {
   return (
@@ -14,7 +15,7 @@ export function ProfilePage({
       <header className="flex items-start justify-between">
         <div>
           <Logo />
-          <h1 className="mt-3 text-3xl font-semibold text-white">Profile</h1>
+          <h1 className="mt-3 text-3xl mx-2.5 font-semibold text-white">Profile</h1>
         </div>
       </header>
 
@@ -32,6 +33,7 @@ export function ProfilePage({
           onWorkoutClick={onNavigateToWorkout}
           onProfileClick={onNavigateToProfile}
           onHistoryClick={onNavigateToHistory}
+          onAIClick={onNavigateToAI || (() => {})}
         />
       </div>
     </PageContainer>

@@ -12,7 +12,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   onActivate,
   onValueChange,
 }) => {
-  const isBodyweight = exercise.equipment === "bodyweight";
+  const isBodyweight = exercise.equipment === "bodyweight" || exercise.weight_unit === "bodyweight";
 
   return (
     <div key={`exercise-set-${index}`} className="flex gap-4">
@@ -77,7 +77,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
           />
           <Input
             label="Weight"
-            unit={exercise.weight_unit}
+            unit={isBodyweight ? undefined : exercise.weight_unit}
             value={setEntry.weight}
             type="number"
             disabled={isCompleted || isBodyweight}

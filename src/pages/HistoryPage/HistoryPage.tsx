@@ -10,6 +10,7 @@ export function HistoryPage({
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,
+  onNavigateToAI,
   activePage,
   workouts,
 }: HistoryPageProps) {
@@ -166,6 +167,7 @@ export function HistoryPage({
           onWorkoutClick={onNavigateToWorkout}
           onProfileClick={onNavigateToProfile}
           onHistoryClick={onNavigateToHistory}
+          onAIClick={onNavigateToAI || (() => {})}
         />
       </div>
     </PageContainer>

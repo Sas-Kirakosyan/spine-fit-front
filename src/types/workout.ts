@@ -33,7 +33,8 @@ export interface WorkoutPageProps {
   onNavigateToWorkout: () => void;
   onNavigateToProfile: () => void;
   onNavigateToHistory: () => void;
-  activePage: "workout" | "profile" | "history";
+  onNavigateToAI?: () => void;
+  activePage: "workout" | "profile" | "history" | "ai";
   onOpenExerciseDetails: (exercise: Exercise) => void;
   onOpenExerciseSets: (exercise: Exercise) => void;
   onStartWorkoutSession: () => void;

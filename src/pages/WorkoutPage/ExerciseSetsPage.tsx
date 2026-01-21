@@ -501,18 +501,18 @@ export function ExerciseSetsPage({
         ) : isDuringActiveWorkout ? (
           <div className="mx-5 flex flex-col gap-3 sm:flex-row">
             <Button
-              onClick={handleLogAllSets}
-              disabled={!canLogAllSets}
-              className="h-[40px] flex-1 rounded-[10px] bg-orange-500 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              LOG ALL SETS
-            </Button>
-            <Button
               onClick={handleLogSet}
               disabled={!canLogCurrentSet}
-              className="h-[40px] flex-1 rounded-[10px] bg-red-500 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[50px] flex-1 rounded-[10px] bg-red-500 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
             >
               LOG SET
+            </Button>
+            <Button
+              onClick={handleLogAllSets}
+              disabled={!canLogAllSets}
+              className="h-[50px] flex-1 rounded-[10px] bg-orange-500 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              LOG ALL SETS
             </Button>
           </div>
         ) : (

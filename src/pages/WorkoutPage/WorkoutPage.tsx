@@ -26,6 +26,7 @@ export function WorkoutPage({
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,
+  onNavigateToAI,
   activePage,
   onNavigateToMyPlan,
   onOpenExerciseDetails,
@@ -245,6 +246,7 @@ export function WorkoutPage({
     "plan",
     JSON.parse(localStorage.getItem("generatedPlan") || "{}")
   ); // dont remove this log
+
   return (
     <PageContainer>
       <div className="flex items-center justify-between pr-2.5">
@@ -362,6 +364,7 @@ export function WorkoutPage({
           onWorkoutClick={onNavigateToWorkout}
           onProfileClick={onNavigateToProfile}
           onHistoryClick={onNavigateToHistory}
+          onAIClick={onNavigateToAI || (() => {})}
         />
       </div>
 

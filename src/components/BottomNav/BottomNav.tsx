@@ -1,8 +1,9 @@
 interface BottomNavProps {
-  activePage: "workout" | "profile" | "history";
+  activePage: "workout" | "profile" | "history" | "ai";
   onWorkoutClick: () => void;
   onProfileClick: () => void;
   onHistoryClick: () => void;
+  onAIClick: () => void;
 }
 
 const baseNavButtonClass =
@@ -20,6 +21,7 @@ export function BottomNav({
   onWorkoutClick,
   onProfileClick,
   onHistoryClick,
+  onAIClick,
 }: BottomNavProps) {
   return (
     <nav className="bg-[#1B1E2B] flex justify-evenly gap-4 rounded-[10px] w-full max-w-[440px]">
@@ -43,6 +45,13 @@ export function BottomNav({
         onClick={onHistoryClick}
       >
         History
+      </button>
+      <button
+        type="button"
+        className={getNavButtonClassName(activePage === "ai")}
+        onClick={onAIClick}
+      >
+        AI
       </button>
     </nav>
   );
