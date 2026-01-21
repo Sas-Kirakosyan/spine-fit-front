@@ -11,6 +11,7 @@ export interface ProfilePageProps {
   onNavigateToProfile: () => void;
   onNavigateToHistory: () => void;
   onNavigateToSettings: () => void;
+  onNavigateToAI: () => void;
   activePage: "workout" | "profile" | "history";
 }
 

@@ -18,7 +18,6 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   onDelete,
 }) => {
   const isBodyweight = exercise.equipment === "bodyweight" || exercise.weight_unit === "bodyweight";
-  const isBodyweight = exercise.equipment === "bodyweight";
   const [translateX, setTranslateX] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const startXRef = useRef(0);
@@ -154,29 +153,6 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="grid grid-cols-2 gap-4">
-          <Input
-            label="Reps"
-            value={setEntry.reps}
-            type="number"
-            disabled={isCompleted}
-            onFocus={() => onActivate(index)}
-            onChange={(value) => onValueChange(index, "reps", value)}
-            inputClassName="bg-[#101326]/80 border-white/40"
-            wrapperClassName="w-full"
-          />
-          <Input
-            label="Weight"
-            unit={isBodyweight ? undefined : exercise.weight_unit}
-            value={setEntry.weight}
-            type="number"
-            disabled={isCompleted || isBodyweight}
-            placeholder={isBodyweight ? "Bodyweight" : undefined}
-            onFocus={() => onActivate(index)}
-            onChange={(value) => onValueChange(index, "weight", value)}
-            inputClassName="bg-[#101326]/80 border-white/40"
-            wrapperClassName="w-full"
-          />
         <div className="flex justify-center w-10 flex-col items-center">
           <div
             className={`flex h-7 w-7 items-center justify-center border-[1px] text-[16px] font-semibold transition-colors ${isCompleted
