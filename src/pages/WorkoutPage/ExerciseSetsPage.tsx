@@ -85,14 +85,17 @@ export function ExerciseSetsPage({
   isDuringActiveWorkout = false,
   exerciseLogs = {},
 }: ExerciseSetsPageProps) {
-  const initialSetTemplate = useMemo(
-    () => ({
-      reps: exercise.reps ? String(exercise.reps) : "",
-      weight: exercise.weight ? String(exercise.weight) : "",
-      completed: false,
-    }),
-    [exercise.reps, exercise.weight]
-  );
+  // Generate unique ID for each set
+  const generateSetId = () => `set-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+  const createNewSet = (template?: Partial<ExerciseSetRow>): ExerciseSetRow => ({
+    id: generateSetId(),
+    reps: exercise.reps ? String(exercise.reps) : "",
+    weight: exercise.weight ? String(exercise.weight) : "",
+    completed: false,
+    ...template,
+  });
+
   const isBodyweight = exercise.equipment === "bodyweight";
 
   const [restTimerEnabled, setRestTimerEnabled] = useState(false);
@@ -103,11 +106,14 @@ export function ExerciseSetsPage({
   const [sets, setSets] = useState<ExerciseSetRow[]>(() => {
     // If we have saved logs, use them; otherwise create new sets from template
     if (savedLogs && savedLogs.length > 0) {
-      return savedLogs.map((log) => ({ ...log }));
+      return savedLogs.map((log) => ({
+        ...log,
+        id: log.id || generateSetId()
+      }));
     }
 
     const count = Math.max(exercise.sets || 1, 1);
-    return Array.from({ length: count }, () => ({ ...initialSetTemplate }));
+    return Array.from({ length: count }, () => createNewSet());
   });
   const [activeSetIndex, setActiveSetIndex] = useState(0);
   const [painLevel, setPainLevel] = useState(2);
@@ -115,16 +121,20 @@ export function ExerciseSetsPage({
   useEffect(() => {
     // Restore saved logs if they exist, otherwise reset to template
     if (savedLogs && savedLogs.length > 0) {
-      setSets(savedLogs.map((log) => ({ ...log })));
+      setSets(savedLogs.map((log) => ({
+        ...log,
+        id: log.id || generateSetId()
+      })));
       // Find first incomplete set or set to -1 if all completed
       const firstIncomplete = savedLogs.findIndex((s) => !s.completed);
       setActiveSetIndex(firstIncomplete !== -1 ? firstIncomplete : -1);
     } else {
       const count = Math.max(exercise.sets || 1, 1);
-      setSets(Array.from({ length: count }, () => ({ ...initialSetTemplate })));
+      setSets(Array.from({ length: count }, () => createNewSet()));
       setActiveSetIndex(0);
     }
-  }, [exercise, initialSetTemplate, savedLogs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exercise, savedLogs]);
 
   useEffect(() => {
     setActiveSetIndex((prev) => {
@@ -188,10 +198,37 @@ export function ExerciseSetsPage({
 
   const handleAddSet = () => {
     setSets((prev) => {
-      const next = [...prev, { ...initialSetTemplate }];
+      const next = [...prev, createNewSet()];
       if (activeSetIndex === -1) {
         setActiveSetIndex(next.length - 1);
       }
+      return next;
+    });
+  };
+
+  const handleDeleteSet = (index: number) => {
+    setSets((prevSets) => {
+      // Don't allow deletion if only one set remains
+      if (prevSets.length <= 1) return prevSets;
+
+      const next = prevSets.filter((_, i) => i !== index);
+
+      // Adjust active index if needed
+      setActiveSetIndex((prevIndex) => {
+        if (prevIndex >= next.length) {
+          return Math.max(0, next.length - 1);
+        }
+        if (prevIndex > index) {
+          return prevIndex - 1;
+        }
+        if (prevIndex === index) {
+          // If deleting active set, find next incomplete set
+          const nextIncomplete = next.findIndex((s) => !s.completed);
+          return nextIncomplete !== -1 ? nextIncomplete : Math.min(prevIndex, next.length - 1);
+        }
+        return prevIndex;
+      });
+
       return next;
     });
   };
@@ -367,17 +404,15 @@ export function ExerciseSetsPage({
                     ? () => setRestTimerEnabled((prev) => !prev)
                     : undefined
                 }
-                className={`${secondaryButtonClass} ${
-                  isActive
+                className={`${secondaryButtonClass} ${isActive
                     ? "border-main/70 text-main/70 shadow-inner shadow-main/20"
                     : ""
-                }`}
+                  }`}
               >
                 <span className="flex items-center gap-2">
                   <span
-                    className={`flex h-7 w-7 items-center justify-center rounded-full bg-black/40 ${
-                      isActive ? "text-main/70" : "text-slate-200"
-                    }`}
+                    className={`flex h-7 w-7 items-center justify-center rounded-full bg-black/40 ${isActive ? "text-main/70" : "text-slate-200"
+                      }`}
                   >
                     {item.icon}
                   </span>
@@ -395,14 +430,16 @@ export function ExerciseSetsPage({
           <div className="space-y-3">
             {sets.map((setEntry, index) => (
               <ExerciseSet
-                key={index}
+                key={setEntry.id}
                 index={index}
                 setEntry={setEntry}
                 exercise={exercise}
                 isActive={index === activeSetIndex}
                 isCompleted={setEntry.completed}
+                canDelete={sets.length > 1}
                 onActivate={handleActivateSet}
                 onValueChange={handleSetValueChange}
+                onDelete={handleDeleteSet}
               />
             ))}
             <button
@@ -451,11 +488,10 @@ export function ExerciseSetsPage({
                 {painFaces.map((face) => (
                   <span
                     key={face.id}
-                    className={`transition-opacity ${
-                      Math.abs(face.value - painLevel) <= 1
+                    className={`transition-opacity ${Math.abs(face.value - painLevel) <= 1
                         ? "opacity-100"
                         : "opacity-30"
-                    }`}
+                      }`}
                   >
                     {face.label}
                   </span>
