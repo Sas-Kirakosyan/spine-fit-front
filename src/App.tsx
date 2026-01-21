@@ -14,6 +14,7 @@ import { HistoryPage } from "@/pages/HistoryPage/HistoryPage";
 import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
 import { MyPlanPage } from "@/pages/MyPlanPage/MyPlanPage";
 import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPage";
+import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 
 function App() {
@@ -31,7 +32,8 @@ function App() {
       savedPage === "history" ||
       savedPage === "allExercise" ||
       savedPage === "myPlan" ||
-      savedPage === "availableEquipment"
+      savedPage === "availableEquipment" ||
+      savedPage === "settings"
     ) {
       return savedPage;
     }
@@ -189,6 +191,7 @@ function App() {
   const navigateToMyPlan = () => setCurrentPage("myPlan");
   const navigateToAvailableEquipment = () =>
     setCurrentPage("availableEquipment");
+  const navigateToSettings = () => setCurrentPage("settings");
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
@@ -307,6 +310,7 @@ function App() {
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProfile={navigateToProfile}
             onNavigateToHistory={navigateToHistory}
+            onNavigateToSettings={navigateToSettings}
             activePage="profile"
           />
         );
@@ -378,6 +382,8 @@ function App() {
         );
       case "availableEquipment":
         return <AvailableEquipmentPage onNavigateBack={navigateToMyPlan} />;
+      case "settings":
+        return <SettingsPage onNavigateBack={navigateToProfile} />;
       default:
         return (
           <HomePage

@@ -10,6 +10,7 @@ export interface ProfilePageProps {
   onNavigateToWorkout: () => void;
   onNavigateToProfile: () => void;
   onNavigateToHistory: () => void;
+  onNavigateToSettings: () => void;
   activePage: "workout" | "profile" | "history";
 }
 
@@ -27,6 +28,10 @@ export interface MyPlanPageProps {
 }
 
 export interface AvailableEquipmentPageProps {
+  onNavigateBack: () => void;
+}
+
+export interface SettingsPageProps {
   onNavigateBack: () => void;
 }
 
