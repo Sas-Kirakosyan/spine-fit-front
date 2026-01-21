@@ -10,5 +10,6 @@ export type Page =
   | "activeWorkout"
   | "allExercise"
   | "myPlan"
-  | "availableEquipment";
+  | "availableEquipment"
+  | "settings";
 

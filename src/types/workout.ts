@@ -4,6 +4,7 @@ import type { Exercise } from "./exercise";
 export type SetField = "reps" | "weight";
 
 export interface ExerciseSetRow {
+  id: string;
   reps: string;
   weight: string;
   completed: boolean;
@@ -15,8 +16,10 @@ export interface ExerciseSetProps {
   exercise: Exercise;
   isActive: boolean;
   isCompleted: boolean;
+  canDelete: boolean;
   onActivate: (index: number) => void;
   onValueChange: (index: number, field: SetField, value: string) => void;
+  onDelete: (index: number) => void;
 }
 
 export interface ExerciseSetsPageProps {
