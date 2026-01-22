@@ -1,6 +1,6 @@
 import type { ChatMessage } from "@/types/chat";
 
-const GEMINI_API_KEY = "AIzaSyB1ns6hUdCi9FsuD7CfAfeEZbXXqXifde8";
+const GEMINI_API_KEY = "";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`;
 
 export interface GeminiMessage {
