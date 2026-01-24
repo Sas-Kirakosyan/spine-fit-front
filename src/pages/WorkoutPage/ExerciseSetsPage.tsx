@@ -405,8 +405,8 @@ export function ExerciseSetsPage({
                     : undefined
                 }
                 className={`${secondaryButtonClass} ${isActive
-                    ? "border-main/70 text-main/70 shadow-inner shadow-main/20"
-                    : ""
+                  ? "border-main/70 text-main/70 shadow-inner shadow-main/20"
+                  : ""
                   }`}
               >
                 <span className="flex items-center gap-2">
@@ -489,8 +489,8 @@ export function ExerciseSetsPage({
                   <span
                     key={face.id}
                     className={`transition-opacity ${Math.abs(face.value - painLevel) <= 1
-                        ? "opacity-100"
-                        : "opacity-30"
+                      ? "opacity-100"
+                      : "opacity-30"
                       }`}
                   >
                     {face.label}

@@ -29,18 +29,16 @@ export const Input: React.FC<InputProps> = ({
     <label
       className={`flex flex-col gap-2 text-left w-full ${wrapperClassName}`}
     >
-          {label && (
+      {label && (
         <span
-          className={`text-[11px] font-semibold uppercase tracking-[0.32em] ${
-            disabled ? "text-slate-600" : "text-slate-300"
-          }`}
+          className={`text-[11px] font-semibold uppercase tracking-[0.32em] ${disabled ? "text-slate-600" : "text-slate-300"
+            }`}
         >
           {label}
           {unit && (
             <span
-              className={`ml-1 text-[10px] uppercase ${
-                disabled ? "text-slate-500" : "text-slate-400"
-              }`}
+              className={`ml-1 text-[10px] uppercase ${disabled ? "text-slate-500" : "text-slate-400"
+                }`}
             >
               ({unit})
             </span>
