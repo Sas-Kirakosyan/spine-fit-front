@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import type { ExerciseActionSheetProps } from "@/types/workout";
 import { ActionButton } from "@/components/ActionSheet/ActionButton/ActionButton";
-import { InfoIcon, PlayIcon, TrashIcon } from "@/components/Icons/Icons";
+import { InfoIcon, PlayIcon, TrashIcon, ReplaceIcon } from "@/components/Icons/Icons";
 
 export function ExerciseActionSheet({
   exercise,
@@ -67,6 +67,12 @@ export function ExerciseActionSheet({
                 variant="blue"
               />
             )}
+            <ActionButton
+              icon={<ReplaceIcon />}
+              text="Replace exercise"
+              onClick={() => {}}
+              variant="green"
+            />
             <ActionButton
               icon={<TrashIcon />}
               text="Delete from workout"

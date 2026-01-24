@@ -24,14 +24,20 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   const isDraggingRef = useRef(false);
   const deleteCalledRef = useRef(false);
 
+  // Можно удалить только если: есть возможность удаления И сет не выполнен
+  const canSwipeToDelete = canDelete && !isCompleted;
+
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (!canDelete || isDeleting || deleteCalledRef.current) return;
+    // Не блокировать тач на интерактивных элементах (INPUT, LABEL)
+    const targetTag = (e.target as HTMLElement).tagName;
+    if (targetTag === 'INPUT' || targetTag === 'LABEL') return;
+    if (!canSwipeToDelete || isDeleting || deleteCalledRef.current) return;
     startXRef.current = e.touches[0].clientX;
     isDraggingRef.current = true;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDraggingRef.current || !canDelete || isDeleting || deleteCalledRef.current) return;
+    if (!isDraggingRef.current || !canSwipeToDelete || isDeleting || deleteCalledRef.current) return;
     const diff = e.touches[0].clientX - startXRef.current;
     // Только свайп влево (отрицательные значения)
     const newTranslate = Math.min(0, diff);
@@ -39,7 +45,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   };
 
   const handleTouchEnd = () => {
-    if (!isDraggingRef.current || !canDelete || isDeleting || deleteCalledRef.current) return;
+    if (!isDraggingRef.current || !canSwipeToDelete || isDeleting || deleteCalledRef.current) return;
     isDraggingRef.current = false;
 
     // Если свайп достаточно далеко - удалить
@@ -59,21 +65,26 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
 
   // Mouse events для поддержки компьютера
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (!canDelete || isDeleting || deleteCalledRef.current) return;
+    const targetTag = (e.target as HTMLElement).tagName;
+    // Не блокировать клики на интерактивных элементах (INPUT, LABEL)
+    if (targetTag === 'INPUT' || targetTag === 'LABEL') {
+      return;
+    }
+    if (!canSwipeToDelete || isDeleting || deleteCalledRef.current) return;
     e.preventDefault();
     startXRef.current = e.clientX;
     isDraggingRef.current = true;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDraggingRef.current || !canDelete || isDeleting || deleteCalledRef.current) return;
+    if (!isDraggingRef.current || !canSwipeToDelete || isDeleting || deleteCalledRef.current) return;
     const diff = e.clientX - startXRef.current;
     const newTranslate = Math.min(0, diff);
     setTranslateX(newTranslate);
   };
 
   const handleMouseUp = () => {
-    if (!isDraggingRef.current || !canDelete || isDeleting || deleteCalledRef.current) return;
+    if (!isDraggingRef.current || !canSwipeToDelete || isDeleting || deleteCalledRef.current) return;
     isDraggingRef.current = false;
 
     if (translateX < -DELETE_THRESHOLD) {
@@ -141,7 +152,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
         style={{
           transform: `translateX(${translateX}px)`,
           transition: isDraggingRef.current ? 'none' : 'transform 0.3s ease-out',
-          cursor: canDelete ? 'grab' : 'default',
+          cursor: canSwipeToDelete ? 'grab' : 'default',
         }}
         // Touch events (мобильные)
         onTouchStart={handleTouchStart}

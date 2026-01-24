@@ -3,7 +3,18 @@ import { PageContainer } from "@/Layout/PageContainer";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
 import { auth } from "@/firebase/config";
+import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
+import { BodyProfileModal } from "@/components/BodyProfileModal/BodyProfileModal";
 import type { SettingsPageProps } from "@/types/pages";
+
+interface ModalConfig {
+  title: string;
+  options: string[];
+  descriptions?: string[];
+  headerDescription?: string;
+  selectedValue: string;
+  onSelect: (value: string) => void;
+}
 
 interface SettingsItemProps {
   label: string;
@@ -66,6 +77,30 @@ function Divider() {
 export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
+  const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Dark");
+  const [isBodyProfileOpen, setIsBodyProfileOpen] = useState(false);
+  const [bodyProfileSummary, setBodyProfileSummary] = useState<string>("Not set");
+
+  const loadBodyProfileSummary = () => {
+    const stored = localStorage.getItem("bodyProfile");
+    if (stored) {
+      try {
+        const profile = JSON.parse(stored);
+        const parts: string[] = [];
+        if (profile.gender) parts.push(profile.gender);
+        if (profile.height) parts.push(`${profile.height} ${profile.heightUnit || "cm"}`);
+        if (profile.weight) parts.push(`${profile.weight} ${profile.weightUnit || "kg"}`);
+        if (parts.length > 0) {
+          setBodyProfileSummary(parts.join(" • "));
+          return;
+        }
+      } catch (e) {
+        console.error("Error loading body profile:", e);
+      }
+    }
+    setBodyProfileSummary("Not set");
+  };
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -83,6 +118,7 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         setUserEmail(savedEmail);
       }
     }
+    loadBodyProfileSummary();
   }, []);
 
   const handleLogout = () => {
@@ -90,6 +126,76 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("currentPage");
     window.location.reload();
+  };
+
+  const openModal = (config: ModalConfig) => {
+    setModalConfig(config);
+  };
+
+  const closeModal = () => {
+    setModalConfig(null);
+  };
+
+  const handleThemeChange = () => {
+    openModal({
+      title: "Change Theme",
+      options: ["Light", "Dark", "System"],
+      descriptions: [
+        "Always use light mode",
+        "Always use dark mode",
+        "Follow system settings"
+      ],
+      selectedValue: theme,
+      onSelect: (value) => {
+        setTheme(value);
+        localStorage.setItem("theme", value);
+      }
+    });
+  };
+
+  const handleSubscription = () => {
+    openModal({
+      title: "Subscription Plans",
+      options: ["Free", "Monthly", "Annual"],
+      descriptions: [
+        "Limited to 3 workouts per week",
+        "$9.99/month - Unlimited workouts",
+        "$79.99/year - Save 33%"
+      ],
+      headerDescription: "Upgrade to unlock unlimited workout logging and premium features.",
+      selectedValue: "Free",
+      onSelect: (value) => {
+        console.log("Selected subscription:", value);
+      }
+    });
+  };
+
+  const handleBodyProfile = () => {
+    setIsBodyProfileOpen(true);
+  };
+
+  const handleBodyProfileSave = () => {
+    loadBodyProfileSummary();
+  };
+
+  const handleContactSupport = () => {
+    openModal({
+      title: "Contact Support",
+      options: ["Email Support", "Live Chat", "FAQ"],
+      descriptions: [
+        "Send us an email at support@spinefit.com",
+        "Chat with our support team (9AM-6PM EST)",
+        "Browse frequently asked questions"
+      ],
+      selectedValue: "",
+      onSelect: (value) => {
+        if (value === "Email Support") {
+          window.open("mailto:support@spinefit.com", "_blank");
+        } else if (value === "FAQ") {
+          console.log("Open FAQ");
+        }
+      }
+    });
   };
 
   return (
@@ -114,10 +220,14 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         />
         <SettingsItem
           label="Subscribe to log unlimited workouts"
-          onClick={() => { }}
+          onClick={handleSubscription}
         />
         <SettingsItem label="Change Password" onClick={() => { }} />
-        <SettingsItem label="Change Theme" onClick={() => { }} />
+        <SettingsItem
+          label="Change Theme"
+          value={theme}
+          onClick={handleThemeChange}
+        />
         <SettingsItem
           label="Log Out"
           onClick={handleLogout}
@@ -127,9 +237,20 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
       <Divider />
 
+      {/* About You Section */}
+      <SettingsSection title="About You">
+        <SettingsItem
+          label="Body Profile"
+          value={bodyProfileSummary}
+          onClick={handleBodyProfile}
+        />
+      </SettingsSection>
+
+      <Divider />
+
       {/* Help Section */}
       <SettingsSection title="Help">
-        <SettingsItem label="Contact Support" onClick={() => { }} />
+        <SettingsItem label="Contact Support" onClick={handleContactSupport} />
         <SettingsItem label="Permanently Delete Account" onClick={() => { }} />
       </SettingsSection>
 
@@ -145,6 +266,27 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           showArrow={false}
         />
       </SettingsSection>
+
+      {/* Selection Modal */}
+      {modalConfig && (
+        <SelectionModal
+          isOpen={!!modalConfig}
+          onClose={closeModal}
+          title={modalConfig.title}
+          options={modalConfig.options}
+          descriptions={modalConfig.descriptions}
+          headerDescription={modalConfig.headerDescription}
+          selectedValue={modalConfig.selectedValue}
+          onSelect={modalConfig.onSelect}
+        />
+      )}
+
+      {/* Body Profile Modal */}
+      <BodyProfileModal
+        isOpen={isBodyProfileOpen}
+        onClose={() => setIsBodyProfileOpen(false)}
+        onSave={handleBodyProfileSave}
+      />
     </PageContainer>
   );
 }

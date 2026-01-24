@@ -205,3 +205,25 @@ export function SettingsIcon({ className = "h-8 w-8" }: { className?: string }) 
 
   );
 }
+
+export function ReplaceIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M4 7h13"></path>
+      <path d="M13 3l4 4-4 4"></path>
+
+      <path d="M20 17H7"></path>
+      <path d="M11 21l-4-4 4-4"></path>
+    </svg>
+  );
+}
