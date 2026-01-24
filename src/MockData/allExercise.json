@@ -236,7 +236,7 @@
     "video_url": "https://cdn.spinefit.app/videos/bulgarian_split.mp4",
     "sets": 3,
     "reps": 10,
-    "weight": 4,
+    "weight": 0,
     "weight_unit": "kg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
