@@ -7,12 +7,14 @@ import { filterExercisesByProfile, getAlternativeExercises, type FilterCriteria,
 import { mapSplitToMuscleGroups, assignExercisesToDays, getMissingMuscleGroups, createWeeklySchedule, type WorkoutDay } from "./splitScheduler";
 import { calculateVolume, calculateExercisesPerWorkout } from "./volumeCalculator";
 import { applyProgressionToExercises } from "./progressiveOverload";
+import { buildSourceOnboarding, type SourceOnboarding } from "./planGeneratorHelpers";
 
 export interface GeneratedPlan {
   id: string;
   name: string;
   createdAt: string;
   settings: PlanSettings;
+  sourceOnboarding?: SourceOnboarding;
   workoutDays: WorkoutDay[];
   missingMuscleGroups: string[];
   alternativeExercises: Exercise[];
@@ -321,11 +323,15 @@ export function generateTrainingPlan(
   const planId = generatePlanId();
   const planName = generatePlanName(effectivePlanSettings);
 
+  // 15. Build sourceOnboarding object for debugging and AI-readiness
+  const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
+
   return {
     id: planId,
     name: planName,
     createdAt: new Date().toISOString(),
     settings: effectivePlanSettings,
+    sourceOnboarding,
     workoutDays: adjustedWorkoutDaysWithVolume,
     missingMuscleGroups,
     alternativeExercises,
@@ -1192,13 +1198,95 @@ function mergePlanSettingsWithQuizAnswers(
     trainingSplit = "Push/Pull/Legs";
   }
 
+  // Extract personal profile data from quiz
+  const genderAnswer = answers[3]; // gender
+  const heightAnswer = answers[5]; // height
+  const weightAnswer = answers[6]; // weight
+  const ageRangeAnswer = answers[4]; // ageRange
+  const bodyTypeAnswer = answers[7]; // bodyType
+
+  // Extract pain profile from quiz
+  const painStatusAnswer = answers[10]; // painStatus (returns index)
+  const painStatusOptions = ["Never", "In the past", "Yes, currently"];
+  const painStatus = typeof painStatusAnswer === "number"
+    ? painStatusOptions[painStatusAnswer]
+    : undefined;
+
+  const painLocationAnswer = answers[11]; // painLocation (returns array of indices)
+  const painLocationOptions = [
+    "Lower back (L5–S1)",
+    "Middle back",
+    "Upper back",
+    "Sciatica",
+    "Leg",
+    "Shoulder",
+    "Other",
+  ];
+  const painLocation = Array.isArray(painLocationAnswer)
+    ? painLocationAnswer.map((idx) => painLocationOptions[idx as number])
+    : undefined;
+
+  const painTriggersAnswer = answers[13]; // painTriggers (returns array of indices)
+  const painTriggersOptions = [
+    "walking",
+    "Bending forward",
+    "Lifting heavy objects",
+    "Long sitting",
+    "Running or jumping",
+    "Deadlifts / squats with weight",
+    "Other activities",
+  ];
+  const painTriggers = Array.isArray(painTriggersAnswer)
+    ? painTriggersAnswer.map((idx) => painTriggersOptions[idx as number])
+    : undefined;
+
+  const canSquatAnswer = answers[14]; // canSquat (returns index)
+  const canSquatOptions = ["Yes", "Sometimes", "No", "Haven't tried"];
+  const canSquat = typeof canSquatAnswer === "number"
+    ? canSquatOptions[canSquatAnswer]
+    : undefined;
+
+  // Map gender index to label
+  const genderOptions = ["Male", "Female", "Other"];
+  const gender = typeof genderAnswer === "number"
+    ? genderOptions[genderAnswer]
+    : undefined;
+
+  // Map ageRange index to label
+  const ageRangeOptions = ["18–29", "30–39", "40–49", "50+"];
+  const ageRange = typeof ageRangeAnswer === "number"
+    ? ageRangeOptions[ageRangeAnswer]
+    : undefined;
+
+  // Map bodyType - depends on gender
+  let bodyType: string | undefined;
+  if (typeof bodyTypeAnswer === "number") {
+    const isFemale = gender === "Female";
+    const bodyTypeOptions = isFemale
+      ? ["18-24", "25-31", "32-38", "38+"]
+      : ["8-15", "16-22", "23-30", "30+"];
+    bodyType = bodyTypeOptions[bodyTypeAnswer];
+  }
+
   return {
     ...planSettings,
     goal,
     experience,
     workoutsPerWeek,
     duration,
+    durationRange: durationValue,
     trainingSplit,
+    // User profile
+    gender,
+    height: typeof heightAnswer === "string" ? heightAnswer : undefined,
+    weight: typeof weightAnswer === "string" ? weightAnswer : undefined,
+    ageRange,
+    bodyType,
+    // Pain profile
+    painStatus,
+    painLocation,
+    painTriggers,
+    canSquat,
   };
 }
 

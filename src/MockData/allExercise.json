@@ -15,7 +15,7 @@
     "back_issue_restrictions": [
       {
         "id": 12,
-        "exercise_id": 402,
+        "exercise_id": 1,
         "issue_type": "l5_s1",
         "restriction_level": "low",
         "recommendation": "Keep spine neutral and avoid hyperextending at the top. Move slowly and avoid jerky motions.",
@@ -46,7 +46,7 @@
     "back_issue_restrictions": [
       {
         "id": 13,
-        "exercise_id": 403,
+        "exercise_id": 2,
         "issue_type": "l5_s1",
         "restriction_level": "low",
         "recommendation": "Do not overextend hips. Keep ribs down and avoid pushing through lower back. Move slowly.",
@@ -77,7 +77,7 @@
     "back_issue_restrictions": [
       {
         "id": 14,
-        "exercise_id": 404,
+        "exercise_id": 3,
         "issue_type": "l5_s1",
         "restriction_level": "medium",
         "recommendation": "Use bent-knee or single-leg only. Avoid straight-leg raises. Keep pelvis neutral and avoid lumbar rounding.",
@@ -108,7 +108,7 @@
     "back_issue_restrictions": [
       {
         "id": 15,
-        "exercise_id": 405,
+        "exercise_id": 4,
         "issue_type": "l5_s1",
         "restriction_level": "low",
         "recommendation": "Keep core braced and avoid twisting the lower back. Use light to moderate weight and move with control.",

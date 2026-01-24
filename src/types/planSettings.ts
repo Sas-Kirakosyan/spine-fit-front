@@ -127,12 +127,24 @@ export interface PlanSettings {
   goal: string;
   workoutsPerWeek: string;
   duration: string;
+  durationRange?: string; // Store the original range (e.g., "30–45 min")
   experience: string;
   trainingSplit: string;
   exerciseVariability: string;
   units: string;
   cardio: string;
   stretching: string;
+  // User profile data from quiz
+  gender?: string;
+  height?: string;
+  weight?: string;
+  ageRange?: string;
+  bodyType?: string;
+  // Pain profile
+  painStatus?: string;
+  painLocation?: string[];
+  painTriggers?: string[];
+  canSquat?: string;
 }
 
 const STORAGE_KEY = "planSettings";
