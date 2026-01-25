@@ -169,7 +169,7 @@ export function ExerciseSetsPage({
       hasValidReps &&
       setEntry.weight.trim() !== "" &&
       !Number.isNaN(Number(setEntry.weight)) &&
-      Number(setEntry.weight) > 0
+      Number(setEntry.weight) >= 0
     );
   };
 

@@ -17,6 +17,7 @@ import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPag
 import { AIPage } from "@/pages/AIPage/AIPage";
 import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
+import "@/utils/testWorkoutHistoryGenerator";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
