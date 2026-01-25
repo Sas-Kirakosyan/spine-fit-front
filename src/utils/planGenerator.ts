@@ -7,7 +7,7 @@ import { filterExercisesByProfile, getAlternativeExercises, type FilterCriteria,
 import { mapSplitToMuscleGroups, assignExercisesToDays, getMissingMuscleGroups, createWeeklySchedule, type WorkoutDay } from "./splitScheduler";
 import { calculateVolume, calculateExercisesPerWorkout } from "./volumeCalculator";
 import { applyProgressionToExercises } from "./progressiveOverload";
-import { buildSourceOnboarding, type SourceOnboarding } from "./planGeneratorHelpers";
+import { buildSourceOnboarding, enforceFullBodyABRequirements, type SourceOnboarding } from "./planGeneratorHelpers";
 
 export interface GeneratedPlan {
   id: string;
@@ -279,7 +279,15 @@ export function generateTrainingPlan(
     filteredExercises
   );
 
-  const adjustedWorkoutDaysWithVolume = rearDeltBalancedDays.map((day) => ({
+  // Build sourceOnboarding to get split information
+  const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
+  
+  // Enforce FULL_BODY_AB split requirements (Day A needs push + horizontal pull, Day B needs push + vertical pull)
+  const fullBodyABEnforcedDays = sourceOnboarding?.split 
+    ? enforceFullBodyABRequirements(rearDeltBalancedDays, allExercises, sourceOnboarding.split)
+    : rearDeltBalancedDays;
+
+  const adjustedWorkoutDaysWithVolume = fullBodyABEnforcedDays.map((day) => ({
     ...day,
     exercises: day.exercises.map((exercise) => {
       // Core stability exercises should not have weight assigned
@@ -322,9 +330,6 @@ export function generateTrainingPlan(
   // 14. Generate plan metadata
   const planId = generatePlanId();
   const planName = generatePlanName(effectivePlanSettings);
-
-  // 15. Build sourceOnboarding object for debugging and AI-readiness
-  const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
 
   return {
     id: planId,
