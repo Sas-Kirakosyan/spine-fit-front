@@ -48,6 +48,13 @@ export function ExerciseDetails({
             alt={exercise.name}
             className="h-full w-full object-cover"
           />
+          <video
+            src={exercise.video_url}
+            autoPlay
+            loop
+            muted
+            className="h-full w-full object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-[#161827] via-transparent to-black/40" />
           <button
             type="button"

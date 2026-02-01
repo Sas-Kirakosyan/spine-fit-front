@@ -1,24 +1,29 @@
 import { useState } from "react";
 import { SwapWorkoutActionSheet } from "../../components/ActionSheet/SwapWorkoutActionSheet";
+import type { GeneratedPlan } from "@/utils/planGenerator";
 
 interface WorkoutPlanCardProps {
   planName?: string;
+  dayName?: string;
   exerciseCount?: number;
   muscleCount?: number;
   duration?: string;
   location?: string;
   containerRef: React.RefObject<HTMLDivElement | null>;
   onWorkoutSwap?: (workoutId: string) => void;
+  onPlanSwitched?: (plan: GeneratedPlan) => void;
 }
 
 export function WorkoutPlanCard({
   planName = "Pull Day",
+  dayName = "Pull Day",
   exerciseCount = 3,
   muscleCount = 3,
   duration = "1h 1m",
   location = "My Gym",
   containerRef,
   onWorkoutSwap,
+  onPlanSwitched,
 }: WorkoutPlanCardProps) {
   const [showSwapSheet, setShowSwapSheet] = useState(false);
 
@@ -76,8 +81,9 @@ export function WorkoutPlanCard({
 
         {/* Main content */}
         <div className="pr-32">
-          <h2 className="text-2xl font-bold text-white mb-1">{planName}</h2>
-          <p className="text-sm text-white/80 mb-4">
+          <h2 className="text-2xl font-bold text-white mb-1">{dayName}</h2>
+          <p className="text-xs text-white/60 mb-3">{planName}</p>
+          <p className="text-sm text-white/80">
             {exerciseCount} Exercises • {muscleCount} Muscles
           </p>
 
@@ -125,6 +131,12 @@ export function WorkoutPlanCard({
           onSelectWorkout={(workoutId) => {
             if (onWorkoutSwap) {
               onWorkoutSwap(workoutId);
+            }
+            setShowSwapSheet(false);
+          }}
+          onSwitchSplit={(plan) => {
+            if (onPlanSwitched) {
+              onPlanSwitched(plan);
             }
             setShowSwapSheet(false);
           }}

@@ -416,6 +416,15 @@
         "recommendation": "Requires medical clearance. Use very light loads or avoid. Consider belt squats or hip thrusts instead.",
         "created_at": "2025-12-20T12:00:00Z",
         "updated_at": "2025-12-20T12:00:00Z"
+      },
+      {
+        "id": 35,
+        "exercise_id": 12,
+        "issue_type": "sciatica",
+        "restriction_level": "high",
+        "recommendation": "Spinal flexion under load can aggravate sciatica. Avoid or use medical clearance only. Consider trap bar deadlifts, hip thrusts, or belt squats as safer alternatives that load the posterior chain without spinal compression.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
       }
     ],
     "created_at": "2025-12-20T12:00:00Z",
@@ -1253,6 +1262,86 @@
     "sets": 3,
     "reps": 10,
     "weight": 0,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 39,
+    "name": "Cable Face Pull (Rope Face Pull)",
+    "description": "A cable rear-delt and upper back exercise that improves shoulder health, posture, and external rotation strength. Essential for shoulder balance and injury prevention, especially for desk workers and those with forward shoulder posture.",
+    "category": "strength",
+    "muscle_groups": ["rear_delts", "upper_back", "rotator_cuff"],
+    "equipment": "cable_machine",
+    "difficulty": "beginner",
+    "instructions": "Set cable at upper chest height. Attach rope. Grip ends with palms facing each other. Pull rope toward face, separating hands as they pass face level. Focus on squeezing shoulder blades together. Keep elbows high and pull rope to eye level. Return with control. Use light weight and high reps for best results.",
+    "video_url": "https://www.youtube.com/watch?v=0Po47vvj9g4",
+    "image_url": "https://trainingstation.co.uk/cdn/shop/articles/face-pulls-muscles-used_fe27890e-ac33-489a-bb21-a9bbcc84bfae_922x.png?v=1738219155",
+    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 62,
+        "exercise_id": 39,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent choice - zero spinal loading. Keep core braced and avoid leaning back. Focus on shoulder blade retraction.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      },
+      {
+        "id": 63,
+        "exercise_id": 39,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Safe exercise with no nerve stress. Maintain stable stance throughout.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 10,
+    "weight_unit": "kg"
+  },
+  {
+    "id": 40,
+    "name": "Reverse Pec Deck (Rear-Delt Fly)",
+    "description": "A machine-based rear-delt isolation exercise that targets the posterior deltoids while providing stable, supported positioning. Excellent for shoulder balance and preventing rounded shoulders.",
+    "category": "strength",
+    "muscle_groups": ["rear_delts", "upper_back"],
+    "equipment": "pec_deck_machine",
+    "difficulty": "beginner",
+    "instructions": "Sit facing the pec deck machine with chest against pad. Grip handles with palms facing each other. Pull handles back by squeezing shoulder blades together. Keep slight bend in elbows. Control the return. Avoid using momentum.",
+    "video_url": "https://www.youtube.com/watch?v=5YK4bgzXDp0&pp=ygURUmV2ZXJzZSBQZWMgRGVjayA%3D",
+    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWhbSdSbz1hbYVAMLy3qaKfbHj9DZ9dr73-g&s",
+    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/pec-deck-machine.jpg",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 64,
+        "exercise_id": 40,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent choice with chest support. Keep torso stable against pad throughout.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      },
+      {
+        "id": 65,
+        "exercise_id": 40,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Safe seated exercise with support. No nerve stress.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 15,
     "weight_unit": "kg"
   }
 ]

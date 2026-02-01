@@ -19,7 +19,9 @@ export interface SourceOnboarding {
   split?: WorkoutSplit;
 }
 
-export type SplitType = "FULL_BODY_ABC" | "FULL_BODY_AB" | "UPPER_LOWER_UPPER" | "PUSH_PULL_LEGS" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_STRENGTH_HYPERTROPHY";
+export type SplitType = "FULL_BODY_ABC" | "FULL_BODY_AB" | "UPPER_LOWER_UPPER" | "PUSH_PULL_LEGS" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "BRO_SPLIT" | "FRESH_MUSCLES";
+
+export type AlternativeSplitType = "BRO_SPLIT" | "PPL" | "FRESH_MUSCLES";
 
 export interface WorkoutSplit {
   type: SplitType;

@@ -14,6 +14,7 @@ import {
   generateTrainingPlan,
   savePlanToLocalStorage,
   loadPlanFromLocalStorage,
+  type GeneratedPlan,
 } from "@/utils/planGenerator";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { loadPlanSettings } from "@/types/planSettings";
@@ -56,13 +57,13 @@ export function WorkoutPage({
 
           const nextWorkout = getNextAvailableWorkout(
             plan,
-            completedWorkoutIds
+            completedWorkoutIds,
           );
           console.log("nextWorkout:", nextWorkout);
           if (nextWorkout && nextWorkout.exercises.length > 0) {
             setWorkoutExercises(nextWorkout.exercises);
             console.log(
-              `📋 Loaded ${nextWorkout.dayName} workout (${nextWorkout.exercises.length} exercises)`
+              `📋 Loaded ${nextWorkout.dayName} workout (${nextWorkout.exercises.length} exercises)`,
             );
           } else {
             // Fallback to first workout day
@@ -101,7 +102,7 @@ export function WorkoutPage({
         const availableEquipment = equipmentData.flatMap((category) =>
           category.items
             .filter((item) => item.selected)
-            .map((item) => item.name)
+            .map((item) => item.name),
         );
 
         // If no equipment configured yet, assume all equipment exists (extract from exercise database)
@@ -110,13 +111,13 @@ export function WorkoutPage({
           availableEquipment.length > 0
             ? availableEquipment
             : equipmentData.length === 0
-            ? // No equipment data configured - assume all equipment exists
-              Array.from(
-                new Set(
-                  (allExercisesData as Exercise[]).map((ex) => ex.equipment)
-                )
-              ).filter((eq) => eq && eq !== "none")
-            : ["bodyweight"];
+              ? // No equipment data configured - assume all equipment exists
+                Array.from(
+                  new Set(
+                    (allExercisesData as Exercise[]).map((ex) => ex.equipment),
+                  ),
+                ).filter((eq) => eq && eq !== "none")
+              : ["bodyweight"];
 
         // Load workout history
         const historyString = localStorage.getItem("workoutHistory");
@@ -134,7 +135,7 @@ export function WorkoutPage({
           planSettings,
           quizData,
           bodyweightOnly ? ["bodyweight"] : finalEquipment,
-          workoutHistory
+          workoutHistory,
         );
 
         // Save the generated plan
@@ -172,13 +173,13 @@ export function WorkoutPage({
           const plan = JSON.parse(e.newValue);
           const nextWorkout = getNextAvailableWorkout(
             plan,
-            completedWorkoutIds
+            completedWorkoutIds,
           );
           if (nextWorkout && nextWorkout.exercises.length > 0) {
             setWorkoutExercises(nextWorkout.exercises);
             console.log(
               `Updated to ${nextWorkout.dayName} workout from storage event:`,
-              nextWorkout.exercises.map((e: any) => e.name)
+              nextWorkout.exercises.map((e: any) => e.name),
             );
           }
         } catch (error) {
@@ -200,7 +201,7 @@ export function WorkoutPage({
           const plan = JSON.parse(planString);
           const nextWorkout = getNextAvailableWorkout(
             plan,
-            completedWorkoutIds
+            completedWorkoutIds,
           );
           if (nextWorkout && nextWorkout.exercises.length > 0) {
             // Only update if exercises have actually changed (compare IDs)
@@ -216,7 +217,7 @@ export function WorkoutPage({
               if (prevIds !== nextIds) {
                 console.log(
                   `Reloaded ${nextWorkout.dayName} workout:`,
-                  nextWorkout.exercises.map((e: any) => e.name)
+                  nextWorkout.exercises.map((e: any) => e.name),
                 );
                 return nextWorkout.exercises;
               }
@@ -242,10 +243,47 @@ export function WorkoutPage({
   const hasGeneratedPlan = localStorage.getItem("generatedPlan") !== null;
   const displayExercises = hasGeneratedPlan ? workoutExercises : [];
 
+  // Calculate current workout day name based on rotation index
+  const getCurrentDayName = (): string => {
+    const plan = loadPlanFromLocalStorage();
+    if (!plan || plan.workoutDays.length === 0) return "No Workout";
+
+    // Count completed workouts from this plan
+    const planCompletedCount = Array.from(completedWorkoutIds).filter(
+      (id) => id.startsWith(plan.id),
+    ).length;
+
+    // Calculate rotation index
+    const rotationIndex = planCompletedCount % plan.workoutDays.length;
+
+    // Get the day name at that index
+    return plan.workoutDays[rotationIndex]?.dayName || "Today's Workout";
+  };
+
+  const currentDayName = displayExercises.length > 0 ? getCurrentDayName() : "No Workout";
+
   console.log(
     "plan",
-    JSON.parse(localStorage.getItem("generatedPlan") || "{}")
+    JSON.parse(localStorage.getItem("generatedPlan") || "{}"),
   ); // dont remove this log
+
+  // Handler for when user switches to a different training split
+  const handlePlanSwitched = (updatedPlan: GeneratedPlan) => {
+    console.log(
+      "[WorkoutPage] Plan switched to:",
+      updatedPlan.splitType,
+      updatedPlan.name,
+    );
+
+    // Update displayed exercises to first day of new split
+    const firstWorkout = updatedPlan.workoutDays[0];
+    if (firstWorkout && firstWorkout.exercises.length > 0) {
+      setWorkoutExercises(firstWorkout.exercises);
+      console.log(
+        `📋 Switched to ${firstWorkout.dayName} (${firstWorkout.exercises.length} exercises)`,
+      );
+    }
+  };
 
   return (
     <PageContainer>
@@ -281,7 +319,32 @@ export function WorkoutPage({
           }}
         />
 
-        <WorkoutPlanCard containerRef={cardRef} />
+        <WorkoutPlanCard
+          containerRef={cardRef}
+          onPlanSwitched={handlePlanSwitched}
+          planName={loadPlanFromLocalStorage()?.name || "My Workout Plan"}
+          dayName={currentDayName}
+          exerciseCount={displayExercises.length}
+          muscleCount={
+            new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size
+          }
+          duration={`${Math.ceil(displayExercises.length * 3)}m`}
+          location="My Gym"
+          onWorkoutSwap={(workoutId) => {
+            const plan = loadPlanFromLocalStorage();
+            if (plan) {
+              const selectedWorkout = plan.workoutDays.find((day) =>
+                day.dayName.toLowerCase().includes(workoutId),
+              );
+              if (selectedWorkout && selectedWorkout.exercises.length > 0) {
+                setWorkoutExercises(selectedWorkout.exercises);
+                console.log(
+                  `📋 Swapped to ${selectedWorkout.dayName} (${selectedWorkout.exercises.length} exercises)`,
+                );
+              }
+            }
+          }}
+        />
 
         <section className="flex-1 space-y-3 mx-2.5">
           {isLoadingPlan ? (
@@ -393,13 +456,13 @@ export function WorkoutPage({
                   // Find current workout
                   const currentWorkout = getNextAvailableWorkout(
                     plan,
-                    completedWorkoutIds
+                    completedWorkoutIds,
                   );
 
                   if (currentWorkout) {
                     // Remove exercise from current workout
                     currentWorkout.exercises = currentWorkout.exercises.filter(
-                      (ex: Exercise) => ex.id !== actionExercise.id
+                      (ex: Exercise) => ex.id !== actionExercise.id,
                     );
 
                     // Save updated plan to localStorage
@@ -407,7 +470,7 @@ export function WorkoutPage({
 
                     // Update local state
                     setWorkoutExercises((prev) =>
-                      prev.filter((ex) => ex.id !== actionExercise.id)
+                      prev.filter((ex) => ex.id !== actionExercise.id),
                     );
                   } else {
                     // Fallback: if no current workout found, try to remove from all workouts
@@ -415,7 +478,7 @@ export function WorkoutPage({
                     for (const workoutDay of plan.workoutDays) {
                       const beforeCount = workoutDay.exercises.length;
                       workoutDay.exercises = workoutDay.exercises.filter(
-                        (ex: Exercise) => ex.id !== actionExercise.id
+                        (ex: Exercise) => ex.id !== actionExercise.id,
                       );
                       if (workoutDay.exercises.length < beforeCount) {
                         removed = true;
@@ -424,7 +487,7 @@ export function WorkoutPage({
                     if (removed) {
                       savePlanToLocalStorage(plan);
                       setWorkoutExercises((prev) =>
-                        prev.filter((ex) => ex.id !== actionExercise.id)
+                        prev.filter((ex) => ex.id !== actionExercise.id),
                       );
                     }
                   }

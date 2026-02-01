@@ -9,15 +9,27 @@ import { calculateVolume, calculateExercisesPerWorkout } from "./volumeCalculato
 import { applyProgressionToExercises } from "./progressiveOverload";
 import { buildSourceOnboarding, enforceFullBodyABRequirements, type SourceOnboarding } from "./planGeneratorHelpers";
 
+export type { WorkoutDay };
+
 export interface GeneratedPlan {
   id: string;
   name: string;
+  splitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES"; // Identifies the plan type
   createdAt: string;
   settings: PlanSettings;
   sourceOnboarding?: SourceOnboarding;
   workoutDays: WorkoutDay[];
   missingMuscleGroups: string[];
   alternativeExercises: Exercise[];
+}
+
+export interface AlternativeSplit {
+  id: string;
+  name: string;
+  splitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES";
+  description: string;
+  workoutDays: WorkoutDay[];
+  createdAt: string;
 }
 
 const isPress = (e: Exercise) =>
@@ -122,6 +134,132 @@ const replaceByName = (
 };
 
 /**
+ * Generate alternative split plan options based on training frequency
+ * - Upper/Lower: 3+ days/week
+ * - PPL: 3+ days/week (pain-free users)
+ * - Bro Split (5-day body-part): 5+ days/week only
+ */
+function generateAlternativeSplits(
+  allExercises: Exercise[],
+  painProfile: PainProfile,
+  frequency: number
+): AlternativeSplit[] {
+  const alternatives: AlternativeSplit[] = [];
+
+  try {
+    // Alternative 1: Upper/Lower Split (3+ days/week)
+    if (frequency >= 3) {
+      const upperLowerWorkoutDays = assignExercisesToDays(
+        allExercises,
+        [
+          ["chest", "front_delts", "lats", "upper_back", "rear_delts", "triceps", "biceps"],
+          ["quadriceps", "glutes", "hamstrings"],
+          ["chest", "front_delts", "lats", "upper_back", "rear_delts", "triceps", "biceps"],
+          ["quadriceps", "glutes", "hamstrings"],
+        ].slice(0, frequency),
+        4,
+        "Upper/Lower"
+      );
+
+      alternatives.push({
+        id: generatePlanId(),
+        name: "Upper/Lower Split",
+        splitType: "BRO_SPLIT",
+        description: `${frequency} days per week - Upper and lower body days. Each muscle group trained 2x per week for optimal growth.`,
+        workoutDays: upperLowerWorkoutDays,
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    // Alternative 2: Push/Pull/Legs (3+ days/week, pain-free users)
+    const isPainMinimal = painProfile.painStatus === "Never" || painProfile.painStatus === "In the past";
+    if (frequency >= 3 && isPainMinimal) {
+      const pplMuscleGroups = [
+        ["chest", "front_delts", "triceps"], // Push
+        ["lats", "upper_back", "rear_delts", "biceps"], // Pull
+        ["quadriceps", "glutes", "hamstrings"], // Legs
+      ];
+
+      const pplWorkoutDays = assignExercisesToDays(
+        allExercises,
+        pplMuscleGroups,
+        4,
+        "Push/Pull/Legs"
+      );
+
+      alternatives.push({
+        id: generatePlanId(),
+        name: "Push/Pull/Legs",
+        splitType: "PPL",
+        description: "Classic 3-6 day split - Push, Pull, Legs rotation. Excellent for volume and specialization.",
+        workoutDays: pplWorkoutDays,
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    // Alternative 3: Bro Split - 5-day body-part split (5+ days/week ONLY)
+    if (frequency >= 5) {
+      const broSplitMuscleGroups = [
+        ["chest", "front_delts"], // Chest day
+        ["lats", "upper_back", "rear_delts"], // Back day
+        ["front_delts", "rear_delts"], // Shoulders day
+        ["biceps", "triceps"], // Arms day
+        ["quadriceps", "glutes", "hamstrings"], // Legs day
+      ];
+
+      const broSplitWorkoutDays = assignExercisesToDays(
+        allExercises,
+        broSplitMuscleGroups,
+        3,
+        "Full Body"
+      );
+
+      alternatives.push({
+        id: generatePlanId(),
+        name: "Bro Split",
+        splitType: "FRESH_MUSCLES",
+        description: "5 days per week - One muscle group per day. Classic bodybuilding approach for maximum pump.",
+        workoutDays: broSplitWorkoutDays,
+        createdAt: new Date().toISOString(),
+      });
+    }
+  } catch (error) {
+    console.warn("[generateAlternativeSplits] Error generating alternatives:", error);
+    // Return empty array if alternative generation fails; primary plan is always valid
+  }
+
+  return alternatives;
+}
+
+/**
+ * Generate alternative splits on-demand for an existing plan
+ * Uses the same filtering as the primary plan to ensure exercises are safe
+ */
+export function generateAlternativeSplitsForPlan(
+  plan: GeneratedPlan,
+  allExercises: Exercise[]
+): AlternativeSplit[] {
+  // Extract pain profile from plan's source onboarding
+  const painProfile = extractPainProfileFromSource(plan.sourceOnboarding || null);
+
+  const workoutsPerWeek = parseWorkoutsPerWeek(plan.settings.workoutsPerWeek);
+
+  // Filter exercises same way as primary plan
+  const filterCriteria: FilterCriteria = {
+    availableEquipment: [], // TODO: Store and retrieve from plan
+    painProfile,
+    experience: plan.settings.experience as "Beginner" | "Intermediate" | "Advanced",
+    goal: plan.settings.goal,
+  };
+
+  const filteredExercises = filterExercisesByProfile(allExercises, filterCriteria);
+
+  console.log("[generateAlternativeSplitsForPlan] Filtered exercises:", filteredExercises.length);
+
+  return generateAlternativeSplits(filteredExercises, painProfile, workoutsPerWeek);
+}
+
+/**
  * Main function to generate a complete training plan
  */
 export function generateTrainingPlan(
@@ -131,6 +269,7 @@ export function generateTrainingPlan(
   availableEquipment: string[],
   workoutHistory: FinishedWorkoutSummary[] = []
 ): GeneratedPlan {
+
   // Override plan settings with quiz answers if available
   const effectivePlanSettings = quizAnswers
     ? mergePlanSettingsWithQuizAnswers(planSettings, quizAnswers)
@@ -281,12 +420,13 @@ export function generateTrainingPlan(
 
   // Build sourceOnboarding to get split information
   const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
-  
+
   // Enforce FULL_BODY_AB split requirements (Day A needs push + horizontal pull, Day B needs push + vertical pull)
-  const fullBodyABEnforcedDays = sourceOnboarding?.split 
+  const fullBodyABEnforcedDays = sourceOnboarding?.split
     ? enforceFullBodyABRequirements(rearDeltBalancedDays, allExercises, sourceOnboarding.split)
     : rearDeltBalancedDays;
 
+  // 12. Apply volume (sets/reps) to final workout days
   const adjustedWorkoutDaysWithVolume = fullBodyABEnforcedDays.map((day) => ({
     ...day,
     exercises: day.exercises.map((exercise) => {
@@ -315,25 +455,31 @@ export function generateTrainingPlan(
     }),
   }));
 
-  // 12. Check for missing muscle groups
+  // 13. Check for missing muscle groups
   const allTargetMuscleGroups = muscleGroupsByDay.flat();
   const missingMuscleGroups = getMissingMuscleGroups(
     allTargetMuscleGroups,
     filteredExercises
   );
 
-  // 13. Get alternative exercises for missing muscle groups
+  // 14. Get alternative exercises for missing muscle groups
   const alternativeExercises = missingMuscleGroups.length > 0
     ? getAlternativeExercises(allExercises, missingMuscleGroups)
     : [];
 
-  // 14. Generate plan metadata
+  // 15. Generate plan metadata
   const planId = generatePlanId();
   const planName = generatePlanName(effectivePlanSettings);
 
+  // Determine the plan's split type from sourceOnboarding
+  const primarySplitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES" =
+    sourceOnboarding?.split?.type || "FULL_BODY_AB"; // Use split type from sourceOnboarding, fallback to FULL_BODY_AB
+
+  // 15. Return primary plan (alternatives stored separately)
   return {
     id: planId,
     name: planName,
+    splitType: primarySplitType,
     createdAt: new Date().toISOString(),
     settings: effectivePlanSettings,
     sourceOnboarding,
@@ -380,8 +526,8 @@ function rebalanceUpperLowerDays(
     findExerciseByName(allExercises, "One-Arm Crossover Cable Pull");
   const horizontalPull = findExerciseByName(allExercises, "Seated Cable Row");
   const facePull =
-    findExerciseByName(allExercises, "Face Pull") ||
-    findExerciseByName(allExercises, "Rear-Delt Cable Fly");
+    findExerciseByName(allExercises, "Cable Face Pull") ||
+    findExerciseByName(allExercises, "Reverse Pec Deck (Rear-Delt Fly)");
   const ropePressdown = findExerciseByName(allExercises, "Cable Tricep Pushdown");
   const hamstringCurl =
     findExerciseByName(allExercises, "Lying Leg Curl") ||
@@ -578,8 +724,8 @@ function enforcePullNotLessThanPush(
     "Chin-Up",
     "Seated Cable Row",
     "Chest Supported Row",
-    "Face Pull",
-    "Rear-Delt Cable Fly",
+    "Cable Face Pull",
+    "Reverse Pec Deck (Rear-Delt Fly)",
   ]
     .map((name) => findExerciseByName(allExercises, name))
     .filter(Boolean) as Exercise[];
@@ -813,10 +959,8 @@ function ensureRearDeltWork(
 
   // Find rear-delt candidates
   const rearDeltCandidates = [
-    "Face Pull",
-    "Rear-Delt Cable Fly",
-    "Reverse Pec Deck",
     "Cable Face Pull",
+    "Reverse Pec Deck (Rear-Delt Fly)",
     "Band Pull Apart",
   ]
     .map((name) => findExerciseByName(allExercises, name))
@@ -929,6 +1073,10 @@ function enforceRowVariability(
 
 /**
  * Restructure 3-day Full Body split with rotating daily focus
+ * Applies to both:
+ * - FULL_BODY_ABC (Beginner): Full Body A/B/C rotation
+ * - UPPER_LOWER_UPPER (Intermediate): Upper/Lower/Upper split
+ * 
  * Day A: Push Focus (chest, shoulders, triceps + legs)
  * Day B: Lower Focus (legs, glutes, hamstrings + upper back)
  * Day C: Pull Focus (lats, back, biceps + legs)
@@ -939,8 +1087,11 @@ function restructureThreeDayFullBody(
   workoutsPerWeek: number,
   allExercises: Exercise[] = []
 ): WorkoutDay[] {
-  // Only apply to 3-day Full Body splits
-  if (trainingSplit !== "Full Body" || workoutsPerWeek !== 3 || days.length !== 3) {
+  // Apply to 3-day Full Body OR 3-day Upper/Lower splits
+  const isThreeDaySplit = workoutsPerWeek === 3 && days.length === 3 &&
+    (trainingSplit === "Full Body" || trainingSplit === "Upper/Lower");
+
+  if (!isThreeDaySplit) {
     return days;
   }
 
@@ -990,12 +1141,11 @@ function restructureThreeDayFullBody(
     ...(coreExercises.length > 0 ? [coreExercises[0]] : []),
   ].filter(Boolean);
 
-  // DAY B: Lower Focus (hinge, quad, hamstring + different horizontal pull)
+  // DAY B: Lower Focus (hinge, quad, hamstring only - NO upper body exercises)
   const dayBExercises = [
     ...(hingeExercises.length > 0 ? [hingeExercises[0]] : legExercises.slice(0, 1)),
     ...(quadExercises.length > 1 ? [quadExercises[1]] : []),
     ...(hamstringExercises.length > 0 ? [hamstringExercises[0]] : []),
-    ...(horizontalPulls.length > 1 ? [horizontalPulls[1]] : horizontalPulls.length > 0 ? [horizontalPulls[0]] : pullExercises.slice(0, 1)),
   ].filter(Boolean);
 
   // DAY C: Pull Focus - MUST include vertical pull, exclude ANY push exercises
@@ -1041,10 +1191,13 @@ function restructureThreeDayFullBody(
     if (exercises.length >= min) return exercises.slice(0, 6);
 
     const used = new Set(exercises.map(e => e.id));
+    // For Day B (Lower Focus), filter out ALL upper body exercises when padding
     // For Day C (Pull Focus), filter out push exercises when padding
-    const remaining = dayIndex === 2
-      ? allDayExercises.filter(e => !used.has(e.id) && !isPress(e))
-      : allDayExercises.filter(e => !used.has(e.id));
+    const remaining = dayIndex === 1
+      ? allDayExercises.filter(e => !used.has(e.id) && !isPress(e) && !isPull(e)) // Day B: only legs
+      : dayIndex === 2
+        ? allDayExercises.filter(e => !used.has(e.id) && !isPress(e)) // Day C: no push
+        : allDayExercises.filter(e => !used.has(e.id)); // Day A: anything
     return [...exercises, ...remaining].slice(0, Math.max(min, 4));
   };
 
@@ -1052,21 +1205,24 @@ function restructureThreeDayFullBody(
   const finalDayB = dedupeExercises(ensureMinExercises(dayBExercises, 4, 1));
   const finalDayC = dedupeExercises(ensureMinExercises(dayCExercises, 4, 2));
 
-  // Update day names with focus indicators
+  // Update day names and muscle groups with focus indicators
   return [
     {
       ...days[0],
       dayName: "Day A (Push Focus)",
+      muscleGroups: ["chest", "front_delts", "triceps", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
       exercises: finalDayA,
     },
     {
       ...days[1],
       dayName: "Day B (Lower Focus)",
+      muscleGroups: ["quadriceps", "glutes", "hamstrings"],
       exercises: finalDayB,
     },
     {
       ...days[2],
       dayName: "Day C (Pull Focus)",
+      muscleGroups: ["lats", "upper_back", "rear_delts", "biceps", "quadriceps", "glutes", "hamstrings"],
       exercises: finalDayC,
     },
   ];
@@ -1364,6 +1520,26 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
 }
 
 /**
+ * Extract pain profile from SourceOnboarding (alternative to extractPainProfile)
+ * Used when generating alternatives from an existing plan
+ */
+function extractPainProfileFromSource(sourceOnboarding: SourceOnboarding | null): PainProfile {
+  if (!sourceOnboarding) {
+    return {
+      painStatus: "Never",
+    };
+  }
+
+  return {
+    painStatus: (sourceOnboarding.painStatus as "Never" | "In the past" | "Yes, currently") || "Never",
+    painLocation: sourceOnboarding.painLocation,
+    painLevel: undefined, // Not stored in SourceOnboarding
+    painTriggers: sourceOnboarding.painTriggers,
+    canSquat: sourceOnboarding.canSquat,
+  };
+}
+
+/**
  * Find answer by question ID
  */
 function findAnswerByFieldName(
@@ -1409,8 +1585,25 @@ export function savePlanToLocalStorage(plan: GeneratedPlan): void {
   try {
     localStorage.setItem("generatedPlan", JSON.stringify(plan));
     localStorage.setItem("activePlanId", plan.id);
+    console.log("✅ Saved plan:", {
+      id: plan.id,
+      size: JSON.stringify(plan).length,
+      exercises: plan.workoutDays.reduce((sum, d) => sum + d.exercises.length, 0)
+    });
   } catch (error) {
     console.error("Failed to save plan to localStorage:", error);
+  }
+}
+
+/**
+ * Save alternative splits to localStorage (separate from main plan)
+ */
+export function saveAlternativeSplitsToLocalStorage(alternatives: AlternativeSplit[]): void {
+  try {
+    localStorage.setItem("alternativeSplits", JSON.stringify(alternatives));
+    console.log("✅ Saved alternatives:", alternatives.length);
+  } catch (error) {
+    console.error("Failed to save alternatives to localStorage:", error);
   }
 }
 
@@ -1426,6 +1619,19 @@ export function loadPlanFromLocalStorage(): GeneratedPlan | null {
   } catch (error) {
     console.error("Failed to load plan from localStorage:", error);
     return null;
+  }
+}
+
+/**
+ * Load alternative splits from localStorage
+ */
+export function loadAlternativeSplitsFromLocalStorage(): AlternativeSplit[] {
+  try {
+    const data = localStorage.getItem("alternativeSplits");
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error("Failed to load alternatives from localStorage:", error);
+    return [];
   }
 }
 
@@ -1456,4 +1662,131 @@ export function clearGeneratedPlan(): void {
   } catch (error) {
     console.error("Failed to clear plan from localStorage:", error);
   }
+}
+
+/**
+ * Switch to an alternative split plan by ID
+ * Replaces the current workoutDays with the alternative's workoutDays
+ */
+export function switchToAlternativePlan(alternativeId: string): GeneratedPlan | null {
+  try {
+    const plan = loadPlanFromLocalStorage();
+    if (!plan) return null;
+
+    // Load alternatives from separate storage
+    const alternatives = loadAlternativeSplitsFromLocalStorage();
+    if (alternatives.length === 0) {
+      console.warn(`[switchToAlternativePlan] No alternative splits found in storage`);
+      return null;
+    }
+
+    const alternative = alternatives.find((alt) => alt.id === alternativeId);
+    if (!alternative) return null;
+
+    const updatedPlan: GeneratedPlan = {
+      ...plan,
+      workoutDays: alternative.workoutDays,
+      splitType: alternative.splitType,
+      // Update name to reflect the new split
+      name: `${alternative.name} - ${plan.settings.workoutsPerWeek}`,
+    };
+
+    savePlanToLocalStorage(updatedPlan);
+    return updatedPlan;
+  } catch (error) {
+    console.error("Failed to switch to alternative plan:", error);
+    return null;
+  }
+}
+
+/**
+ * Switch to an alternative split plan by splitType
+ * Used by the Swap Workout action sheet
+ */
+export function switchToSplit(splitType: "FULL_BODY" | "FULL_BODY_AB" | "PPL" | "UPPER_LOWER" | "UPPER_LOWER_UPPER" | "BRO_SPLIT" | "FRESH_MUSCLES"): GeneratedPlan | null {
+  try {
+
+    const plan = loadPlanFromLocalStorage();
+    if (!plan) return null;
+
+    // Load alternatives from separate storage
+    const alternatives = loadAlternativeSplitsFromLocalStorage();
+    if (alternatives.length === 0) {
+      console.warn(`[switchToSplit] No alternative splits found in storage`);
+      return null;
+    }
+
+    // Find the alternative with matching splitType
+    const alternative = alternatives.find((alt) => alt.splitType === splitType);
+    if (!alternative) {
+      console.warn(`[switchToSplit] No alternative split found for type: ${splitType}`);
+      return null;
+    }
+
+    // Create updated plan with new split
+    const updatedPlan: GeneratedPlan = {
+      ...plan,
+      workoutDays: alternative.workoutDays,
+      splitType: alternative.splitType,
+      name: `${alternative.name} - ${plan.settings.workoutsPerWeek}`,
+      settings: {
+        ...plan.settings,
+        trainingSplit:
+          splitType === "BRO_SPLIT" ? "Upper/Lower" :
+            splitType === "PPL" ? "Push/Pull/Legs" :
+              "Fresh Muscle Groups"
+      }
+    };
+
+    // Persist the change
+    savePlanToLocalStorage(updatedPlan);
+    console.log(`[switchToSplit] Successfully switched to ${alternative.name}`);
+    return updatedPlan;
+  } catch (error) {
+    console.error("Failed to switch to split:", error);
+    return null;
+  }
+}
+
+/**
+ * Get all available split plans (primary + alternatives)
+ * Reads alternatives from separate storage
+ */
+export function getAvailablePlans(plan: GeneratedPlan | null): Array<{
+  id: string;
+  name: string;
+  splitType: string;
+  description: string;
+  isPrimary: boolean;
+  dayCount: number;
+}> {
+  if (!plan) return [];
+
+  const plans = [
+    {
+      id: plan.id,
+      name: plan.name,
+      splitType: "Primary",
+      description: "Your generated primary plan based on quiz answers",
+      isPrimary: true,
+      dayCount: plan.workoutDays.length,
+    },
+  ];
+
+  // Load alternatives from separate storage
+  const alternatives = loadAlternativeSplitsFromLocalStorage();
+  if (alternatives.length > 0) {
+    plans.push(
+      ...alternatives.map((alt) => ({
+        id: alt.id,
+        name: alt.name,
+        splitType: alt.splitType,
+        description: alt.description,
+        isPrimary: false,
+        dayCount: alt.workoutDays.length,
+      }))
+    );
+  }
+
+  return plans;
 }

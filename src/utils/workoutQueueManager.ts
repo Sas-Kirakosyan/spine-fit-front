@@ -2,12 +2,36 @@ import type { GeneratedPlan, WorkoutDay } from "./planGenerator";
 
 /**
  * Get the next available workout (regardless of day)
- * Prioritizes: today's workouts first, then upcoming workouts
+ * For sequential splits (Full Body, PPL, ULU): rotates through workouts in order
+ * For day-based splits: prioritizes today's workouts first
  */
 export function getNextAvailableWorkout(
   plan: GeneratedPlan,
   completedWorkoutIds: Set<string> = new Set()
 ): WorkoutDay | null {
+  // Check if this is a sequential/rotating split (not day-based)
+  const isSequentialSplit =
+    plan.splitType === "PPL" ||
+    plan.splitType === "FULL_BODY" ||
+    plan.splitType === "FULL_BODY_AB" ||
+    plan.splitType === "UPPER_LOWER" ||
+    plan.splitType === "UPPER_LOWER_UPPER";
+
+  if (isSequentialSplit) {
+    // For sequential splits: rotate through workouts in order based on completion count
+    // Count how many workouts from THIS plan have been completed
+    const planCompletedCount = Array.from(completedWorkoutIds).filter(id =>
+      id.startsWith(plan.id)
+    ).length;
+
+    // Calculate which workout should be next in the rotation
+    const nextIndex = planCompletedCount % plan.workoutDays.length;
+
+    // Return the workout at that index
+    return plan.workoutDays[nextIndex] || null;
+  }
+
+  // For day-based splits: use calendar day logic
   const today = new Date().getDay();
   const adjustedDay = today === 0 ? 6 : today - 1;
 
