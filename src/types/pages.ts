@@ -13,6 +13,7 @@ export interface ProfilePageProps {
   onNavigateToSettings: () => void;
   onNavigateToAI: () => void;
   activePage: "workout" | "profile" | "history";
+  workoutHistory: FinishedWorkoutSummary[];
 }
 
 export interface HistoryPageProps {
@@ -43,4 +44,3 @@ export interface AIPageProps {
 export interface SettingsPageProps {
   onNavigateBack: () => void;
 }
-

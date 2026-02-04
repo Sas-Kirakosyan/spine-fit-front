@@ -318,6 +318,7 @@ function App() {
             onNavigateToAI={navigateToAI}
             onNavigateToSettings={navigateToSettings}
             activePage="profile"
+            workoutHistory={workoutHistory}
           />
         );
       case "exerciseSets":
