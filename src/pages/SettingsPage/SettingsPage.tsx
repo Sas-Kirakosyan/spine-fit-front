@@ -79,6 +79,7 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Dark");
+  const [language, setLanguage] = useState(() => localStorage.getItem("language") || "English");
   const [isBodyProfileOpen, setIsBodyProfileOpen] = useState(false);
   const [bodyProfileSummary, setBodyProfileSummary] = useState<string>("Not set");
 
@@ -153,6 +154,18 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     });
   };
 
+  const handleLanguageChange = () => {
+    openModal({
+      title: "Change Language",
+      options: ["English", "Russian"],
+      selectedValue: "English",
+      onSelect: (value) => {
+        setLanguage(value);
+        localStorage.setItem("language", value);
+      }
+    });
+  };  
+
   const handleSubscription = () => {
     openModal({
       title: "Subscription Plans",
@@ -217,6 +230,11 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           value={userEmail || "Not logged in"}
           subValue={isGoogleUser ? "Signed in with Google" : undefined}
           showArrow={false}
+        />
+        <SettingsItem
+          label="Language"
+          value={language}
+          onClick={handleLanguageChange}
         />
         <SettingsItem
           label="Subscribe to log unlimited workouts"
