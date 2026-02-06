@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type {
   ExerciseSetsPageProps,
   SetField,
@@ -6,6 +6,7 @@ import type {
 } from "@/types/workout";
 import { PageContainer } from "@/Layout/PageContainer";
 import { ExerciseSet } from "@/pages/WorkoutPage/ExerciseSet";
+import { RestTimerModal } from "@/pages/WorkoutPage/RestTimerModal";
 import {
   iconButtonClass,
   primaryButtonClass,
@@ -54,27 +55,7 @@ const toolbarButtons = [
         <path d="M12 7v5l4 2" />
       </svg>
     ),
-  },
-  {
-    id: "plates",
-    label: "Plate Calculator",
-    icon: (
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 24 24"
-        className="h-4 w-4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="9" />
-        <path d="M7 12h10" />
-        <path d="M12 7v10" />
-      </svg>
-    ),
-  },
+  }
 ];
 
 export function ExerciseSetsPage({
@@ -90,15 +71,21 @@ export function ExerciseSetsPage({
 
   const createNewSet = (template?: Partial<ExerciseSetRow>): ExerciseSetRow => ({
     id: generateSetId(),
-    reps: exercise.reps ? String(exercise.reps) : "",
-    weight: exercise.weight ? String(exercise.weight) : "",
+    reps: exercise.reps !== undefined && exercise.reps !== null ? String(exercise.reps) : "",
+    weight: exercise.weight !== undefined && exercise.weight !== null ? String(exercise.weight) : "",
     completed: false,
     ...template,
   });
 
-  const isBodyweight = exercise.equipment === "bodyweight";
-
+  const [restTimerModalOpen, setRestTimerModalOpen] = useState(false);
   const [restTimerEnabled, setRestTimerEnabled] = useState(false);
+  const [restDurationMinutes, setRestDurationMinutes] = useState(1);
+  const [restDurationSeconds, setRestDurationSeconds] = useState(0);
+  const [restCountdownSeconds, setRestCountdownSeconds] = useState<number | null>(null);
+  const [restPaused, setRestPaused] = useState(false);
+  const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const isBodyweight = exercise.equipment === "bodyweight";
 
   // Get saved logs for this exercise if they exist
   const savedLogs = exerciseLogs[exercise.id];
@@ -145,6 +132,33 @@ export function ExerciseSetsPage({
     });
   }, [sets.length]);
 
+  // Rest timer countdown (не тикает при паузе)
+  useEffect(() => {
+    if (restCountdownSeconds === null || restCountdownSeconds <= 0 || restPaused) {
+      if (restIntervalRef.current) {
+        clearInterval(restIntervalRef.current);
+        restIntervalRef.current = null;
+      }
+      if (restCountdownSeconds === 0) {
+        setRestCountdownSeconds(null);
+      }
+      return () => {
+        if (restIntervalRef.current) {
+          clearInterval(restIntervalRef.current);
+        }
+      };
+    }
+    restIntervalRef.current = setInterval(() => {
+      setRestCountdownSeconds((prev) => (prev !== null && prev > 0 ? prev - 1 : null));
+    }, 1000);
+    return () => {
+      if (restIntervalRef.current) {
+        clearInterval(restIntervalRef.current);
+        restIntervalRef.current = null;
+      }
+    };
+  }, [restCountdownSeconds, restPaused]);
+
   const findNextPendingIndex = (
     list: ExerciseSetRow[],
     startFrom = 0
@@ -188,6 +202,21 @@ export function ExerciseSetsPage({
     if (sets[index]?.completed) {
       return;
     }
+
+    // Блокируем ввод отрицательных чисел
+    // Запрещаем ввод минуса в любом виде
+    if (value.includes("-")) {
+      return; // Не обновляем состояние, если значение содержит минус
+    }
+
+    // Дополнительная проверка: если значение можно преобразовать в число, проверяем что оно не отрицательное
+    if (value !== "") {
+      const numValue = Number(value);
+      if (!Number.isNaN(numValue) && numValue < 0) {
+        return; // Не обновляем состояние, если значение отрицательное
+      }
+    }
+
     setActiveSetIndex(index);
     setSets((prev) =>
       prev.map((item, itemIndex) =>
@@ -258,6 +287,13 @@ export function ExerciseSetsPage({
       setActiveSetIndex(fallback);
       return updated;
     });
+
+    if (restTimerEnabled && isDuringActiveWorkout) {
+      const totalSeconds = restDurationMinutes * 60 + restDurationSeconds;
+      if (totalSeconds > 0) {
+        setRestCountdownSeconds(totalSeconds);
+      }
+    }
   };
 
   const handleLogAllSets = () => {
@@ -400,8 +436,8 @@ export function ExerciseSetsPage({
                 key={item.id}
                 type="button"
                 onClick={
-                  isTimer
-                    ? () => setRestTimerEnabled((prev) => !prev)
+                  isTimer && isDuringActiveWorkout
+                    ? () => setRestTimerModalOpen(true)
                     : undefined
                 }
                 className={`${secondaryButtonClass} ${isActive
@@ -426,6 +462,87 @@ export function ExerciseSetsPage({
           })}
         </div>
 
+        {isDuringActiveWorkout && restCountdownSeconds !== null && restCountdownSeconds > 0 && (
+          <div className="flex items-center justify-center gap-3 rounded-[16px] border border-main bg-main/40 px-4 py-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background/70">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="h-5 w-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="13" r="8" />
+                <path d="M12 9v4l2 2" />
+                <path d="M9 3h6" />
+                <path d="M10 6h4" />
+              </svg>
+            </span>
+            <span className="min-w-[4rem] text-center text-lg font-semibold tabular-nums text-white">
+              Rest: {Math.floor(restCountdownSeconds / 60)}:{(restCountdownSeconds % 60).toString().padStart(2, "0")}
+            </span>
+            <div className="flex shrink-0 items-center gap-1">
+              <button
+                type="button"
+                onClick={restPaused ? () => setRestPaused(false) : () => setRestPaused(true)}
+                aria-label={restPaused ? "Продолжить" : "Пауза"}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+              >
+                {restPaused ? (
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                ) : (
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                  </svg>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setRestCountdownSeconds(null);
+                  setRestPaused(false);
+                }}
+                aria-label="Выключить таймер"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {isDuringActiveWorkout && (
+          <RestTimerModal
+            isOpen={restTimerModalOpen}
+            onClose={() => setRestTimerModalOpen(false)}
+            enabled={restTimerEnabled}
+            onEnabledChange={setRestTimerEnabled}
+            durationMinutes={restDurationMinutes}
+            durationSeconds={restDurationSeconds}
+            onDurationChange={(min, sec) => {
+              setRestDurationMinutes(min);
+              setRestDurationSeconds(sec);
+            }}
+            isRestRunning={restCountdownSeconds !== null && restCountdownSeconds > 0}
+            isRestPaused={restPaused}
+            onPause={() => setRestPaused(true)}
+            onResume={() => setRestPaused(false)}
+            onCancelRest={() => {
+              setRestCountdownSeconds(null);
+              setRestPaused(false);
+              setRestTimerModalOpen(false);
+            }}
+          />
+        )}
+
         <section className="flex-1 rounded-[26px] border border-white/12 bg-[#13172A] p-3 shadow-xl ring-1 ring-white/5">
           <div className="space-y-3">
             {sets.map((setEntry, index) => (
@@ -445,10 +562,10 @@ export function ExerciseSetsPage({
             <button
               type="button"
               onClick={handleAddSet}
-              className="ml-[6px] mt-9 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-rose-500"
+              className="ml-[6px] mt-9 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-white"
             >
               <span
-                className="flex h-7 w-7 items-center justify-center rounded-[6px] border border-rose-500 bg-rose-500 text-black"
+                className="flex h-7 w-7 items-center justify-center rounded-[6px] border border-white bg-white text-black"
                 style={{
                   clipPath:
                     "polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)",
@@ -539,14 +656,14 @@ export function ExerciseSetsPage({
             <Button
               onClick={handleLogSet}
               disabled={!canLogCurrentSet}
-              className="h-[50px] flex-1 rounded-[10px] bg-red-500 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[50px] flex-1 rounded-[10px] bg-main text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
             >
               LOG SET
             </Button>
             <Button
               onClick={handleLogAllSets}
               disabled={!canLogAllSets}
-              className="h-[50px] flex-1 rounded-[10px] bg-orange-500 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[50px] flex-1 rounded-[10px] bg-blue-700 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
             >
               LOG ALL SETS
             </Button>

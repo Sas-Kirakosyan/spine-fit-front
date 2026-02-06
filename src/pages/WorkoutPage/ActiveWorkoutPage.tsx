@@ -222,7 +222,7 @@ export function ActiveWorkoutPage({
         })}
         <Button
           onClick={handleFinishWorkout}
-          className="mx-5 h-[40px] rounded-[10px] bg-red-600 text-white uppercase"
+          className="mx-5 h-[40px] rounded-[10px] bg-[#228B22] text-white uppercase"
         >
           Finish Workout
         </Button>
