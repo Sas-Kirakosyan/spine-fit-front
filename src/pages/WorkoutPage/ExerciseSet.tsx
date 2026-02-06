@@ -215,6 +215,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
               label="Reps"
               value={setEntry.reps}
               type="number"
+              min={0}
               disabled={isCompleted}
               onFocus={() => onActivate(index)}
               onChange={(value) => onValueChange(index, "reps", value)}
@@ -226,6 +227,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
               unit={exercise.weight_unit}
               value={setEntry.weight}
               type="number"
+              min={0}
               disabled={isCompleted || isBodyweight}
               placeholder={isBodyweight ? "Bodyweight" : undefined}
               onFocus={() => onActivate(index)}

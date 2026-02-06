@@ -42,7 +42,7 @@ export function WorkoutPlanCard({
         <div className="absolute top-4 right-4 flex items-center gap-2">
           <button
             onClick={() => setShowSwapSheet(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-red-600/80 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg bg-main px-3 py-1.5 text-sm font-medium text-white hover:bg-main/80 transition-colors"
           >
             <svg
               width="16"

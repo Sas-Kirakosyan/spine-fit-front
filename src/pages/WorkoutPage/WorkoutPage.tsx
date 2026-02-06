@@ -112,11 +112,11 @@ export function WorkoutPage({
             ? availableEquipment
             : equipmentData.length === 0
               ? // No equipment data configured - assume all equipment exists
-                Array.from(
-                  new Set(
-                    (allExercisesData as Exercise[]).map((ex) => ex.equipment),
-                  ),
-                ).filter((eq) => eq && eq !== "none")
+              Array.from(
+                new Set(
+                  (allExercisesData as Exercise[]).map((ex) => ex.equipment),
+                ),
+              ).filter((eq) => eq && eq !== "none")
               : ["bodyweight"];
 
         // Load workout history
@@ -389,7 +389,7 @@ export function WorkoutPage({
           >
             <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[10px] border-2 border-stone-500 bg-transparent">
               <svg
-                className="h-10 w-10 text-red-500"
+                className="h-10 w-10 text-main"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -405,7 +405,7 @@ export function WorkoutPage({
             </div>
 
             <div className="flex flex-1 flex-col justify-center">
-              <span className="text-lg font-semibold text-red-500 sm:text-xl">
+              <span className="text-lg font-semibold text-main sm:text-xl">
                 Add Exercise
               </span>
             </div>
@@ -427,7 +427,7 @@ export function WorkoutPage({
           onWorkoutClick={onNavigateToWorkout}
           onProfileClick={onNavigateToProfile}
           onHistoryClick={onNavigateToHistory}
-          onAIClick={onNavigateToAI || (() => {})}
+          onAIClick={onNavigateToAI || (() => { })}
         />
       </div>
 
