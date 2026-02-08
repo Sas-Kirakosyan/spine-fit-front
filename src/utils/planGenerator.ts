@@ -1341,10 +1341,12 @@ function mergePlanSettingsWithQuizAnswers(
 
   // Map duration to plan settings format
   let duration = "1 hr";
-  if (durationValue.includes("10–20")) duration = "30 min";
-  else if (durationValue.includes("20–30")) duration = "30 min";
-  else if (durationValue.includes("30–45")) duration = "45 min";
-  else if (durationValue.includes("45–60")) duration = "1 hr";
+  if (durationValue.includes("10–20")) duration = "15 min";
+  else if (durationValue.includes("20–30")) duration = "25 min";
+  else if (durationValue.includes("30–45")) duration = "35 min";
+  else if (durationValue.includes("45–60")) duration = "50 min";
+  else if (durationValue.includes("60-120")) duration = "1 hr";
+  else duration = planSettings.duration;
 
   // Determine appropriate training split based on frequency
   let trainingSplit = planSettings.trainingSplit;
