@@ -196,14 +196,14 @@ export function determineWorkoutSplit(
         {
           dayLabel: "Day A",
           focus: ["Lower body", "Push (chest/shoulders)", "Pull (horizontal - rows)", "Core"],
-          exerciseGuidelines: "1 push (chest or shoulders) + 1 horizontal pull (row variation) + 1-2 leg exercises (compound + isolation) + optional core. Avoid multiple pull exercises.",
-          requiredExerciseTypes: ["push_horizontal", "pull_horizontal", "leg_compound", "leg_isolation"],
+          exerciseGuidelines: "1 push (chest or shoulders) + 1 horizontal pull (row variation) + 1 leg compound + 1 hamstring isolation + 1 core stability. Avoid multiple pull exercises.",
+          requiredExerciseTypes: ["push_horizontal", "pull_horizontal", "leg_compound", "hamstring_isolation", "core_stability"],
         },
         {
           dayLabel: "Day B",
           focus: ["Lower body", "Push (chest/shoulders)", "Pull (vertical - pulldowns/pull-ups)", "Core"],
-          exerciseGuidelines: "1 push (chest or shoulders) + 1 vertical pull (pulldown or pull-up) + 1-2 leg exercises (compound + isolation) + optional core. MUST include push movement - do not skip push.",
-          requiredExerciseTypes: ["push_horizontal", "pull_vertical", "leg_compound", "leg_isolation"],
+          exerciseGuidelines: "1 push (chest or shoulders) + 1 vertical pull (pulldown or pull-up) + 1 leg compound + 1 leg isolation + 1 core stability. MUST include push movement - do not skip push.",
+          requiredExerciseTypes: ["push_horizontal", "pull_vertical", "leg_compound", "leg_isolation", "core_stability"],
         },
       ],
       rationale: "Safe default for 2 days per week, full body ensures all muscle groups are trained with balanced push/pull distribution. Each day includes one push and one pull to maintain balance.",
@@ -377,8 +377,17 @@ export function enforceFullBodyABRequirements<T extends {
   split: WorkoutSplit
 ): T[] {
   if (split.type !== "FULL_BODY_AB" || workoutDays.length !== 2) {
+    console.log(`[enforceFullBodyABRequirements] Skipping - split.type=${split.type}, days=${workoutDays.length}`);
     return workoutDays; // Only enforce for FULL_BODY_AB
   }
+
+  console.log(`[enforceFullBodyABRequirements] ✓ Starting enforcement for ${split.type}`);
+  console.log(`[enforceFullBody AB] Total exercises available: ${allExercises.length}`);
+  console.log(`[enforceFullBodyAB] Current state:`, workoutDays.map(d => ({ 
+    day: d.dayName, 
+    exercises: d.exercises.length,
+    names: d.exercises.map((e: any) => e.name) 
+  })));
 
   const updatedDays = [...workoutDays];
 
@@ -398,6 +407,19 @@ export function enforceFullBodyABRequirements<T extends {
     (ex.name?.toLowerCase().includes("pulldown") ||
       ex.name?.toLowerCase().includes("pull-up") ||
       ex.name?.toLowerCase().includes("chin-up"));
+
+  const isHamstringIsolation = (ex: any) =>
+    ex.muscle_groups?.[0] === "hamstrings" || // Primary muscle is hamstrings
+    (ex.name?.toLowerCase().includes("curl") && ex.muscle_groups?.includes("hamstrings")) ||
+    (ex.name?.toLowerCase().includes("leg curl"));
+
+  const isCoreStability = (ex: any) =>
+    ex.muscle_groups?.includes("abs") ||
+    ex.muscle_groups?.includes("core") ||
+    ex.name?.toLowerCase().includes("plank") ||
+    ex.name?.toLowerCase().includes("bird dog") ||
+    ex.name?.toLowerCase().includes("dead bug") ||
+    ex.category === "core";
 
   // Process each day
   split.days.forEach((daySpec, dayIndex) => {
@@ -454,6 +476,44 @@ export function enforceFullBodyABRequirements<T extends {
       }
     }
 
+    // Check for hamstring isolation requirement
+    if (requiredTypes.includes("hamstring_isolation")) {
+      const hasHamstringIsolation = dayExercises.some(isHamstringIsolation);
+      console.log(`[enforceFullBodyAB] ${daySpec.dayLabel} hamstring check: has=${hasHamstringIsolation}`);
+      if (!hasHamstringIsolation) {
+        const hamstringEx = allExercises.find(
+          (ex) => isHamstringIsolation(ex) && !usedIds.has(ex.id) && ex.is_back_friendly
+        );
+        if (hamstringEx) {
+          console.log(`[FULL_BODY_AB] ✓ Adding missing hamstring isolation to ${daySpec.dayLabel}: ${hamstringEx.name}`);
+          dayExercises.push(hamstringEx);
+          usedIds.add(hamstringEx.id);
+        } else {
+          console.warn(`[FULL_BODY_AB] ✗ Could not find hamstring isolation exercise for ${daySpec.dayLabel}`);
+          console.log(`[DEBUG] Available hamstring exercises:`, allExercises.filter(isHamstringIsolation).map(e => ({ id: e.id, name: e.name, backFriendly: e.is_back_friendly })));
+        }
+      }
+    }
+
+    // Check for core stability requirement (CRITICAL for sciatica)
+    if (requiredTypes.includes("core_stability")) {
+      const hasCoreWork = dayExercises.some(isCoreStability);
+      console.log(`[enforceFullBodyAB] ${daySpec.dayLabel} core check: has=${hasCoreWork}`);
+      if (!hasCoreWork) {
+        const coreEx = allExercises.find(
+          (ex) => isCoreStability(ex) && !usedIds.has(ex.id) && ex.is_back_friendly
+        );
+        if (coreEx) {
+          console.log(`[FULL_BODY_AB] ✓ Adding missing core work to ${daySpec.dayLabel}: ${coreEx.name}`);
+          dayExercises.push(coreEx);
+          usedIds.add(coreEx.id);
+        } else {
+          console.warn(`[FULL_BODY_AB] ✗ Could not find core stability exercise for ${daySpec.dayLabel}`);
+          console.log(`[DEBUG] Available core exercises:`, allExercises.filter(isCoreStability).map(e => ({ id: e.id, name: e.name, backFriendly: e.is_back_friendly, category: e.category })));
+        }
+      }
+    }
+
     // Remove duplicate pulls if necessary (keep only 1 pull per day)
     const pullExercises = dayExercises.filter((ex) => isHorizontalPull(ex) || isVerticalPull(ex));
     if (pullExercises.length > 1) {
@@ -470,6 +530,12 @@ export function enforceFullBodyABRequirements<T extends {
 
     updatedDays[dayIndex] = { ...day, exercises: dayExercises };
   });
+
+  console.log(`[enforceFullBodyAB] ✓ Enforcement complete. Final state:`, updatedDays.map(d => ({ 
+    day: d.dayName, 
+    exercises: d.exercises.length,
+    names: d.exercises.map((e: any) => e.name) 
+  })));
 
   return updatedDays;
 }
@@ -596,6 +662,13 @@ export function buildSourceOnboarding(
     ? durationOptions[workoutDurationAnswer]
     : "30–45 min";
 
+  const split = determineWorkoutSplit(experience, trainingFrequency, painStatus);
+  console.log(`[buildSourceOnboarding] Generated split for frequency=${trainingFrequency}, experience=${experience}:`, split);
+  console.log(`[buildSourceOnboarding] Split requirements:`, split?.days?.map(d => ({ 
+    day: d.dayLabel, 
+    requiredTypes: d.requiredExerciseTypes 
+  })));
+
   return {
     workoutType: quizAnswers.workoutType,
     goal,
@@ -614,6 +687,6 @@ export function buildSourceOnboarding(
     painTriggers,
     canSquat,
     workoutDuration,
-    split: determineWorkoutSplit(experience, trainingFrequency, painStatus),
+    split,
   };
 }

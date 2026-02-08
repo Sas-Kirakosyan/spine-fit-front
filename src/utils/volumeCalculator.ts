@@ -94,8 +94,8 @@ function adjustForExperience(
  */
 function calculateSetsPerExercise(experience: string): number {
   const setsMap = {
-    Beginner: 2,
-    Intermediate: 3,
+    Beginner: 3,
+    Intermediate: 4, // Increased from 3 to 4 for adequate hypertrophy stimulus
     Advanced: 4,
   };
 

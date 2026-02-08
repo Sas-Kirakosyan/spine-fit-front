@@ -295,6 +295,23 @@ export function generateTrainingPlan(
   console.log("Filter criteria:", filterCriteria);
   console.log("Filtered exercise names:", filteredExercises.slice(0, 10).map(e => `${e.name} (${e.muscle_groups.join(", ")})`));
   console.log("Pain profile:", painProfile);
+  
+  // DEBUG: Check if critical exercises got filtered out
+  const hamstringExercises = allExercises.filter(e => 
+    e.muscle_groups?.[0] === "hamstrings" || 
+    (e.name?.toLowerCase().includes("curl") && e.muscle_groups?.includes("hamstrings"))
+  );
+  const coreExercises = allExercises.filter(e => 
+    e.category === "core" || 
+    e.muscle_groups?.includes("abs") || 
+    e.muscle_groups?.includes("core")
+  );
+  console.log("[DEBUG] Hamstring exercises in database:", hamstringExercises.length, hamstringExercises.map(e => ({ name: e.name, equipment: e.equipment, backFriendly: e.is_back_friendly })));
+  console.log("[DEBUG] Core exercises in database:", coreExercises.length, coreExercises.map(e => ({ name: e.name, equipment: e.equipment, backFriendly: e.is_back_friendly })));
+  console.log("[DEBUG] Are they in filtered list?", {
+    hamstringFiltered: filteredExercises.filter(e => hamstringExercises.some(h => h.id === e.id)).length,
+    coreFiltered: filteredExercises.filter(e => coreExercises.some(c => c.id === e.id)).length
+  });
 
   // 4. Apply progressive overload based on workout history
   if (workoutHistory.length > 0) {
@@ -430,8 +447,10 @@ export function generateTrainingPlan(
   const adjustedWorkoutDaysWithVolume = fullBodyABEnforcedDays.map((day) => ({
     ...day,
     exercises: day.exercises.map((exercise) => {
+
       // Core stability exercises should not have weight assigned
       if (isCoreStability(exercise)) {
+
         return {
           ...exercise,
           sets: volumeRecommendation.setsPerExercise,
@@ -444,9 +463,15 @@ export function generateTrainingPlan(
 
       // Preserve rear-delt exercise volume if already set (light weight, higher reps)
       if (isRearDeltExercise(exercise) && exercise.sets && exercise.reps) {
-        return exercise; // Keep existing volume parameters
+        // BUT: Always update sets to match current experience level
+        return {
+          ...exercise,
+          sets: volumeRecommendation.setsPerExercise, // Force update sets
+        };
       }
 
+      // For all other exercises: ALWAYS set sets/reps based on current experience level
+      // This ensures exercises from history get updated sets (e.g., 3 -> 4 for intermediate)
       return {
         ...exercise,
         sets: volumeRecommendation.setsPerExercise,

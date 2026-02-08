@@ -242,6 +242,8 @@ export function applyProgressionToExercises(
       ...exercise,
       weight: safeWeight,
       reps: progression.suggestion.reps,
+      // Note: Do NOT set 'sets' here - it's set by volumeCalculator based on experience level
+      // This ensures sets are always current (e.g., 4 for intermediate) even if history had 3
       // Store progression info for UI display
       progressionInfo: progression,
     };
