@@ -1287,10 +1287,7 @@ function applyProgressionGuardrails(
  * Quiz Answer IDs:
  * - 1.5: workoutType (not in answers, handled separately)
  * - 2: goal
- * - 3: gender
- * - 4: ageRange
- * - 5: height
- * - 6: weight
+ * - 3: baselineStats (multi_field: gender, dateOfBirth, height, weight)
  * - 7: bodyType
  * - 8: experience
  * - 9: trainingFrequency
@@ -1362,10 +1359,35 @@ function mergePlanSettingsWithQuizAnswers(
   }
 
   // Extract personal profile data from quiz
-  const genderAnswer = answers[3]; // gender
-  const heightAnswer = answers[5]; // height
-  const weightAnswer = answers[6]; // weight
-  const ageRangeAnswer = answers[4]; // ageRange
+  // Question 3 is now a multi_field containing gender, dateOfBirth, height, weight
+  const baselineStatsAnswer = answers[3];
+  let gender: string | undefined;
+  let height: string | undefined;
+  let weight: string | undefined;
+  let dateOfBirth: string | undefined;
+  let heightUnit: string | undefined;
+  let weightUnit: string | undefined;
+
+  if (baselineStatsAnswer && typeof baselineStatsAnswer === "object" && !Array.isArray(baselineStatsAnswer)) {
+    const stats = baselineStatsAnswer as Record<string, string | number>;
+    gender = typeof stats.gender === "string" ? stats.gender : undefined;
+    height = stats.height ? String(stats.height) : undefined;
+    weight = stats.weight ? String(stats.weight) : undefined;
+    dateOfBirth = typeof stats.dateOfBirth === "string" ? stats.dateOfBirth : undefined;
+  }
+
+  // Extract units for height and weight from quizAnswers.units[3]
+  const unitsForQuestion3 = quizAnswers.units?.[3];
+  if (unitsForQuestion3 && typeof unitsForQuestion3 === "object" && !Array.isArray(unitsForQuestion3)) {
+    const unitsObj = unitsForQuestion3 as Record<string, string>;
+    heightUnit = unitsObj.height || "cm";
+    weightUnit = unitsObj.weight || "kg";
+  } else {
+    // Default units if not specified
+    heightUnit = "cm";
+    weightUnit = "kg";
+  }
+
   const bodyTypeAnswer = answers[7]; // bodyType
 
   // Extract pain profile from quiz
@@ -1409,19 +1431,13 @@ function mergePlanSettingsWithQuizAnswers(
     ? canSquatOptions[canSquatAnswer]
     : undefined;
 
-  // Map gender index to label
-  const genderOptions = ["Male", "Female", "Other"];
-  const gender = typeof genderAnswer === "number"
-    ? genderOptions[genderAnswer]
+  // Question 12: painLevel - slider (returns string or number 0-10)
+  const painLevelAnswer = answers[12];
+  const painLevel = painLevelAnswer !== undefined
+    ? (typeof painLevelAnswer === "number" ? painLevelAnswer : Number(painLevelAnswer))
     : undefined;
 
-  // Map ageRange index to label
-  const ageRangeOptions = ["18–29", "30–39", "40–49", "50+"];
-  const ageRange = typeof ageRangeAnswer === "number"
-    ? ageRangeOptions[ageRangeAnswer]
-    : undefined;
-
-  // Map bodyType - depends on gender
+  // Map bodyType - depends on gender from baselineStats
   let bodyType: string | undefined;
   if (typeof bodyTypeAnswer === "number") {
     const isFemale = gender === "Female";
@@ -1441,13 +1457,16 @@ function mergePlanSettingsWithQuizAnswers(
     trainingSplit,
     // User profile
     gender,
-    height: typeof heightAnswer === "string" ? heightAnswer : undefined,
-    weight: typeof weightAnswer === "string" ? weightAnswer : undefined,
-    ageRange,
+    height,
+    heightUnit,
+    weight,
+    weightUnit,
+    dateOfBirth,
     bodyType,
     // Pain profile
     painStatus,
     painLocation,
+    painLevel,
     painTriggers,
     canSquat,
   };
@@ -1545,9 +1564,9 @@ function extractPainProfileFromSource(sourceOnboarding: SourceOnboarding | null)
  * Find answer by question ID
  */
 function findAnswerByFieldName(
-  answers: Record<number, number | number[] | string>,
+  answers: Record<number, number | number[] | string | Record<string, string | number>>,
   questionId: number
-): number | number[] | string | undefined {
+): number | number[] | string | Record<string, string | number> | undefined {
   return answers[questionId];
 }
 

@@ -39,41 +39,48 @@ export const questions: QuizQuestion[] = [
 
   {
     id: 3,
-    fieldName: "gender",
-    question: "What's your gender?",
-    type: "radio",
-    options: ["Male", "Female", "Other"],
-  },
-
-  {
-    id: 4,
-    fieldName: "ageRange",
-    question: "Which age range are you in?",
-    type: "radio",
-    options: [
-      "18–29",
-      "30–39",
-      "40–49",
-      "50+",
+    fieldName: "baselineStats",
+    question: "Lastly, what are your baseline stats?",
+    type: "multi_field",
+    description: "Optional and can be added later.",
+    optional: true,
+    fields: [
+      {
+        id: 3.1,
+        fieldName: "gender",
+        label: "Gender",
+        type: "radio",
+        options: ["Male", "Female", "Other"],
+        optional: true,
+      },
+      {
+        id: 3.2,
+        fieldName: "dateOfBirth",
+        label: "Date of Birth",
+        type: "date",
+        optional: true,
+      },
+      {
+        id: 3.3,
+        fieldName: "height",
+        label: "Height",
+        type: "input",
+        inputType: "number",
+        placeholder: "Enter height",
+        optional: true,
+        unitOptions: ["cm", "ft"],
+      },
+      {
+        id: 3.4,
+        fieldName: "weight",
+        label: "Weight",
+        type: "input",
+        inputType: "number",
+        placeholder: "Enter weight",
+        optional: true,
+        unitOptions: ["kg", "lbs"],
+      },
     ],
-  },
-  {
-    id: 5,
-    fieldName: "height",
-    question: "What's your height?",
-    type: "input",
-    inputType: "number",
-    placeholder: "Height in cm",
-    optional: false,
-  },
-
-  {
-    id: 6,
-    fieldName: "weight",
-    question: "What's your current weight?",
-    type: "input",
-    inputType: "number",
-    placeholder: "Weight in kg",
   },
 
   {
@@ -134,7 +141,7 @@ export const questions: QuizQuestion[] = [
       },
     ],
     showIf: {
-      fieldName: "gender",
+      fieldName: "baselineStats",
       showOptionsBasedOn: true,
     },
     optional: true,

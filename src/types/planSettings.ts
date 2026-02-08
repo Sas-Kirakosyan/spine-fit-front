@@ -137,12 +137,16 @@ export interface PlanSettings {
   // User profile data from quiz
   gender?: string;
   height?: string;
+  heightUnit?: string;
   weight?: string;
+  weightUnit?: string;
+  dateOfBirth?: string;
   ageRange?: string;
   bodyType?: string;
   // Pain profile
   painStatus?: string;
   painLocation?: string[];
+  painLevel?: number;
   painTriggers?: string[];
   canSquat?: string;
 }

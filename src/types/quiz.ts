@@ -2,7 +2,7 @@ export interface QuizQuestion {
   id: number;
   fieldName?: string;
   question?: string;
-  type: "radio" | "checkbox" | "input" | "info" | "slider" | "image_radio";
+  type: "radio" | "checkbox" | "input" | "info" | "slider" | "image_radio" | "multi_field";
   title?: string;
   description?: string;
   buttonText?: string;
@@ -20,6 +20,17 @@ export interface QuizQuestion {
     in?: string[];
     showOptionsBasedOn?: boolean;
   };
+  fields?: {
+    id: number;
+    fieldName: string;
+    label: string;
+    type: "radio" | "input" | "date";
+    options?: string[];
+    inputType?: "number" | "text";
+    placeholder?: string;
+    optional?: boolean;
+    unitOptions?: string[];
+  }[];
 }
 
 export interface QuizModalProps {
@@ -30,7 +41,7 @@ export interface QuizModalProps {
 
 export interface QuizAnswers {
   workoutType: "home" | "gym";
-  answers: Record<number, number | number[] | string>;
-  units?: Record<number, string>;
+  answers: Record<number, number | number[] | string | Record<string, string | number>>;
+  units?: Record<number, string | Record<string, string>>;
   timestamp?: string;
 }

@@ -9,6 +9,7 @@ import { QuizCheckboxOption } from "./QuizCheckboxOption";
 import { QuizInputWithUnit } from "./QuizInputWithUnit";
 import { QuizSlider } from "./QuizSlider";
 import { QuizNavigationButtons } from "./QuizNavigationButtons";
+import { QuizMultiField } from "./QuizMultiField";
 
 export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const [workoutType, setWorkoutType] = useState<"home" | "gym">("home");
@@ -19,10 +20,16 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const [heightUnit, setHeightUnit] = useState<"cm" | "ft">("cm");
   const [weightUnit, setWeightUnit] = useState<"kg" | "lbs">("kg");
   const [answers, setAnswers] = useState<
-    Record<number, number | number[] | string>
+    Record<number, number | number[] | string | Record<string, string | number>>
   >({});
   const [units, setUnits] = useState<
-    Record<number, "cm" | "ft" | "kg" | "lbs">
+    Record<number, "cm" | "ft" | "kg" | "lbs" | Record<string, string>>
+  >({});
+  const [multiFieldValues, setMultiFieldValues] = useState<
+    Record<string, string | number>
+  >({});
+  const [multiFieldUnits, setMultiFieldUnits] = useState<
+    Record<string, string>
   >({});
 
   const filteredQuestions = useMemo(() => {
@@ -31,7 +38,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
       const { fieldName, equals, in: inArray } = question.showIf;
       const dependentQuestion = questions.find(
-        (q) => q.fieldName === fieldName
+        (q) => q.fieldName === fieldName,
       );
 
       if (!dependentQuestion) return true;
@@ -40,7 +47,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
       if (dependentAnswer === undefined) return false;
 
-      if (dependentQuestion.type === "radio") {
+      if (dependentQuestion.type === "multi_field") {
+        // For multi_field, we just check if it has any values (always show dependent questions)
+        return true;
+      } else if (dependentQuestion.type === "radio") {
         const optionIndex = dependentAnswer as number;
         const selectedOption = dependentQuestion.options?.[optionIndex];
 
@@ -54,7 +64,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       } else if (dependentQuestion.type === "checkbox") {
         const selectedIndices = dependentAnswer as number[];
         const selectedOptions = selectedIndices.map(
-          (i) => dependentQuestion.options?.[i]
+          (i) => dependentQuestion.options?.[i],
         );
 
         if (equals !== undefined) {
@@ -63,7 +73,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
         if (inArray !== undefined) {
           return selectedOptions.some((option) =>
-            inArray.includes(option as string)
+            inArray.includes(option as string),
           );
         }
       } else if (dependentQuestion.type === "input") {
@@ -129,7 +139,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
   const handleCheckboxToggle = (index: number) => {
     setSelectedCheckboxes((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
   };
 
@@ -160,6 +170,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     if (question.optional) {
       return true;
     }
+    if (question.type === "multi_field") {
+      // For multi_field, it's optional by design
+      return true;
+    }
     if (question.type === "radio" || question.type === "image_radio") {
       return selectedAnswer !== null;
     } else if (question.type === "checkbox") {
@@ -180,22 +194,51 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setSelectedAnswer(null);
         setSelectedCheckboxes([]);
         setInputValue("");
+        setMultiFieldValues({});
+        setMultiFieldUnits({});
+      } else if (question.type === "multi_field") {
+        // Load saved multi-field values
+        const saved = savedAnswer as unknown as
+          | Record<string, string | number>
+          | undefined;
+        setMultiFieldValues(saved || {});
+
+        // Load saved units from the main units state
+        const savedUnits = units[question.id];
+        if (typeof savedUnits === "object") {
+          setMultiFieldUnits(savedUnits as Record<string, string>);
+        } else {
+          // Set default units
+          setMultiFieldUnits({
+            height: "cm",
+            weight: "kg",
+          });
+        }
+
+        setSelectedAnswer(null);
+        setSelectedCheckboxes([]);
+        setInputValue("");
       } else if (question.type === "radio") {
         setSelectedAnswer(
-          savedAnswer !== undefined ? (savedAnswer as number) : null
+          savedAnswer !== undefined ? (savedAnswer as number) : null,
         );
         setSelectedCheckboxes([]);
         setInputValue("");
+        setMultiFieldValues({});
+        setMultiFieldUnits({});
       } else if (question.type === "checkbox") {
         setSelectedCheckboxes(
-          savedAnswer !== undefined ? (savedAnswer as number[]) : []
+          savedAnswer !== undefined ? (savedAnswer as number[]) : [],
         );
         setSelectedAnswer(null);
         setInputValue("");
+        setMultiFieldValues({});
       } else if (question.type === "input" || question.type === "slider") {
         setInputValue(savedAnswer !== undefined ? String(savedAnswer) : "");
         setSelectedAnswer(null);
         setSelectedCheckboxes([]);
+        setMultiFieldValues({});
+        setMultiFieldUnits({});
 
         if (question.fieldName === "height") {
           setHeightUnit(savedUnit === "ft" ? "ft" : "cm");
@@ -204,7 +247,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         }
       }
     },
-    [answers, units, filteredQuestions]
+    [answers, units, filteredQuestions],
   );
 
   const saveCurrentAnswer = () => {
@@ -212,9 +255,23 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     if (question.type === "info") {
       return;
     }
-    let answerValue: number | number[] | string;
+    let answerValue:
+      | number
+      | number[]
+      | string
+      | Record<string, string | number>;
 
-    if (question.type === "radio" || question.type === "image_radio") {
+    if (question.type === "multi_field") {
+      answerValue = multiFieldValues;
+
+      // Save units for multi-field (height and weight)
+      if (Object.keys(multiFieldUnits).length > 0) {
+        setUnits((prev) => ({
+          ...prev,
+          [question.id]: multiFieldUnits as any,
+        }));
+      }
+    } else if (question.type === "radio" || question.type === "image_radio") {
       answerValue = selectedAnswer!;
     } else if (question.type === "checkbox") {
       answerValue = selectedCheckboxes;
@@ -298,6 +355,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       setUnits({});
       setHeightUnit("cm");
       setWeightUnit("kg");
+      setMultiFieldValues({});
+      setMultiFieldUnits({});
       onClose();
       if (onQuizComplete) {
         onQuizComplete();
@@ -341,6 +400,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     setUnits({});
     setHeightUnit("cm");
     setWeightUnit("kg");
+    setMultiFieldValues({});
+    setMultiFieldUnits({});
     onClose();
     if (onQuizComplete) {
       onQuizComplete();
@@ -406,6 +467,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       setUnits({});
       setHeightUnit("cm");
       setWeightUnit("kg");
+      setMultiFieldValues({});
+      setMultiFieldUnits({});
     }
   }, [isOpen]);
 
@@ -418,6 +481,23 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   // Determine which options to show for body type question
   const getDisplayOptions = () => {
     if (question.fieldName === "bodyType" && question.type === "image_radio") {
+      // Check if gender is stored in baselineStats (multi_field)
+      const baselineStatsQuestion = questions.find(
+        (q) => q.fieldName === "baselineStats",
+      );
+      if (baselineStatsQuestion) {
+        const baselineStats = answers[baselineStatsQuestion.id] as unknown as
+          | Record<string, string | number>
+          | undefined;
+        const gender = baselineStats?.gender;
+
+        // Female selected
+        if (gender === "Female" && question.optionsFemale) {
+          return question.optionsFemale;
+        }
+      }
+
+      // Fallback: check old gender question format
       const genderQuestion = questions.find((q) => q.fieldName === "gender");
       if (genderQuestion) {
         const genderAnswer = answers[genderQuestion.id];
@@ -518,7 +598,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                             isSelected={selectedCheckboxes.includes(index)}
                             onToggle={handleCheckboxToggle}
                           />
-                        )
+                        ),
                       )}
                     </div>
                   )}
@@ -610,6 +690,30 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                       onChange={handleInputChange}
                     />
                   )}
+
+                  {filteredQuestions[currentQuestion].type === "multi_field" &&
+                    filteredQuestions[currentQuestion].fields && (
+                      <QuizMultiField
+                        fields={filteredQuestions[currentQuestion].fields!}
+                        values={multiFieldValues}
+                        units={multiFieldUnits}
+                        onValueChange={(fieldName, value) => {
+                          setMultiFieldValues((prev) => ({
+                            ...prev,
+                            [fieldName]: value,
+                          }));
+                        }}
+                        onUnitChange={(fieldName, unit) => {
+                          setMultiFieldUnits((prev) => ({
+                            ...prev,
+                            [fieldName]: unit,
+                          }));
+                        }}
+                        description={
+                          filteredQuestions[currentQuestion].description
+                        }
+                      />
+                    )}
                 </div>
               </div>
             </div>

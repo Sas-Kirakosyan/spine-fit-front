@@ -1,13 +1,32 @@
 import type { QuizAnswers } from "@/types/quiz";
 import type { PlanSettings } from "@/types/planSettings";
 
+/**
+ * Calculate age from date of birth
+ */
+function calculateAge(dateOfBirth: string): number {
+  const birthDate = new Date(dateOfBirth);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  return age;
+}
+
 export interface SourceOnboarding {
   workoutType: "gym" | "home";
   goal: string;
   gender?: string;
-  ageRange?: string;
+  age?: number;
+  dateOfBirth?: string;
   heightCm?: number;
+  heightUnit?: string;
   weightKg?: number;
+  weightUnit?: string;
   bodyType?: string;
   experience: string;
   trainingFrequency: string;
@@ -475,19 +494,40 @@ export function buildSourceOnboarding(
   ];
   const goal = typeof goalAnswer === "number" ? goalOptions[goalAnswer] : planSettings.goal;
 
-  const genderAnswer = answers[3];
-  const genderOptions = ["Male", "Female", "Other"];
-  const gender = typeof genderAnswer === "number" ? genderOptions[genderAnswer] : undefined;
+  // Extract personal stats from multi_field answer (ID 3)
+  const baselineStatsAnswer = answers[3];
+  let gender: string | undefined;
+  let age: number | undefined;
+  let dateOfBirth: string | undefined;
+  let heightCm: number | undefined;
+  let weightKg: number | undefined;
+  let heightUnit: string | undefined;
+  let weightUnit: string | undefined;
 
-  const ageRangeAnswer = answers[4];
-  const ageRangeOptions = ["18–29", "30–39", "40–49", "50+"];
-  const ageRange = typeof ageRangeAnswer === "number" ? ageRangeOptions[ageRangeAnswer] : undefined;
+  if (baselineStatsAnswer && typeof baselineStatsAnswer === "object" && !Array.isArray(baselineStatsAnswer)) {
+    const stats = baselineStatsAnswer as Record<string, string | number>;
+    gender = typeof stats.gender === "string" ? stats.gender : undefined;
+    dateOfBirth = typeof stats.dateOfBirth === "string" ? stats.dateOfBirth : undefined;
+    heightCm = typeof stats.height === "number" ? stats.height : undefined;
+    weightKg = typeof stats.weight === "number" ? stats.weight : undefined;
 
-  const heightAnswer = answers[5];
-  const heightCm = typeof heightAnswer === "string" ? parseInt(heightAnswer, 10) : undefined;
+    // Calculate age from date of birth
+    if (dateOfBirth) {
+      age = calculateAge(dateOfBirth);
+    }
+  }
 
-  const weightAnswer = answers[6];
-  const weightKg = typeof weightAnswer === "string" ? parseInt(weightAnswer, 10) : undefined;
+  // Extract units for height and weight from quizAnswers.units[3]
+  const unitsForQuestion3 = quizAnswers.units?.[3];
+  if (unitsForQuestion3 && typeof unitsForQuestion3 === "object" && !Array.isArray(unitsForQuestion3)) {
+    const unitsObj = unitsForQuestion3 as Record<string, string>;
+    heightUnit = unitsObj.height || "cm";
+    weightUnit = unitsObj.weight || "kg";
+  } else {
+    // Default units if not specified
+    heightUnit = "cm";
+    weightUnit = "kg";
+  }
 
   const bodyTypeAnswer = answers[7];
   // bodyType returns an index - map based on gender
@@ -560,9 +600,12 @@ export function buildSourceOnboarding(
     workoutType: quizAnswers.workoutType,
     goal,
     gender,
-    ageRange,
+    age,
+    dateOfBirth,
     heightCm,
+    heightUnit,
     weightKg,
+    weightUnit,
     bodyType,
     experience,
     trainingFrequency,
