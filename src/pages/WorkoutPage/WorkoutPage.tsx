@@ -21,6 +21,155 @@ import { loadPlanSettings } from "@/types/planSettings";
 import type { EquipmentCategory } from "@/types/equipment";
 import type { QuizAnswers } from "@/types/quiz";
 import type { FinishedWorkoutSummary } from "@/types/workout";
+import { ReplaceIcon, TrashIcon } from "@/components/Icons/Icons";
+
+const SWIPE_ACTION_WIDTH = 88;
+const SWIPE_MAX_OFFSET = SWIPE_ACTION_WIDTH * 2;
+
+interface SwipeableExerciseCardProps {
+  exerciseId: number;
+  isOpen: boolean;
+  onOpenChange: (exerciseId: number | null) => void;
+  onReplace: () => void;
+  onDelete: () => void;
+  children: React.ReactNode;
+}
+
+function SwipeableExerciseCard({
+  exerciseId,
+  isOpen,
+  onOpenChange,
+  onReplace,
+  onDelete,
+  children,
+}: SwipeableExerciseCardProps) {
+  const [offsetX, setOffsetX] = useState(isOpen ? -SWIPE_MAX_OFFSET : 0);
+  const [isDragging, setIsDragging] = useState(false);
+  const startXRef = useRef(0);
+  const startYRef = useRef(0);
+  const startOffsetRef = useRef(0);
+  const offsetRef = useRef(offsetX);
+  const draggingRef = useRef(false);
+  const isHorizontalSwipeRef = useRef(false);
+  const movedRef = useRef(false);
+
+  useEffect(() => {
+    if (!draggingRef.current) {
+      setOffsetX(isOpen ? -SWIPE_MAX_OFFSET : 0);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    offsetRef.current = offsetX;
+  }, [offsetX]);
+
+  const finishSwipe = () => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    const didHorizontalSwipe = isHorizontalSwipeRef.current;
+    isHorizontalSwipeRef.current = false;
+    setIsDragging(false);
+
+    if (!didHorizontalSwipe) {
+      movedRef.current = false;
+      return;
+    }
+
+    const shouldOpen = offsetRef.current <= -SWIPE_MAX_OFFSET / 2;
+    setOffsetX(shouldOpen ? -SWIPE_MAX_OFFSET : 0);
+    onOpenChange(shouldOpen ? exerciseId : null);
+  };
+
+  return (
+    <div className="relative overflow-hidden rounded-[14px]">
+      <div className="absolute inset-y-0 right-0 flex">
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onReplace();
+            onOpenChange(null);
+          }}
+          className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#21243A] text-white"
+          aria-label="Replace exercise"
+        >
+          <ReplaceIcon className="h-6 w-6" />
+          <span className="text-xs font-semibold">Replace</span>
+        </button>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onDelete();
+            onOpenChange(null);
+          }}
+          className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#D04A40] text-white"
+          aria-label="Delete exercise"
+        >
+          <TrashIcon className="h-6 w-6" />
+          <span className="text-xs font-semibold">Delete</span>
+        </button>
+      </div>
+
+      <div
+        className={`relative ${isDragging ? "" : "transition-transform duration-200 ease-out"}`}
+        style={{
+          transform: `translateX(${offsetX}px)`,
+          touchAction: "pan-y",
+        }}
+        onPointerDown={(event) => {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
+          startXRef.current = event.clientX;
+          startYRef.current = event.clientY;
+          startOffsetRef.current = offsetX;
+          draggingRef.current = true;
+          isHorizontalSwipeRef.current = false;
+          movedRef.current = false;
+        }}
+        onPointerMove={(event) => {
+          if (!draggingRef.current) return;
+          const deltaX = event.clientX - startXRef.current;
+          const deltaY = event.clientY - startYRef.current;
+          const absX = Math.abs(deltaX);
+          const absY = Math.abs(deltaY);
+
+          if (!isHorizontalSwipeRef.current) {
+            if (absY > 10 && absY > absX) {
+              draggingRef.current = false;
+              return;
+            }
+            if (absX > 12 && absX > absY) {
+              isHorizontalSwipeRef.current = true;
+              setIsDragging(true);
+            } else {
+              return;
+            }
+          }
+
+          if (absX > 4) {
+            movedRef.current = true;
+          }
+          const nextOffset = Math.max(
+            -SWIPE_MAX_OFFSET,
+            Math.min(0, startOffsetRef.current + deltaX),
+          );
+          setOffsetX(nextOffset);
+        }}
+        onPointerUp={finishSwipe}
+        onPointerCancel={finishSwipe}
+        onClickCapture={(event) => {
+          if (movedRef.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            movedRef.current = false;
+          }
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export function WorkoutPage({
   onNavigateToHome,
@@ -38,10 +187,14 @@ export function WorkoutPage({
   completedWorkoutIds = new Set(),
 }: WorkoutPageProps) {
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
+  const [swipedExerciseId, setSwipedExerciseId] = useState<number | null>(null);
+  const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
+  const [replaceQuery, setReplaceQuery] = useState("");
   const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>([]);
   const [isLoadingPlan, setIsLoadingPlan] = useState(true);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [c, setC] = useState(0); // counter to trigger re-generation
+  const allExercises = allExercisesData as Exercise[];
 
   // Load or generate plan when component mounts
   useEffect(() => {
@@ -285,6 +438,127 @@ export function WorkoutPage({
     }
   };
 
+  const updateCurrentWorkoutInPlan = (
+    updateExercises: (exercises: Exercise[]) => Exercise[],
+  ): boolean => {
+    const plan = loadPlanFromLocalStorage();
+    if (!plan) return false;
+
+    const currentWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
+    if (!currentWorkout) return false;
+
+    const workoutIndex = plan.workoutDays.findIndex(
+      (day) =>
+        day.dayNumber === currentWorkout.dayNumber &&
+        day.dayName === currentWorkout.dayName,
+    );
+    if (workoutIndex === -1) return false;
+
+    plan.workoutDays[workoutIndex].exercises = updateExercises(
+      plan.workoutDays[workoutIndex].exercises as Exercise[],
+    );
+    savePlanToLocalStorage(plan);
+    return true;
+  };
+
+  const handleDeleteExercise = (exerciseToDelete: Exercise) => {
+    try {
+      const removedFromCurrentWorkout = updateCurrentWorkoutInPlan((exercises) =>
+        exercises.filter((ex) => ex.id !== exerciseToDelete.id),
+      );
+
+      if (!removedFromCurrentWorkout) {
+        const plan = loadPlanFromLocalStorage();
+        if (plan) {
+          let removed = false;
+          for (const workoutDay of plan.workoutDays) {
+            const beforeCount = workoutDay.exercises.length;
+            workoutDay.exercises = workoutDay.exercises.filter(
+              (ex: Exercise) => ex.id !== exerciseToDelete.id,
+            );
+            if (workoutDay.exercises.length < beforeCount) {
+              removed = true;
+            }
+          }
+          if (removed) {
+            savePlanToLocalStorage(plan);
+          }
+        }
+      }
+
+      setWorkoutExercises((prev) =>
+        prev.filter((ex) => ex.id !== exerciseToDelete.id),
+      );
+      setSwipedExerciseId((prev) =>
+        prev === exerciseToDelete.id ? null : prev,
+      );
+
+      if (onRemoveExercise) {
+        onRemoveExercise(exerciseToDelete.id);
+      }
+    } catch (error) {
+      console.error("Error removing exercise:", error);
+    }
+  };
+
+  const handleReplaceExercise = (
+    oldExercise: Exercise,
+    selectedReplacement: Exercise,
+  ) => {
+    const replacement: Exercise = {
+      ...selectedReplacement,
+      sets: oldExercise.sets,
+      reps: oldExercise.reps,
+      weight: oldExercise.weight,
+      weight_unit: oldExercise.weight_unit,
+    };
+
+    try {
+      const replaced = updateCurrentWorkoutInPlan((exercises) => {
+        const hasDuplicate = exercises.some(
+          (ex) => ex.id === replacement.id && ex.id !== oldExercise.id,
+        );
+        if (hasDuplicate) return exercises;
+        return exercises.map((ex) =>
+          ex.id === oldExercise.id ? replacement : ex,
+        );
+      });
+
+      if (replaced) {
+        setWorkoutExercises((prev) => {
+          const hasDuplicate = prev.some(
+            (ex) => ex.id === replacement.id && ex.id !== oldExercise.id,
+          );
+          if (hasDuplicate) return prev;
+          return prev.map((ex) => (ex.id === oldExercise.id ? replacement : ex));
+        });
+      }
+    } catch (error) {
+      console.error("Error replacing exercise:", error);
+    } finally {
+      setSwipedExerciseId(null);
+      setReplaceExercise(null);
+      setReplaceQuery("");
+      setActionExercise(null);
+    }
+  };
+
+  const filteredReplacementExercises = allExercises
+    .filter((exercise) => {
+      if (!replaceExercise) return false;
+      const query = replaceQuery.trim().toLowerCase();
+      const matchesQuery =
+        query.length === 0 || exercise.name.toLowerCase().includes(query);
+      const isSameExercise = exercise.id === replaceExercise.id;
+      const alreadyExistsInWorkout = displayExercises.some(
+        (workoutExercise) =>
+          workoutExercise.id === exercise.id &&
+          workoutExercise.id !== replaceExercise.id,
+      );
+      return matchesQuery && !isSameExercise && !alreadyExistsInWorkout;
+    })
+    .slice(0, 60);
+
   return (
     <PageContainer>
       <div className="flex items-center justify-between pr-2.5">
@@ -353,13 +627,27 @@ export function WorkoutPage({
             </div>
           ) : displayExercises.length > 0 ? (
             displayExercises.map((exercise, index) => (
-              <ExerciseCard
+              <SwipeableExerciseCard
                 key={`${exercise.id}-${index}`}
-                exercise={exercise}
-                onCardClick={() => onOpenExerciseSets(exercise)}
-                onDetailsClick={() => onOpenExerciseDetails(exercise)}
-                onActionClick={() => setActionExercise(exercise)}
-              />
+                exerciseId={exercise.id}
+                isOpen={swipedExerciseId === exercise.id}
+                onOpenChange={(exerciseId) => setSwipedExerciseId(exerciseId)}
+                onReplace={() => setReplaceExercise(exercise)}
+                onDelete={() => handleDeleteExercise(exercise)}
+              >
+                <ExerciseCard
+                  exercise={exercise}
+                  onCardClick={() => {
+                    if (swipedExerciseId === exercise.id) {
+                      setSwipedExerciseId(null);
+                      return;
+                    }
+                    onOpenExerciseSets(exercise);
+                  }}
+                  onDetailsClick={() => onOpenExerciseDetails(exercise)}
+                  onActionClick={() => setActionExercise(exercise)}
+                />
+              </SwipeableExerciseCard>
             ))
           ) : (
             <div className="flex flex-col items-center justify-center gap-3 py-10">
@@ -447,64 +735,82 @@ export function WorkoutPage({
             }
             setActionExercise(null);
           }}
+          onReplace={() => {
+            if (actionExercise) {
+              setReplaceExercise(actionExercise);
+            }
+          }}
           onDelete={() => {
             if (actionExercise) {
-              try {
-                // Load plan from localStorage
-                const plan = loadPlanFromLocalStorage();
-                if (plan) {
-                  // Find current workout
-                  const currentWorkout = getNextAvailableWorkout(
-                    plan,
-                    completedWorkoutIds,
-                  );
-
-                  if (currentWorkout) {
-                    // Remove exercise from current workout
-                    currentWorkout.exercises = currentWorkout.exercises.filter(
-                      (ex: Exercise) => ex.id !== actionExercise.id,
-                    );
-
-                    // Save updated plan to localStorage
-                    savePlanToLocalStorage(plan);
-
-                    // Update local state
-                    setWorkoutExercises((prev) =>
-                      prev.filter((ex) => ex.id !== actionExercise.id),
-                    );
-                  } else {
-                    // Fallback: if no current workout found, try to remove from all workouts
-                    let removed = false;
-                    for (const workoutDay of plan.workoutDays) {
-                      const beforeCount = workoutDay.exercises.length;
-                      workoutDay.exercises = workoutDay.exercises.filter(
-                        (ex: Exercise) => ex.id !== actionExercise.id,
-                      );
-                      if (workoutDay.exercises.length < beforeCount) {
-                        removed = true;
-                      }
-                    }
-                    if (removed) {
-                      savePlanToLocalStorage(plan);
-                      setWorkoutExercises((prev) =>
-                        prev.filter((ex) => ex.id !== actionExercise.id),
-                      );
-                    }
-                  }
-                }
-
-                // Also call parent's onRemoveExercise if provided (for backward compatibility)
-                if (onRemoveExercise) {
-                  onRemoveExercise(actionExercise.id);
-                }
-              } catch (error) {
-                console.error("Error removing exercise:", error);
-              }
+              handleDeleteExercise(actionExercise);
             }
             setActionExercise(null);
           }}
           containerRef={cardRef}
         />
+      )}
+
+      {replaceExercise && (
+        <div className="fixed inset-0 z-[60] flex items-end bg-black/70">
+          <div className="mx-auto w-full max-w-[440px] rounded-t-[24px] border-t border-white/10 bg-[#161827] px-4 pb-5 pt-4">
+            <div className="mb-3 text-center">
+              <h3 className="text-lg font-semibold text-white">Replace exercise</h3>
+              <p className="mt-1 text-sm text-slate-400">
+                Choose from all exercises
+              </p>
+            </div>
+
+            <input
+              value={replaceQuery}
+              onChange={(event) => setReplaceQuery(event.target.value)}
+              placeholder="Search exercise..."
+              className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
+            />
+
+            <div
+              className="max-h-[52vh] space-y-2 overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {filteredReplacementExercises.length > 0 ? (
+                filteredReplacementExercises.map((exercise) => (
+                  <button
+                    key={exercise.id}
+                    type="button"
+                    onClick={() => handleReplaceExercise(replaceExercise, exercise)}
+                    className="flex w-full items-center gap-3 rounded-[12px] bg-[#1F2232] p-2 text-left text-white ring-1 ring-white/5"
+                  >
+                    <img
+                      src={exercise.image_url}
+                      alt={exercise.name}
+                      className="h-12 w-12 rounded-[8px] object-cover"
+                    />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold">{exercise.name}</p>
+                      <p className="truncate text-xs text-slate-400">
+                        {exercise.muscle_groups.join(", ")}
+                      </p>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="py-6 text-center text-sm text-slate-400">
+                  No exercises found
+                </div>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setReplaceExercise(null);
+                setReplaceQuery("");
+              }}
+              className="mt-3 h-11 w-full rounded-[10px] bg-[#232639] text-sm font-semibold text-white"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       )}
     </PageContainer>
   );

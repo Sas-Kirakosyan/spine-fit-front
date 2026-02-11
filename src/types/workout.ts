@@ -14,11 +14,14 @@ export interface ExerciseSetProps {
   index: number;
   setEntry: ExerciseSetRow;
   exercise: Exercise;
+  previousValue: string;
   isActive: boolean;
   isCompleted: boolean;
   canDelete: boolean;
+  canLogSet: boolean;
   onActivate: (index: number) => void;
   onValueChange: (index: number, field: SetField, value: string) => void;
+  onLogSet: (index: number) => void;
   onDelete: (index: number) => void;
 }
 
@@ -26,6 +29,7 @@ export interface ExerciseSetsPageProps {
   exercise: Exercise;
   onNavigateBack: () => void;
   onStartWorkoutSession: () => void;
+  onNavigateToHistory?: () => void;
   onMarkExerciseComplete?: (exerciseId: number, sets: ExerciseSetRow[]) => void;
   isDuringActiveWorkout?: boolean;
   exerciseLogs?: Record<number, ExerciseSetRow[]>;

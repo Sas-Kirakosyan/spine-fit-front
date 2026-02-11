@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import allExercisesData from "@/MockData/allExercise.json";
+import type { Exercise } from "@/types/exercise";
 import type {
   ExerciseSetsPageProps,
   SetField,
@@ -13,6 +15,10 @@ import {
   secondaryButtonClass,
 } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
+import {
+  loadPlanFromLocalStorage,
+  savePlanToLocalStorage,
+} from "@/utils/planGenerator";
 
 const toolbarButtons = [
   {
@@ -37,6 +43,28 @@ const toolbarButtons = [
     ),
   },
   {
+    id: "replace",
+    label: "Replace",
+    icon: (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M4 7h13"></path>
+        <path d="M13 3l4 4-4 4"></path>
+
+        <path d="M20 17H7"></path>
+        <path d="M11 21l-4-4 4-4"></path>
+      </svg>
+    ),
+  },
+  {
     id: "history",
     label: "History",
     icon: (
@@ -55,13 +83,14 @@ const toolbarButtons = [
         <path d="M12 7v5l4 2" />
       </svg>
     ),
-  }
+  },
 ];
 
 export function ExerciseSetsPage({
   exercise,
   onNavigateBack,
   onStartWorkoutSession,
+  onNavigateToHistory,
   onMarkExerciseComplete,
   isDuringActiveWorkout = false,
   exerciseLogs = {},
@@ -83,7 +112,10 @@ export function ExerciseSetsPage({
   const [restDurationSeconds, setRestDurationSeconds] = useState(0);
   const [restCountdownSeconds, setRestCountdownSeconds] = useState<number | null>(null);
   const [restPaused, setRestPaused] = useState(false);
+  const [replaceModalOpen, setReplaceModalOpen] = useState(false);
+  const [replaceQuery, setReplaceQuery] = useState("");
   const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const allExercises = allExercisesData as Exercise[];
 
   const isBodyweight = exercise.equipment === "bodyweight";
 
@@ -262,33 +294,42 @@ export function ExerciseSetsPage({
     });
   };
 
-  const handleLogSet = () => {
-    if (sets.length === 0 || sets.every((item) => item.completed)) {
+  const handleLogSet = (requestedIndex?: number) => {
+    if (sets.length === 0) {
       return;
     }
-    const targetIndex =
-      activeSetIndex >= 0 && activeSetIndex < sets.length ? activeSetIndex : -1;
-    if (targetIndex === -1 || sets[targetIndex]?.completed) {
+    const targetIndex = typeof requestedIndex === "number"
+      ? requestedIndex
+      : activeSetIndex >= 0 && activeSetIndex < sets.length
+        ? activeSetIndex
+        : -1;
+    if (targetIndex === -1) {
       return;
     }
 
     const targetSet = sets[targetIndex];
-    if (!isSetValid(targetSet)) {
+    const shouldUnlog = targetSet.completed;
+    if (!shouldUnlog && !isSetValid(targetSet)) {
       return;
     }
 
     setSets((prev) => {
       const updated = prev.map((item, index) =>
-        index === targetIndex ? { ...item, completed: true } : item
+        index === targetIndex ? { ...item, completed: !shouldUnlog } : item
       );
-      const nextAfter = findNextPendingIndex(updated, targetIndex + 1);
-      const fallback =
-        nextAfter !== -1 ? nextAfter : findNextPendingIndex(updated, 0);
-      setActiveSetIndex(fallback);
+
+      if (shouldUnlog) {
+        setActiveSetIndex(targetIndex);
+      } else {
+        const nextAfter = findNextPendingIndex(updated, targetIndex + 1);
+        const fallback =
+          nextAfter !== -1 ? nextAfter : findNextPendingIndex(updated, 0);
+        setActiveSetIndex(fallback);
+      }
       return updated;
     });
 
-    if (restTimerEnabled && isDuringActiveWorkout) {
+    if (!shouldUnlog && restTimerEnabled && isDuringActiveWorkout) {
       const totalSeconds = restDurationMinutes * 60 + restDurationSeconds;
       if (totalSeconds > 0) {
         setRestCountdownSeconds(totalSeconds);
@@ -330,18 +371,6 @@ export function ExerciseSetsPage({
   const allSetsCompleted =
     sets.length > 0 && sets.every((setEntry) => setEntry.completed);
 
-  const canLogCurrentSet = useMemo(() => {
-    if (sets.length === 0 || sets.every((item) => item.completed)) {
-      return false;
-    }
-    const targetIndex =
-      activeSetIndex >= 0 && activeSetIndex < sets.length ? activeSetIndex : -1;
-    if (targetIndex === -1 || sets[targetIndex]?.completed) {
-      return false;
-    }
-    return isSetValid(sets[targetIndex]);
-  }, [sets, activeSetIndex]);
-
   const canLogAllSets = useMemo(() => {
     const incompleteSets = sets.filter((item) => !item.completed);
     if (incompleteSets.length === 0) {
@@ -349,6 +378,32 @@ export function ExerciseSetsPage({
     }
     return incompleteSets.every((setEntry) => isSetValid(setEntry));
   }, [sets]);
+
+  const getPreviousValue = (index: number) => {
+    const hasTemplateRow = index < Math.max(exercise.sets || 1, 1);
+    if (!hasTemplateRow) {
+      return "\u2014";
+    }
+
+    const repsValue =
+      exercise.reps !== undefined && exercise.reps !== null ? String(exercise.reps) : "";
+    if (!repsValue) {
+      return "\u2014";
+    }
+
+    if (isBodyweight) {
+      return `BW x ${repsValue}`;
+    }
+
+    const weightValue =
+      exercise.weight !== undefined && exercise.weight !== null ? String(exercise.weight) : "";
+    if (!weightValue) {
+      return "\u2014";
+    }
+
+    const unit = exercise.weight_unit?.trim() || "kg";
+    return `${weightValue}${unit} x ${repsValue}`;
+  };
 
   const sliderProgress = ((painLevel - 1) / 9) * 100;
   const painFaces = [
@@ -358,6 +413,59 @@ export function ExerciseSetsPage({
     { id: 4, label: "🙁", value: 7 },
     { id: 5, label: "😣", value: 9 },
   ];
+
+  const filteredReplacementExercises = allExercises
+    .filter((item) => {
+      const query = replaceQuery.trim().toLowerCase();
+      const matchesQuery =
+        query.length === 0 || item.name.toLowerCase().includes(query);
+      return item.id !== exercise.id && matchesQuery;
+    })
+    .slice(0, 80);
+
+  const handleReplaceCurrentExercise = (selectedReplacement: Exercise) => {
+    try {
+      const plan = loadPlanFromLocalStorage();
+      if (!plan) return;
+
+      const workoutIndex = plan.workoutDays.findIndex((day) =>
+        day.exercises.some((item) => item.id === exercise.id),
+      );
+
+      if (workoutIndex === -1) return;
+
+      const hasDuplicateInWorkout = plan.workoutDays[workoutIndex].exercises.some(
+        (item) => item.id === selectedReplacement.id,
+      );
+      if (hasDuplicateInWorkout) {
+        setReplaceModalOpen(false);
+        setReplaceQuery("");
+        onNavigateBack();
+        return;
+      }
+
+      const replacementWithCurrentSets: Exercise = {
+        ...selectedReplacement,
+        sets: exercise.sets,
+        reps: exercise.reps,
+        weight: exercise.weight,
+        weight_unit: exercise.weight_unit,
+      };
+
+      plan.workoutDays[workoutIndex].exercises = plan.workoutDays[
+        workoutIndex
+      ].exercises.map((item) =>
+        item.id === exercise.id ? replacementWithCurrentSets : item,
+      );
+
+      savePlanToLocalStorage(plan);
+      setReplaceModalOpen(false);
+      setReplaceQuery("");
+      onNavigateBack();
+    } catch (error) {
+      console.error("Error replacing exercise from sets page:", error);
+    }
+  };
 
   return (
     <PageContainer
@@ -427,39 +535,50 @@ export function ExerciseSetsPage({
           </div>
         </header>
 
-        <div className="flex flex-wrap gap-3">
-          {toolbarButtons.map((item) => {
-            const isTimer = item.id === "timer";
-            const isActive = isTimer && restTimerEnabled;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={
-                  isTimer && isDuringActiveWorkout
-                    ? () => setRestTimerModalOpen(true)
-                    : undefined
-                }
-                className={`${secondaryButtonClass} ${isActive
-                  ? "border-main/70 text-main/70 shadow-inner shadow-main/20"
-                  : ""
-                  }`}
-              >
-                <span className="flex items-center gap-2">
-                  <span
-                    className={`flex h-7 w-7 items-center justify-center rounded-full bg-black/40 ${isActive ? "text-main/70" : "text-slate-200"
-                      }`}
-                  >
-                    {item.icon}
+        <div
+          className="overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          <div className="flex h-[50px] w-max gap-2 pr-2">
+            {toolbarButtons.map((item) => {
+              const isTimer = item.id === "timer";
+              const isActive = isTimer && restTimerEnabled;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={
+                  isTimer
+                    ? isDuringActiveWorkout
+                      ? () => setRestTimerModalOpen(true)
+                      : undefined
+                    : item.id === "replace"
+                      ? () => setReplaceModalOpen(true)
+                      : item.id === "history"
+                        ? onNavigateToHistory
+                      : undefined
+                  }
+                  className={`${secondaryButtonClass} shrink-0 whitespace-nowrap ${isActive
+                    ? "border-main/70 text-main/70 shadow-inner shadow-main/20"
+                    : ""
+                    }`}
+                >
+                  <span className="flex gap-2">
+                    <span
+                      className={`flex items-center justify-center ${isActive ? "text-main/70" : "text-slate-200"
+                        }`}
+                    >
+                      {item.icon}
+                    </span>
+                    <span>
+                      {item.label}
+                      {isTimer ? `: ${restTimerEnabled ? "on" : "off"}` : ""}
+                    </span>
                   </span>
-                  <span>
-                    {item.label}
-                    {isTimer ? `: ${restTimerEnabled ? "on" : "off"}` : ""}
-                  </span>
-                </span>
-              </button>
-            );
-          })}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {isDuringActiveWorkout && restCountdownSeconds !== null && restCountdownSeconds > 0 && (
@@ -519,6 +638,69 @@ export function ExerciseSetsPage({
           </div>
         )}
 
+        {replaceModalOpen && (
+          <div className="fixed inset-0 z-[60] flex items-end bg-black/70">
+            <div className="mx-auto w-full max-w-[440px] rounded-t-[24px] border-t border-white/10 bg-[#161827] px-4 pb-5 pt-4">
+              <div className="mb-3 text-center">
+                <h3 className="text-lg font-semibold text-white">Replace exercise</h3>
+                <p className="mt-1 text-sm text-slate-400">
+                  Choose from all exercises
+                </p>
+              </div>
+
+              <input
+                value={replaceQuery}
+                onChange={(event) => setReplaceQuery(event.target.value)}
+                placeholder="Search exercise..."
+                className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
+              />
+
+              <div
+                className="max-h-[52vh] space-y-2 overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {filteredReplacementExercises.length > 0 ? (
+                  filteredReplacementExercises.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => handleReplaceCurrentExercise(item)}
+                      className="flex w-full items-center gap-3 rounded-[12px] bg-[#1F2232] p-2 text-left text-white ring-1 ring-white/5"
+                    >
+                      <img
+                        src={item.image_url}
+                        alt={item.name}
+                        className="h-12 w-12 rounded-[8px] object-cover"
+                      />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">{item.name}</p>
+                        <p className="truncate text-xs text-slate-400">
+                          {item.muscle_groups.join(", ")}
+                        </p>
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="py-6 text-center text-sm text-slate-400">
+                    No exercises found
+                  </div>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setReplaceModalOpen(false);
+                  setReplaceQuery("");
+                }}
+                className="mt-3 h-11 w-full rounded-[10px] bg-[#232639] text-sm font-semibold text-white"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
         {isDuringActiveWorkout && (
           <RestTimerModal
             isOpen={restTimerModalOpen}
@@ -545,47 +727,38 @@ export function ExerciseSetsPage({
 
         <section className="flex-1 rounded-[26px] border border-white/12 bg-[#13172A] p-3 shadow-xl ring-1 ring-white/5">
           <div className="space-y-3">
+            <div className="grid grid-cols-[44px_minmax(0,1fr)_68px_68px_52px] items-center gap-2 px-2.5 pb-1 text-[14px] font-medium text-white/80">
+              <span className="text-center">Set</span>
+              <span className="text-left">Previous</span>
+              <span className="text-center">
+                {isBodyweight ? "BW" : "Kg"}
+              </span>
+              <span className="text-center">Reps</span>
+              <span />
+            </div>
             {sets.map((setEntry, index) => (
               <ExerciseSet
                 key={setEntry.id}
                 index={index}
                 setEntry={setEntry}
                 exercise={exercise}
+                previousValue={getPreviousValue(index)}
                 isActive={index === activeSetIndex}
                 isCompleted={setEntry.completed}
                 canDelete={sets.length > 1}
+                canLogSet={setEntry.completed || isSetValid(setEntry)}
                 onActivate={handleActivateSet}
                 onValueChange={handleSetValueChange}
+                onLogSet={handleLogSet}
                 onDelete={handleDeleteSet}
               />
             ))}
             <button
               type="button"
               onClick={handleAddSet}
-              className="ml-[6px] mt-9 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-white"
+              className="mt-5 flex h-[56px] w-full items-center justify-center rounded-full bg-[#1D1F27] text-[34px] font-semibold leading-none text-white/90 transition hover:bg-[#272A35]"
             >
-              <span
-                className="flex h-7 w-7 items-center justify-center rounded-[6px] border border-white bg-white text-black"
-                style={{
-                  clipPath:
-                    "polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)",
-                }}
-              >
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 16 16"
-                  className="h-3 w-3"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M8 3v10" />
-                  <path d="M3 8h10" />
-                </svg>
-              </span>
-              Add Set
+              <span className="mt-0.5 text-[28px]">+ Add Set</span>
             </button>
           </div>
         </section>
@@ -654,16 +827,9 @@ export function ExerciseSetsPage({
         ) : isDuringActiveWorkout ? (
           <div className="mx-5 flex flex-col gap-3 sm:flex-row">
             <Button
-              onClick={handleLogSet}
-              disabled={!canLogCurrentSet}
-              className="h-[50px] flex-1 rounded-[10px] bg-main text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              LOG SET
-            </Button>
-            <Button
               onClick={handleLogAllSets}
               disabled={!canLogAllSets}
-              className="h-[50px] flex-1 rounded-[10px] bg-blue-700 text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[50px] flex-1 rounded-[10px] bg-main text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
             >
               LOG ALL SETS
             </Button>

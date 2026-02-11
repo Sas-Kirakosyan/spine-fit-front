@@ -19,7 +19,7 @@ export function ExerciseCard({
 }: ExerciseCardProps) {
   return (
     <div
-      className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B]/90 p-3 text-left shadow-xl ring-1 ring-white/5"
+      className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B] p-3 text-left shadow-xl ring-1 ring-white/5"
       role="button"
       tabIndex={0}
       onClick={onCardClick}
