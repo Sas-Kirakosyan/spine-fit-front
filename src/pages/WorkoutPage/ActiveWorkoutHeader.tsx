@@ -1,3 +1,5 @@
+import { Button } from "@/components/Buttons/Button";
+
 interface ActiveWorkoutHeaderProps {
   onNavigateBack: () => void;
   buttonClass?: string;
@@ -11,11 +13,11 @@ export function ActiveWorkoutHeader({
 }: ActiveWorkoutHeaderProps) {
   return (
     <header className="flex items-center justify-between">
-      <button
+      <Button
         type="button"
         onClick={onNavigateBack}
         className={buttonClass}
-        aria-label="back to workout list"
+        ariaLabel="back to workout list"
       >
         <svg
           aria-hidden="true"
@@ -30,7 +32,7 @@ export function ActiveWorkoutHeader({
           <line x1="18" y1="6" x2="6" y2="18" />
           <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
-      </button>
+      </Button>
 
       <div className="text-center">
         <p className="text-sm uppercase tracking-[0.3em] text-slate-300">
