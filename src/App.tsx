@@ -331,6 +331,7 @@ function App() {
             exercise={selectedExercise}
             onNavigateBack={backFromExerciseSets}
             onStartWorkoutSession={navigateToActiveWorkout}
+            onNavigateToHistory={navigateToHistory}
             onMarkExerciseComplete={markExerciseComplete}
             isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
             exerciseLogs={exerciseLogs}
