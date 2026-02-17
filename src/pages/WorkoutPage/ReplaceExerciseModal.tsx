@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import type { Exercise } from "@/types/exercise";
 import { Button } from "@/components/Buttons/Button";
 
@@ -5,28 +6,63 @@ interface ReplaceExerciseModalProps {
   replaceExercise: Exercise;
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  filteredExercises: Exercise[];
+  suggestedExercises: Exercise[];
+  allExercises: Exercise[];
   onSelectReplacement: (replacement: Exercise) => void;
   onClose: () => void;
 }
 
 export function ReplaceExerciseModal({
-  // replaceExercise is received for type safety but currently unused
-  // Can be used for additional context display in the future
+  replaceExercise,
   searchQuery,
   onSearchChange,
-  filteredExercises,
+  suggestedExercises,
+  allExercises,
   onSelectReplacement,
   onClose,
 }: ReplaceExerciseModalProps) {
+  const [activeTab, setActiveTab] = useState<"suggested" | "all">("suggested");
+
+  const visibleExercises = useMemo(
+    () => (activeTab === "suggested" ? suggestedExercises : allExercises),
+    [activeTab, suggestedExercises, allExercises],
+  );
+
+  const emptyStateText =
+    activeTab === "suggested"
+      ? `No suggested alternatives found for ${replaceExercise.name}`
+      : "No exercises found";
+
   return (
     <div className="fixed inset-0 z-[60] flex items-end bg-black/70">
       <div className="mx-auto w-full max-w-[440px] rounded-t-[24px] border-t border-white/10 bg-[#161827] px-4 pb-5 pt-4">
         <div className="mb-3 text-center">
           <h3 className="text-lg font-semibold text-white">Replace exercise</h3>
-          <p className="mt-1 text-sm text-slate-400">
-            Choose from all exercises
-          </p>
+        </div>
+
+        <div className="mb-3 flex h-10 rounded-[10px] bg-white/10 p-1">
+          <button
+            type="button"
+            onClick={() => setActiveTab("suggested")}
+            className={`flex-1 rounded-[8px] text-sm font-semibold transition-colors ${
+              activeTab === "suggested"
+                ? "bg-main text-white"
+                : "text-slate-300 hover:text-white"
+            }`}
+          >
+            Suggested Alternatives
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("all")}
+            className={`flex-1 rounded-[8px] text-sm font-semibold transition-colors ${
+              activeTab === "all"
+                ? "bg-main text-white"
+                : "text-slate-300 hover:text-white"
+            }`}
+          >
+            All Exercises
+          </button>
         </div>
 
         <input
@@ -40,8 +76,8 @@ export function ReplaceExerciseModal({
           className="max-h-[52vh] space-y-2 overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {filteredExercises.length > 0 ? (
-            filteredExercises.map((item) => (
+          {visibleExercises.length > 0 ? (
+            visibleExercises.map((item) => (
               <button
                 key={item.id}
                 type="button"
@@ -63,7 +99,7 @@ export function ReplaceExerciseModal({
             ))
           ) : (
             <div className="py-6 text-center text-sm text-slate-400">
-              No exercises found
+              {emptyStateText}
             </div>
           )}
         </div>

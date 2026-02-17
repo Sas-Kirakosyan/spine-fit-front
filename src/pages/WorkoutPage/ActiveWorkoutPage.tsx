@@ -17,6 +17,10 @@ import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
 import { ReplaceExerciseModal } from "@/pages/WorkoutPage/ReplaceExerciseModal";
 import { loadPlanFromLocalStorage } from "@/utils/planGenerator";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
+import {
+  getAllReplacementExercises,
+  getSuggestedReplacementExercises,
+} from "@/utils/replacementExercises";
 import { useWorkoutTimer } from "./useWorkoutTimer";
 import { useExerciseManagement } from "./useExerciseManagement";
 
@@ -117,22 +121,21 @@ export function ActiveWorkoutPage({
     [updateCurrentWorkoutInPlan, setTodaysExercises],
   );
 
-  const filteredReplacementExercises = useMemo(() => {
-    if (!replaceExercise) return [];
-    return allExercises
-      .filter((item) => {
-        const query = replaceQuery.trim().toLowerCase();
-        const matchesQuery =
-          query.length === 0 || item.name.toLowerCase().includes(query);
-        const isSameExercise = item.id === replaceExercise.id;
-        const alreadyExistsInWorkout = todaysExercises.some(
-          (exercise: Exercise) =>
-            exercise.id === item.id && exercise.id !== replaceExercise.id,
-        );
-        return matchesQuery && !isSameExercise && !alreadyExistsInWorkout;
-      })
-      .slice(0, 60);
+  const allReplacementExercises = useMemo(() => {
+    return getAllReplacementExercises({
+      allExercises,
+      replaceExercise,
+      replaceQuery,
+      currentExercises: todaysExercises,
+    });
   }, [allExercises, replaceExercise, replaceQuery, todaysExercises]);
+
+  const suggestedReplacementExercises = useMemo(() => {
+    return getSuggestedReplacementExercises({
+      allReplacementExercises,
+      replaceExercise,
+    });
+  }, [allReplacementExercises, replaceExercise]);
 
   const allExercisesCompleted = useMemo(() => {
     return (
@@ -318,7 +321,8 @@ export function ActiveWorkoutPage({
             replaceExercise={replaceExercise}
             searchQuery={replaceQuery}
             onSearchChange={setReplaceQuery}
-            filteredExercises={filteredReplacementExercises}
+            suggestedExercises={suggestedReplacementExercises}
+            allExercises={allReplacementExercises}
             onSelectReplacement={handleSelectReplacement}
             onClose={handleCloseReplaceModal}
           />

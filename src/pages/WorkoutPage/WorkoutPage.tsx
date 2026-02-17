@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import allExercisesData from "@/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -10,6 +10,7 @@ import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { WorkoutPageHeader } from "./WorkoutPageHeader";
 import { WorkoutPlanCard } from "@/pages/WorkoutPage/WorkoutPlanCard";
+import { ReplaceExerciseModal } from "@/pages/WorkoutPage/ReplaceExerciseModal";
 import {
   generateTrainingPlan,
   savePlanToLocalStorage,
@@ -22,6 +23,10 @@ import type { EquipmentCategory } from "@/types/equipment";
 import type { QuizAnswers } from "@/types/quiz";
 import type { FinishedWorkoutSummary } from "@/types/workout";
 import { ReplaceIcon, TrashIcon } from "@/components/Icons/Icons";
+import {
+  getAllReplacementExercises,
+  getSuggestedReplacementExercises,
+} from "@/utils/replacementExercises";
 
 const SWIPE_ACTION_WIDTH = 88;
 const SWIPE_MAX_OFFSET = SWIPE_ACTION_WIDTH * 2;
@@ -265,11 +270,11 @@ export function WorkoutPage({
             ? availableEquipment
             : equipmentData.length === 0
               ? // No equipment data configured - assume all equipment exists
-              Array.from(
-                new Set(
-                  (allExercisesData as Exercise[]).map((ex) => ex.equipment),
-                ),
-              ).filter((eq) => eq && eq !== "none")
+                Array.from(
+                  new Set(
+                    (allExercisesData as Exercise[]).map((ex) => ex.equipment),
+                  ),
+                ).filter((eq) => eq && eq !== "none")
               : ["bodyweight"];
 
         // Load workout history
@@ -394,7 +399,10 @@ export function WorkoutPage({
 
   // Only show exercises from generated plans - no default exercises
   const hasGeneratedPlan = localStorage.getItem("generatedPlan") !== null;
-  const displayExercises = hasGeneratedPlan ? workoutExercises : [];
+  const displayExercises = useMemo(
+    () => (hasGeneratedPlan ? workoutExercises : []),
+    [hasGeneratedPlan, workoutExercises],
+  );
 
   // Calculate current workout day name based on rotation index
   const getCurrentDayName = (): string => {
@@ -402,8 +410,8 @@ export function WorkoutPage({
     if (!plan || plan.workoutDays.length === 0) return "No Workout";
 
     // Count completed workouts from this plan
-    const planCompletedCount = Array.from(completedWorkoutIds).filter(
-      (id) => id.startsWith(plan.id),
+    const planCompletedCount = Array.from(completedWorkoutIds).filter((id) =>
+      id.startsWith(plan.id),
     ).length;
 
     // Calculate rotation index
@@ -413,7 +421,8 @@ export function WorkoutPage({
     return plan.workoutDays[rotationIndex]?.dayName || "Today's Workout";
   };
 
-  const currentDayName = displayExercises.length > 0 ? getCurrentDayName() : "No Workout";
+  const currentDayName =
+    displayExercises.length > 0 ? getCurrentDayName() : "No Workout";
 
   console.log(
     "plan",
@@ -463,8 +472,8 @@ export function WorkoutPage({
 
   const handleDeleteExercise = (exerciseToDelete: Exercise) => {
     try {
-      const removedFromCurrentWorkout = updateCurrentWorkoutInPlan((exercises) =>
-        exercises.filter((ex) => ex.id !== exerciseToDelete.id),
+      const removedFromCurrentWorkout = updateCurrentWorkoutInPlan(
+        (exercises) => exercises.filter((ex) => ex.id !== exerciseToDelete.id),
       );
 
       if (!removedFromCurrentWorkout) {
@@ -530,7 +539,9 @@ export function WorkoutPage({
             (ex) => ex.id === replacement.id && ex.id !== oldExercise.id,
           );
           if (hasDuplicate) return prev;
-          return prev.map((ex) => (ex.id === oldExercise.id ? replacement : ex));
+          return prev.map((ex) =>
+            ex.id === oldExercise.id ? replacement : ex,
+          );
         });
       }
     } catch (error) {
@@ -543,21 +554,32 @@ export function WorkoutPage({
     }
   };
 
-  const filteredReplacementExercises = allExercises
-    .filter((exercise) => {
-      if (!replaceExercise) return false;
-      const query = replaceQuery.trim().toLowerCase();
-      const matchesQuery =
-        query.length === 0 || exercise.name.toLowerCase().includes(query);
-      const isSameExercise = exercise.id === replaceExercise.id;
-      const alreadyExistsInWorkout = displayExercises.some(
-        (workoutExercise) =>
-          workoutExercise.id === exercise.id &&
-          workoutExercise.id !== replaceExercise.id,
-      );
-      return matchesQuery && !isSameExercise && !alreadyExistsInWorkout;
-    })
-    .slice(0, 60);
+  const allReplacementExercises = useMemo(() => {
+    return getAllReplacementExercises({
+      allExercises,
+      replaceExercise,
+      replaceQuery,
+      currentExercises: displayExercises,
+    });
+  }, [allExercises, replaceExercise, replaceQuery, displayExercises]);
+
+  const suggestedReplacementExercises = useMemo(() => {
+    return getSuggestedReplacementExercises({
+      allReplacementExercises,
+      replaceExercise,
+    });
+  }, [allReplacementExercises, replaceExercise]);
+
+  const handleCloseReplaceModal = () => {
+    setReplaceExercise(null);
+    setReplaceQuery("");
+  };
+
+  const handleSelectReplacement = (replacement: Exercise) => {
+    if (replaceExercise) {
+      handleReplaceExercise(replaceExercise, replacement);
+    }
+  };
 
   return (
     <PageContainer>
@@ -715,7 +737,7 @@ export function WorkoutPage({
           onWorkoutClick={onNavigateToWorkout}
           onProfileClick={onNavigateToProfile}
           onHistoryClick={onNavigateToHistory}
-          onAIClick={onNavigateToAI || (() => { })}
+          onAIClick={onNavigateToAI || (() => {})}
         />
       </div>
 
@@ -751,66 +773,15 @@ export function WorkoutPage({
       )}
 
       {replaceExercise && (
-        <div className="fixed inset-0 z-[60] flex items-end bg-black/70">
-          <div className="mx-auto w-full max-w-[440px] rounded-t-[24px] border-t border-white/10 bg-[#161827] px-4 pb-5 pt-4">
-            <div className="mb-3 text-center">
-              <h3 className="text-lg font-semibold text-white">Replace exercise</h3>
-              <p className="mt-1 text-sm text-slate-400">
-                Choose from all exercises
-              </p>
-            </div>
-
-            <input
-              value={replaceQuery}
-              onChange={(event) => setReplaceQuery(event.target.value)}
-              placeholder="Search exercise..."
-              className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
-            />
-
-            <div
-              className="max-h-[52vh] space-y-2 overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {filteredReplacementExercises.length > 0 ? (
-                filteredReplacementExercises.map((exercise) => (
-                  <button
-                    key={exercise.id}
-                    type="button"
-                    onClick={() => handleReplaceExercise(replaceExercise, exercise)}
-                    className="flex w-full items-center gap-3 rounded-[12px] bg-[#1F2232] p-2 text-left text-white ring-1 ring-white/5"
-                  >
-                    <img
-                      src={exercise.image_url}
-                      alt={exercise.name}
-                      className="h-12 w-12 rounded-[8px] object-cover"
-                    />
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold">{exercise.name}</p>
-                      <p className="truncate text-xs text-slate-400">
-                        {exercise.muscle_groups.join(", ")}
-                      </p>
-                    </div>
-                  </button>
-                ))
-              ) : (
-                <div className="py-6 text-center text-sm text-slate-400">
-                  No exercises found
-                </div>
-              )}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                setReplaceExercise(null);
-                setReplaceQuery("");
-              }}
-              className="mt-3 h-11 w-full rounded-[10px] bg-[#232639] text-sm font-semibold text-white"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+        <ReplaceExerciseModal
+          replaceExercise={replaceExercise}
+          searchQuery={replaceQuery}
+          onSearchChange={setReplaceQuery}
+          suggestedExercises={suggestedReplacementExercises}
+          allExercises={allReplacementExercises}
+          onSelectReplacement={handleSelectReplacement}
+          onClose={handleCloseReplaceModal}
+        />
       )}
     </PageContainer>
   );
