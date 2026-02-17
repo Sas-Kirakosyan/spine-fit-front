@@ -10,7 +10,10 @@ import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { WorkoutPageHeader } from "./WorkoutPageHeader";
 import { WorkoutPlanCard } from "@/pages/WorkoutPage/WorkoutPlanCard";
-import { ReplaceExerciseModal } from "@/pages/WorkoutPage/ReplaceExerciseModal";
+import {
+  ReplaceExerciseModal,
+  type SwapDurationOption,
+} from "@/pages/WorkoutPage/ReplaceExerciseModal";
 import {
   generateTrainingPlan,
   savePlanToLocalStorage,
@@ -513,6 +516,7 @@ export function WorkoutPage({
   const handleReplaceExercise = (
     oldExercise: Exercise,
     selectedReplacement: Exercise,
+    duration: SwapDurationOption,
   ) => {
     const replacement: Exercise = {
       ...selectedReplacement,
@@ -522,27 +526,36 @@ export function WorkoutPage({
       weight_unit: oldExercise.weight_unit,
     };
 
-    try {
-      const replaced = updateCurrentWorkoutInPlan((exercises) => {
-        const hasDuplicate = exercises.some(
-          (ex) => ex.id === replacement.id && ex.id !== oldExercise.id,
-        );
-        if (hasDuplicate) return exercises;
-        return exercises.map((ex) =>
-          ex.id === oldExercise.id ? replacement : ex,
-        );
-      });
+    const replaceInWorkout = (exercises: Exercise[]) => {
+      const hasDuplicate = exercises.some(
+        (ex) => ex.id === replacement.id && ex.id !== oldExercise.id,
+      );
+      if (hasDuplicate) return exercises;
+      return exercises.map((ex) =>
+        ex.id === oldExercise.id ? replacement : ex,
+      );
+    };
 
-      if (replaced) {
-        setWorkoutExercises((prev) => {
-          const hasDuplicate = prev.some(
-            (ex) => ex.id === replacement.id && ex.id !== oldExercise.id,
-          );
-          if (hasDuplicate) return prev;
-          return prev.map((ex) =>
-            ex.id === oldExercise.id ? replacement : ex,
-          );
-        });
+    try {
+      if (duration === "plan") {
+        const plan = loadPlanFromLocalStorage();
+        if (plan) {
+          plan.workoutDays = plan.workoutDays.map((day) => ({
+            ...day,
+            exercises: replaceInWorkout(day.exercises as Exercise[]),
+          }));
+          savePlanToLocalStorage(plan);
+
+          setWorkoutExercises((prev) => replaceInWorkout(prev));
+        }
+      } else {
+        const replaced = updateCurrentWorkoutInPlan((exercises) =>
+          replaceInWorkout(exercises),
+        );
+
+        if (replaced) {
+          setWorkoutExercises((prev) => replaceInWorkout(prev));
+        }
       }
     } catch (error) {
       console.error("Error replacing exercise:", error);
@@ -575,9 +588,12 @@ export function WorkoutPage({
     setReplaceQuery("");
   };
 
-  const handleSelectReplacement = (replacement: Exercise) => {
+  const handleConfirmSwap = (
+    replacement: Exercise,
+    duration: SwapDurationOption,
+  ) => {
     if (replaceExercise) {
-      handleReplaceExercise(replaceExercise, replacement);
+      handleReplaceExercise(replaceExercise, replacement, duration);
     }
   };
 
@@ -779,7 +795,7 @@ export function WorkoutPage({
           onSearchChange={setReplaceQuery}
           suggestedExercises={suggestedReplacementExercises}
           allExercises={allReplacementExercises}
-          onSelectReplacement={handleSelectReplacement}
+          onConfirmSwap={handleConfirmSwap}
           onClose={handleCloseReplaceModal}
         />
       )}

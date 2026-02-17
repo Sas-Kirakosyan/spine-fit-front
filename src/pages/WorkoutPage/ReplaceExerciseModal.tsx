@@ -1,6 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Exercise } from "@/types/exercise";
 import { Button } from "@/components/Buttons/Button";
+
+export type SwapDurationOption = "workout" | "plan";
 
 interface ReplaceExerciseModalProps {
   replaceExercise: Exercise;
@@ -8,7 +10,7 @@ interface ReplaceExerciseModalProps {
   onSearchChange: (query: string) => void;
   suggestedExercises: Exercise[];
   allExercises: Exercise[];
-  onSelectReplacement: (replacement: Exercise) => void;
+  onConfirmSwap: (replacement: Exercise, duration: SwapDurationOption) => void;
   onClose: () => void;
 }
 
@@ -18,15 +20,31 @@ export function ReplaceExerciseModal({
   onSearchChange,
   suggestedExercises,
   allExercises,
-  onSelectReplacement,
+  onConfirmSwap,
   onClose,
 }: ReplaceExerciseModalProps) {
   const [activeTab, setActiveTab] = useState<"suggested" | "all">("suggested");
+  const [selectedReplacementId, setSelectedReplacementId] = useState<
+    number | null
+  >(null);
+  const [swapDuration, setSwapDuration] =
+    useState<SwapDurationOption>("workout");
 
   const visibleExercises = useMemo(
     () => (activeTab === "suggested" ? suggestedExercises : allExercises),
     [activeTab, suggestedExercises, allExercises],
   );
+
+  const selectedReplacement = useMemo(
+    () =>
+      allExercises.find((exercise) => exercise.id === selectedReplacementId),
+    [allExercises, selectedReplacementId],
+  );
+
+  useEffect(() => {
+    setSelectedReplacementId(null);
+    setSwapDuration("workout");
+  }, [replaceExercise.id]);
 
   const emptyStateText =
     activeTab === "suggested"
@@ -73,7 +91,7 @@ export function ReplaceExerciseModal({
         />
 
         <div
-          className="max-h-[52vh] space-y-2 overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden"
+          className="max-h-[44vh] space-y-2 overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {visibleExercises.length > 0 ? (
@@ -81,8 +99,12 @@ export function ReplaceExerciseModal({
               <button
                 key={item.id}
                 type="button"
-                onClick={() => onSelectReplacement(item)}
-                className="flex w-full items-center gap-3 rounded-[12px] bg-[#1F2232] p-2 text-left text-white ring-1 ring-white/5"
+                onClick={() => setSelectedReplacementId(item.id)}
+                className={`flex w-full items-center gap-3 rounded-[12px] p-2 text-left text-white ring-1 transition-colors ${
+                  selectedReplacementId === item.id
+                    ? "bg-main/20 ring-main"
+                    : "bg-[#1F2232] ring-white/5"
+                }`}
               >
                 <img
                   src={item.image_url}
@@ -104,12 +126,66 @@ export function ReplaceExerciseModal({
           )}
         </div>
 
-        <Button
-          onClick={onClose}
-          className="mt-3 h-11 w-full rounded-[10px] bg-[#232639] text-sm font-semibold text-white"
-        >
-          Cancel
-        </Button>
+        <div className="mt-3 border-t border-white/10 pt-3">
+          <p className="text-sm font-semibold text-white">Swap duration</p>
+          <div className="mt-2 space-y-2">
+            <button
+              type="button"
+              onClick={() => setSwapDuration("workout")}
+              className="flex items-center gap-2 text-left text-white"
+            >
+              <span
+                className={`h-5 w-5 rounded-full border-2 ${
+                  swapDuration === "workout"
+                    ? "border-main"
+                    : "border-slate-500"
+                } flex items-center justify-center`}
+              >
+                {swapDuration === "workout" && (
+                  <span className="h-2.5 w-2.5 rounded-full bg-main" />
+                )}
+              </span>
+              <span className="text-[15px]">Only for this workout</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSwapDuration("plan")}
+              className="flex items-center gap-2 text-left text-white"
+            >
+              <span
+                className={`h-5 w-5 rounded-full border-2 ${
+                  swapDuration === "plan" ? "border-main" : "border-slate-500"
+                } flex items-center justify-center`}
+              >
+                {swapDuration === "plan" && (
+                  <span className="h-2.5 w-2.5 rounded-full bg-main" />
+                )}
+              </span>
+              <span className="text-[15px]">Permanent replacement in plan</span>
+            </button>
+          </div>
+
+          <div className="mt-4 flex gap-3">
+            <Button
+              onClick={onClose}
+              className="h-11 flex-1 rounded-[10px] bg-[#6B7280] text-sm font-semibold text-white"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                if (selectedReplacement) {
+                  onConfirmSwap(selectedReplacement, swapDuration);
+                }
+              }}
+              disabled={!selectedReplacement}
+              className="h-11 flex-1 rounded-[10px] bg-main text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Confirm Swap
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

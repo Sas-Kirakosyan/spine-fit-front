@@ -14,8 +14,14 @@ import { FinishWorkoutModal } from "@/pages/WorkoutPage/FinishWorkoutModal";
 import { calculateWorkoutVolume } from "@/utils/workoutStats";
 import { ActiveWorkoutHeader } from "@/pages/WorkoutPage/ActiveWorkoutHeader";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
-import { ReplaceExerciseModal } from "@/pages/WorkoutPage/ReplaceExerciseModal";
-import { loadPlanFromLocalStorage } from "@/utils/planGenerator";
+import {
+  ReplaceExerciseModal,
+  type SwapDurationOption,
+} from "@/pages/WorkoutPage/ReplaceExerciseModal";
+import {
+  loadPlanFromLocalStorage,
+  savePlanToLocalStorage,
+} from "@/utils/planGenerator";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import {
   getAllReplacementExercises,
@@ -77,7 +83,11 @@ export function ActiveWorkoutPage({
   );
 
   const handleReplaceExercise = useCallback(
-    (oldExercise: Exercise, selectedReplacement: Exercise) => {
+    (
+      oldExercise: Exercise,
+      selectedReplacement: Exercise,
+      duration: SwapDurationOption,
+    ) => {
       const replacement: Exercise = {
         ...selectedReplacement,
         sets: oldExercise.sets,
@@ -86,29 +96,38 @@ export function ActiveWorkoutPage({
         weight_unit: oldExercise.weight_unit,
       };
 
-      try {
-        const replaced = updateCurrentWorkoutInPlan((exercises: Exercise[]) => {
-          const hasDuplicate = exercises.some(
-            (item: Exercise) =>
-              item.id === replacement.id && item.id !== oldExercise.id,
-          );
-          if (hasDuplicate) return exercises;
-          return exercises.map((item: Exercise) =>
-            item.id === oldExercise.id ? replacement : item,
-          );
-        });
+      const replaceInWorkout = (exercises: Exercise[]) => {
+        const hasDuplicate = exercises.some(
+          (item: Exercise) =>
+            item.id === replacement.id && item.id !== oldExercise.id,
+        );
+        if (hasDuplicate) return exercises;
+        return exercises.map((item: Exercise) =>
+          item.id === oldExercise.id ? replacement : item,
+        );
+      };
 
-        if (replaced) {
-          setTodaysExercises((prev: Exercise[]) => {
-            const hasDuplicate = prev.some(
-              (item: Exercise) =>
-                item.id === replacement.id && item.id !== oldExercise.id,
-            );
-            if (hasDuplicate) return prev;
-            return prev.map((item: Exercise) =>
-              item.id === oldExercise.id ? replacement : item,
-            );
-          });
+      try {
+        if (duration === "plan") {
+          const generatedPlan = loadPlanFromLocalStorage();
+
+          if (generatedPlan) {
+            generatedPlan.workoutDays = generatedPlan.workoutDays.map((day) => ({
+              ...day,
+              exercises: replaceInWorkout(day.exercises as Exercise[]),
+            }));
+            savePlanToLocalStorage(generatedPlan);
+
+            setTodaysExercises((prev: Exercise[]) => replaceInWorkout(prev));
+          }
+        } else {
+          const replaced = updateCurrentWorkoutInPlan((exercises: Exercise[]) =>
+            replaceInWorkout(exercises),
+          );
+
+          if (replaced) {
+            setTodaysExercises((prev: Exercise[]) => replaceInWorkout(prev));
+          }
         }
       } catch (error) {
         console.error("Error replacing exercise in active workout:", error);
@@ -236,10 +255,10 @@ export function ActiveWorkoutPage({
     setReplaceQuery("");
   }, []);
 
-  const handleSelectReplacement = useCallback(
-    (replacement: Exercise) => {
+  const handleConfirmSwap = useCallback(
+    (replacement: Exercise, duration: SwapDurationOption) => {
       if (replaceExercise) {
-        handleReplaceExercise(replaceExercise, replacement);
+        handleReplaceExercise(replaceExercise, replacement, duration);
       }
     },
     [replaceExercise, handleReplaceExercise],
@@ -323,7 +342,7 @@ export function ActiveWorkoutPage({
             onSearchChange={setReplaceQuery}
             suggestedExercises={suggestedReplacementExercises}
             allExercises={allReplacementExercises}
-            onSelectReplacement={handleSelectReplacement}
+            onConfirmSwap={handleConfirmSwap}
             onClose={handleCloseReplaceModal}
           />
         )}
