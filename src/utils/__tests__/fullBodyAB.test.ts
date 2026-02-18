@@ -125,8 +125,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
             "difficulty": "beginner",
             "instructions": "Sit in machine with back pressed firmly against pad. Grip handles at chest level. Push handles forward by extending arms until nearly straight. Return with control. Keep lower back pressed to pad throughout. Avoid arching back or driving through lower back.",
             "video_url": "https://cdn.spinefit.app/videos/machine_chest_press.mp4",
-            "image_url": "https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Chest-Press-Machine.gif",
-            "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/chest-press-machine.jpg",
+            "media": [{ "type": "exercise", "source": "local", "url": "/exercises/machine-chest-press.png", "primary": true }],
             "is_back_friendly": true,
             "back_issue_restrictions": [
               {
@@ -194,8 +193,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
             "difficulty": "beginner",
             "instructions": "Sit with feet on footrests, knees slightly bent. Grip handle with arms extended. Pull handle to lower abdomen, driving elbows back. Squeeze shoulder blades together. Keep torso upright, avoid rounding or overextending spine. Return with control.",
             "video_url": "https://cdn.spinefit.app/videos/seated_cable_row.mp4",
-            "image_url": "https://images.squarespace-cdn.com/content/v1/5ffcea9416aee143500ea103/1638351904146-GDGXXL9IHXKQKTXULLHF/Seated%2BCable%2BRow.jpeg",
-            "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/b4964a9b/hammer-strength-select-se-seated-row_b4964a9b_lf_n_600x600.png",
+            "media": [{ "type": "exercise", "source": "local", "url": "/exercises/seated-cable-row.png", "primary": true }],
             "is_back_friendly": true,
             "back_issue_restrictions": [
               {
@@ -262,8 +260,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
             "difficulty": "beginner",
             "instructions": "Sit in leg press machine with back and head against pad. Place feet shoulder-width apart on platform. Push platform away by extending knees and hips. Lower with control, keeping knees aligned with toes. Avoid locking knees at top or rounding lower back at bottom.",
             "video_url": "https://cdn.spinefit.app/videos/leg_press.mp4",
-            "image_url": "https://fitnessprogramer.com/wp-content/uploads/2015/11/Leg-Press.gif",
-            "equipment_image_url": "https://fitnessprogramer.com/wp-content/uploads/2015/11/Leg-Press.gif",
+            "media": [{ "type": "exercise", "source": "local", "url": "/exercises/leg-press.png", "primary": true }],
             "is_back_friendly": true,
             "back_issue_restrictions": [
               {
@@ -352,8 +349,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
             "difficulty": "beginner",
             "instructions": "Sit with back against pad, grip handles at chest level. Keep slight bend in elbows. Bring handles together in front of chest using a hugging motion. Control the return. Avoid excessive arching of lower back.",
             "video_url": "https://cdn.spinefit.app/videos/chest_fly.mp4",
-            "image_url": "https://s3.amazonaws.com/prod.skimble/assets/1530049/image_iphone.jpg",
-            "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/da8a9b52/hammer-strength-select-chest-fly_da8a9b52_lf_n_600x600.png",
+            "media": [{ "type": "exercise", "source": "local", "url": "/exercises/chest-fly.png", "primary": true }],
             "is_back_friendly": true,
             "back_issue_restrictions": [
               {
@@ -388,8 +384,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
             "instructions": "Attach the ankle strap to the cable. Stand tall, brace your core, keep ribs down. Kick the leg backward slowly, avoid leaning forward or arching the back. Return with control.",
             "difficulty": "beginner",
             "video_url": "/videos/cable_kickbacks.mp4",
-            "image_url": "https://imagely.mirafit.co.uk/wp/wp-content/uploads/2024/07/bent-over-kickback-on-a-Mirafit-Functional-Trainer-1024x683.jpg",
-            "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
+            "media": [{ "type": "exercise", "source": "local", "url": "/exercises/cable-kickbacks.png", "primary": true }],
             "is_back_friendly": true,
             "back_issue_restrictions": [
               {
@@ -457,8 +452,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
             "difficulty": "beginner",
             "instructions": "Sit at lat pulldown machine with thighs secured. Grip wide bar with hands wider than shoulder-width, palms facing away. Pull bar down toward upper chest, focusing on driving elbows down. Squeeze lats at bottom. Return with control. Avoid pulling behind neck.",
             "video_url": "https://cdn.spinefit.app/videos/lat_pulldown_wide.mp4",
-            "image_url": "https://www.skimble.com/exercises/102906-lat-pulldown-how-to-do-exercise",
-            "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/lat-pulldown-machine.jpg",
+            "media": [{ "type": "exercise", "source": "local", "url": "/exercises/lat-pulldown-wide-grip.png", "primary": true }],
             "is_back_friendly": true,
             "back_issue_restrictions": [
               {
@@ -495,8 +489,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
               "quadriceps"
             ],
             "equipment": "leg_extension_machine",
-            "image_url": "https://i0.wp.com/www.strengthlog.com/wp-content/uploads/2024/08/leg-press-vs-leg-extension-for-quads.jpg?fit=1953%2C1351&ssl=1",
-            "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/leg-extension-machine.jpg",
+            "media": [{ "type": "exercise", "source": "local", "url": "/exercises/leg-extension.png", "primary": true }],
             "difficulty": "beginner",
             "instructions": "Sit tall, hold handles, extend knees under control. Avoid leaning back aggressively.",
             "video_url": "https://cdn.spinefit.app/videos/leg_extension.mp4",

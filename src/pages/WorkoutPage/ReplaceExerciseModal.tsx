@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Exercise } from "@/types/exercise";
+import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
 import { Button } from "@/components/Buttons/Button";
+import { LazyImage } from "@/components/ui/LazyImage";
 
 export type SwapDurationOption = "workout" | "plan";
 
@@ -106,8 +107,8 @@ export function ReplaceExerciseModal({
                     : "bg-[#1F2232] ring-white/5"
                 }`}
               >
-                <img
-                  src={item.image_url}
+                <LazyImage
+                  src={getExerciseImageUrl(item)}
                   alt={item.name}
                   className="h-12 w-12 rounded-[8px] object-cover"
                 />

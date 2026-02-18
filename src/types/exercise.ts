@@ -8,6 +8,13 @@ export interface ExerciseRestriction {
   updated_at: string;
 }
 
+export interface ExerciseMedia {
+  type: string;
+  source: string;
+  url: string;
+  primary?: boolean;
+}
+
 export interface Exercise {
   id: number;
   name: string;
@@ -18,8 +25,7 @@ export interface Exercise {
   difficulty: string;
   instructions: string;
   video_url: string;
-  image_url: string;
-  equipment_image_url?: string;
+  media: ExerciseMedia[];
   is_back_friendly: boolean;
   back_issue_restrictions: ExerciseRestriction[];
   created_at: string;
@@ -28,6 +34,29 @@ export interface Exercise {
   reps: number;
   weight: number;
   weight_unit: string;
-  load_mode?: "external" | "assistance"; // external = add weight makes harder, assistance = add weight makes easier
+  load_mode?: "external" | "assistance";
+}
+
+function nameToKebab(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[()]/g, "")
+    .replace(/\//g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+export function getExerciseImageUrl(
+  exercise: Partial<Pick<Exercise, "media" | "name">>,
+): string {
+  if (exercise.media && exercise.media.length > 0) {
+    const primary = exercise.media.find((m) => m.primary);
+    return primary?.url ?? exercise.media[0]?.url ?? "";
+  }
+  if (exercise.name) {
+    return `/exercises/${nameToKebab(exercise.name)}.png`;
+  }
+  return "";
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import allExercisesData from "@/MockData/allExercise.json";
-import type { Exercise } from "@/types/exercise";
+import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
 import type {
   ExerciseSetsPageProps,
   SetField,
@@ -15,6 +15,7 @@ import {
   secondaryButtonClass,
 } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
+import { LazyImage } from "@/components/ui/LazyImage";
 import {
   loadPlanFromLocalStorage,
   savePlanToLocalStorage,
@@ -469,15 +470,15 @@ export function ExerciseSetsPage({
 
   return (
     <PageContainer
-      backgroundImage={`url(${exercise.image_url})`}
+      backgroundImage={`url(${getExerciseImageUrl(exercise)})`}
       overlayClassName="bg-[#080A14]/85"
       contentClassName="gap-6 rounded-[28px] bg-[#0E1224]/95 px-6 pb-10 pt-6 text-white"
       fallbackBackgroundClassName="bg-[#0E1224]"
     >
       <div className="flex flex-1 flex-col gap-6">
         <header className="relative overflow-hidden rounded-[26px] border border-white/12 bg-[#191E31] shadow-xl">
-          <img
-            src={exercise.image_url}
+          <LazyImage
+            src={getExerciseImageUrl(exercise)}
             alt={exercise.name}
             className="h-56 w-full object-cover brightness-[0.88]"
           />
@@ -667,8 +668,8 @@ export function ExerciseSetsPage({
                       onClick={() => handleReplaceCurrentExercise(item)}
                       className="flex w-full items-center gap-3 rounded-[12px] bg-[#1F2232] p-2 text-left text-white ring-1 ring-white/5"
                     >
-                      <img
-                        src={item.image_url}
+                      <LazyImage
+                        src={getExerciseImageUrl(item)}
                         alt={item.name}
                         className="h-12 w-12 rounded-[8px] object-cover"
                       />

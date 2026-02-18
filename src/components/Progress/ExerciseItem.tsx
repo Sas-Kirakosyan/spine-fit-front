@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { ExerciseProgress } from "@/utils/progressStats";
+import { LazyImage } from "@/components/ui/LazyImage";
 import {
   LineChart,
   Line,
@@ -70,28 +71,10 @@ export function ExerciseItem({ exercise }: ExerciseItemProps) {
       {/* Exercise icon/image */}
       <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-700/50 overflow-hidden flex items-center justify-center">
         {exercise.imageUrl ? (
-          <img
+          <LazyImage
             src={exercise.imageUrl}
             alt={exercise.exerciseName}
             className="w-full h-full object-cover"
-            onError={(e) => {
-              // Fallback to icon if image fails to load
-              const target = e.target as HTMLImageElement;
-              target.style.display = "none";
-              if (target.parentElement) {
-                target.parentElement.innerHTML = `
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400">
-                    <path d="m6.5 6.5 11 11" />
-                    <path d="m21 21-1-1" />
-                    <path d="m3 3 1 1" />
-                    <path d="m18 22 4-4" />
-                    <path d="m2 6 4-4" />
-                    <path d="m3 10 7-7" />
-                    <path d="m14 21 7-7" />
-                  </svg>
-                `;
-              }
-            }}
           />
         ) : (
           <svg

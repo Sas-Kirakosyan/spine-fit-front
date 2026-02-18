@@ -85,8 +85,12 @@ interface RawExerciseData {
   difficulty: DifficultyLevel;
   instructions: string;
   video_url: string | null;
-  image_url: string | null;
-  equipment_image_url: string | null;
+  media: Array<{
+    type: string;
+    source: string;
+    url: string;
+    primary?: boolean;
+  }>;
   is_back_friendly: boolean;
   back_issue_restrictions: BackIssueRestriction[];
   created_at: string;

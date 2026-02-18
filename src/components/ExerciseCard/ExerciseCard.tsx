@@ -1,6 +1,7 @@
-import type { Exercise } from "@/types/exercise";
+import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
 import TreeDotButton from "@/components/TreeDotButton/TreeDotButton";
 import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
+import { LazyImage } from "@/components/ui/LazyImage";
 
 interface ExerciseCardProps {
   exercise: Exercise;
@@ -33,8 +34,8 @@ export function ExerciseCard({
         className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
         aria-label={`Открыть детали упражнения ${exercise.name}`}
       >
-        <img
-          src={exercise.image_url}
+        <LazyImage
+          src={getExerciseImageUrl(exercise)}
           alt={exercise.name}
           className="h-full w-full object-cover"
         />

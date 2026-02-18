@@ -1,6 +1,7 @@
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseDetailsProps } from "@/types/workout";
-import type { Exercise } from "@/types/exercise";
+import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
+import { LazyImage } from "@/components/ui/LazyImage";
 
 const formatLabel = (value: string) =>
   value
@@ -43,8 +44,8 @@ export function ExerciseDetails({
     >
       <div className="flex h-full flex-col">
         <div className="relative h-56 w-full overflow-hidden">
-          <img
-            src={exercise.image_url}
+          <LazyImage
+            src={getExerciseImageUrl(exercise)}
             alt={exercise.name}
             className="h-full w-full object-cover"
           />

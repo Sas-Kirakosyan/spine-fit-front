@@ -1,4 +1,5 @@
 import type { FinishedWorkoutSummary } from "@/types/workout";
+import { getExerciseImageUrl } from "@/types/exercise";
 import { getExerciseEstimated1RM } from "./oneRepMax";
 
 export interface TotalStats {
@@ -305,7 +306,7 @@ export function getAllExercisesWithProgress(
         exerciseMap.set(exercise.id, {
           exerciseId: exercise.id,
           exerciseName: exercise.name,
-          imageUrl: exercise.image_url || "",
+          imageUrl: getExerciseImageUrl(exercise),
           estimated1RM: 0,
           currentBest1RM: 0,
           lastPerformed: workout.finishedAt,
