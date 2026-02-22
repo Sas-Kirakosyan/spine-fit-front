@@ -16,12 +16,45 @@ export interface ProgressionSuggestion {
   };
 }
 
+const LBS_TO_KG = 0.45359237;
+
+function parsePositiveNumber(value: string): number | null {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return null;
+  }
+  if (parsed < 0) {
+    return null;
+  }
+  return parsed;
+}
+
+function normalizeWeightWithReference(rawWeight: number, referenceWeight: number): number {
+  if (rawWeight <= 0) {
+    return 0;
+  }
+
+  if (referenceWeight <= 0) {
+    return rawWeight;
+  }
+
+  const asKgFromLb = rawWeight * LBS_TO_KG;
+  const selected =
+    Math.abs(asKgFromLb - referenceWeight) < Math.abs(rawWeight - referenceWeight)
+      ? asKgFromLb
+      : rawWeight;
+
+  const upperBound = Math.max(referenceWeight * 2, referenceWeight + 80);
+  return Math.max(0, Math.min(selected, upperBound));
+}
+
 /**
  * Get last performed data for a specific exercise from workout history
  */
 export function getLastPerformedData(
   exerciseId: number,
-  workoutHistory: FinishedWorkoutSummary[]
+  workoutHistory: FinishedWorkoutSummary[],
+  referenceWeight: number = 0
 ): ProgressionSuggestion["lastPerformed"] | undefined {
   // Sort by most recent first
   const sortedHistory = [...workoutHistory].sort(
@@ -38,7 +71,27 @@ export function getLastPerformedData(
   }
 
   const sets = lastWorkout.completedExerciseLogs[exerciseId];
-  const completedSets = sets.filter((set) => set.completed);
+  const completedSets = sets
+    .filter((set) => set.completed)
+    .map((set) => {
+      const parsedWeight = parsePositiveNumber(set.weight);
+      const parsedReps = parsePositiveNumber(set.reps);
+      const safeWeight =
+        parsedWeight === null
+          ? 0
+          : normalizeWeightWithReference(parsedWeight, referenceWeight);
+      const safeReps =
+        parsedReps === null
+          ? 0
+          : Math.min(50, Math.max(0, Math.round(parsedReps)));
+
+      return {
+        ...set,
+        weight: safeWeight.toString(),
+        reps: safeReps.toString(),
+      };
+    })
+    .filter((set) => Number(set.reps) > 0);
 
   if (completedSets.length === 0) {
     return undefined;
@@ -67,10 +120,11 @@ export function getLastPerformedData(
  */
 export function getDaysSinceLastWorkout(
   exerciseId: number,
-  workoutHistory: FinishedWorkoutSummary[]
+  workoutHistory: FinishedWorkoutSummary[],
+  referenceWeight: number = 0
 ): number | null {
 
-  const lastPerformed = getLastPerformedData(exerciseId, workoutHistory);
+  const lastPerformed = getLastPerformedData(exerciseId, workoutHistory, referenceWeight);
 
   if (!lastPerformed) {
     return null;
@@ -91,7 +145,12 @@ export function generateProgressionSuggestion(
   exercise: Exercise,
   workoutHistory: FinishedWorkoutSummary[]
 ): ProgressionSuggestion {
-  const lastPerformed = getLastPerformedData(exercise.id, workoutHistory);
+  const referenceWeight = exercise.weight || 0;
+  const lastPerformed = getLastPerformedData(
+    exercise.id,
+    workoutHistory,
+    referenceWeight
+  );
 
   // Check if exercise can be loaded (e.g., Bulgarian split squats, glute bridges)
   const canBeLoaded =
@@ -115,7 +174,11 @@ export function generateProgressionSuggestion(
     };
   }
 
-  const daysSince = getDaysSinceLastWorkout(exercise.id, workoutHistory);
+  const daysSince = getDaysSinceLastWorkout(
+    exercise.id,
+    workoutHistory,
+    referenceWeight
+  );
 
   // If more than 7 days (1 week) since last workout, maintain or decrease weight
   if (daysSince && daysSince > 7) {
@@ -236,11 +299,13 @@ export function applyProgressionToExercises(
 
     // Zero out load for true bodyweight movements to avoid showing weights where none apply
     const isBodyweight = (exercise.equipment || "").toLowerCase().includes("bodyweight");
-    const safeWeight = isBodyweight ? 0 : progression.suggestion.weight;
+    // Round weights to nearest 0.5kg for UI
+    const rawWeight = isBodyweight ? 0 : progression.suggestion.weight;
+    const roundedWeight = Math.round(rawWeight * 2) / 2;
 
     return {
       ...exercise,
-      weight: safeWeight,
+      weight: roundedWeight,
       reps: progression.suggestion.reps,
       // Note: Do NOT set 'sets' here - it's set by volumeCalculator based on experience level
       // This ensures sets are always current (e.g., 4 for intermediate) even if history had 3

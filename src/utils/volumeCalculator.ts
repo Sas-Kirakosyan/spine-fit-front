@@ -3,6 +3,8 @@ export interface VolumeParameters {
   experience: "Beginner" | "Intermediate" | "Advanced";
   goal: string;
   painLevel?: number;
+  canSquat?: string;
+  gender?: string;
 }
 
 export interface VolumeRecommendation {
@@ -16,7 +18,7 @@ export interface VolumeRecommendation {
  * Calculate recommended training volume based on workout duration and user profile
  */
 export function calculateVolume(params: VolumeParameters): VolumeRecommendation {
-  const { workoutDuration, experience, goal, painLevel } = params;
+  const { workoutDuration, experience, goal, painLevel, canSquat, gender } = params;
 
   // Parse duration string to minutes
   const durationMinutes = parseDurationToMinutes(workoutDuration);
@@ -33,7 +35,13 @@ export function calculateVolume(params: VolumeParameters): VolumeRecommendation 
   }
 
   // Calculate sets per exercise
-  const setsPerExercise = calculateSetsPerExercise(experience);
+  const setsPerExercise = calculateSetsPerExercise(
+    experience,
+    durationMinutes,
+    painLevel,
+    canSquat,
+    gender
+  );
 
   // Calculate reps based on goal
   const repsPerSet = calculateRepsForGoal(goal, painLevel);
@@ -89,17 +97,36 @@ function adjustForExperience(
   return Math.floor(baseSets * multiplier);
 }
 
-/**
- * Calculate sets per exercise based on experience
- */
-function calculateSetsPerExercise(experience: string): number {
+function calculateSetsPerExercise(
+  experience: string,
+  durationMinutes: number,
+  painLevel?: number,
+  canSquat?: string,
+  gender?: string
+): number {
   const setsMap = {
     Beginner: 3,
-    Intermediate: 4, // Increased from 3 to 4 for adequate hypertrophy stimulus
+    Intermediate: 4,
     Advanced: 4,
   };
 
-  return setsMap[experience as keyof typeof setsMap] || 3;
+  let sets = setsMap[experience as keyof typeof setsMap] || 3;
+
+  const hasMeaningfulPain = typeof painLevel === "number" && painLevel > 3;
+  const cannotSquat = (canSquat || "").toLowerCase() === "no";
+  const isMale = (gender || "").toLowerCase() === "male";
+
+  // Requested safety override: male users with pain who cannot squat should stay at 2-3 sets.
+  if (isMale && hasMeaningfulPain && cannotSquat) {
+    return durationMinutes <= 30 ? 2 : 3;
+  }
+
+  // General safety/time cap for pain-aware short sessions.
+  if (hasMeaningfulPain && durationMinutes <= 30) {
+    sets = Math.min(sets, 3);
+  }
+
+  return sets;
 }
 
 /**
