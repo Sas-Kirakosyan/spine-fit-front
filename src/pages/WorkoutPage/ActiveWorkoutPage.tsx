@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { Exercise } from "@/types/exercise";
 import allExercisesData from "@/MockData/allExercise.json";
@@ -39,6 +39,8 @@ export function ActiveWorkoutPage({
   exerciseLogs = {},
   completedWorkoutIds = new Set(),
   setCompletedWorkoutIds,
+  customExercises,
+  isCustomWorkout = false,
 }: ActiveWorkoutPageProps) {
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
@@ -56,6 +58,13 @@ export function ActiveWorkoutPage({
 
   const { todaysExercises, setTodaysExercises, updateCurrentWorkoutInPlan } =
     useExerciseManagement(completedWorkoutIds);
+
+  // Override with custom exercises when in custom workout mode
+  useEffect(() => {
+    if (isCustomWorkout && customExercises && customExercises.length > 0) {
+      setTodaysExercises(customExercises);
+    }
+  }, [isCustomWorkout, customExercises, setTodaysExercises]);
 
   const completedExerciseIdsSet = useMemo(
     () => new Set(completedExerciseIds),
@@ -230,11 +239,16 @@ export function ActiveWorkoutPage({
         const nextWorkout = getNextAvailableWorkout(generatedPlan, updatedIds);
 
         if (nextWorkout) {
-          // There's another workout available - show alert
           console.log("Next workout available:", nextWorkout.dayName);
-          alert(`Great job! Next workout available: ${nextWorkout.dayName}`);
         } else {
-          console.log("🎉 All workouts completed!");
+          // Full cycle completed — reset completed IDs for this plan so rotation restarts
+          const resetIds = new Set(
+            Array.from(updatedIds).filter((id) => !id.startsWith(generatedPlan.id)),
+          );
+          if (setCompletedWorkoutIds) {
+            setCompletedWorkoutIds(resetIds);
+          }
+          console.log("🎉 Full cycle completed! Resetting for next cycle.");
         }
       }
     }

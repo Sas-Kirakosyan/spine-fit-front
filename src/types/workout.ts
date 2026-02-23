@@ -47,9 +47,33 @@ export interface WorkoutPageProps {
   onStartWorkoutSession: () => void;
   onNavigateToAllExercise?: () => void;
   onNavigateToMyPlan?: () => void;
+  onCreateProgramFromScratch?: () => void;
+  onSelectSavedProgram?: (program: SavedProgram) => void;
+  onEditSavedProgram?: (program: SavedProgram) => void;
   exercises?: Exercise[];
+  isCustomWorkout?: boolean;
   onRemoveExercise?: (exerciseId: number) => void;
   completedWorkoutIds?: Set<string>;
+}
+
+export interface SavedWorkout {
+  id: string;
+  name: string;
+  exercises: Exercise[];
+  createdAt: string;
+}
+
+export interface TrainingDay {
+  id: string;
+  name: string;
+  exercises: Exercise[];
+}
+
+export interface SavedProgram {
+  id: string;
+  name: string;
+  days: TrainingDay[];
+  createdAt: string;
 }
 
 export interface ExerciseDetailsProps {
@@ -88,4 +112,6 @@ export interface ActiveWorkoutPageProps {
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
   completedWorkoutIds?: Set<string>;
   setCompletedWorkoutIds?: (ids: Set<string>) => void;
+  customExercises?: Exercise[];
+  isCustomWorkout?: boolean;
 }

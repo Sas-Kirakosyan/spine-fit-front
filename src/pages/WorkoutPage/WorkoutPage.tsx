@@ -191,6 +191,11 @@ export function WorkoutPage({
   onOpenExerciseSets,
   onStartWorkoutSession,
   onNavigateToAllExercise,
+  onCreateProgramFromScratch,
+  onSelectSavedProgram,
+  onEditSavedProgram,
+  exercises: externalExercises,
+  isCustomWorkout = false,
   onRemoveExercise,
   completedWorkoutIds = new Set(),
 }: WorkoutPageProps) {
@@ -198,14 +203,25 @@ export function WorkoutPage({
   const [swipedExerciseId, setSwipedExerciseId] = useState<number | null>(null);
   const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
   const [replaceQuery, setReplaceQuery] = useState("");
-  const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>([]);
-  const [isLoadingPlan, setIsLoadingPlan] = useState(true);
+  const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>(
+    isCustomWorkout && externalExercises?.length ? externalExercises : [],
+  );
+  const [isLoadingPlan, setIsLoadingPlan] = useState(!isCustomWorkout);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [c, setC] = useState(0); // counter to trigger re-generation
   const allExercises = allExercisesData as Exercise[];
 
+  // Sync from external exercises when switching to custom workout mode (e.g. saved workout selected)
+  useEffect(() => {
+    if (isCustomWorkout && externalExercises && externalExercises.length > 0) {
+      setWorkoutExercises(externalExercises);
+      setIsLoadingPlan(false);
+    }
+  }, [isCustomWorkout, externalExercises]);
+
   // Load or generate plan when component mounts
   useEffect(() => {
+    if (isCustomWorkout) return;
     console.log("Initializing workout plan...");
     const initializePlan = () => {
       try {
@@ -324,10 +340,11 @@ export function WorkoutPage({
     };
 
     initializePlan();
-  }, [completedWorkoutIds, c]);
+  }, [completedWorkoutIds, c, isCustomWorkout]);
 
   // Listen for plan changes via storage events (when exercises are added from AllExercisePage)
   useEffect(() => {
+    if (isCustomWorkout) return;
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === "generatedPlan" && e.newValue) {
         try {
@@ -351,10 +368,11 @@ export function WorkoutPage({
 
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, [completedWorkoutIds]);
+  }, [completedWorkoutIds, isCustomWorkout]);
 
   // Reload exercises when plan changes (e.g., when exercises are added)
   useEffect(() => {
+    if (isCustomWorkout) return;
     const reloadExercisesFromPlan = () => {
       try {
         const planString = localStorage.getItem("generatedPlan");
@@ -398,13 +416,12 @@ export function WorkoutPage({
     reloadExercisesFromPlan();
 
     return () => clearInterval(interval);
-  }, [completedWorkoutIds]);
+  }, [completedWorkoutIds, isCustomWorkout]);
 
-  // Only show exercises from generated plans - no default exercises
   const hasGeneratedPlan = localStorage.getItem("generatedPlan") !== null;
   const displayExercises = useMemo(
-    () => (hasGeneratedPlan ? workoutExercises : []),
-    [hasGeneratedPlan, workoutExercises],
+    () => (hasGeneratedPlan || isCustomWorkout ? workoutExercises : []),
+    [hasGeneratedPlan, isCustomWorkout, workoutExercises],
   );
 
   // Calculate current workout day name based on rotation index
@@ -656,6 +673,9 @@ export function WorkoutPage({
               }
             }
           }}
+          onCreateProgramFromScratch={onCreateProgramFromScratch}
+          onSelectSavedProgram={onSelectSavedProgram}
+          onEditSavedProgram={onEditSavedProgram}
         />
 
         <section className="flex-1 space-y-3 mx-2.5">
