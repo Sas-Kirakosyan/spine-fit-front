@@ -12,5 +12,6 @@ export type Page =
   | "allExercise"
   | "myPlan"
   | "availableEquipment"
-  | "settings";
+  | "settings"
+  | "createProgram";
 
