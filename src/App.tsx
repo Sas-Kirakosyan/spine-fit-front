@@ -1,7 +1,15 @@
 import { useState, useEffect, Suspense, lazy } from "react";
 import type { Exercise } from "@/types/exercise";
 import type { Page } from "@/types/navigation";
-import type { ExerciseSetRow, FinishedWorkoutSummary } from "@/types/workout";
+import type { ExerciseSetRow, FinishedWorkoutSummary, SavedProgram, TrainingDay } from "@/types/workout";
+//import { HistoryPage } from "@/pages/HistoryPage/HistoryPage";
+//import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
+//import { MyPlanPage } from "@/pages/MyPlanPage/MyPlanPage";
+//import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPage";
+//import { AIPage } from "@/pages/AIPage/AIPage";
+//import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
+import { CreateProgramPage } from "@/pages/CreateWorkoutPage/CreateWorkoutPage";
+import { loadPlanSettings } from "@/types/planSettings";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 const HomePage = lazy(() => import("@/pages/HomePage/HomePage"));
 const WorkoutPage = lazy(() => import("@/pages/WorkoutPage/WorkoutPage"));
@@ -36,7 +44,8 @@ function App() {
       savedPage === "allExercise" ||
       savedPage === "myPlan" ||
       savedPage === "availableEquipment" ||
-      savedPage === "settings"
+      savedPage === "settings" ||
+      savedPage === "createProgram"
     ) {
       return savedPage;
     }
@@ -95,6 +104,15 @@ function App() {
       return saved ? new Set(JSON.parse(saved)) : new Set();
     }
   );
+
+  const [createProgramDays, setCreateProgramDays] = useState<TrainingDay[]>([]);
+  const [createProgramName, setCreateProgramName] = useState("");
+  const [activeDayId, setActiveDayId] = useState<string | null>(null);
+  const [allExerciseReturnPage, setAllExerciseReturnPage] = useState<
+    "workout" | "createProgram"
+  >("workout");
+  const [isCustomWorkoutMode, setIsCustomWorkoutMode] = useState(false);
+  const [editingProgramId, setEditingProgramId] = useState<string | undefined>();
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -186,16 +204,58 @@ function App() {
 
   const navigateToWorkout = () => {
     resetWorkoutState();
+    setIsCustomWorkoutMode(false);
     setCurrentPage("workout");
   };
   const navigateToProfile = () => setCurrentPage("profile");
   const navigateToHistory = () => setCurrentPage("history");
   const navigateToAI = () => setCurrentPage("ai");
-  const navigateToAllExercise = () => setCurrentPage("allExercise");
+  const navigateToAllExercise = () => {
+    setAllExerciseReturnPage("workout");
+    setCurrentPage("allExercise");
+  };
   const navigateToMyPlan = () => setCurrentPage("myPlan");
   const navigateToAvailableEquipment = () =>
     setCurrentPage("availableEquipment");
   const navigateToSettings = () => setCurrentPage("settings");
+  const navigateToCreateProgram = () => {
+    setCreateProgramDays([]);
+    setCreateProgramName("");
+    setEditingProgramId(undefined);
+    setActiveDayId(null);
+    setCurrentPage("createProgram");
+  };
+
+  const handleSelectSavedProgram = (program: SavedProgram) => {
+    const plan = {
+      id: program.id,
+      name: program.name,
+      splitType: "CUSTOM",
+      createdAt: program.createdAt,
+      settings: loadPlanSettings(),
+      workoutDays: program.days.map((day, i) => ({
+        dayNumber: i + 1,
+        dayName: day.name,
+        muscleGroups: [...new Set(day.exercises.flatMap((ex) => ex.muscle_groups))],
+        exercises: day.exercises,
+      })),
+      missingMuscleGroups: [],
+      alternativeExercises: [],
+    };
+    localStorage.setItem("generatedPlan", JSON.stringify(plan));
+    setCompletedWorkoutIds(new Set());
+    setIsCustomWorkoutMode(false);
+    resetWorkoutState();
+    setCurrentPage("workout");
+  };
+
+  const handleEditSavedProgram = (program: SavedProgram) => {
+    setCreateProgramDays(program.days);
+    setCreateProgramName(program.name);
+    setEditingProgramId(program.id);
+    setActiveDayId(null);
+    setCurrentPage("createProgram");
+  };
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
@@ -306,7 +366,11 @@ function App() {
               onStartWorkoutSession={navigateToActiveWorkout}
               onNavigateToAllExercise={navigateToAllExercise}
               onNavigateToMyPlan={navigateToMyPlan}
+              onCreateProgramFromScratch={navigateToCreateProgram}
+              onSelectSavedProgram={handleSelectSavedProgram}
+              onEditSavedProgram={handleEditSavedProgram}
               exercises={workoutExercises}
+              isCustomWorkout={isCustomWorkoutMode}
               onRemoveExercise={(exerciseId: number) => {
                 setWorkoutExercises((prev) =>
                   prev.filter((ex) => ex.id !== exerciseId)
@@ -342,6 +406,7 @@ function App() {
               exercise={selectedExercise}
               onNavigateBack={backFromExerciseSets}
               onStartWorkoutSession={navigateToActiveWorkout}
+              onNavigateToHistory={navigateToHistory}
               onMarkExerciseComplete={markExerciseComplete}
               isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
               exerciseLogs={exerciseLogs}
@@ -376,6 +441,8 @@ function App() {
               exerciseLogs={exerciseLogs}
               completedWorkoutIds={completedWorkoutIds}
               setCompletedWorkoutIds={setCompletedWorkoutIds}
+              customExercises={isCustomWorkoutMode ? workoutExercises : undefined}
+              isCustomWorkout={isCustomWorkoutMode}
             />
           </Suspense>
         );
@@ -408,11 +475,51 @@ function App() {
         return (
           <Suspense fallback={<div>Загрузка...</div>}>
             <AllExercisePage
-              onClose={navigateToWorkout}
-              onAddExercises={handleAddExercises}
+              onClose={() => {
+              if (allExerciseReturnPage === "createProgram") {
+                setCurrentPage("createProgram");
+              } else {
+                navigateToWorkout();
+              }
+            }}
+              onAddExercises={(exercises) => {
+              if (allExerciseReturnPage === "createProgram" && activeDayId) {
+                setCreateProgramDays((prev) =>
+                  prev.map((day) => {
+                    if (day.id !== activeDayId) return day;
+                    const existingIds = new Set(day.exercises.map((ex) => ex.id));
+                    const newExercises = exercises.filter(
+                      (ex) => !existingIds.has(ex.id),
+                    );
+                    return { ...day, exercises: [...day.exercises, ...newExercises] };
+                  }),
+                );
+              } else {
+                handleAddExercises(exercises);
+              }
+            }}
             />
           </Suspense>
         );
+        case "createProgram":
+        return (
+          <CreateProgramPage
+            days={createProgramDays}
+            programName={createProgramName}
+            onNavigateBack={navigateToWorkout}
+            onAddExercise={(dayId) => {
+              setActiveDayId(dayId);
+              setAllExerciseReturnPage("createProgram");
+              setCurrentPage("allExercise");
+            }}
+            onSave={() => {
+              navigateToWorkout();
+            }}
+            onDaysChange={setCreateProgramDays}
+            onProgramNameChange={setCreateProgramName}
+            editProgramId={editingProgramId}
+          />
+        )
       case "myPlan":
         return (
           <Suspense fallback={<div>Загрузка...</div>}>

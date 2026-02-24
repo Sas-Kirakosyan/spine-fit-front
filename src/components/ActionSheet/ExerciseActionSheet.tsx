@@ -9,6 +9,7 @@ export function ExerciseActionSheet({
   onClose,
   onShowDetails,
   onStartWorkout,
+  onReplace,
   onDelete,
   containerRef: _containerRef,
 }: ExerciseActionSheetProps) {
@@ -70,7 +71,10 @@ export function ExerciseActionSheet({
             <ActionButton
               icon={<ReplaceIcon />}
               text="Replace exercise"
-              onClick={() => {}}
+              onClick={() => {
+                onReplace?.();
+                onClose();
+              }}
               variant="green"
             />
             <ActionButton

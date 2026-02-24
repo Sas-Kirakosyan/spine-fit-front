@@ -408,6 +408,25 @@ export function enforceFullBodyABRequirements<T extends {
       ex.name?.toLowerCase().includes("pull-up") ||
       ex.name?.toLowerCase().includes("chin-up"));
 
+  const isLegCompound = (ex: any) => {
+    const name = ex.name?.toLowerCase() || "";
+    const muscleGroups = ex.muscle_groups || [];
+    const trainsLowerBody =
+      muscleGroups.includes("quadriceps") ||
+      muscleGroups.includes("glutes") ||
+      muscleGroups.includes("hamstrings");
+
+    const compoundPattern =
+      name.includes("leg press") ||
+      name.includes("squat") ||
+      name.includes("hack squat") ||
+      name.includes("split squat") ||
+      name.includes("step-up") ||
+      name.includes("step up");
+
+    return trainsLowerBody && compoundPattern;
+  };
+
   const isHamstringIsolation = (ex: any) =>
     ex.muscle_groups?.[0] === "hamstrings" || // Primary muscle is hamstrings
     (ex.name?.toLowerCase().includes("curl") && ex.muscle_groups?.includes("hamstrings")) ||
@@ -476,6 +495,23 @@ export function enforceFullBodyABRequirements<T extends {
       }
     }
 
+    // Check for leg compound requirement
+    if (requiredTypes.includes("leg_compound")) {
+      const hasLegCompound = dayExercises.some(isLegCompound);
+      if (!hasLegCompound) {
+        const legCompoundEx = allExercises.find(
+          (ex) => isLegCompound(ex) && !usedIds.has(ex.id) && ex.is_back_friendly
+        );
+        if (legCompoundEx) {
+          console.log(`[FULL_BODY_AB] Adding missing leg compound to ${daySpec.dayLabel}: ${legCompoundEx.name}`);
+          dayExercises.push(legCompoundEx);
+          usedIds.add(legCompoundEx.id);
+        } else {
+          console.warn(`[FULL_BODY_AB] Could not find leg compound exercise for ${daySpec.dayLabel}`);
+        }
+      }
+    }
+
     // Check for hamstring isolation requirement
     if (requiredTypes.includes("hamstring_isolation")) {
       const hasHamstringIsolation = dayExercises.some(isHamstringIsolation);
@@ -517,8 +553,15 @@ export function enforceFullBodyABRequirements<T extends {
     // Remove duplicate pulls if necessary (keep only 1 pull per day)
     const pullExercises = dayExercises.filter((ex) => isHorizontalPull(ex) || isVerticalPull(ex));
     if (pullExercises.length > 1) {
-      // Keep the required pull type, remove others
-      const toRemove = pullExercises.slice(1);
+      // Keep the required pull type for the day, remove others
+      const keepPredicate = requiredTypes.includes("pull_vertical")
+        ? isVerticalPull
+        : requiredTypes.includes("pull_horizontal")
+          ? isHorizontalPull
+          : (ex: any) => isHorizontalPull(ex) || isVerticalPull(ex);
+
+      const preferredPull = pullExercises.find((ex) => keepPredicate(ex)) || pullExercises[0];
+      const toRemove = pullExercises.filter((ex) => ex.id !== preferredPull.id);
       toRemove.forEach((ex) => {
         const index = dayExercises.findIndex((e) => e.id === ex.id);
         if (index > -1) {

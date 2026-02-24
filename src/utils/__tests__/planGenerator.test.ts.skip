@@ -19,8 +19,7 @@ const mockExercises: Exercise[] = [
     difficulty: "beginner",
     instructions: "Test instructions",
     video_url: "",
-    image_url: "",
-    equipment_image_url: "",
+    media: [{ type: "exercise", source: "local", url: "", primary: true }],
     is_back_friendly: true,
     back_issue_restrictions: [
       {
@@ -50,8 +49,7 @@ const mockExercises: Exercise[] = [
     difficulty: "beginner",
     instructions: "Test instructions",
     video_url: "",
-    image_url: "",
-    equipment_image_url: "",
+    media: [{ type: "exercise", source: "local", url: "", primary: true }],
     is_back_friendly: true,
     back_issue_restrictions: [],
     created_at: "",
@@ -71,8 +69,7 @@ const mockExercises: Exercise[] = [
     difficulty: "intermediate",
     instructions: "Test instructions",
     video_url: "",
-    image_url: "",
-    equipment_image_url: "",
+    media: [{ type: "exercise", source: "local", url: "", primary: true }],
     is_back_friendly: false,
     back_issue_restrictions: [
       {
@@ -102,8 +99,7 @@ const mockExercises: Exercise[] = [
     difficulty: "intermediate",
     instructions: "Test instructions",
     video_url: "",
-    image_url: "",
-    equipment_image_url: "",
+    media: [{ type: "exercise", source: "local", url: "", primary: true }],
     is_back_friendly: true,
     back_issue_restrictions: [],
     created_at: "",

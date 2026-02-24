@@ -1,3 +1,5 @@
+import { LazyImage } from "@/components/ui/LazyImage";
+
 interface QuizImageRadioOptionProps {
   option: { value: string; label: string; image: string; description: string };
   index: number;
@@ -23,7 +25,7 @@ export function QuizImageRadioOption({
       <div className="flex items-start gap-4">
         {option.image && (
           <div className="flex-shrink-0 bg-gray-100 rounded-lg p-3">
-            <img
+            <LazyImage
               src={option.image}
               alt={option.label}
               className="h-28 w-28 object-contain"

@@ -14,11 +14,14 @@ export interface ExerciseSetProps {
   index: number;
   setEntry: ExerciseSetRow;
   exercise: Exercise;
+  previousValue: string;
   isActive: boolean;
   isCompleted: boolean;
   canDelete: boolean;
+  canLogSet: boolean;
   onActivate: (index: number) => void;
   onValueChange: (index: number, field: SetField, value: string) => void;
+  onLogSet: (index: number) => void;
   onDelete: (index: number) => void;
 }
 
@@ -26,6 +29,7 @@ export interface ExerciseSetsPageProps {
   exercise: Exercise;
   onNavigateBack: () => void;
   onStartWorkoutSession: () => void;
+  onNavigateToHistory?: () => void;
   onMarkExerciseComplete?: (exerciseId: number, sets: ExerciseSetRow[]) => void;
   isDuringActiveWorkout?: boolean;
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
@@ -43,9 +47,33 @@ export interface WorkoutPageProps {
   onStartWorkoutSession: () => void;
   onNavigateToAllExercise?: () => void;
   onNavigateToMyPlan?: () => void;
+  onCreateProgramFromScratch?: () => void;
+  onSelectSavedProgram?: (program: SavedProgram) => void;
+  onEditSavedProgram?: (program: SavedProgram) => void;
   exercises?: Exercise[];
+  isCustomWorkout?: boolean;
   onRemoveExercise?: (exerciseId: number) => void;
   completedWorkoutIds?: Set<string>;
+}
+
+export interface SavedWorkout {
+  id: string;
+  name: string;
+  exercises: Exercise[];
+  createdAt: string;
+}
+
+export interface TrainingDay {
+  id: string;
+  name: string;
+  exercises: Exercise[];
+}
+
+export interface SavedProgram {
+  id: string;
+  name: string;
+  days: TrainingDay[];
+  createdAt: string;
 }
 
 export interface ExerciseDetailsProps {
@@ -84,4 +112,6 @@ export interface ActiveWorkoutPageProps {
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
   completedWorkoutIds?: Set<string>;
   setCompletedWorkoutIds?: (ids: Set<string>) => void;
+  customExercises?: Exercise[];
+  isCustomWorkout?: boolean;
 }

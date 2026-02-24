@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SwapWorkoutActionSheet } from "../../components/ActionSheet/SwapWorkoutActionSheet";
 import type { GeneratedPlan } from "@/utils/planGenerator";
+import type { SavedProgram } from "@/types/workout";
 
 interface WorkoutPlanCardProps {
   planName?: string;
@@ -12,6 +13,9 @@ interface WorkoutPlanCardProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   onWorkoutSwap?: (workoutId: string) => void;
   onPlanSwitched?: (plan: GeneratedPlan) => void;
+  onCreateProgramFromScratch?: () => void;
+  onSelectSavedProgram?: (program: SavedProgram) => void;
+  onEditSavedProgram?: (program: SavedProgram) => void;
 }
 
 export function WorkoutPlanCard({
@@ -24,6 +28,9 @@ export function WorkoutPlanCard({
   containerRef,
   onWorkoutSwap,
   onPlanSwitched,
+  onCreateProgramFromScratch,
+  onSelectSavedProgram,
+  onEditSavedProgram,
 }: WorkoutPlanCardProps) {
   const [showSwapSheet, setShowSwapSheet] = useState(false);
 
@@ -138,6 +145,20 @@ export function WorkoutPlanCard({
             if (onPlanSwitched) {
               onPlanSwitched(plan);
             }
+            setShowSwapSheet(false);
+          }}
+          onCreateFromScratch={() => {
+            if (onCreateProgramFromScratch) {
+              onCreateProgramFromScratch();
+            }
+            setShowSwapSheet(false);
+          }}
+          onSelectSavedProgram={(program) => {
+            onSelectSavedProgram?.(program);
+            setShowSwapSheet(false);
+          }}
+          onEditSavedProgram={(program) => {
+            onEditSavedProgram?.(program);
             setShowSwapSheet(false);
           }}
         />

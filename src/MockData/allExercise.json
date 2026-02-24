@@ -4,13 +4,15 @@
     "name": "Back Hyperextension",
     "description": "A controlled spinal extension exercise performed on a hyperextension bench. Primarily targets the lower back (erector spinae), glutes, and hamstrings.",
     "category": "strength",
-    "muscle_groups": ["erector_spinae", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "erector_spinae",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "hyperextension_bench",
     "difficulty": "beginner",
     "instructions": "Position your hips on the pad with feet secured. Lower your torso under control while keeping a neutral spine. Raise your upper body until aligned with your legs. Avoid overextending your lower back.",
     "video_url": "https://cdn.spinefit.app/videos/hyperextension.mp4",
-    "image_url": "https://expertfitnesssupply.com/wp-content/uploads/2018/10/GHYP345B-IMGL0134.jpg",
-    "equipment_image_url": "https://image.made-in-china.com/202f0j00ThMcNkpRJgoG/Professional-Exercise-Strength-Trainer-Back-Extension-Bench-Roman-Chair.webp",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -28,20 +30,48 @@
     "sets": 3,
     "reps": 15,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/back-hyperextension.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://expertfitnesssupply.com/wp-content/uploads/2018/10/GHYP345B-IMGL0134.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/hyperextension-bench.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 2,
     "name": "Single-Leg Glute Bridge",
     "description": "A unilateral glute activation exercise performed on the floor. It strengthens the glutes, stabilizers, hamstrings, and improves lumbopelvic control.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your back with one knee bent and the other leg extended. Press through your heel and lift your hips while keeping your core engaged. Avoid arching your lower back. Lower slowly with control.",
     "video_url": "https://cdn.spinefit.app/videos/single_leg_glute_bridge.mp4",
-    "image_url": "https://www.shutterstock.com/image-photo/female-fitness-instructor-demonstrates-singleleg-260nw-2538969509.jpg",
-    "equipment_image_url": "https://www.shutterstock.com/image-photo/female-fitness-instructor-demonstrates-singleleg-260nw-2538969509.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -59,20 +89,48 @@
     "sets": 3,
     "reps": 12,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/single-leg-glute-bridge.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://expertfitnesssupply.com/wp-content/uploads/2018/10/GHYP345B-IMGL0134.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 3,
     "name": "Hanging Leg Raises (Bent-Knee or Single-Leg)",
     "description": "A core exercise performed while hanging from a bar. The bent-knee or single-leg variation targets the abdominals and hip flexors while reducing lumbar strain.",
     "category": "strength",
-    "muscle_groups": ["abdominals", "hip_flexors", "obliques"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "obliques"
+    ],
     "equipment": "pull_up_bar",
     "difficulty": "intermediate",
     "instructions": "Hang from a bar with shoulders active. Bend your knees and lift them toward your chest while keeping your core braced. Avoid swinging and keep your spine neutral. Lower slowly with control.",
     "video_url": "https://cdn.spinefit.app/videos/hanging_leg_raise_bent_knee.mp4",
-    "image_url": "https://www.muscletech.com/cdn/shop/articles/how-to-perfect-hanging-leg-raises_5a36b98d-aec0-4bbc-b5e1-9007bb029a25.jpg?v=1731600039",
-    "equipment_image_url": "https://xmarkfitness.com/cdn/shop/products/4437.2-1.jpg?v=1718890756&width=3000",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -90,20 +148,49 @@
     "sets": 3,
     "reps": 10,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/hanging-leg-raises-bent-knee-or-single-leg.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.muscletech.com/cdn/shop/articles/how-to-perfect-hanging-leg-raises_5a36b98d-aec0-4bbc-b5e1-9007bb029a25.jpg?v=1731600039",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/pull-up-bar.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 4,
     "name": "One-Arm Crossover Cable Pull",
     "description": "A unilateral cable pulling exercise that targets the lats, upper back, and deep stabilizers. This movement also improves core control and supports a healthy spine.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "rear_delts", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "rear_delts",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Stand sideways to the cable machine with the handle set slightly above shoulder level. Grab the handle with the outside arm. Pull the cable across your body while keeping your torso stable and ribs down. Focus on driving the elbow toward the hip. Avoid rotating the spine.",
     "video_url": "https://www.garagegymreviews.com/wp-content/uploads/2023/06/single-arm-cable-row.gif",
-    "image_url": "https://www.garagegymreviews.com/wp-content/uploads/2023/06/single-arm-cable-row.gif",
-    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -121,20 +208,49 @@
     "sets": 3,
     "reps": 12,
     "weight": 10,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/one-arm-crossover-cable-pull.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.garagegymreviews.com/wp-content/uploads/2023/06/single-arm-cable-row.gif",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 5,
     "name": "Cable Kickbacks",
     "description": "A controlled cable kickback exercise focusing on glutes, hamstrings, spinal stabilizers, and leg biceps. Great for strength without loading the lumbar spine.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "erector_spinae", "leg_biceps"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "erector_spinae",
+      "leg_biceps"
+    ],
     "equipment": "cable_machine_ankle_attachment",
     "instructions": "Attach the ankle strap to the cable. Stand tall, brace your core, keep ribs down. Kick the leg backward slowly, avoid leaning forward or arching the back. Return with control.",
     "difficulty": "beginner",
     "video_url": "/videos/cable_kickbacks.mp4",
-    "image_url": "https://imagely.mirafit.co.uk/wp/wp-content/uploads/2024/07/bent-over-kickback-on-a-Mirafit-Functional-Trainer-1024x683.jpg",
-    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -152,7 +268,33 @@
     "sets": 3,
     "reps": 15,
     "weight": 5,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/cable-kickbacks.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://imagely.mirafit.co.uk/wp/wp-content/uploads/2024/07/bent-over-kickback-on-a-Mirafit-Functional-Trainer-1024x683.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine-ankle-attachment.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 6,
@@ -170,8 +312,6 @@
     "instructions": "On a bench or stability ball, keep pelvis neutral. Extend opposite arm and leg slowly. Avoid shifting hips or arching lower back. Hold 2 seconds, switch sides.",
     "difficulty": "beginner",
     "video_url": "/videos/bird_dog_variation.mp4",
-    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0NsPxDQcH2fSFgARBlUK8WID89CN7ETcX1w&s",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/c9f68f74/hammer-strength-athletic-flat-bench_c9f68f74_lf_n_600x600.png",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -189,20 +329,48 @@
     "sets": 3,
     "reps": 12,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/bird-dog-bench-or-stability-ball.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0NsPxDQcH2fSFgARBlUK8WID89CN7ETcX1w&s",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 7,
     "name": "Cable Knee Drive",
     "description": "The Cable Knee Drive is a dynamic lower-body exercise that strengthens the hip flexors, challenges the core, and enhances overall stability. With the cable strap secured around the ankle, you lift the knee toward the chest while resisting the pull of the machine. This movement closely resembles sprinting mechanics, making it especially valuable for improving acceleration, jump performance, and explosive leg power. The constant tension also forces the core to stay active, promoting better balance, coordination, and upright posture throughout the exercise.",
     "category": "strength",
-    "muscle_groups": ["hip_flexors", "quadriceps", "core_stabilizers"],
+    "muscle_groups": [
+      "hip_flexors",
+      "quadriceps",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine_low_pull_handle",
     "instructions": "Lie on your back, attach foot/handle to cable set at low pull. Brace core, drive one knee toward chest without lumbar rounding. Extend back slowly. Do not swing.",
     "difficulty": "intermediate",
     "video_url": "https://app-media-r2.fitbod.me/v2/3108/videos/full_720p.mp4",
-    "image_url": "https://images.ctfassets.net/0k812o62ndtw/7c727xCChH5217XAA4Z4sO/047a1e1ea2917ec05f201af2c9e3ce0c/exercise20180713-22274-1c8pwy851bbdf01143d1cff46912f484b635657.png",
-    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -220,17 +388,45 @@
     "sets": 3,
     "reps": 10,
     "weight": 7,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/cable-knee-drive.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://images.ctfassets.net/0k812o62ndtw/7c727xCChH5217XAA4Z4sO/047a1e1ea2917ec05f201af2c9e3ce0c/exercise20180713-22274-1c8pwy851bbdf01143d1cff46912f484b635657.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine-low-pull-handle.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 406,
     "name": "Bodyweight/Light Dumbbell Bulgarian Split Squats",
     "description": "A back-friendly unilateral leg builder that avoids axial spinal loading while still building muscle effectively.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "bench_bodyweight_or_light_dumbbell",
-    "image_url": "https://www.endomondo.com/wp-content/uploads/2024/07/Bodyweight-Bulgarian-Split-Squats.png",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/c9f68f74/hammer-strength-athletic-flat-bench_c9f68f74_lf_n_600x600.png",
     "difficulty": "beginner",
     "instructions": "Place rear foot on bench, step forward, brace core. Lower under control without leaning torso forward aggressively.",
     "video_url": "https://cdn.spinefit.app/videos/bulgarian_split.mp4",
@@ -247,6 +443,32 @@
         "restriction_level": "medium",
         "recommendation": "Keep torso upright, avoid deep forward bend. No added weight if pain increases."
       }
+    ],
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/bodyweightlight-dumbbell-bulgarian-split-squats.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.endomondo.com/wp-content/uploads/2024/07/Bodyweight-Bulgarian-Split-Squats.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bench-bodyweight-or-light-dumbbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
     ]
   },
   {
@@ -254,10 +476,10 @@
     "name": "Leg Extension",
     "description": "Quadriceps isolation using a machine with zero compression through the lumbar spine.",
     "category": "strength",
-    "muscle_groups": ["quadriceps"],
+    "muscle_groups": [
+      "quadriceps"
+    ],
     "equipment": "leg_extension_machine",
-    "image_url": "https://i0.wp.com/www.strengthlog.com/wp-content/uploads/2024/08/leg-press-vs-leg-extension-for-quads.jpg?fit=1953%2C1351&ssl=1",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/leg-extension-machine.jpg",
     "difficulty": "beginner",
     "instructions": "Sit tall, hold handles, extend knees under control. Avoid leaning back aggressively.",
     "video_url": "https://cdn.spinefit.app/videos/leg_extension.mp4",
@@ -274,6 +496,32 @@
         "restriction_level": "low",
         "recommendation": "Do not slam the pad, keep movement smooth. Reduce range if nerve pain flares."
       }
+    ],
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/leg-extension.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://i0.wp.com/www.strengthlog.com/wp-content/uploads/2024/08/leg-press-vs-leg-extension-for-quads.jpg?fit=1953%2C1351&ssl=1",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/leg-extension-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
     ]
   },
   {
@@ -281,10 +529,11 @@
     "name": "Seated Hip Abduction",
     "description": "Glute medius and outer-leg isolation improving hip stability and pelvis control, which supports spine health.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hip_abductors"],
+    "muscle_groups": [
+      "glutes",
+      "hip_abductors"
+    ],
     "equipment": "hip_abductor_machine",
-    "image_url": "https://s3assets.skimble.com/assets/2773445/image_full.jpg",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/hip-abduction-machine.jpg",
     "difficulty": "beginner",
     "instructions": "Sit tall, press knees outward slowly, avoid lumbar movement while spreading.",
     "video_url": "https://cdn.spinefit.app/videos/hip_abduction.mp4",
@@ -301,6 +550,32 @@
         "restriction_level": "low",
         "recommendation": "Keep pelvis neutral, avoid leaning sideways or arching."
       }
+    ],
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/seated-hip-abduction.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://s3assets.skimble.com/assets/2773445/image_full.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/hip-abductor-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
     ]
   },
   {
@@ -308,10 +583,11 @@
     "name": "Bench or Machine Hip Thrust",
     "description": "A glute and hamstring builder with external support that avoids spinal compression and trains hip hinge strength safely.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "bench_or_smith_machine",
-    "image_url": "https://watsongym.co.uk/wp-content/uploads/2023/12/HIP-2.png",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/c9f68f74/hammer-strength-athletic-flat-bench_c9f68f74_lf_n_600x600.png",
     "difficulty": "intermediate",
     "instructions": "Upper back on bench or supported pad, drive hips up without lumbar arch. Ribs down, chin tucked slightly.",
     "video_url": "https://cdn.spinefit.app/videos/hip_thrust.mp4",
@@ -328,6 +604,32 @@
         "restriction_level": "medium",
         "recommendation": "No top-position lumbar arching. Reduce load if compression or nerve pain increases."
       }
+    ],
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/bench-or-machine-hip-thrust.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://watsongym.co.uk/wp-content/uploads/2023/12/HIP-2.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bench-or-smith-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
     ]
   },
   {
@@ -335,13 +637,16 @@
     "name": "Belt Squats",
     "description": "A squat variation using a dip belt or dedicated belt-squat machine where weight hangs from the hips instead of resting on the shoulders. Removes spinal compression and is ideal for people with lower back concerns, herniated disc history, or shoulder injuries who want to load legs without compressing the spine.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings", "calves"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings",
+      "calves"
+    ],
     "equipment": "belt_squat_machine",
     "difficulty": "beginner",
     "instructions": "Stand on the platform with the belt secured around your hips and weight attached. Keep your torso upright and core engaged. Lower into a squat by bending your knees and hips, keeping your chest up. Push through your feet to return to the starting position. The load stays on your pelvis/hips with minimal pressure on the lower back.",
     "video_url": "https://cdn.spinefit.app/videos/belt_squat.mp4",
-    "image_url": "https://www.diamondfitnesspro.com/wp-content/uploads/2023/02/PL-BELTSQUAT-ragazza-1.jpg",
-    "equipment_image_url": "https://www.roguefitness.com/media/catalog/product/r/h/rhino-belt-squat-h1.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -377,7 +682,33 @@
     "sets": 3,
     "reps": 12,
     "weight": 50,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/belt-squats.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.diamondfitnesspro.com/wp-content/uploads/2023/02/PL-BELTSQUAT-ragazza-1.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/belt-squat-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 12,
@@ -395,8 +726,6 @@
     "difficulty": "intermediate",
     "instructions": "Stand with feet hip-width apart, barbell over mid-foot. Hinge at hips, grip bar just outside legs. Brace core, keep spine neutral, chest up. Drive through heels, extend hips and knees simultaneously. Keep bar close to body. Lower with control by hinging hips first.",
     "video_url": "https://cdn.spinefit.app/videos/deadlift.mp4",
-    "image_url": "https://www.kettlebellkings.com/cdn/shop/articles/barbell-deadlift-movement.gif?v=1692228918",
-    "equipment_image_url": "https://www.roguefitness.com/media/catalog/product/o/h/ohio-power-bar-black-zinc-th_1.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -432,20 +761,48 @@
     "sets": 3,
     "reps": 8,
     "weight": 60,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/deadlift.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.kettlebellkings.com/cdn/shop/articles/barbell-deadlift-movement.gif?v=1692228918",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 13,
     "name": "Glute Bridge Machine",
     "description": "A machine-based or dumbbell-loaded glute bridge exercise that targets glutes and hamstrings with back support. Safer alternative to barbell hip thrusts for those with back concerns.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "glute_bridge_machine",
     "difficulty": "beginner",
     "instructions": "Position yourself on the machine or lie on your back with a dumbbell on your hips. Drive through heels to lift hips up, squeezing glutes at the top. Keep ribs down, avoid arching lower back. Lower with control.",
     "video_url": "https://cdn.spinefit.app/videos/glute_bridge_machine.mp4",
-    "image_url": "https://m.media-amazon.com/images/I/71H8jkI7iFL._AC_SL1500_.jpg",
-    "equipment_image_url": "https://www.inspireusafitness.com/cdn/shop/products/scs-hip-thrust-1_1024x1024.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -463,20 +820,49 @@
     "sets": 4,
     "reps": 12,
     "weight": 30,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/glute-bridge-machine.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://m.media-amazon.com/images/I/71H8jkI7iFL._AC_SL1500_.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/glute-bridge-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 14,
     "name": "Seated Cable Row",
     "description": "A horizontal pulling exercise using a cable machine that targets the mid-back, lats, and rear delts. Excellent for building back thickness and improving posture while maintaining a stable, supported position.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "rear_delts", "biceps"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "rear_delts",
+      "biceps"
+    ],
     "equipment": "seated_cable_row",
     "difficulty": "beginner",
     "instructions": "Sit with feet on footrests, knees slightly bent. Grip handle with arms extended. Pull handle to lower abdomen, driving elbows back. Squeeze shoulder blades together. Keep torso upright, avoid rounding or overextending spine. Return with control.",
     "video_url": "https://cdn.spinefit.app/videos/seated_cable_row.mp4",
-    "image_url": "https://images.squarespace-cdn.com/content/v1/5ffcea9416aee143500ea103/1638351904146-GDGXXL9IHXKQKTXULLHF/Seated%2BCable%2BRow.jpeg",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/b4964a9b/hammer-strength-select-se-seated-row_b4964a9b_lf_n_600x600.png",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -494,20 +880,47 @@
     "sets": 3,
     "reps": 12,
     "weight": 40,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/seated-cable-row.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://images.squarespace-cdn.com/content/v1/5ffcea9416aee143500ea103/1638351904146-GDGXXL9IHXKQKTXULLHF/Seated%2BCable%2BRow.jpeg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/seated-cable-row.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 15,
     "name": "Chest Fly",
     "description": "An isolation exercise for the chest using a fly machine or lying with dumbbells. Targets pectorals with minimal shoulder stress when performed correctly.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts"],
+    "muscle_groups": [
+      "chest",
+      "front_delts"
+    ],
     "equipment": "chest_fly_machine",
     "difficulty": "beginner",
     "instructions": "Sit with back against pad, grip handles at chest level. Keep slight bend in elbows. Bring handles together in front of chest using a hugging motion. Control the return. Avoid excessive arching of lower back.",
     "video_url": "https://cdn.spinefit.app/videos/chest_fly.mp4",
-    "image_url": "https://s3.amazonaws.com/prod.skimble/assets/1530049/image_iphone.jpg",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/da8a9b52/hammer-strength-select-chest-fly_da8a9b52_lf_n_600x600.png",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -525,20 +938,48 @@
     "sets": 3,
     "reps": 12,
     "weight": 25,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/chest-fly.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://s3.amazonaws.com/prod.skimble/assets/1530049/image_iphone.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/chest-fly-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 16,
     "name": "Incline Leg Raises",
     "description": "A core exercise performed on an incline bench targeting the lower abdominals and hip flexors. The incline adds difficulty compared to flat leg raises.",
     "category": "strength",
-    "muscle_groups": ["abdominals", "hip_flexors", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "core_stabilizers"
+    ],
     "equipment": "incline_bench or_decline_bench",
     "difficulty": "intermediate",
     "instructions": "Lie on incline bench, grip handles behind head. Keep lower back pressed to bench. Raise legs up toward chest with controlled movement. Lower slowly without letting lower back arch. Keep knees slightly bent if needed.",
     "video_url": "https://cdn.spinefit.app/videos/incline_leg_raise.mp4",
-    "image_url": "https://s3.amazonaws.com/prod.skimble/assets/911278/image_iphone.jpg",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/5a989682/hammer-strength-athletic-series-decline-bench_5a989682_lf_n_600x600.png",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -556,20 +997,49 @@
     "sets": 3,
     "reps": 15,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/incline-leg-raises.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://s3.amazonaws.com/prod.skimble/assets/911278/image_iphone.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/incline-bench-or-decline-bench.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 17,
     "name": "Seated Dumbbell Shoulder Press",
     "description": "An overhead pressing exercise performed seated with dumbbells. Targets shoulders (deltoids) and triceps while the seated position provides back support.",
     "category": "strength",
-    "muscle_groups": ["front_delts", "side_delts", "triceps", "upper_chest"],
+    "muscle_groups": [
+      "front_delts",
+      "side_delts",
+      "triceps",
+      "upper_chest"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Sit on bench with back support, hold dumbbells at shoulder height with palms forward. Press dumbbells overhead until arms are extended but not locked. Lower with control to shoulder level. Keep core engaged, avoid excessive arching of lower back.",
     "video_url": "https://cdn.spinefit.app/videos/seated_db_press.mp4",
-    "image_url": "https://repfitness.com/cdn/shop/articles/AB-5000-MAT-1R2A3300_0e12eedb-6363-4f4b-a1df-1a88f5702fbe.jpg?v=1750185329&width=1100",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/dumbbells-thumbnail.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -587,20 +1057,47 @@
     "sets": 3,
     "reps": 10,
     "weight": 12,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/seated-dumbbell-shoulder-press.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://repfitness.com/cdn/shop/articles/AB-5000-MAT-1R2A3300_0e12eedb-6363-4f4b-a1df-1a88f5702fbe.jpg?v=1750185329&width=1100",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 18,
     "name": "Dumbbell Lateral Raises",
     "description": "An isolation exercise for the side deltoids (shoulders) that creates shoulder width and definition. Minimal back involvement when performed correctly.",
     "category": "strength",
-    "muscle_groups": ["side_delts", "front_delts"],
+    "muscle_groups": [
+      "side_delts",
+      "front_delts"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand with feet hip-width apart, dumbbells at sides. Keep slight bend in elbows. Raise arms out to sides until parallel with floor, leading with elbows. Lower with control. Avoid swinging or using momentum. Keep torso stable.",
     "video_url": "https://cdn.spinefit.app/videos/lateral_raise.mp4",
-    "image_url": "https://barbend.com/wp-content/uploads/2023/10/seated-dumbbell-shoulder-press-barbend-movement-gif-masters-2.gif",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/dumbbells-thumbnail.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -618,20 +1115,47 @@
     "sets": 3,
     "reps": 12,
     "weight": 6,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/dumbbell-lateral-raises.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://barbend.com/wp-content/uploads/2023/10/seated-dumbbell-shoulder-press-barbend-movement-gif-masters-2.gif",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 19,
     "name": "Dumbbell Bicep Curls",
     "description": "A fundamental arm exercise targeting the biceps. Can be performed standing or seated with various grips (supinated, hammer, or alternating).",
     "category": "strength",
-    "muscle_groups": ["biceps", "forearms"],
+    "muscle_groups": [
+      "biceps",
+      "forearms"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand with feet hip-width apart or sit on bench. Hold dumbbells with arms extended, palms forward. Curl weights up by bending elbows, keeping upper arms stationary. Squeeze biceps at top. Lower with control. Avoid swinging or using back momentum.",
     "video_url": "https://cdn.spinefit.app/videos/bicep_curl.mp4",
-    "image_url": "https://weighttraining.guide/wp-content/uploads/2016/05/Dumbbell-Alternate-Biceps-Curl-resized.png",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/dumbbells-thumbnail.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -649,20 +1173,46 @@
     "sets": 3,
     "reps": 10,
     "weight": 10,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/dumbbell-bicep-curls.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://weighttraining.guide/wp-content/uploads/2016/05/Dumbbell-Alternate-Biceps-Curl-resized.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 20,
     "name": "Dumbbell Tricep Kickbacks",
     "description": "An isolation exercise for the triceps performed in a hinged position. Targets the back of the arms with minimal shoulder involvement.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Hinge forward at hips with neutral spine, one hand on bench for support. Hold dumbbell with elbow bent at 90 degrees, upper arm parallel to torso. Extend arm back until fully straightened. Squeeze tricep. Return with control. Avoid swinging or moving upper arm.",
     "video_url": "https://cdn.spinefit.app/videos/tricep_kickback.mp4",
-    "image_url": "https://trainingstation.co.uk/cdn/shop/articles/tricep-kickbacks-muscles-used_fc22f5e8-856f-451e-aebb-a6b021873ab6_600x.webp?v=1741685715",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/dumbbells-thumbnail.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -680,20 +1230,46 @@
     "sets": 3,
     "reps": 12,
     "weight": 5,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/dumbbell-tricep-kickbacks.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://trainingstation.co.uk/cdn/shop/articles/tricep-kickbacks-muscles-used_fc22f5e8-856f-451e-aebb-a6b021873ab6_600x.webp?v=1741685715",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 21,
     "name": "Cable Tricep Pushdown",
     "description": "A cable exercise targeting the triceps using a high pulley and straight bar, V-bar, or rope attachment. Excellent for building arm strength and definition.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Stand facing cable machine with high pulley. Grip bar with hands shoulder-width apart, elbows at sides. Push bar down by extending elbows until arms are straight. Keep elbows stationary. Return with control, stopping at 90 degrees. Maintain upright posture.",
     "video_url": "https://cdn.spinefit.app/videos/tricep_pushdown.mp4",
-    "image_url": "https://trainingstation.co.uk/cdn/shop/articles/Tricep-pushdown-movement_ddb8dbd8-566d-4f55-99e0-36c35790234a_1224x.png?v=1739005533",
-    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -711,20 +1287,46 @@
     "sets": 3,
     "reps": 12,
     "weight": 20,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/cable-tricep-pushdown.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://trainingstation.co.uk/cdn/shop/articles/Tricep-pushdown-movement_ddb8dbd8-566d-4f55-99e0-36c35790234a_1224x.png?v=1739005533",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 32,
     "name": "French Bench Press (EZ-Bar Skullcrusher)",
     "description": "A lying triceps extension using an EZ-bar on a flat bench. Emphasizes long-head triceps with stable torso support, reducing lower-back demand.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Lie on a flat bench, feet planted. Grip an EZ-bar with a narrow, comfortable angle. Start with arms extended above shoulders. Bend elbows to lower the bar toward the forehead, keeping upper arms mostly vertical. Stop just before the bar reaches your forehead, then extend elbows to return. Keep elbows tucked and wrists neutral. Avoid arching the lower back.",
     "video_url": "https://cdn.spinefit.app/videos/ez_bar_skullcrusher.mp4",
-    "image_url": "https://steelsupplements.com/blogs/steel-blog/how-to-do-the-french-press-exercise-form-benefits?srsltid=AfmBOoquzcKYXa5l8GKm2zloD6hrn7_VVy1qPUO2W-kovqFa7_VdGmKT",
-    "equipment_image_url": "https://www.roguefitness.com/media/catalog/product/o/h/ohio-power-bar-black-zinc-th_1.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -742,20 +1344,47 @@
     "sets": 3,
     "reps": 10,
     "weight": 20,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/french-bench-press-ez-bar-skullcrusher.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://steelsupplements.com/blogs/steel-blog/how-to-do-the-french-press-exercise-form-benefits?srsltid=AfmBOoquzcKYXa5l8GKm2zloD6hrn7_VVy1qPUO2W-kovqFa7_VdGmKT",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 22,
     "name": "Floor Crunches",
     "description": "A basic core exercise targeting the abdominals while lying on the floor or mat. Safer for the spine than sit-ups due to limited range of motion.",
     "category": "core",
-    "muscle_groups": ["abdominals", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on back with knees bent, feet flat on floor. Place hands behind head or across chest. Engage core and lift shoulder blades off floor by curling torso toward knees. Keep lower back on floor. Lower with control. Avoid pulling on neck.",
     "video_url": "https://cdn.spinefit.app/videos/floor_crunch.mp4",
-    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDCrLEw5XwiljiJmAj_vDmpIyPIj2zftnr9w&s",
-    "equipment_image_url": "https://m.media-amazon.com/images/I/71Q3vC5JFZL.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -773,20 +1402,48 @@
     "sets": 3,
     "reps": 15,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/floor-crunches.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDCrLEw5XwiljiJmAj_vDmpIyPIj2zftnr9w&s",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 23,
     "name": "Bicycle Crunches",
     "description": "A dynamic core exercise that targets the abdominals and obliques through a rotating movement pattern. Excellent for overall core strength and coordination.",
     "category": "core",
-    "muscle_groups": ["abdominals", "obliques", "hip_flexors"],
+    "muscle_groups": [
+      "abdominals",
+      "obliques",
+      "hip_flexors"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on back, hands behind head, legs lifted with knees bent. Bring right elbow toward left knee while extending right leg. Alternate sides in a pedaling motion. Keep lower back pressed to floor. Move with control, not speed. Focus on rotation from torso, not just arms.",
     "video_url": "https://cdn.spinefit.app/videos/bicycle_crunch.mp4",
-    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvJHqyojKzU0KddRf77CMBvRKh0kjADHQlZQ&s",
-    "equipment_image_url": "https://m.media-amazon.com/images/I/71Q3vC5JFZL.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -804,20 +1461,48 @@
     "sets": 3,
     "reps": 15,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/bicycle-crunches.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvJHqyojKzU0KddRf77CMBvRKh0kjADHQlZQ&s",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 24,
     "name": "Leg Press",
     "description": "A machine-based compound leg exercise that targets quadriceps, glutes, and hamstrings with no spinal compression. Excellent alternative to squats for those with back issues.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "leg_press",
     "difficulty": "beginner",
     "instructions": "Sit in leg press machine with back and head against pad. Place feet shoulder-width apart on platform. Push platform away by extending knees and hips. Lower with control, keeping knees aligned with toes. Avoid locking knees at top or rounding lower back at bottom.",
     "video_url": "https://cdn.spinefit.app/videos/leg_press.mp4",
-    "image_url": "https://fitnessprogramer.com/wp-content/uploads/2015/11/Leg-Press.gif",
-    "equipment_image_url": "https://fitnessprogramer.com/wp-content/uploads/2015/11/Leg-Press.gif",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -844,20 +1529,46 @@
     "sets": 3,
     "reps": 12,
     "weight": 80,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/leg-press.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://fitnessprogramer.com/wp-content/uploads/2015/11/Leg-Press.gif",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/leg-press.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 25,
     "name": "Lying Leg Curl",
     "description": "An isolation exercise for the hamstrings performed on a leg curl machine while lying face down. Targets hamstrings with zero spinal loading.",
     "category": "strength",
-    "muscle_groups": ["hamstrings"],
+    "muscle_groups": [
+      "hamstrings"
+    ],
     "equipment": "leg_curl_machine",
     "difficulty": "beginner",
     "instructions": "Lie face down on leg curl machine with pad behind ankles. Keep hips pressed to pad. Curl legs up toward glutes by bending knees. Squeeze hamstrings at top. Lower with control. Avoid lifting hips or arching back.",
     "video_url": "https://cdn.spinefit.app/videos/leg_curl.mp4",
-    "image_url": "https://s3assets.skimble.com/assets/2172103/image_full.jpg",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/leg-curl-machine.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -875,20 +1586,48 @@
     "sets": 3,
     "reps": 12,
     "weight": 20,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/lying-leg-curl.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://s3assets.skimble.com/assets/2172103/image_full.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/leg-curl-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 26,
     "name": "Single-Leg Romanian Deadlift",
     "description": "A unilateral hip hinge movement with light dumbbells that targets hamstrings, glutes, and balance. Reduces spinal load compared to barbell variations.",
     "category": "strength",
-    "muscle_groups": ["hamstrings", "glutes", "erector_spinae"],
+    "muscle_groups": [
+      "hamstrings",
+      "glutes",
+      "erector_spinae"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Stand on one leg holding light dumbbell in opposite hand. Hinge at hip, lowering dumbbell toward floor while extending free leg behind for balance. Keep back neutral, core braced. Return to standing by driving through heel. Use light weight and focus on form.",
     "video_url": "https://cdn.spinefit.app/videos/single_leg_rdl.mp4",
-    "image_url": "https://s3assets.skimble.com/assets/2286951/image_full.jpg",
-    "equipment_image_url": "https://sbdireland.com/cdn/shop/articles/single_leg_Romanian_Deadlift.png?v=1716216874",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -906,20 +1645,48 @@
     "sets": 3,
     "reps": 10,
     "weight": 8,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/single-leg-romanian-deadlift.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://s3assets.skimble.com/assets/2286951/image_full.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 27,
     "name": "Goblet Squat",
     "description": "A front-loaded squat holding a dumbbell or kettlebell at chest level. The front load promotes upright torso positioning and reduces lower back stress compared to back squats.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Hold dumbbell vertically at chest level with both hands. Stand with feet shoulder-width apart. Squat down by bending knees and hips, keeping chest up and elbows inside knees. Lower to comfortable depth. Drive through heels to stand. Keep torso upright throughout.",
     "video_url": "https://cdn.spinefit.app/videos/goblet_squat.mp4",
-    "image_url": "https://ca.ironbullstrength.com/cdn/shop/articles/ea15b7b44c2032cfeae6685e160bc02e_7788ffa8-a063-4c51-a0ea-aa474c2a3e5d.jpg?v=1756366811",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/dumbbells-thumbnail.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -937,20 +1704,48 @@
     "sets": 3,
     "reps": 12,
     "weight": 12,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/goblet-squat.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://ca.ironbullstrength.com/cdn/shop/articles/ea15b7b44c2032cfeae6685e160bc02e_7788ffa8-a063-4c51-a0ea-aa474c2a3e5d.jpg?v=1756366811",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 28,
     "name": "Machine Chest Press",
     "description": "A machine-based horizontal pushing exercise targeting the chest, front delts, and triceps. Provides back support and stable movement path, safer than free weight bench press for those with back issues.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "chest_press_machine",
     "difficulty": "beginner",
     "instructions": "Sit in machine with back pressed firmly against pad. Grip handles at chest level. Push handles forward by extending arms until nearly straight. Return with control. Keep lower back pressed to pad throughout. Avoid arching back or driving through lower back.",
     "video_url": "https://cdn.spinefit.app/videos/machine_chest_press.mp4",
-    "image_url": "https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Chest-Press-Machine.gif",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/chest-press-machine.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -968,20 +1763,49 @@
     "sets": 3,
     "reps": 10,
     "weight": 40,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/machine-chest-press.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Chest-Press-Machine.gif",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/chest-press-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 29,
     "name": "Push-ups",
     "description": "A fundamental bodyweight exercise targeting chest, shoulders, and triceps while engaging the core. Can be modified with incline or knee variations for different difficulty levels.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps", "core_stabilizers"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Start in plank position with hands slightly wider than shoulders. Keep body in straight line from head to heels, core engaged. Lower chest toward floor by bending elbows. Push back up to starting position. Maintain neutral spine throughout - avoid sagging hips or piking up.",
     "video_url": "https://cdn.spinefit.app/videos/pushups.mp4",
-    "image_url": "https://training.fit/wp-content/uploads/2020/02/liegestuetze.png",
-    "equipment_image_url": "https://m.media-amazon.com/images/I/71Q3vC5JFZL.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -999,20 +1823,48 @@
     "sets": 3,
     "reps": 12,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/push-ups.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://training.fit/wp-content/uploads/2020/02/liegestuetze.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 30,
     "name": "Assisted Dips",
     "description": "A compound upper body exercise targeting chest, triceps, and front delts using an assisted dip machine or resistance bands. The assistance reduces load on the lower back.",
     "category": "strength",
-    "muscle_groups": ["chest", "triceps", "front_delts"],
+    "muscle_groups": [
+      "chest",
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "assisted_dip_machine",
     "difficulty": "intermediate",
     "instructions": "Position yourself on assisted dip machine with hands on handles, arms straight. Lean slightly forward for chest emphasis. Lower body by bending elbows until upper arms are parallel to floor. Push back up to starting position. Keep core engaged and avoid excessive swinging.",
     "video_url": "https://cdn.spinefit.app/videos/assisted_dips.mp4",
-    "image_url": "https://weighttraining.guide/wp-content/uploads/2017/08/assisted-triceps-dip-resized-1.png",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/assisted-dip-machine.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1030,20 +1882,48 @@
     "sets": 3,
     "reps": 10,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/assisted-dips.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://weighttraining.guide/wp-content/uploads/2017/08/assisted-triceps-dip-resized-1.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/assisted-dip-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 31,
     "name": "Incline Dumbbell Press",
     "description": "An upper chest pressing exercise performed on an incline bench with dumbbells. The incline angle reduces lower back stress compared to flat pressing.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Set bench to 30-45 degree incline. Sit with back against pad, dumbbells at shoulder level. Press dumbbells up and slightly inward until arms are extended. Lower with control to shoulder level. Keep lower back pressed to pad, avoid excessive arching.",
     "video_url": "https://cdn.spinefit.app/videos/incline_db_press.mp4",
-    "image_url": "https://weighttraining.guide/wp-content/uploads/2017/07/Incline-reverse-grip-dumbbell-bench-press-resized.png",
-    "equipment_image_url": "https://sbdireland.com/cdn/shop/articles/dumbbells.png?v=1716216874",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1061,20 +1941,49 @@
     "sets": 3,
     "reps": 10,
     "weight": 16,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/incline-dumbbell-press.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://weighttraining.guide/wp-content/uploads/2017/07/Incline-reverse-grip-dumbbell-bench-press-resized.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 33,
     "name": "Lat Pulldown (Neutral Grip)",
     "description": "A vertical pulling exercise using a lat pulldown machine with a neutral (palms facing) grip attachment. Targets the lats, upper back, and biceps while maintaining a stable seated position. Excellent for building back width and shoulder health with zero spinal compression.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "rear_delts"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "lat_pulldown",
     "difficulty": "beginner",
     "instructions": "Sit at lat pulldown machine with thighs secured under pad. Grip neutral handles with palms facing each other. Pull handles down toward upper chest by driving elbows down and back. Squeeze shoulder blades together at bottom. Return with control. Keep torso upright, avoid leaning back excessively.",
     "video_url": "https://cdn.spinefit.app/videos/lat_pulldown_neutral.mp4",
-    "image_url": "https://s3assets.skimble.com/assets/694656/image_full.jpg",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/lat-pulldown-machine.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1101,20 +2010,49 @@
     "sets": 3,
     "reps": 10,
     "weight": 40,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/lat-pulldown-neutral-grip.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://s3assets.skimble.com/assets/694656/image_full.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/lat-pulldown.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 34,
     "name": "Lat Pulldown (Wide Grip)",
     "description": "A vertical pulling exercise using a lat pulldown machine with a wide overhand grip. Emphasizes lat width and upper back development. The wide grip increases lat activation while the seated position provides stability.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "rear_delts"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "lat_pulldown",
     "difficulty": "beginner",
     "instructions": "Sit at lat pulldown machine with thighs secured. Grip wide bar with hands wider than shoulder-width, palms facing away. Pull bar down toward upper chest, focusing on driving elbows down. Squeeze lats at bottom. Return with control. Avoid pulling behind neck.",
     "video_url": "https://cdn.spinefit.app/videos/lat_pulldown_wide.mp4",
-    "image_url": "https://www.skimble.com/exercises/102906-lat-pulldown-how-to-do-exercise",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/lat-pulldown-machine.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1132,7 +2070,33 @@
     "sets": 3,
     "reps": 10,
     "weight": 35,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/lat-pulldown-wide-grip.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.skimble.com/exercises/102906-lat-pulldown-how-to-do-exercise",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/lat-pulldown.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 35,
@@ -1150,8 +2114,6 @@
     "difficulty": "advanced",
     "instructions": "Hang from pull-up bar with overhand grip slightly wider than shoulders. Engage core and pull body up by driving elbows down until chin clears bar. Lower with control to full arm extension. Keep shoulders active at bottom, avoid dead hang. Use assistance or negative reps if needed.",
     "video_url": "https://cdn.spinefit.app/videos/pull_up.mp4",
-    "image_url": "https://velocitywestchester.com/wp-content/uploads/2025/06/rsw_1280-9.webp",
-    "equipment_image_url": "https://xmarkfitness.com/cdn/shop/products/4437.2-1.jpg?v=1718890756&width=3000",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1169,20 +2131,49 @@
     "sets": 3,
     "reps": 8,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/pull-up.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://velocitywestchester.com/wp-content/uploads/2025/06/rsw_1280-9.webp",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/pull-up-bar.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 36,
     "name": "Chin-Up",
     "description": "A bodyweight vertical pulling exercise performed with an underhand (supinated) grip. Similar to pull-ups but with increased bicep activation. The underhand grip often makes this slightly easier than standard pull-ups.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "forearms"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "forearms"
+    ],
     "equipment": "pull_up_bar",
     "difficulty": "intermediate",
     "instructions": "Hang from bar with underhand grip, hands shoulder-width apart, palms facing you. Pull body up until chin clears bar, focusing on driving elbows down. Lower with control to full extension. Keep core engaged and avoid excessive swinging.",
     "video_url": "https://cdn.spinefit.app/videos/chin_up.mp4",
-    "image_url": "https://outlift.com/wp-content/uploads/2020/05/chin-up-hypertrophy-illustration.jpg",
-    "equipment_image_url": "https://xmarkfitness.com/cdn/shop/products/4437.2-1.jpg?v=1718890756&width=3000",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1200,20 +2191,48 @@
     "sets": 3,
     "reps": 8,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/chin-up.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://outlift.com/wp-content/uploads/2020/05/chin-up-hypertrophy-illustration.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/pull-up-bar.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 37,
     "name": "Straight-Arm Pulldown",
     "description": "A lat isolation exercise using a cable machine with straight arms throughout the movement. Emphasizes lat engagement with minimal bicep involvement. Excellent for improving mind-muscle connection with the lats.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Stand facing high cable with rope or straight bar attachment. Grip handle with arms extended overhead, slight elbow bend. Keeping arms nearly straight, pull handle down toward thighs by contracting lats. Focus on driving elbows down. Return with control. Keep torso stable and core braced.",
     "video_url": "https://cdn.spinefit.app/videos/straight_arm_pulldown.mp4",
-    "image_url": "https://www.inspireusafitness.com/cdn/shop/articles/straight-arm-pulldown_1100x.jpg",
-    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1231,20 +2250,49 @@
     "sets": 3,
     "reps": 12,
     "weight": 25,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/straight-arm-pulldown.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.inspireusafitness.com/cdn/shop/articles/straight-arm-pulldown_1100x.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 38,
     "name": "Assisted Pull-Up",
     "description": "A machine-assisted version of pull-ups that reduces the amount of bodyweight lifted. Allows beginners or those with back concerns to build pulling strength safely while working toward unassisted pull-ups.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "core_stabilizers"
+    ],
     "equipment": "assisted_pull_up_machine",
     "difficulty": "beginner",
     "instructions": "Set assistance weight on machine. Kneel or stand on platform, grip handles with overhand grip. Pull body up until chin clears handles, focusing on driving elbows down. Lower with control. Gradually reduce assistance over time as strength improves.",
     "video_url": "https://cdn.spinefit.app/videos/assisted_pull_up.mp4",
-    "image_url": "https://www.inspireusafitness.com/cdn/shop/articles/assisted-pull-up_1100x.jpg",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/assisted-dip-machine.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1262,20 +2310,48 @@
     "sets": 3,
     "reps": 10,
     "weight": 0,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/assisted-pull-up.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.inspireusafitness.com/cdn/shop/articles/assisted-pull-up_1100x.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/assisted-pull-up-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 39,
     "name": "Cable Face Pull (Rope Face Pull)",
     "description": "A cable rear-delt and upper back exercise that improves shoulder health, posture, and external rotation strength. Essential for shoulder balance and injury prevention, especially for desk workers and those with forward shoulder posture.",
     "category": "strength",
-    "muscle_groups": ["rear_delts", "upper_back", "rotator_cuff"],
+    "muscle_groups": [
+      "rear_delts",
+      "upper_back",
+      "rotator_cuff"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set cable at upper chest height. Attach rope. Grip ends with palms facing each other. Pull rope toward face, separating hands as they pass face level. Focus on squeezing shoulder blades together. Keep elbows high and pull rope to eye level. Return with control. Use light weight and high reps for best results.",
     "video_url": "https://www.youtube.com/watch?v=0Po47vvj9g4",
-    "image_url": "https://trainingstation.co.uk/cdn/shop/articles/face-pulls-muscles-used_fe27890e-ac33-489a-bb21-a9bbcc84bfae_922x.png?v=1738219155",
-    "equipment_image_url": "https://img001.video2b.com/1961/file_21688457713937.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1302,20 +2378,47 @@
     "sets": 3,
     "reps": 15,
     "weight": 10,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/cable-face-pull-rope-face-pull.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://trainingstation.co.uk/cdn/shop/articles/face-pulls-muscles-used_fe27890e-ac33-489a-bb21-a9bbcc84bfae_922x.png?v=1738219155",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   },
   {
     "id": 40,
     "name": "Reverse Pec Deck (Rear-Delt Fly)",
     "description": "A machine-based rear-delt isolation exercise that targets the posterior deltoids while providing stable, supported positioning. Excellent for shoulder balance and preventing rounded shoulders.",
     "category": "strength",
-    "muscle_groups": ["rear_delts", "upper_back"],
+    "muscle_groups": [
+      "rear_delts",
+      "upper_back"
+    ],
     "equipment": "pec_deck_machine",
     "difficulty": "beginner",
     "instructions": "Sit facing the pec deck machine with chest against pad. Grip handles with palms facing each other. Pull handles back by squeezing shoulder blades together. Keep slight bend in elbows. Control the return. Avoid using momentum.",
     "video_url": "https://www.youtube.com/watch?v=5YK4bgzXDp0&pp=ygURUmV2ZXJzZSBQZWMgRGVjayA%3D",
-    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWhbSdSbz1hbYVAMLy3qaKfbHj9DZ9dr73-g&s",
-    "equipment_image_url": "https://www.lifefitness.com/assets/hashed/product/pec-deck-machine.jpg",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1342,6 +2445,32 @@
     "sets": 3,
     "reps": 15,
     "weight": 15,
-    "weight_unit": "kg"
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/reverse-pec-deck-rear-delt-fly.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWhbSdSbz1hbYVAMLy3qaKfbHj9DZ9dr73-g&s",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/pec-deck-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
   }
 ]
