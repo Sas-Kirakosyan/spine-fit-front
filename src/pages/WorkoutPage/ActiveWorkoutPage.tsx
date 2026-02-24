@@ -16,7 +16,7 @@ import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
 import { loadPlanFromLocalStorage } from "@/utils/planGenerator";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 
-export function ActiveWorkoutPage({
+export default function ActiveWorkoutPage({
   onNavigateBack,
   onOpenExerciseSets,
   onFinishWorkout,

@@ -22,7 +22,7 @@ import type { EquipmentCategory } from "@/types/equipment";
 import type { QuizAnswers } from "@/types/quiz";
 import type { FinishedWorkoutSummary } from "@/types/workout";
 
-export function WorkoutPage({
+export default function WorkoutPage({
   onNavigateToHome,
   onNavigateToWorkout,
   onNavigateToProfile,

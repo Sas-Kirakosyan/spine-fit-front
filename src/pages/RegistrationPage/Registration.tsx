@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "@/firebase/config";
+import { getAuth_, getGoogleProvider } from "@/firebase/config";
 import type { RegistrationFormData, RegistrationProps } from "@/types/auth";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -13,7 +13,7 @@ import { Divider } from "@/components/Form/Divider/Divider";
 import { GoogleAuthButton } from "@/components/Form/GoogleAuthButton/GoogleAuthButton";
 import { AuthSwitchLink } from "@/components/Form/AuthSwitchLink/AuthSwitchLink";
 
-export function Registration({
+export default function Registration({
   onSwitchToLogin,
   onNavigateToHome,
   onNavigateToWorkout,
@@ -96,6 +96,8 @@ export function Registration({
 
   const handleGoogleSignUp = async () => {
     try {
+      const auth = await getAuth_();
+      const googleProvider = await getGoogleProvider();
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 

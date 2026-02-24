@@ -1,22 +1,22 @@
-import { useState, useEffect } from "react";
-import { HomePage } from "@/pages/HomePage/HomePage";
-import { Registration } from "@/pages/RegistrationPage/Registration";
-import { Login } from "@/pages/LoginPage/Login";
-import { WorkoutPage } from "@/pages/WorkoutPage/WorkoutPage";
-import { ProfilePage } from "@/pages/ProfilePage/ProfilePage";
-import { ExerciseSetsPage } from "@/pages/WorkoutPage/ExerciseSetsPage";
-import { ExerciseDetails } from "@/pages/WorkoutPage/ExerciseHowTo";
-import { ActiveWorkoutPage } from "@/pages/WorkoutPage/ActiveWorkoutPage";
+import { useState, useEffect, Suspense, lazy } from "react";
 import type { Exercise } from "@/types/exercise";
 import type { Page } from "@/types/navigation";
 import type { ExerciseSetRow, FinishedWorkoutSummary } from "@/types/workout";
-import { HistoryPage } from "@/pages/HistoryPage/HistoryPage";
-import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
-import { MyPlanPage } from "@/pages/MyPlanPage/MyPlanPage";
-import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPage";
-import { AIPage } from "@/pages/AIPage/AIPage";
-import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
+const HomePage = lazy(() => import("@/pages/HomePage/HomePage"));
+const WorkoutPage = lazy(() => import("@/pages/WorkoutPage/WorkoutPage"));
+const ProfilePage = lazy(() => import("@/pages/ProfilePage/ProfilePage"));
+const Registration = lazy(() => import("@/pages/RegistrationPage/Registration"));
+const Login = lazy(() => import("@/pages/LoginPage/Login"));
+const HistoryPage = lazy(() => import("@/pages/HistoryPage/HistoryPage"));
+const ExerciseDetails = lazy(() => import("@/pages/WorkoutPage/ExerciseHowTo"));
+const ActiveWorkoutPage = lazy(() => import("@/pages/WorkoutPage/ActiveWorkoutPage"));
+const ExerciseSetsPage = lazy(() => import("@/pages/WorkoutPage/ExerciseSetsPage"));
+const AllExercisePage = lazy(() => import("@/pages/AllExercisePage/AllExercisePage"));
+const MyPlanPage = lazy(() => import("@/pages/MyPlanPage/MyPlanPage"));
+const AvailableEquipmentPage = lazy(() => import("@/pages/MyPlanPage/AvailableEquipmentPage"));
+const AIPage = lazy(() => import("@/pages/AIPage/AIPage"));
+const SettingsPage = lazy(() => import("@/pages/SettingsPage/SettingsPage"));
 import "@/utils/testWorkoutHistoryGenerator";
 
 function App() {
@@ -264,62 +264,72 @@ function App() {
     switch (currentPage) {
       case "home":
         return (
-          <HomePage
-            onNavigateToLogin={navigateToLogin}
-            onNavigateToWorkout={navigateToWorkout}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <HomePage
+              onNavigateToLogin={navigateToLogin}
+              onNavigateToWorkout={navigateToWorkout}
+            />
+          </Suspense>
         );
       case "login":
         return (
-          <Login
-            onSwitchToRegister={navigateToRegister}
-            onNavigateToHome={navigateToHome}
-            onNavigateToWorkout={navigateToWorkout}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <Login
+              onSwitchToRegister={navigateToRegister}
+              onNavigateToHome={navigateToHome}
+              onNavigateToWorkout={navigateToWorkout}
+            />
+          </Suspense>
         );
       case "register":
         return (
-          <Registration
-            onSwitchToLogin={navigateToLogin}
-            onNavigateToHome={navigateToHome}
-            onNavigateToWorkout={navigateToWorkout}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <Registration
+              onSwitchToLogin={navigateToLogin}
+              onNavigateToHome={navigateToHome}
+              onNavigateToWorkout={navigateToWorkout}
+            />
+          </Suspense>
         );
       case "workout":
         return (
-          <WorkoutPage
-            onNavigateToHome={navigateToHome}
-            onNavigateToWorkout={navigateToWorkout}
-            onNavigateToProfile={navigateToProfile}
-            onNavigateToHistory={navigateToHistory}
-            onNavigateToAI={navigateToAI}
-            activePage="workout"
-            onOpenExerciseDetails={navigateToExerciseDetails}
-            onOpenExerciseSets={navigateToExerciseSets}
-            onStartWorkoutSession={navigateToActiveWorkout}
-            onNavigateToAllExercise={navigateToAllExercise}
-            onNavigateToMyPlan={navigateToMyPlan}
-            exercises={workoutExercises}
-            onRemoveExercise={(exerciseId) => {
-              setWorkoutExercises((prev) =>
-                prev.filter((ex) => ex.id !== exerciseId)
-              );
-            }}
-            completedWorkoutIds={completedWorkoutIds}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <WorkoutPage
+              onNavigateToHome={navigateToHome}
+              onNavigateToWorkout={navigateToWorkout}
+              onNavigateToProfile={navigateToProfile}
+              onNavigateToHistory={navigateToHistory}
+              onNavigateToAI={navigateToAI}
+              activePage="workout"
+              onOpenExerciseDetails={navigateToExerciseDetails}
+              onOpenExerciseSets={navigateToExerciseSets}
+              onStartWorkoutSession={navigateToActiveWorkout}
+              onNavigateToAllExercise={navigateToAllExercise}
+              onNavigateToMyPlan={navigateToMyPlan}
+              exercises={workoutExercises}
+              onRemoveExercise={(exerciseId: number) => {
+                setWorkoutExercises((prev) =>
+                  prev.filter((ex) => ex.id !== exerciseId)
+                );
+              }}
+              completedWorkoutIds={completedWorkoutIds}
+            />
+          </Suspense>
         );
       case "profile":
         return (
-          <ProfilePage
-            onNavigateToHome={navigateToHome}
-            onNavigateToWorkout={navigateToWorkout}
-            onNavigateToProfile={navigateToProfile}
-            onNavigateToHistory={navigateToHistory}
-            onNavigateToAI={navigateToAI}
-            onNavigateToSettings={navigateToSettings}
-            activePage="profile"
-            workoutHistory={workoutHistory}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <ProfilePage
+              onNavigateToHome={navigateToHome}
+              onNavigateToWorkout={navigateToWorkout}
+              onNavigateToProfile={navigateToProfile}
+              onNavigateToHistory={navigateToHistory}
+              onNavigateToAI={navigateToAI}
+              onNavigateToSettings={navigateToSettings}
+              activePage="profile"
+              workoutHistory={workoutHistory}
+            />
+          </Suspense>
         );
       case "exerciseSets":
         if (!selectedExercise) {
@@ -327,14 +337,16 @@ function App() {
           return null;
         }
         return (
-          <ExerciseSetsPage
-            exercise={selectedExercise}
-            onNavigateBack={backFromExerciseSets}
-            onStartWorkoutSession={navigateToActiveWorkout}
-            onMarkExerciseComplete={markExerciseComplete}
-            isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
-            exerciseLogs={exerciseLogs}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <ExerciseSetsPage
+              exercise={selectedExercise}
+              onNavigateBack={backFromExerciseSets}
+              onStartWorkoutSession={navigateToActiveWorkout}
+              onMarkExerciseComplete={markExerciseComplete}
+              isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
+              exerciseLogs={exerciseLogs}
+            />
+          </Suspense>
         );
       case "exerciseDetails":
         if (!selectedExercise) {
@@ -342,72 +354,94 @@ function App() {
           return null;
         }
         return (
-          <ExerciseDetails
-            exercise={selectedExercise}
-            onNavigateBack={backFromExerciseDetails}
-            onStartWorkout={navigateToExerciseSets}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <ExerciseDetails
+              exercise={selectedExercise}
+              onNavigateBack={backFromExerciseDetails}
+              onStartWorkout={navigateToExerciseSets}
+            />
+          </Suspense>
         );
       case "activeWorkout":
         return (
-          <ActiveWorkoutPage
-            onNavigateBack={navigateToWorkout}
-            onOpenExerciseSets={(exercise) =>
-              navigateToExerciseSets(exercise, "activeWorkout")
-            }
-            onFinishWorkout={handleFinishWorkout}
-            completedExerciseIds={completedExerciseIds}
-            workoutStartTime={workoutStartTime || undefined}
-            exerciseLogs={exerciseLogs}
-            completedWorkoutIds={completedWorkoutIds}
-            setCompletedWorkoutIds={setCompletedWorkoutIds}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <ActiveWorkoutPage
+              onNavigateBack={navigateToWorkout}
+              onOpenExerciseSets={(exercise: Exercise) =>
+                navigateToExerciseSets(exercise, "activeWorkout")
+              }
+              onFinishWorkout={handleFinishWorkout}
+              completedExerciseIds={completedExerciseIds}
+              workoutStartTime={workoutStartTime || undefined}
+              exerciseLogs={exerciseLogs}
+              completedWorkoutIds={completedWorkoutIds}
+              setCompletedWorkoutIds={setCompletedWorkoutIds}
+            />
+          </Suspense>
         );
       case "history":
         return (
-          <HistoryPage
-            onNavigateToWorkout={navigateToWorkout}
-            onNavigateToProfile={navigateToProfile}
-            onNavigateToHistory={navigateToHistory}
-            onNavigateToAI={navigateToAI}
-            activePage="history"
-            workouts={workoutHistory}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <HistoryPage
+              onNavigateToWorkout={navigateToWorkout}
+              onNavigateToProfile={navigateToProfile}
+              onNavigateToHistory={navigateToHistory}
+              onNavigateToAI={navigateToAI}
+              activePage="history"
+              workouts={workoutHistory}
+            />
+          </Suspense>
         );
       case "ai":
         return (
-          <AIPage
-            onNavigateToWorkout={navigateToWorkout}
-            onNavigateToProfile={navigateToProfile}
-            onNavigateToHistory={navigateToHistory}
-            onNavigateToAI={navigateToAI}
-            activePage="ai"
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <AIPage
+              onNavigateToWorkout={navigateToWorkout}
+              onNavigateToProfile={navigateToProfile}
+              onNavigateToHistory={navigateToHistory}
+              onNavigateToAI={navigateToAI}
+              activePage="ai"
+            />
+          </Suspense>
         );
       case "allExercise":
         return (
-          <AllExercisePage
-            onClose={navigateToWorkout}
-            onAddExercises={handleAddExercises}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <AllExercisePage
+              onClose={navigateToWorkout}
+              onAddExercises={handleAddExercises}
+            />
+          </Suspense>
         );
       case "myPlan":
         return (
-          <MyPlanPage
-            onNavigateBack={navigateToWorkout}
-            onNavigateToAvailableEquipment={navigateToAvailableEquipment}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <MyPlanPage
+              onNavigateBack={navigateToWorkout}
+              onNavigateToAvailableEquipment={navigateToAvailableEquipment}
+            />
+          </Suspense>
         );
       case "availableEquipment":
-        return <AvailableEquipmentPage onNavigateBack={navigateToMyPlan} />;
+        return (
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <AvailableEquipmentPage onNavigateBack={navigateToMyPlan} />
+          </Suspense>
+        );
       case "settings":
-        return <SettingsPage onNavigateBack={navigateToProfile} />;
+        return (
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <SettingsPage onNavigateBack={navigateToProfile} />
+          </Suspense>
+        );
       default:
         return (
-          <HomePage
-            onNavigateToLogin={navigateToLogin}
-            onNavigateToWorkout={navigateToWorkout}
-          />
+          <Suspense fallback={<div>Загрузка...</div>}>
+            <HomePage
+              onNavigateToLogin={navigateToLogin}
+              onNavigateToWorkout={navigateToWorkout}
+            />
+          </Suspense>
         );
     }
   };

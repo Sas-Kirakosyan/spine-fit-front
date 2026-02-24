@@ -15,7 +15,7 @@ import {
 const CHAT_HISTORY_KEY = "aiChatHistory";
 const MAX_HISTORY_MESSAGES = 50;
 
-export function AIPage({
+export default function AIPage({
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,

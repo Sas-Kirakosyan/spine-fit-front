@@ -18,7 +18,7 @@ interface AllExercisePageProps {
   onAddExercises?: (exercises: Exercise[]) => void;
 }
 
-export function AllExercisePage({
+export default function AllExercisePage({
   onClose,
   onAddExercises,
 }: AllExercisePageProps) {

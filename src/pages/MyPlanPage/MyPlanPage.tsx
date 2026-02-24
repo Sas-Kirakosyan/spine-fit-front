@@ -26,7 +26,7 @@ import type { Exercise } from "@/types/exercise";
 import type { FinishedWorkoutSummary } from "@/types/workout";
 import type { QuizAnswers } from "@/types/quiz";
 
-export function MyPlanPage({
+export default function MyPlanPage({
   onNavigateBack,
   onNavigateToAvailableEquipment,
 }: MyPlanPageProps) {

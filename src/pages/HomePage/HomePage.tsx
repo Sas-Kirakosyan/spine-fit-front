@@ -4,7 +4,7 @@ import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { HomePageProps } from "@/types/pages";
 
-export function HomePage({
+export default function HomePage({
   onNavigateToLogin,
   onNavigateToWorkout,
 }: HomePageProps) {

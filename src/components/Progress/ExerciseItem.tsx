@@ -1,13 +1,35 @@
-import { useMemo } from "react";
+import { useMemo, lazy, Suspense } from "react";
 import type { ExerciseProgress } from "@/utils/progressStats";
-import {
-  LineChart,
-  Line,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
+
+const LazyResponsiveContainer = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.ResponsiveContainer,
+  }))
+);
+
+const LazyLineChart = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.LineChart,
+  }))
+);
+
+const LazyLine = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.Line,
+  }))
+);
+
+const LazyXAxis = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.XAxis,
+  }))
+);
+
+const LazyYAxis = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.YAxis,
+  }))
+);
 
 interface ExerciseItemProps {
   exercise: ExerciseProgress;
@@ -36,20 +58,22 @@ function MiniProgressChart({ data }: { data: Array<{ date: string; value: number
 
   return (
     <div className="h-12 w-20">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={chartData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
-          <Line
-            type="monotone"
-            dataKey="value"
-            stroke="#3b82f6"
-            strokeWidth={2}
-            dot={false}
-            isAnimationActive={false}
-          />
-          <XAxis hide />
-          <YAxis hide domain={[minValue - range * 0.1, maxValue + range * 0.1]} />
-        </LineChart>
-      </ResponsiveContainer>
+      <Suspense fallback={<div className="h-12 w-20 bg-slate-700/50 rounded animate-pulse" />}>
+        <LazyResponsiveContainer width="100%" height="100%">
+          <LazyLineChart data={chartData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+            <LazyLine
+              type="monotone"
+              dataKey="value"
+              stroke="#3b82f6"
+              strokeWidth={2}
+              dot={false}
+              isAnimationActive={false}
+            />
+            <LazyXAxis hide />
+            <LazyYAxis hide domain={[minValue - range * 0.1, maxValue + range * 0.1]} />
+          </LazyLineChart>
+        </LazyResponsiveContainer>
+      </Suspense>
     </div>
   );
 }

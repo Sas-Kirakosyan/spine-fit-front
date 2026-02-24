@@ -26,7 +26,7 @@ const detailPills = (exercise: Exercise) => [
   },
 ];
 
-export function ExerciseDetails({
+export default function ExerciseDetails({
   exercise,
   onNavigateBack,
   onStartWorkout,

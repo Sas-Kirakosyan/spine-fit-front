@@ -1,13 +1,47 @@
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import { lazy, Suspense } from "react";
 import type { ProgressDataPoint } from "@/utils/progressStats";
+
+const LazyResponsiveContainer = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.ResponsiveContainer,
+  }))
+);
+
+const LazyAreaChart = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.AreaChart,
+  }))
+);
+
+const LazyArea = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.Area,
+  }))
+);
+
+const LazyXAxis = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.XAxis,
+  }))
+);
+
+const LazyYAxis = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.YAxis,
+  }))
+);
+
+const LazyTooltip = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.Tooltip,
+  }))
+);
+
+const LazyCartesianGrid = lazy(() =>
+  import("recharts").then((module) => ({
+    default: module.CartesianGrid,
+  }))
+);
 import { formatVolume } from "@/utils/progressStats";
 
 interface ProgressChartProps {
@@ -60,38 +94,39 @@ export function ProgressChart({
         {title}
       </h3>
       <div className="h-[180px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={data}
-            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#e77d10" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#e77d10" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="#334155"
-              vertical={false}
-            />
-            <XAxis
-              dataKey="label"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "#94a3b8", fontSize: 11 }}
-              dy={10}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "#94a3b8", fontSize: 11 }}
-              tickFormatter={(value) => formatVolume(value)}
-              width={45}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Area
+        <Suspense fallback={<div className="h-[180px] w-full bg-slate-700/50 rounded animate-pulse" />}>
+          <LazyResponsiveContainer width="100%" height="100%">
+            <LazyAreaChart
+              data={data}
+              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#e77d10" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#e77d10" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <LazyCartesianGrid
+                strokeDasharray="3 3"
+                stroke="#334155"
+                vertical={false}
+              />
+              <LazyXAxis
+                dataKey="label"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#94a3b8", fontSize: 11 }}
+                dy={10}
+              />
+              <LazyYAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#94a3b8", fontSize: 11 }}
+                tickFormatter={(value) => formatVolume(value)}
+                width={45}
+              />
+              <LazyTooltip content={<CustomTooltip />} />
+              <LazyArea
               type="monotone"
               dataKey="volume"
               stroke="#e77d10"
@@ -109,8 +144,9 @@ export function ProgressChart({
                 r: 6,
               }}
             />
-          </AreaChart>
-        </ResponsiveContainer>
+            </LazyAreaChart>
+          </LazyResponsiveContainer>
+        </Suspense>
       </div>
     </div>
   );

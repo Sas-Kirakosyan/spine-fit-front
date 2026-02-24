@@ -58,7 +58,7 @@ const toolbarButtons = [
   }
 ];
 
-export function ExerciseSetsPage({
+export default function ExerciseSetsPage({
   exercise,
   onNavigateBack,
   onStartWorkoutSession,

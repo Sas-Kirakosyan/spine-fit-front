@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { PageContainer } from "@/Layout/PageContainer";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
-import { auth } from "@/firebase/config";
+import { getAuth_ } from "@/firebase/config";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
 import { BodyProfileModal } from "@/components/BodyProfileModal/BodyProfileModal";
 import type { SettingsPageProps } from "@/types/pages";
+import type { UserInfo } from "firebase/auth";
 
 interface ModalConfig {
   title: string;
@@ -74,7 +75,7 @@ function Divider() {
   );
 }
 
-export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
+export default function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
@@ -104,25 +105,31 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   };
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      setUserEmail(user.email);
-      // Проверяем, авторизован ли пользователь через Google
-      const isGoogle = user.providerData.some(
-        (provider) => provider.providerId === "google.com"
-      );
-      setIsGoogleUser(isGoogle);
-    } else {
-      // Если пользователь не авторизован через Firebase, проверяем localStorage
-      const savedEmail = localStorage.getItem("userEmail");
-      if (savedEmail) {
-        setUserEmail(savedEmail);
+    const fetchAuth = async () => {
+      const auth = await getAuth_();
+      const user = auth.currentUser;
+      if (user) {
+        setUserEmail(user.email);
+        // Проверяем, авторизован ли пользователь через Google
+        const isGoogle = user.providerData.some(
+          (provider: UserInfo) => provider.providerId === "google.com"
+        );
+        setIsGoogleUser(isGoogle);
+      } else {
+        // Если пользователь не авторизован через Firebase, проверяем localStorage
+        const savedEmail = localStorage.getItem("userEmail");
+        if (savedEmail) {
+          setUserEmail(savedEmail);
+        }
       }
-    }
+    };
+
+    fetchAuth();
     loadBodyProfileSummary();
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const auth = await getAuth_();
     auth.signOut();
     localStorage.removeItem("userEmail");
     localStorage.removeItem("currentPage");

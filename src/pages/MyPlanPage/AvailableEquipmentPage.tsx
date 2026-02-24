@@ -12,7 +12,7 @@ import { EquipmentItem } from "@/components/EquipmentItem/EquipmentItem";
 import { createEquipmentData } from "@/utils/equipment";
 import { AvailableEquipmentPageHeader } from "./AvailableEquipmentPageHeader";
 
-export function AvailableEquipmentPage({
+export default function AvailableEquipmentPage({
   onNavigateBack,
 }: AvailableEquipmentPageProps) {
   const [activeTab, setActiveTab] = useState<EquipmentTab>(() => {

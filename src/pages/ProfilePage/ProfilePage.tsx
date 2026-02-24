@@ -19,7 +19,7 @@ import {
   getAllExercisesWithProgress,
 } from "@/utils/progressStats";
 
-export function ProfilePage({
+export default function ProfilePage({
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,

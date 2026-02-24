@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "@/firebase/config";
+import { getAuth_, getGoogleProvider } from "@/firebase/config";
 import { PageContainer } from "@/Layout/PageContainer";
 import { FormCard } from "@/components/Form/FormCard/FormCard";
 import { FormHeader } from "@/components/Form/FormHeader/FormHeader";
@@ -14,7 +14,7 @@ import { PageHeader } from "@/components/PageHeader/PageHeader";
 
 import type { LoginFormData, LoginProps } from "@/types/auth";
 
-export function Login({
+export default function Login({
   onSwitchToRegister,
   onNavigateToHome,
   onNavigateToWorkout,
@@ -73,6 +73,8 @@ export function Login({
 
   const handleGoogleSignIn = async () => {
     try {
+      const auth = await getAuth_();
+      const googleProvider = await getGoogleProvider();
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 
