@@ -28,7 +28,7 @@ function persistSavedPrograms(programs: SavedProgram[]) {
   localStorage.setItem("savedPrograms", JSON.stringify(programs));
 }
 
-export function CreateProgramPage({
+export default function CreateProgramPage({
   days,
   onNavigateBack,
   onAddExercise,
@@ -77,7 +77,10 @@ export function CreateProgramPage({
       onDaysChange(
         days.map((d) =>
           d.id === dayId
-            ? { ...d, exercises: d.exercises.filter((ex) => ex.id !== exerciseId) }
+            ? {
+                ...d,
+                exercises: d.exercises.filter((ex) => ex.id !== exerciseId),
+              }
             : d,
         ),
       );
@@ -86,7 +89,12 @@ export function CreateProgramPage({
   );
 
   const handleUpdateExercise = useCallback(
-    (dayId: string, exerciseId: number, field: "sets" | "reps" | "weight", value: number) => {
+    (
+      dayId: string,
+      exerciseId: number,
+      field: "sets" | "reps" | "weight",
+      value: number,
+    ) => {
       onDaysChange(
         days.map((d) =>
           d.id === dayId
@@ -111,7 +119,10 @@ export function CreateProgramPage({
           const newIndex = direction === "up" ? index - 1 : index + 1;
           if (newIndex < 0 || newIndex >= d.exercises.length) return d;
           const updated = [...d.exercises];
-          [updated[index], updated[newIndex]] = [updated[newIndex], updated[index]];
+          [updated[index], updated[newIndex]] = [
+            updated[newIndex],
+            updated[index],
+          ];
           return { ...d, exercises: updated };
         }),
       );
@@ -132,14 +143,13 @@ export function CreateProgramPage({
 
   const handleSave = useCallback(() => {
     const totalExercises = days.reduce((sum, d) => sum + d.exercises.length, 0);
-    if (!programName.trim() || days.length === 0 || totalExercises === 0) return;
+    if (!programName.trim() || days.length === 0 || totalExercises === 0)
+      return;
 
     const existing = loadSavedPrograms();
     if (editProgramId) {
       const updated = existing.map((p) =>
-        p.id === editProgramId
-          ? { ...p, name: programName.trim(), days }
-          : p,
+        p.id === editProgramId ? { ...p, name: programName.trim(), days } : p,
       );
       persistSavedPrograms(updated);
     } else {
@@ -157,7 +167,8 @@ export function CreateProgramPage({
   }, [programName, days, editProgramId, onSave]);
 
   const totalExercises = days.reduce((sum, d) => sum + d.exercises.length, 0);
-  const canSave = programName.trim().length > 0 && days.length > 0 && totalExercises > 0;
+  const canSave =
+    programName.trim().length > 0 && days.length > 0 && totalExercises > 0;
 
   return (
     <PageContainer contentClassName="px-4 py-6">
@@ -225,7 +236,9 @@ export function CreateProgramPage({
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <p className="text-white/40 text-sm">No training days added yet</p>
+              <p className="text-white/40 text-sm">
+                No training days added yet
+              </p>
               <p className="text-white/25 text-xs mt-1">
                 Tap the button below to add a training day
               </p>
@@ -245,7 +258,9 @@ export function CreateProgramPage({
                   onNameChange={(name) => handleDayNameChange(day.id, name)}
                   onRemoveDay={() => handleRemoveDay(day.id)}
                   onMoveDay={(dir) => handleMoveDay(dayIndex, dir)}
-                  onRemoveExercise={(exId) => handleRemoveExercise(day.id, exId)}
+                  onRemoveExercise={(exId) =>
+                    handleRemoveExercise(day.id, exId)
+                  }
                   onUpdateExercise={(exId, field, val) =>
                     handleUpdateExercise(day.id, exId, field, val)
                   }
@@ -317,7 +332,11 @@ interface TrainingDayCardProps {
   onRemoveDay: () => void;
   onMoveDay: (direction: "up" | "down") => void;
   onRemoveExercise: (exerciseId: number) => void;
-  onUpdateExercise: (exerciseId: number, field: "sets" | "reps" | "weight", value: number) => void;
+  onUpdateExercise: (
+    exerciseId: number,
+    field: "sets" | "reps" | "weight",
+    value: number,
+  ) => void;
   onMoveExercise: (index: number, direction: "up" | "down") => void;
   onAddExercise: () => void;
 }
@@ -348,7 +367,9 @@ function TrainingDayCard({
         }}
       >
         {/* Expand chevron */}
-        <div className={`transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}>
+        <div
+          className={`transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+        >
           <svg
             width="16"
             height="16"
@@ -408,18 +429,31 @@ function TrainingDayCard({
             </div>
           )}
           <p className="text-white/40 text-xs">
-            {day.exercises.length} exercise{day.exercises.length !== 1 ? "s" : ""}
+            {day.exercises.length} exercise
+            {day.exercises.length !== 1 ? "s" : ""}
           </p>
         </div>
 
         {/* Day actions */}
-        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="flex items-center gap-1"
+          onClick={(e) => e.stopPropagation()}
+        >
           <button
             onClick={() => onMoveDay("up")}
             disabled={dayIndex === 0}
             className={`p-1.5 rounded-lg transition-colors ${dayIndex === 0 ? "text-white/15" : "text-white/50 hover:text-white hover:bg-white/10"}`}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M18 15l-6-6-6 6" />
             </svg>
           </button>
@@ -428,7 +462,16 @@ function TrainingDayCard({
             disabled={dayIndex === totalDays - 1}
             className={`p-1.5 rounded-lg transition-colors ${dayIndex === totalDays - 1 ? "text-white/15" : "text-white/50 hover:text-white hover:bg-white/10"}`}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
@@ -436,7 +479,16 @@ function TrainingDayCard({
             onClick={onRemoveDay}
             className="p-1.5 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 transition-colors ml-1"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
             </svg>
           </button>
@@ -477,7 +529,11 @@ function TrainingDayCard({
               strokeWidth="2"
               className="text-main/70 group-hover:text-main"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4v16m8-8H4"
+              />
             </svg>
             <span className="text-main/70 group-hover:text-main text-sm font-medium">
               Add Exercise
@@ -535,7 +591,16 @@ function ExerciseConfigCard({
             disabled={index === 0}
             className={`p-1.5 rounded-lg transition-colors ${index === 0 ? "text-white/15" : "text-white/50 hover:text-white hover:bg-white/10"}`}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M18 15l-6-6-6 6" />
             </svg>
           </button>
@@ -544,7 +609,16 @@ function ExerciseConfigCard({
             disabled={index === total - 1}
             className={`p-1.5 rounded-lg transition-colors ${index === total - 1 ? "text-white/15" : "text-white/50 hover:text-white hover:bg-white/10"}`}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
@@ -553,7 +627,16 @@ function ExerciseConfigCard({
             onClick={onRemove}
             className="p-1.5 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 transition-colors ml-1"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
             </svg>
           </button>
@@ -611,8 +694,7 @@ function NumberStepper({
   const decrement = () => onChange(Math.max(min, value - step));
   const increment = () => onChange(Math.min(max, value + step));
 
-  const displayValue =
-    step % 1 !== 0 ? value.toFixed(1) : String(value);
+  const displayValue = step % 1 !== 0 ? value.toFixed(1) : String(value);
 
   return (
     <div className="flex-1 rounded-lg bg-white/5 p-2">

@@ -87,7 +87,7 @@ const toolbarButtons = [
   },
 ];
 
-export function ExerciseSetsPage({
+function ExerciseSetsPage({
   exercise,
   onNavigateBack,
   onStartWorkoutSession,
@@ -97,12 +97,21 @@ export function ExerciseSetsPage({
   exerciseLogs = {},
 }: ExerciseSetsPageProps) {
   // Generate unique ID for each set
-  const generateSetId = () => `set-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const generateSetId = () =>
+    `set-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-  const createNewSet = (template?: Partial<ExerciseSetRow>): ExerciseSetRow => ({
+  const createNewSet = (
+    template?: Partial<ExerciseSetRow>,
+  ): ExerciseSetRow => ({
     id: generateSetId(),
-    reps: exercise.reps !== undefined && exercise.reps !== null ? String(exercise.reps) : "",
-    weight: exercise.weight !== undefined && exercise.weight !== null ? String(exercise.weight) : "",
+    reps:
+      exercise.reps !== undefined && exercise.reps !== null
+        ? String(exercise.reps)
+        : "",
+    weight:
+      exercise.weight !== undefined && exercise.weight !== null
+        ? String(exercise.weight)
+        : "",
     completed: false,
     ...template,
   });
@@ -111,7 +120,9 @@ export function ExerciseSetsPage({
   const [restTimerEnabled, setRestTimerEnabled] = useState(false);
   const [restDurationMinutes, setRestDurationMinutes] = useState(1);
   const [restDurationSeconds, setRestDurationSeconds] = useState(0);
-  const [restCountdownSeconds, setRestCountdownSeconds] = useState<number | null>(null);
+  const [restCountdownSeconds, setRestCountdownSeconds] = useState<
+    number | null
+  >(null);
   const [restPaused, setRestPaused] = useState(false);
   const [replaceModalOpen, setReplaceModalOpen] = useState(false);
   const [replaceQuery, setReplaceQuery] = useState("");
@@ -128,7 +139,7 @@ export function ExerciseSetsPage({
     if (savedLogs && savedLogs.length > 0) {
       return savedLogs.map((log) => ({
         ...log,
-        id: log.id || generateSetId()
+        id: log.id || generateSetId(),
       }));
     }
 
@@ -141,10 +152,12 @@ export function ExerciseSetsPage({
   useEffect(() => {
     // Restore saved logs if they exist, otherwise reset to template
     if (savedLogs && savedLogs.length > 0) {
-      setSets(savedLogs.map((log) => ({
-        ...log,
-        id: log.id || generateSetId()
-      })));
+      setSets(
+        savedLogs.map((log) => ({
+          ...log,
+          id: log.id || generateSetId(),
+        })),
+      );
       // Find first incomplete set or set to -1 if all completed
       const firstIncomplete = savedLogs.findIndex((s) => !s.completed);
       setActiveSetIndex(firstIncomplete !== -1 ? firstIncomplete : -1);
@@ -167,7 +180,11 @@ export function ExerciseSetsPage({
 
   // Rest timer countdown (не тикает при паузе)
   useEffect(() => {
-    if (restCountdownSeconds === null || restCountdownSeconds <= 0 || restPaused) {
+    if (
+      restCountdownSeconds === null ||
+      restCountdownSeconds <= 0 ||
+      restPaused
+    ) {
       if (restIntervalRef.current) {
         clearInterval(restIntervalRef.current);
         restIntervalRef.current = null;
@@ -182,7 +199,9 @@ export function ExerciseSetsPage({
       };
     }
     restIntervalRef.current = setInterval(() => {
-      setRestCountdownSeconds((prev) => (prev !== null && prev > 0 ? prev - 1 : null));
+      setRestCountdownSeconds((prev) =>
+        prev !== null && prev > 0 ? prev - 1 : null,
+      );
     }, 1000);
     return () => {
       if (restIntervalRef.current) {
@@ -194,7 +213,7 @@ export function ExerciseSetsPage({
 
   const findNextPendingIndex = (
     list: ExerciseSetRow[],
-    startFrom = 0
+    startFrom = 0,
   ): number => {
     for (let i = startFrom; i < list.length; i += 1) {
       if (!list[i].completed) {
@@ -230,7 +249,7 @@ export function ExerciseSetsPage({
   const handleSetValueChange = (
     index: number,
     field: SetField,
-    value: string
+    value: string,
   ) => {
     if (sets[index]?.completed) {
       return;
@@ -253,8 +272,8 @@ export function ExerciseSetsPage({
     setActiveSetIndex(index);
     setSets((prev) =>
       prev.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [field]: value } : item
-      )
+        itemIndex === index ? { ...item, [field]: value } : item,
+      ),
     );
   };
 
@@ -286,7 +305,9 @@ export function ExerciseSetsPage({
         if (prevIndex === index) {
           // If deleting active set, find next incomplete set
           const nextIncomplete = next.findIndex((s) => !s.completed);
-          return nextIncomplete !== -1 ? nextIncomplete : Math.min(prevIndex, next.length - 1);
+          return nextIncomplete !== -1
+            ? nextIncomplete
+            : Math.min(prevIndex, next.length - 1);
         }
         return prevIndex;
       });
@@ -299,11 +320,12 @@ export function ExerciseSetsPage({
     if (sets.length === 0) {
       return;
     }
-    const targetIndex = typeof requestedIndex === "number"
-      ? requestedIndex
-      : activeSetIndex >= 0 && activeSetIndex < sets.length
-        ? activeSetIndex
-        : -1;
+    const targetIndex =
+      typeof requestedIndex === "number"
+        ? requestedIndex
+        : activeSetIndex >= 0 && activeSetIndex < sets.length
+          ? activeSetIndex
+          : -1;
     if (targetIndex === -1) {
       return;
     }
@@ -316,7 +338,7 @@ export function ExerciseSetsPage({
 
     setSets((prev) => {
       const updated = prev.map((item, index) =>
-        index === targetIndex ? { ...item, completed: !shouldUnlog } : item
+        index === targetIndex ? { ...item, completed: !shouldUnlog } : item,
       );
 
       if (shouldUnlog) {
@@ -345,7 +367,7 @@ export function ExerciseSetsPage({
     }
 
     const allIncompleteSetsValid = incompleteSets.every((setEntry) =>
-      isSetValid(setEntry)
+      isSetValid(setEntry),
     );
     if (!allIncompleteSetsValid) {
       return;
@@ -362,7 +384,7 @@ export function ExerciseSetsPage({
     if (onMarkExerciseComplete) {
       onMarkExerciseComplete(
         exercise.id,
-        sets.map((setEntry) => ({ ...setEntry }))
+        sets.map((setEntry) => ({ ...setEntry })),
       );
       return;
     }
@@ -387,7 +409,9 @@ export function ExerciseSetsPage({
     }
 
     const repsValue =
-      exercise.reps !== undefined && exercise.reps !== null ? String(exercise.reps) : "";
+      exercise.reps !== undefined && exercise.reps !== null
+        ? String(exercise.reps)
+        : "";
     if (!repsValue) {
       return "\u2014";
     }
@@ -397,7 +421,9 @@ export function ExerciseSetsPage({
     }
 
     const weightValue =
-      exercise.weight !== undefined && exercise.weight !== null ? String(exercise.weight) : "";
+      exercise.weight !== undefined && exercise.weight !== null
+        ? String(exercise.weight)
+        : "";
     if (!weightValue) {
       return "\u2014";
     }
@@ -435,9 +461,9 @@ export function ExerciseSetsPage({
 
       if (workoutIndex === -1) return;
 
-      const hasDuplicateInWorkout = plan.workoutDays[workoutIndex].exercises.some(
-        (item) => item.id === selectedReplacement.id,
-      );
+      const hasDuplicateInWorkout = plan.workoutDays[
+        workoutIndex
+      ].exercises.some((item) => item.id === selectedReplacement.id);
       if (hasDuplicateInWorkout) {
         setReplaceModalOpen(false);
         setReplaceQuery("");
@@ -549,25 +575,27 @@ export function ExerciseSetsPage({
                   key={item.id}
                   type="button"
                   onClick={
-                  isTimer
-                    ? isDuringActiveWorkout
-                      ? () => setRestTimerModalOpen(true)
-                      : undefined
-                    : item.id === "replace"
-                      ? () => setReplaceModalOpen(true)
-                      : item.id === "history"
-                        ? onNavigateToHistory
-                      : undefined
+                    isTimer
+                      ? isDuringActiveWorkout
+                        ? () => setRestTimerModalOpen(true)
+                        : undefined
+                      : item.id === "replace"
+                        ? () => setReplaceModalOpen(true)
+                        : item.id === "history"
+                          ? onNavigateToHistory
+                          : undefined
                   }
-                  className={`${secondaryButtonClass} shrink-0 whitespace-nowrap ${isActive
-                    ? "border-main/70 text-main/70 shadow-inner shadow-main/20"
-                    : ""
-                    }`}
+                  className={`${secondaryButtonClass} shrink-0 whitespace-nowrap ${
+                    isActive
+                      ? "border-main/70 text-main/70 shadow-inner shadow-main/20"
+                      : ""
+                  }`}
                 >
                   <span className="flex gap-2">
                     <span
-                      className={`flex items-center justify-center ${isActive ? "text-main/70" : "text-slate-200"
-                        }`}
+                      className={`flex items-center justify-center ${
+                        isActive ? "text-main/70" : "text-slate-200"
+                      }`}
                     >
                       {item.icon}
                     </span>
@@ -582,68 +610,96 @@ export function ExerciseSetsPage({
           </div>
         </div>
 
-        {isDuringActiveWorkout && restCountdownSeconds !== null && restCountdownSeconds > 0 && (
-          <div className="flex items-center justify-center gap-3 rounded-[16px] border border-main bg-main/40 px-4 py-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background/70">
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="h-5 w-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="13" r="8" />
-                <path d="M12 9v4l2 2" />
-                <path d="M9 3h6" />
-                <path d="M10 6h4" />
-              </svg>
-            </span>
-            <span className="min-w-[4rem] text-center text-lg font-semibold tabular-nums text-white">
-              Rest: {Math.floor(restCountdownSeconds / 60)}:{(restCountdownSeconds % 60).toString().padStart(2, "0")}
-            </span>
-            <div className="flex shrink-0 items-center gap-1">
-              <button
-                type="button"
-                onClick={restPaused ? () => setRestPaused(false) : () => setRestPaused(true)}
-                aria-label={restPaused ? "Продолжить" : "Пауза"}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
-              >
-                {restPaused ? (
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                ) : (
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-                  </svg>
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setRestCountdownSeconds(null);
-                  setRestPaused(false);
-                }}
-                aria-label="Выключить таймер"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
-              >
-                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
+        {isDuringActiveWorkout &&
+          restCountdownSeconds !== null &&
+          restCountdownSeconds > 0 && (
+            <div className="flex items-center justify-center gap-3 rounded-[16px] border border-main bg-main/40 px-4 py-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background/70">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="13" r="8" />
+                  <path d="M12 9v4l2 2" />
+                  <path d="M9 3h6" />
+                  <path d="M10 6h4" />
                 </svg>
-              </button>
+              </span>
+              <span className="min-w-[4rem] text-center text-lg font-semibold tabular-nums text-white">
+                Rest: {Math.floor(restCountdownSeconds / 60)}:
+                {(restCountdownSeconds % 60).toString().padStart(2, "0")}
+              </span>
+              <div className="flex shrink-0 items-center gap-1">
+                <button
+                  type="button"
+                  onClick={
+                    restPaused
+                      ? () => setRestPaused(false)
+                      : () => setRestPaused(true)
+                  }
+                  aria-label={restPaused ? "Продолжить" : "Пауза"}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+                >
+                  {restPaused ? (
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5"
+                      fill="currentColor"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5"
+                      fill="currentColor"
+                    >
+                      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                    </svg>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRestCountdownSeconds(null);
+                    setRestPaused(false);
+                  }}
+                  aria-label="Выключить таймер"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+                >
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {replaceModalOpen && (
           <div className="fixed inset-0 z-[60] flex items-end bg-black/70">
             <div className="mx-auto w-full max-w-[440px] rounded-t-[24px] border-t border-white/10 bg-[#161827] px-4 pb-5 pt-4">
               <div className="mb-3 text-center">
-                <h3 className="text-lg font-semibold text-white">Replace exercise</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  Replace exercise
+                </h3>
                 <p className="mt-1 text-sm text-slate-400">
                   Choose from all exercises
                 </p>
@@ -674,7 +730,9 @@ export function ExerciseSetsPage({
                         className="h-12 w-12 rounded-[8px] object-cover"
                       />
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold">{item.name}</p>
+                        <p className="truncate text-sm font-semibold">
+                          {item.name}
+                        </p>
                         <p className="truncate text-xs text-slate-400">
                           {item.muscle_groups.join(", ")}
                         </p>
@@ -714,7 +772,9 @@ export function ExerciseSetsPage({
               setRestDurationMinutes(min);
               setRestDurationSeconds(sec);
             }}
-            isRestRunning={restCountdownSeconds !== null && restCountdownSeconds > 0}
+            isRestRunning={
+              restCountdownSeconds !== null && restCountdownSeconds > 0
+            }
             isRestPaused={restPaused}
             onPause={() => setRestPaused(true)}
             onResume={() => setRestPaused(false)}
@@ -731,9 +791,7 @@ export function ExerciseSetsPage({
             <div className="grid grid-cols-[44px_minmax(0,1fr)_68px_68px_52px] items-center gap-2 px-2.5 pb-1 text-[14px] font-medium text-white/80">
               <span className="text-center">Set</span>
               <span className="text-left">Previous</span>
-              <span className="text-center">
-                {isBodyweight ? "BW" : "Kg"}
-              </span>
+              <span className="text-center">{isBodyweight ? "BW" : "Kg"}</span>
               <span className="text-center">Reps</span>
               <span />
             </div>
@@ -779,10 +837,11 @@ export function ExerciseSetsPage({
                 {painFaces.map((face) => (
                   <span
                     key={face.id}
-                    className={`transition-opacity ${Math.abs(face.value - painLevel) <= 1
-                      ? "opacity-100"
-                      : "opacity-30"
-                      }`}
+                    className={`transition-opacity ${
+                      Math.abs(face.value - painLevel) <= 1
+                        ? "opacity-100"
+                        : "opacity-30"
+                    }`}
                   >
                     {face.label}
                   </span>
@@ -847,3 +906,5 @@ export function ExerciseSetsPage({
     </PageContainer>
   );
 }
+
+export default ExerciseSetsPage;

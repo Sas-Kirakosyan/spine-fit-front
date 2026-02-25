@@ -27,7 +27,7 @@ const detailPills = (exercise: Exercise) => [
   },
 ];
 
-export function ExerciseDetails({
+function ExerciseDetails({
   exercise,
   onNavigateBack,
   onStartWorkout,
@@ -214,3 +214,5 @@ export function ExerciseDetails({
     </PageContainer>
   );
 }
+
+export default ExerciseDetails;

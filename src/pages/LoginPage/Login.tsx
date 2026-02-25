@@ -14,7 +14,7 @@ import { PageHeader } from "@/components/PageHeader/PageHeader";
 
 import type { LoginFormData, LoginProps } from "@/types/auth";
 
-export function Login({
+function Login({
   onSwitchToRegister,
   onNavigateToHome,
   onNavigateToWorkout,
@@ -154,3 +154,5 @@ export function Login({
     </PageContainer>
   );
 }
+
+export default Login;

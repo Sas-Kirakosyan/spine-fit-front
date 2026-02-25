@@ -42,9 +42,7 @@ function SettingsItem({
         {value && (
           <div className="text-right">
             <span className="text-sm text-slate-400">{value}</span>
-            {subValue && (
-              <p className="text-xs text-slate-500">{subValue}</p>
-            )}
+            {subValue && <p className="text-xs text-slate-500">{subValue}</p>}
           </div>
         )}
         {showArrow && <ChevronRightIcon className="h-4 w-4 text-slate-500" />}
@@ -69,19 +67,22 @@ function SettingsSection({ title, children }: SettingsSectionProps) {
   );
 }
 function Divider() {
-  return (
-    <div className="mx-4 border-t border-white/10" />
-  );
+  return <div className="mx-4 border-t border-white/10" />;
 }
 
-export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
+function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Dark");
-  const [language, setLanguage] = useState(() => localStorage.getItem("language") || "English");
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "Dark",
+  );
+  const [language, setLanguage] = useState(
+    () => localStorage.getItem("language") || "English",
+  );
   const [isBodyProfileOpen, setIsBodyProfileOpen] = useState(false);
-  const [bodyProfileSummary, setBodyProfileSummary] = useState<string>("Not set");
+  const [bodyProfileSummary, setBodyProfileSummary] =
+    useState<string>("Not set");
 
   const loadBodyProfileSummary = () => {
     const stored = localStorage.getItem("bodyProfile");
@@ -90,8 +91,10 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         const profile = JSON.parse(stored);
         const parts: string[] = [];
         if (profile.gender) parts.push(profile.gender);
-        if (profile.height) parts.push(`${profile.height} ${profile.heightUnit || "cm"}`);
-        if (profile.weight) parts.push(`${profile.weight} ${profile.weightUnit || "kg"}`);
+        if (profile.height)
+          parts.push(`${profile.height} ${profile.heightUnit || "cm"}`);
+        if (profile.weight)
+          parts.push(`${profile.weight} ${profile.weightUnit || "kg"}`);
         if (parts.length > 0) {
           setBodyProfileSummary(parts.join(" • "));
           return;
@@ -109,7 +112,7 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       setUserEmail(user.email);
       // Проверяем, авторизован ли пользователь через Google
       const isGoogle = user.providerData.some(
-        (provider) => provider.providerId === "google.com"
+        (provider) => provider.providerId === "google.com",
       );
       setIsGoogleUser(isGoogle);
     } else {
@@ -144,13 +147,13 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       descriptions: [
         "Always use light mode",
         "Always use dark mode",
-        "Follow system settings"
+        "Follow system settings",
       ],
       selectedValue: theme,
       onSelect: (value) => {
         setTheme(value);
         localStorage.setItem("theme", value);
-      }
+      },
     });
   };
 
@@ -162,9 +165,9 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       onSelect: (value) => {
         setLanguage(value);
         localStorage.setItem("language", value);
-      }
+      },
     });
-  };  
+  };
 
   const handleSubscription = () => {
     openModal({
@@ -173,13 +176,14 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       descriptions: [
         "Limited to 3 workouts per week",
         "$9.99/month - Unlimited workouts",
-        "$79.99/year - Save 33%"
+        "$79.99/year - Save 33%",
       ],
-      headerDescription: "Upgrade to unlock unlimited workout logging and premium features.",
+      headerDescription:
+        "Upgrade to unlock unlimited workout logging and premium features.",
       selectedValue: "Free",
       onSelect: (value) => {
         console.log("Selected subscription:", value);
-      }
+      },
     });
   };
 
@@ -198,7 +202,7 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       descriptions: [
         "Send us an email at support@spinefit.com",
         "Chat with our support team (9AM-6PM EST)",
-        "Browse frequently asked questions"
+        "Browse frequently asked questions",
       ],
       selectedValue: "",
       onSelect: (value) => {
@@ -207,7 +211,7 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         } else if (value === "FAQ") {
           console.log("Open FAQ");
         }
-      }
+      },
     });
   };
 
@@ -240,7 +244,7 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           label="Subscribe to log unlimited workouts"
           onClick={handleSubscription}
         />
-        <SettingsItem label="Change Password" onClick={() => { }} />
+        <SettingsItem label="Change Password" onClick={() => {}} />
         <SettingsItem
           label="Change Theme"
           value={theme}
@@ -269,20 +273,16 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       {/* Help Section */}
       <SettingsSection title="Help">
         <SettingsItem label="Contact Support" onClick={handleContactSupport} />
-        <SettingsItem label="Permanently Delete Account" onClick={() => { }} />
+        <SettingsItem label="Permanently Delete Account" onClick={() => {}} />
       </SettingsSection>
 
       <Divider />
 
       {/* Legal Section */}
       <SettingsSection title="Legal">
-        <SettingsItem label="Terms & Conditions" onClick={() => { }} />
-        <SettingsItem label="Privacy Policy" onClick={() => { }} />
-        <SettingsItem
-          label="Version"
-          value="1.0.0"
-          showArrow={false}
-        />
+        <SettingsItem label="Terms & Conditions" onClick={() => {}} />
+        <SettingsItem label="Privacy Policy" onClick={() => {}} />
+        <SettingsItem label="Version" value="1.0.0" showArrow={false} />
       </SettingsSection>
 
       {/* Selection Modal */}
@@ -308,3 +308,5 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     </PageContainer>
   );
 }
+
+export default SettingsPage;

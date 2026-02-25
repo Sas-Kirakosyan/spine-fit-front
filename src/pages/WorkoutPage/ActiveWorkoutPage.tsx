@@ -30,7 +30,7 @@ import {
 import { useWorkoutTimer } from "./useWorkoutTimer";
 import { useExerciseManagement } from "./useExerciseManagement";
 
-export function ActiveWorkoutPage({
+function ActiveWorkoutPage({
   onNavigateBack,
   onOpenExerciseSets,
   onFinishWorkout,
@@ -121,10 +121,12 @@ export function ActiveWorkoutPage({
           const generatedPlan = loadPlanFromLocalStorage();
 
           if (generatedPlan) {
-            generatedPlan.workoutDays = generatedPlan.workoutDays.map((day) => ({
-              ...day,
-              exercises: replaceInWorkout(day.exercises as Exercise[]),
-            }));
+            generatedPlan.workoutDays = generatedPlan.workoutDays.map(
+              (day) => ({
+                ...day,
+                exercises: replaceInWorkout(day.exercises as Exercise[]),
+              }),
+            );
             savePlanToLocalStorage(generatedPlan);
 
             setTodaysExercises((prev: Exercise[]) => replaceInWorkout(prev));
@@ -243,7 +245,9 @@ export function ActiveWorkoutPage({
         } else {
           // Full cycle completed — reset completed IDs for this plan so rotation restarts
           const resetIds = new Set(
-            Array.from(updatedIds).filter((id) => !id.startsWith(generatedPlan.id)),
+            Array.from(updatedIds).filter(
+              (id) => !id.startsWith(generatedPlan.id),
+            ),
           );
           if (setCompletedWorkoutIds) {
             setCompletedWorkoutIds(resetIds);
@@ -373,3 +377,5 @@ export function ActiveWorkoutPage({
     </PageContainer>
   );
 }
+
+export default ActiveWorkoutPage;

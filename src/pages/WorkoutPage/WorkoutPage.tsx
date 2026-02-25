@@ -179,7 +179,7 @@ function SwipeableExerciseCard({
   );
 }
 
-export function WorkoutPage({
+function WorkoutPage({
   onNavigateToHome,
   onNavigateToWorkout,
   onNavigateToProfile,
@@ -822,3 +822,5 @@ export function WorkoutPage({
     </PageContainer>
   );
 }
+
+export default WorkoutPage;

@@ -4,10 +4,7 @@ import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { HomePageProps } from "@/types/pages";
 
-export function HomePage({
-  onNavigateToLogin,
-  onNavigateToWorkout,
-}: HomePageProps) {
+function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   const handleStartQuiz = () => {
@@ -58,3 +55,5 @@ export function HomePage({
     </>
   );
 }
+
+export default HomePage;

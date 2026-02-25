@@ -19,7 +19,7 @@ import {
   getAllExercisesWithProgress,
 } from "@/utils/progressStats";
 
-export function ProfilePage({
+function ProfilePage({
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,
@@ -30,45 +30,45 @@ export function ProfilePage({
 }: ProfilePageProps) {
   const stats = useMemo(
     () => calculateTotalStats(workoutHistory),
-    [workoutHistory]
+    [workoutHistory],
   );
 
   const weeklyActivity = useMemo(
     () => getWeeklyActivity(workoutHistory),
-    [workoutHistory]
+    [workoutHistory],
   );
 
   const progressData = useMemo(
     () => getProgressData(workoutHistory),
-    [workoutHistory]
+    [workoutHistory],
   );
 
   const exerciseRecords = useMemo(
     () => getPersonalRecords(workoutHistory),
-    [workoutHistory]
+    [workoutHistory],
   );
 
   const workoutRecords = useMemo(
     () => getWorkoutRecords(workoutHistory),
-    [workoutHistory]
+    [workoutHistory],
   );
 
   const allExercises = useMemo(
     () => getAllExercisesWithProgress(workoutHistory),
-    [workoutHistory]
+    [workoutHistory],
   );
 
   const hasWorkouts = workoutHistory.length > 0;
-  const [activeTab, setActiveTab] = useState<"overview" | "exercise">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "exercise">(
+    "overview",
+  );
 
   return (
     <PageContainer contentClassName="gap-5 pb-24 mx-2.5">
       <header className="flex items-start justify-between">
         <div>
           <Logo />
-          <h1 className="mx-2.5 text-3xl font-semibold text-white">
-            Progress
-          </h1>
+          <h1 className="mx-2.5 text-3xl font-semibold text-white">Progress</h1>
         </div>
         <Button
           onClick={onNavigateToSettings}
@@ -79,24 +79,29 @@ export function ProfilePage({
       </header>
 
       {/* Tabs: Overview | Exercise */}
-      <nav className="flex border-b border-white/10" aria-label="Progress sections">
+      <nav
+        className="flex border-b border-white/10"
+        aria-label="Progress sections"
+      >
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
-          className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 cursor-pointer ${activeTab === "overview"
-            ? "border-main text-white"
-            : "border-transparent text-slate-400 hover:text-slate-300"
-            }`}
+          className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 cursor-pointer ${
+            activeTab === "overview"
+              ? "border-main text-white"
+              : "border-transparent text-slate-400 hover:text-slate-300"
+          }`}
         >
           Overview
         </button>
         <button
           type="button"
           onClick={() => setActiveTab("exercise")}
-          className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 cursor-pointer ${activeTab === "exercise"
-            ? "border-main text-white"
-            : "border-transparent text-slate-400 hover:text-slate-300"
-            }`}
+          className={`flex-1 py-3 text-sm font-medium transition-colors border-b-2 cursor-pointer ${
+            activeTab === "exercise"
+              ? "border-main text-white"
+              : "border-transparent text-slate-400 hover:text-slate-300"
+          }`}
         >
           Exercise
         </button>
@@ -142,7 +147,8 @@ export function ProfilePage({
               </div>
               <h2 className="text-xl font-semibold">Start training</h2>
               <p className="max-w-xs text-sm text-slate-400">
-                Your progress, workout stats, personal records and charts will appear here after your first completed workout
+                Your progress, workout stats, personal records and charts will
+                appear here after your first completed workout
               </p>
               <button
                 onClick={onNavigateToWorkout}
@@ -182,7 +188,8 @@ export function ProfilePage({
                 <path d="m14 21 7-7" />
               </svg>
               <p className="text-sm text-slate-400">
-                Your estimated 1RM by exercise will appear here after completed workouts.
+                Your estimated 1RM by exercise will appear here after completed
+                workouts.
               </p>
             </div>
           )}
@@ -195,9 +202,11 @@ export function ProfilePage({
           onWorkoutClick={onNavigateToWorkout}
           onProfileClick={onNavigateToProfile}
           onHistoryClick={onNavigateToHistory}
-          onAIClick={onNavigateToAI || (() => { })}
+          onAIClick={onNavigateToAI || (() => {})}
         />
       </div>
     </PageContainer>
   );
 }
+
+export default ProfilePage;

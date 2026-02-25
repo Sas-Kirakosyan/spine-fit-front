@@ -1,22 +1,44 @@
-import { useState, useEffect } from "react";
-import { HomePage } from "@/pages/HomePage/HomePage";
-import { Registration } from "@/pages/RegistrationPage/Registration";
-import { Login } from "@/pages/LoginPage/Login";
-import { WorkoutPage } from "@/pages/WorkoutPage/WorkoutPage";
-import { ProfilePage } from "@/pages/ProfilePage/ProfilePage";
-import { ExerciseSetsPage } from "@/pages/WorkoutPage/ExerciseSetsPage";
-import { ExerciseDetails } from "@/pages/WorkoutPage/ExerciseHowTo";
-import { ActiveWorkoutPage } from "@/pages/WorkoutPage/ActiveWorkoutPage";
+import React, { useState, useEffect, Suspense, lazy } from "react";
+
+// --- LAZY LOADED COMPONENTS ---
+// Note: Using .then() to handle named exports from your files
+const HomePage = lazy(() => import("@/pages/HomePage/HomePage"));
+
+const Registration = lazy(
+  () => import("@/pages/RegistrationPage/Registration"),
+);
+const Login = lazy(() => import("@/pages/LoginPage/Login"));
+const WorkoutPage = lazy(() => import("@/pages/WorkoutPage/WorkoutPage"));
+const ProfilePage = lazy(() => import("@/pages/ProfilePage/ProfilePage"));
+const ExerciseSetsPage = lazy(
+  () => import("@/pages/WorkoutPage/ExerciseSetsPage"),
+);
+const ExerciseDetails = lazy(() => import("@/pages/WorkoutPage/ExerciseHowTo"));
+const ActiveWorkoutPage = lazy(
+  () => import("@/pages/WorkoutPage/ActiveWorkoutPage"),
+);
+const HistoryPage = lazy(() => import("@/pages/HistoryPage/HistoryPage"));
+const AllExercisePage = lazy(
+  () => import("@/pages/AllExercisePage/AllExercisePage"),
+);
+const MyPlanPage = lazy(() => import("@/pages/MyPlanPage/MyPlanPage"));
+const AvailableEquipmentPage = lazy(
+  () => import("@/pages/MyPlanPage/AvailableEquipmentPage"),
+);
+const AIPage = lazy(() => import("@/pages/AIPage/AIPage"));
+const SettingsPage = lazy(() => import("@/pages/SettingsPage/SettingsPage"));
+const CreateProgramPage = lazy(
+  () => import("@/pages/CreateWorkoutPage/CreateWorkoutPage"),
+);
+
 import type { Exercise } from "@/types/exercise";
 import type { Page } from "@/types/navigation";
-import type { ExerciseSetRow, FinishedWorkoutSummary, SavedProgram, TrainingDay } from "@/types/workout";
-import { HistoryPage } from "@/pages/HistoryPage/HistoryPage";
-import { AllExercisePage } from "@/pages/AllExercisePage/AllExercisePage";
-import { MyPlanPage } from "@/pages/MyPlanPage/MyPlanPage";
-import { AvailableEquipmentPage } from "@/pages/MyPlanPage/AvailableEquipmentPage";
-import { AIPage } from "@/pages/AIPage/AIPage";
-import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
-import { CreateProgramPage } from "@/pages/CreateWorkoutPage/CreateWorkoutPage";
+import type {
+  ExerciseSetRow,
+  FinishedWorkoutSummary,
+  SavedProgram,
+  TrainingDay,
+} from "@/types/workout";
 import { loadPlanSettings } from "@/types/planSettings";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
@@ -24,79 +46,69 @@ import "@/utils/testWorkoutHistoryGenerator";
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const savedPage = localStorage.getItem("currentPage") as Page | null;
-    if (
-      savedPage === "home" ||
-      savedPage === "login" ||
-      savedPage === "register" ||
-      savedPage === "workout" ||
-      savedPage === "profile" ||
-      savedPage === "exerciseSets" ||
-      savedPage === "exerciseDetails" ||
-      savedPage === "activeWorkout" ||
-      savedPage === "history" ||
-      savedPage === "ai" ||
-      savedPage === "allExercise" ||
-      savedPage === "myPlan" ||
-      savedPage === "availableEquipment" ||
-      savedPage === "settings" ||
-      savedPage === "createProgram"
-    ) {
-      return savedPage;
-    }
-    return "home";
+    const validPages: Page[] = [
+      "home",
+      "login",
+      "register",
+      "workout",
+      "profile",
+      "exerciseSets",
+      "exerciseDetails",
+      "activeWorkout",
+      "history",
+      "ai",
+      "allExercise",
+      "myPlan",
+      "availableEquipment",
+      "settings",
+      "createProgram",
+    ];
+    return savedPage && validPages.includes(savedPage) ? savedPage : "home";
   });
+
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
-    null
+    null,
   );
   const [exerciseSetsMode, setExerciseSetsMode] = useState<
     "preWorkout" | "activeWorkout"
   >("preWorkout");
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
-    []
+    [],
   );
   const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(null);
   const [exerciseLogs, setExerciseLogs] = useState<
     Record<number, ExerciseSetRow[]>
   >({});
+
   const [workoutHistory, setWorkoutHistory] = useState<
     FinishedWorkoutSummary[]
   >(() => {
     const savedHistory = localStorage.getItem("workoutHistory");
-    if (!savedHistory) {
-      return [];
-    }
+    if (!savedHistory) return [];
     try {
       const parsed = JSON.parse(savedHistory);
-      if (Array.isArray(parsed)) {
-        return parsed;
-      }
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
     }
-    return [];
   });
 
   const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>(() => {
     const savedExercises = localStorage.getItem("workoutExercises");
-    if (!savedExercises) {
-      return [];
-    }
+    if (!savedExercises) return [];
     try {
       const parsed = JSON.parse(savedExercises);
-      if (Array.isArray(parsed)) {
-        return parsed;
-      }
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
-      console.error("Error parsing saved workout exercises");
+      return [];
     }
-    return [];
   });
 
   const [completedWorkoutIds, setCompletedWorkoutIds] = useState<Set<string>>(
     () => {
       const saved = localStorage.getItem("completedWorkoutIds");
       return saved ? new Set(JSON.parse(saved)) : new Set();
-    }
+    },
   );
 
   const [createProgramDays, setCreateProgramDays] = useState<TrainingDay[]>([]);
@@ -106,7 +118,9 @@ function App() {
     "workout" | "createProgram"
   >("workout");
   const [isCustomWorkoutMode, setIsCustomWorkoutMode] = useState(false);
-  const [editingProgramId, setEditingProgramId] = useState<string | undefined>();
+  const [editingProgramId, setEditingProgramId] = useState<
+    string | undefined
+  >();
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -123,7 +137,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem(
       "completedWorkoutIds",
-      JSON.stringify([...completedWorkoutIds])
+      JSON.stringify([...completedWorkoutIds]),
     );
   }, [completedWorkoutIds]);
 
@@ -143,56 +157,41 @@ function App() {
       return [...prev, ...newExercises];
     });
 
-    // Also update the generated plan in localStorage for the current active workout
     try {
       const planString = localStorage.getItem("generatedPlan");
       if (planString) {
         const plan = JSON.parse(planString);
-
-        // Find the current active workout (next uncompleted workout)
         const activeWorkout = getNextAvailableWorkout(
           plan,
-          completedWorkoutIds
+          completedWorkoutIds,
         );
 
         if (activeWorkout) {
-          // Find the index of this workout in the plan
           const workoutIndex = plan.workoutDays.findIndex(
             (day: any) =>
               day.dayNumber === activeWorkout.dayNumber &&
-              day.dayName === activeWorkout.dayName
+              day.dayName === activeWorkout.dayName,
           );
 
           if (workoutIndex !== -1) {
             const existingExerciseIds = new Set(
-              plan.workoutDays[workoutIndex].exercises.map((ex: any) => ex.id)
+              plan.workoutDays[workoutIndex].exercises.map((ex: any) => ex.id),
             );
             const newExercisesToAdd = exercises.filter(
-              (ex) => !existingExerciseIds.has(ex.id)
+              (ex) => !existingExerciseIds.has(ex.id),
             );
 
             if (newExercisesToAdd.length > 0) {
               plan.workoutDays[workoutIndex].exercises.push(
-                ...newExercisesToAdd
+                ...newExercisesToAdd,
               );
               localStorage.setItem("generatedPlan", JSON.stringify(plan));
-              console.log(
-                `✅ Added ${newExercisesToAdd.length} exercises to ${activeWorkout.dayName} workout:`,
-                newExercisesToAdd.map((ex) => ex.name)
-              );
             }
           }
-        } else {
-          console.warn(
-            "⚠️ No active workout found (all workouts may be completed)"
-          );
         }
       }
     } catch (error) {
-      console.error(
-        "❌ Error updating generated plan with new exercises:",
-        error
-      );
+      console.error("Error updating generated plan:", error);
     }
   };
 
@@ -230,7 +229,9 @@ function App() {
       workoutDays: program.days.map((day, i) => ({
         dayNumber: i + 1,
         dayName: day.name,
-        muscleGroups: [...new Set(day.exercises.flatMap((ex) => ex.muscle_groups))],
+        muscleGroups: [
+          ...new Set(day.exercises.flatMap((ex) => ex.muscle_groups)),
+        ],
         exercises: day.exercises,
       })),
       missingMuscleGroups: [],
@@ -250,6 +251,7 @@ function App() {
     setActiveDayId(null);
     setCurrentPage("createProgram");
   };
+
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
@@ -262,22 +264,26 @@ function App() {
     setExerciseSetsMode("preWorkout");
     setCurrentPage("activeWorkout");
   };
+
   const navigateToExerciseDetails = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCurrentPage("exerciseDetails");
   };
+
   const navigateToExerciseSets = (
     exercise: Exercise,
-    mode: "preWorkout" | "activeWorkout" = "preWorkout"
+    mode: "preWorkout" | "activeWorkout" = "preWorkout",
   ) => {
     setSelectedExercise(exercise);
     setExerciseSetsMode(mode);
     setCurrentPage("exerciseSets");
   };
+
   const backFromExerciseDetails = () => {
     setSelectedExercise(null);
     setCurrentPage("workout");
   };
+
   const backFromExerciseSets = () => {
     const previousMode = exerciseSetsMode;
     setSelectedExercise(null);
@@ -291,14 +297,11 @@ function App() {
 
   const markExerciseComplete = (exerciseId: number, sets: ExerciseSetRow[]) => {
     const completedSets = sets
-      .filter((setEntry) => setEntry.completed)
-      .map((setEntry) => ({ ...setEntry }));
-    setExerciseLogs((prev) => ({
-      ...prev,
-      [exerciseId]: completedSets,
-    }));
+      .filter((s) => s.completed)
+      .map((s) => ({ ...s }));
+    setExerciseLogs((prev) => ({ ...prev, [exerciseId]: completedSets }));
     setCompletedExerciseIds((prev) =>
-      prev.includes(exerciseId) ? prev : [...prev, exerciseId]
+      prev.includes(exerciseId) ? prev : [...prev, exerciseId],
     );
     navigateToActiveWorkout({ resetCompleted: false });
   };
@@ -358,11 +361,9 @@ function App() {
             onEditSavedProgram={handleEditSavedProgram}
             exercises={workoutExercises}
             isCustomWorkout={isCustomWorkoutMode}
-            onRemoveExercise={(exerciseId) => {
-              setWorkoutExercises((prev) =>
-                prev.filter((ex) => ex.id !== exerciseId)
-              );
-            }}
+            onRemoveExercise={(id) =>
+              setWorkoutExercises((prev) => prev.filter((ex) => ex.id !== id))
+            }
             completedWorkoutIds={completedWorkoutIds}
           />
         );
@@ -411,8 +412,8 @@ function App() {
         return (
           <ActiveWorkoutPage
             onNavigateBack={navigateToWorkout}
-            onOpenExerciseSets={(exercise) =>
-              navigateToExerciseSets(exercise, "activeWorkout")
+            onOpenExerciseSets={(ex) =>
+              navigateToExerciseSets(ex, "activeWorkout")
             }
             onFinishWorkout={handleFinishWorkout}
             completedExerciseIds={completedExerciseIds}
@@ -448,23 +449,26 @@ function App() {
       case "allExercise":
         return (
           <AllExercisePage
-            onClose={() => {
-              if (allExerciseReturnPage === "createProgram") {
-                setCurrentPage("createProgram");
-              } else {
-                navigateToWorkout();
-              }
-            }}
+            onClose={() =>
+              allExerciseReturnPage === "createProgram"
+                ? setCurrentPage("createProgram")
+                : navigateToWorkout()
+            }
             onAddExercises={(exercises) => {
               if (allExerciseReturnPage === "createProgram" && activeDayId) {
                 setCreateProgramDays((prev) =>
                   prev.map((day) => {
                     if (day.id !== activeDayId) return day;
-                    const existingIds = new Set(day.exercises.map((ex) => ex.id));
-                    const newExercises = exercises.filter(
-                      (ex) => !existingIds.has(ex.id),
+                    const existingIds = new Set(
+                      day.exercises.map((ex) => ex.id),
                     );
-                    return { ...day, exercises: [...day.exercises, ...newExercises] };
+                    return {
+                      ...day,
+                      exercises: [
+                        ...day.exercises,
+                        ...exercises.filter((ex) => !existingIds.has(ex.id)),
+                      ],
+                    };
                   }),
                 );
               } else {
@@ -484,9 +488,7 @@ function App() {
               setAllExerciseReturnPage("createProgram");
               setCurrentPage("allExercise");
             }}
-            onSave={() => {
-              navigateToWorkout();
-            }}
+            onSave={navigateToWorkout}
             onDaysChange={setCreateProgramDays}
             onProgramNameChange={setCreateProgramName}
             editProgramId={editingProgramId}
@@ -513,7 +515,17 @@ function App() {
     }
   };
 
-  return renderPage();
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen">
+          Loading...
+        </div>
+      }
+    >
+      {renderPage()}
+    </Suspense>
+  );
 }
 
 export default App;

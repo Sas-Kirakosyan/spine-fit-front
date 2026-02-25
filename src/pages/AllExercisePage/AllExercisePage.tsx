@@ -18,10 +18,7 @@ interface AllExercisePageProps {
   onAddExercises?: (exercises: Exercise[]) => void;
 }
 
-export function AllExercisePage({
-  onClose,
-  onAddExercises,
-}: AllExercisePageProps) {
+function AllExercisePage({ onClose, onAddExercises }: AllExercisePageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -42,7 +39,7 @@ export function AllExercisePage({
     (exercise: Exercise) => {
       toggleExercise(exercise.id);
     },
-    [toggleExercise]
+    [toggleExercise],
   );
 
   const handleAddExercises = useCallback(() => {
@@ -96,7 +93,7 @@ export function AllExercisePage({
                   selectedExerciseIds={selectedExercises}
                   onExerciseSelect={handleExerciseClick}
                 />
-              )
+              ),
             )
           )}
         </div>
@@ -109,3 +106,5 @@ export function AllExercisePage({
     </PageContainer>
   );
 }
+
+export default AllExercisePage;
