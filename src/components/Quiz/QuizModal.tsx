@@ -125,15 +125,15 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         }));
       }
 
-      setTimeout(() => {
-        if (currentQuestion < filteredQuestions.length - 1) {
-          const nextQuestion = currentQuestion + 1;
-          setCurrentQuestion(nextQuestion);
-          setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
-        } else {
-          handleSubmitWithAnswer(answerValue);
-        }
-      }, 300);
+      // setTimeout(() => {
+      //   if (currentQuestion < filteredQuestions.length - 1) {
+      //     const nextQuestion = currentQuestion + 1;
+      //     setCurrentQuestion(nextQuestion);
+      //     setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
+      //   } else {
+      //     handleSubmitWithAnswer(answerValue);
+      //   }
+      // }, 300);
     }
   };
 
@@ -315,52 +315,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       const prevQuestion = currentQuestion - 1;
       setCurrentQuestion(prevQuestion);
       setTimeout(() => loadAnswerForQuestion(prevQuestion), 0);
-    }
-  };
-
-  const handleSkip = () => {
-    const question = filteredQuestions[currentQuestion];
-    const updatedAnswers = {
-      ...answers,
-      [question.id]: "",
-    };
-    setAnswers(updatedAnswers);
-
-    if (currentQuestion < filteredQuestions.length - 1) {
-      const nextQuestion = currentQuestion + 1;
-      setCurrentQuestion(nextQuestion);
-      setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
-    } else {
-      const finalUnits = { ...units };
-
-      const quizData = {
-        workoutType,
-        answers: updatedAnswers,
-        units: finalUnits,
-        timestamp: new Date().toISOString(),
-      };
-
-      // Overwrite any existing quiz data instead of appending
-      localStorage.setItem("quizAnswers", JSON.stringify(quizData));
-
-      // Clear any existing generated plan so a new one gets created with updated answers
-      localStorage.removeItem("generatedPlan");
-
-      console.log("quizData:", quizData);
-      setCurrentQuestion(0);
-      setSelectedAnswer(null);
-      setSelectedCheckboxes([]);
-      setInputValue("");
-      setAnswers({});
-      setUnits({});
-      setHeightUnit("cm");
-      setWeightUnit("kg");
-      setMultiFieldValues({});
-      setMultiFieldUnits({});
-      onClose();
-      if (onQuizComplete) {
-        onQuizComplete();
-      }
     }
   };
 
@@ -722,16 +676,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
               currentQuestion={currentQuestion}
               totalQuestions={filteredQuestions.length}
               isAnswered={isAnswered()}
-              isOptional={filteredQuestions[currentQuestion].optional || false}
               isInfoScreen={filteredQuestions[currentQuestion].type === "info"}
-              hideNextButton={
-                filteredQuestions[currentQuestion].type === "radio" ||
-                filteredQuestions[currentQuestion].type === "image_radio"
-              }
               buttonText={filteredQuestions[currentQuestion].buttonText}
               onBack={handleBack}
               onNext={handleNext}
-              onSkip={handleSkip}
               onSubmit={handleSubmit}
             />
           </div>

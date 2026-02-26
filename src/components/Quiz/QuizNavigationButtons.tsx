@@ -2,13 +2,13 @@ interface QuizNavigationButtonsProps {
   currentQuestion: number;
   totalQuestions: number;
   isAnswered: boolean;
-  isOptional: boolean;
+  // isOptional: boolean;
   isInfoScreen: boolean;
   hideNextButton?: boolean;
   buttonText?: string;
   onBack: () => void;
   onNext: () => void;
-  onSkip: () => void;
+  // onSkip: () => void;
   onSubmit: () => void;
 }
 
@@ -16,13 +16,13 @@ export function QuizNavigationButtons({
   currentQuestion,
   totalQuestions,
   isAnswered,
-  isOptional,
+  // isOptional,
   isInfoScreen,
   hideNextButton = false,
   buttonText,
   onBack,
   onNext,
-  onSkip,
+  // onSkip,
   onSubmit,
 }: QuizNavigationButtonsProps) {
   const isLastQuestion = currentQuestion >= totalQuestions - 1;
@@ -44,18 +44,8 @@ export function QuizNavigationButtons({
   }
 
   return (
-    <div className="mt-6 mx-4 flex items-center justify-between text-white">
-      {isOptional ? (
-        <button
-          onClick={onSkip}
-          className="rounded-full mb-5 bg-white/10 px-4 py-2 text-sm font-medium transition hover:bg-white/20 sm:px-6"
-        >
-          Skip
-        </button>
-      ) : (
-        <span />
-      )}
-      <div className="flex mb-5 gap-3">
+    <div className="mt-6 mx-4 text-white">
+      <div className="w-full flex justify-between mb-5 gap-3">
         {currentQuestion > 0 && (
           <button
             onClick={onBack}
