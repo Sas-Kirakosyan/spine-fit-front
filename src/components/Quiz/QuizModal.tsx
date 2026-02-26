@@ -124,16 +124,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
           [question.id]: answerValue,
         }));
       }
-
-      // setTimeout(() => {
-      //   if (currentQuestion < filteredQuestions.length - 1) {
-      //     const nextQuestion = currentQuestion + 1;
-      //     setCurrentQuestion(nextQuestion);
-      //     setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
-      //   } else {
-      //     handleSubmitWithAnswer(answerValue);
-      //   }
-      // }, 300);
     }
   };
 
