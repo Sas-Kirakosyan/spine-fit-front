@@ -144,7 +144,7 @@ export const questions: QuizQuestion[] = [
       fieldName: "baselineStats",
       showOptionsBasedOn: true,
     },
-    optional: true,
+    // optional: true,
   },
 
   {
