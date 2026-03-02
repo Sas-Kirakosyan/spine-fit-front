@@ -32,14 +32,11 @@ function useExerciseHistory(
     let exerciseName = "";
 
     const sorted = [...workoutHistory].sort(
-      (a, b) =>
-        new Date(b.finishedAt).getTime() - new Date(a.finishedAt).getTime()
+      (a, b) => new Date(b.finishedAt).getTime() - new Date(a.finishedAt).getTime()
     );
 
     sorted.forEach((workout) => {
-      const exercise = workout.completedExercises.find(
-        (ex) => ex.id === exerciseId
-      );
+      const exercise = workout.completedExercises.find((ex) => ex.id === exerciseId);
       if (!exercise) return;
 
       if (!exerciseName) exerciseName = exercise.name;
@@ -97,11 +94,7 @@ function formatShortDate(dateStr: string): string {
   return `${d.getDate()}/${d.getMonth() + 1}`;
 }
 
-function HistoryTab({
-  sessions,
-}: {
-  sessions: ExerciseSession[];
-}) {
+function HistoryTab({ sessions }: { sessions: ExerciseSession[] }) {
   if (sessions.length === 0) {
     return (
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center ring-1 ring-white/5">
@@ -132,9 +125,7 @@ function HistoryTab({
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-white">Workout</h3>
-                <p className="text-xs text-slate-400">
-                  {formatDateTime(session.date)}
-                </p>
+                <p className="text-xs text-slate-400">{formatDateTime(session.date)}</p>
               </div>
             </div>
 
@@ -142,23 +133,16 @@ function HistoryTab({
               <span className="text-xs text-slate-400 uppercase tracking-wider">
                 Sets Performed
               </span>
-              <span className="text-xs text-slate-400 uppercase tracking-wider">
-                1RM
-              </span>
+              <span className="text-xs text-slate-400 uppercase tracking-wider">1RM</span>
             </div>
 
             <div className="flex flex-col gap-1">
               {session.sets
                 .filter((s) => s.completed)
                 .map((set, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between py-1"
-                  >
+                  <div key={idx} className="flex items-center justify-between py-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-main font-semibold w-4">
-                        {idx + 1}
-                      </span>
+                      <span className="text-xs text-main font-semibold w-4">{idx + 1}</span>
                       <span className="text-sm font-medium text-white">
                         {set.weight}kg x {set.reps} reps
                       </span>
@@ -168,12 +152,8 @@ function HistoryTab({
                           session.sets
                             .filter((s) => s.completed)
                             .findIndex(
-                              (s) =>
-                                s.weight === bestSet.weight &&
-                                s.reps === bestSet.reps
-                            ) && (
-                          <span className="text-xs text-yellow-400">🏅 1RM</span>
-                        )}
+                              (s) => s.weight === bestSet.weight && s.reps === bestSet.reps
+                            ) && <span className="text-xs text-yellow-400">🏅 1RM</span>}
                     </div>
                     <span className="text-sm text-slate-300">
                       {Math.round(session.estimated1RM)}
@@ -189,7 +169,6 @@ function HistoryTab({
 }
 
 function renderChartTooltip(unit: string, formatFn?: (v: number) => string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (props: any) => {
     const { active, payload } = props;
     if (active && payload && payload.length) {
@@ -208,15 +187,11 @@ function renderChartTooltip(unit: string, formatFn?: (v: number) => string) {
 }
 
 function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
-  const reversedSessions = useMemo(
-    () => [...sessions].reverse(),
-    [sessions]
-  );
+  const reversedSessions = useMemo(() => [...sessions].reverse(), [sessions]);
 
   const latest1RM = sessions.length > 0 ? sessions[0].estimated1RM : 0;
   const latestDate = sessions.length > 0 ? sessions[0].date : "";
-  const latestVolume =
-    sessions.length > 0 ? sessions[0].sessionVolume : 0;
+  const latestVolume = sessions.length > 0 ? sessions[0].sessionVolume : 0;
 
   const getSessionMaxWeight = (s: ExerciseSession) =>
     s.sets.filter((x) => x.completed).reduce((m, x) => Math.max(m, x.weight), 0);
@@ -276,9 +251,7 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
       {/* Estimated Strength card */}
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-base font-semibold text-white">
-            Estimated Strength
-          </h3>
+          <h3 className="text-base font-semibold text-white">Estimated Strength</h3>
         </div>
         <p className="text-3xl font-bold text-white">
           {Math.round(latest1RM)}
@@ -288,15 +261,8 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
 
         <div className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={strengthData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="#334155"
-                vertical={false}
-              />
+            <LineChart data={strengthData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
               <XAxis
                 dataKey="date"
                 axisLine={false}
@@ -316,7 +282,12 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
                 stroke="#3b82f6"
                 strokeWidth={2}
                 dot={{ fill: "#3b82f6", r: 5, strokeWidth: 0 }}
-                activeDot={{ fill: "#3b82f6", stroke: "#fff", strokeWidth: 2, r: 7 }}
+                activeDot={{
+                  fill: "#3b82f6",
+                  stroke: "#fff",
+                  strokeWidth: 2,
+                  r: 7,
+                }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -326,9 +297,7 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
       {/* Session Volume card */}
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-base font-semibold text-white">
-            Session Volume
-          </h3>
+          <h3 className="text-base font-semibold text-white">Session Volume</h3>
         </div>
         <p className="text-3xl font-bold text-white">
           {formatVolume(latestVolume)}
@@ -338,15 +307,8 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
 
         <div className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={volumeData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="#334155"
-                vertical={false}
-              />
+            <BarChart data={volumeData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
               <XAxis
                 dataKey="date"
                 axisLine={false}
@@ -380,15 +342,8 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
 
         <div className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={maxWeightData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="#334155"
-                vertical={false}
-              />
+            <BarChart data={maxWeightData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
               <XAxis
                 dataKey="date"
                 axisLine={false}
@@ -421,15 +376,8 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
 
         <div className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={maxRepsData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="#334155"
-                vertical={false}
-              />
+            <BarChart data={maxRepsData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
               <XAxis
                 dataKey="date"
                 axisLine={false}
@@ -452,18 +400,13 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
   );
 }
 
-export function ExerciseProgressPage({
+function ExerciseProgressPage({
   exerciseId,
   onNavigateBack,
   workoutHistory,
 }: ExerciseProgressPageProps) {
-  const [activeTab, setActiveTab] = useState<"history" | "progress">(
-    "history"
-  );
-  const { sessions, exerciseName } = useExerciseHistory(
-    exerciseId,
-    workoutHistory
-  );
+  const [activeTab, setActiveTab] = useState<"history" | "progress">("history");
+  const { sessions, exerciseName } = useExerciseHistory(exerciseId, workoutHistory);
 
   return (
     <PageContainer contentClassName="pb-8">
@@ -514,10 +457,7 @@ export function ExerciseProgressPage({
       </header>
 
       {/* Tabs */}
-      <nav
-        className="flex border-b border-white/10 px-4"
-        aria-label="Exercise sections"
-      >
+      <nav className="flex border-b border-white/10 px-4" aria-label="Exercise sections">
         <button
           type="button"
           onClick={() => setActiveTab("history")}
@@ -553,3 +493,5 @@ export function ExerciseProgressPage({
     </PageContainer>
   );
 }
+
+export default ExerciseProgressPage;

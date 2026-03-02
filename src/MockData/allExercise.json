@@ -3502,6 +3502,171 @@
     ]
   },
   {
+    "id": 62,
+    "name": "Front Plank",
+    "description": "A foundational anti-extension core exercise that builds deep trunk stability by teaching you to resist lumbar arching under bodyweight load. Essential for spinal endurance, posture control, and reducing compensations that can aggravate low back pain.",
+    "category": "core",
+    "muscle_groups": ["core_stabilizers", "abdominals", "obliques"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Set up on forearms and toes with elbows under shoulders. Brace your core, squeeze glutes, and keep a straight line from head to heels. Maintain neutral ribs and pelvis, avoiding hip sag or piking. Hold steady while breathing slowly through the nose. Stop when form breaks.",
+    "video_url": "https://www.youtube.com/watch?v=pSHjTRCQxIw",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 89,
+        "exercise_id": 62,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Start with short holds (10-20 seconds) and prioritize perfect bracing. If pain appears, regress to knees-plank or dead bug.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 30,
+    "weight": 0,
+    "weight_unit": "seconds",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/front-plank.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://i.ytimg.com/vi/pSHjTRCQxIw/maxresdefault.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "name": "Dumbbell Shrug",
+    "description": "An upper-trapezius isolation exercise that improves shoulder girdle strength, posture support, and neck-shoulder resilience. Useful for balancing scapular musculature alongside rear-delt and mid-back work.",
+    "category": "strength",
+    "muscle_groups": ["traps", "upper_back"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Stand tall holding dumbbells at your sides with arms straight. Keep chest up and core braced. Elevate shoulders straight up toward your ears without rolling them. Pause briefly at the top, then lower under control to full stretch. Avoid swinging, leaning, or neck jutting.",
+    "video_url": "https://www.youtube.com/watch?v=cJRVVxmytaM",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 90,
+        "exercise_id": 63,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Use light to moderate loads and strict posture. Avoid heavy loading that increases axial compression or causes trunk sway.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 10,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/dumbbell-shrug.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://i.ytimg.com/vi/cJRVVxmytaM/maxresdefault.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "name": "Hammer Curl",
+    "description": "A neutral-grip biceps variation that emphasizes the brachialis and brachioradialis, improving arm thickness, elbow resilience, and forearm strength. Complements standard supinated curls for more complete arm development.",
+    "category": "strength",
+    "muscle_groups": ["biceps", "forearms", "brachialis"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Stand or sit tall with dumbbells at your sides, palms facing each other. Keep elbows close to your torso and curl both dumbbells upward without rotating the wrists. Squeeze at the top, then lower slowly to full extension. Keep shoulders down and avoid swinging the torso.",
+    "video_url": "https://www.youtube.com/watch?v=zC3nLlEvin4",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 91,
+        "exercise_id": 64,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Perform seated or with back support if needed. Avoid momentum and keep core engaged.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 8,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercises/hammer-curl.png",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://i.ytimg.com/vi/zC3nLlEvin4/maxresdefault.jpg",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
+  },
+  {
     "id": 100,
     "name": "Լյամկով ռուչկով վերևից բոկ",
     "description": "Լյամկով ռուչկով վերևից բոկ",
