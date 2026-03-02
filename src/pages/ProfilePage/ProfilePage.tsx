@@ -8,16 +8,15 @@ import { Button } from "@/components/Buttons/Button";
 import { StatsGrid } from "@/components/Progress/StatsGrid";
 import { WeeklyActivity } from "@/components/Progress/WeeklyActivity";
 import { ProgressChart } from "@/components/Progress/ProgressChart";
-import { PersonalRecords } from "@/components/Progress/PersonalRecords";
 import { ExerciseList } from "@/components/Progress/ExerciseList";
 import {
   calculateTotalStats,
   getWeeklyActivity,
   getProgressData,
-  getPersonalRecords,
-  getWorkoutRecords,
   getAllExercisesWithProgress,
+  getMuscleGroupDistribution,
 } from "@/utils/progressStats";
+import { MuscleGroupChart } from "@/components/Progress/MuscleGroupChart";
 
 function ProfilePage({
   onNavigateToWorkout,
@@ -25,6 +24,7 @@ function ProfilePage({
   onNavigateToHistory,
   onNavigateToAI,
   onNavigateToSettings,
+  onExerciseClick,
   activePage,
   workoutHistory,
 }: ProfilePageProps) {
@@ -43,19 +43,14 @@ function ProfilePage({
     [workoutHistory],
   );
 
-  const exerciseRecords = useMemo(
-    () => getPersonalRecords(workoutHistory),
-    [workoutHistory],
-  );
-
-  const workoutRecords = useMemo(
-    () => getWorkoutRecords(workoutHistory),
-    [workoutHistory],
-  );
-
   const allExercises = useMemo(
     () => getAllExercisesWithProgress(workoutHistory),
     [workoutHistory],
+  );
+
+  const muscleGroupData = useMemo(
+    () => getMuscleGroupDistribution(workoutHistory),
+    [workoutHistory]
   );
 
   const hasWorkouts = workoutHistory.length > 0;
@@ -103,7 +98,7 @@ function ProfilePage({
               : "border-transparent text-slate-400 hover:text-slate-300"
           }`}
         >
-          Exercise
+          Exercises
         </button>
       </nav>
 
@@ -114,12 +109,7 @@ function ProfilePage({
               <StatsGrid stats={stats} />
               <WeeklyActivity days={weeklyActivity} />
               <ProgressChart data={progressData} title="Volume progress" />
-              <PersonalRecords
-                exerciseRecords={exerciseRecords}
-                workoutRecords={workoutRecords}
-                maxItems={5}
-                section="all"
-              />
+              <MuscleGroupChart data={muscleGroupData} />
             </>
           ) : (
             <section className="flex flex-1 flex-col items-center justify-center gap-5 rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center text-slate-100 shadow-xl ring-1 ring-white/5">
@@ -164,7 +154,7 @@ function ProfilePage({
       {activeTab === "exercise" && (
         <>
           {allExercises.length > 0 ? (
-            <ExerciseList exercises={allExercises} />
+            <ExerciseList exercises={allExercises} onExerciseClick={onExerciseClick} />
           ) : (
             <div className="rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center ring-1 ring-white/5">
               <svg

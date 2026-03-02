@@ -48,6 +48,38 @@ export interface ExerciseProgress {
   progressData: Array<{ date: string; value: number }>;
 }
 
+export interface MuscleGroupData {
+  name: string;
+  value: number;
+  percentage: number;
+}
+
+const MUSCLE_GROUP_CATEGORIES: Record<string, string> = {
+  chest: "Chest",
+  upper_chest: "Chest",
+  lats: "Back",
+  upper_back: "Back",
+  erector_spinae: "Back",
+  front_delts: "Shoulders",
+  side_delts: "Shoulders",
+  rear_delts: "Shoulders",
+  rotator_cuff: "Shoulders",
+  biceps: "Arms",
+  triceps: "Arms",
+  forearms: "Arms",
+  abdominals: "Core",
+  obliques: "Core",
+  core_stabilizers: "Core",
+  hip_flexors: "Core",
+  quadriceps: "Legs",
+  quads: "Legs",
+  glutes: "Legs",
+  hamstrings: "Legs",
+  calves: "Legs",
+  hip_abductors: "Legs",
+  leg_biceps: "Legs",
+};
+
 /**
  * Calculate total stats from workout history
  */
@@ -336,4 +368,30 @@ export function getAllExercisesWithProgress(
     (a, b) =>
       new Date(b.lastPerformed).getTime() - new Date(a.lastPerformed).getTime()
   );
+}
+
+export function getMuscleGroupDistribution(
+  workouts: FinishedWorkoutSummary[]
+): MuscleGroupData[] {
+  const categoryCounts = new Map<string, number>();
+
+  workouts.forEach((workout) => {
+    workout.completedExercises.forEach((exercise) => {
+      exercise.muscle_groups.forEach((mg) => {
+        const category = MUSCLE_GROUP_CATEGORIES[mg] ?? "Other";
+        categoryCounts.set(category, (categoryCounts.get(category) ?? 0) + 1);
+      });
+    });
+  });
+
+  const total = Array.from(categoryCounts.values()).reduce((s, v) => s + v, 0);
+  if (total === 0) return [];
+
+  return Array.from(categoryCounts.entries())
+    .map(([name, value]) => ({
+      name,
+      value,
+      percentage: Math.round((value / total) * 100),
+    }))
+    .sort((a, b) => b.value - a.value);
 }
