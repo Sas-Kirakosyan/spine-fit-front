@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import { useState, useEffect, Suspense, lazy, useTransition } from "react";
 
 // --- LAZY LOADED COMPONENTS ---
 // Note: Using .then() to handle named exports from your files
@@ -30,6 +30,11 @@ const SettingsPage = lazy(() => import("@/pages/SettingsPage/SettingsPage"));
 const CreateProgramPage = lazy(
   () => import("@/pages/CreateWorkoutPage/CreateWorkoutPage"),
 );
+const ExerciseProgressPage = lazy(() =>
+  import("@/pages/ProfilePage/ExerciseProgressPage").then((m) => ({
+    default: m.ExerciseProgressPage,
+  })),
+);
 
 import type { Exercise } from "@/types/exercise";
 import type { Page } from "@/types/navigation";
@@ -42,8 +47,10 @@ import type {
 import { loadPlanSettings } from "@/types/planSettings";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
+import { PageLoader } from "@/components/ui/PageLoader";
 
 function App() {
+  const [isPagePending, startPageTransition] = useTransition();
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const savedPage = localStorage.getItem("currentPage") as Page | null;
     const validPages: Page[] = [
@@ -62,6 +69,7 @@ function App() {
       "availableEquipment",
       "settings",
       "createProgram",
+      "exerciseProgress",
     ];
     return savedPage && validPages.includes(savedPage) ? savedPage : "home";
   });
@@ -121,6 +129,9 @@ function App() {
   const [editingProgramId, setEditingProgramId] = useState<
     string | undefined
   >();
+  const [selectedExerciseProgressId, setSelectedExerciseProgressId] = useState<
+    number | null
+  >(null);
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -141,9 +152,13 @@ function App() {
     );
   }, [completedWorkoutIds]);
 
-  const navigateToHome = () => setCurrentPage("home");
-  const navigateToLogin = () => setCurrentPage("login");
-  const navigateToRegister = () => setCurrentPage("register");
+  const navigateToPage = (page: Page) => {
+    startPageTransition(() => setCurrentPage(page));
+  };
+
+  const navigateToHome = () => navigateToPage("home");
+  const navigateToLogin = () => navigateToPage("login");
+  const navigateToRegister = () => navigateToPage("register");
   const resetWorkoutState = () => {
     setCompletedExerciseIds([]);
     setExerciseLogs({});
@@ -198,25 +213,29 @@ function App() {
   const navigateToWorkout = () => {
     resetWorkoutState();
     setIsCustomWorkoutMode(false);
-    setCurrentPage("workout");
+    navigateToPage("workout");
   };
-  const navigateToProfile = () => setCurrentPage("profile");
-  const navigateToHistory = () => setCurrentPage("history");
-  const navigateToAI = () => setCurrentPage("ai");
+  const navigateToProfile = () => navigateToPage("profile");
+  const navigateToHistory = () => navigateToPage("history");
+  const navigateToAI = () => navigateToPage("ai");
   const navigateToAllExercise = () => {
     setAllExerciseReturnPage("workout");
-    setCurrentPage("allExercise");
+    navigateToPage("allExercise");
   };
-  const navigateToMyPlan = () => setCurrentPage("myPlan");
+  const navigateToMyPlan = () => navigateToPage("myPlan");
   const navigateToAvailableEquipment = () =>
-    setCurrentPage("availableEquipment");
-  const navigateToSettings = () => setCurrentPage("settings");
+    navigateToPage("availableEquipment");
+  const navigateToSettings = () => navigateToPage("settings");
+  const navigateToExerciseProgress = (exerciseId: number) => {
+    setSelectedExerciseProgressId(exerciseId);
+    navigateToPage("exerciseProgress");
+  };
   const navigateToCreateProgram = () => {
     setCreateProgramDays([]);
     setCreateProgramName("");
     setEditingProgramId(undefined);
     setActiveDayId(null);
-    setCurrentPage("createProgram");
+    navigateToPage("createProgram");
   };
 
   const handleSelectSavedProgram = (program: SavedProgram) => {
@@ -241,7 +260,7 @@ function App() {
     setCompletedWorkoutIds(new Set());
     setIsCustomWorkoutMode(false);
     resetWorkoutState();
-    setCurrentPage("workout");
+    navigateToPage("workout");
   };
 
   const handleEditSavedProgram = (program: SavedProgram) => {
@@ -249,7 +268,7 @@ function App() {
     setCreateProgramName(program.name);
     setEditingProgramId(program.id);
     setActiveDayId(null);
-    setCurrentPage("createProgram");
+    navigateToPage("createProgram");
   };
 
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
@@ -262,12 +281,12 @@ function App() {
     }
     setSelectedExercise(null);
     setExerciseSetsMode("preWorkout");
-    setCurrentPage("activeWorkout");
+    navigateToPage("activeWorkout");
   };
 
   const navigateToExerciseDetails = (exercise: Exercise) => {
     setSelectedExercise(exercise);
-    setCurrentPage("exerciseDetails");
+    navigateToPage("exerciseDetails");
   };
 
   const navigateToExerciseSets = (
@@ -276,12 +295,12 @@ function App() {
   ) => {
     setSelectedExercise(exercise);
     setExerciseSetsMode(mode);
-    setCurrentPage("exerciseSets");
+    navigateToPage("exerciseSets");
   };
 
   const backFromExerciseDetails = () => {
     setSelectedExercise(null);
-    setCurrentPage("workout");
+    navigateToPage("workout");
   };
 
   const backFromExerciseSets = () => {
@@ -289,9 +308,9 @@ function App() {
     setSelectedExercise(null);
     setExerciseSetsMode("preWorkout");
     if (previousMode === "activeWorkout") {
-      setCurrentPage("activeWorkout");
+      navigateToPage("activeWorkout");
     } else {
-      setCurrentPage("workout");
+      navigateToPage("workout");
     }
   };
 
@@ -310,11 +329,11 @@ function App() {
     if (summary) {
       setWorkoutHistory((prev) => [...prev, summary]);
       resetWorkoutState();
-      setCurrentPage("history");
+      navigateToPage("history");
       return;
     }
     resetWorkoutState();
-    setCurrentPage("workout");
+    navigateToPage("workout");
   };
 
   const renderPage = () => {
@@ -376,6 +395,7 @@ function App() {
             onNavigateToHistory={navigateToHistory}
             onNavigateToAI={navigateToAI}
             onNavigateToSettings={navigateToSettings}
+            onExerciseClick={navigateToExerciseProgress}
             activePage="profile"
             workoutHistory={workoutHistory}
           />
@@ -451,7 +471,7 @@ function App() {
           <AllExercisePage
             onClose={() =>
               allExerciseReturnPage === "createProgram"
-                ? setCurrentPage("createProgram")
+                ? navigateToPage("createProgram")
                 : navigateToWorkout()
             }
             onAddExercises={(exercises) => {
@@ -486,7 +506,7 @@ function App() {
             onAddExercise={(dayId) => {
               setActiveDayId(dayId);
               setAllExerciseReturnPage("createProgram");
-              setCurrentPage("allExercise");
+              navigateToPage("allExercise");
             }}
             onSave={navigateToWorkout}
             onDaysChange={setCreateProgramDays}
@@ -503,6 +523,18 @@ function App() {
         );
       case "availableEquipment":
         return <AvailableEquipmentPage onNavigateBack={navigateToMyPlan} />;
+      case "exerciseProgress":
+        if (!selectedExerciseProgressId) {
+          navigateToProfile();
+          return null;
+        }
+        return (
+          <ExerciseProgressPage
+            exerciseId={selectedExerciseProgressId}
+            onNavigateBack={navigateToProfile}
+            workoutHistory={workoutHistory}
+          />
+        );
       case "settings":
         return <SettingsPage onNavigateBack={navigateToProfile} />;
       default:
@@ -516,15 +548,12 @@ function App() {
   };
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center h-screen">
-          Loading...
-        </div>
-      }
-    >
-      {renderPage()}
-    </Suspense>
+    <>
+      {isPagePending ? <PageLoader className="pointer-events-none" /> : null}
+      <Suspense fallback={<PageLoader className="pointer-events-none" />}>
+        {renderPage()}
+      </Suspense>
+    </>
   );
 }
 

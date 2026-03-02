@@ -4,11 +4,12 @@ import { ExerciseItem } from "@/components/Progress/ExerciseItem";
 
 interface ExerciseListProps {
   exercises: ExerciseProgress[];
+  onExerciseClick?: (exerciseId: number) => void;
 }
 
 type SortOption = "recent" | "name" | "1rm";
 
-export function ExerciseList({ exercises }: ExerciseListProps) {
+export function ExerciseList({ exercises, onExerciseClick }: ExerciseListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("recent");
 
@@ -119,7 +120,11 @@ export function ExerciseList({ exercises }: ExerciseListProps) {
       ) : (
         <div className="flex flex-col gap-2">
           {filteredAndSorted.map((exercise) => (
-            <ExerciseItem key={exercise.exerciseId} exercise={exercise} />
+            <ExerciseItem
+              key={exercise.exerciseId}
+              exercise={exercise}
+              onClick={onExerciseClick ? () => onExerciseClick(exercise.exerciseId) : undefined}
+            />
           ))}
         </div>
       )}

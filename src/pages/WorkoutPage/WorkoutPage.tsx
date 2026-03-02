@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useMemo } from "react";
 import allExercisesData from "@/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
-import type { WorkoutPageProps } from "@/types/workout";
+import type { SavedProgram, WorkoutPageProps } from "@/types/workout";
 import { ExerciseActionSheet } from "@/components/ActionSheet/ExerciseActionSheet";
 import { Button } from "@/components/Buttons/Button";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
@@ -60,6 +60,7 @@ function SwipeableExerciseCard({
   const draggingRef = useRef(false);
   const isHorizontalSwipeRef = useRef(false);
   const movedRef = useRef(false);
+  const actionPressHandledRef = useRef(false);
 
   useEffect(() => {
     if (!draggingRef.current) {
@@ -88,15 +89,34 @@ function SwipeableExerciseCard({
     onOpenChange(shouldOpen ? exerciseId : null);
   };
 
+  const handleActionPress = (event: React.PointerEvent | React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const runActionOnce = (action: () => void) => {
+    if (actionPressHandledRef.current) return;
+    actionPressHandledRef.current = true;
+    action();
+    onOpenChange(null);
+    window.setTimeout(() => {
+      actionPressHandledRef.current = false;
+    }, 0);
+  };
+
   return (
     <div className="relative overflow-hidden rounded-[14px]">
       <div className="absolute inset-y-0 right-0 flex">
         <button
           type="button"
+          onPointerDown={handleActionPress}
+          onPointerUp={(event) => {
+            handleActionPress(event);
+            runActionOnce(onReplace);
+          }}
           onClick={(event) => {
-            event.stopPropagation();
-            onReplace();
-            onOpenChange(null);
+            handleActionPress(event);
+            runActionOnce(onReplace);
           }}
           className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#21243A] text-white"
           aria-label="Replace exercise"
@@ -106,10 +126,14 @@ function SwipeableExerciseCard({
         </button>
         <button
           type="button"
+          onPointerDown={handleActionPress}
+          onPointerUp={(event) => {
+            handleActionPress(event);
+            runActionOnce(onDelete);
+          }}
           onClick={(event) => {
-            event.stopPropagation();
-            onDelete();
-            onOpenChange(null);
+            handleActionPress(event);
+            runActionOnce(onDelete);
           }}
           className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#D04A40] text-white"
           aria-label="Delete exercise"
@@ -211,6 +235,46 @@ function WorkoutPage({
   const [c, setC] = useState(0); // counter to trigger re-generation
   const allExercises = allExercisesData as Exercise[];
 
+  const syncGeneratedPlanWithSavedProgram = (
+    plan: GeneratedPlan,
+  ): GeneratedPlan => {
+    try {
+      const savedProgramsString = localStorage.getItem("savedPrograms");
+      if (!savedProgramsString) return plan;
+
+      const savedPrograms: SavedProgram[] = JSON.parse(savedProgramsString);
+      if (!Array.isArray(savedPrograms)) return plan;
+
+      const matchingProgram = savedPrograms.find((p) => p.id === plan.id);
+      if (!matchingProgram) return plan;
+
+      const syncedWorkoutDays = matchingProgram.days.map((day, index) => ({
+        dayNumber: index + 1,
+        dayName: day.name,
+        muscleGroups: [...new Set(day.exercises.flatMap((ex) => ex.muscle_groups))],
+        exercises: day.exercises,
+      }));
+
+      const nameChanged = plan.name !== matchingProgram.name;
+      const workoutDaysChanged =
+        JSON.stringify(plan.workoutDays) !== JSON.stringify(syncedWorkoutDays);
+
+      if (!nameChanged && !workoutDaysChanged) return plan;
+
+      const syncedPlan: GeneratedPlan = {
+        ...plan,
+        name: matchingProgram.name,
+        workoutDays: syncedWorkoutDays,
+      };
+
+      savePlanToLocalStorage(syncedPlan);
+      return syncedPlan;
+    } catch (error) {
+      console.error("Error syncing generated plan with saved program:", error);
+      return plan;
+    }
+  };
+
   // Sync from external exercises when switching to custom workout mode (e.g. saved workout selected)
   useEffect(() => {
     if (isCustomWorkout && externalExercises && externalExercises.length > 0) {
@@ -229,7 +293,8 @@ function WorkoutPage({
         const existingPlan = localStorage.getItem("generatedPlan");
         if (existingPlan) {
           // Load existing plan
-          const plan = JSON.parse(existingPlan);
+          let plan = JSON.parse(existingPlan) as GeneratedPlan;
+          plan = syncGeneratedPlanWithSavedProgram(plan);
           // Get next uncompleted workout based on completion status
 
           const nextWorkout = getNextAvailableWorkout(
