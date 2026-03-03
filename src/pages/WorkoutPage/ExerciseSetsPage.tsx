@@ -381,7 +381,7 @@ function ExerciseSetsPage({
     if (sets.length === 0) {
       return;
     }
-    if (onMarkExerciseComplete) {
+    if (isDuringActiveWorkout && onMarkExerciseComplete) {
       onMarkExerciseComplete(
         exercise.id,
         sets.map((setEntry) => ({ ...setEntry })),

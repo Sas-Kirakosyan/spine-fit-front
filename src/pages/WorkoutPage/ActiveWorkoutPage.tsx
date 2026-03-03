@@ -67,7 +67,7 @@ function ActiveWorkoutPage({
   }, [isCustomWorkout, customExercises, setTodaysExercises]);
 
   const completedExerciseIdsSet = useMemo(
-    () => new Set(completedExerciseIds),
+    () => new Set(completedExerciseIds.map((id) => String(id))),
     [completedExerciseIds],
   );
 
@@ -171,14 +171,14 @@ function ActiveWorkoutPage({
     return (
       todaysExercises.length > 0 &&
       todaysExercises.every((exercise: Exercise) =>
-        completedExerciseIdsSet.has(exercise.id),
+        completedExerciseIdsSet.has(String(exercise.id)),
       )
     );
   }, [completedExerciseIdsSet, todaysExercises]);
 
   const completedExercises = useMemo(() => {
     return todaysExercises.filter((exercise: Exercise) =>
-      completedExerciseIdsSet.has(exercise.id),
+      completedExerciseIdsSet.has(String(exercise.id)),
     );
   }, [completedExerciseIdsSet, todaysExercises]);
 
@@ -306,7 +306,7 @@ function ActiveWorkoutPage({
           </div>
         )}
         {todaysExercises.map((exercise: Exercise, index: number) => {
-          const isCompleted = completedExerciseIdsSet.has(exercise.id);
+          const isCompleted = completedExerciseIdsSet.has(String(exercise.id));
           return (
             <ExerciseCard
               key={`${exercise.id}-${index}`}
