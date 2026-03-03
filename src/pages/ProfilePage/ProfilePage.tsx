@@ -12,10 +12,11 @@ import { ExerciseList } from "@/components/Progress/ExerciseList";
 import {
   calculateTotalStats,
   getWeeklyActivity,
-  getProgressData,
+  getProgressDataByPeriod,
   getAllExercisesWithProgress,
   getMuscleGroupDistribution,
 } from "@/utils/progressStats";
+import type { VolumePeriod } from "@/utils/progressStats";
 import { MuscleGroupChart } from "@/components/Progress/MuscleGroupChart";
 
 function ProfilePage({
@@ -38,9 +39,11 @@ function ProfilePage({
     [workoutHistory],
   );
 
+  const [volumePeriod, setVolumePeriod] = useState<VolumePeriod>("month");
+
   const progressData = useMemo(
-    () => getProgressData(workoutHistory),
-    [workoutHistory],
+    () => getProgressDataByPeriod(workoutHistory, volumePeriod),
+    [workoutHistory, volumePeriod],
   );
 
   const allExercises = useMemo(
@@ -108,7 +111,12 @@ function ProfilePage({
             <>
               <StatsGrid stats={stats} />
               <WeeklyActivity days={weeklyActivity} />
-              <ProgressChart data={progressData} title="Volume progress" />
+              <ProgressChart
+                data={progressData}
+                title="Volume progress"
+                activePeriod={volumePeriod}
+                onPeriodChange={setVolumePeriod}
+              />
               <MuscleGroupChart data={muscleGroupData} />
             </>
           ) : (

@@ -94,7 +94,43 @@ function formatShortDate(dateStr: string): string {
   return `${d.getDate()}/${d.getMonth() + 1}`;
 }
 
+interface SetPR {
+  isPR: boolean;
+  diff: number;
+}
+
+function calculateSetRecords(
+  sessions: ExerciseSession[],
+): Map<string, Map<number, SetPR>> {
+  const chronological = [...sessions].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  );
+  const bestByReps = new Map<number, number>();
+  const result = new Map<string, Map<number, SetPR>>();
+
+  chronological.forEach((session) => {
+    const sessionPRs = new Map<number, SetPR>();
+    session.sets
+      .filter((s) => s.completed)
+      .forEach((set, idx) => {
+        const prevBest = bestByReps.get(set.reps) ?? 0;
+        if (set.weight > prevBest && set.weight > 0) {
+          sessionPRs.set(idx, {
+            isPR: true,
+            diff: prevBest > 0 ? set.weight - prevBest : 0,
+          });
+          bestByReps.set(set.reps, set.weight);
+        }
+      });
+    result.set(session.workoutId, sessionPRs);
+  });
+
+  return result;
+}
+
 function HistoryTab({ sessions }: { sessions: ExerciseSession[] }) {
+  const setRecords = useMemo(() => calculateSetRecords(sessions), [sessions]);
+
   if (sessions.length === 0) {
     return (
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center ring-1 ring-white/5">
@@ -105,65 +141,51 @@ function HistoryTab({ sessions }: { sessions: ExerciseSession[] }) {
 
   return (
     <div className="flex flex-col gap-4">
-      {sessions.map((session) => {
-        const bestSet = session.sets.reduce(
-          (best, s) => {
-            if (s.weight > best.weight) return s;
-            return best;
-          },
-          { weight: 0, reps: 0, completed: false }
-        );
-
-        return (
-          <div
-            key={session.workoutId}
-            className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-900/50 text-sm font-bold text-purple-300">
-                Fb
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-white">Workout</h3>
-                <p className="text-xs text-slate-400">{formatDateTime(session.date)}</p>
-              </div>
+      {sessions.map((session) => (
+        <div
+          key={session.workoutId}
+          className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5"
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-900/50 text-sm font-bold text-purple-300">
+              Fb
             </div>
-
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-slate-400 uppercase tracking-wider">
-                Sets Performed
-              </span>
-              <span className="text-xs text-slate-400 uppercase tracking-wider">1RM</span>
+            <div>
+              <h3 className="text-sm font-semibold text-white">Workout</h3>
+              <p className="text-xs text-slate-400">{formatDateTime(session.date)}</p>
             </div>
+          </div>
 
-            <div className="flex flex-col gap-1">
-              {session.sets
-                .filter((s) => s.completed)
-                .map((set, idx) => (
+          <div className="mb-2">
+            <span className="text-xs text-slate-400 uppercase tracking-wider">
+              Sets Performed
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            {session.sets
+              .filter((s) => s.completed)
+              .map((set, idx) => {
+                const pr = setRecords.get(session.workoutId)?.get(idx);
+                return (
                   <div key={idx} className="flex items-center justify-between py-1">
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-main font-semibold w-4">{idx + 1}</span>
                       <span className="text-sm font-medium text-white">
                         {set.weight}kg x {set.reps} reps
                       </span>
-                      {set.weight === bestSet.weight &&
-                        set.reps === bestSet.reps &&
-                        idx ===
-                          session.sets
-                            .filter((s) => s.completed)
-                            .findIndex(
-                              (s) => s.weight === bestSet.weight && s.reps === bestSet.reps
-                            ) && <span className="text-xs text-yellow-400">🏅 1RM</span>}
                     </div>
-                    <span className="text-sm text-slate-300">
-                      {Math.round(session.estimated1RM)}
-                    </span>
+                    {pr?.isPR && (
+                      <span className="text-xs font-semibold text-green-400">
+                        PR{pr.diff > 0 ? ` +${pr.diff}kg` : ""}
+                      </span>
+                    )}
                   </div>
-                ))}
-            </div>
+                );
+              })}
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>
   );
 }
