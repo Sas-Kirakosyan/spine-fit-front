@@ -183,6 +183,8 @@ export function getWeeklyActivity(
   return days;
 }
 
+export type VolumePeriod = "week" | "month" | "3months" | "year";
+
 /**
  * Получение данных для графика прогресса (последние 10 тренировок)
  */
@@ -198,6 +200,42 @@ export function getProgressData(
     .slice(-limit);
 
   return sorted.map((w, index) => {
+    const date = new Date(w.finishedAt);
+    const label = `${date.getDate()}/${date.getMonth() + 1}`;
+    return {
+      date: w.finishedAt,
+      volume: w.totalVolume,
+      label,
+    };
+  });
+}
+
+const PERIOD_DAYS: Record<VolumePeriod, number> = {
+  week: 7,
+  month: 30,
+  "3months": 90,
+  year: 365,
+};
+
+export function getProgressDataByPeriod(
+  workouts: FinishedWorkoutSummary[],
+  period: VolumePeriod
+): ProgressDataPoint[] {
+  const now = new Date();
+  const cutoff = new Date(
+    now.getTime() - PERIOD_DAYS[period] * 24 * 60 * 60 * 1000
+  );
+
+  const filtered = workouts.filter(
+    (w) => new Date(w.finishedAt).getTime() >= cutoff.getTime()
+  );
+
+  const sorted = [...filtered].sort(
+    (a, b) =>
+      new Date(a.finishedAt).getTime() - new Date(b.finishedAt).getTime()
+  );
+
+  return sorted.map((w) => {
     const date = new Date(w.finishedAt);
     const label = `${date.getDate()}/${date.getMonth() + 1}`;
     return {
