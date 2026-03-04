@@ -232,12 +232,12 @@ function App() {
       setCompletedExerciseIds([]);
       setExerciseLogs({});
     }
-    if (workoutStartTime === null) {
-      setWorkoutStartTime(Date.now());
-    }
-    setSelectedExercise(null);
+    setWorkoutStartTime((prevStartTime) => prevStartTime ?? Date.now());
     setExerciseSetsMode("preWorkout");
-    navigateToPage("activeWorkout");
+    startPageTransition(() => {
+      setSelectedExercise(null);
+      setCurrentPage("activeWorkout");
+    });
   };
 
   const navigateToExerciseDetails = (exercise: Exercise) => {
@@ -261,27 +261,31 @@ function App() {
 
   const backFromExerciseSets = () => {
     const previousMode = exerciseSetsMode;
-    setSelectedExercise(null);
     setExerciseSetsMode("preWorkout");
-    if (previousMode === "activeWorkout") {
-      navigateToPage("activeWorkout");
-    } else {
-      navigateToPage("workout");
-    }
+    startPageTransition(() => {
+      setSelectedExercise(null);
+      setCurrentPage(previousMode === "activeWorkout" ? "activeWorkout" : "workout");
+    });
   };
 
   const markExerciseComplete = (exerciseId: number, sets: ExerciseSetRow[]) => {
     const completedSets = sets.filter((s) => s.completed).map((s) => ({ ...s }));
     setExerciseLogs((prev) => ({ ...prev, [exerciseId]: completedSets }));
-    setCompletedExerciseIds((prev) => (prev.includes(exerciseId) ? prev : [...prev, exerciseId]));
-    navigateToActiveWorkout({ resetCompleted: false });
+    setCompletedExerciseIds((prev) =>
+      prev.includes(exerciseId) ? prev : [...prev, exerciseId]
+    );
+    setExerciseSetsMode("preWorkout");
+    startPageTransition(() => {
+      setSelectedExercise(null);
+      setCurrentPage("activeWorkout");
+    });
   };
 
   const handleFinishWorkout = (summary?: FinishedWorkoutSummary) => {
     if (summary) {
       setWorkoutHistory((prev) => [...prev, summary]);
       resetWorkoutState();
-      navigateToPage("history");
+      navigateToPage("workout");
       return;
     }
     resetWorkoutState();
