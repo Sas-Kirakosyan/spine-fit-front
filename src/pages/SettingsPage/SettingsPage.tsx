@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
@@ -75,11 +77,15 @@ function Divider() {
 }
 
 export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
+  useTranslation();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Dark");
-  const [language, setLanguage] = useState(() => localStorage.getItem("language") || "English");
+  const [language, setLanguage] = useState(() => {
+    const currentLang = i18n.language;
+    return currentLang === "ru" ? "Russian" : "English";
+  });
   const [isBodyProfileOpen, setIsBodyProfileOpen] = useState(false);
   const [bodyProfileSummary, setBodyProfileSummary] = useState<string>("Not set");
 
@@ -122,6 +128,19 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     loadBodyProfileSummary();
   }, []);
 
+  // Sync language state with i18next language
+  useEffect(() => {
+    const handleLanguageChanged = () => {
+      const currentLang = i18n.language;
+      setLanguage(currentLang === "ru" ? "Russian" : "English");
+    };
+
+    i18n.on("languageChanged", handleLanguageChanged);
+    return () => {
+      i18n.off("languageChanged", handleLanguageChanged);
+    };
+  }, []);
+
   const handleLogout = () => {
     auth.signOut();
     localStorage.removeItem("userEmail");
@@ -158,9 +177,11 @@ export function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     openModal({
       title: "Change Language",
       options: ["English", "Russian"],
-      selectedValue: "English",
+      selectedValue: language,
       onSelect: (value) => {
         setLanguage(value);
+        const langCode = value === "Russian" ? "ru" : "en";
+        i18n.changeLanguage(langCode);
         localStorage.setItem("language", value);
       }
     });

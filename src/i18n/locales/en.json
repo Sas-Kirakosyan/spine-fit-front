@@ -1,0 +1,36 @@
+{
+  "workoutPage": {
+    "buttons": {
+      "regeneratePlan": "Regenerate Plan",
+      "backToHome": "Back to Home",
+      "goToMyPlan": "Go to My Plan",
+      "addExercise": "Add Exercise",
+      "startWorkout": "START Workout"
+    },
+    "messages": {
+      "loading": "Loading workout plan...",
+      "noExercises": "No exercises available. Generate a plan first!",
+      "noWorkout": "No Workout",
+      "initializingPlan": "Initializing workout plan...",
+      "errorInitializing": "Error initializing workout plan:",
+      "errorUpdatingExercises": "Error updating exercises from plan:",
+      "errorReloadingExercises": "Error reloading exercises from plan:",
+      "errorRemovingExercise": "Error removing exercise:",
+      "planGenerated": "Plan generated after onboarding:",
+      "loadedWorkout": "Loaded",
+      "swappedToWorkout": "Swapped to",
+      "updatedToWorkout": "Updated to"
+    },
+    "labels": {
+      "todayWorkout": "Today's Workout",
+      "myGym": "My Gym",
+      "myWorkoutPlan": "My Workout Plan",
+      "exercises": "exercises",
+      "muscleGroups": "muscle groups",
+      "duration": "m"
+    }
+  },
+  "common": {
+    "exercises": "exercises"
+  }
+}

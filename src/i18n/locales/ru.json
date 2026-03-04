@@ -1,0 +1,36 @@
+{
+  "workoutPage": {
+    "buttons": {
+      "regeneratePlan": "Перестроить План",
+      "backToHome": "Вернуться на Главную",
+      "goToMyPlan": "Перейти в Мой План",
+      "addExercise": "Добавить упражнение",
+      "startWorkout": "НАЧАТЬ Тренировку"
+    },
+    "messages": {
+      "loading": "Загрузка плана тренировки...",
+      "noExercises": "Нет доступных упражнений. Сначала создайте план!",
+      "noWorkout": "Нет тренировки",
+      "initializingPlan": "Инициализация плана тренировки...",
+      "errorInitializing": "Ошибка инициализации плана тренировки:",
+      "errorUpdatingExercises": "Ошибка обновления упражнений из плана:",
+      "errorReloadingExercises": "Ошибка перезагрузки упражнений из плана:",
+      "errorRemovingExercise": "Ошибка при удалении упражнения:",
+      "planGenerated": "План тренировки создан после прохождения опроса:",
+      "loadedWorkout": "Загруженная тренировка",
+      "swappedToWorkout": "Переключились на тренировку",
+      "updatedToWorkout": "Обновили на тренировку из события хранилища:"
+    },
+    "labels": {
+      "todayWorkout": "Тренировка на сегодня",
+      "myGym": "Мой Спортзал",
+      "myWorkoutPlan": "Мой План Тренировок",
+      "exercises": "упражнения",
+      "muscleGroups": "группы мышц",
+      "duration": "мин"
+    }
+  },
+  "common": {
+    "exercises": "упражнения"
+  }
+}

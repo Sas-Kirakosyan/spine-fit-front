@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import allExercisesData from "@/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -37,6 +38,7 @@ export function WorkoutPage({
   onRemoveExercise,
   completedWorkoutIds = new Set(),
 }: WorkoutPageProps) {
+  const { t } = useTranslation();
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>([]);
   const [isLoadingPlan, setIsLoadingPlan] = useState(true);
@@ -298,14 +300,14 @@ export function WorkoutPage({
             }}
             className="border border-2 border-white/50 rounded-full p-1 mb-1"
           >
-            Regenerate Plan
+            {t('workoutPage.buttons.regeneratePlan')}
           </div>
           {onNavigateToHome && (
             <Button
               onClick={onNavigateToHome}
               className="border border-2 border-white/50 rounded-full p-1"
             >
-              Back to Home
+              {t('workoutPage.buttons.backToHome')}
             </Button>
           )}
         </div>
@@ -322,14 +324,14 @@ export function WorkoutPage({
         <WorkoutPlanCard
           containerRef={cardRef}
           onPlanSwitched={handlePlanSwitched}
-          planName={loadPlanFromLocalStorage()?.name || "My Workout Plan"}
+          planName={loadPlanFromLocalStorage()?.name || t('workoutPage.labels.myWorkoutPlan')}
           dayName={currentDayName}
           exerciseCount={displayExercises.length}
           muscleCount={
             new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size
           }
-          duration={`${Math.ceil(displayExercises.length * 3)}m`}
-          location="My Gym"
+          duration={`${Math.ceil(displayExercises.length * 3)}${t('workoutPage.labels.duration')}`}
+          location={t('workoutPage.labels.myGym')}
           onWorkoutSwap={(workoutId) => {
             const plan = loadPlanFromLocalStorage();
             if (plan) {
@@ -349,7 +351,7 @@ export function WorkoutPage({
         <section className="flex-1 space-y-3 mx-2.5">
           {isLoadingPlan ? (
             <div className="flex items-center justify-center py-10">
-              <span className="text-white/60">Loading workout plan...</span>
+              <span className="text-white/60">{t('workoutPage.messages.loading')}</span>
             </div>
           ) : displayExercises.length > 0 ? (
             displayExercises.map((exercise, index) => (
@@ -364,14 +366,14 @@ export function WorkoutPage({
           ) : (
             <div className="flex flex-col items-center justify-center gap-3 py-10">
               <span className="text-white/60 text-center">
-                No exercises available. Generate a plan first!
+                {t('workoutPage.messages.noExercises')}
               </span>
               {onNavigateToMyPlan && (
                 <Button
                   onClick={onNavigateToMyPlan}
                   className="rounded-[10px] bg-main px-6 py-2 text-white"
                 >
-                  Go to My Plan
+                  {t('workoutPage.buttons.goToMyPlan')}
                 </Button>
               )}
             </div>
@@ -406,7 +408,7 @@ export function WorkoutPage({
 
             <div className="flex flex-1 flex-col justify-center">
               <span className="text-lg font-semibold text-main sm:text-xl">
-                Add Exercise
+                {t('workoutPage.buttons.addExercise')}
               </span>
             </div>
           </div>
@@ -419,7 +421,7 @@ export function WorkoutPage({
             onClick={onStartWorkoutSession}
             className="w-full mx-2.5 flex justify-center items-center mb-[30px] h-[46px] rounded-[10px] bg-main text-white uppercase"
           >
-            START Workout
+            {t('workoutPage.buttons.startWorkout')}
           </Button>
         </div>
         <BottomNav
