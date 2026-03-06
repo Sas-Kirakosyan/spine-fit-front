@@ -1,4 +1,5 @@
 import type { FinishedWorkoutSummary } from "@/types/workout";
+import { getExerciseImageUrl } from "@/types/exercise";
 import { getExerciseEstimated1RM } from "./oneRepMax";
 
 export interface TotalStats {
@@ -46,6 +47,38 @@ export interface ExerciseProgress {
   lastPerformed: string;
   progressData: Array<{ date: string; value: number }>;
 }
+
+export interface MuscleGroupData {
+  name: string;
+  value: number;
+  percentage: number;
+}
+
+const MUSCLE_GROUP_CATEGORIES: Record<string, string> = {
+  chest: "Chest",
+  upper_chest: "Chest",
+  lats: "Back",
+  upper_back: "Back",
+  erector_spinae: "Back",
+  front_delts: "Shoulders",
+  side_delts: "Shoulders",
+  rear_delts: "Shoulders",
+  rotator_cuff: "Shoulders",
+  biceps: "Arms",
+  triceps: "Arms",
+  forearms: "Arms",
+  abdominals: "Core",
+  obliques: "Core",
+  core_stabilizers: "Core",
+  hip_flexors: "Core",
+  quadriceps: "Legs",
+  quads: "Legs",
+  glutes: "Legs",
+  hamstrings: "Legs",
+  calves: "Legs",
+  hip_abductors: "Legs",
+  leg_biceps: "Legs",
+};
 
 /**
  * Calculate total stats from workout history
@@ -150,6 +183,8 @@ export function getWeeklyActivity(
   return days;
 }
 
+export type VolumePeriod = "week" | "month" | "3months" | "year";
+
 /**
  * Получение данных для графика прогресса (последние 10 тренировок)
  */
@@ -165,6 +200,42 @@ export function getProgressData(
     .slice(-limit);
 
   return sorted.map((w, index) => {
+    const date = new Date(w.finishedAt);
+    const label = `${date.getDate()}/${date.getMonth() + 1}`;
+    return {
+      date: w.finishedAt,
+      volume: w.totalVolume,
+      label,
+    };
+  });
+}
+
+const PERIOD_DAYS: Record<VolumePeriod, number> = {
+  week: 7,
+  month: 30,
+  "3months": 90,
+  year: 365,
+};
+
+export function getProgressDataByPeriod(
+  workouts: FinishedWorkoutSummary[],
+  period: VolumePeriod
+): ProgressDataPoint[] {
+  const now = new Date();
+  const cutoff = new Date(
+    now.getTime() - PERIOD_DAYS[period] * 24 * 60 * 60 * 1000
+  );
+
+  const filtered = workouts.filter(
+    (w) => new Date(w.finishedAt).getTime() >= cutoff.getTime()
+  );
+
+  const sorted = [...filtered].sort(
+    (a, b) =>
+      new Date(a.finishedAt).getTime() - new Date(b.finishedAt).getTime()
+  );
+
+  return sorted.map((w) => {
     const date = new Date(w.finishedAt);
     const label = `${date.getDate()}/${date.getMonth() + 1}`;
     return {
@@ -305,7 +376,7 @@ export function getAllExercisesWithProgress(
         exerciseMap.set(exercise.id, {
           exerciseId: exercise.id,
           exerciseName: exercise.name,
-          imageUrl: exercise.image_url || "",
+          imageUrl: getExerciseImageUrl(exercise),
           estimated1RM: 0,
           currentBest1RM: 0,
           lastPerformed: workout.finishedAt,
@@ -335,4 +406,30 @@ export function getAllExercisesWithProgress(
     (a, b) =>
       new Date(b.lastPerformed).getTime() - new Date(a.lastPerformed).getTime()
   );
+}
+
+export function getMuscleGroupDistribution(
+  workouts: FinishedWorkoutSummary[]
+): MuscleGroupData[] {
+  const categoryCounts = new Map<string, number>();
+
+  workouts.forEach((workout) => {
+    workout.completedExercises.forEach((exercise) => {
+      exercise.muscle_groups.forEach((mg) => {
+        const category = MUSCLE_GROUP_CATEGORIES[mg] ?? "Other";
+        categoryCounts.set(category, (categoryCounts.get(category) ?? 0) + 1);
+      });
+    });
+  });
+
+  const total = Array.from(categoryCounts.values()).reduce((s, v) => s + v, 0);
+  if (total === 0) return [];
+
+  return Array.from(categoryCounts.entries())
+    .map(([name, value]) => ({
+      name,
+      value,
+      percentage: Math.round((value / total) * 100),
+    }))
+    .sort((a, b) => b.value - a.value);
 }

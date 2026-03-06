@@ -7,12 +7,21 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-import type { ProgressDataPoint } from "@/utils/progressStats";
+import type { ProgressDataPoint, VolumePeriod } from "@/utils/progressStats";
 import { formatVolume } from "@/utils/progressStats";
+
+const PERIOD_OPTIONS: { key: VolumePeriod; label: string }[] = [
+  { key: "week", label: "W" },
+  { key: "month", label: "M" },
+  { key: "3months", label: "3M" },
+  { key: "year", label: "Y" },
+];
 
 interface ProgressChartProps {
   data: ProgressDataPoint[];
   title?: string;
+  activePeriod?: VolumePeriod;
+  onPeriodChange?: (period: VolumePeriod) => void;
 }
 
 interface CustomTooltipProps {
@@ -38,16 +47,40 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
 export function ProgressChart({
   data,
   title = "Progress Volume",
+  activePeriod,
+  onPeriodChange,
 }: ProgressChartProps) {
+  const showPeriodSelector = activePeriod !== undefined && onPeriodChange !== undefined;
+
   if (data.length === 0) {
     return (
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
-        <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-slate-400">
-          {title}
-        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-medium uppercase tracking-wider text-slate-400">
+            {title}
+          </h3>
+          {showPeriodSelector && (
+            <div className="flex rounded-lg bg-white/5 p-0.5">
+              {PERIOD_OPTIONS.map((opt) => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => onPeriodChange(opt.key)}
+                  className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors cursor-pointer ${
+                    activePeriod === opt.key
+                      ? "bg-main text-white shadow-sm"
+                      : "text-slate-400 hover:text-slate-300"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="flex h-[180px] items-center justify-center">
           <p className="text-sm text-slate-500">
-            No data to display
+            No data for this period
           </p>
         </div>
       </div>
@@ -56,9 +89,29 @@ export function ProgressChart({
 
   return (
     <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
-      <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-slate-400">
-        {title}
-      </h3>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-medium uppercase tracking-wider text-slate-400">
+          {title}
+        </h3>
+        {showPeriodSelector && (
+          <div className="flex rounded-lg bg-white/5 p-0.5">
+            {PERIOD_OPTIONS.map((opt) => (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => onPeriodChange(opt.key)}
+                className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors cursor-pointer ${
+                  activePeriod === opt.key
+                    ? "bg-main text-white shadow-sm"
+                    : "text-slate-400 hover:text-slate-300"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       <div className="h-[180px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart

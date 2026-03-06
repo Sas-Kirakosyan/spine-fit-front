@@ -1,6 +1,7 @@
-import type { Exercise } from "@/types/exercise";
+import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
 import TreeDotButton from "@/components/TreeDotButton/TreeDotButton";
 import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
+import { LazyImage } from "@/components/ui/LazyImage";
 
 interface ExerciseCardProps {
   exercise: Exercise;
@@ -19,7 +20,7 @@ export function ExerciseCard({
 }: ExerciseCardProps) {
   return (
     <div
-      className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B]/90 p-3 text-left shadow-xl ring-1 ring-white/5"
+      className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B] p-3 text-left shadow-xl ring-1 ring-white/5"
       role="button"
       tabIndex={0}
       onClick={onCardClick}
@@ -33,8 +34,8 @@ export function ExerciseCard({
         className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
         aria-label={`Открыть детали упражнения ${exercise.name}`}
       >
-        <img
-          src={exercise.image_url}
+        <LazyImage
+          src={getExerciseImageUrl(exercise)}
           alt={exercise.name}
           className="h-full w-full object-cover"
         />

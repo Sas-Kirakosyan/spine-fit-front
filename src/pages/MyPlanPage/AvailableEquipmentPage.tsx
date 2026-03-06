@@ -12,7 +12,7 @@ import { EquipmentItem } from "@/components/EquipmentItem/EquipmentItem";
 import { createEquipmentData } from "@/utils/equipment";
 import { AvailableEquipmentPageHeader } from "./AvailableEquipmentPageHeader";
 
-export function AvailableEquipmentPage({
+function AvailableEquipmentPage({
   onNavigateBack,
 }: AvailableEquipmentPageProps) {
   const [activeTab, setActiveTab] = useState<EquipmentTab>(() => {
@@ -39,9 +39,8 @@ export function AvailableEquipmentPage({
     return createEquipmentData(equipmentsData as RawEquipmentData[]);
   };
 
-  const [equipmentData, setEquipmentData] = useState<EquipmentCategory[]>(
-    loadEquipmentData()
-  );
+  const [equipmentData, setEquipmentData] =
+    useState<EquipmentCategory[]>(loadEquipmentData());
 
   useEffect(() => {
     try {
@@ -59,12 +58,12 @@ export function AvailableEquipmentPage({
           return {
             ...category,
             items: category.items.map((item) =>
-              item.id === itemId ? { ...item, selected: !item.selected } : item
+              item.id === itemId ? { ...item, selected: !item.selected } : item,
             ),
           };
         }
         return category;
-      })
+      }),
     );
   };
 
@@ -147,3 +146,5 @@ export function AvailableEquipmentPage({
     </PageContainer>
   );
 }
+
+export default AvailableEquipmentPage;

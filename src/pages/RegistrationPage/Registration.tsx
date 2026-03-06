@@ -13,7 +13,7 @@ import { Divider } from "@/components/Form/Divider/Divider";
 import { GoogleAuthButton } from "@/components/Form/GoogleAuthButton/GoogleAuthButton";
 import { AuthSwitchLink } from "@/components/Form/AuthSwitchLink/AuthSwitchLink";
 
-export function Registration({
+function Registration({
   onSwitchToLogin,
   onNavigateToHome,
   onNavigateToWorkout,
@@ -203,3 +203,5 @@ export function Registration({
     </PageContainer>
   );
 }
+
+export default Registration;

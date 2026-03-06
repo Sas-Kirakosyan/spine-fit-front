@@ -26,7 +26,7 @@ import type { Exercise } from "@/types/exercise";
 import type { FinishedWorkoutSummary } from "@/types/workout";
 import type { QuizAnswers } from "@/types/quiz";
 
-export function MyPlanPage({
+function MyPlanPage({
   onNavigateBack,
   onNavigateToAvailableEquipment,
 }: MyPlanPageProps) {
@@ -34,13 +34,12 @@ export function MyPlanPage({
   const [warmUpSets, setWarmUpSets] = useState(true);
   const [circuitsAndSupersets, setCircuitsAndSupersets] = useState(true);
   const [selectedCount, setSelectedCount] = useState(0);
-  const [planSettings, setPlanSettings] = useState<PlanSettings>(
-    loadPlanSettings()
-  );
+  const [planSettings, setPlanSettings] =
+    useState<PlanSettings>(loadPlanSettings());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentField, setCurrentField] = useState<PlanFieldId | null>(null);
   const [generatedPlan, setGeneratedPlan] = useState<GeneratedPlan | null>(
-    null
+    null,
   );
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -53,7 +52,7 @@ export function MyPlanPage({
           const count = equipmentData.reduce(
             (total, category) =>
               total + category.items.filter((item) => item.selected).length,
-            0
+            0,
           );
           setSelectedCount(count);
         } else {
@@ -120,7 +119,7 @@ export function MyPlanPage({
       // Validate that quiz/onboarding was completed
       if (!quizData) {
         alert(
-          "⚠️ Please complete the onboarding quiz first to generate a personalized plan."
+          "⚠️ Please complete the onboarding quiz first to generate a personalized plan.",
         );
         setIsGenerating(false);
         return;
@@ -134,7 +133,7 @@ export function MyPlanPage({
 
       // Extract available equipment names from configured equipment
       const availableEquipment = equipmentData.flatMap((category) =>
-        category.items.filter((item) => item.selected).map((item) => item.name)
+        category.items.filter((item) => item.selected).map((item) => item.name),
       );
 
       // If no equipment configured yet, assume all equipment exists (extract from exercise database)
@@ -143,13 +142,13 @@ export function MyPlanPage({
         availableEquipment.length > 0
           ? availableEquipment
           : equipmentData.length === 0
-          ? // No equipment data configured - assume all equipment exists
-            Array.from(
-              new Set(
-                (allExercisesData as Exercise[]).map((ex) => ex.equipment)
-              )
-            ).filter((eq) => eq && eq !== "none")
-          : ["bodyweight"];
+            ? // No equipment data configured - assume all equipment exists
+              Array.from(
+                new Set(
+                  (allExercisesData as Exercise[]).map((ex) => ex.equipment),
+                ),
+              ).filter((eq) => eq && eq !== "none")
+            : ["bodyweight"];
 
       // Load workout history
       const historyString = localStorage.getItem("workoutHistory");
@@ -163,7 +162,7 @@ export function MyPlanPage({
         planSettings,
         quizData,
         bodyweightOnly ? ["bodyweight"] : finalEquipment,
-        workoutHistory
+        workoutHistory,
       );
 
       console.log("Generated plan:", plan);
@@ -179,12 +178,12 @@ export function MyPlanPage({
           plan.workoutDays.length
         } workouts per week with ${
           plan.workoutDays[0]?.exercises.length || 0
-        } exercises per day.`
+        } exercises per day.`,
       );
     } catch (error) {
       console.error("Error generating plan:", error);
       alert(
-        "Failed to generate plan. Please check your settings and try again."
+        "Failed to generate plan. Please check your settings and try again.",
       );
     } finally {
       setIsGenerating(false);
@@ -535,3 +534,5 @@ export function MyPlanPage({
     </PageContainer>
   );
 }
+
+export default MyPlanPage;

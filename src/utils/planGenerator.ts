@@ -275,8 +275,23 @@ export function generateTrainingPlan(
     ? mergePlanSettingsWithQuizAnswers(planSettings, quizAnswers)
     : planSettings;
 
-  // 1. Extract pain profile from quiz answers
-  const painProfile = extractPainProfile(quizAnswers);
+  // 1. Extract pain profile (prefer quiz when available, fallback to plan settings)
+  const painProfileFromQuiz = extractPainProfile(quizAnswers);
+  const painProfileFromSettings = extractPainProfileFromSettings(effectivePlanSettings);
+  const settingsHasPain = painProfileFromSettings.painStatus !== "Never";
+  const painProfile: PainProfile = {
+    painStatus:
+      painProfileFromQuiz.painStatus === "Never" && settingsHasPain
+        ? painProfileFromSettings.painStatus
+        : painProfileFromQuiz.painStatus,
+    painLocation: painProfileFromQuiz.painLocation ?? painProfileFromSettings.painLocation,
+    painLevel:
+      typeof painProfileFromQuiz.painLevel === "number"
+        ? painProfileFromQuiz.painLevel
+        : painProfileFromSettings.painLevel,
+    painTriggers: painProfileFromQuiz.painTriggers ?? painProfileFromSettings.painTriggers,
+    canSquat: painProfileFromQuiz.canSquat ?? painProfileFromSettings.canSquat,
+  };
 
   // 2. Create filter criteria
   const filterCriteria: FilterCriteria = {
@@ -324,6 +339,8 @@ export function generateTrainingPlan(
     experience: effectivePlanSettings.experience as "Beginner" | "Intermediate" | "Advanced",
     goal: effectivePlanSettings.goal,
     painLevel: painProfile.painLevel,
+    canSquat: painProfile.canSquat,
+    gender: effectivePlanSettings.gender,
   });
 
   // 6. Calculate how many exercises per workout
@@ -443,6 +460,21 @@ export function generateTrainingPlan(
     ? enforceFullBodyABRequirements(rearDeltBalancedDays, allExercises, sourceOnboarding.split)
     : rearDeltBalancedDays;
 
+  const durationMinutes = Number(effectivePlanSettings.duration.match(/(\d+)/)?.[1] || 30);
+  const hasMeaningfulPain = typeof painProfile.painLevel === "number" && painProfile.painLevel > 3;
+  const cannotSquat = (painProfile.canSquat || "").toLowerCase() === "no";
+  const isMale = (effectivePlanSettings.gender || "").toLowerCase() === "male";
+
+  let safeSetsPerExercise = volumeRecommendation.setsPerExercise;
+  if (hasMeaningfulPain && durationMinutes <= 30) {
+    safeSetsPerExercise = Math.min(safeSetsPerExercise, 3);
+  }
+  if (isMale && hasMeaningfulPain && cannotSquat) {
+    safeSetsPerExercise = durationMinutes <= 30
+      ? 2
+      : Math.min(safeSetsPerExercise, 3);
+  }
+
   // 12. Apply volume (sets/reps) to final workout days
   const adjustedWorkoutDaysWithVolume = fullBodyABEnforcedDays.map((day) => ({
     ...day,
@@ -453,7 +485,7 @@ export function generateTrainingPlan(
 
         return {
           ...exercise,
-          sets: volumeRecommendation.setsPerExercise,
+          sets: safeSetsPerExercise,
           reps: volumeRecommendation.repsPerSet,
           weight: 0,
           weight_unit: "bodyweight",
@@ -466,7 +498,7 @@ export function generateTrainingPlan(
         // BUT: Always update sets to match current experience level
         return {
           ...exercise,
-          sets: volumeRecommendation.setsPerExercise, // Force update sets
+          sets: safeSetsPerExercise, // Force update sets
         };
       }
 
@@ -474,7 +506,7 @@ export function generateTrainingPlan(
       // This ensures exercises from history get updated sets (e.g., 3 -> 4 for intermediate)
       return {
         ...exercise,
-        sets: volumeRecommendation.setsPerExercise,
+        sets: safeSetsPerExercise,
         reps: volumeRecommendation.repsPerSet,
       };
     }),
@@ -1419,8 +1451,8 @@ function mergePlanSettingsWithQuizAnswers(
   const painStatusAnswer = answers[10]; // painStatus (returns index)
   const painStatusOptions = ["Never", "In the past", "Yes, currently"];
   const painStatus = typeof painStatusAnswer === "number"
-    ? painStatusOptions[painStatusAnswer]
-    : undefined;
+    ? (painStatusOptions[painStatusAnswer] as "Never" | "In the past" | "Yes, currently")
+    : "Never";
 
   const painLocationAnswer = answers[11]; // painLocation (returns array of indices)
   const painLocationOptions = [
@@ -1531,8 +1563,15 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
     ? painLocationAnswer.map((idx) => painLocationOptions[Number(idx)])
     : undefined;
 
-  // Question 12: painLevel - slider (returns number 0-10)
-  const painLevel = findAnswerByFieldName(answers, 12) as number | undefined;
+  // Question 12: painLevel - slider (returns number/string 0-10)
+  const painLevelRaw = findAnswerByFieldName(answers, 12);
+  const painLevelParsed =
+    painLevelRaw === undefined
+      ? undefined
+      : typeof painLevelRaw === "number"
+        ? painLevelRaw
+        : Number(painLevelRaw);
+  const painLevel = Number.isFinite(painLevelParsed) ? painLevelParsed : undefined;
 
   // Question 13: painTriggers - checkbox (returns array of indices)
   const painTriggersAnswer = findAnswerByFieldName(answers, 13);
@@ -1562,6 +1601,29 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
     painLevel,
     painTriggers,
     canSquat,
+  };
+}
+
+function extractPainProfileFromSettings(planSettings: PlanSettings): PainProfile {
+  const painStatus =
+    planSettings.painStatus === "In the past" ||
+    planSettings.painStatus === "Yes, currently"
+      ? planSettings.painStatus
+      : "Never";
+
+  const parsedPainLevel =
+    planSettings.painLevel === undefined
+      ? undefined
+      : typeof planSettings.painLevel === "number"
+        ? planSettings.painLevel
+        : Number(planSettings.painLevel);
+
+  return {
+    painStatus,
+    painLocation: planSettings.painLocation,
+    painLevel: Number.isFinite(parsedPainLevel) ? parsedPainLevel : undefined,
+    painTriggers: planSettings.painTriggers,
+    canSquat: planSettings.canSquat,
   };
 }
 
@@ -1624,6 +1686,48 @@ function generatePlanName(settings: PlanSettings): string {
   return `${split} - ${frequency}x per week`;
 }
 
+function getSafeSetsFromSettings(settings: PlanSettings): number | null {
+  const durationMinutes = Number(settings.duration.match(/(\d+)/)?.[1] || 30);
+  const painLevelRaw = settings.painLevel;
+  const painLevel =
+    painLevelRaw === undefined
+      ? undefined
+      : typeof painLevelRaw === "number"
+        ? painLevelRaw
+        : Number(painLevelRaw);
+  const hasMeaningfulPain = Number.isFinite(painLevel) && (painLevel as number) > 3;
+  const cannotSquat = (settings.canSquat || "").toLowerCase() === "no";
+  const isMale = (settings.gender || "").toLowerCase() === "male";
+
+  if (isMale && hasMeaningfulPain && cannotSquat) {
+    return durationMinutes <= 30 ? 2 : 3;
+  }
+
+  if (hasMeaningfulPain && durationMinutes <= 30) {
+    return 3;
+  }
+
+  return null;
+}
+
+function applyVolumeSafetyToLoadedPlan(plan: GeneratedPlan): GeneratedPlan {
+  const safeSets = getSafeSetsFromSettings(plan.settings);
+  if (!safeSets) {
+    return plan;
+  }
+
+  return {
+    ...plan,
+    workoutDays: plan.workoutDays.map((day) => ({
+      ...day,
+      exercises: day.exercises.map((exercise) => ({
+        ...exercise,
+        sets: Math.min(exercise.sets || safeSets, safeSets),
+      })),
+    })),
+  };
+}
+
 /**
  * Save generated plan to localStorage
  */
@@ -1661,7 +1765,14 @@ export function loadPlanFromLocalStorage(): GeneratedPlan | null {
     const planData = localStorage.getItem("generatedPlan");
     if (!planData) return null;
 
-    return JSON.parse(planData) as GeneratedPlan;
+    const parsedPlan = JSON.parse(planData) as GeneratedPlan;
+    const normalizedPlan = applyVolumeSafetyToLoadedPlan(parsedPlan);
+
+    if (JSON.stringify(parsedPlan) !== JSON.stringify(normalizedPlan)) {
+      localStorage.setItem("generatedPlan", JSON.stringify(normalizedPlan));
+    }
+
+    return normalizedPlan;
   } catch (error) {
     console.error("Failed to load plan from localStorage:", error);
     return null;

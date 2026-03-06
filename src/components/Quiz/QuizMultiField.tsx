@@ -1,3 +1,5 @@
+import QuizDayPicker from "@/components/Quiz/QuizDayPicker.tsx";
+
 interface Field {
   id: number;
   fieldName: string;
@@ -7,7 +9,7 @@ interface Field {
   inputType?: "number" | "text";
   placeholder?: string;
   optional?: boolean;
-  unitOptions?: string[]; // Add unit options for fields like height/weight
+  unitOptions?: string[];
 }
 
 interface QuizMultiFieldProps {
@@ -30,12 +32,12 @@ export function QuizMultiField({
   return (
     <div className="flex flex-col gap-4 w-full">
       {description && (
-        <p className="text-sm text-gray-400 mb-2">{description}</p>
+        <p className="text-sm text-background mb-2">{description}</p>
       )}
 
       {fields.map((field) => (
         <div key={field.fieldName} className="w-full">
-          <label className="block text-sm text-gray-300 mb-2">
+          <label className="block text-sm text-background mb-2">
             {field.label}
           </label>
 
@@ -43,13 +45,13 @@ export function QuizMultiField({
             <select
               value={values[field.fieldName] || ""}
               onChange={(e) => onValueChange(field.fieldName, e.target.value)}
-              className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+              className="w-full bg-background border border-gray-700 placeholder-white rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500"
             >
-              <option value="" disabled>
+              <option value="" disabled hidden>
                 Select {field.label.toLowerCase()}
               </option>
               {field.options.map((option, idx) => (
-                <option key={idx} value={option}>
+                <option key={idx} value={option} className="rounded-lg">
                   {option}
                 </option>
               ))}
@@ -70,7 +72,20 @@ export function QuizMultiField({
                   )
                 }
                 placeholder={field.placeholder}
-                className="flex-1 bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                className="appearance-none
+                                           [&::-webkit-outer-spin-button]:appearance-none
+                                           [&::-webkit-inner-spin-button]:appearance-none
+                                           [-moz-appearance:textfield]
+                                           flex-1
+                                           bg-background border
+                                           border-gray-700
+                                           placeholder-white
+                                           rounded-lg
+                                           px-4
+                                           py-3
+                                           text-white
+                                           focus:outline-none
+                                           focus:border-blue-500"
               />
               {field.unitOptions && field.unitOptions.length > 0 && (
                 <select
@@ -78,7 +93,7 @@ export function QuizMultiField({
                   onChange={(e) =>
                     onUnitChange?.(field.fieldName, e.target.value)
                   }
-                  className="bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 min-w-[80px]"
+                  className="bg-background border placeholder-white border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 min-w-[80px]"
                 >
                   {field.unitOptions.map((unit) => (
                     <option key={unit} value={unit}>
@@ -90,14 +105,7 @@ export function QuizMultiField({
             </div>
           )}
 
-          {field.type === "date" && (
-            <input
-              type="date"
-              value={values[field.fieldName] || ""}
-              onChange={(e) => onValueChange(field.fieldName, e.target.value)}
-              className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500"
-            />
-          )}
+          {field.type === "date" && <QuizDayPicker />}
         </div>
       ))}
 

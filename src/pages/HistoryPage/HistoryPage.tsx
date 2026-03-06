@@ -6,7 +6,8 @@ import { PageContainer } from "@/Layout/PageContainer";
 import type { HistoryPageProps } from "@/types/pages";
 import { WorkoutHistoryList } from "@/pages/HistoryPage/WorkoutHistoryList";
 import { Logo } from "@/components/Logo/Logo";
-export function HistoryPage({
+
+function HistoryPage({
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,
@@ -173,3 +174,5 @@ export function HistoryPage({
     </PageContainer>
   );
 }
+
+export default HistoryPage;

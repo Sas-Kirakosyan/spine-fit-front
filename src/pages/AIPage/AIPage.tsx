@@ -15,7 +15,7 @@ import {
 const CHAT_HISTORY_KEY = "aiChatHistory";
 const MAX_HISTORY_MESSAGES = 50;
 
-export function AIPage({
+function AIPage({
   onNavigateToWorkout,
   onNavigateToProfile,
   onNavigateToHistory,
@@ -83,11 +83,11 @@ export function AIPage({
       // Отправляем запрос с обработкой streaming
       await sendMessageToGemini(geminiMessages, (chunk: string) => {
         streamingMessageRef.current += chunk;
-        
+
         // Обновляем последнее сообщение ассистента или создаем новое
         setMessages((prev) => {
           const lastMessage = prev[prev.length - 1];
-          
+
           // Если последнее сообщение - это сообщение ассистента, обновляем его
           if (lastMessage && lastMessage.role === "assistant") {
             return [
@@ -98,7 +98,7 @@ export function AIPage({
               },
             ];
           }
-          
+
           // Иначе создаем новое сообщение
           return [
             ...prev,
@@ -120,9 +120,10 @@ export function AIPage({
 
       setMessages((prev) => {
         // Удаляем временное сообщение и добавляем финальное
-        const withoutLast = prev[prev.length - 1]?.role === "assistant" 
-          ? prev.slice(0, -1) 
-          : prev;
+        const withoutLast =
+          prev[prev.length - 1]?.role === "assistant"
+            ? prev.slice(0, -1)
+            : prev;
         return [...withoutLast, finalAssistantMessage];
       });
     } catch (err) {
@@ -130,9 +131,9 @@ export function AIPage({
         err instanceof Error
           ? err.message
           : "Не удалось подключиться к Gemini API. Проверьте подключение к интернету.";
-      
+
       setError(errorMessage);
-      
+
       // Добавляем сообщение об ошибке
       const errorChatMessage: ChatMessage = {
         role: "assistant",
@@ -190,3 +191,5 @@ export function AIPage({
     </PageContainer>
   );
 }
+
+export default AIPage;
