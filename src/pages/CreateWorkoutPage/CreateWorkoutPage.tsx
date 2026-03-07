@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { PageContainer } from "@/Layout/PageContainer";
-import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
+import { type Exercise } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import type { SavedProgram, TrainingDay } from "@/types/workout";
 import { LazyImage } from "@/components/ui/LazyImage";
 

@@ -1,5 +1,5 @@
 import type { FinishedWorkoutSummary } from "@/types/workout";
-import { getExerciseImageUrl } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import { getExerciseEstimated1RM } from "./oneRepMax";
 
 export interface TotalStats {

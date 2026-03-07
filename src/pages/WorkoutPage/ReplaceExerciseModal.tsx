@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
+import { type Exercise } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import { Button } from "@/components/Buttons/Button";
 import { LazyImage } from "@/components/ui/LazyImage";
 

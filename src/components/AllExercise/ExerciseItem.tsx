@@ -1,4 +1,5 @@
-import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
+import { type Exercise } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import { TreeDotButton } from "@/components/TreeDotButton/TreeDotButton";
 import { LazyImage } from "@/components/ui/LazyImage";
 
@@ -30,6 +31,7 @@ export function ExerciseItem({
           src={getExerciseImageUrl(exercise)}
           alt={exercise.name}
           className="h-full w-full object-cover"
+          fallback={exercise.media?.find((m) => m.source === "remote")?.url}
         />
         <div className="pointer-events-none absolute inset-0 rounded-[10px] border border-white/10" />
         {isSelected && (
