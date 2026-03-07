@@ -3,7 +3,7 @@
     "buttons": {
       "regeneratePlan": "Regenerate Plan",
       "backToHome": "Back to Home",
-      "goToMyPlan": "Go to My Plan",
+      "myPlan": "My Plan",
       "addExercise": "Add Exercise",
       "startWorkout": "START Workout"
     },
@@ -28,9 +28,50 @@
       "exercises": "exercises",
       "muscleGroups": "muscle groups",
       "duration": "m"
+    },
+    "workoutPlanCard": {
+      "swap": "Swap",
+      "exercises": "Exercises",
+      "muscles": "Muscles"
     }
   },
   "common": {
     "exercises": "exercises"
+  },
+  "exerciseCard": {
+    "sets": "Sets",
+    "reps": "Reps",
+    "done": "Done",
+    "logged": "Logged"
+  },
+  "bottomNav": {
+    "workout": "Workout",
+    "profile": "Profile",
+    "history": "History",
+    "ai": "AI"
+  },
+  "exerciseActionSheet": {
+    "viewDetails": "View details",
+    "viewSets": "View sets",
+    "replaceExercise": "Replace exercise",
+    "deleteFromWorkout": "Delete from workout"
+  },
+  "swapWorkoutActionSheet": {
+    "title": "Swap Workout",
+    "withinSplit": "Within Training Split",
+    "suggestedSplits": "Suggested Splits (Coach-Recommended)",
+    "newWorkout": "New Workout",
+    "current": "CURRENT",
+    "savedPrograms": "Saved Programs",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "noSavedPrograms": "No saved programs yet",
+    "noSavedProgramsDesc": "Create a program and save it to see it here",
+    "program": "program",
+    "programs": "programs",
+    "pickMuscles": "Pick Muscles",
+    "createFromScratch": "Create Program From Scratch",
+    "import": "Import Workout"
   }
 }

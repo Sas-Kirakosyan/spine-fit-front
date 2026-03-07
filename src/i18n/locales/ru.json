@@ -3,7 +3,7 @@
     "buttons": {
       "regeneratePlan": "Перестроить План",
       "backToHome": "Вернуться на Главную",
-      "goToMyPlan": "Перейти в Мой План",
+      "myPlan": "Мой План",
       "addExercise": "Добавить упражнение",
       "startWorkout": "НАЧАТЬ Тренировку"
     },
@@ -28,9 +28,50 @@
       "exercises": "упражнения",
       "muscleGroups": "группы мышц",
       "duration": "мин"
+    },
+    "workoutPlanCard": {
+      "swap": "Заменить",
+      "exercises": "Упражнения",
+      "muscles": "Мышцы"
     }
   },
   "common": {
     "exercises": "упражнения"
+  },
+  "exerciseCard": {
+    "sets": "Подходы",
+    "reps": "Повторения",
+    "done": "Готово",
+    "logged": "Записано"
+  },
+  "bottomNav": {
+    "workout": "Тренировка",
+    "profile": "Профиль",
+    "history": "История",
+    "ai": "ИИ"
+  },
+  "exerciseActionSheet": {
+    "viewDetails": "Подробнее",
+    "viewSets": "Посмотреть подходы",
+    "replaceExercise": "Заменить упражнение",
+    "deleteFromWorkout": "Удалить из тренировки"
+  },
+  "swapWorkoutActionSheet": {
+    "title": "Заменить тренировку",
+    "withinSplit": "В рамках программы",
+    "suggestedSplits": "Рекомендованные сплиты",
+    "newWorkout": "Новая тренировка",
+    "current": "ТЕКУЩИЙ",
+    "savedPrograms": "Сохранённые программы",
+    "edit": "Изменить",
+    "duplicate": "Дублировать",
+    "delete": "Удалить",
+    "noSavedPrograms": "Нет сохранённых программ",
+    "noSavedProgramsDesc": "Создайте программу и сохраните её, чтобы увидеть её здесь",
+    "program": "программа",
+    "programs": "программы",
+    "pickMuscles": "Выбрать мышцы",
+    "createFromScratch": "Создать с нуля",
+    "import": "Импортировать тренировку"
   }
 }

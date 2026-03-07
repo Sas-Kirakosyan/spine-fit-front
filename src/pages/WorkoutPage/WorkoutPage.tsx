@@ -278,7 +278,7 @@ export default function WorkoutPage({
               onClick={onNavigateToHome}
               className="border border-2 border-white/50 rounded-full p-1"
             >
-              Back to Home
+              {t("workoutPage.buttons.backToHome")}
             </Button>
           )}
         </div>
@@ -299,8 +299,8 @@ export default function WorkoutPage({
           dayName={currentDayName}
           exerciseCount={displayExercises.length}
           muscleCount={new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size}
-          duration={`${Math.ceil(displayExercises.length * 3)}m`}
-          location="My Gym"
+          duration={`${Math.ceil(displayExercises.length * 3)} ${t("workoutPage.labels.duration")}`}
+          location={t("workoutPage.labels.myGym")}
           onWorkoutSwap={(workoutId) => {
             const plan = loadPlanFromLocalStorage();
             if (plan) {
@@ -320,7 +320,7 @@ export default function WorkoutPage({
         <section className="flex-1 space-y-3 mx-2.5">
           {isLoadingPlan ? (
             <div className="flex items-center justify-center py-10">
-              <span className="text-white/60">Loading workout plan...</span>
+              <span className="text-white/60">{t("workoutPage.messages.loading")}</span>
             </div>
           ) : displayExercises.length > 0 ? (
             displayExercises.map((exercise, index) => (
@@ -335,14 +335,14 @@ export default function WorkoutPage({
           ) : (
             <div className="flex flex-col items-center justify-center gap-3 py-10">
               <span className="text-white/60 text-center">
-                No exercises available. Generate a plan first!
+                {t("workoutPage.messages.noExercises")}
               </span>
               {onNavigateToMyPlan && (
                 <Button
                   onClick={onNavigateToMyPlan}
                   className="rounded-[10px] bg-main px-6 py-2 text-white"
                 >
-                  Go to My Plan
+                  {t("workoutPage.buttons.myPlan")}
                 </Button>
               )}
             </div>
@@ -376,7 +376,9 @@ export default function WorkoutPage({
             </div>
 
             <div className="flex flex-1 flex-col justify-center">
-              <span className="text-lg font-semibold text-main sm:text-xl">Add Exercise</span>
+              <span className="text-lg font-semibold text-main sm:text-xl">
+                {t("workoutPage.buttons.addExercise")}
+              </span>
             </div>
           </div>
         </section>
@@ -388,7 +390,7 @@ export default function WorkoutPage({
             onClick={onStartWorkoutSession}
             className="w-full mx-2.5 flex justify-center items-center mb-[30px] h-[46px] rounded-[10px] bg-main text-white uppercase"
           >
-            START Workout
+            {t("workoutPage.buttons.startWorkout")}
           </Button>
         </div>
         <BottomNav
