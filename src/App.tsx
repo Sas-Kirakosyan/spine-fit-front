@@ -271,9 +271,7 @@ function App() {
   const markExerciseComplete = (exerciseId: number, sets: ExerciseSetRow[]) => {
     const completedSets = sets.filter((s) => s.completed).map((s) => ({ ...s }));
     setExerciseLogs((prev) => ({ ...prev, [exerciseId]: completedSets }));
-    setCompletedExerciseIds((prev) =>
-      prev.includes(exerciseId) ? prev : [...prev, exerciseId]
-    );
+    setCompletedExerciseIds((prev) => (prev.includes(exerciseId) ? prev : [...prev, exerciseId]));
     setExerciseSetsMode("preWorkout");
     startPageTransition(() => {
       setSelectedExercise(null);
@@ -333,7 +331,7 @@ function App() {
             onEditSavedProgram={handleEditSavedProgram}
             exercises={workoutExercises}
             isCustomWorkout={isCustomWorkoutMode}
-            onRemoveExercise={(id) =>
+            onRemoveExercise={(id: number) =>
               setWorkoutExercises((prev) => prev.filter((ex) => ex.id !== id))
             }
             completedWorkoutIds={completedWorkoutIds}

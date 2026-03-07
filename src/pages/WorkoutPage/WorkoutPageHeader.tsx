@@ -1,15 +1,18 @@
+import { useTranslation } from "react-i18next";
+
 interface WorkoutPageHeaderProps {
   onNavigateToMyPlan: () => void;
 }
 
-export function WorkoutPageHeader({
-  onNavigateToMyPlan,
-}: WorkoutPageHeaderProps) {
+export function WorkoutPageHeader({ onNavigateToMyPlan }: WorkoutPageHeaderProps) {
+  const { t } = useTranslation();
+
   return (
     <button onClick={onNavigateToMyPlan}>
       <header className="flex mt-2 ml-2.5">
         <div className="w-8 h-8 border-3 border-main rounded-full mr-1"></div>
-        <div className="text-2xl font-semibold text-white">My Plan</div>
+        <div className="text-2xl font-semibold text-white">{t("workoutPage.buttons.myPlan")}</div>
+
         <svg
           className="text-main"
           width="30"

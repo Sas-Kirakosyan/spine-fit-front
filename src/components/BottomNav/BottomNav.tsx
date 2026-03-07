@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface BottomNavProps {
   activePage: "workout" | "profile" | "history" | "ai";
   onWorkoutClick: () => void;
@@ -23,6 +25,7 @@ export function BottomNav({
   onHistoryClick,
   onAIClick,
 }: BottomNavProps) {
+  const { t } = useTranslation();
   return (
     <nav className="bg-[#1B1E2B] flex justify-evenly gap-4 rounded-[10px] w-full max-w-[440px]">
       <button
@@ -30,28 +33,28 @@ export function BottomNav({
         className={getNavButtonClassName(activePage === "workout")}
         onClick={onWorkoutClick}
       >
-        Workout
+        {t("bottomNav.workout")}
       </button>
       <button
         type="button"
         className={getNavButtonClassName(activePage === "profile")}
         onClick={onProfileClick}
       >
-        Profile
+        {t("bottomNav.profile")}
       </button>
       <button
         type="button"
         className={getNavButtonClassName(activePage === "history")}
         onClick={onHistoryClick}
       >
-        History
+        {t("bottomNav.history")}
       </button>
       <button
         type="button"
         className={getNavButtonClassName(activePage === "ai")}
         onClick={onAIClick}
       >
-        AI
+        {t("bottomNav.ai")}
       </button>
     </nav>
   );
