@@ -1,6 +1,7 @@
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseDetailsProps } from "@/types/workout";
-import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
+import { type Exercise } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import { LazyImage } from "@/components/ui/LazyImage";
 
 const formatLabel = (value: string) =>

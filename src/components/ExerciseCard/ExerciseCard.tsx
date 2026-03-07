@@ -1,4 +1,5 @@
-import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
+import { type Exercise } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import TreeDotButton from "@/components/TreeDotButton/TreeDotButton";
 import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
 import { LazyImage } from "@/components/ui/LazyImage";
