@@ -416,7 +416,8 @@ export function SwapWorkoutActionSheet({
                           <p
                             className={`text-xs mt-1 ${isUpperLowerType(currentSplitType) ? "text-white/70" : availableSplits.has("BRO_SPLIT") ? "text-white/60" : "text-white/40"}`}
                           >
-                            2x per week per muscle • 3+ days
+                            {t("swapWorkoutActionSheet.oneMusclePerTwoDay")} • 3+{" "}
+                            {t("swapWorkoutActionSheet.days")}
                           </p>
                         </div>
                         {isUpperLowerType(currentSplitType) ? (
@@ -484,7 +485,7 @@ export function SwapWorkoutActionSheet({
                           <p
                             className={`text-xs mt-1 ${currentSplitType === "PPL" ? "text-white/70" : availableSplits.has("PPL") ? "text-white/60" : "text-white/40"}`}
                           >
-                            PPL • 3-6 days/week
+                            PPL • 3-6 {t("swapWorkoutActionSheet.days")}/week
                           </p>
                         </div>
                         {currentSplitType === "PPL" ? (
@@ -552,7 +553,8 @@ export function SwapWorkoutActionSheet({
                           <p
                             className={`text-xs mt-1 ${currentSplitType === "FRESH_MUSCLES" ? "text-white/70" : availableSplits.has("FRESH_MUSCLES") ? "text-white/60" : "text-white/40"}`}
                           >
-                            One muscle per day • 5+ days
+                            {t("swapWorkoutActionSheet.oneMusclePerDay")} • 5+
+                            {t("swapWorkoutActionSheet.days")}
                           </p>
                         </div>
                         {currentSplitType === "FRESH_MUSCLES" ? (

@@ -72,6 +72,9 @@
     "programs": "programs",
     "pickMuscles": "Pick Muscles",
     "createFromScratch": "Create Program From Scratch",
-    "import": "Import Workout"
+    "import": "Import Workout",
+    "days": "days",
+    "oneMusclePerDay": "One muscle per day",
+    "oneMusclePerTwoDay": "One muscle every two days"
   }
 }

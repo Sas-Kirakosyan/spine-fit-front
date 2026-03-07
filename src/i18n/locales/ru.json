@@ -72,6 +72,11 @@
     "programs": "программы",
     "pickMuscles": "Выбрать мышцы",
     "createFromScratch": "Создать с нуля",
-    "import": "Импортировать тренировку"
+    "import": "Импортировать тренировку",
+    "days": "дней",
+    "oneMusclePerDay": "Одна мышца в день",
+    "oneMusclePerTwoDay": "Одна мышца каждые два дня"
+
+
   }
 }
