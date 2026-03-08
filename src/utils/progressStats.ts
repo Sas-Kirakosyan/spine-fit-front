@@ -1,5 +1,5 @@
 import type { FinishedWorkoutSummary } from "@/types/workout";
-import { getExerciseImageUrl } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import { getExerciseEstimated1RM } from "./oneRepMax";
 
 export interface TotalStats {
@@ -199,7 +199,7 @@ export function getProgressData(
     )
     .slice(-limit);
 
-  return sorted.map((w, index) => {
+  return sorted.map((w) => {
     const date = new Date(w.finishedAt);
     const label = `${date.getDate()}/${date.getMonth() + 1}`;
     return {

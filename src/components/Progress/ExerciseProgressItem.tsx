@@ -1,16 +1,9 @@
 import { useMemo } from "react";
 import type { ExerciseProgress } from "@/utils/progressStats";
 import { LazyImage } from "@/components/ui/LazyImage";
-import {
-  LineChart,
-  Line,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
+import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 
-interface ExerciseItemProps {
+interface ExerciseProgressItemProps {
   exercise: ExerciseProgress;
   onClick?: () => void;
 }
@@ -56,7 +49,7 @@ function MiniProgressChart({ data }: { data: Array<{ date: string; value: number
   );
 }
 
-export function ExerciseItem({ exercise, onClick }: ExerciseItemProps) {
+export function ExerciseProgressItem({ exercise, onClick }: ExerciseProgressItemProps) {
   const hasImprovement = useMemo(() => {
     if (exercise.progressData.length < 2) return false;
     const sorted = [...exercise.progressData].sort(
@@ -73,9 +66,14 @@ export function ExerciseItem({ exercise, onClick }: ExerciseItemProps) {
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") onClick(); } : undefined}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") onClick();
+            }
+          : undefined
+      }
     >
-      {/* Exercise icon/image */}
       <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-slate-700/50 overflow-hidden flex items-center justify-center">
         {exercise.imageUrl ? (
           <LazyImage
@@ -107,11 +105,8 @@ export function ExerciseItem({ exercise, onClick }: ExerciseItemProps) {
         )}
       </div>
 
-      {/* Exercise info */}
       <div className="flex-1 min-w-0">
-        <h3 className="text-sm font-semibold text-white truncate">
-          {exercise.exerciseName}
-        </h3>
+        <h3 className="text-sm font-semibold text-white truncate">{exercise.exerciseName}</h3>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-xs text-slate-400">
             Est 1RM. {Math.round(exercise.estimated1RM)}kg
@@ -124,7 +119,6 @@ export function ExerciseItem({ exercise, onClick }: ExerciseItemProps) {
         </div>
       </div>
 
-      {/* Progress chart */}
       <MiniProgressChart data={exercise.progressData} />
     </div>
   );

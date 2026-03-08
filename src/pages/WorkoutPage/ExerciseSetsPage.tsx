@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import allExercisesData from "@/MockData/allExercise.json";
-import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
+import { type Exercise } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import type {
   ExerciseSetsPageProps,
   SetField,

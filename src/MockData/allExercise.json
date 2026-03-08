@@ -31,7 +31,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/back-hyperextension.png",
+        "url": "/exercisesSm/back-hyperextension.webp",
         "primary": true
       },
       {
@@ -86,7 +86,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/single-leg-glute-bridge.png",
+        "url": "/exercisesSm/single-leg-glute-bridge.webp",
         "primary": true
       },
       {
@@ -141,7 +141,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/hanging-leg-raises-bent-knee-or-single-leg.png",
+        "url": "/exercisesSm/hanging-leg-raises-bent-knee-or-single-leg.webp",
         "primary": true
       },
       {
@@ -196,7 +196,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/one-arm-crossover-cable-pull.png",
+        "url": "/exercisesSm/one-arm-crossover-cable-pull.webp",
         "primary": true
       },
       {
@@ -251,7 +251,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/cable-kickbacks.png",
+        "url": "/exercisesSm/cable-kickbacks.webp",
         "primary": true
       },
       {
@@ -279,13 +279,7 @@
     "name": "Bird Dog (Bench or Stability Ball)",
     "description": "A cable-free core stabilization exercise that strengthens the spine, back muscles, and deep stabilizers with minimal lumbar load.",
     "category": "core",
-    "muscle_groups": [
-      "core_stabilizers",
-      "erector_spinae",
-      "glutes",
-      "obliques",
-      "upper_back"
-    ],
+    "muscle_groups": ["core_stabilizers", "erector_spinae", "glutes", "obliques", "upper_back"],
     "equipment": "bodyweight",
     "instructions": "On a bench or stability ball, keep pelvis neutral. Extend opposite arm and leg slowly. Avoid shifting hips or arching lower back. Hold 2 seconds, switch sides.",
     "difficulty": "beginner",
@@ -312,7 +306,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/bird-dog-bench-or-stability-ball.png",
+        "url": "/exercisesSm/bird-dog-bench-or-stability-ball.webp",
         "primary": true
       },
       {
@@ -367,7 +361,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/cable-knee-drive.png",
+        "url": "/exercisesSm/cable-knee-drive.webp",
         "primary": true
       },
       {
@@ -418,7 +412,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/bodyweightlight-dumbbell-bulgarian-split-squats.png",
+        "url": "/exercisesSm/bodyweightlight-dumbbell-bulgarian-split-squats.webp",
         "primary": true
       },
       {
@@ -469,7 +463,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/leg-extension.png",
+        "url": "/exercisesSm/leg-extension.webp",
         "primary": true
       },
       {
@@ -520,7 +514,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/seated-hip-abduction.png",
+        "url": "/exercisesSm/seated-hip-adduction.webp",
         "primary": true
       },
       {
@@ -571,7 +565,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/bench-or-machine-hip-thrust.png",
+        "url": "/exercisesSm/bench-or-machine-hip-thrust.webp",
         "primary": true
       },
       {
@@ -644,7 +638,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/belt-squats.png",
+        "url": "/exercisesSm/belt-squats.webp",
         "primary": true
       },
       {
@@ -672,13 +666,7 @@
     "name": "Deadlift",
     "description": "A fundamental compound hip-hinge movement that targets the posterior chain including glutes, hamstrings, erector spinae, and upper back. While highly effective for building strength, proper form and load management are critical for spinal health.",
     "category": "strength",
-    "muscle_groups": [
-      "glutes",
-      "hamstrings",
-      "erector_spinae",
-      "upper_back",
-      "forearms"
-    ],
+    "muscle_groups": ["glutes", "hamstrings", "erector_spinae", "upper_back", "forearms"],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Stand with feet hip-width apart, barbell over mid-foot. Hinge at hips, grip bar just outside legs. Brace core, keep spine neutral, chest up. Drive through heels, extend hips and knees simultaneously. Keep bar close to body. Lower with control by hinging hips first.",
@@ -723,7 +711,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/deadlift.png",
+        "url": "/exercisesSm/deadlift.webp",
         "primary": true
       },
       {
@@ -778,7 +766,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/glute-bridge-machine.png",
+        "url": "/exercisesSm/glute-bridge-machine.webp",
         "primary": true
       },
       {
@@ -833,7 +821,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/seated-cable-row.png",
+        "url": "/exercisesSm/seated-cable-row.webp",
         "primary": true
       },
       {
@@ -888,7 +876,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/chest-fly.png",
+        "url": "/exercisesSm/chest-fly.webp",
         "primary": true
       },
       {
@@ -943,7 +931,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/incline-leg-raises.png",
+        "url": "/exercisesSm/incline-leg-raises.webp",
         "primary": true
       },
       {
@@ -998,7 +986,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/seated-dumbbell-shoulder-press.png",
+        "url": "/exercisesSm/seated-dumbbell-shoulder-press.webp",
         "primary": true
       },
       {
@@ -1053,7 +1041,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/dumbbell-lateral-raises.png",
+        "url": "/exercisesSm/dumbbell-lateral-raises.webp",
         "primary": true
       },
       {
@@ -1108,7 +1096,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/dumbbell-bicep-curls.png",
+        "url": "/exercisesSm/dumbbell-bicep-curls.webp",
         "primary": true
       },
       {
@@ -1163,7 +1151,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/dumbbell-tricep-kickbacks.png",
+        "url": "/exercisesSm/dumbbell-tricep-kickbacks.webp",
         "primary": true
       },
       {
@@ -1218,7 +1206,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/cable-tricep-pushdown.png",
+        "url": "/exercisesSm/cable-tricep-pushdown.webp",
         "primary": true
       },
       {
@@ -1273,7 +1261,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/french-bench-press-ez-bar-skullcrusher.png",
+        "url": "/exercisesSm/french-bench-press-ez-bar-skullcrusher.webp",
         "primary": true
       },
       {
@@ -1328,7 +1316,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/floor-crunches.png",
+        "url": "/exercisesSm/floor-crunches.webp",
         "primary": true
       },
       {
@@ -1383,7 +1371,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/bicycle-crunches.png",
+        "url": "/exercisesSm/bicycle-crunches.webp",
         "primary": true
       },
       {
@@ -1447,7 +1435,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/leg-press.png",
+        "url": "/exercisesSm/leg-press.webp",
         "primary": true
       },
       {
@@ -1502,7 +1490,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/lying-leg-curl.png",
+        "url": "/exercisesSm/lying-leg-curl.webp",
         "primary": true
       },
       {
@@ -1557,7 +1545,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/single-leg-romanian-deadlift.png",
+        "url": "/exercisesSm/single-leg-romanian-deadlift.webp",
         "primary": true
       },
       {
@@ -1612,7 +1600,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/goblet-squat.png",
+        "url": "/exercisesSm/goblet-squat.webp",
         "primary": true
       },
       {
@@ -1667,7 +1655,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/machine-chest-press.png",
+        "url": "/exercisesSm/machine-chest-press.webp",
         "primary": true
       },
       {
@@ -1722,7 +1710,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/push-ups.png",
+        "url": "/exercisesSm/push-ups.webp",
         "primary": true
       },
       {
@@ -1777,7 +1765,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/assisted-dips.png",
+        "url": "/exercisesSm/assisted-dips.webp",
         "primary": true
       },
       {
@@ -1832,7 +1820,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/incline-dumbbell-press.png",
+        "url": "/exercisesSm/incline-dumbbell-press.webp",
         "primary": true
       },
       {
@@ -1896,7 +1884,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/lat-pulldown-neutral-grip.png",
+        "url": "/exercisesSm/lat-pulldown-neutral-grip.webp",
         "primary": true
       },
       {
@@ -1951,7 +1939,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/lat-pulldown-wide-grip.png",
+        "url": "/exercisesSm/lat-pulldown-wide-grip.webp",
         "primary": true
       },
       {
@@ -1979,13 +1967,7 @@
     "name": "Pull-Up",
     "description": "A bodyweight vertical pulling exercise performed on a pull-up bar using an overhand grip. One of the most effective exercises for building back strength, lat development, and grip strength. Requires good upper body strength.",
     "category": "strength",
-    "muscle_groups": [
-      "lats",
-      "upper_back",
-      "biceps",
-      "forearms",
-      "core_stabilizers"
-    ],
+    "muscle_groups": ["lats", "upper_back", "biceps", "forearms", "core_stabilizers"],
     "equipment": "pull_up_bar",
     "difficulty": "advanced",
     "instructions": "Hang from pull-up bar with overhand grip slightly wider than shoulders. Engage core and pull body up by driving elbows down until chin clears bar. Lower with control to full arm extension. Keep shoulders active at bottom, avoid dead hang. Use assistance or negative reps if needed.",
@@ -2012,7 +1994,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/pull-up.png",
+        "url": "/exercisesSm/pull-up.webp",
         "primary": true
       },
       {
@@ -2067,7 +2049,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/chin-up.png",
+        "url": "/exercisesSm/chin-up.webp",
         "primary": true
       },
       {
@@ -2122,7 +2104,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/straight-arm-pulldown.png",
+        "url": "/exercisesSm/straight-arm-pulldown.webp",
         "primary": true
       },
       {
@@ -2177,7 +2159,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/assisted-pull-up.png",
+        "url": "/exercisesSm/assisted-pull-up.webp",
         "primary": true
       },
       {
@@ -2241,7 +2223,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/cable-face-pull-rope-face-pull.png",
+        "url": "/exercisesSm/cable-face-pull-rope-face-pull.webp",
         "primary": true
       },
       {
@@ -2305,7 +2287,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/reverse-pec-deck-rear-delt-fly.png",
+        "url": "/exercisesSm/reverse-pec-deck-rear-delt-fly.webp",
         "primary": true
       },
       {
@@ -2965,13 +2947,13 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://weighttraining.guide/wp-content/uploads/2021/10/Dumbbell-suitcase-carry-2.png 1320w, https://weighttraining.guide/wp-content/uploads/2021/10/Dumbbell-suitcase-carry-2-300x200.png 300w, https://weighttraining.guide/wp-content/uploads/2021/10/Dumbbell-suitcase-carry-2-1024x683.png 1024w, https://weighttraining.guide/wp-content/uploads/2021/10/Dumbbell-suitcase-carry-2-768x512.png 768w",
+        "url": "/exercisesSm/suitcase-carry.webp",
         "primary": true
       },
       {
         "type": "exercise",
         "source": "remote",
-        "url": "https://weighttraining.guide/wp-content/uploads/2021/10/Dumbbell-suitcase-carry-2.png 1320w, https://weighttraining.guide/wp-content/uploads/2021/10/Dumbbell-suitcase-carry-2-300x200.png 300w, https://weighttraining.guide/wp-content/uploads/2021/10/Dumbbell-suitcase-carry-2-1024x683.png 1024w, https://weighttraining.guide/wp-content/uploads/2021/10/Dumbbell-suitcase-carry-2-768x512.png 768w",
+        "url": "https://liftmanual.com/wp-content/uploads/2023/04/dumbbell-suitcase-carry.jpg",
         "primary": false
       },
       {
@@ -3203,7 +3185,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/chest-supported-row.png",
+        "url": "/exercisesSm/chest-supported-row.webp",
         "primary": true
       },
       {
@@ -3258,13 +3240,13 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/seated-leg-curl.png",
+        "url": "/exercisesSm/seated-leg-curl.webp",
         "primary": true
       },
       {
         "type": "exercise",
         "source": "remote",
-        "url": "https://i.ytimg.com/vi/1Tq3QdYUuHs/maxresdefault.jpg",
+        "url": "https://fitnessprogramer.com/wp-content/uploads/2021/08/Seated-Leg-Curl.gif",
         "primary": false
       },
       {
@@ -3283,7 +3265,7 @@
   },
   {
     "id": 58,
-    "name": "Seated Hip Adduction",
+    "name": "Seated Hip Adduction (Outer Side)",
     "description": "A machine-based inner-thigh isolation exercise that strengthens the hip adductors. Complements hip abduction work to build balanced pelvic stability, which supports proper spinal alignment and reduces compensatory lower back strain.",
     "category": "strength",
     "muscle_groups": ["hip_adductors"],
@@ -3313,13 +3295,13 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/seated-hip-adduction.png",
+        "url": "/exercisesSm/seated-hip-adduction.webp",
         "primary": true
       },
       {
         "type": "exercise",
         "source": "remote",
-        "url": "https://i.ytimg.com/vi/u-4PYRuKBuw/maxresdefault.jpg",
+        "url": "https://s3assets.skimble.com/assets/1357563/image_full.jpg",
         "primary": false
       },
       {
@@ -3368,13 +3350,13 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/standing-cable-hip-adduction-inner-side.png",
+        "url": "/exercisesSm/standing-cable-hip-adduction-inner-side.webp",
         "primary": true
       },
       {
         "type": "exercise",
         "source": "remote",
-        "url": "https://i.ytimg.com/vi/wqp1I9HbhT4/maxresdefault.jpg",
+        "url": "https://weighttraining.guide/wp-content/uploads/2017/12/Cable-Hip-Adduction-resized.png",
         "primary": false
       },
       {
@@ -3478,13 +3460,13 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/standing-cable-external-rotation.png",
+        "url": "/exercisesSm/standing-cable-external-rotation.webp",
         "primary": true
       },
       {
         "type": "exercise",
         "source": "remote",
-        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/standing-cable-external-rotation.png",
+        "url": "https://weighttraining.guide/wp-content/uploads/2016/10/Cable-Standing-Shoulder-External-Rotation-resized.png",
         "primary": false
       },
       {
@@ -3533,7 +3515,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/front-plank.png",
+        "url": "/exercisesSm/front-plank.webp",
         "primary": true
       },
       {
@@ -3588,7 +3570,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/dumbbell-shrug.png",
+        "url": "/exercisesSm/dumbbell-shrug.webp",
         "primary": true
       },
       {
@@ -3643,7 +3625,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/hammer-curl.png",
+        "url": "/exercisesSm/hammer-curl.webp",
         "primary": true
       },
       {
@@ -3698,7 +3680,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/standing-cable-external-rotion.png",
+        "url": "/exercisesSm/standing-cable-external-rotion.webp",
         "primary": true
       },
       {
@@ -3753,7 +3735,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/standing-cable-external-rotion.png",
+        "url": "/exercisesSm/standing-cable-external-rotion.webp",
         "primary": true
       },
       {
@@ -3808,7 +3790,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/standing-cable-external-rotion.png",
+        "url": "/exercisesSm/standing-cable-external-rotion.webp",
         "primary": true
       },
       {
@@ -3863,7 +3845,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/standing-cable-external-rotion.png",
+        "url": "/exercisesSm/standing-cable-external-rotion.webp",
         "primary": true
       },
       {
@@ -3918,7 +3900,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/standing-cable-external-rotion.png",
+        "url": "/exercisesSm/standing-cable-external-rotion.webp",
         "primary": true
       },
       {
@@ -3973,7 +3955,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercises/standing-cable-external-rotion.png",
+        "url": "/exercisesSm/standing-cable-external-rotion.webp",
         "primary": true
       },
       {

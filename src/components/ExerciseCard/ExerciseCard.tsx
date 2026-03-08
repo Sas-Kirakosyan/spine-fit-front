@@ -1,4 +1,6 @@
-import { type Exercise, getExerciseImageUrl } from "@/types/exercise";
+import { useTranslation } from "react-i18next";
+import { type Exercise } from "@/types/exercise";
+import { getExerciseImageUrl } from "@/utils/exercise";
 import TreeDotButton from "@/components/TreeDotButton/TreeDotButton";
 import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
 import { LazyImage } from "@/components/ui/LazyImage";
@@ -18,6 +20,7 @@ export function ExerciseCard({
   onActionClick,
   isCompleted = false,
 }: ExerciseCardProps) {
+  const { t } = useTranslation();
   return (
     <div
       className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B] p-3 text-left shadow-xl ring-1 ring-white/5"
@@ -50,15 +53,17 @@ export function ExerciseCard({
 
       <div className="flex flex-1 flex-col justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-lg font-semibold text-white sm:text-xl">
-            {exercise.name}
-          </span>
+          <span className="text-lg font-semibold text-white sm:text-xl">{exercise.name}</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-1 text-sm font-medium text-slate-200">
-          <span>{exercise.sets} Sets</span>
+          <span>
+            {exercise.sets} {t("exerciseCard.sets")}
+          </span>
           <span className="text-slate-500">•</span>
-          <span>{exercise.reps} Reps</span>
+          <span>
+            {exercise.reps} {t("exerciseCard.reps")}
+          </span>
           <span className="text-slate-500">•</span>
           <span>
             {exercise.weight} {exercise.weight_unit}
@@ -66,16 +71,13 @@ export function ExerciseCard({
         </div>
         {isCompleted && (
           <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-300">
-            Done
+            {t("exerciseCard.done")}
             <span className="h-1 w-1 rounded-full bg-emerald-300" />
-            Logged
+            {t("exerciseCard.logged")}
           </span>
         )}
       </div>
-      <TreeDotButton
-        ariaLabel="open exercise actions"
-        onClick={() => onActionClick()}
-      />
+      <TreeDotButton ariaLabel="open exercise actions" onClick={() => onActionClick()} />
     </div>
   );
 }

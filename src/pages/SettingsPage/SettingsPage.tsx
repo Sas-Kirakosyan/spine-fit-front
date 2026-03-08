@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
@@ -24,13 +26,7 @@ interface SettingsItemProps {
   showArrow?: boolean;
 }
 
-function SettingsItem({
-  label,
-  value,
-  subValue,
-  onClick,
-  showArrow = true,
-}: SettingsItemProps) {
+function SettingsItem({ label, value, subValue, onClick, showArrow = true }: SettingsItemProps) {
   return (
     <button
       type="button"
@@ -71,19 +67,17 @@ function Divider() {
 }
 
 function SettingsPage({ onNavigateBack }: SettingsPageProps) {
+  useTranslation();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "Dark",
-  );
-  const [language, setLanguage] = useState(
-    () => localStorage.getItem("language") || "English",
-  );
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Dark");
   const [isBodyProfileOpen, setIsBodyProfileOpen] = useState(false);
-  const [bodyProfileSummary, setBodyProfileSummary] =
-    useState<string>("Not set");
-
+  const [bodyProfileSummary, setBodyProfileSummary] = useState<string>("Not set");
+  const [language, setLanguage] = useState(() => {
+    const currentLang = i18n.language;
+    return currentLang === "ru" ? "Russian" : "English";
+  });
   const loadBodyProfileSummary = () => {
     const stored = localStorage.getItem("bodyProfile");
     if (stored) {
@@ -91,10 +85,8 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         const profile = JSON.parse(stored);
         const parts: string[] = [];
         if (profile.gender) parts.push(profile.gender);
-        if (profile.height)
-          parts.push(`${profile.height} ${profile.heightUnit || "cm"}`);
-        if (profile.weight)
-          parts.push(`${profile.weight} ${profile.weightUnit || "kg"}`);
+        if (profile.height) parts.push(`${profile.height} ${profile.heightUnit || "cm"}`);
+        if (profile.weight) parts.push(`${profile.weight} ${profile.weightUnit || "kg"}`);
         if (parts.length > 0) {
           setBodyProfileSummary(parts.join(" • "));
           return;
@@ -111,9 +103,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     if (user) {
       setUserEmail(user.email);
       // Проверяем, авторизован ли пользователь через Google
-      const isGoogle = user.providerData.some(
-        (provider) => provider.providerId === "google.com",
-      );
+      const isGoogle = user.providerData.some((provider) => provider.providerId === "google.com");
       setIsGoogleUser(isGoogle);
     } else {
       // Если пользователь не авторизован через Firebase, проверяем localStorage
@@ -123,6 +113,19 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       }
     }
     loadBodyProfileSummary();
+  }, []);
+
+  // Sync language state with i18next language
+  useEffect(() => {
+    const handleLanguageChanged = () => {
+      const currentLang = i18n.language;
+      setLanguage(currentLang === "ru" ? "Russian" : "English");
+    };
+
+    i18n.on("languageChanged", handleLanguageChanged);
+    return () => {
+      i18n.off("languageChanged", handleLanguageChanged);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -144,11 +147,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     openModal({
       title: "Change Theme",
       options: ["Light", "Dark", "System"],
-      descriptions: [
-        "Always use light mode",
-        "Always use dark mode",
-        "Follow system settings",
-      ],
+      descriptions: ["Always use light mode", "Always use dark mode", "Follow system settings"],
       selectedValue: theme,
       onSelect: (value) => {
         setTheme(value);
@@ -161,9 +160,11 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     openModal({
       title: "Change Language",
       options: ["English", "Russian"],
-      selectedValue: "English",
+      selectedValue: language,
       onSelect: (value) => {
         setLanguage(value);
+        const langCode = value === "Russian" ? "ru" : "en";
+        i18n.changeLanguage(langCode);
         localStorage.setItem("language", value);
       },
     });
@@ -178,8 +179,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         "$9.99/month - Unlimited workouts",
         "$79.99/year - Save 33%",
       ],
-      headerDescription:
-        "Upgrade to unlock unlimited workout logging and premium features.",
+      headerDescription: "Upgrade to unlock unlimited workout logging and premium features.",
       selectedValue: "Free",
       onSelect: (value) => {
         console.log("Selected subscription:", value);
@@ -235,37 +235,18 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           subValue={isGoogleUser ? "Signed in with Google" : undefined}
           showArrow={false}
         />
-        <SettingsItem
-          label="Language"
-          value={language}
-          onClick={handleLanguageChange}
-        />
-        <SettingsItem
-          label="Subscribe to log unlimited workouts"
-          onClick={handleSubscription}
-        />
+        <SettingsItem label="Language" value={language} onClick={handleLanguageChange} />
+        <SettingsItem label="Subscribe to log unlimited workouts" onClick={handleSubscription} />
         <SettingsItem label="Change Password" onClick={() => {}} />
-        <SettingsItem
-          label="Change Theme"
-          value={theme}
-          onClick={handleThemeChange}
-        />
-        <SettingsItem
-          label="Log Out"
-          onClick={handleLogout}
-          showArrow={false}
-        />
+        <SettingsItem label="Change Theme" value={theme} onClick={handleThemeChange} />
+        <SettingsItem label="Log Out" onClick={handleLogout} showArrow={false} />
       </SettingsSection>
 
       <Divider />
 
       {/* About You Section */}
       <SettingsSection title="About You">
-        <SettingsItem
-          label="Body Profile"
-          value={bodyProfileSummary}
-          onClick={handleBodyProfile}
-        />
+        <SettingsItem label="Body Profile" value={bodyProfileSummary} onClick={handleBodyProfile} />
       </SettingsSection>
 
       <Divider />

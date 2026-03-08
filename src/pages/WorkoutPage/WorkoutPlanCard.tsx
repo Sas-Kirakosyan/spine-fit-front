@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { SwapWorkoutActionSheet } from "../../components/ActionSheet/SwapWorkoutActionSheet";
 import type { GeneratedPlan } from "@/utils/planGenerator";
 import type { SavedProgram } from "@/types/workout";
@@ -32,6 +33,7 @@ export function WorkoutPlanCard({
   onSelectSavedProgram,
   onEditSavedProgram,
 }: WorkoutPlanCardProps) {
+  const { t } = useTranslation();
   const [showSwapSheet, setShowSwapSheet] = useState(false);
 
   const getCurrentWorkoutId = () => {
@@ -66,7 +68,7 @@ export function WorkoutPlanCard({
               <path d="M16 21l4-4-4-4" />
               <path d="M20 17H4" />
             </svg>
-            Swap
+            {t("workoutPage.workoutPlanCard.swap")}
           </button>
           <button className="text-white hover:text-white/80 transition-colors p-1">
             <svg
@@ -91,7 +93,7 @@ export function WorkoutPlanCard({
           <h2 className="text-2xl font-bold text-white mb-1">{dayName}</h2>
           <p className="text-xs text-white/60 mb-3">{planName}</p>
           <p className="text-sm text-white/80">
-            {exerciseCount} Exercises • {muscleCount} Muscles
+            {exerciseCount} {t("workoutPage.workoutPlanCard.exercises")} • {muscleCount} {t("workoutPage.workoutPlanCard.muscles")}
           </p>
 
           {/* Bottom buttons */}

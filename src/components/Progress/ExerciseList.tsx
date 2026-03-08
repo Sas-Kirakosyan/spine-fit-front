@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import type { ExerciseProgress } from "@/utils/progressStats";
-import { ExerciseItem } from "@/components/Progress/ExerciseItem";
+import { ExerciseProgressItem } from "@/components/Progress/ExerciseProgressItem";
 
 interface ExerciseListProps {
   exercises: ExerciseProgress[];
@@ -120,7 +120,7 @@ export function ExerciseList({ exercises, onExerciseClick }: ExerciseListProps) 
       ) : (
         <div className="flex flex-col gap-2">
           {filteredAndSorted.map((exercise) => (
-            <ExerciseItem
+            <ExerciseProgressItem
               key={exercise.exerciseId}
               exercise={exercise}
               onClick={onExerciseClick ? () => onExerciseClick(exercise.exerciseId) : undefined}

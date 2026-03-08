@@ -333,7 +333,7 @@ function App() {
             onEditSavedProgram={handleEditSavedProgram}
             exercises={workoutExercises}
             isCustomWorkout={isCustomWorkoutMode}
-            onRemoveExercise={(id) =>
+            onRemoveExercise={(id: number) =>
               setWorkoutExercises((prev) => prev.filter((ex) => ex.id !== id))
             }
             completedWorkoutIds={completedWorkoutIds}

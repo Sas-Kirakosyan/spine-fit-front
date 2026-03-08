@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import type { ExerciseActionSheetProps } from "@/types/workout";
 import { ActionButton } from "@/components/ActionSheet/ActionButton/ActionButton";
@@ -11,8 +12,9 @@ export function ExerciseActionSheet({
   onStartWorkout,
   onReplace,
   onDelete,
-  containerRef: _containerRef,
+  //containerRef: _containerRef,
 }: ExerciseActionSheetProps) {
+  const { t } = useTranslation();
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -50,7 +52,7 @@ export function ExerciseActionSheet({
             </div>
             <ActionButton
               icon={<InfoIcon />}
-              text="View details"
+              text={t("exerciseActionSheet.viewDetails")}
               onClick={() => {
                 onShowDetails();
                 onClose();
@@ -60,7 +62,7 @@ export function ExerciseActionSheet({
             {onStartWorkout && (
               <ActionButton
                 icon={<PlayIcon />}
-                text="View sets"
+                text={t("exerciseActionSheet.viewSets")}
                 onClick={() => {
                   onStartWorkout();
                   onClose();
@@ -70,7 +72,7 @@ export function ExerciseActionSheet({
             )}
             <ActionButton
               icon={<ReplaceIcon />}
-              text="Replace exercise"
+              text={t("exerciseActionSheet.replaceExercise")}
               onClick={() => {
                 onReplace?.();
                 onClose();
@@ -79,7 +81,7 @@ export function ExerciseActionSheet({
             />
             <ActionButton
               icon={<TrashIcon />}
-              text="Delete from workout"
+              text={t("exerciseActionSheet.deleteFromWorkout")}
               onClick={() => {
                 onDelete?.();
                 onClose();
