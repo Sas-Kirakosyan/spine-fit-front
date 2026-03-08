@@ -120,7 +120,7 @@ describe('Plan Generator - Full Integration Tests', () => {
   test('should generate a complete training plan for beginner with no pain', () => {
     // Setup plan settings
     const planSettings: PlanSettings = {
-      goal: "Build muscle safely (gym-goer with back or sciatic pain)",
+      goal: "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
       workoutsPerWeek: "3 days per week",
       duration: "45 min",
       experience: "Beginner",

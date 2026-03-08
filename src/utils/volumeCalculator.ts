@@ -133,9 +133,10 @@ function calculateSetsPerExercise(
  * Calculate reps per set based on goal and pain level
  */
 function calculateRepsForGoal(goal: string, painLevel?: number): number {
-  const isMuscleBuildingGoal = goal.toLowerCase().includes("build muscle");
+  const isMuscleBuildingGoal = goal.toLowerCase().includes("hypertrophy") || goal.toLowerCase().includes("build muscle");
   const isPainReductionGoal = goal.toLowerCase().includes("reduce pain") ||
-    goal.toLowerCase().includes("back health");
+    goal.toLowerCase().includes("back health") ||
+    goal.toLowerCase().includes("structural recovery");
 
   // If in significant pain, use higher reps (lighter weight)
   if (painLevel && painLevel > 6) {
@@ -160,7 +161,7 @@ function calculateRepsForGoal(goal: string, painLevel?: number): number {
  * Calculate rest time between sets
  */
 function calculateRestTime(experience: string, goal: string): number {
-  const isMuscleBuildingGoal = goal.toLowerCase().includes("build muscle");
+  const isMuscleBuildingGoal = goal.toLowerCase().includes("hypertrophy") || goal.toLowerCase().includes("build muscle");
 
   // Advanced users with muscle building goals need more rest
   if (experience === "Advanced" && isMuscleBuildingGoal) {
@@ -168,7 +169,7 @@ function calculateRestTime(experience: string, goal: string): number {
   }
 
   // Beginners and pain reduction need less rest (lighter weights)
-  if (experience === "Beginner" || goal.toLowerCase().includes("reduce pain")) {
+  if (experience === "Beginner" || goal.toLowerCase().includes("reduce pain") || goal.toLowerCase().includes("structural recovery")) {
     return 60; // 1 minute
   }
 

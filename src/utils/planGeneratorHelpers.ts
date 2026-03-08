@@ -598,8 +598,8 @@ export function buildSourceOnboarding(
   // Extract all quiz answers with proper type mapping
   const goalAnswer = answers[2];
   const goalOptions = [
-    "Build muscle safely (gym-goer with back or sciatic pain)",
-    "Reduce pain and improve back health",
+    "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
+    "Structural Recovery (Reduce pain and restore movement capacity)",
   ];
   const goal = typeof goalAnswer === "number" ? goalOptions[goalAnswer] : planSettings.goal;
 

@@ -23,10 +23,10 @@ export const planFieldsConfig: Record<PlanFieldId, FieldConfig> = {
     id: "goal",
     title: "Select Goal",
     options: [
-      "Build muscle safely (gym-goer with back or sciatic pain)",
-      "Reduce pain and improve back health (rehab-focused user)",
+      "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
+      "Structural Recovery (Reduce pain and restore movement capacity)",
     ],
-    defaultValue: "Build muscle safely (gym-goer with back or sciatic pain)",
+    defaultValue: "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
     headerDescription:
       "Your goal is key to how Fitbod selects exercises, rep & weight ranges, and workout intensity.",
   },

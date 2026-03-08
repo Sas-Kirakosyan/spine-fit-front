@@ -12,7 +12,7 @@ import { QuizNavigationButtons } from "./QuizNavigationButtons";
 import { QuizMultiField } from "./QuizMultiField";
 
 export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
-  const [workoutType, setWorkoutType] = useState<"home" | "gym">("home");
+  const [workoutType] = useState<"home" | "gym">("gym");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<number[]>([]);
@@ -106,24 +106,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
     const question = filteredQuestions[currentQuestion];
     if (question.type === "radio" || question.type === "image_radio") {
-      const answerValue = answerIndex;
-
-      // Dynamically set workout type based on workoutType answer
-      if (question.fieldName === "workoutType") {
-        const selectedOption = question.options?.[answerValue];
-        if (selectedOption === "home") {
-          setWorkoutType("home");
-        } else if (selectedOption === "gym") {
-          setWorkoutType("gym");
-        }
-        // Don't save workoutType to answers - it's stored separately
-      } else {
-        // Save answer for all other questions
-        setAnswers((prev) => ({
-          ...prev,
-          [question.id]: answerValue,
-        }));
-      }
+      setAnswers((prev) => ({
+        ...prev,
+        [question.id]: answerIndex,
+      }));
     }
   };
 

@@ -9,7 +9,7 @@ describe('Push/Pull/Legs 3-Day Split - Real World Example', () => {
   test('should generate 3 workouts for Push/Pull/Legs split', () => {
     // User settings: Push/Pull/Legs, 3 days per week
     const planSettings: PlanSettings = {
-      goal: "Build muscle safely (gym-goer with back or sciatic pain)",
+      goal: "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
       workoutsPerWeek: "3 days per week",
       duration: "45 min",
       experience: "Intermediate",

@@ -14,17 +14,10 @@ export const questions: QuizQuestion[] = [
     id: 1,
     fieldName: "intro",
     type: "info",
-    title: "Let's personalize your plan",
+    title: "Build Muscle, Protect Your Spine",
     description:
-      "Answer a few quick questions so we can build a safe and effective workout plan tailored to you.",
-    buttonText: "Start",
-  },
-  {
-    id: 1.5,
-    fieldName: "workoutType",
-    question: "Where do you plan to work out?",
-    type: "radio",
-    options: ["gym", "home"],
+      "We combine professional coaching logic with spine-safe protocols to help you train hard without the fear of a flare-up. Let's customize your journey.",
+    buttonText: "Start My Assessment",
   },
   {
     id: 2,
@@ -32,8 +25,8 @@ export const questions: QuizQuestion[] = [
     question: "What is your main goal?",
     type: "radio",
     options: [
-      "Build muscle safely (gym-goer with back or sciatic pain)",
-      "Reduce pain and improve back health",
+      "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
+      "Structural Recovery (Reduce pain and restore movement capacity)",
     ],
   },
 
@@ -86,7 +79,7 @@ export const questions: QuizQuestion[] = [
   {
     id: 7,
     fieldName: "bodyType",
-    question: "Which body type looks most like you?",
+    question: "Which physique profile best matches yours?",
     type: "image_radio",
     options: [
       {
@@ -150,9 +143,13 @@ export const questions: QuizQuestion[] = [
   {
     id: 8,
     fieldName: "experience",
-    question: "What's your training experience?",
+    question: "What is your resistance training experience?",
     type: "radio",
-    options: ["Beginner", "Intermediate", "Advanced"],
+    options: [
+      "Beginner — new to training",
+      "Intermediate — 1 to 3 years",
+      "Advanced — 3+ years",
+    ],
   },
 
   {

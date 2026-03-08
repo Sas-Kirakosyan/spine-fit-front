@@ -9,7 +9,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
     "splitType": "FULL_BODY_AB",
     "createdAt": "2026-02-08T08:06:47.113Z",
     "settings": {
-      "goal": "Build muscle safely (gym-goer with back or sciatic pain)",
+      "goal": "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
       "workoutsPerWeek": "2 days per week",
       "duration": "50 min",
       "experience": "Intermediate",
@@ -38,7 +38,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
     },
     "sourceOnboarding": {
       "workoutType": "gym",
-      "goal": "Build muscle safely (gym-goer with back or sciatic pain)",
+      "goal": "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
       "gender": "Female",
       "age": 42,
       "dateOfBirth": "1983-12-11",

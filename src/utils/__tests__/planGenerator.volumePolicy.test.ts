@@ -4,7 +4,7 @@ import { generateTrainingPlan, loadPlanFromLocalStorage } from "@/utils/planGene
 import type { PlanSettings } from "@/types/planSettings";
 
 const baseSettings: PlanSettings = {
-  goal: "Build muscle safely (gym-goer with back or sciatic pain)",
+  goal: "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
   workoutsPerWeek: "2 days per week",
   duration: "25 min",
   durationRange: "20–30 min",

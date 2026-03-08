@@ -20,7 +20,7 @@
 
 1. Navigate to the Quiz (usually on first launch or in settings)
 2. Answer these test questions:
-   - **Goal**: "Build muscle safely (gym-goer with back or sciatic pain)"
+   - **Goal**: "Muscle Hypertrophy (Build mass safely with back/sciatica history)"
    - **Gender**: Male
    - **Age**: 30-39
    - **Height**: 180 cm

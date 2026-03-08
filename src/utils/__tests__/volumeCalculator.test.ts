@@ -37,7 +37,7 @@ describe('Volume Calculator - Basic Tests', () => {
     const result = calculateVolume({
       workoutDuration: "30 min",
       experience: "Beginner",
-      goal: "Reduce pain and improve back health",
+      goal: "Structural Recovery (Reduce pain and restore movement capacity)",
       painLevel: 5
     });
 

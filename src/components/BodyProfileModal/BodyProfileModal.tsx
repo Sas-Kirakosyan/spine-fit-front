@@ -220,7 +220,7 @@ export function BodyProfileModal({ isOpen, onClose, onSave }: BodyProfileModalPr
   const handleSave = () => {
     // Save to quizAnswers
     const stored = localStorage.getItem("quizAnswers");
-    let quizData = stored ? JSON.parse(stored) : { answers: {}, units: {}, workoutType: "home" };
+    let quizData = stored ? JSON.parse(stored) : { answers: {}, units: {}, workoutType: "gym" };
 
     const genderOptions = ["Male", "Female", "Other"];
     const genderIndex = genderOptions.indexOf(gender);

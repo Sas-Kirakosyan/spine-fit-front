@@ -1,18 +1,11 @@
 interface QuizRadioOptionProps {
-  option:
-    | string
-    | { value: string; label: string; image: string; description: string };
+  option: string | { value: string; label: string; image: string; description: string };
   index: number;
   isSelected: boolean;
   onSelect: (index: number) => void;
 }
 
-export function QuizRadioOption({
-  option,
-  index,
-  isSelected,
-  onSelect,
-}: QuizRadioOptionProps) {
+export function QuizRadioOption({ option, index, isSelected, onSelect }: QuizRadioOptionProps) {
   const displayText = typeof option === "string" ? option : option.label;
 
   return (
