@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@layer components {
+    .embla__ios-picker {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transform: translateZ(0);
+    }
+}
+
 @theme {
   --color-main: #e77d10;
   --color-background: #132f54;

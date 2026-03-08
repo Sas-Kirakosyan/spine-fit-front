@@ -1,4 +1,4 @@
-import QuizDayPicker from "@/components/Quiz/QuizDayPicker.tsx";
+import QuizScrollCalendar from "@/components/Quiz/QuizScrollCalendar.tsx";
 
 interface Field {
   id: number;
@@ -15,7 +15,7 @@ interface Field {
 interface QuizMultiFieldProps {
   fields: Field[];
   values: Record<string, string | number>;
-  units?: Record<string, string>; // Track units for each field
+  units?: Record<string, string>;
   onValueChange: (fieldName: string, value: string | number) => void;
   onUnitChange?: (fieldName: string, unit: string) => void;
   description?: string;
@@ -73,19 +73,19 @@ export function QuizMultiField({
                 }
                 placeholder={field.placeholder}
                 className="appearance-none
-                                           [&::-webkit-outer-spin-button]:appearance-none
-                                           [&::-webkit-inner-spin-button]:appearance-none
-                                           [-moz-appearance:textfield]
-                                           flex-1
-                                           bg-background border
-                                           border-gray-700
-                                           placeholder-white
-                                           rounded-lg
-                                           px-4
-                                           py-3
-                                           text-white
-                                           focus:outline-none
-                                           focus:border-blue-500"
+                           [&::-webkit-outer-spin-button]:appearance-none
+                           [&::-webkit-inner-spin-button]:appearance-none
+                           [-moz-appearance:textfield]
+                           flex-1
+                           bg-background border
+                           border-gray-700
+                           placeholder-white
+                           rounded-lg
+                           px-4
+                           py-3
+                           text-white
+                           focus:outline-none
+                           focus:border-blue-500"
               />
               {field.unitOptions && field.unitOptions.length > 0 && (
                 <select
@@ -105,7 +105,7 @@ export function QuizMultiField({
             </div>
           )}
 
-          {field.type === "date" && <QuizDayPicker />}
+          {field.type === "date" && <QuizScrollCalendar />}
         </div>
       ))}
 
