@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 
 interface BottomNavProps {
-  activePage: "workout" | "profile" | "history" | "ai";
+  activePage: "workout" | "progress" | "history" | "ai";
   onWorkoutClick: () => void;
-  onProfileClick: () => void;
+  onProgressClick: () => void;
   onHistoryClick: () => void;
   onAIClick: () => void;
 }
@@ -21,7 +21,7 @@ const getNavButtonClassName = (isActive: boolean) =>
 export function BottomNav({
   activePage,
   onWorkoutClick,
-  onProfileClick,
+  onProgressClick,
   onHistoryClick,
   onAIClick,
 }: BottomNavProps) {
@@ -37,10 +37,10 @@ export function BottomNav({
       </button>
       <button
         type="button"
-        className={getNavButtonClassName(activePage === "profile")}
-        onClick={onProfileClick}
+        className={getNavButtonClassName(activePage === "progress")}
+        onClick={onProgressClick}
       >
-        {t("bottomNav.profile")}
+        {t("bottomNav.progress")}
       </button>
       <button
         type="button"

@@ -46,6 +46,7 @@
   },
   "bottomNav": {
     "workout": "Workout",
+    "progress": "Progress",
     "profile": "Profile",
     "history": "History",
     "ai": "AI"

@@ -9,7 +9,7 @@ import { Logo } from "@/components/Logo/Logo";
 
 function HistoryPage({
   onNavigateToWorkout,
-  onNavigateToProfile,
+  onNavigateToProgress,
   onNavigateToHistory,
   onNavigateToAI,
   activePage,
@@ -166,7 +166,7 @@ function HistoryPage({
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}
-          onProfileClick={onNavigateToProfile}
+          onProgressClick={onNavigateToProgress}
           onHistoryClick={onNavigateToHistory}
           onAIClick={onNavigateToAI || (() => {})}
         />

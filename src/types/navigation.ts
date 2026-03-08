@@ -3,7 +3,7 @@ export type Page =
   | "login"
   | "register"
   | "workout"
-  | "profile"
+  | "progress"
   | "history"
   | "ai"
   | "exerciseSets"
