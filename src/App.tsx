@@ -7,7 +7,7 @@ const HomePage = lazy(() => import("@/pages/HomePage/HomePage"));
 const Registration = lazy(() => import("@/pages/RegistrationPage/Registration"));
 const Login = lazy(() => import("@/pages/LoginPage/Login"));
 const WorkoutPage = lazy(() => import("@/pages/WorkoutPage/WorkoutPage"));
-const ProfilePage = lazy(() => import("@/pages/ProfilePage/ProfilePage"));
+const ProgressPage = lazy(() => import("@/pages/ProgressPage/ProgressPage"));
 const ExerciseSetsPage = lazy(() => import("@/pages/WorkoutPage/ExerciseSetsPage"));
 const ExerciseDetails = lazy(() => import("@/pages/WorkoutPage/ExerciseHowTo"));
 const ActiveWorkoutPage = lazy(() => import("@/pages/WorkoutPage/ActiveWorkoutPage"));
@@ -18,7 +18,7 @@ const AvailableEquipmentPage = lazy(() => import("@/pages/MyPlanPage/AvailableEq
 const AIPage = lazy(() => import("@/pages/AIPage/AIPage"));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage/SettingsPage"));
 const CreateProgramPage = lazy(() => import("@/pages/CreateWorkoutPage/CreateWorkoutPage"));
-const ExerciseProgressPage = lazy(() => import("@/pages/ProfilePage/ExerciseProgressPage"));
+const ExerciseProgressPage = lazy(() => import("@/pages/ProgressPage/ExerciseProgressPage"));
 
 import type { Exercise } from "@/types/exercise";
 import type { Page } from "@/types/navigation";
@@ -42,7 +42,7 @@ function App() {
       "login",
       "register",
       "workout",
-      "profile",
+      "progress",
       "exerciseSets",
       "exerciseDetails",
       "activeWorkout",
@@ -174,7 +174,7 @@ function App() {
     setIsCustomWorkoutMode(false);
     navigateToPage("workout");
   };
-  const navigateToProfile = () => navigateToPage("profile");
+  const navigateToProgress = () => navigateToPage("progress");
   const navigateToHistory = () => navigateToPage("history");
   const navigateToAI = () => navigateToPage("ai");
   const navigateToAllExercise = () => {
@@ -319,7 +319,7 @@ function App() {
           <WorkoutPage
             onNavigateToHome={navigateToHome}
             onNavigateToWorkout={navigateToWorkout}
-            onNavigateToProfile={navigateToProfile}
+            onNavigateToProgress={navigateToProgress}
             onNavigateToHistory={navigateToHistory}
             onNavigateToAI={navigateToAI}
             activePage="workout"
@@ -339,17 +339,17 @@ function App() {
             completedWorkoutIds={completedWorkoutIds}
           />
         );
-      case "profile":
+      case "progress":
         return (
-          <ProfilePage
+          <ProgressPage
             onNavigateToHome={navigateToHome}
             onNavigateToWorkout={navigateToWorkout}
-            onNavigateToProfile={navigateToProfile}
+            onNavigateToProgress={navigateToProgress}
             onNavigateToHistory={navigateToHistory}
             onNavigateToAI={navigateToAI}
             onNavigateToSettings={navigateToSettings}
             onExerciseClick={navigateToExerciseProgress}
-            activePage="profile"
+            activePage="progress"
             workoutHistory={workoutHistory}
           />
         );
@@ -400,7 +400,7 @@ function App() {
         return (
           <HistoryPage
             onNavigateToWorkout={navigateToWorkout}
-            onNavigateToProfile={navigateToProfile}
+            onNavigateToProgress={navigateToProgress}
             onNavigateToHistory={navigateToHistory}
             onNavigateToAI={navigateToAI}
             activePage="history"
@@ -411,7 +411,7 @@ function App() {
         return (
           <AIPage
             onNavigateToWorkout={navigateToWorkout}
-            onNavigateToProfile={navigateToProfile}
+            onNavigateToProgress={navigateToProgress}
             onNavigateToHistory={navigateToHistory}
             onNavigateToAI={navigateToAI}
             activePage="ai"
@@ -474,18 +474,18 @@ function App() {
         return <AvailableEquipmentPage onNavigateBack={navigateToMyPlan} />;
       case "exerciseProgress":
         if (!selectedExerciseProgressId) {
-          navigateToProfile();
+          navigateToProgress();
           return null;
         }
         return (
           <ExerciseProgressPage
             exerciseId={selectedExerciseProgressId}
-            onNavigateBack={navigateToProfile}
+            onNavigateBack={navigateToProgress}
             workoutHistory={workoutHistory}
           />
         );
       case "settings":
-        return <SettingsPage onNavigateBack={navigateToProfile} />;
+        return <SettingsPage onNavigateBack={navigateToProgress} />;
       default:
         return (
           <HomePage onNavigateToLogin={navigateToLogin} onNavigateToWorkout={navigateToWorkout} />

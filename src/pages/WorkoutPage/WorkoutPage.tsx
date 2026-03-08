@@ -206,7 +206,7 @@ function SwipeableExerciseCard({
 function WorkoutPage({
   onNavigateToHome,
   onNavigateToWorkout,
-  onNavigateToProfile,
+  onNavigateToProgress,
   onNavigateToHistory,
   onNavigateToAI,
   activePage,
@@ -836,7 +836,7 @@ function WorkoutPage({
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}
-          onProfileClick={onNavigateToProfile}
+          onProgressClick={onNavigateToProgress}
           onHistoryClick={onNavigateToHistory}
           onAIClick={onNavigateToAI || (() => {})}
         />

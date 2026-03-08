@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
-import type { ProfilePageProps } from "@/types/pages";
+import type { ProgressPageProps } from "@/types/pages";
 import { SettingsIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
 import { StatsGrid } from "@/components/Progress/StatsGrid";
@@ -19,37 +19,28 @@ import {
 import type { VolumePeriod } from "@/utils/progressStats";
 import { MuscleGroupChart } from "@/components/Progress/MuscleGroupChart";
 
-function ProfilePage({
+function ProgressPage({
   onNavigateToWorkout,
-  onNavigateToProfile,
+  onNavigateToProgress,
   onNavigateToHistory,
   onNavigateToAI,
   onNavigateToSettings,
   onExerciseClick,
   activePage,
   workoutHistory,
-}: ProfilePageProps) {
-  const stats = useMemo(
-    () => calculateTotalStats(workoutHistory),
-    [workoutHistory],
-  );
+}: ProgressPageProps) {
+  const stats = useMemo(() => calculateTotalStats(workoutHistory), [workoutHistory]);
 
-  const weeklyActivity = useMemo(
-    () => getWeeklyActivity(workoutHistory),
-    [workoutHistory],
-  );
+  const weeklyActivity = useMemo(() => getWeeklyActivity(workoutHistory), [workoutHistory]);
 
   const [volumePeriod, setVolumePeriod] = useState<VolumePeriod>("month");
 
   const progressData = useMemo(
     () => getProgressDataByPeriod(workoutHistory, volumePeriod),
-    [workoutHistory, volumePeriod],
+    [workoutHistory, volumePeriod]
   );
 
-  const allExercises = useMemo(
-    () => getAllExercisesWithProgress(workoutHistory),
-    [workoutHistory],
-  );
+  const allExercises = useMemo(() => getAllExercisesWithProgress(workoutHistory), [workoutHistory]);
 
   const muscleGroupData = useMemo(
     () => getMuscleGroupDistribution(workoutHistory),
@@ -57,9 +48,7 @@ function ProfilePage({
   );
 
   const hasWorkouts = workoutHistory.length > 0;
-  const [activeTab, setActiveTab] = useState<"overview" | "exercise">(
-    "overview",
-  );
+  const [activeTab, setActiveTab] = useState<"overview" | "exercise">("overview");
 
   return (
     <PageContainer contentClassName="gap-5 pb-24 mx-2.5">
@@ -77,10 +66,7 @@ function ProfilePage({
       </header>
 
       {/* Tabs: Overview | Exercise */}
-      <nav
-        className="flex border-b border-white/10"
-        aria-label="Progress sections"
-      >
+      <nav className="flex border-b border-white/10" aria-label="Progress sections">
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
@@ -145,8 +131,8 @@ function ProfilePage({
               </div>
               <h2 className="text-xl font-semibold">Start training</h2>
               <p className="max-w-xs text-sm text-slate-400">
-                Your progress, workout stats, personal records and charts will
-                appear here after your first completed workout
+                Your progress, workout stats, personal records and charts will appear here after
+                your first completed workout
               </p>
               <button
                 onClick={onNavigateToWorkout}
@@ -186,8 +172,7 @@ function ProfilePage({
                 <path d="m14 21 7-7" />
               </svg>
               <p className="text-sm text-slate-400">
-                Your estimated 1RM by exercise will appear here after completed
-                workouts.
+                Your estimated 1RM by exercise will appear here after completed workouts.
               </p>
             </div>
           )}
@@ -198,7 +183,7 @@ function ProfilePage({
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}
-          onProfileClick={onNavigateToProfile}
+          onProgressClick={onNavigateToProgress}
           onHistoryClick={onNavigateToHistory}
           onAIClick={onNavigateToAI || (() => {})}
         />
@@ -207,4 +192,4 @@ function ProfilePage({
   );
 }
 
-export default ProfilePage;
+export default ProgressPage;
