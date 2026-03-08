@@ -17,7 +17,7 @@ const MAX_HISTORY_MESSAGES = 50;
 
 function AIPage({
   onNavigateToWorkout,
-  onNavigateToProfile,
+  onNavigateToProgress,
   onNavigateToHistory,
   onNavigateToAI,
   activePage,
@@ -183,7 +183,7 @@ function AIPage({
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}
-          onProfileClick={onNavigateToProfile}
+          onProgressClick={onNavigateToProgress}
           onHistoryClick={onNavigateToHistory}
           onAIClick={onNavigateToAI}
         />

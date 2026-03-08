@@ -199,7 +199,7 @@ export function getProgressData(
     )
     .slice(-limit);
 
-  return sorted.map((w, index) => {
+  return sorted.map((w) => {
     const date = new Date(w.finishedAt);
     const label = `${date.getDate()}/${date.getMonth() + 1}`;
     return {

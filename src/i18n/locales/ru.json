@@ -46,6 +46,7 @@
   },
   "bottomNav": {
     "workout": "Тренировка",
+    "progress": "Прогресс",
     "profile": "Профиль",
     "history": "История",
     "ai": "ИИ"
