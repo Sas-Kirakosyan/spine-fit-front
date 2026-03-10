@@ -96,7 +96,7 @@ export function determineWorkoutSplit(
 
     if (experience === "Advanced") {
       // Only use PPL if pain is in the past or very mild
-      const isPainMinimal = !painStatus || painStatus === "Never" || painStatus === "In the past";
+      const isPainMinimal = !painStatus || painStatus === "Healthy" || painStatus === "Recovered";
 
       if (isPainMinimal) {
         return {
@@ -156,7 +156,7 @@ export function determineWorkoutSplit(
     }
 
     if (experience === "Advanced") {
-      const isPainMinimal = !painStatus || painStatus === "Never" || painStatus === "In the past";
+      const isPainMinimal = !painStatus || painStatus === "Healthy" || painStatus === "Recovered";
 
       if (isPainMinimal) {
         return {
@@ -226,7 +226,7 @@ export function determineWorkoutSplit(
       };
     }
 
-    const isPainMinimal = !painStatus || painStatus === "Never" || painStatus === "In the past";
+    const isPainMinimal = !painStatus || painStatus === "Healthy" || painStatus === "Recovered";
     if (experience === "Advanced" && isPainMinimal) {
       return {
         type: "PUSH_PULL_LEGS",
@@ -662,7 +662,7 @@ export function buildSourceOnboarding(
     : "3";
 
   const painStatusAnswer = answers[10];
-  const painStatusOptions = ["Never", "In the past", "Yes, currently"];
+  const painStatusOptions = ["Healthy", "Recovered", "Active Symptoms"];
   const painStatus = typeof painStatusAnswer === "number"
     ? painStatusOptions[painStatusAnswer]
     : undefined;

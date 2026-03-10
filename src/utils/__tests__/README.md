@@ -72,7 +72,7 @@ if (plan.workoutDays) {
 
    - Goal: "Build muscle safely"
    - Experience: Intermediate
-   - Pain Status: "In the past"
+   - Pain Status: "Recovered"
    - Frequency: 3 days/week
 
 2. **Select Equipment**:

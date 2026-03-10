@@ -26,7 +26,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
       "weightUnit": "lbs",
       "dateOfBirth": "1983-12-11",
       "bodyType": "25-31",
-      "painStatus": "Yes, currently",
+      "painStatus": "Active Symptoms",
       "painLocation": [
         "Sciatica"
       ],
@@ -49,7 +49,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
       "bodyType": "25-31",
       "experience": "Intermediate",
       "trainingFrequency": "2",
-      "painStatus": "Yes, currently",
+      "painStatus": "Active Symptoms",
       "painLocation": [
         "Sciatica"
       ],
@@ -570,7 +570,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
     console.log('Can Squat:', testPlan.settings.canSquat);
     console.log('Experience:', testPlan.settings.experience);
 
-    expect(testPlan.settings.painStatus).toBe('Yes, currently');
+    expect(testPlan.settings.painStatus).toBe('Active Symptoms');
     expect(testPlan.settings.painLocation).toContain('Sciatica');
     expect(testPlan.settings.painLevel).toBe(4);
     expect(testPlan.settings.canSquat).toBe("Haven't tried");

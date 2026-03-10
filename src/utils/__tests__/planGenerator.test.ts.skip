@@ -135,7 +135,7 @@ describe('Plan Generator - Full Integration Tests', () => {
     const quizAnswers = {
       workoutType: "gym" as const,
       answers: {
-        10: "Never" // painStatus
+        10: "Healthy" // painStatus
       }
     };
 
@@ -167,7 +167,7 @@ describe('Plan Generator - Full Integration Tests', () => {
 
   test('should filter out unsafe exercises for user with high pain', () => {
     const painProfile = {
-      painStatus: "Yes, currently" as const,
+      painStatus: "Active Symptoms" as const,
       painLevel: 8,
       painLocation: ["Lower back (L5–S1)"],
       painTriggers: ["Deadlifts / squats with weight"],

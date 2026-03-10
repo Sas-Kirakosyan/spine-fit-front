@@ -1,7 +1,7 @@
 import type { Exercise } from "@/types/exercise";
 
 export interface PainProfile {
-  painStatus: "Never" | "In the past" | "Yes, currently";
+  painStatus: "Healthy" | "Recovered" | "Active Symptoms";
   painLocation?: string[];
   painLevel?: number;
   painTriggers?: string[];
@@ -95,12 +95,12 @@ function isAppropriateForExperience(
  */
 function isBackSafe(exercise: Exercise, painProfile: PainProfile): boolean {
   // If no pain, all back-friendly exercises are okay
-  if (painProfile.painStatus === "Never") {
+  if (painProfile.painStatus === "Healthy") {
     return exercise.is_back_friendly === true;
   }
 
   // If user has pain, check restriction levels
-  if (painProfile.painStatus === "In the past" || painProfile.painStatus === "Yes, currently") {
+  if (painProfile.painStatus === "Recovered" || painProfile.painStatus === "Active Symptoms") {
     if (!exercise.back_issue_restrictions || exercise.back_issue_restrictions.length === 0) {
       return exercise.is_back_friendly === true;
     }
@@ -126,7 +126,7 @@ function isBackSafe(exercise: Exercise, painProfile: PainProfile): boolean {
 
         // For past pain in sensitive areas, also avoid "high" restriction exercises
         if (
-          painProfile.painStatus === "In the past" &&
+          painProfile.painStatus === "Recovered" &&
           restriction.restriction_level === "high" &&
           (restriction.issue_type === "l5_s1" || restriction.issue_type === "sciatica" || restriction.issue_type === "herniated_disc")
         ) {
@@ -135,7 +135,7 @@ function isBackSafe(exercise: Exercise, painProfile: PainProfile): boolean {
 
         // If current pain is high (>7), avoid "high" restriction exercises
         if (
-          painProfile.painStatus === "Yes, currently" &&
+          painProfile.painStatus === "Active Symptoms" &&
           painProfile.painLevel &&
           painProfile.painLevel > 7 &&
           restriction.restriction_level === "high"
@@ -145,7 +145,7 @@ function isBackSafe(exercise: Exercise, painProfile: PainProfile): boolean {
 
         // If current pain is moderate (5-7), avoid "high" and "medium" restriction exercises
         if (
-          painProfile.painStatus === "Yes, currently" &&
+          painProfile.painStatus === "Active Symptoms" &&
           painProfile.painLevel &&
           painProfile.painLevel >= 5 &&
           (restriction.restriction_level === "high" || restriction.restriction_level === "medium")

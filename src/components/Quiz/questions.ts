@@ -159,15 +159,18 @@ export const questions: QuizQuestion[] = [
     type: "radio",
     options: ["2", "3", "4", "5+"],
   },
-  // 🔥 Improved pain logic
+
   {
     id: 10,
     fieldName: "painStatus",
-    question: "Have you ever experienced back or sciatic pain?",
+    question: "What is your current spinal health status?",
     type: "radio",
-    options: ["Never", "In the past", "Yes, currently"],
+    options: [
+      "Healthy (I am pain-free, but cautious)",
+      "Recovered (Past history of pain/injury)",
+      "Active Symptoms (Currently experiencing discomfort)",
+    ],
   },
-
   {
     id: 11,
     fieldName: "painLocation",
@@ -184,7 +187,10 @@ export const questions: QuizQuestion[] = [
     ],
     showIf: {
       fieldName: "painStatus",
-      in: ["In the past", "Yes, currently"],
+      in: [
+        "Recovered (Past history of pain/injury)",
+        "Active Symptoms (Currently experiencing discomfort)",
+      ],
     },
   },
   {
@@ -194,7 +200,10 @@ export const questions: QuizQuestion[] = [
     type: "slider",
     min: 0,
     max: 10,
-    showIf: { fieldName: "painStatus", equals: "Yes, currently" },
+    showIf: {
+      fieldName: "painStatus",
+      equals: "Active Symptoms (Currently experiencing discomfort)",
+    },
   },
   {
     id: 13,
@@ -212,7 +221,10 @@ export const questions: QuizQuestion[] = [
     ],
     showIf: {
       fieldName: "painStatus",
-      in: ["In the past", "Yes, currently"],
+      in: [
+        "Recovered (Past history of pain/injury)",
+        "Active Symptoms (Currently experiencing discomfort)",
+      ],
     },
   },
   {
@@ -223,7 +235,10 @@ export const questions: QuizQuestion[] = [
     options: ["Yes", "Sometimes", "No", "Haven't tried"],
     showIf: {
       fieldName: "painStatus",
-      in: ["In the past", "Yes, currently"],
+      in: [
+        "Recovered (Past history of pain/injury)",
+        "Active Symptoms (Currently experiencing discomfort)",
+      ],
     },
   },
   {

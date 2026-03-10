@@ -172,7 +172,7 @@ function generateAlternativeSplits(
     }
 
     // Alternative 2: Push/Pull/Legs (3+ days/week, pain-free users)
-    const isPainMinimal = painProfile.painStatus === "Never" || painProfile.painStatus === "In the past";
+    const isPainMinimal = painProfile.painStatus === "Healthy" || painProfile.painStatus === "Recovered";
     if (frequency >= 3 && isPainMinimal) {
       const pplMuscleGroups = [
         ["chest", "front_delts", "triceps"], // Push
@@ -278,10 +278,10 @@ export function generateTrainingPlan(
   // 1. Extract pain profile (prefer quiz when available, fallback to plan settings)
   const painProfileFromQuiz = extractPainProfile(quizAnswers);
   const painProfileFromSettings = extractPainProfileFromSettings(effectivePlanSettings);
-  const settingsHasPain = painProfileFromSettings.painStatus !== "Never";
+  const settingsHasPain = painProfileFromSettings.painStatus !== "Healthy";
   const painProfile: PainProfile = {
     painStatus:
-      painProfileFromQuiz.painStatus === "Never" && settingsHasPain
+      painProfileFromQuiz.painStatus === "Healthy" && settingsHasPain
         ? painProfileFromSettings.painStatus
         : painProfileFromQuiz.painStatus,
     painLocation: painProfileFromQuiz.painLocation ?? painProfileFromSettings.painLocation,
@@ -732,7 +732,7 @@ function rebalanceUpperLowerDays(
   });
 
   // Weekly safeguard: for users with back history, ensure weekly_pull_sets >= weekly_push_sets
-  const userHasBackHistory = painProfile.painStatus && painProfile.painStatus !== "Never";
+  const userHasBackHistory = painProfile.painStatus && painProfile.painStatus !== "Healthy";
   if (userHasBackHistory) {
     const countWeekly = (predicate: (e: Exercise) => boolean) =>
       updated.reduce((acc, d) => acc + d.exercises.filter(predicate).length, 0);
@@ -1449,10 +1449,10 @@ function mergePlanSettingsWithQuizAnswers(
 
   // Extract pain profile from quiz
   const painStatusAnswer = answers[10]; // painStatus (returns index)
-  const painStatusOptions = ["Never", "In the past", "Yes, currently"];
+  const painStatusOptions = ["Healthy", "Recovered", "Active Symptoms"];
   const painStatus = typeof painStatusAnswer === "number"
-    ? (painStatusOptions[painStatusAnswer] as "Never" | "In the past" | "Yes, currently")
-    : "Never";
+    ? (painStatusOptions[painStatusAnswer] as "Healthy" | "Recovered" | "Active Symptoms")
+    : "Healthy";
 
   const painLocationAnswer = answers[11]; // painLocation (returns array of indices)
   const painLocationOptions = [
@@ -1535,7 +1535,7 @@ function mergePlanSettingsWithQuizAnswers(
 function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
   if (!quizAnswers || !quizAnswers.answers) {
     return {
-      painStatus: "Never",
+      painStatus: "Healthy",
     };
   }
 
@@ -1543,10 +1543,10 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
 
   // Question 10: painStatus - radio (returns index)
   const painStatusAnswer = findAnswerByFieldName(answers, 10);
-  const painStatusOptions = ["Never", "In the past", "Yes, currently"];
+  const painStatusOptions = ["Healthy", "Recovered", "Active Symptoms"];
   const painStatus = typeof painStatusAnswer === "number"
-    ? (painStatusOptions[painStatusAnswer] as "Never" | "In the past" | "Yes, currently")
-    : "Never";
+    ? (painStatusOptions[painStatusAnswer] as "Healthy" | "Recovered" | "Active Symptoms")
+    : "Healthy";
 
   // Question 11: painLocation - checkbox (returns array of indices)
   const painLocationAnswer = findAnswerByFieldName(answers, 11);
@@ -1606,10 +1606,10 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
 
 function extractPainProfileFromSettings(planSettings: PlanSettings): PainProfile {
   const painStatus =
-    planSettings.painStatus === "In the past" ||
-    planSettings.painStatus === "Yes, currently"
+    planSettings.painStatus === "Recovered" ||
+    planSettings.painStatus === "Active Symptoms"
       ? planSettings.painStatus
-      : "Never";
+      : "Healthy";
 
   const parsedPainLevel =
     planSettings.painLevel === undefined
@@ -1634,12 +1634,12 @@ function extractPainProfileFromSettings(planSettings: PlanSettings): PainProfile
 function extractPainProfileFromSource(sourceOnboarding: SourceOnboarding | null): PainProfile {
   if (!sourceOnboarding) {
     return {
-      painStatus: "Never",
+      painStatus: "Healthy",
     };
   }
 
   return {
-    painStatus: (sourceOnboarding.painStatus as "Never" | "In the past" | "Yes, currently") || "Never",
+    painStatus: (sourceOnboarding.painStatus as "Healthy" | "Recovered" | "Active Symptoms") || "Healthy",
     painLocation: sourceOnboarding.painLocation,
     painLevel: undefined, // Not stored in SourceOnboarding
     painTriggers: sourceOnboarding.painTriggers,

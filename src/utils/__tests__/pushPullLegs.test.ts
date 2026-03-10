@@ -24,7 +24,7 @@ describe('Push/Pull/Legs 3-Day Split - Real World Example', () => {
     const quizAnswers = {
       workoutType: "gym" as const,
       answers: {
-        10: "Never" // painStatus
+        10: "Healthy" // painStatus
       }
     };
 

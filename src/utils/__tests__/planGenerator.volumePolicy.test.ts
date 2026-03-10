@@ -14,7 +14,7 @@ const baseSettings: PlanSettings = {
   units: "kg",
   cardio: "Off",
   stretching: "Off",
-  painStatus: "Yes, currently",
+  painStatus: "Active Symptoms",
   painLocation: ["Lower back (L5–S1)", "Sciatica"],
   painLevel: 4,
   painTriggers: ["Lifting heavy objects"],
