@@ -33,9 +33,9 @@ export const questions: QuizQuestion[] = [
   {
     id: 3,
     fieldName: "baselineStats",
-    question: "Lastly, what are your baseline stats?",
+    question: "Standard Metrics",
     type: "multi_field",
-    description: "Optional and can be added later.",
+    description: "These stats allow us to calibrate your volume and intensity.",
     optional: true,
     fields: [
       {
@@ -157,7 +157,7 @@ export const questions: QuizQuestion[] = [
     fieldName: "trainingFrequency",
     question: "How many times per week can you train?",
     type: "radio",
-    options: ["2", "3", "4", "5+"],
+    options: ["2 Days", "3 Days", "4 Days", "5+ Days"],
   },
 
   {
