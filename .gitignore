@@ -13,6 +13,15 @@ dist-ssr
 .cursor
 *.local
 
+# Expo
+apps/mobile/.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
