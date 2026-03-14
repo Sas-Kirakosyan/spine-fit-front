@@ -29,6 +29,7 @@ import {
 } from "@/utils/replacementExercises";
 import { useWorkoutTimer } from "./useWorkoutTimer";
 import { useExerciseManagement } from "./useExerciseManagement";
+import { useTranslation } from "react-i18next";
 
 function ActiveWorkoutPage({
   onNavigateBack,
@@ -42,6 +43,7 @@ function ActiveWorkoutPage({
   customExercises,
   isCustomWorkout = false,
 }: ActiveWorkoutPageProps) {
+  const { t } = useTranslation();
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
   const [replaceQuery, setReplaceQuery] = useState("");
@@ -68,18 +70,18 @@ function ActiveWorkoutPage({
 
   const completedExerciseIdsSet = useMemo(
     () => new Set(completedExerciseIds.map((id) => String(id))),
-    [completedExerciseIds],
+    [completedExerciseIds]
   );
 
   const handleDeleteExercise = useCallback(
     (exerciseToDelete: Exercise) => {
       try {
         const removed = updateCurrentWorkoutInPlan((exercises: Exercise[]) =>
-          exercises.filter((item: Exercise) => item.id !== exerciseToDelete.id),
+          exercises.filter((item: Exercise) => item.id !== exerciseToDelete.id)
         );
         if (removed) {
           setTodaysExercises((prev: Exercise[]) =>
-            prev.filter((item: Exercise) => item.id !== exerciseToDelete.id),
+            prev.filter((item: Exercise) => item.id !== exerciseToDelete.id)
           );
         }
       } catch (error) {
@@ -88,14 +90,14 @@ function ActiveWorkoutPage({
         setActionExercise(null);
       }
     },
-    [updateCurrentWorkoutInPlan, setTodaysExercises],
+    [updateCurrentWorkoutInPlan, setTodaysExercises]
   );
 
   const handleReplaceExercise = useCallback(
     (
       oldExercise: Exercise,
       selectedReplacement: Exercise,
-      duration: SwapDurationOption,
+      duration: SwapDurationOption
     ) => {
       const replacement: Exercise = {
         ...selectedReplacement,
@@ -108,11 +110,11 @@ function ActiveWorkoutPage({
       const replaceInWorkout = (exercises: Exercise[]) => {
         const hasDuplicate = exercises.some(
           (item: Exercise) =>
-            item.id === replacement.id && item.id !== oldExercise.id,
+            item.id === replacement.id && item.id !== oldExercise.id
         );
         if (hasDuplicate) return exercises;
         return exercises.map((item: Exercise) =>
-          item.id === oldExercise.id ? replacement : item,
+          item.id === oldExercise.id ? replacement : item
         );
       };
 
@@ -125,7 +127,7 @@ function ActiveWorkoutPage({
               (day) => ({
                 ...day,
                 exercises: replaceInWorkout(day.exercises as Exercise[]),
-              }),
+              })
             );
             savePlanToLocalStorage(generatedPlan);
 
@@ -133,7 +135,7 @@ function ActiveWorkoutPage({
           }
         } else {
           const replaced = updateCurrentWorkoutInPlan((exercises: Exercise[]) =>
-            replaceInWorkout(exercises),
+            replaceInWorkout(exercises)
           );
 
           if (replaced) {
@@ -148,7 +150,7 @@ function ActiveWorkoutPage({
         setActionExercise(null);
       }
     },
-    [updateCurrentWorkoutInPlan, setTodaysExercises],
+    [updateCurrentWorkoutInPlan, setTodaysExercises]
   );
 
   const allReplacementExercises = useMemo(() => {
@@ -171,14 +173,14 @@ function ActiveWorkoutPage({
     return (
       todaysExercises.length > 0 &&
       todaysExercises.every((exercise: Exercise) =>
-        completedExerciseIdsSet.has(String(exercise.id)),
+        completedExerciseIdsSet.has(String(exercise.id))
       )
     );
   }, [completedExerciseIdsSet, todaysExercises]);
 
   const completedExercises = useMemo(() => {
     return todaysExercises.filter((exercise: Exercise) =>
-      completedExerciseIdsSet.has(String(exercise.id)),
+      completedExerciseIdsSet.has(String(exercise.id))
     );
   }, [completedExerciseIdsSet, todaysExercises]);
 
@@ -201,7 +203,7 @@ function ActiveWorkoutPage({
     const caloriesBurned = 100;
     const totalVolume = calculateWorkoutVolume(
       completedExercises,
-      exerciseLogs,
+      exerciseLogs
     );
     const summary: FinishedWorkoutSummary = {
       id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
@@ -221,7 +223,7 @@ function ActiveWorkoutPage({
       // Find the current active workout by matching exercises
       const currentWorkout = getNextAvailableWorkout(
         generatedPlan,
-        completedWorkoutIds,
+        completedWorkoutIds
       );
 
       if (currentWorkout) {
@@ -234,7 +236,7 @@ function ActiveWorkoutPage({
         }
 
         console.log(
-          `✅ Marked workout complete: ${currentWorkout.dayName} (${workoutId})`,
+          `✅ Marked workout complete: ${currentWorkout.dayName} (${workoutId})`
         );
 
         // Check if there's another workout available
@@ -246,8 +248,8 @@ function ActiveWorkoutPage({
           // Full cycle completed — reset completed IDs for this plan so rotation restarts
           const resetIds = new Set(
             Array.from(updatedIds).filter(
-              (id) => !id.startsWith(generatedPlan.id),
-            ),
+              (id) => !id.startsWith(generatedPlan.id)
+            )
           );
           if (setCompletedWorkoutIds) {
             setCompletedWorkoutIds(resetIds);
@@ -279,7 +281,7 @@ function ActiveWorkoutPage({
         handleReplaceExercise(replaceExercise, replacement, duration);
       }
     },
-    [replaceExercise, handleReplaceExercise],
+    [replaceExercise, handleReplaceExercise]
   );
 
   return (
@@ -299,9 +301,9 @@ function ActiveWorkoutPage({
         </section>
         {todaysExercises.length === 0 && (
           <div className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center">
-            <p className="text-white/60">No exercises for today's workout.</p>
+            <p className="text-white/60">{t("activeWorkoutPage.noExercises")}</p>
             <p className="text-sm text-white/40 mt-2">
-              Generate a plan in My Plan page to get started.
+              {t("activeWorkoutPage.generatePlanHint")}
             </p>
           </div>
         )}
@@ -322,7 +324,7 @@ function ActiveWorkoutPage({
           onClick={handleFinishWorkout}
           className="mx-5 h-[40px] rounded-[10px] bg-[#228B22] text-white uppercase"
         >
-          Finish Workout
+          {t("workoutPage.buttons.finishWorkout")}{" "}
         </Button>
         {actionExercise && (
           <ExerciseActionSheet

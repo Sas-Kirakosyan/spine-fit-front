@@ -5,7 +5,8 @@
       "backToHome": "Вернуться на Главную",
       "myPlan": "Мой План",
       "addExercise": "Добавить упражнение",
-      "startWorkout": "НАЧАТЬ Тренировку"
+      "startWorkout": "НАЧАТЬ Тренировку",
+      "finishWorkout": "ЗАВЕРШИТЬ Тренировку"
     },
     "messages": {
       "loading": "Загрузка плана тренировки...",
@@ -57,6 +58,10 @@
     "replaceExercise": "Заменить упражнение",
     "deleteFromWorkout": "Удалить из тренировки"
   },
+  "activeWorkoutPage": {
+    "noExercises": "Нет упражнений для сегодняшней тренировки.",
+    "generatePlanHint": "Создайте план на странице Мой План, чтобы начать."
+  },
   "swapWorkoutActionSheet": {
     "title": "Заменить тренировку",
     "withinSplit": "В рамках программы",
@@ -77,7 +82,60 @@
     "days": "дней",
     "oneMusclePerDay": "Одна мышца в день",
     "oneMusclePerTwoDay": "Одна мышца каждые два дня"
-
-
+  },
+  "settingsPage": {
+    "title": "Настройки",
+    "sections": {
+      "account": "Аккаунт",
+      "aboutYou": "О вас",
+      "help": "Помощь",
+      "legal": "Правовая информация"
+    },
+    "items": {
+      "emailAddress": "Электронная почта",
+      "language": "Язык",
+      "subscribe": "Подписка для безлимитных тренировок",
+      "changePassword": "Сменить пароль",
+      "changeTheme": "Сменить тему",
+      "logOut": "Выйти",
+      "bodyProfile": "Профиль тела",
+      "contactSupport": "Связаться с поддержкой",
+      "deleteAccount": "Удалить аккаунт навсегда",
+      "termsAndConditions": "Условия использования",
+      "privacyPolicy": "Политика конфиденциальности",
+      "version": "Версия"
+    },
+    "values": {
+      "notLoggedIn": "Не вошли в систему",
+      "signedInWithGoogle": "Вход через Google",
+      "notSet": "Не указано"
+    },
+    "modals": {
+      "changeTheme": "Сменить тему",
+      "themeLight": "Светлая",
+      "themeDark": "Тёмная",
+      "themeSystem": "Системная",
+      "themeLightDesc": "Всегда светлая тема",
+      "themeDarkDesc": "Всегда тёмная тема",
+      "themeSystemDesc": "Следовать настройкам системы",
+      "changeLanguage": "Сменить язык",
+      "langEnglish": "English",
+      "langRussian": "Русский",
+      "subscriptionPlans": "Планы подписки",
+      "subFree": "Бесплатно",
+      "subMonthly": "Ежемесячно",
+      "subAnnual": "Ежегодно",
+      "subFreeDesc": "Ограничено 3 тренировки в неделю",
+      "subMonthlyDesc": "$9.99/мес — Безлимитные тренировки",
+      "subAnnualDesc": "$79.99/год — Скидка 33%",
+      "subHeader": "Оформите подписку для безлимитного журнала тренировок.",
+      "contactSupport": "Связаться с поддержкой",
+      "supportEmail": "Написать по почте",
+      "supportChat": "Онлайн-чат",
+      "supportFaq": "Частые вопросы",
+      "supportEmailDesc": "Отправьте письмо на support@spinefit.com",
+      "supportChatDesc": "Чат с поддержкой (9:00–18:00 МСК)",
+      "supportFaqDesc": "Просмотреть частые вопросы"
+    }
   }
 }

@@ -26,7 +26,13 @@ interface SettingsItemProps {
   showArrow?: boolean;
 }
 
-function SettingsItem({ label, value, subValue, onClick, showArrow = true }: SettingsItemProps) {
+function SettingsItem({
+  label,
+  value,
+  subValue,
+  onClick,
+  showArrow = true,
+}: SettingsItemProps) {
   return (
     <button
       type="button"
@@ -67,13 +73,16 @@ function Divider() {
 }
 
 function SettingsPage({ onNavigateBack }: SettingsPageProps) {
-  useTranslation();
+  const { t } = useTranslation();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Dark");
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "Dark"
+  );
   const [isBodyProfileOpen, setIsBodyProfileOpen] = useState(false);
-  const [bodyProfileSummary, setBodyProfileSummary] = useState<string>("Not set");
+  const [bodyProfileSummary, setBodyProfileSummary] =
+    useState<string>("Not set");
   const [language, setLanguage] = useState(() => {
     const currentLang = i18n.language;
     return currentLang === "ru" ? "Russian" : "English";
@@ -85,8 +94,10 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         const profile = JSON.parse(stored);
         const parts: string[] = [];
         if (profile.gender) parts.push(profile.gender);
-        if (profile.height) parts.push(`${profile.height} ${profile.heightUnit || "cm"}`);
-        if (profile.weight) parts.push(`${profile.weight} ${profile.weightUnit || "kg"}`);
+        if (profile.height)
+          parts.push(`${profile.height} ${profile.heightUnit || "cm"}`);
+        if (profile.weight)
+          parts.push(`${profile.weight} ${profile.weightUnit || "kg"}`);
         if (parts.length > 0) {
           setBodyProfileSummary(parts.join(" • "));
           return;
@@ -95,7 +106,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         console.error("Error loading body profile:", e);
       }
     }
-    setBodyProfileSummary("Not set");
+    setBodyProfileSummary(t("settingsPage.values.notSet"));
   };
 
   useEffect(() => {
@@ -103,7 +114,9 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     if (user) {
       setUserEmail(user.email);
       // Проверяем, авторизован ли пользователь через Google
-      const isGoogle = user.providerData.some((provider) => provider.providerId === "google.com");
+      const isGoogle = user.providerData.some(
+        (provider) => provider.providerId === "google.com"
+      );
       setIsGoogleUser(isGoogle);
     } else {
       // Если пользователь не авторизован через Firebase, проверяем localStorage
@@ -145,9 +158,17 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
   const handleThemeChange = () => {
     openModal({
-      title: "Change Theme",
-      options: ["Light", "Dark", "System"],
-      descriptions: ["Always use light mode", "Always use dark mode", "Follow system settings"],
+      title: t("settingsPage.modals.changeTheme"),
+      options: [
+        t("settingsPage.modals.themeLight"),
+        t("settingsPage.modals.themeDark"),
+        t("settingsPage.modals.themeSystem"),
+      ],
+      descriptions: [
+        t("settingsPage.modals.themeLightDesc"),
+        t("settingsPage.modals.themeDarkDesc"),
+        t("settingsPage.modals.themeSystemDesc"),
+      ],
       selectedValue: theme,
       onSelect: (value) => {
         setTheme(value);
@@ -158,7 +179,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
   const handleLanguageChange = () => {
     openModal({
-      title: "Change Language",
+      title: t("settingsPage.modals.changeLanguage"),
       options: ["English", "Russian"],
       selectedValue: language,
       onSelect: (value) => {
@@ -172,14 +193,18 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
   const handleSubscription = () => {
     openModal({
-      title: "Subscription Plans",
-      options: ["Free", "Monthly", "Annual"],
-      descriptions: [
-        "Limited to 3 workouts per week",
-        "$9.99/month - Unlimited workouts",
-        "$79.99/year - Save 33%",
+      title: t("settingsPage.modals.subscriptionPlans"),
+      options: [
+        t("settingsPage.modals.subFree"),
+        t("settingsPage.modals.subMonthly"),
+        t("settingsPage.modals.subAnnual"),
       ],
-      headerDescription: "Upgrade to unlock unlimited workout logging and premium features.",
+      descriptions: [
+        t("settingsPage.modals.subFreeDesc"),
+        t("settingsPage.modals.subMonthlyDesc"),
+        t("settingsPage.modals.subAnnualDesc"),
+      ],
+      headerDescription: t("settingsPage.modals.subHeader"),
       selectedValue: "Free",
       onSelect: (value) => {
         console.log("Selected subscription:", value);
@@ -197,12 +222,16 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
   const handleContactSupport = () => {
     openModal({
-      title: "Contact Support",
-      options: ["Email Support", "Live Chat", "FAQ"],
+      title: t("settingsPage.modals.contactSupport"),
+      options: [
+        t("settingsPage.modals.supportEmail"),
+        t("settingsPage.modals.supportChat"),
+        t("settingsPage.modals.supportFaq"),
+      ],
       descriptions: [
-        "Send us an email at support@spinefit.com",
-        "Chat with our support team (9AM-6PM EST)",
-        "Browse frequently asked questions",
+        t("settingsPage.modals.supportEmailDesc"),
+        t("settingsPage.modals.supportChatDesc"),
+        t("settingsPage.modals.supportFaqDesc"),
       ],
       selectedValue: "",
       onSelect: (value) => {
@@ -224,46 +253,90 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         >
           <ChevronLeftIcon className="h-6 w-6 text-main" />
         </Button>
-        <h1 className="text-xl font-semibold text-white">Settings</h1>
+        <h1 className="text-xl font-semibold text-white">
+          {t("settingsPage.title")}
+        </h1>
       </header>
 
       {/* Account Section */}
-      <SettingsSection title="Account">
+      <SettingsSection title={t("settingsPage.sections.account")}>
         <SettingsItem
-          label="Email Address"
-          value={userEmail || "Not logged in"}
-          subValue={isGoogleUser ? "Signed in with Google" : undefined}
+          label={t("settingsPage.items.emailAddress")}
+          value={userEmail || t("settingsPage.values.notLoggedIn")}
+          subValue={
+            isGoogleUser
+              ? t("settingsPage.values.signedInWithGoogle")
+              : undefined
+          }
           showArrow={false}
         />
-        <SettingsItem label="Language" value={language} onClick={handleLanguageChange} />
-        <SettingsItem label="Subscribe to log unlimited workouts" onClick={handleSubscription} />
-        <SettingsItem label="Change Password" onClick={() => {}} />
-        <SettingsItem label="Change Theme" value={theme} onClick={handleThemeChange} />
-        <SettingsItem label="Log Out" onClick={handleLogout} showArrow={false} />
+        <SettingsItem
+          label={t("settingsPage.items.language")}
+          value={language}
+          onClick={handleLanguageChange}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.subscribe")}
+          onClick={handleSubscription}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.changePassword")}
+          onClick={() => {}}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.changeTheme")}
+          value={theme}
+          onClick={handleThemeChange}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.logOut")}
+          onClick={handleLogout}
+          showArrow={false}
+        />
       </SettingsSection>
 
       <Divider />
 
       {/* About You Section */}
-      <SettingsSection title="About You">
-        <SettingsItem label="Body Profile" value={bodyProfileSummary} onClick={handleBodyProfile} />
+      <SettingsSection title={t("settingsPage.sections.aboutYou")}>
+        <SettingsItem
+          label={t("settingsPage.items.bodyProfile")}
+          value={bodyProfileSummary}
+          onClick={handleBodyProfile}
+        />
       </SettingsSection>
 
       <Divider />
 
       {/* Help Section */}
-      <SettingsSection title="Help">
-        <SettingsItem label="Contact Support" onClick={handleContactSupport} />
-        <SettingsItem label="Permanently Delete Account" onClick={() => {}} />
+      <SettingsSection title={t("settingsPage.sections.help")}>
+        <SettingsItem
+          label={t("settingsPage.items.contactSupport")}
+          onClick={handleContactSupport}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.deleteAccount")}
+          onClick={() => {}}
+        />
       </SettingsSection>
 
       <Divider />
 
       {/* Legal Section */}
-      <SettingsSection title="Legal">
-        <SettingsItem label="Terms & Conditions" onClick={() => {}} />
-        <SettingsItem label="Privacy Policy" onClick={() => {}} />
-        <SettingsItem label="Version" value="1.0.0" showArrow={false} />
+      <SettingsSection title={t("settingsPage.sections.legal")}>
+        <SettingsItem
+          label={t("settingsPage.items.termsAndConditions")}
+          onClick={() => {}}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.privacyPolicy")}
+          onClick={() => {}}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.version")}
+          value="1.0.0"
+          showArrow={false}
+        />
       </SettingsSection>
 
       {/* Selection Modal */}
