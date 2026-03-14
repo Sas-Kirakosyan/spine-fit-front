@@ -1,0 +1,1 @@
+node_modules, .next, dist, build, out, .cache, .turbo, *.log, .git, package-lock.json, yarn.lock, pnpm-lock.yaml, public, coverage, .DS_Store, *.exe, *.dll, *.so, *.pyc, __pycache__
