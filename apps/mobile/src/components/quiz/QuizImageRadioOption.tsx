@@ -1,5 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { Image } from "expo-image";
+import { getLocalImageSource } from "../../utils/imageRegistry";
 
 interface QuizImageRadioOptionProps {
   option: { value: string; label: string; image: string; description: string };
@@ -25,7 +26,7 @@ export function QuizImageRadioOption({
         {option.image && (
           <View className="bg-gray-100 rounded-lg p-3">
             <Image
-              source={{ uri: option.image }}
+              source={getLocalImageSource(option.image) ?? { uri: option.image }}
               style={{ width: 112, height: 112 }}
               contentFit="contain"
             />
