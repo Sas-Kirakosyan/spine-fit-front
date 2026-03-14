@@ -108,7 +108,9 @@
     "values": {
       "notLoggedIn": "Not logged in",
       "signedInWithGoogle": "Signed in with Google",
-      "notSet": "Not set"
+      "notSet": "Not set",
+      "languageValueEnglish": "English",
+      "languageValueRussian": "Russian"
     },
     "modals": {
       "changeTheme": "Change Theme",

@@ -159,11 +159,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const handleThemeChange = () => {
     openModal({
       title: t("settingsPage.modals.changeTheme"),
-      options: [
-        t("settingsPage.modals.themeLight"),
-        t("settingsPage.modals.themeDark"),
-        t("settingsPage.modals.themeSystem"),
-      ],
+      options: ["Light", "Dark", "System"],
       descriptions: [
         t("settingsPage.modals.themeLightDesc"),
         t("settingsPage.modals.themeDarkDesc"),
@@ -194,11 +190,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const handleSubscription = () => {
     openModal({
       title: t("settingsPage.modals.subscriptionPlans"),
-      options: [
-        t("settingsPage.modals.subFree"),
-        t("settingsPage.modals.subMonthly"),
-        t("settingsPage.modals.subAnnual"),
-      ],
+      options: ["Free", "Monthly", "Annual"],
       descriptions: [
         t("settingsPage.modals.subFreeDesc"),
         t("settingsPage.modals.subMonthlyDesc"),
