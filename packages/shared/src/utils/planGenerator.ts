@@ -462,7 +462,7 @@ export function generateTrainingPlan(
 
   const durationMinutes = Number(effectivePlanSettings.duration.match(/(\d+)/)?.[1] || 30);
   const hasMeaningfulPain = typeof painProfile.painLevel === "number" && painProfile.painLevel > 3;
-  const cannotSquat = (painProfile.canSquat || "").toLowerCase() === "no";
+  const cannotSquat = (painProfile.canSquat || "").toLowerCase().includes("avoidant");
   const isMale = (effectivePlanSettings.gender || "").toLowerCase() === "male";
 
   let safeSetsPerExercise = volumeRecommendation.setsPerExercise;
@@ -1456,13 +1456,10 @@ function mergePlanSettingsWithQuizAnswers(
 
   const painLocationAnswer = answers[11]; // painLocation (returns array of indices)
   const painLocationOptions = [
-    "Lower back (L5–S1)",
-    "Middle back",
-    "Upper back",
-    "Sciatica",
-    "Leg",
-    "Shoulder",
-    "Other",
+    "Lower Back (L4-L5/S1 area)",
+    "Sciatica (Pain radiating down leg)",
+    "Glute / Deep Hip discomfort",
+    "Calf or Foot (Numbness/Tingling)",
   ];
   const painLocation = Array.isArray(painLocationAnswer)
     ? painLocationAnswer.map((idx) => painLocationOptions[idx as number])
@@ -1470,20 +1467,26 @@ function mergePlanSettingsWithQuizAnswers(
 
   const painTriggersAnswer = answers[13]; // painTriggers (returns array of indices)
   const painTriggersOptions = [
-    "walking",
-    "Bending forward",
-    "Lifting heavy objects",
-    "Long sitting",
-    "Running or jumping",
-    "Deadlifts / squats with weight",
-    "Other activities",
+    "Walking long distances",
+    "Bending forward (Flexion)",
+    "Lifting objects from the floor",
+    "Sitting for long durations",
+    "High-impact movement (Running/Jumping)",
+    "Weighted Squats or Deadlifts",
+    "Other functional movements",
   ];
   const painTriggers = Array.isArray(painTriggersAnswer)
     ? painTriggersAnswer.map((idx) => painTriggersOptions[idx as number])
     : undefined;
 
   const canSquatAnswer = answers[14]; // canSquat (returns index)
-  const canSquatOptions = ["Yes", "Sometimes", "No", "Haven't tried"];
+  const canSquatOptions = [
+    "Confident (I squat with weights regularly)",
+    "Cautious (I only squat with light weights)",
+    "Technical (I can squat bodyweight, but weights trigger pain)",
+    "Avoidant (I strictly avoid all squatting movements)",
+    "Untested (I haven't tried squatting recently)",
+  ];
   const canSquat = typeof canSquatAnswer === "number"
     ? canSquatOptions[canSquatAnswer]
     : undefined;
@@ -1551,13 +1554,10 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
   // Question 11: painLocation - checkbox (returns array of indices)
   const painLocationAnswer = findAnswerByFieldName(answers, 11);
   const painLocationOptions = [
-    "Lower back (L5–S1)",
-    "Middle back",
-    "Upper back",
-    "Sciatica",
-    "Leg",
-    "Shoulder",
-    "Other",
+    "Lower Back (L4-L5/S1 area)",
+    "Sciatica (Pain radiating down leg)",
+    "Glute / Deep Hip discomfort",
+    "Calf or Foot (Numbness/Tingling)",
   ];
   const painLocation = Array.isArray(painLocationAnswer)
     ? painLocationAnswer.map((idx) => painLocationOptions[Number(idx)])
@@ -1576,13 +1576,13 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
   // Question 13: painTriggers - checkbox (returns array of indices)
   const painTriggersAnswer = findAnswerByFieldName(answers, 13);
   const painTriggersOptions = [
-    "walking",
-    "Bending forward",
-    "Lifting heavy objects",
-    "Long sitting",
-    "Running or jumping",
-    "Deadlifts / squats with weight",
-    "Other activities",
+    "Walking long distances",
+    "Bending forward (Flexion)",
+    "Lifting objects from the floor",
+    "Sitting for long durations",
+    "High-impact movement (Running/Jumping)",
+    "Weighted Squats or Deadlifts",
+    "Other functional movements",
   ];
   const painTriggers = Array.isArray(painTriggersAnswer)
     ? painTriggersAnswer.map((idx) => painTriggersOptions[Number(idx)])
@@ -1590,7 +1590,13 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
 
   // Question 14: canSquat - radio (returns index)
   const canSquatAnswer = findAnswerByFieldName(answers, 14);
-  const canSquatOptions = ["Yes", "Sometimes", "No", "Haven't tried"];
+  const canSquatOptions = [
+    "Confident (I squat with weights regularly)",
+    "Cautious (I only squat with light weights)",
+    "Technical (I can squat bodyweight, but weights trigger pain)",
+    "Avoidant (I strictly avoid all squatting movements)",
+    "Untested (I haven't tried squatting recently)",
+  ];
   const canSquat = typeof canSquatAnswer === "number"
     ? canSquatOptions[canSquatAnswer]
     : undefined;
@@ -1696,7 +1702,7 @@ function getSafeSetsFromSettings(settings: PlanSettings): number | null {
         ? painLevelRaw
         : Number(painLevelRaw);
   const hasMeaningfulPain = Number.isFinite(painLevel) && (painLevel as number) > 3;
-  const cannotSquat = (settings.canSquat || "").toLowerCase() === "no";
+  const cannotSquat = (settings.canSquat || "").toLowerCase().includes("avoidant");
   const isMale = (settings.gender || "").toLowerCase() === "male";
 
   if (isMale && hasMeaningfulPain && cannotSquat) {

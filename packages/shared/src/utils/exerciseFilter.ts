@@ -177,7 +177,9 @@ function isPainTriggerSafe(exercise: Exercise, painProfile: PainProfile): boolea
     triggers.some((t) => t.includes("squat") || t.includes("deadlift")) &&
     (exerciseName.includes("squat") || exerciseName.includes("deadlift")) &&
     painProfile.canSquat &&
-    (painProfile.canSquat === "No" || painProfile.canSquat === "Sometimes")
+    (painProfile.canSquat?.includes("Avoidant") ||
+      painProfile.canSquat?.includes("Cautious") ||
+      painProfile.canSquat?.includes("Technical"))
   ) {
     return false;
   }

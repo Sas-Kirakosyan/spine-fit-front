@@ -177,13 +177,10 @@ export const questions: QuizQuestion[] = [
     question: "Where do you feel or did you feel pain?",
     type: "checkbox",
     options: [
-      "Lower back (L5–S1)",
-      "Middle back",
-      "Upper back",
-      "Sciatica",
-      "Leg",
-      "Shoulder",
-      "Other",
+      "Lower Back (L4-L5/S1 area)",         // Core Niche
+      "Sciatica (Pain radiating down leg)", // Nerve Niche
+      "Glute / Deep Hip discomfort",        // Referred Pain
+      "Calf or Foot (Numbness/Tingling)",//here needs to show tostmessage reletaed apply to the doctor
     ],
     showIf: {
       fieldName: "painStatus",
@@ -208,37 +205,37 @@ export const questions: QuizQuestion[] = [
   {
     id: 13,
     fieldName: "painTriggers",
-    question: "What movements trigger or triggered your pain?",
+    question: "Which movements trigger or provoke your symptoms?",
     type: "checkbox",
     options: [
-      "walking",
-      "Bending forward",
-      "Lifting heavy objects",
-      "Long sitting",
-      "Running or jumping",
-      "Deadlifts / squats with weight",
-      "Other activities",
+      "Bending forward (e.g., reaching for the floor)",
+      "Arching backward (e.g., reaching overhead)",
+      "Lifting or carrying heavy objects",
+      "Sitting for longer than 20–30 minutes",
+      "Impact movements (Running, Jumping)",
+      "Rotating or twisting the torso",
+      "Straining (Heavy bracing/holding breath)",
     ],
     showIf: {
       fieldName: "painStatus",
-      in: [
-        "Recovered (Past history of pain/injury)",
-        "Active Symptoms (Currently experiencing discomfort)",
-      ],
+      in: ["Recovered (Past history of pain/injury)", "Active Symptoms (Currently experiencing discomfort)"],
     },
   },
   {
     id: 14,
-    fieldName: "canSquat",
-    question: "Can you perform squats without pain?",
+    fieldName: "squatConfidence",
+    question: "How do you feel about squatting with extra weight?",
     type: "radio",
-    options: ["Yes", "Sometimes", "No", "Haven't tried"],
+    options: [
+      "Confident (I squat with weights regularly)",
+      "Cautious (I only squat with light weights)",
+      "Technical (I can squat bodyweight, but weights trigger pain)",
+      "Avoidant (I strictly avoid all squatting movements)",
+      "Untested (I haven't tried squatting recently)",
+    ],
     showIf: {
       fieldName: "painStatus",
-      in: [
-        "Recovered (Past history of pain/injury)",
-        "Active Symptoms (Currently experiencing discomfort)",
-      ],
+      in: ["Recovered (Past history of pain/injury)", "Active Symptoms (Currently experiencing discomfort)"],
     },
   },
   {

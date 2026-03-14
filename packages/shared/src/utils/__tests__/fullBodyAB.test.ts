@@ -32,9 +32,9 @@ describe('Full Body A/B Plan - Real World Test', () => {
       ],
       "painLevel": 4,
       "painTriggers": [
-        "Lifting heavy objects"
+        "Lifting objects from the floor"
       ],
-      "canSquat": "Haven't tried"
+      "canSquat": "Untested (I haven't tried squatting recently)"
     },
     "sourceOnboarding": {
       "workoutType": "gym",
@@ -54,9 +54,9 @@ describe('Full Body A/B Plan - Real World Test', () => {
         "Sciatica"
       ],
       "painTriggers": [
-        "Lifting heavy objects"
+        "Lifting objects from the floor"
       ],
-      "canSquat": "Haven't tried",
+      "canSquat": "Untested (I haven't tried squatting recently)",
       "workoutDuration": "45–60 min",
       "split": {
         "type": "FULL_BODY_AB",
@@ -573,7 +573,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
     expect(testPlan.settings.painStatus).toBe('Active Symptoms');
     expect(testPlan.settings.painLocation).toContain('Sciatica');
     expect(testPlan.settings.painLevel).toBe(4);
-    expect(testPlan.settings.canSquat).toBe("Haven't tried");
+    expect(testPlan.settings.canSquat).toBe("Untested (I haven't tried squatting recently)");
   });
 
   test('Day A should follow Full Body structure with horizontal pull', () => {

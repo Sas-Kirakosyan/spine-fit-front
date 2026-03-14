@@ -61,7 +61,7 @@ describe('Volume Calculator - Basic Tests', () => {
       experience: "Intermediate",
       goal: "Build muscle safely",
       painLevel: 4,
-      canSquat: "No",
+      canSquat: "Avoidant (I strictly avoid all squatting movements)",
       gender: "Male",
     });
 
@@ -74,7 +74,7 @@ describe('Volume Calculator - Basic Tests', () => {
       experience: "Intermediate",
       goal: "Build muscle safely",
       painLevel: 4,
-      canSquat: "No",
+      canSquat: "Avoidant (I strictly avoid all squatting movements)",
       gender: "Male",
     });
 

@@ -160,12 +160,10 @@ export const questions: QuizQuestion[] = [
     question: "Identify your areas of sensitivity:",
     type: "checkbox",
     options: [
-      "Lower Back (L4-L5/S1 area)",
-      "Mid Back (Thoracic)",
-      "Upper Back / Neck",
-      "Sciatica (Radiating nerve pain)",
-      "Glute / Hip / Leg",
-      "Other",
+      "Lower Back (L4-L5/S1 area)",         // Core Niche
+      "Sciatica (Pain radiating down leg)", // Nerve Niche
+      "Glute / Deep Hip discomfort",        // Referred Pain
+      "Calf or Foot (Numbness/Tingling)",
     ],
     showIf: {
       fieldName: "painStatus",

@@ -113,7 +113,7 @@ function calculateSetsPerExercise(
   let sets = setsMap[experience as keyof typeof setsMap] || 3;
 
   const hasMeaningfulPain = typeof painLevel === "number" && painLevel > 3;
-  const cannotSquat = (canSquat || "").toLowerCase() === "no";
+  const cannotSquat = (canSquat || "").toLowerCase().includes("avoidant");
   const isMale = (gender || "").toLowerCase() === "male";
 
   // Requested safety override: male users with pain who cannot squat should stay at 2-3 sets.

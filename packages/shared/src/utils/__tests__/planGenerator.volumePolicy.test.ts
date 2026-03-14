@@ -15,10 +15,10 @@ const baseSettings: PlanSettings = {
   cardio: "Off",
   stretching: "Off",
   painStatus: "Active Symptoms",
-  painLocation: ["Lower back (L5–S1)", "Sciatica"],
+  painLocation: ["Lower Back (L4-L5/S1 area)", "Sciatica (Pain radiating down leg)"],
   painLevel: 4,
-  painTriggers: ["Lifting heavy objects"],
-  canSquat: "No",
+  painTriggers: ["Lifting objects from the floor"],
+  canSquat: "Avoidant (I strictly avoid all squatting movements)",
 };
 
 const availableEquipment = [

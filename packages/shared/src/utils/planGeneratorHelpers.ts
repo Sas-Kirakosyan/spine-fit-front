@@ -669,13 +669,10 @@ export function buildSourceOnboarding(
 
   const painLocationAnswer = answers[11];
   const painLocationOptions = [
-    "Lower back (L5–S1)",
-    "Middle back",
-    "Upper back",
-    "Sciatica",
-    "Leg",
-    "Shoulder",
-    "Other",
+    "Lower Back (L4-L5/S1 area)",
+    "Sciatica (Pain radiating down leg)",
+    "Glute / Deep Hip discomfort",
+    "Calf or Foot (Numbness/Tingling)",
   ];
   const painLocation = Array.isArray(painLocationAnswer)
     ? painLocationAnswer.map((idx) => painLocationOptions[idx as number])
@@ -683,20 +680,26 @@ export function buildSourceOnboarding(
 
   const painTriggersAnswer = answers[13];
   const painTriggersOptions = [
-    "walking",
-    "Bending forward",
-    "Lifting heavy objects",
-    "Long sitting",
-    "Running or jumping",
-    "Deadlifts / squats with weight",
-    "Other activities",
+    "Walking long distances",
+    "Bending forward (Flexion)",
+    "Lifting objects from the floor",
+    "Sitting for long durations",
+    "High-impact movement (Running/Jumping)",
+    "Weighted Squats or Deadlifts",
+    "Other functional movements",
   ];
   const painTriggers = Array.isArray(painTriggersAnswer)
     ? painTriggersAnswer.map((idx) => painTriggersOptions[idx as number])
     : undefined;
 
   const canSquatAnswer = answers[14];
-  const canSquatOptions = ["Yes", "Sometimes", "No", "Haven't tried"];
+  const canSquatOptions = [
+    "Confident (I squat with weights regularly)",
+    "Cautious (I only squat with light weights)",
+    "Technical (I can squat bodyweight, but weights trigger pain)",
+    "Avoidant (I strictly avoid all squatting movements)",
+    "Untested (I haven't tried squatting recently)",
+  ];
   const canSquat = typeof canSquatAnswer === "number" ? canSquatOptions[canSquatAnswer] : undefined;
 
   const workoutDurationAnswer = answers[15];
