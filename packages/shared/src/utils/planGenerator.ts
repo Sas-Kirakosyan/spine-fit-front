@@ -375,13 +375,18 @@ export function generateTrainingPlan(
     effectivePlanSettings.trainingSplit
   );
 
+  // Build sourceOnboarding early so we have the user-selected split type for restructuring
+  const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
+
   // 10.1. Restructure 3-day Full Body splits with rotating focus (Push/Lower/Pull)
   // Pass allExercises so it can access unfiltered pulls for Day C
+  // Pass splitType so ULU gets strict upper/lower/upper days (no legs on upper days)
   const rotatedWorkoutDays = restructureThreeDayFullBody(
     workoutDays,
     effectivePlanSettings.trainingSplit,
     workoutsPerWeek,
-    allExercises
+    allExercises,
+    sourceOnboarding?.split?.type
   );
 
   // For Upper/Lower 4-day splits, cap lower-day exercises to reduce weekly leg/glute volume
@@ -451,9 +456,6 @@ export function generateTrainingPlan(
     variabilityAdjustedDays,
     filteredExercises
   );
-
-  // Build sourceOnboarding to get split information
-  const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
 
   // Enforce FULL_BODY_AB split requirements (Day A needs push + horizontal pull, Day B needs push + vertical pull)
   const fullBodyABEnforcedDays = sourceOnboarding?.split
@@ -526,7 +528,7 @@ export function generateTrainingPlan(
 
   // 15. Generate plan metadata
   const planId = generatePlanId();
-  const planName = generatePlanName(effectivePlanSettings);
+  const planName = generatePlanName(effectivePlanSettings, sourceOnboarding);
 
   // Determine the plan's split type from sourceOnboarding
   const primarySplitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES" =
@@ -1142,7 +1144,8 @@ function restructureThreeDayFullBody(
   days: WorkoutDay[],
   trainingSplit: PlanSettings["trainingSplit"],
   workoutsPerWeek: number,
-  allExercises: Exercise[] = []
+  allExercises: Exercise[] = [],
+  splitType?: string
 ): WorkoutDay[] {
   // Apply to 3-day Full Body OR 3-day Upper/Lower splits
   const isThreeDaySplit = workoutsPerWeek === 3 && days.length === 3 &&
@@ -1190,7 +1193,89 @@ function restructureThreeDayFullBody(
   const coreExercises = categorized.filter(c => c.isCore).map(c => c.exercise);
   const rearDeltExercises = categorized.filter(c => c.isRearDelt).map(c => c.exercise);
 
-  // DAY A: Push Focus (chest, shoulders, triceps + 1 leg compound + 1 horizontal pull)
+  // Helper: true when exercise targets only leg muscles (no upper body)
+  const isPureLeg = (e: Exercise) =>
+    (e.muscle_groups || []).some(mg => ["quadriceps", "glutes", "hamstrings"].includes(mg)) &&
+    !isPull(e) && !isPress(e);
+
+  // ─── UPPER_LOWER_UPPER (ULU) path ────────────────────────────────────────────
+  // Strict upper / lower / upper structure. Upper days contain NO leg exercises.
+  if (splitType === "UPPER_LOWER_UPPER") {
+    // Day 1 Upper A: 2 push + 1 horizontal pull + 1 vertical pull
+    const uluDay1 = dedupeExercises(
+      [
+        ...pushExercises.slice(0, 2),
+        horizontalPulls[0],
+        verticalPulls[0],
+      ].filter(Boolean) as Exercise[]
+    );
+
+    // Day 2 Lower: hinge + non-hinge quad + hamstring (isolation) + second quad
+    const nonHingeQuads = quadExercises.filter(q => !hingeExercises.some(h => h.id === q.id));
+    const uluDay2 = dedupeExercises(
+      [
+        hingeExercises[0] || legExercises[0],
+        nonHingeQuads[0],
+        hamstringExercises.find(
+          h =>
+            !hingeExercises.some(hi => hi.id === h.id) &&
+            h.id !== nonHingeQuads[0]?.id
+        ),
+        nonHingeQuads[1],
+      ].filter(Boolean) as Exercise[]
+    );
+
+    // Day 3 Upper B (pull emphasis): vertical pull + DIFFERENT horizontal pull + push variation + rear delt
+    const day1Ids = new Set(uluDay1.map(e => e.id));
+    const day3HorizontalPull =
+      horizontalPulls.find(h => !day1Ids.has(h.id)) || horizontalPulls[0];
+    const day3Push = pushExercises.find(p => !day1Ids.has(p.id));
+
+    const uluDay3 = dedupeExercises(
+      [
+        verticalPulls[0],
+        day3HorizontalPull,
+        ...(day3Push ? [day3Push] : []),
+        ...(rearDeltExercises[0] ? [rearDeltExercises[0]] : []),
+      ].filter(Boolean) as Exercise[]
+    );
+
+    // Pad upper days to at least 4 exercises using non-leg pool exercises
+    const padUpperToFour = (exercises: Exercise[], avoidIds?: Set<number>): Exercise[] => {
+      if (exercises.length >= 4) return exercises.slice(0, 5);
+      const usedIds = new Set(exercises.map(e => e.id));
+      const pool = allDayExercises.filter(e => !usedIds.has(e.id) && !isPureLeg(e));
+      const preferred = pool.filter(e => !avoidIds?.has(e.id));
+      const fallback = pool.filter(e => avoidIds?.has(e.id));
+      return dedupeExercises([...exercises, ...preferred, ...fallback].slice(0, 4));
+    };
+
+    return [
+      {
+        ...days[0],
+        dayName: "Day 1 (Upper - Push & Pull)",
+        muscleGroups: ["chest", "front_delts", "triceps", "lats", "upper_back", "rear_delts", "biceps"],
+        exercises: padUpperToFour(uluDay1),
+      },
+      {
+        ...days[1],
+        dayName: "Day 2 (Lower Body)",
+        muscleGroups: ["quadriceps", "glutes", "hamstrings"],
+        exercises: uluDay2,
+      },
+      {
+        ...days[2],
+        dayName: "Day 3 (Upper - Pull & Push)",
+        muscleGroups: ["lats", "upper_back", "rear_delts", "biceps", "chest", "front_delts"],
+        exercises: padUpperToFour(uluDay3, day1Ids),
+      },
+    ];
+  }
+
+  // ─── FULL_BODY_ABC path ───────────────────────────────────────────────────────
+  // Push-bias / Lower / Pull rotation. Each day is a full-body day with a focus.
+
+  // DAY A: Full Body (Push Bias) — chest, shoulders + 1 leg compound + 1 horizontal pull + core
   const dayAExercises = [
     ...pushExercises.slice(0, 2),
     ...(quadExercises.length > 0 ? [quadExercises[0]] : legExercises.slice(0, 1)),
@@ -1227,10 +1312,16 @@ function restructureThreeDayFullBody(
     (p) => !dayAExercises.includes(p) && !dayBExercises.includes(p)
   ) || horizontalPulls[2] || horizontalPulls[0];
 
+  // Avoid repeating any hamstring exercise already present in Day B
+  const dayBUsedIds = new Set(dayBExercises.map(e => e.id));
+  const dayCHamstring =
+    hamstringExercises.find(h => !dayBUsedIds.has(h.id)) ||
+    legExercises.find(l => !dayBUsedIds.has(l.id));
+
   const dayCExercises = [
     dayCVerticalPull,
     dayCHorizontalPull,
-    ...(hamstringExercises.length > 1 ? [hamstringExercises[1]] : legExercises.slice(1, 2)),
+    ...(dayCHamstring ? [dayCHamstring] : []),
     ...(rearDeltExercises.length > 0 ? [rearDeltExercises[0]] : []),
   ].filter((e) => e && !isPress(e)) as Exercise[];
 
@@ -1266,7 +1357,7 @@ function restructureThreeDayFullBody(
   return [
     {
       ...days[0],
-      dayName: "Day A (Push Focus)",
+      dayName: "Day A (Full Body - Push Bias)",
       muscleGroups: ["chest", "front_delts", "triceps", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
       exercises: finalDayA,
     },
@@ -1683,12 +1774,16 @@ function generatePlanId(): string {
 }
 
 /**
- * Generate plan name based on settings
+ * Generate plan name based on settings.
+ * Prefers the user-selected split name from sourceOnboarding so that the
+ * name field always matches the splitType field (e.g. "Upper / Lower / Upper (ULU)").
  */
-function generatePlanName(settings: PlanSettings): string {
-  const split = settings.trainingSplit;
+function generatePlanName(settings: PlanSettings, sourceOnboarding?: SourceOnboarding | null): string {
   const frequency = parseWorkoutsPerWeek(settings.workoutsPerWeek);
-
+  if (sourceOnboarding?.split?.name) {
+    return `${sourceOnboarding.split.name} - ${frequency}x per week`;
+  }
+  const split = settings.trainingSplit;
   return `${split} - ${frequency}x per week`;
 }
 

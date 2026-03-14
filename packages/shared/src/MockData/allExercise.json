@@ -279,7 +279,13 @@
     "name": "Bird Dog (Bench or Stability Ball)",
     "description": "A cable-free core stabilization exercise that strengthens the spine, back muscles, and deep stabilizers with minimal lumbar load.",
     "category": "core",
-    "muscle_groups": ["core_stabilizers", "erector_spinae", "glutes", "obliques", "upper_back"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "erector_spinae",
+      "glutes",
+      "obliques",
+      "upper_back"
+    ],
     "equipment": "bodyweight",
     "instructions": "On a bench or stability ball, keep pelvis neutral. Extend opposite arm and leg slowly. Avoid shifting hips or arching lower back. Hold 2 seconds, switch sides.",
     "difficulty": "beginner",
@@ -666,7 +672,13 @@
     "name": "Deadlift",
     "description": "A fundamental compound hip-hinge movement that targets the posterior chain including glutes, hamstrings, erector spinae, and upper back. While highly effective for building strength, proper form and load management are critical for spinal health.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "erector_spinae", "upper_back", "forearms"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "erector_spinae",
+      "upper_back",
+      "forearms"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Stand with feet hip-width apart, barbell over mid-foot. Hinge at hips, grip bar just outside legs. Brace core, keep spine neutral, chest up. Drive through heels, extend hips and knees simultaneously. Keep bar close to body. Lower with control by hinging hips first.",
@@ -980,7 +992,7 @@
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
     "reps": 10,
-    "weight": 12,
+    "weight": 10,
     "weight_unit": "kg",
     "media": [
       {
@@ -1967,7 +1979,13 @@
     "name": "Pull-Up",
     "description": "A bodyweight vertical pulling exercise performed on a pull-up bar using an overhand grip. One of the most effective exercises for building back strength, lat development, and grip strength. Requires good upper body strength.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "forearms", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "forearms",
+      "core_stabilizers"
+    ],
     "equipment": "pull_up_bar",
     "difficulty": "advanced",
     "instructions": "Hang from pull-up bar with overhand grip slightly wider than shoulders. Engage core and pull body up by driving elbows down until chin clears bar. Lower with control to full arm extension. Keep shoulders active at bottom, avoid dead hang. Use assistance or negative reps if needed.",
