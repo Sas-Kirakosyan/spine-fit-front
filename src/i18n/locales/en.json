@@ -137,7 +137,8 @@
       "supportFaq": "FAQ",
       "supportEmailDesc": "Send us an email at support@spinefit.com",
       "supportChatDesc": "Chat with our support team (9AM-6PM EST)",
-      "supportFaqDesc": "Browse frequently asked questions"
+      "supportFaqDesc": "Browse frequently asked questions",
+      "close": "Close"
     }
   }
 }

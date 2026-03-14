@@ -137,7 +137,8 @@
       "supportFaq": "Частые вопросы",
       "supportEmailDesc": "Отправьте письмо на support@spinefit.com",
       "supportChatDesc": "Чат с поддержкой (9:00–18:00 МСК)",
-      "supportFaqDesc": "Просмотреть частые вопросы"
+      "supportFaqDesc": "Просмотреть частые вопросы",
+      "close": "Закрыть"
     }
   }
 }
