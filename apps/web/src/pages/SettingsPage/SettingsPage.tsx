@@ -4,7 +4,6 @@ import i18n from "i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
-import { auth } from "@/firebase/config";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
 import { BodyProfileModal } from "@/components/BodyProfileModal/BodyProfileModal";
 import type { SettingsPageProps } from "@/types/pages";
@@ -68,8 +67,6 @@ function Divider() {
 
 function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   useTranslation();
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "Dark");
   const [isBodyProfileOpen, setIsBodyProfileOpen] = useState(false);
@@ -98,23 +95,6 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     setBodyProfileSummary("Not set");
   };
 
-  useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      setUserEmail(user.email);
-      // Проверяем, авторизован ли пользователь через Google
-      const isGoogle = user.providerData.some((provider) => provider.providerId === "google.com");
-      setIsGoogleUser(isGoogle);
-    } else {
-      // Если пользователь не авторизован через Firebase, проверяем localStorage
-      const savedEmail = localStorage.getItem("userEmail");
-      if (savedEmail) {
-        setUserEmail(savedEmail);
-      }
-    }
-    loadBodyProfileSummary();
-  }, []);
-
   // Sync language state with i18next language
   useEffect(() => {
     const handleLanguageChanged = () => {
@@ -129,7 +109,6 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   }, []);
 
   const handleLogout = () => {
-    auth.signOut();
     localStorage.removeItem("userEmail");
     localStorage.removeItem("currentPage");
     window.location.reload();
@@ -231,8 +210,6 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       <SettingsSection title="Account">
         <SettingsItem
           label="Email Address"
-          value={userEmail || "Not logged in"}
-          subValue={isGoogleUser ? "Signed in with Google" : undefined}
           showArrow={false}
         />
         <SettingsItem label="Language" value={language} onClick={handleLanguageChange} />

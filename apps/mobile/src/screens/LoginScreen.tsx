@@ -5,14 +5,12 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { AuthStackParamList } from "../navigation/types";
 import type { LoginFormData } from "@spinefit/shared";
-
 import { FormCard } from "../components/form/FormCard";
 import { FormHeader } from "../components/form/FormHeader";
 import { FormField } from "../components/form/FormField";
 import { PasswordInput } from "../components/form/PasswordInput";
 import { SubmitButton } from "../components/form/SubmitButton";
 import { Divider } from "../components/form/Divider";
-import { GoogleAuthButton } from "../components/form/GoogleAuthButton";
 import { AuthSwitchLink } from "../components/form/AuthSwitchLink";
 import { Logo } from "../components/common/Logo";
 
@@ -35,9 +33,11 @@ export default function LoginScreen() {
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormData> = {};
     if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Please enter a valid email";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Please enter a valid email";
     if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 6) newErrors.password = "Password must contain at least 6 characters";
+    else if (formData.password.length < 6)
+      newErrors.password = "Password must contain at least 6 characters";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -46,11 +46,6 @@ export default function LoginScreen() {
     if (validateForm()) {
       navigation.getParent()?.navigate("Main");
     }
-  };
-
-  const handleGoogleSignIn = () => {
-    // TODO: Implement Google sign-in with expo-auth-session
-    navigation.getParent()?.navigate("Main");
   };
 
   return (
@@ -63,7 +58,10 @@ export default function LoginScreen() {
           <Logo size="sm" />
         </View>
 
-        <ScrollView className="flex-1 mt-8" contentContainerStyle={{ paddingBottom: 20 }}>
+        <ScrollView
+          className="flex-1 mt-8"
+          contentContainerStyle={{ paddingBottom: 20 }}
+        >
           <FormCard>
             <FormHeader title="Login" subtitle="Sign in to your account" />
 
@@ -87,7 +85,6 @@ export default function LoginScreen() {
 
               <SubmitButton text="Sign In" onPress={handleSubmit} />
               <Divider />
-              <GoogleAuthButton onPress={handleGoogleSignIn} text="Login with Google" />
             </View>
           </FormCard>
         </ScrollView>

@@ -27,7 +27,7 @@ export default function HomeScreen() {
         <View className="flex-1 bg-black/30">
           <SafeAreaView className="flex-1 justify-between pb-8">
             <View className="px-4 pt-4">
-              <Logo size="sm" />
+              <Logo size="lg" />
             </View>
 
             <View className="px-4">

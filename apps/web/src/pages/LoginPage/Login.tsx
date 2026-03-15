@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "@/firebase/config";
 import { PageContainer } from "@/Layout/PageContainer";
 import { FormCard } from "@/components/Form/FormCard/FormCard";
 import { FormHeader } from "@/components/Form/FormHeader/FormHeader";
@@ -8,7 +6,6 @@ import { FormField } from "@/components/Form/FormField/FormField";
 import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
 import { Divider } from "@/components/Form/Divider/Divider";
-import { GoogleAuthButton } from "@/components/Form/GoogleAuthButton/GoogleAuthButton";
 import { AuthSwitchLink } from "@/components/Form/AuthSwitchLink/AuthSwitchLink";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
 
@@ -71,20 +68,6 @@ function Login({
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      console.log("Google login successful:", user);
-      if (onNavigateToWorkout) {
-        onNavigateToWorkout();
-      }
-    } catch (error: unknown) {
-      console.error("Google login error:", error);
-    }
-  };
-
   return (
     <PageContainer contentClassName="justify-between">
       <PageHeader onNavigateToHome={onNavigateToHome} />
@@ -137,11 +120,6 @@ function Login({
             <SubmitButton text="Sign In" />
 
             <Divider />
-
-            <GoogleAuthButton
-              onClick={handleGoogleSignIn}
-              text="Login with Google"
-            />
           </form>
         </FormCard>
       </div>

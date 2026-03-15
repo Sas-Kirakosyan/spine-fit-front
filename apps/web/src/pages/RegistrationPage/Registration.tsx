@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "@/firebase/config";
 import type { RegistrationFormData, RegistrationProps } from "@/types/auth";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -10,7 +8,6 @@ import { FormField } from "@/components/Form/FormField/FormField";
 import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
 import { Divider } from "@/components/Form/Divider/Divider";
-import { GoogleAuthButton } from "@/components/Form/GoogleAuthButton/GoogleAuthButton";
 import { AuthSwitchLink } from "@/components/Form/AuthSwitchLink/AuthSwitchLink";
 
 function Registration({
@@ -94,20 +91,6 @@ function Registration({
     }
   };
 
-  const handleGoogleSignUp = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      console.log("Google registration successful:", user);
-      if (onNavigateToWorkout) {
-        onNavigateToWorkout();
-      }
-    } catch (error: unknown) {
-      console.error("Google registration error:", error);
-    }
-  };
-
   return (
     <PageContainer contentClassName="justify-between">
       <PageHeader onNavigateToHome={onNavigateToHome} />
@@ -186,11 +169,6 @@ function Registration({
             <SubmitButton text="Register" />
 
             <Divider />
-
-            <GoogleAuthButton
-              onClick={handleGoogleSignUp}
-              text="Registration with Google"
-            />
           </form>
         </FormCard>
       </div>

@@ -5,14 +5,12 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { AuthStackParamList } from "../navigation/types";
 import type { RegistrationFormData } from "@spinefit/shared";
-
 import { FormCard } from "../components/form/FormCard";
 import { FormHeader } from "../components/form/FormHeader";
 import { FormField } from "../components/form/FormField";
 import { PasswordInput } from "../components/form/PasswordInput";
 import { SubmitButton } from "../components/form/SubmitButton";
 import { Divider } from "../components/form/Divider";
-import { GoogleAuthButton } from "../components/form/GoogleAuthButton";
 import { AuthSwitchLink } from "../components/form/AuthSwitchLink";
 import { Logo } from "../components/common/Logo";
 
@@ -56,11 +54,6 @@ export default function RegisterScreen() {
     if (validateForm()) {
       navigation.getParent()?.navigate("Main");
     }
-  };
-
-  const handleGoogleSignUp = () => {
-    // TODO: Implement Google sign-in with expo-auth-session
-    navigation.getParent()?.navigate("Main");
   };
 
   return (
@@ -136,7 +129,6 @@ export default function RegisterScreen() {
 
               <SubmitButton text="Register" onPress={handleSubmit} />
               <Divider />
-              <GoogleAuthButton onPress={handleGoogleSignUp} text="Registration with Google" />
             </View>
           </FormCard>
         </ScrollView>

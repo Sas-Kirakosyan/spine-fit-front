@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import { Image } from "expo-image";
 
+
 interface LogoProps {
   size?: "sm" | "md" | "lg";
   className?: string;
@@ -18,7 +19,7 @@ export function Logo({ size = "md", className = "" }: LogoProps) {
   return (
     <View className={`flex-row items-center gap-2 ${className}`}>
       <Image
-        source={require("../../../assets/icon.png")}
+        source={require("../../../../../packages/shared/public/logo/logo.png")}
         style={{ width, height }}
         contentFit="contain"
       />
