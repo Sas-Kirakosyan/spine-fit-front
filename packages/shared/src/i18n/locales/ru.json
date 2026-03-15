@@ -59,9 +59,9 @@
   },
   "swapWorkoutActionSheet": {
     "title": "Заменить тренировку",
-    "withinSplit": "В рамках программы",
+    "weeklyPlan": "Текущий недельный план тренировок",
     "suggestedSplits": "Рекомендованные сплиты",
-    "newWorkout": "Новая тренировка",
+    "customWorkout": "Индивидуальный план тренировок",
     "current": "ТЕКУЩИЙ",
     "savedPrograms": "Сохранённые программы",
     "edit": "Изменить",

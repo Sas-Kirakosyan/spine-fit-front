@@ -17,6 +17,7 @@ interface WorkoutPlanCardProps {
   onCreateProgramFromScratch?: () => void;
   onSelectSavedProgram?: (program: SavedProgram) => void;
   onEditSavedProgram?: (program: SavedProgram) => void;
+  onSelectPlanDay?: (dayIndex: number) => void;
 }
 
 export function WorkoutPlanCard({
@@ -32,6 +33,7 @@ export function WorkoutPlanCard({
   onCreateProgramFromScratch,
   onSelectSavedProgram,
   onEditSavedProgram,
+  onSelectPlanDay,
 }: WorkoutPlanCardProps) {
   const { t } = useTranslation();
   const [showSwapSheet, setShowSwapSheet] = useState(false);
@@ -161,6 +163,10 @@ export function WorkoutPlanCard({
           }}
           onEditSavedProgram={(program) => {
             onEditSavedProgram?.(program);
+            setShowSwapSheet(false);
+          }}
+          onSelectPlanDay={(dayIndex) => {
+            onSelectPlanDay?.(dayIndex);
             setShowSwapSheet(false);
           }}
         />
