@@ -4,7 +4,11 @@
     "name": "Back Hyperextension",
     "description": "A controlled spinal extension exercise performed on a hyperextension bench. Primarily targets the lower back (erector spinae), glutes, and hamstrings.",
     "category": "strength",
-    "muscle_groups": ["erector_spinae", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "erector_spinae",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "hyperextension_bench",
     "difficulty": "beginner",
     "instructions": "Position your hips on the pad with feet secured. Lower your torso under control while keeping a neutral spine. Raise your upper body until aligned with your legs. Avoid overextending your lower back.",
@@ -59,7 +63,11 @@
     "name": "Single-Leg Glute Bridge",
     "description": "A unilateral glute activation exercise performed on the floor. It strengthens the glutes, stabilizers, hamstrings, and improves lumbopelvic control.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your back with one knee bent and the other leg extended. Press through your heel and lift your hips while keeping your core engaged. Avoid arching your lower back. Lower slowly with control.",
@@ -114,7 +122,11 @@
     "name": "Hanging Leg Raises (Bent-Knee or Single-Leg)",
     "description": "A core exercise performed while hanging from a bar. The bent-knee or single-leg variation targets the abdominals and hip flexors while reducing lumbar strain.",
     "category": "strength",
-    "muscle_groups": ["abdominals", "hip_flexors", "obliques"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "obliques"
+    ],
     "equipment": "pull_up_bar",
     "difficulty": "intermediate",
     "instructions": "Hang from a bar with shoulders active. Bend your knees and lift them toward your chest while keeping your core braced. Avoid swinging and keep your spine neutral. Lower slowly with control.",
@@ -169,7 +181,12 @@
     "name": "One-Arm Crossover Cable Pull",
     "description": "A unilateral cable pulling exercise that targets the lats, upper back, and deep stabilizers. This movement also improves core control and supports a healthy spine.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "rear_delts", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "rear_delts",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Stand sideways to the cable machine with the handle set slightly above shoulder level. Grab the handle with the outside arm. Pull the cable across your body while keeping your torso stable and ribs down. Focus on driving the elbow toward the hip. Avoid rotating the spine.",
@@ -196,7 +213,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/one-arm-crossover-cable-pull.webp",
+        "url": "/exercisesSm/one-arm-crossover-cable-pull.png",
         "primary": true
       },
       {
@@ -224,7 +241,12 @@
     "name": "Cable Kickbacks",
     "description": "A controlled cable kickback exercise focusing on glutes, hamstrings, spinal stabilizers, and leg biceps. Great for strength without loading the lumbar spine.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "erector_spinae", "leg_biceps"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "erector_spinae",
+      "leg_biceps"
+    ],
     "equipment": "cable_machine_ankle_attachment",
     "instructions": "Attach the ankle strap to the cable. Stand tall, brace your core, keep ribs down. Kick the leg backward slowly, avoid leaning forward or arching the back. Return with control.",
     "difficulty": "beginner",
@@ -340,7 +362,11 @@
     "name": "Cable Knee Drive",
     "description": "The Cable Knee Drive is a dynamic lower-body exercise that strengthens the hip flexors, challenges the core, and enhances overall stability. With the cable strap secured around the ankle, you lift the knee toward the chest while resisting the pull of the machine. This movement closely resembles sprinting mechanics, making it especially valuable for improving acceleration, jump performance, and explosive leg power. The constant tension also forces the core to stay active, promoting better balance, coordination, and upright posture throughout the exercise.",
     "category": "strength",
-    "muscle_groups": ["hip_flexors", "quadriceps", "core_stabilizers"],
+    "muscle_groups": [
+      "hip_flexors",
+      "quadriceps",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine_low_pull_handle",
     "instructions": "Lie on your back, attach foot/handle to cable set at low pull. Brace core, drive one knee toward chest without lumbar rounding. Extend back slowly. Do not swing.",
     "difficulty": "intermediate",
@@ -395,7 +421,11 @@
     "name": "Bodyweight/Light Dumbbell Bulgarian Split Squats",
     "description": "A back-friendly unilateral leg builder that avoids axial spinal loading while still building muscle effectively.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "bench_bodyweight_or_light_dumbbell",
     "difficulty": "beginner",
     "instructions": "Place rear foot on bench, step forward, brace core. Lower under control without leaning torso forward aggressively.",
@@ -446,7 +476,9 @@
     "name": "Leg Extension",
     "description": "Quadriceps isolation using a machine with zero compression through the lumbar spine.",
     "category": "strength",
-    "muscle_groups": ["quadriceps"],
+    "muscle_groups": [
+      "quadriceps"
+    ],
     "equipment": "leg_extension_machine",
     "difficulty": "beginner",
     "instructions": "Sit tall, hold handles, extend knees under control. Avoid leaning back aggressively.",
@@ -497,7 +529,10 @@
     "name": "Seated Hip Abduction",
     "description": "Glute medius and outer-leg isolation improving hip stability and pelvis control, which supports spine health.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hip_abductors"],
+    "muscle_groups": [
+      "glutes",
+      "hip_abductors"
+    ],
     "equipment": "hip_abductor_machine",
     "difficulty": "beginner",
     "instructions": "Sit tall, press knees outward slowly, avoid lumbar movement while spreading.",
@@ -520,7 +555,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-hip-adduction.webp",
+        "url": "/exercisesSm/seated-hip-abduction.png",
         "primary": true
       },
       {
@@ -548,7 +583,10 @@
     "name": "Bench or Machine Hip Thrust",
     "description": "A glute and hamstring builder with external support that avoids spinal compression and trains hip hinge strength safely.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "bench_or_smith_machine",
     "difficulty": "intermediate",
     "instructions": "Upper back on bench or supported pad, drive hips up without lumbar arch. Ribs down, chin tucked slightly.",
@@ -599,7 +637,12 @@
     "name": "Belt Squats",
     "description": "A squat variation using a dip belt or dedicated belt-squat machine where weight hangs from the hips instead of resting on the shoulders. Removes spinal compression and is ideal for people with lower back concerns, herniated disc history, or shoulder injuries who want to load legs without compressing the spine.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings", "calves"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings",
+      "calves"
+    ],
     "equipment": "belt_squat_machine",
     "difficulty": "beginner",
     "instructions": "Stand on the platform with the belt secured around your hips and weight attached. Keep your torso upright and core engaged. Lower into a squat by bending your knees and hips, keeping your chest up. Push through your feet to return to the starting position. The load stays on your pelvis/hips with minimal pressure on the lower back.",
@@ -751,7 +794,11 @@
     "name": "Glute Bridge Machine",
     "description": "A machine-based or dumbbell-loaded glute bridge exercise that targets glutes and hamstrings with back support. Safer alternative to barbell hip thrusts for those with back concerns.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "glute_bridge_machine",
     "difficulty": "beginner",
     "instructions": "Position yourself on the machine or lie on your back with a dumbbell on your hips. Drive through heels to lift hips up, squeezing glutes at the top. Keep ribs down, avoid arching lower back. Lower with control.",
@@ -806,7 +853,12 @@
     "name": "Seated Cable Row",
     "description": "A horizontal pulling exercise using a cable machine that targets the mid-back, lats, and rear delts. Excellent for building back thickness and improving posture while maintaining a stable, supported position.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "rear_delts", "biceps"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "rear_delts",
+      "biceps"
+    ],
     "equipment": "seated_cable_row",
     "difficulty": "beginner",
     "instructions": "Sit with feet on footrests, knees slightly bent. Grip handle with arms extended. Pull handle to lower abdomen, driving elbows back. Squeeze shoulder blades together. Keep torso upright, avoid rounding or overextending spine. Return with control.",
@@ -861,7 +913,10 @@
     "name": "Chest Fly",
     "description": "An isolation exercise for the chest using a fly machine or lying with dumbbells. Targets pectorals with minimal shoulder stress when performed correctly.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts"],
+    "muscle_groups": [
+      "chest",
+      "front_delts"
+    ],
     "equipment": "chest_fly_machine",
     "difficulty": "beginner",
     "instructions": "Sit with back against pad, grip handles at chest level. Keep slight bend in elbows. Bring handles together in front of chest using a hugging motion. Control the return. Avoid excessive arching of lower back.",
@@ -916,7 +971,11 @@
     "name": "Incline Leg Raises",
     "description": "A core exercise performed on an incline bench targeting the lower abdominals and hip flexors. The incline adds difficulty compared to flat leg raises.",
     "category": "strength",
-    "muscle_groups": ["abdominals", "hip_flexors", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "core_stabilizers"
+    ],
     "equipment": "incline_bench or_decline_bench",
     "difficulty": "intermediate",
     "instructions": "Lie on incline bench, grip handles behind head. Keep lower back pressed to bench. Raise legs up toward chest with controlled movement. Lower slowly without letting lower back arch. Keep knees slightly bent if needed.",
@@ -971,7 +1030,12 @@
     "name": "Seated Dumbbell Shoulder Press",
     "description": "An overhead pressing exercise performed seated with dumbbells. Targets shoulders (deltoids) and triceps while the seated position provides back support.",
     "category": "strength",
-    "muscle_groups": ["front_delts", "side_delts", "triceps", "upper_chest"],
+    "muscle_groups": [
+      "front_delts",
+      "side_delts",
+      "triceps",
+      "upper_chest"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Sit on bench with back support, hold dumbbells at shoulder height with palms forward. Press dumbbells overhead until arms are extended but not locked. Lower with control to shoulder level. Keep core engaged, avoid excessive arching of lower back.",
@@ -1026,7 +1090,10 @@
     "name": "Dumbbell Lateral Raises",
     "description": "An isolation exercise for the side deltoids (shoulders) that creates shoulder width and definition. Minimal back involvement when performed correctly.",
     "category": "strength",
-    "muscle_groups": ["side_delts", "front_delts"],
+    "muscle_groups": [
+      "side_delts",
+      "front_delts"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand with feet hip-width apart, dumbbells at sides. Keep slight bend in elbows. Raise arms out to sides until parallel with floor, leading with elbows. Lower with control. Avoid swinging or using momentum. Keep torso stable.",
@@ -1081,7 +1148,10 @@
     "name": "Dumbbell Bicep Curls",
     "description": "A fundamental arm exercise targeting the biceps. Can be performed standing or seated with various grips (supinated, hammer, or alternating).",
     "category": "strength",
-    "muscle_groups": ["biceps", "forearms"],
+    "muscle_groups": [
+      "biceps",
+      "forearms"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand with feet hip-width apart or sit on bench. Hold dumbbells with arms extended, palms forward. Curl weights up by bending elbows, keeping upper arms stationary. Squeeze biceps at top. Lower with control. Avoid swinging or using back momentum.",
@@ -1136,7 +1206,9 @@
     "name": "Dumbbell Tricep Kickbacks",
     "description": "An isolation exercise for the triceps performed in a hinged position. Targets the back of the arms with minimal shoulder involvement.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Hinge forward at hips with neutral spine, one hand on bench for support. Hold dumbbell with elbow bent at 90 degrees, upper arm parallel to torso. Extend arm back until fully straightened. Squeeze tricep. Return with control. Avoid swinging or moving upper arm.",
@@ -1191,7 +1263,9 @@
     "name": "Cable Tricep Pushdown",
     "description": "A cable exercise targeting the triceps using a high pulley and straight bar, V-bar, or rope attachment. Excellent for building arm strength and definition.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Stand facing cable machine with high pulley. Grip bar with hands shoulder-width apart, elbows at sides. Push bar down by extending elbows until arms are straight. Keep elbows stationary. Return with control, stopping at 90 degrees. Maintain upright posture.",
@@ -1246,7 +1320,9 @@
     "name": "French Bench Press (EZ-Bar Skullcrusher)",
     "description": "A lying triceps extension using an EZ-bar on a flat bench. Emphasizes long-head triceps with stable torso support, reducing lower-back demand.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Lie on a flat bench, feet planted. Grip an EZ-bar with a narrow, comfortable angle. Start with arms extended above shoulders. Bend elbows to lower the bar toward the forehead, keeping upper arms mostly vertical. Stop just before the bar reaches your forehead, then extend elbows to return. Keep elbows tucked and wrists neutral. Avoid arching the lower back.",
@@ -1301,7 +1377,10 @@
     "name": "Floor Crunches",
     "description": "A basic core exercise targeting the abdominals while lying on the floor or mat. Safer for the spine than sit-ups due to limited range of motion.",
     "category": "core",
-    "muscle_groups": ["abdominals", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on back with knees bent, feet flat on floor. Place hands behind head or across chest. Engage core and lift shoulder blades off floor by curling torso toward knees. Keep lower back on floor. Lower with control. Avoid pulling on neck.",
@@ -1356,7 +1435,11 @@
     "name": "Bicycle Crunches",
     "description": "A dynamic core exercise that targets the abdominals and obliques through a rotating movement pattern. Excellent for overall core strength and coordination.",
     "category": "core",
-    "muscle_groups": ["abdominals", "obliques", "hip_flexors"],
+    "muscle_groups": [
+      "abdominals",
+      "obliques",
+      "hip_flexors"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on back, hands behind head, legs lifted with knees bent. Bring right elbow toward left knee while extending right leg. Alternate sides in a pedaling motion. Keep lower back pressed to floor. Move with control, not speed. Focus on rotation from torso, not just arms.",
@@ -1411,7 +1494,11 @@
     "name": "Leg Press",
     "description": "A machine-based compound leg exercise that targets quadriceps, glutes, and hamstrings with no spinal compression. Excellent alternative to squats for those with back issues.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "leg_press",
     "difficulty": "beginner",
     "instructions": "Sit in leg press machine with back and head against pad. Place feet shoulder-width apart on platform. Push platform away by extending knees and hips. Lower with control, keeping knees aligned with toes. Avoid locking knees at top or rounding lower back at bottom.",
@@ -1475,7 +1562,9 @@
     "name": "Lying Leg Curl",
     "description": "An isolation exercise for the hamstrings performed on a leg curl machine while lying face down. Targets hamstrings with zero spinal loading.",
     "category": "strength",
-    "muscle_groups": ["hamstrings"],
+    "muscle_groups": [
+      "hamstrings"
+    ],
     "equipment": "leg_curl_machine",
     "difficulty": "beginner",
     "instructions": "Lie face down on leg curl machine with pad behind ankles. Keep hips pressed to pad. Curl legs up toward glutes by bending knees. Squeeze hamstrings at top. Lower with control. Avoid lifting hips or arching back.",
@@ -1530,7 +1619,11 @@
     "name": "Single-Leg Romanian Deadlift",
     "description": "A unilateral hip hinge movement with light dumbbells that targets hamstrings, glutes, and balance. Reduces spinal load compared to barbell variations.",
     "category": "strength",
-    "muscle_groups": ["hamstrings", "glutes", "erector_spinae"],
+    "muscle_groups": [
+      "hamstrings",
+      "glutes",
+      "erector_spinae"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Stand on one leg holding light dumbbell in opposite hand. Hinge at hip, lowering dumbbell toward floor while extending free leg behind for balance. Keep back neutral, core braced. Return to standing by driving through heel. Use light weight and focus on form.",
@@ -1585,7 +1678,11 @@
     "name": "Goblet Squat",
     "description": "A front-loaded squat holding a dumbbell or kettlebell at chest level. The front load promotes upright torso positioning and reduces lower back stress compared to back squats.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Hold dumbbell vertically at chest level with both hands. Stand with feet shoulder-width apart. Squat down by bending knees and hips, keeping chest up and elbows inside knees. Lower to comfortable depth. Drive through heels to stand. Keep torso upright throughout.",
@@ -1640,7 +1737,11 @@
     "name": "Machine Chest Press",
     "description": "A machine-based horizontal pushing exercise targeting the chest, front delts, and triceps. Provides back support and stable movement path, safer than free weight bench press for those with back issues.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "chest_press_machine",
     "difficulty": "beginner",
     "instructions": "Sit in machine with back pressed firmly against pad. Grip handles at chest level. Push handles forward by extending arms until nearly straight. Return with control. Keep lower back pressed to pad throughout. Avoid arching back or driving through lower back.",
@@ -1695,7 +1796,12 @@
     "name": "Push-ups",
     "description": "A fundamental bodyweight exercise targeting chest, shoulders, and triceps while engaging the core. Can be modified with incline or knee variations for different difficulty levels.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps", "core_stabilizers"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Start in plank position with hands slightly wider than shoulders. Keep body in straight line from head to heels, core engaged. Lower chest toward floor by bending elbows. Push back up to starting position. Maintain neutral spine throughout - avoid sagging hips or piking up.",
@@ -1750,7 +1856,11 @@
     "name": "Assisted Dips",
     "description": "A compound upper body exercise targeting chest, triceps, and front delts using an assisted dip machine or resistance bands. The assistance reduces load on the lower back.",
     "category": "strength",
-    "muscle_groups": ["chest", "triceps", "front_delts"],
+    "muscle_groups": [
+      "chest",
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "assisted_dip_machine",
     "difficulty": "intermediate",
     "instructions": "Position yourself on assisted dip machine with hands on handles, arms straight. Lean slightly forward for chest emphasis. Lower body by bending elbows until upper arms are parallel to floor. Push back up to starting position. Keep core engaged and avoid excessive swinging.",
@@ -1805,7 +1915,11 @@
     "name": "Incline Dumbbell Press",
     "description": "An upper chest pressing exercise performed on an incline bench with dumbbells. The incline angle reduces lower back stress compared to flat pressing.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Set bench to 30-45 degree incline. Sit with back against pad, dumbbells at shoulder level. Press dumbbells up and slightly inward until arms are extended. Lower with control to shoulder level. Keep lower back pressed to pad, avoid excessive arching.",
@@ -1860,7 +1974,12 @@
     "name": "Lat Pulldown (Neutral Grip)",
     "description": "A vertical pulling exercise using a lat pulldown machine with a neutral (palms facing) grip attachment. Targets the lats, upper back, and biceps while maintaining a stable seated position. Excellent for building back width and shoulder health with zero spinal compression.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "rear_delts"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "lat_pulldown",
     "difficulty": "beginner",
     "instructions": "Sit at lat pulldown machine with thighs secured under pad. Grip neutral handles with palms facing each other. Pull handles down toward upper chest by driving elbows down and back. Squeeze shoulder blades together at bottom. Return with control. Keep torso upright, avoid leaning back excessively.",
@@ -1924,7 +2043,12 @@
     "name": "Lat Pulldown (Wide Grip)",
     "description": "A vertical pulling exercise using a lat pulldown machine with a wide overhand grip. Emphasizes lat width and upper back development. The wide grip increases lat activation while the seated position provides stability.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "rear_delts"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "lat_pulldown",
     "difficulty": "beginner",
     "instructions": "Sit at lat pulldown machine with thighs secured. Grip wide bar with hands wider than shoulder-width, palms facing away. Pull bar down toward upper chest, focusing on driving elbows down. Squeeze lats at bottom. Return with control. Avoid pulling behind neck.",
@@ -2040,7 +2164,12 @@
     "name": "Chin-Up",
     "description": "A bodyweight vertical pulling exercise performed with an underhand (supinated) grip. Similar to pull-ups but with increased bicep activation. The underhand grip often makes this slightly easier than standard pull-ups.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "forearms"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "forearms"
+    ],
     "equipment": "pull_up_bar",
     "difficulty": "intermediate",
     "instructions": "Hang from bar with underhand grip, hands shoulder-width apart, palms facing you. Pull body up until chin clears bar, focusing on driving elbows down. Lower with control to full extension. Keep core engaged and avoid excessive swinging.",
@@ -2095,7 +2224,11 @@
     "name": "Straight-Arm Pulldown",
     "description": "A lat isolation exercise using a cable machine with straight arms throughout the movement. Emphasizes lat engagement with minimal bicep involvement. Excellent for improving mind-muscle connection with the lats.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Stand facing high cable with rope or straight bar attachment. Grip handle with arms extended overhead, slight elbow bend. Keeping arms nearly straight, pull handle down toward thighs by contracting lats. Focus on driving elbows down. Return with control. Keep torso stable and core braced.",
@@ -2150,7 +2283,12 @@
     "name": "Assisted Pull-Up",
     "description": "A machine-assisted version of pull-ups that reduces the amount of bodyweight lifted. Allows beginners or those with back concerns to build pulling strength safely while working toward unassisted pull-ups.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "core_stabilizers"
+    ],
     "equipment": "assisted_pull_up_machine",
     "difficulty": "beginner",
     "instructions": "Set assistance weight on machine. Kneel or stand on platform, grip handles with overhand grip. Pull body up until chin clears handles, focusing on driving elbows down. Lower with control. Gradually reduce assistance over time as strength improves.",
@@ -2205,7 +2343,11 @@
     "name": "Cable Face Pull (Rope Face Pull)",
     "description": "A cable rear-delt and upper back exercise that improves shoulder health, posture, and external rotation strength. Essential for shoulder balance and injury prevention, especially for desk workers and those with forward shoulder posture.",
     "category": "strength",
-    "muscle_groups": ["rear_delts", "upper_back", "rotator_cuff"],
+    "muscle_groups": [
+      "rear_delts",
+      "upper_back",
+      "rotator_cuff"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set cable at upper chest height. Attach rope. Grip ends with palms facing each other. Pull rope toward face, separating hands as they pass face level. Focus on squeezing shoulder blades together. Keep elbows high and pull rope to eye level. Return with control. Use light weight and high reps for best results.",
@@ -2269,7 +2411,10 @@
     "name": "Reverse Pec Deck (Rear-Delt Fly)",
     "description": "A machine-based rear-delt isolation exercise that targets the posterior deltoids while providing stable, supported positioning. Excellent for shoulder balance and preventing rounded shoulders.",
     "category": "strength",
-    "muscle_groups": ["rear_delts", "upper_back"],
+    "muscle_groups": [
+      "rear_delts",
+      "upper_back"
+    ],
     "equipment": "pec_deck_machine",
     "difficulty": "beginner",
     "instructions": "Sit facing the pec deck machine with chest against pad. Grip handles with palms facing each other. Pull handles back by squeezing shoulder blades together. Keep slight bend in elbows. Control the return. Avoid using momentum.",
@@ -2333,7 +2478,10 @@
     "name": "One-Arm Cable Bicep Curl (Facing Away)",
     "description": "A unilateral cable curl performed facing away from the stack. The arm starts slightly behind the body, providing a deep stretch on the biceps which is excellent for muscle growth while allowing the spine to remain upright and supported.",
     "category": "strength",
-    "muscle_groups": ["biceps", "forearms"],
+    "muscle_groups": [
+      "biceps",
+      "forearms"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Set a single handle on a low pulley. Stand facing away from the cable in a split stance with the working arm slightly behind your body. Brace your core and keep your torso tall. Curl the handle toward your shoulder without swinging or leaning back, focusing on the deep stretch at the bottom. Control the descent and keep your elbow close to your side throughout.",
@@ -2360,7 +2508,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://images.squarespace-cdn.com/content/v1/5ffcea9416aee143500ea103/1638178700622-JEVR1B175PTB4C6WM5RE/One%2BArm%2BStanding%2BCable%2BCurls.jpeg",
+        "url": "/exercisesSm/one-arm-cable-bicep-curl-facing-away.webp",
         "primary": true
       },
       {
@@ -2388,7 +2536,9 @@
     "name": "One-Arm Cable Tricep Pushdown",
     "description": "A unilateral cable tricep pushdown that allows the user to hold the machine with the non-working hand for extra spinal stability. Ideal for isolating the triceps while keeping the lower back supported.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Attach a single handle to a high pulley. Stand close to the machine with one hand lightly holding the frame for support. With the working arm at your side and elbow bent to 90 degrees, push the handle down by straightening the elbow until the arm is almost fully extended. Keep your torso upright, core braced, and upper arm pinned to your side. Control the return and avoid shrugging the shoulder.",
@@ -2415,7 +2565,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://images.squarespace-cdn.com/content/v1/5ffcea9416aee143500ea103/1638250812315-686PUSW2ZT5SDES53XQU/One%2BArm%2BCable%2BTriceps%2BPushdowns%2B%28Reverse%2BGrip%29.jpeg",
+        "url": "/exercisesSm/one-arm-cable-tricep-pushdown.webp",
         "primary": true
       },
       {
@@ -2443,7 +2593,10 @@
     "name": "Cable Lateral Raise (Behind the Back)",
     "description": "A cable lateral raise variation where the cable runs behind the body, creating constant tension through the entire range of motion. Excellent for shoulder growth with a smooth resistance curve and minimal spinal loading.",
     "category": "strength",
-    "muscle_groups": ["side_delts", "front_delts"],
+    "muscle_groups": [
+      "side_delts",
+      "front_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Set a single handle on a low pulley. Stand sideways to the stack with the working arm furthest from the cable so the cable passes behind your hips. With a slight bend in your elbow, raise the handle out to the side until your hand reaches shoulder height. Pause, then lower slowly under control. Keep your torso upright and avoid leaning or swinging.",
@@ -2470,7 +2623,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1HrK15RBrPPngVrv33b1dz3dsG5MtxCo3RQ&s",
+        "url": "/exercisesSm/cable-lateral-raise-behind-the-back.webp",
         "primary": true
       },
       {
@@ -2498,7 +2651,11 @@
     "name": "Bodyweight Box Squat",
     "description": "A controlled squat variation where you sit back to a box or bench. The fixed depth prevents going too low and avoids the \"butt wink\" (pelvic tuck) that can irritate the L5-S1 segment, making it very back-friendly.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "box_or_bench",
     "difficulty": "beginner",
     "instructions": "Stand in front of a box or bench set to a height that allows you to sit with hips just above parallel. Stand with feet shoulder-width apart and brace your core. Sit back under control until you lightly touch the box, keeping your shins relatively vertical and spine neutral. Pause briefly, then drive through your heels to stand back up without rocking or collapsing onto the box.",
@@ -2525,7 +2682,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://hips.hearstapps.com/vidthumb/brightcove/57893e67e694aa370d882ec1/thumb_1468612200.png?crop=1xw:1xh;center,top",
+        "url": "/exercisesSm/bodyweight-box-squat.webp",
         "primary": true
       },
       {
@@ -2553,7 +2710,11 @@
     "name": "Goblet Squat (Heels Elevated)",
     "description": "A goblet squat performed with the heels elevated on small plates or a wedge. Holding the dumbbell at the chest shifts the center of gravity forward and the heel elevation allows for a more vertical spine, making it very friendly for sensitive lower backs.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Place your heels on small plates or a wedge and stand shoulder-width apart. Hold a dumbbell vertically at your chest in a goblet position. Brace your core and sit straight down between your heels, keeping your torso as upright as possible. Lower to a comfortable depth without losing spinal neutrality, then drive through mid-foot and heel to stand back up.",
@@ -2580,7 +2741,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://i.ytimg.com/vi/RUXLuZ_GLrE/maxresdefault.jpg",
+        "url": "/exercisesSm/goblet-squat-heels-elevated.webp",
         "primary": true
       },
       {
@@ -2608,7 +2769,11 @@
     "name": "Landmine Goblet Squat",
     "description": "A squat performed holding the end of a landmine bar in a goblet position. The fixed arc of the bar naturally guides you into an upright squat pattern, making it one of the safest squat options for disc issues and lower back sensitivity.",
     "category": "strength",
-    "muscle_groups": ["quadriceps", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "landmine_barbell",
     "difficulty": "beginner",
     "instructions": "Secure one end of a barbell in a landmine attachment or corner. Stand close and hold the free end at chest level with both hands like a goblet. Brace your core and sit straight down between your feet as the bar moves in its fixed arc. Keep your torso tall and let the bar guide your path. Drive through your feet to stand back up without leaning forward.",
@@ -2635,7 +2800,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://images.ctfassets.net/0k812o62ndtw/43FWRI7I0vzg0kvfgeP9up/6ea18cd2547cb1127bfa3c19c80bbc94/exercise20180626-7073-ss76zgf7951ff62fc74debd4176e4c47dcbba5.png",
+        "url": "/exercisesSm/landmine-goblet-squat.webp",
         "primary": true
       },
       {
@@ -2663,7 +2828,12 @@
     "name": "Single-Leg Box Step-Up",
     "description": "A unilateral lower-body exercise where you step onto a box or bench with one leg at a time. One of the best glute builders with almost zero spinal compression, making it ideal for people with lower back or disc issues.",
     "category": "strength",
-    "muscle_groups": ["glutes", "quadriceps", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "quadriceps",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "box_or_bench",
     "difficulty": "beginner",
     "instructions": "Stand facing a box or bench roughly knee height. Place one foot fully on the box, brace your core, and drive through the front heel to stand tall on the box without pushing off the back leg. Control the descent back down on the same leg. Keep your torso upright and knee tracking over the middle of the foot. Perform all reps on one side before switching.",
@@ -2690,7 +2860,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://cdn.calisteniapp.com/09_2024/images/exercise/full/EX322.jpg",
+        "url": "/exercisesSm/single-leg-box-step-up.webp",
         "primary": true
       },
       {
@@ -2718,7 +2888,11 @@
     "name": "Dead Bug",
     "description": "A core-stability exercise that trains anti-extension control by moving opposite arm and leg while maintaining a neutral lumbar spine. Excellent for back-safe core strength and motor control.",
     "category": "core",
-    "muscle_groups": ["core_stabilizers", "abdominals", "obliques"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "abdominals",
+      "obliques"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your back with hips and knees at 90 degrees and arms pointing toward the ceiling. Brace your core and keep your lower back gently pressed to the floor. Slowly extend one leg and the opposite arm without letting your back arch. Return to start and alternate sides. Move slowly with full control.",
@@ -2745,7 +2919,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://s3assets.skimble.com/assets/1921153/image_iphone.jpg",
+        "url": "/exercisesSm/dead-bug.webp",
         "primary": true
       },
       {
@@ -2773,7 +2947,11 @@
     "name": "Side Plank",
     "description": "An anti-lateral-flexion core exercise that strengthens the obliques, deep trunk stabilizers, and glute medius while placing minimal stress on the lumbar spine.",
     "category": "core",
-    "muscle_groups": ["obliques", "core_stabilizers", "glutes"],
+    "muscle_groups": [
+      "obliques",
+      "core_stabilizers",
+      "glutes"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your side with elbow directly under shoulder and legs stacked or bottom knee bent for an easier version. Lift hips to create a straight line from shoulders to ankles or knees. Keep ribs down and pelvis neutral. Hold for time while breathing normally. Repeat on the other side.",
@@ -2800,7 +2978,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://hips.hearstapps.com/hmg-prod/images/side-plank-1549646915.jpg?crop=0.75xw:1xh;center,top&resize=1200:*",
+        "url": "/exercisesSm/side-plank.webp",
         "primary": true
       },
       {
@@ -2828,7 +3006,11 @@
     "name": "Cable Pallof Press",
     "description": "A cable anti-rotation exercise where you press the handle away from the body while resisting torso rotation. Excellent for trunk stability and reducing unwanted lumbar compensation.",
     "category": "core",
-    "muscle_groups": ["core_stabilizers", "obliques", "abdominals"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "obliques",
+      "abdominals"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set cable at chest height and stand sideways to the machine. Hold the handle at your sternum with both hands and step away to create tension. Brace your core and press the handle straight out in front without letting your torso rotate. Pause briefly, then bring it back to chest under control. Perform both sides.",
@@ -2855,7 +3037,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://weighttraining.guide/wp-content/uploads/2018/01/Cable-horizontal-Pallof-Press-2-resized.png",
+        "url": "/exercisesSm/cable-pallof-press.webp",
         "primary": true
       },
       {
@@ -2883,7 +3065,12 @@
     "name": "Farmer Carry",
     "description": "A loaded carry performed while walking with dumbbells or kettlebells in both hands. Builds total-body strength, grip, and core bracing with a highly functional and spine-friendly pattern when loads are controlled.",
     "category": "strength",
-    "muscle_groups": ["core_stabilizers", "forearms", "traps", "glutes"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "forearms",
+      "traps",
+      "glutes"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Pick up two weights and stand tall with shoulders down and back. Brace your core and walk with short controlled steps while maintaining upright posture. Keep ribs stacked over pelvis and avoid leaning to either side. Turn under control and set weights down safely.",
@@ -2910,7 +3097,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://trainingstation.co.uk/cdn/shop/articles/farmers-walk_6347c84d-e8bc-4205-8bf3-6a8ab0315451_2580x.png?v=1741867578",
+        "url": "/exercisesSm/farmer-carry.webp",
         "primary": true
       },
       {
@@ -2938,7 +3125,12 @@
     "name": "Suitcase Carry",
     "description": "A unilateral loaded carry with weight in one hand only. Trains anti-lateral-flexion core strength and gait stability, making it highly useful for spinal control and back resilience.",
     "category": "strength",
-    "muscle_groups": ["obliques", "core_stabilizers", "forearms", "glutes"],
+    "muscle_groups": [
+      "obliques",
+      "core_stabilizers",
+      "forearms",
+      "glutes"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Hold one dumbbell at your side and stand tall. Brace your core and walk forward without leaning toward or away from the load. Keep your shoulders level and hips stable. Walk for distance or time, then switch hands and repeat.",
@@ -2993,7 +3185,9 @@
     "name": "Standing Calf Raise",
     "description": "A lower-leg exercise targeting the gastrocnemius by raising the heels while standing. Improves ankle strength, lower-leg hypertrophy, and gait efficiency with minimal spinal loading.",
     "category": "strength",
-    "muscle_groups": ["calves"],
+    "muscle_groups": [
+      "calves"
+    ],
     "equipment": "calf_raise_machine_or_bodyweight",
     "difficulty": "beginner",
     "instructions": "Stand on a step or machine platform with the balls of your feet supported and heels free. Hold support lightly and brace your core. Rise onto your toes as high as possible, squeezing calves at the top. Lower slowly into a stretch without bouncing. Keep knees slightly soft and movement controlled.",
@@ -3020,7 +3214,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://weighttraining.guide/wp-content/uploads/2016/10/Lever-Standing-Calf-Raise-resized.png",
+        "url": "/exercisesSm/standing-calf-raise.webp",
         "primary": true
       },
       {
@@ -3048,7 +3242,10 @@
     "name": "Seated Calf Raise",
     "description": "A calf exercise performed seated with knees bent, emphasizing the soleus muscle. Useful for ankle strength, hypertrophy, and lower-leg endurance with very low spinal demand.",
     "category": "strength",
-    "muscle_groups": ["calves", "soleus"],
+    "muscle_groups": [
+      "calves",
+      "soleus"
+    ],
     "equipment": "seated_calf_raise_machine",
     "difficulty": "beginner",
     "instructions": "Sit on the machine with pads on your thighs and feet on the platform. Release safety handles, raise your heels as high as possible, and squeeze calves at the top. Lower slowly into a full stretch. Keep the movement smooth and avoid bouncing.",
@@ -3075,7 +3272,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://thefitnessmaverick.com/wp-content/uploads/2022/11/seated-calf-raise-e1668088378294-930x612.webp",
+        "url": "/exercisesSm/seated-calf-raise.webp",
         "primary": true
       },
       {
@@ -3103,7 +3300,9 @@
     "name": "Tibialis Raise",
     "description": "A lower-leg exercise targeting the tibialis anterior (front of shin). Helps improve ankle balance, deceleration control, and can reduce overuse stress on knees and calves.",
     "category": "strength",
-    "muscle_groups": ["tibialis_anterior"],
+    "muscle_groups": [
+      "tibialis_anterior"
+    ],
     "equipment": "bodyweight_or_tib_bar",
     "difficulty": "beginner",
     "instructions": "Stand with your back against a wall and feet slightly in front, or use a tib bar. Keep heels on the floor and lift your toes toward your shins as high as possible. Pause briefly at the top, then lower under control. Keep movement slow and avoid rocking through the hips.",
@@ -3130,7 +3329,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://s3assets.skimble.com/assets/2661677/image_iphone.jpg",
+        "url": "/exercisesSm/tibialis-raise.webp",
         "primary": true
       },
       {
@@ -3158,7 +3357,12 @@
     "name": "Chest-Supported Row",
     "description": "A machine-based horizontal pulling exercise where the chest rests against a pad, eliminating all spinal loading. The most back-friendly row variation — ideal for L5-S1 and disc issues because the thorax is fully supported and there is zero lumbar compression or shear.",
     "category": "strength",
-    "muscle_groups": ["upper_back", "lats", "rear_delts", "biceps"],
+    "muscle_groups": [
+      "upper_back",
+      "lats",
+      "rear_delts",
+      "biceps"
+    ],
     "equipment": "chest_supported_row_machine",
     "difficulty": "beginner",
     "instructions": "Set the chest pad height so your chest rests flat against it with arms hanging freely. Grip the handles with palms facing each other or down. Pull the handles toward your torso by driving your elbows back, squeezing your shoulder blades together at the top. Lower with control to a full stretch. Keep chest against the pad throughout — do not lift off at the top.",
@@ -3231,7 +3435,9 @@
     "name": "Seated Leg Curl",
     "description": "A hamstring isolation exercise performed on a seated leg curl machine. Training the hamstrings with the hip in a flexed position emphasizes the long head and produces more complete hamstring development compared to the lying variation. Zero spinal compression.",
     "category": "strength",
-    "muscle_groups": ["hamstrings"],
+    "muscle_groups": [
+      "hamstrings"
+    ],
     "equipment": "seated_leg_curl_machine",
     "difficulty": "beginner",
     "instructions": "Sit on the machine with the back of your lower legs on the pad. Adjust so your knees align with the machine's axis. Hold the handles, brace your core, and curl your legs down as far as possible without lifting your hips. Squeeze at the bottom, then return slowly to the start. Avoid bouncing or swinging.",
@@ -3286,7 +3492,9 @@
     "name": "Seated Hip Adduction (Outer Side)",
     "description": "A machine-based inner-thigh isolation exercise that strengthens the hip adductors. Complements hip abduction work to build balanced pelvic stability, which supports proper spinal alignment and reduces compensatory lower back strain.",
     "category": "strength",
-    "muscle_groups": ["hip_adductors"],
+    "muscle_groups": [
+      "hip_adductors"
+    ],
     "equipment": "hip_adductor_machine",
     "difficulty": "beginner",
     "instructions": "Sit tall in the machine with the pads against the inner sides of your knees and feet on the footrests. Keep your back against the support pad. Squeeze your legs together in a slow, controlled motion. Pause briefly at the fully closed position, then open back to the start under control. Avoid using momentum or arching your lower back.",
@@ -3313,7 +3521,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-hip-adduction.webp",
+        "url": "/exercisesSm/seated-hip-adduction-outer-side.webp",
         "primary": true
       },
       {
@@ -3341,7 +3549,9 @@
     "name": "Standing Cable Hip Adduction (Inner Side)",
     "description": "A standing cable exercise that trains the hip adductors (inner thigh) through a full range of motion with constant cable tension. Strengthening the adductors improves pelvic stability and reduces compensatory lower back strain.",
     "category": "strength",
-    "muscle_groups": ["hip_adductors"],
+    "muscle_groups": [
+      "hip_adductors"
+    ],
     "equipment": "cable_machine_ankle_attachment",
     "difficulty": "beginner",
     "instructions": "Attach an ankle strap to a low pulley and fasten it to the ankle of your working leg. Stand sideways to the machine with the working leg furthest from the stack. Hold the machine lightly for balance. Keeping your leg straight and torso upright, sweep the working leg across the body in front of the standing leg. Control the return to the start. Keep your hips level and core braced throughout.",
@@ -3396,7 +3606,10 @@
     "name": "Standing Cable Hip Abduction (Outer Side)",
     "description": "A standing cable exercise that trains the hip abductors (outer glute / glute medius) through a full range of motion with constant tension. Strengthening the glute medius improves single-leg stability, walking mechanics, and reduces lateral pelvic drop that stresses the lower back.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hip_abductors"],
+    "muscle_groups": [
+      "glutes",
+      "hip_abductors"
+    ],
     "equipment": "cable_machine_ankle_attachment",
     "difficulty": "beginner",
     "instructions": "Attach an ankle strap to a low pulley and fasten it to the working leg. Stand sideways to the machine with the working leg closest to the stack. Hold the machine lightly for balance. Keeping your leg straight and torso upright, sweep the working leg away from the body out to the side. Pause at the top, then lower with control. Keep hips level and avoid leaning away from the machine.",
@@ -3423,7 +3636,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "https://s3.amazonaws.com/prod.skimble/assets/1887229/image_iphone.jpg",
+        "url": "/exercisesSm/standing-cable-hip-abduction-outer-side.webp",
         "primary": true
       },
       {
@@ -3451,7 +3664,10 @@
     "name": "Standing Cable External Rotation",
     "description": "A shoulder stabilization exercise that targets the rotator cuff — specifically the infraspinatus and teres minor — to restore the shoulder's natural dynamic stability. The rotator cuff is responsible for centering the humeral head in the shoulder socket during all pressing and pulling movements. Weakness here leads to shoulder impingement, poor posture, and compensatory upper-back tension that often contributes to neck and lower back pain. This exercise directly retrains the stabilizers that protect the joint, making it essential for anyone with rounded shoulders, chronic upper-back tightness, or a history of shoulder or spine issues.",
     "category": "rehab",
-    "muscle_groups": ["rotator_cuff", "rear_delts"],
+    "muscle_groups": [
+      "rotator_cuff",
+      "rear_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
@@ -3506,7 +3722,11 @@
     "name": "Front Plank",
     "description": "A foundational anti-extension core exercise that builds deep trunk stability by teaching you to resist lumbar arching under bodyweight load. Essential for spinal endurance, posture control, and reducing compensations that can aggravate low back pain.",
     "category": "core",
-    "muscle_groups": ["core_stabilizers", "abdominals", "obliques"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "abdominals",
+      "obliques"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Set up on forearms and toes with elbows under shoulders. Brace your core, squeeze glutes, and keep a straight line from head to heels. Maintain neutral ribs and pelvis, avoiding hip sag or piking. Hold steady while breathing slowly through the nose. Stop when form breaks.",
@@ -3561,7 +3781,10 @@
     "name": "Dumbbell Shrug",
     "description": "An upper-trapezius isolation exercise that improves shoulder girdle strength, posture support, and neck-shoulder resilience. Useful for balancing scapular musculature alongside rear-delt and mid-back work.",
     "category": "strength",
-    "muscle_groups": ["traps", "upper_back"],
+    "muscle_groups": [
+      "traps",
+      "upper_back"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand tall holding dumbbells at your sides with arms straight. Keep chest up and core braced. Elevate shoulders straight up toward your ears without rolling them. Pause briefly at the top, then lower under control to full stretch. Avoid swinging, leaning, or neck jutting.",
@@ -3616,7 +3839,11 @@
     "name": "Hammer Curl",
     "description": "A neutral-grip biceps variation that emphasizes the brachialis and brachioradialis, improving arm thickness, elbow resilience, and forearm strength. Complements standard supinated curls for more complete arm development.",
     "category": "strength",
-    "muscle_groups": ["biceps", "forearms", "brachialis"],
+    "muscle_groups": [
+      "biceps",
+      "forearms",
+      "brachialis"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand or sit tall with dumbbells at your sides, palms facing each other. Keep elbows close to your torso and curl both dumbbells upward without rotating the wrists. Squeeze at the top, then lower slowly to full extension. Keep shoulders down and avoid swinging the torso.",
@@ -3671,7 +3898,10 @@
     "name": "Լյամկով ռուչկով վերևից բոկ",
     "description": "Լյամկով ռուչկով վերևից բոկ",
     "category": "rehab",
-    "muscle_groups": ["rotator_cuff", "rear_delts"],
+    "muscle_groups": [
+      "rotator_cuff",
+      "rear_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
@@ -3726,7 +3956,10 @@
     "name": "Կոնաձև ռուչկով դեմից դոշին",
     "description": "Կոնաձև ռուչկով դեմից դոշին",
     "category": "rehab",
-    "muscle_groups": ["rotator_cuff", "rear_delts"],
+    "muscle_groups": [
+      "rotator_cuff",
+      "rear_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
@@ -3781,7 +4014,10 @@
     "name": "Լուչ ատվիդենյա ներքևից մեջքով",
     "description": "Լուչ ատվիդենյա ներքևից մեջքով",
     "category": "rehab",
-    "muscle_groups": ["rotator_cuff", "rear_delts"],
+    "muscle_groups": [
+      "rotator_cuff",
+      "rear_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
@@ -3836,7 +4072,10 @@
     "name": "Պռանացիայի ուդերժանի",
     "description": "Պռանացիայի ուդերժանի",
     "category": "rehab",
-    "muscle_groups": ["rotator_cuff", "rear_delts"],
+    "muscle_groups": [
+      "rotator_cuff",
+      "rear_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
@@ -3891,7 +4130,10 @@
     "name": "Լյամկով ռուչկով կիստ",
     "description": "Լյամկով ռուչկով կիստ",
     "category": "rehab",
-    "muscle_groups": ["rotator_cuff", "rear_delts"],
+    "muscle_groups": [
+      "rotator_cuff",
+      "rear_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
@@ -3946,7 +4188,10 @@
     "name": "Հաստ ռուչկով կիստ",
     "description": "Հաստ ռուչկով կիստ",
     "category": "rehab",
-    "muscle_groups": ["rotator_cuff", "rear_delts"],
+    "muscle_groups": [
+      "rotator_cuff",
+      "rear_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
