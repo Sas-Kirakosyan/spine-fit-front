@@ -310,15 +310,15 @@ export function generateTrainingPlan(
   console.log("Filter criteria:", filterCriteria);
   console.log("Filtered exercise names:", filteredExercises.slice(0, 10).map(e => `${e.name} (${e.muscle_groups.join(", ")})`));
   console.log("Pain profile:", painProfile);
-  
+
   // DEBUG: Check if critical exercises got filtered out
-  const hamstringExercises = allExercises.filter(e => 
-    e.muscle_groups?.[0] === "hamstrings" || 
+  const hamstringExercises = allExercises.filter(e =>
+    e.muscle_groups?.[0] === "hamstrings" ||
     (e.name?.toLowerCase().includes("curl") && e.muscle_groups?.includes("hamstrings"))
   );
-  const coreExercises = allExercises.filter(e => 
-    e.category === "core" || 
-    e.muscle_groups?.includes("abs") || 
+  const coreExercises = allExercises.filter(e =>
+    e.category === "core" ||
+    e.muscle_groups?.includes("abs") ||
     e.muscle_groups?.includes("core")
   );
   console.log("[DEBUG] Hamstring exercises in database:", hamstringExercises.length, hamstringExercises.map(e => ({ name: e.name, equipment: e.equipment, backFriendly: e.is_back_friendly })));
@@ -1173,7 +1173,7 @@ function restructureThreeDayFullBody(
     };
   };
 
-  // Collect all exercises from all days + unfiltered database
+  // Collect all exercises from all days + unfiltered database 1
   const allDayExercises = days.flatMap(d => d.exercises);
   const allPossibleExercises = [...allDayExercises, ...allExercises];
   const categorized = allPossibleExercises.map(e => ({
@@ -1704,7 +1704,7 @@ function extractPainProfile(quizAnswers: QuizAnswers | null): PainProfile {
 function extractPainProfileFromSettings(planSettings: PlanSettings): PainProfile {
   const painStatus =
     planSettings.painStatus === "Recovered" ||
-    planSettings.painStatus === "Active Symptoms"
+      planSettings.painStatus === "Active Symptoms"
       ? planSettings.painStatus
       : "Healthy";
 
