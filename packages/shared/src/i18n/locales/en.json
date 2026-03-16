@@ -59,9 +59,9 @@
   },
   "swapWorkoutActionSheet": {
     "title": "Swap Workout",
-    "withinSplit": "Within Training Split",
+    "weeklyPlan": "Current Weekly Training Plan",
     "suggestedSplits": "Suggested Splits (Coach-Recommended)",
-    "newWorkout": "New Workout",
+    "customWorkout": "Custom Workout Plan",
     "current": "CURRENT",
     "savedPrograms": "Saved Programs",
     "edit": "Edit",

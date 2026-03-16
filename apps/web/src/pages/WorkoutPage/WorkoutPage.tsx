@@ -235,6 +235,7 @@ function WorkoutPage({
   );
   const [isLoadingPlan, setIsLoadingPlan] = useState(!isCustomWorkout);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const selectedDayIndexRef = useRef<number | null>(null);
   const [c, setC] = useState(0); // counter to trigger re-generation
   const allExercises = allExercisesData as Exercise[];
 
@@ -425,24 +426,28 @@ function WorkoutPage({
         const planString = localStorage.getItem("generatedPlan");
         if (planString) {
           const plan = JSON.parse(planString);
-          const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
-          if (nextWorkout && nextWorkout.exercises.length > 0) {
+          // If user manually selected a day, respect that selection
+          const targetWorkout =
+            selectedDayIndexRef.current !== null
+              ? plan.workoutDays[selectedDayIndexRef.current]
+              : getNextAvailableWorkout(plan, completedWorkoutIds);
+          if (targetWorkout && targetWorkout.exercises.length > 0) {
             // Only update if exercises have actually changed (compare IDs)
             setWorkoutExercises((prev) => {
               const prevIds = prev
                 .map((e) => e.id)
                 .sort()
                 .join(",");
-              const nextIds = nextWorkout.exercises
+              const nextIds = targetWorkout.exercises
                 .map((e: any) => e.id)
                 .sort()
                 .join(",");
               if (prevIds !== nextIds) {
                 console.log(
-                  `Reloaded ${nextWorkout.dayName} workout:`,
-                  nextWorkout.exercises.map((e: any) => e.name)
+                  `Reloaded ${targetWorkout.dayName} workout:`,
+                  targetWorkout.exercises.map((e: any) => e.name)
                 );
-                return nextWorkout.exercises;
+                return targetWorkout.exercises;
               }
               return prev;
             });
@@ -468,20 +473,25 @@ function WorkoutPage({
     [hasGeneratedPlan, isCustomWorkout, workoutExercises]
   );
 
-  // Calculate current workout day name based on rotation index
+  // Calculate current workout day name based on manual selection or rotation index
   const getCurrentDayName = (): string => {
     const plan = loadPlanFromLocalStorage();
     if (!plan || plan.workoutDays.length === 0) return "No Workout";
 
-    // Count completed workouts from this plan
+    // Prefer manually selected day
+    const manual = localStorage.getItem("selectedWorkoutDayIndex");
+    if (manual !== null) {
+      const idx = parseInt(manual, 10);
+      if (!isNaN(idx) && plan.workoutDays[idx]) {
+        return plan.workoutDays[idx].dayName;
+      }
+    }
+
+    // Fallback to rotation index
     const planCompletedCount = Array.from(completedWorkoutIds).filter((id) =>
       id.startsWith(plan.id)
     ).length;
-
-    // Calculate rotation index
     const rotationIndex = planCompletedCount % plan.workoutDays.length;
-
-    // Get the day name at that index
     return plan.workoutDays[rotationIndex]?.dayName || "Today's Workout";
   };
 
@@ -697,6 +707,14 @@ function WorkoutPage({
           onCreateProgramFromScratch={onCreateProgramFromScratch}
           onSelectSavedProgram={onSelectSavedProgram}
           onEditSavedProgram={onEditSavedProgram}
+          onSelectPlanDay={(dayIndex) => {
+            const p = loadPlanFromLocalStorage();
+            if (p?.workoutDays[dayIndex]) {
+              selectedDayIndexRef.current = dayIndex;
+              localStorage.setItem("selectedWorkoutDayIndex", String(dayIndex));
+              setWorkoutExercises(p.workoutDays[dayIndex].exercises);
+            }
+          }}
         />
 
         <section className="flex-1 space-y-3 mx-2.5">
