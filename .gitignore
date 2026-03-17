@@ -12,6 +12,7 @@ dist
 dist-ssr
 .cursor
 *.local
+CLAUDE.md
 
 # Expo
 apps/mobile/.expo/

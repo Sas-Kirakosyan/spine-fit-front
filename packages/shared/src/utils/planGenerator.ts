@@ -389,10 +389,19 @@ export function generateTrainingPlan(
     sourceOnboarding?.split?.type
   );
 
+  // 10.1a. Restructure 5-day PPL — ensure Push B / Pull B get fresh compound exercises
+  const pplRestructuredDays = restructureFiveDayPPL(
+    rotatedWorkoutDays,
+    effectivePlanSettings.trainingSplit,
+    workoutsPerWeek,
+    allExercises,
+    exercisesPerWorkout
+  );
+
   // For Upper/Lower 4-day splits, cap lower-day exercises to reduce weekly leg/glute volume
   const lowerBodyGroups = new Set(["quadriceps", "glutes", "hamstrings"]);
   // 10.2. Rebalance upper/lower days for back-safe programming
-  const adjustedWorkoutDays = rotatedWorkoutDays.map((day) => {
+  const adjustedWorkoutDays = pplRestructuredDays.map((day) => {
     const isLowerDay =
       effectivePlanSettings.trainingSplit === "Upper/Lower" &&
       day.muscleGroups.length > 0 &&
@@ -1131,11 +1140,85 @@ function enforceRowVariability(
 }
 
 /**
+ * Restructure 5-day Push/Pull/Legs split
+ * Ensures Push B (day 4) and Pull B (day 5) get fresh compound exercises
+ * instead of leftover isolations after globalUsedExerciseIds is exhausted
+ */
+function restructureFiveDayPPL(
+  days: WorkoutDay[],
+  trainingSplit: PlanSettings["trainingSplit"],
+  workoutsPerWeek: number,
+  allExercises: Exercise[] = [],
+  exercisesPerWorkout: number = 4
+): WorkoutDay[] {
+  if (
+    workoutsPerWeek !== 5 ||
+    days.length !== 5 ||
+    trainingSplit !== "Push/Pull/Legs"
+  ) {
+    return days;
+  }
+
+  // Build full exercise pool from plan days + unfiltered database
+  const allPossibleExercises = dedupeExercises([
+    ...days.flatMap((d) => d.exercises),
+    ...allExercises,
+  ]);
+
+  const pushPool = allPossibleExercises.filter(
+    (e) => isPress(e) && !(e.muscle_groups || []).some((mg) => ["quadriceps", "glutes", "hamstrings"].includes(mg))
+  );
+  const pullPool = allPossibleExercises.filter(
+    (e) => isPull(e) && !(e.muscle_groups || []).some((mg) => ["quadriceps", "glutes", "hamstrings"].includes(mg))
+  );
+
+  const pushAIds = new Set(days[0].exercises.map((e) => e.id));
+  const pullAIds = new Set(days[1].exercises.map((e) => e.id));
+
+  // Push B: prefer exercises NOT in Push A; ensure at least 1 compound press
+  const freshPushes = pushPool.filter((e) => !pushAIds.has(e.id));
+  const fallbackPushes = pushPool.filter((e) => pushAIds.has(e.id));
+  const pushBCandidates = [...freshPushes, ...fallbackPushes];
+
+  // Ensure compound press is first (name includes "press" or "bench")
+  const pushBCompound = pushBCandidates.find((e) => {
+    const n = (e.name || "").toLowerCase();
+    return n.includes("press") || n.includes("bench");
+  });
+  const pushBRest = pushBCandidates.filter((e) => e.id !== pushBCompound?.id);
+  const pushBExercises = dedupeExercises(
+    [pushBCompound, ...pushBRest].filter(Boolean) as Exercise[]
+  ).slice(0, exercisesPerWorkout);
+
+  // Pull B: prefer exercises NOT in Pull A; ensure at least 1 vertical pull
+  const freshPulls = pullPool.filter((e) => !pullAIds.has(e.id));
+  const fallbackPulls = pullPool.filter((e) => pullAIds.has(e.id));
+  const pullBCandidates = [...freshPulls, ...fallbackPulls];
+
+  const pullBVertical = pullBCandidates.find((e) => hasVerticalPull(e));
+  const pullBRest = pullBCandidates.filter((e) => e.id !== pullBVertical?.id);
+  const pullBExercises = dedupeExercises(
+    [pullBVertical, ...pullBRest].filter(Boolean) as Exercise[]
+  ).slice(0, exercisesPerWorkout);
+
+  console.log(`[restructureFiveDayPPL] Push B: ${pushBExercises.map(e => e.name).join(", ")}`);
+  console.log(`[restructureFiveDayPPL] Pull B: ${pullBExercises.map(e => e.name).join(", ")}`);
+
+  return [
+    days[0], // Push A — untouched
+    days[1], // Pull A — untouched
+    days[2], // Legs  — untouched
+    { ...days[3], exercises: pushBExercises },
+    { ...days[4], exercises: pullBExercises },
+  ];
+}
+
+/**
  * Restructure 3-day Full Body split with rotating daily focus
  * Applies to both:
  * - FULL_BODY_ABC (Beginner): Full Body A/B/C rotation
  * - UPPER_LOWER_UPPER (Intermediate): Upper/Lower/Upper split
- * 
+ *
  * Day A: Push Focus (chest, shoulders, triceps + legs)
  * Day B: Lower Focus (legs, glutes, hamstrings + upper back)
  * Day C: Pull Focus (lats, back, biceps + legs)
@@ -1503,7 +1586,11 @@ function mergePlanSettingsWithQuizAnswers(
   } else if (numWorkouts === 4) {
     trainingSplit = "Upper/Lower";
   } else if (numWorkouts >= 5) {
-    trainingSplit = "Push/Pull/Legs";
+    if (experience === "Beginner" || experience === "Intermediate") {
+      trainingSplit = "Upper/Lower";
+    } else {
+      trainingSplit = "Push/Pull/Legs";
+    }
   }
 
   // Extract personal profile data from quiz
