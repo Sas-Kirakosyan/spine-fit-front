@@ -61,6 +61,15 @@ export function mapSplitToMuscleGroups(
 
   // Push/Pull/Legs split
   if (splitLower.includes("push/pull/legs") || splitLower.includes("ppl")) {
+    if (workoutsPerWeek === 5) {
+      return [
+        ["chest", "front_delts", "triceps"],            // Push A
+        ["lats", "upper_back", "rear_delts", "biceps"], // Pull A
+        ["quadriceps", "glutes", "hamstrings"],          // Legs
+        ["chest", "front_delts", "triceps"],            // Push B
+        ["lats", "upper_back", "rear_delts", "biceps"], // Pull B
+      ];
+    }
     if (workoutsPerWeek === 6) {
       return [
         ["chest", "front_delts", "triceps"], // Push 1
@@ -81,6 +90,15 @@ export function mapSplitToMuscleGroups(
 
   // Upper/Lower split
   if (splitLower.includes("upper/lower")) {
+    if (workoutsPerWeek === 5) {
+      return [
+        ["chest", "lats", "upper_back", "front_delts", "rear_delts"], // Upper A
+        ["quadriceps", "glutes", "hamstrings"],                        // Lower A
+        ["core_stabilizers"],                                          // Rest Day
+        ["chest", "lats", "upper_back", "triceps", "biceps"],         // Upper B
+        ["quadriceps", "glutes", "hamstrings"],                        // Lower B
+      ];
+    }
     if (workoutsPerWeek === 4) {
       return [
         ["chest", "lats", "upper_back", "front_delts", "rear_delts"], // Upper 1
@@ -161,9 +179,12 @@ export function assignExercisesToDays(
     // Add selected exercises to global tracker
     dayExercises.forEach((ex) => globalUsedExerciseIds.add(ex.id));
 
+    const isRestDay =
+      muscleGroups.length === 1 && muscleGroups[0] === "core_stabilizers";
+
     workoutDays.push({
       dayNumber: index,
-      dayName: dayNames[index] || `Day ${index + 1}`,
+      dayName: isRestDay ? "Rest Day" : dayNames[index] || `Day ${index + 1}`,
       muscleGroups,
       exercises: dayExercises,
     });
