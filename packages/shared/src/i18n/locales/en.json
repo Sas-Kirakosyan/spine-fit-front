@@ -77,5 +77,63 @@
     "days": "days",
     "oneMusclePerDay": "One muscle per day",
     "oneMusclePerTwoDay": "One muscle every two days"
+  },
+  "settingsPage": {
+    "title": "Settings",
+    "sections": {
+      "account": "Account",
+      "aboutYou": "About You",
+      "help": "Help",
+      "legal": "Legal"
+    },
+    "items": {
+      "emailAddress": "Email Address",
+      "language": "Language",
+      "subscribe": "Subscribe to log unlimited workouts",
+      "changePassword": "Change Password",
+      "changeTheme": "Change Theme",
+      "logOut": "Log Out",
+      "bodyProfile": "Body Profile",
+      "contactSupport": "Contact Support",
+      "deleteAccount": "Permanently Delete Account",
+      "termsAndConditions": "Terms & Conditions",
+      "privacyPolicy": "Privacy Policy",
+      "version": "Version"
+    },
+    "values": {
+      "notLoggedIn": "Not logged in",
+      "signedInWithGoogle": "Signed in with Google",
+      "notSet": "Not set",
+      "languageValueEnglish": "English",
+      "languageValueRussian": "Russian"
+    },
+    "modals": {
+      "changeTheme": "Change Theme",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "themeSystem": "System",
+      "themeLightDesc": "Always use light mode",
+      "themeDarkDesc": "Always use dark mode",
+      "themeSystemDesc": "Follow system settings",
+      "changeLanguage": "Change Language",
+      "langEnglish": "English",
+      "langRussian": "Russian",
+      "subscriptionPlans": "Subscription Plans",
+      "subFree": "Free",
+      "subMonthly": "Monthly",
+      "subAnnual": "Annual",
+      "subFreeDesc": "Limited to 3 workouts per week",
+      "subMonthlyDesc": "$9.99/month - Unlimited workouts",
+      "subAnnualDesc": "$79.99/year - Save 33%",
+      "subHeader": "Upgrade to unlock unlimited workout logging and premium features.",
+      "contactSupport": "Contact Support",
+      "supportEmail": "Email Support",
+      "supportChat": "Live Chat",
+      "supportFaq": "FAQ",
+      "supportEmailDesc": "Send us an email at support@spinefit.com",
+      "supportChatDesc": "Chat with our support team (9AM-6PM EST)",
+      "supportFaqDesc": "Browse frequently asked questions",
+      "close": "Close"
+    }
   }
 }
