@@ -2,13 +2,10 @@ interface QuizNavigationButtonsProps {
   currentQuestion: number;
   totalQuestions: number;
   isAnswered: boolean;
-  // isOptional: boolean;
   isInfoScreen: boolean;
   hideNextButton?: boolean;
-  buttonText?: string;
   onBack: () => void;
   onNext: () => void;
-  // onSkip: () => void;
   onSubmit: () => void;
 }
 
@@ -16,29 +13,27 @@ export function QuizNavigationButtons({
   currentQuestion,
   totalQuestions,
   isAnswered,
-  // isOptional,
   isInfoScreen,
   hideNextButton = false,
-  buttonText,
   onBack,
   onNext,
-  // onSkip,
   onSubmit,
 }: QuizNavigationButtonsProps) {
   const isLastQuestion = currentQuestion >= totalQuestions - 1;
-  const isStartScreen =
-    currentQuestion === 0 && isInfoScreen && buttonText === "Start";
+  const isStartScreen = currentQuestion === 0 && isInfoScreen;
 
   if (isStartScreen) {
     return (
-      <div className="flex flex-col items-center text-white absolute bottom-50 left-0 right-0">
-        <button
-          onClick={onNext}
-          className="w-full max-w-[300px] mx-auto rounded-[18px] bg-main py-4 text-lg font-semibold text-white transition hover:bg-main/90"
-        >
-          {buttonText}
-        </button>
-        <p className="mt-2 text-sm text-gray-400">Takes less than 1 minute</p>
+      <div className="mt-6 mb-26 mx-4 text-white">
+        <div className="mb-5">
+          <button
+            onClick={onNext}
+            className="w-full rounded-full bg-main py-4 text-base font-semibold text-white transition hover:bg-main/90"
+          >
+            Start My Assessment
+          </button>
+          <p className="mt-2 text-center text-sm text-white/50">Takes less than 1 minute</p>
+        </div>
       </div>
     );
   }
@@ -49,7 +44,7 @@ export function QuizNavigationButtons({
         {currentQuestion > 0 && (
           <button
             onClick={onBack}
-            className="rounded-full bg-white/10 px-6 py-2 text-sm font-medium transition hover:bg-white/20"
+            className="rounded-full bg-white/10 px-8 py-4 text-base font-medium transition hover:bg-white/20"
           >
             Back
           </button>
@@ -58,19 +53,19 @@ export function QuizNavigationButtons({
           <button
             onClick={onNext}
             disabled={!isAnswered}
-            className={`rounded-full px-6 py-2 text-sm font-semibold transition ${
+            className={`rounded-full px-8 py-4 text-base font-semibold transition ${
               isAnswered
                 ? "bg-main text-white hover:bg-main/90"
                 : "bg-white/10 text-white/60 cursor-not-allowed"
             }`}
           >
-            {isInfoScreen ? buttonText || "Next" : "Next"}
+            Next
           </button>
         ) : !hideNextButton && isLastQuestion ? (
           <button
             onClick={onSubmit}
             disabled={!isAnswered}
-            className={`rounded-full px-6 py-2 text-sm font-semibold transition ${
+            className={`rounded-full px-8 py-4 text-base font-semibold transition ${
               isAnswered
                 ? "bg-green-500 text-white hover:bg-green-600"
                 : "bg-white/10 text-white/60 cursor-not-allowed"

@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import { getLocalImageSource } from "../../utils/imageRegistry";
 
 interface QuizImageRadioOptionProps {
-  option: { value: string; label: string; image: string; description: string };
+  option: { value: string; label: string; image: string; description?: string };
   index: number;
   isSelected: boolean;
   onSelect: (index: number) => void;

@@ -315,15 +315,17 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
                 {question.type === "image_radio" && (
                   <View className="gap-3">
-                    {displayOptions?.map((option, index) => (
-                      <QuizImageRadioOption
-                        key={index}
-                        option={option as { value: string; label: string; image: string; description: string }}
-                        index={index}
-                        isSelected={selectedAnswer === index}
-                        onSelect={handleAnswerSelect}
-                      />
-                    ))}
+                    {displayOptions?.map((option, index) =>
+                      typeof option !== "string" ? (
+                        <QuizImageRadioOption
+                          key={index}
+                          option={option}
+                          index={index}
+                          isSelected={selectedAnswer === index}
+                          onSelect={handleAnswerSelect}
+                        />
+                      ) : null
+                    )}
                   </View>
                 )}
 

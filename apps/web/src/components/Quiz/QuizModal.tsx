@@ -38,7 +38,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
       const { fieldName, equals, in: inArray } = question.showIf;
       const dependentQuestion = questions.find(
-        (q) => q.fieldName === fieldName,
+        (q) => q.fieldName === fieldName
       );
 
       if (!dependentQuestion) return true;
@@ -64,7 +64,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       } else if (dependentQuestion.type === "checkbox") {
         const selectedIndices = dependentAnswer as number[];
         const selectedOptions = selectedIndices.map(
-          (i) => dependentQuestion.options?.[i],
+          (i) => dependentQuestion.options?.[i]
         );
 
         if (equals !== undefined) {
@@ -73,7 +73,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
         if (inArray !== undefined) {
           return selectedOptions.some((option) =>
-            inArray.includes(option as string),
+            inArray.includes(option as string)
           );
         }
       } else if (dependentQuestion.type === "input") {
@@ -115,7 +115,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
   const handleCheckboxToggle = (index: number) => {
     setSelectedCheckboxes((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
 
@@ -196,7 +196,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setInputValue("");
       } else if (question.type === "radio") {
         setSelectedAnswer(
-          savedAnswer !== undefined ? (savedAnswer as number) : null,
+          savedAnswer !== undefined ? (savedAnswer as number) : null
         );
         setSelectedCheckboxes([]);
         setInputValue("");
@@ -204,7 +204,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setMultiFieldUnits({});
       } else if (question.type === "checkbox") {
         setSelectedCheckboxes(
-          savedAnswer !== undefined ? (savedAnswer as number[]) : [],
+          savedAnswer !== undefined ? (savedAnswer as number[]) : []
         );
         setSelectedAnswer(null);
         setInputValue("");
@@ -223,7 +223,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         }
       }
     },
-    [answers, units, filteredQuestions],
+    [answers, units, filteredQuestions]
   );
 
   const saveCurrentAnswer = () => {
@@ -413,7 +413,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     if (question.fieldName === "bodyType" && question.type === "image_radio") {
       // Check if gender is stored in baselineStats (multi_field)
       const baselineStatsQuestion = questions.find(
-        (q) => q.fieldName === "baselineStats",
+        (q) => q.fieldName === "baselineStats"
       );
       if (baselineStatsQuestion) {
         const baselineStats = answers[baselineStatsQuestion.id] as unknown as
@@ -447,7 +447,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       <div className="relative w-full h-full max-w-full md:max-w-[400px] md:h-auto md:max-h-[90vh]">
         <div className="absolute inset-0 bg-background" />
         <div className="relative z-10 flex flex-col h-full md:min-h-[700px] md:max-h-[90vh]">
-          <div className="flex flex-col flex-1 justify-between min-h-0">
+          <div className="flex flex-col flex-1 justify-beetwen min-h-0">
             <QuizHeader
               currentQuestionNumber={currentQuestionNumber}
               totalQuestions={actualQuestionsCount}
@@ -528,7 +528,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                             isSelected={selectedCheckboxes.includes(index)}
                             onToggle={handleCheckboxToggle}
                           />
-                        ),
+                        )
                       )}
                     </div>
                   )}
@@ -647,13 +647,11 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                 </div>
               </div>
             </div>
-
             <QuizNavigationButtons
               currentQuestion={currentQuestion}
               totalQuestions={filteredQuestions.length}
               isAnswered={isAnswered()}
               isInfoScreen={filteredQuestions[currentQuestion].type === "info"}
-              buttonText={filteredQuestions[currentQuestion].buttonText}
               onBack={handleBack}
               onNext={handleNext}
               onSubmit={handleSubmit}

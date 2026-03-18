@@ -1,7 +1,7 @@
 interface QuizCheckboxOptionProps {
   option:
     | string
-    | { value: string; label: string; image: string; description: string };
+    | { value: string; label: string; image: string; description?: string };
   index: number;
   isSelected: boolean;
   onToggle: (index: number) => void;

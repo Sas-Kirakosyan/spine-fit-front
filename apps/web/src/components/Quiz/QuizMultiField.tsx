@@ -34,7 +34,7 @@ export function QuizMultiField({
       {description && (
         <p className="text-sm text-background mb-2">{description}</p>
       )}
-
+      
       {fields.map((field) => (
         <div key={field.fieldName} className="w-full">
           <label className="block text-sm text-background mb-2">
