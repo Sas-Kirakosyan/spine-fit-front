@@ -57,6 +57,10 @@
     "replaceExercise": "Replace exercise",
     "deleteFromWorkout": "Delete from workout"
   },
+  "activeWorkoutPage": {
+    "noExercises": "No exercises for today's workout.",
+    "generatePlanHint": "Generate a plan in My Plan page to get started."
+  },
   "swapWorkoutActionSheet": {
     "title": "Swap Workout",
     "weeklyPlan": "Current Weekly Training Plan",
@@ -77,6 +81,20 @@
     "days": "days",
     "oneMusclePerDay": "One muscle per day",
     "oneMusclePerTwoDay": "One muscle every two days"
+  },
+  "aiPage": {
+    "title": "AI Assistant",
+    "subtitle": "Your personal AI assistant for fitness",
+    "errorPrefix": "Error: ",
+    "errorConnection": "Failed to connect to Gemini API. Check your internet connection.",
+    "messageInput": {
+      "placeholder": "Write a message...",
+      "sendButton": "Send message"
+    },
+    "messageList": {
+      "emptyState": "Start a conversation with the AI assistant. Ask a question about workouts, nutrition or exercise programs.",
+      "typing": "AI is typing..."
+    }
   },
   "settingsPage": {
     "title": "Settings",

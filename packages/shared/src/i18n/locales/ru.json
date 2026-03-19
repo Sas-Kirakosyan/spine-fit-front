@@ -57,6 +57,10 @@
     "replaceExercise": "Заменить упражнение",
     "deleteFromWorkout": "Удалить из тренировки"
   },
+  "activeWorkoutPage": {
+    "noExercises": "Нет упражнений для сегодняшней тренировки.",
+    "generatePlanHint": "Создайте план на странице Мой План, чтобы начать."
+  },
   "swapWorkoutActionSheet": {
     "title": "Заменить тренировку",
     "weeklyPlan": "Текущий недельный план тренировок",
@@ -77,6 +81,20 @@
     "days": "дней",
     "oneMusclePerDay": "Одна мышца в день",
     "oneMusclePerTwoDay": "Одна мышца каждые два дня"
+  },
+  "aiPage": {
+      "title": "ИИ Ассистент",
+      "subtitle": "Ваш персональный ИИ-ассистент по фитнесу",
+      "errorPrefix": "Ошибка: ",
+      "errorConnection": "Не удалось подключиться к Gemini API. Проверьте подключение к интернету.",
+      "messageInput": {
+        "placeholder": "Напишите сообщение...",
+        "sendButton": "Отправить сообщение"
+      },
+    "messageList": {
+      "emptyState": "Начните разговор с ИИ ассистентом. Задайте вопрос о тренировках, питании или программах упражнений.",
+      "typing": "ИИ печатает..."
+    }
   },
   "settingsPage": {
     "title": "Настройки",

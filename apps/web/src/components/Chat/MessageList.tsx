@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import type { ChatMessage } from "@/types/chat";
 
 interface MessageListProps {
@@ -8,6 +9,7 @@ interface MessageListProps {
 
 export function MessageList({ messages, isLoading }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Автопрокрутка к последнему сообщению
@@ -18,8 +20,7 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
     return (
       <div className="flex flex-1 items-center justify-center">
         <p className="text-sm text-slate-400 text-center px-4">
-          Начните разговор с AI ассистентом. Задайте вопрос о тренировках,
-          питании или программах упражнений.
+          {t("aiPage.messageList.emptyState")}
         </p>
       </div>
     );
@@ -46,9 +47,7 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
             </p>
             <p
               className={`text-xs mt-1 ${
-                message.role === "user"
-                  ? "text-white/70"
-                  : "text-slate-400"
+                message.role === "user" ? "text-white/70" : "text-slate-400"
               }`}
             >
               {new Date(message.timestamp).toLocaleTimeString("ru-RU", {
@@ -59,22 +58,33 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
           </div>
         </div>
       ))}
-      
+
       {isLoading && (
         <div className="flex justify-start">
           <div className="bg-[#1B1E2B]/80 text-slate-100 rounded-2xl px-4 py-3 shadow-lg">
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                <div
+                  className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                />
+                <div
+                  className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                />
+                <div
+                  className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                />
               </div>
-              <span className="text-xs text-slate-400">AI печатает...</span>
+              <span className="text-xs text-slate-400">
+                {t("aiPage.messageList.typing")}
+              </span>
             </div>
           </div>
         </div>
       )}
-      
+
       <div ref={messagesEndRef} />
     </div>
   );
