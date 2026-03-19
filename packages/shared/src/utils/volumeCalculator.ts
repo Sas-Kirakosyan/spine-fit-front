@@ -40,7 +40,8 @@ export function calculateVolume(params: VolumeParameters): VolumeRecommendation 
     durationMinutes,
     painLevel,
     canSquat,
-    gender
+    gender,
+    goal
   );
 
   // Calculate reps based on goal
@@ -102,7 +103,8 @@ function calculateSetsPerExercise(
   durationMinutes: number,
   painLevel?: number,
   canSquat?: string,
-  gender?: string
+  gender?: string,
+  goal?: string
 ): number {
   const setsMap = {
     Beginner: 3,
@@ -111,6 +113,14 @@ function calculateSetsPerExercise(
   };
 
   let sets = setsMap[experience as keyof typeof setsMap] || 3;
+
+  // Fix 6: For hypertrophy goals (intermediate/advanced), use 3 sets per exercise
+  // to allow more exercises per session (4-5 exercises × 3 sets = 12-15 working sets)
+  const isHypertrophy = (goal || "").toLowerCase().includes("hypertrophy") ||
+    (goal || "").toLowerCase().includes("build muscle");
+  if (isHypertrophy && (experience === "Intermediate" || experience === "Advanced")) {
+    sets = 3;
+  }
 
   const hasMeaningfulPain = typeof painLevel === "number" && painLevel > 3;
   const cannotSquat = (canSquat || "").toLowerCase().includes("avoidant");

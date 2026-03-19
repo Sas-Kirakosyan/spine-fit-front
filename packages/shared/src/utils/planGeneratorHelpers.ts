@@ -215,14 +215,14 @@ export function determineWorkoutSplit(
     if (experience === "Beginner" || experience === "Intermediate") {
       return {
         type: "UPPER_LOWER_4X",
-        name: "Upper / Lower (with extra recovery day)",
+        name: "Upper / Lower ×4 + Active Recovery",
         days: [
           { dayLabel: "Day 1", focus: ["Upper body (push + pull + arms)"] },
           { dayLabel: "Day 2", focus: ["Lower body (quads + glutes + hamstrings + core)"] },
           { dayLabel: "Day 3", focus: ["Upper body (push + pull + arms)"] },
           { dayLabel: "Day 4", focus: ["Lower body (quads + glutes + hamstrings + core)"] },
         ],
-        rationale: "Upper/Lower split with extra recovery days, prevents overtraining while maintaining frequency",
+        rationale: "Upper/Lower split with active recovery day, prevents overtraining while maintaining frequency",
       };
     }
 
@@ -244,14 +244,14 @@ export function determineWorkoutSplit(
 
     return {
       type: "UPPER_LOWER_4X",
-      name: "Upper / Lower (with extra recovery day)",
+      name: "Upper / Lower ×4 + Active Recovery",
       days: [
         { dayLabel: "Day 1", focus: ["Upper body (push + pull + arms)"] },
         { dayLabel: "Day 2", focus: ["Lower body (quads + glutes + hamstrings + core)"] },
         { dayLabel: "Day 3", focus: ["Upper body (push + pull + arms)"] },
         { dayLabel: "Day 4", focus: ["Lower body (quads + glutes + hamstrings + core)"] },
       ],
-      rationale: "Safer option for advanced users with current pain, extra days allow for active recovery",
+      rationale: "Safer option for advanced users with current pain, active recovery day for mobility work",
     };
   }
 

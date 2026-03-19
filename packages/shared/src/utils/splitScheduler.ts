@@ -93,18 +93,18 @@ export function mapSplitToMuscleGroups(
     if (workoutsPerWeek === 5) {
       return [
         ["chest", "lats", "upper_back", "front_delts", "rear_delts"], // Upper A
-        ["quadriceps", "glutes", "hamstrings"],                        // Lower A
+        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"],    // Lower A
         ["core_stabilizers"],                                          // Rest Day
         ["chest", "lats", "upper_back", "triceps", "biceps"],         // Upper B
-        ["quadriceps", "glutes", "hamstrings"],                        // Lower B
+        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"],    // Lower B
       ];
     }
     if (workoutsPerWeek === 4) {
       return [
         ["chest", "lats", "upper_back", "front_delts", "rear_delts"], // Upper 1
-        ["quadriceps", "glutes", "hamstrings"], // Lower 1
+        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"], // Lower 1
         ["chest", "lats", "upper_back", "triceps", "biceps"], // Upper 2
-        ["quadriceps", "glutes", "hamstrings"], // Lower 2
+        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"], // Lower 2
       ];
     }
     // 2-day Upper/Lower
@@ -167,8 +167,33 @@ export function assignExercisesToDays(
   ];
   const workoutDays: WorkoutDay[] = [];
   const globalUsedExerciseIds = new Set<number>(); // Track across all days
+  let nonRestDayCounter = 0;
 
   muscleGroupsByDay.forEach((muscleGroups, index) => {
+    const isRestDay =
+      muscleGroups.length === 1 && muscleGroups[0] === "core_stabilizers";
+
+    // Rest days: select only stability/mobility core exercises, max 2
+    if (isRestDay) {
+      const stabilityPatterns = /plank|bird\s*dog|dead\s*bug|hollow|stability/i;
+      const coreOnlyExercises = exercises
+        .filter(ex =>
+          (ex as any).category === "core" &&
+          !globalUsedExerciseIds.has(ex.id) &&
+          stabilityPatterns.test(ex.name)
+        )
+        .slice(0, 2);
+      coreOnlyExercises.forEach(ex => globalUsedExerciseIds.add(ex.id));
+
+      workoutDays.push({
+        dayNumber: index,
+        dayName: "Active Recovery",
+        muscleGroups,
+        exercises: coreOnlyExercises,
+      });
+      return;
+    }
+
     const dayExercises = selectExercisesForMuscleGroups(
       exercises,
       muscleGroups,
@@ -179,15 +204,14 @@ export function assignExercisesToDays(
     // Add selected exercises to global tracker
     dayExercises.forEach((ex) => globalUsedExerciseIds.add(ex.id));
 
-    const isRestDay =
-      muscleGroups.length === 1 && muscleGroups[0] === "core_stabilizers";
-
     workoutDays.push({
       dayNumber: index,
-      dayName: isRestDay ? "Rest Day" : dayNames[index] || `Day ${index + 1}`,
+      dayName: dayNames[nonRestDayCounter] || `Day ${index + 1}`,
       muscleGroups,
       exercises: dayExercises,
     });
+
+    nonRestDayCounter++;
   });
 
   return workoutDays;
@@ -206,7 +230,16 @@ function selectExercisesForMuscleGroups(
   const usedExerciseIds = new Set<number>(globalUsedIds); // Start with globally used IDs
 
   const lowerBodyGroups = new Set(["quadriceps", "glutes", "hamstrings"]);
+  const dayTargetsLowerBody = targetMuscleGroups.some((mg) => lowerBodyGroups.has(mg));
   const targetsCore = targetMuscleGroups.includes("core_stabilizers");
+
+  // Fix 1: Guard against primarily-lower-body exercises appearing on upper-only days
+  const isPrimarilyLowerBody = (exercise: Exercise): boolean => {
+    const lowerCount = exercise.muscle_groups.filter(
+      (mg) => lowerBodyGroups.has(mg) || mg === "erector_spinae"
+    ).length;
+    return lowerCount > exercise.muscle_groups.length / 2;
+  };
 
   console.log("  [Selecting for muscle groups]", targetMuscleGroups, "Max:", maxExercises, "Available exercises:", exercises.length);
 
@@ -246,7 +279,9 @@ function selectExercisesForMuscleGroups(
         ex.muscle_groups.includes(muscleGroup) &&
         !usedExerciseIds.has(ex.id) &&
         // avoid core moves on non-core days
-        (targetsCore || (ex.category !== "core" && !ex.muscle_groups.includes("core_stabilizers")))
+        (targetsCore || (ex.category !== "core" && !ex.muscle_groups.includes("core_stabilizers"))) &&
+        // Fix 1: skip primarily-lower-body exercises on upper-only days
+        (dayTargetsLowerBody || !isPrimarilyLowerBody(ex))
     );
 
     if (exercise && selected.length < maxExercises) {
@@ -274,6 +309,11 @@ function selectExercisesForMuscleGroups(
       continue;
     }
 
+    // Fix 1: skip primarily-lower-body exercises on upper-only days
+    if (!dayTargetsLowerBody && isPrimarilyLowerBody(exercise)) {
+      continue;
+    }
+
     if (targetsRelevantMuscles && !usedExerciseIds.has(exercise.id)) {
       console.log(`    ✓ Additional: ${exercise.name}`);
       selected.push(exercise);
@@ -282,8 +322,6 @@ function selectExercisesForMuscleGroups(
   }
 
   // Only ensure lower-body coverage if the day actually targets lower body muscles
-  const dayTargetsLowerBody = targetMuscleGroups.some((mg) => lowerBodyGroups.has(mg));
-
   if (dayTargetsLowerBody) {
     // Ensure we have at least one lower-body movement (quads/glutes/hamstrings)
     const hasLowerBody = selected.some((ex) =>
@@ -372,8 +410,9 @@ function selectExercisesForMuscleGroups(
   const ensureGroup = (muscleGroup: string, allowGlutes: boolean) => {
     const candidate = sortedExercises.find(
       (ex) =>
-        ex.muscle_groups.includes(muscleGroup) ||
-        (allowGlutes && ex.muscle_groups.includes("glutes"))
+        !usedExerciseIds.has(ex.id) &&
+        (ex.muscle_groups.includes(muscleGroup) ||
+        (allowGlutes && ex.muscle_groups.includes("glutes")))
     );
 
     if (!candidate) return;
