@@ -27,7 +27,7 @@
    - **Weight**: 80 kg
    - **Experience**: Intermediate
    - **Training Frequency**: 3
-   - **Pain Status**: "In the past" (or "Never" for easier testing)
+   - **Pain Status**: "Recovered" (or "Healthy" for easier testing)
    - **Training Location**: Gym
    - **Workout Duration**: "30-45 min"
 
@@ -105,7 +105,7 @@
 #### Test Case 2: High Pain Level
 
 1. Retake quiz
-2. Set **Pain Status**: "Yes, currently"
+2. Set **Pain Status**: "Active Symptoms"
 3. Set **Pain Level**: 8
 4. Set **Pain Location**: "Lower back (L5-S1)"
 5. Set **Can Squat**: "No"
@@ -225,7 +225,7 @@ localStorage.setItem(
   "quizAnswers",
   JSON.stringify({
     workoutType: "gym",
-    answers: { 10: "Never" },
+    answers: { 10: "Healthy" },
   })
 );
 
