@@ -105,7 +105,10 @@ export function QuizMultiField({
             </div>
           )}
 
-          {field.type === "date" && <QuizScrollCalendar />}
+          {field.type === "date" && <QuizScrollCalendar
+              value={(values?.[field.fieldName] as string)  || ""}
+              onChange={(val: string) => onValueChange(field.fieldName, val) }
+          />}
         </div>
       ))}
 

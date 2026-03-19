@@ -32,6 +32,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     Record<string, string>
   >({});
 
+
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
       if (!question.showIf) return true;
@@ -48,7 +49,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       if (dependentAnswer === undefined) return false;
 
       if (dependentQuestion.type === "multi_field") {
-        // For multi_field, we just check if it has any values (always show dependent questions)
         return true;
       } else if (dependentQuestion.type === "radio") {
         const optionIndex = dependentAnswer as number;
@@ -147,8 +147,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       return true;
     }
     if (question.type === "multi_field") {
-      // For multi_field, it's optional by design
-      return true;
+        return true;
     }
     if (question.type === "radio" || question.type === "image_radio") {
       return selectedAnswer !== null;
@@ -173,18 +172,16 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setMultiFieldValues({});
         setMultiFieldUnits({});
       } else if (question.type === "multi_field") {
-        // Load saved multi-field values
         const saved = savedAnswer as unknown as
           | Record<string, string | number>
           | undefined;
         setMultiFieldValues(saved || {});
 
-        // Load saved units from the main units state
+
         const savedUnits = units[question.id];
         if (typeof savedUnits === "object") {
           setMultiFieldUnits(savedUnits as Record<string, string>);
         } else {
-          // Set default units
           setMultiFieldUnits({
             height: "cm",
             weight: "kg",
@@ -240,7 +237,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     if (question.type === "multi_field") {
       answerValue = multiFieldValues;
 
-      // Save units for multi-field (height and weight)
+
       if (Object.keys(multiFieldUnits).length > 0) {
         setUnits((prev) => ({
           ...prev,
@@ -316,10 +313,9 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       timestamp: new Date().toISOString(),
     };
 
-    // Overwrite any existing quiz data instead of appending
+
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
 
-    // Clear any existing generated plan so a new one gets created with updated answers
     localStorage.removeItem("generatedPlan");
 
     setCurrentQuestion(0);
@@ -362,14 +358,12 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     }
   };
 
-  // Clear old array-based quiz data on component mount
   useEffect(() => {
     if (isOpen) {
       const stored = localStorage.getItem("quizAnswers");
       if (stored) {
         try {
           const parsed = JSON.parse(stored);
-          // If it's an array (old format), get the last entry and convert to single object
           if (Array.isArray(parsed) && parsed.length > 0) {
             const latestQuiz = parsed[parsed.length - 1];
             localStorage.setItem("quizAnswers", JSON.stringify(latestQuiz));
@@ -408,10 +402,9 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     "space-y-3 max-h-[50vh] md:max-h-[360px] overflow-y-auto pr-1 -mr-1";
   const question = filteredQuestions[currentQuestion];
 
-  // Determine which options to show for body type question
+
   const getDisplayOptions = () => {
     if (question.fieldName === "bodyType" && question.type === "image_radio") {
-      // Check if gender is stored in baselineStats (multi_field)
       const baselineStatsQuestion = questions.find(
         (q) => q.fieldName === "baselineStats",
       );
@@ -421,17 +414,14 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
           | undefined;
         const gender = baselineStats?.gender;
 
-        // Female selected
         if (gender === "Female" && question.optionsFemale) {
           return question.optionsFemale;
         }
       }
 
-      // Fallback: check old gender question format
       const genderQuestion = questions.find((q) => q.fieldName === "gender");
       if (genderQuestion) {
         const genderAnswer = answers[genderQuestion.id];
-        // Female selected (index 1)
         if (genderAnswer === 1 && question.optionsFemale) {
           return question.optionsFemale;
         }
@@ -439,6 +429,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     }
     return question.options;
   };
+
+
 
   const displayOptions = getDisplayOptions();
 
