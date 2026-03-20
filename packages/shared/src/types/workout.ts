@@ -30,7 +30,8 @@ export interface ExerciseSetsPageProps {
   onNavigateBack: () => void;
   onStartWorkoutSession: () => void;
   onNavigateToHistory?: () => void;
-  onMarkExerciseComplete?: (exerciseId: number, sets: ExerciseSetRow[]) => void;
+  onMarkExerciseComplete?: (exerciseId: number, sets: ExerciseSetRow[], painLevel: number | undefined) => void;
+  onSkipExercise?: (exerciseId: number) => void;
   isDuringActiveWorkout?: boolean;
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
 }
@@ -101,6 +102,7 @@ export interface FinishedWorkoutSummary {
   caloriesBurned: number;
   completedExercises: Exercise[];
   completedExerciseLogs: Record<number, ExerciseSetRow[]>;
+  averagePainLevel?: number;
 }
 
 export interface ActiveWorkoutPageProps {
@@ -112,6 +114,7 @@ export interface ActiveWorkoutPageProps {
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
   completedWorkoutIds?: Set<string>;
   setCompletedWorkoutIds?: (ids: Set<string>) => void;
+  exercisePainLevels?: Record<number, number>;
   customExercises?: Exercise[];
   isCustomWorkout?: boolean;
 }

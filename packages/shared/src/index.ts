@@ -36,8 +36,8 @@ export type { ProgressionSuggestion } from "./utils/progressiveOverload";
 export { getLastPerformedData, getDaysSinceLastWorkout, generateProgressionSuggestion, applyProgressionToExercises, checkTrainingConsistency } from "./utils/progressiveOverload";
 
 // Utils - progressStats
-export type { TotalStats, WeeklyActivityDay, ProgressDataPoint, PersonalRecord, WorkoutRecord, ExerciseProgress, MuscleGroupData, VolumePeriod } from "./utils/progressStats";
-export { calculateTotalStats, calculateStreak, getWeeklyActivity, getProgressData, getProgressDataByPeriod, getPersonalRecords, getWorkoutRecords, formatVolume, getAllExercisesWithProgress, getMuscleGroupDistribution } from "./utils/progressStats";
+export type { TotalStats, WeeklyActivityDay, ProgressDataPoint, PersonalRecord, WorkoutRecord, ExerciseProgress, MuscleGroupData, VolumePeriod, PainDataPoint } from "./utils/progressStats";
+export { calculateTotalStats, calculateStreak, getWeeklyActivity, getProgressData, getProgressDataByPeriod, getPainDataByPeriod, getPersonalRecords, getWorkoutRecords, formatVolume, getAllExercisesWithProgress, getMuscleGroupDistribution } from "./utils/progressStats";
 
 // Utils - workoutQueueManager
 export { getNextAvailableWorkout, getWorkoutsByDay, getTodaysUncompletedWorkouts, markWorkoutCompleted, isWorkoutPlanComplete } from "./utils/workoutQueueManager";
@@ -59,6 +59,10 @@ export { createEquipmentData } from "./utils/equipment";
 
 // Utils - replacementExercises
 export { getAllReplacementExercises, getSuggestedReplacementExercises } from "./utils/replacementExercises";
+
+// Utils - painStatus
+export type { PainStatusValue } from "./utils/painStatus";
+export { getPainStatusFromQuizAnswers } from "./utils/painStatus";
 
 // Events
 export { appEmitter } from "./events/appEmitter";

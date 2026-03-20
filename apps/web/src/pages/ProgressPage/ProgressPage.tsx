@@ -13,11 +13,14 @@ import {
   calculateTotalStats,
   getWeeklyActivity,
   getProgressDataByPeriod,
+  getPainDataByPeriod,
   getAllExercisesWithProgress,
   getMuscleGroupDistribution,
 } from "@/utils/progressStats";
 import type { VolumePeriod } from "@/utils/progressStats";
 import { MuscleGroupChart } from "@/components/Progress/MuscleGroupChart";
+import { PainChart } from "@/components/Progress/PainChart";
+import { shouldShowPainTracking } from "@/utils/painStatus";
 
 function ProgressPage({
   onNavigateToWorkout,
@@ -45,6 +48,13 @@ function ProgressPage({
   const muscleGroupData = useMemo(
     () => getMuscleGroupDistribution(workoutHistory),
     [workoutHistory]
+  );
+
+  const showPain = shouldShowPainTracking();
+  const [painPeriod, setPainPeriod] = useState<VolumePeriod>("month");
+  const painData = useMemo(
+    () => showPain ? getPainDataByPeriod(workoutHistory, painPeriod) : [],
+    [workoutHistory, painPeriod, showPain]
   );
 
   const hasWorkouts = workoutHistory.length > 0;
@@ -103,6 +113,14 @@ function ProgressPage({
                 activePeriod={volumePeriod}
                 onPeriodChange={setVolumePeriod}
               />
+              {showPain && (
+                <PainChart
+                  data={painData}
+                  title="Pain level"
+                  activePeriod={painPeriod}
+                  onPeriodChange={setPainPeriod}
+                />
+              )}
               <MuscleGroupChart data={muscleGroupData} />
             </>
           ) : (
