@@ -293,6 +293,18 @@ export function generateTrainingPlan(
     canSquat: painProfileFromQuiz.canSquat ?? painProfileFromSettings.canSquat,
   };
 
+  // Fix 2: Infer back/sciatica history from goal text even when painStatus is "Healthy"
+  const goalLower = effectivePlanSettings.goal.toLowerCase();
+  if (goalLower.includes("back") && (goalLower.includes("sciatica") || goalLower.includes("history"))) {
+    if (painProfile.painStatus === "Healthy") {
+      painProfile.painStatus = "Recovered";
+    }
+    const locations = painProfile.painLocation || [];
+    if (!locations.some(l => l.includes("Lower back"))) locations.push("Lower back");
+    if (goalLower.includes("sciatica") && !locations.some(l => l.includes("Sciatica"))) locations.push("Sciatica");
+    painProfile.painLocation = locations;
+  }
+
   // 2. Create filter criteria
   const filterCriteria: FilterCriteria = {
     availableEquipment,
@@ -349,8 +361,21 @@ export function generateTrainingPlan(
     volumeRecommendation.setsPerExercise
   );
 
-  // Ensure enough slots to cover all major muscle groups on Full Body days
-  const exercisesPerWorkout = Math.min(Math.max(rawExercisesPerWorkout, 4), 6);
+  // Fix 3: Duration-aware exercise caps to prevent excessive volume in short sessions
+  // Fix 6: For hypertrophy + intermediate/advanced, increase minimums for adequate volume
+  const durationMin = parseInt((effectivePlanSettings.duration.match(/(\d+)/) || ["30"])[1], 10);
+  const isHypertrophyGoal = effectivePlanSettings.goal.toLowerCase().includes("hypertrophy");
+  const isIntermediateOrAbove = ["intermediate", "advanced"].includes(
+    effectivePlanSettings.experience.toLowerCase()
+  );
+  const hypertrophyBoost = isHypertrophyGoal && isIntermediateOrAbove;
+
+  let minEx: number, maxEx: number;
+  if (durationMin <= 20)      { minEx = 2; maxEx = 3; }
+  else if (durationMin <= 30) { minEx = hypertrophyBoost ? 4 : 3; maxEx = hypertrophyBoost ? 5 : 4; }
+  else if (durationMin <= 45) { minEx = hypertrophyBoost ? 4 : 3; maxEx = hypertrophyBoost ? 6 : 5; }
+  else                        { minEx = 4; maxEx = 6; }
+  const exercisesPerWorkout = Math.min(Math.max(rawExercisesPerWorkout, minEx), maxEx);
 
   // 7. Parse workouts per week from plan settings
   const workoutsPerWeek = parseWorkoutsPerWeek(effectivePlanSettings.workoutsPerWeek);
@@ -407,8 +432,9 @@ export function generateTrainingPlan(
       day.muscleGroups.length > 0 &&
       day.muscleGroups.every((mg) => lowerBodyGroups.has(mg));
 
-    if (isLowerDay && exercisesPerWorkout > 3) {
+    if (isLowerDay && exercisesPerWorkout > 3 && !isHypertrophyGoal) {
       // Limit to top 3 selections to keep weekly leg/glute sets in target range
+      // Skip cap for hypertrophy goals — they need 4+ exercises for adequate volume
       return { ...day, exercises: day.exercises.slice(0, 3) };
     }
 
@@ -420,7 +446,8 @@ export function generateTrainingPlan(
     adjustedWorkoutDays,
     filteredExercises,
     effectivePlanSettings.trainingSplit,
-    painProfile
+    painProfile,
+    effectivePlanSettings.goal
   );
   console.log("Muscle groups by day:", muscleGroupsByDay);
   console.log("Exercises per workout:", exercisesPerWorkout);
@@ -466,10 +493,17 @@ export function generateTrainingPlan(
     filteredExercises
   );
 
+  // Fix 8: Limit medium-restriction exercises to max 1 per day for users with back issues
+  const restrictionLimitedDays = limitMediumRestrictionPerDay(
+    rearDeltBalancedDays,
+    filteredExercises,
+    painProfile
+  );
+
   // Enforce FULL_BODY_AB split requirements (Day A needs push + horizontal pull, Day B needs push + vertical pull)
   const fullBodyABEnforcedDays = sourceOnboarding?.split
-    ? enforceFullBodyABRequirements(rearDeltBalancedDays, allExercises, sourceOnboarding.split)
-    : rearDeltBalancedDays;
+    ? enforceFullBodyABRequirements(restrictionLimitedDays, allExercises, sourceOnboarding.split)
+    : restrictionLimitedDays;
 
   const durationMinutes = Number(effectivePlanSettings.duration.match(/(\d+)/)?.[1] || 30);
   const hasMeaningfulPain = typeof painProfile.painLevel === "number" && painProfile.painLevel > 3;
@@ -487,6 +521,22 @@ export function generateTrainingPlan(
   }
 
   // 12. Apply volume (sets/reps) to final workout days
+  // Beginner weight reduction: use 60% of database defaults for beginners
+  const beginnerWeightMultiplier = effectivePlanSettings.experience === "Beginner" ? 0.6 : 1.0;
+
+  // Fix 6: Experience-based weight floors to prevent unrealistically light weights
+  const getWeightFloor = (ex: Exercise, experience: string): number => {
+    if (isCoreStability(ex)) return 0;
+    const isCompound = ex.muscle_groups.length >= 3;
+    const floors: Record<string, { compound: number; isolation: number }> = {
+      Beginner:     { compound: 10, isolation: 5 },
+      Intermediate: { compound: 20, isolation: 10 },
+      Advanced:     { compound: 30, isolation: 15 },
+    };
+    const f = floors[experience] || floors.Intermediate;
+    return isCompound ? f.compound : f.isolation;
+  };
+
   const adjustedWorkoutDaysWithVolume = fullBodyABEnforcedDays.map((day) => ({
     ...day,
     exercises: day.exercises.map((exercise) => {
@@ -507,18 +557,35 @@ export function generateTrainingPlan(
       // Preserve rear-delt exercise volume if already set (light weight, higher reps)
       if (isRearDeltExercise(exercise) && exercise.sets && exercise.reps) {
         // BUT: Always update sets to match current experience level
+        const rearDeltWeight = exercise.weight ? Math.round(exercise.weight * beginnerWeightMultiplier * 2) / 2 : exercise.weight;
         return {
           ...exercise,
           sets: safeSetsPerExercise, // Force update sets
+          weight: rearDeltWeight ? Math.max(rearDeltWeight, getWeightFloor(exercise, effectivePlanSettings.experience)) : rearDeltWeight,
+        };
+      }
+
+      // Fix 11: Carry exercises use distance (meters) instead of reps
+      const isCarryExercise = /carry|farmer|suitcase/i.test(exercise.name);
+      if (isCarryExercise) {
+        return {
+          ...exercise,
+          sets: safeSetsPerExercise,
+          reps: 20,
+          weight_unit: "meters",
+          weight: exercise.weight || 0,
         };
       }
 
       // For all other exercises: ALWAYS set sets/reps based on current experience level
       // This ensures exercises from history get updated sets (e.g., 3 -> 4 for intermediate)
+      const calculatedWeight = exercise.weight ? Math.round(exercise.weight * beginnerWeightMultiplier * 2) / 2 : exercise.weight;
+      const weightFloor = getWeightFloor(exercise, effectivePlanSettings.experience);
       return {
         ...exercise,
         sets: safeSetsPerExercise,
         reps: volumeRecommendation.repsPerSet,
+        weight: calculatedWeight ? Math.max(calculatedWeight, weightFloor) : calculatedWeight,
       };
     }),
   }));
@@ -568,7 +635,8 @@ function rebalanceUpperLowerDays(
   days: WorkoutDay[],
   allExercises: Exercise[],
   trainingSplit: PlanSettings["trainingSplit"],
-  painProfile: PainProfile
+  painProfile: PainProfile,
+  goal: string = ""
 ): WorkoutDay[] {
   if (trainingSplit !== "Upper/Lower") return days;
 
@@ -608,6 +676,34 @@ function rebalanceUpperLowerDays(
   // Track if core is added at least once across the week
   let coreAdded = days.some((d) => d.exercises.some((e) => isCore(e)));
 
+  // Fix 4: Track globally used exercise IDs to prevent duplicates across days
+  const globalRebalanceUsedIds = new Set<number>(
+    days.flatMap((d) => d.exercises.map((e) => Number(e.id)))
+  );
+
+  // Fix 4: Helper to add exercise only if not used globally, with fallback
+  const addIfNotUsedGlobally = (
+    list: Exercise[],
+    primary: Exercise | undefined,
+    fallback: Exercise | undefined
+  ): Exercise[] => {
+    if (primary && !globalRebalanceUsedIds.has(Number(primary.id))) {
+      globalRebalanceUsedIds.add(Number(primary.id));
+      return preferAddIfNotPresent(list, primary);
+    }
+    if (fallback && !globalRebalanceUsedIds.has(Number(fallback.id))) {
+      globalRebalanceUsedIds.add(Number(fallback.id));
+      return preferAddIfNotPresent(list, fallback);
+    }
+    return list;
+  };
+
+  // Fix 4: Alternative vertical pulls to avoid duplicating Lat Pulldown across days
+  const verticalPullAlt =
+    findExerciseByName(allExercises, "Lat Pulldown (Wide Grip)") ||
+    findExerciseByName(allExercises, "Straight-Arm Pulldown") ||
+    findExerciseByName(allExercises, "Pull-Up");
+
   const updated = days.map((day) => {
     const isUpperDay = day.muscleGroups.some((mg) => isUpperGroup(mg)) && !isLowerGroupSet(day.muscleGroups);
     const isLowerDay = isLowerGroupSet(day.muscleGroups);
@@ -622,14 +718,17 @@ function rebalanceUpperLowerDays(
 
       // Rule: per Upper day → minPull = 2 movements if pressing ≥2
       // BUT: limit to 1 vertical pull max per upper day (balance: 1 vertical + 1 horizontal per day)
+      // Fix 4: Use global dedup to avoid repeating the same vertical pull across days
       if (pressCount >= 2 && pullCount < 2 && verticalPullCount === 0) {
-        exercises = preferAddIfNotPresent(exercises, verticalOrDiagonalPull);
+        exercises = addIfNotUsedGlobally(exercises, verticalOrDiagonalPull, verticalPullAlt);
       }
 
       // Upper day must include: horizontal_pull:1 and vertical_pull:1 (max 1 vertical)
       const hasHorizontal = exercises.some((e) => (e.name || "").toLowerCase().includes("row"));
       if (!hasHorizontal) {
-        exercises = preferAddIfNotPresent(exercises, horizontalPull);
+        const horizontalPullAlt = findExerciseByName(allExercises, "Chest Supported Row") ||
+          findExerciseByName(allExercises, "One-Arm Crossover Cable Pull");
+        exercises = addIfNotUsedGlobally(exercises, horizontalPull, horizontalPullAlt);
       }
 
       // CRITICAL: Limit to EXACTLY 1 vertical pull per upper day
@@ -650,15 +749,21 @@ function rebalanceUpperLowerDays(
       }
 
       // CRITICAL: Every upper day MUST have a vertical pull
-      // If missing, replace chest or arm isolation
+      // Fix 4: Pick a vertical pull not already used globally
       const hasVertical = exercises.some(hasVerticalPull);
       if (!hasVertical) {
+        const verticalCandidates = [
+          findExerciseByName(allExercises, "Lat Pulldown (Neutral Grip)"),
+          verticalPullAlt,
+          facePull,
+          verticalOrDiagonalPull,
+        ].filter(Boolean) as Exercise[];
         const preferredVertical =
-          findExerciseByName(allExercises, "Lat Pulldown (Neutral Grip)") ||
-          facePull ||
-          verticalOrDiagonalPull;
+          verticalCandidates.find((c) => !globalRebalanceUsedIds.has(Number(c.id))) ||
+          verticalCandidates[0];
 
         if (preferredVertical) {
+          globalRebalanceUsedIds.add(Number(preferredVertical.id));
           // Try to replace chest fly first
           const flyIdx = exercises.findIndex((e) => (e.name || "").toLowerCase().includes("fly"));
           if (flyIdx !== -1) {
@@ -719,7 +824,10 @@ function rebalanceUpperLowerDays(
       }
 
       // Optionally add a spine-hygiene core on one upper day if not added yet
-      if (!coreAdded && spineCore) {
+      // Fix 5: Only add Bird Dog for users with back issues or non-hypertrophy goals
+      const isHypertrophy = goal.toLowerCase().includes("hypertrophy");
+      const userHasBackIssues = painProfile.painStatus !== "Healthy";
+      if (!coreAdded && spineCore && (userHasBackIssues || !isHypertrophy)) {
         exercises = preferAddIfNotPresent(exercises, spineCore);
         coreAdded = true;
       }
@@ -734,6 +842,23 @@ function rebalanceUpperLowerDays(
       );
       if (!hasHamstringCurl && hamstringCurl) {
         exercises = preferAddIfNotPresent(exercises, hamstringCurl);
+      }
+
+      // Fix 7: Ensure lower days have a quad-dominant machine exercise (Leg Press or Leg Extension)
+      const hasQuadMachine = exercises.some(
+        (e) => {
+          const name = (e.name || "").toLowerCase();
+          return name.includes("leg press") || name.includes("leg extension") || name.includes("belt squat");
+        }
+      );
+      if (!hasQuadMachine) {
+        const quadMachine =
+          findExerciseByName(allExercises, "Leg Press") ||
+          findExerciseByName(allExercises, "Leg Extension") ||
+          findExerciseByName(allExercises, "Belt Squat");
+        if (quadMachine) {
+          exercises = addIfNotUsedGlobally(exercises, quadMachine, undefined);
+        }
       }
     }
 
@@ -768,6 +893,78 @@ function rebalanceUpperLowerDays(
           const deduped = dedupeExercises(clone);
           updated[di] = { ...day, exercises: deduped };
           break;
+        }
+      }
+    }
+  }
+
+  // Fix 2+3: Ensure every upper day has at least one chest exercise and one biceps exercise
+  const chestFallbacks = [
+    findExerciseByName(allExercises, "Chest Fly (Cable)"),
+    findExerciseByName(allExercises, "Incline Dumbbell Press"),
+    findExerciseByName(allExercises, "Push-ups"),
+    findExerciseByName(allExercises, "Machine Chest Press"),
+  ].filter(Boolean) as Exercise[];
+
+  const bicepsFallbacks = [
+    findExerciseByName(allExercises, "Dumbbell Bicep Curls"),
+    findExerciseByName(allExercises, "Hammer Curl"),
+    findExerciseByName(allExercises, "One-Arm Cable Bicep Curl"),
+  ].filter(Boolean) as Exercise[];
+
+  const allUsedIds = new Set<number>(
+    updated.flatMap((d) => d.exercises.map((e) => Number(e.id)))
+  );
+
+  for (let di = 0; di < updated.length; di++) {
+    const day = updated[di];
+    const isUpperDay = day.muscleGroups.some((mg) => isUpperGroup(mg)) && !isLowerGroupSet(day.muscleGroups);
+    if (!isUpperDay) continue;
+
+    // Fix 2: Ensure chest coverage
+    const hasChest = day.exercises.some((e) => (e.muscle_groups || []).includes("chest"));
+    if (!hasChest && day.muscleGroups.includes("chest")) {
+      const chestEx = chestFallbacks.find((c) => !allUsedIds.has(Number(c.id))) || chestFallbacks[0];
+      if (chestEx) {
+        const clone = day.exercises.slice();
+        clone.push(chestEx);
+        allUsedIds.add(Number(chestEx.id));
+        updated[di] = { ...day, exercises: dedupeExercises(clone) };
+      }
+    }
+
+    // Fix 3: Ensure biceps coverage
+    const hasBiceps = day.exercises.some((e) => (e.muscle_groups || []).includes("biceps"));
+    if (!hasBiceps && day.muscleGroups.includes("biceps")) {
+      const bicepsEx = bicepsFallbacks.find((c) => !allUsedIds.has(Number(c.id))) || bicepsFallbacks[0];
+      if (bicepsEx) {
+        const clone = updated[di].exercises.slice();
+        clone.push(bicepsEx);
+        allUsedIds.add(Number(bicepsEx.id));
+        updated[di] = { ...updated[di], exercises: dedupeExercises(clone) };
+      }
+    }
+
+    // Fix 9: Ensure dedicated shoulder exercise when front_delts/rear_delts are targeted
+    const deltTargeted = day.muscleGroups.includes("front_delts") || day.muscleGroups.includes("rear_delts");
+    if (deltTargeted) {
+      const hasDedicatedDelt = updated[di].exercises.some((e) => {
+        const mg = e.muscle_groups || [];
+        return mg.includes("front_delts") || mg.includes("rear_delts") || mg.includes("lateral_delts");
+      });
+      if (!hasDedicatedDelt) {
+        const deltFallbacks = [
+          findExerciseByName(allExercises, "Dumbbell Lateral Raises"),
+          findExerciseByName(allExercises, "Cable Lateral Raise"),
+          findExerciseByName(allExercises, "Cable Face Pull"),
+          findExerciseByName(allExercises, "Reverse Pec Deck (Rear-Delt Fly)"),
+        ].filter(Boolean) as Exercise[];
+        const deltEx = deltFallbacks.find((c) => !allUsedIds.has(Number(c.id))) || deltFallbacks[0];
+        if (deltEx) {
+          const clone = updated[di].exercises.slice();
+          clone.push(deltEx);
+          allUsedIds.add(Number(deltEx.id));
+          updated[di] = { ...updated[di], exercises: dedupeExercises(clone) };
         }
       }
     }
@@ -1095,6 +1292,70 @@ function ensureRearDeltWork(
 }
 
 /**
+ * Fix 8: Limit medium-restriction exercises to max 1 per workout day.
+ * If a day has >1 medium-restriction exercise for the user's pain location,
+ * replace extras with low-restriction alternatives targeting the same muscle group.
+ */
+function limitMediumRestrictionPerDay(
+  days: WorkoutDay[],
+  allExercises: Exercise[],
+  painProfile: PainProfile
+): WorkoutDay[] {
+  if (painProfile.painStatus === "Healthy" || !painProfile.painLocation?.length) {
+    return days;
+  }
+
+  const issueTypes: string[] = [];
+  for (const loc of painProfile.painLocation) {
+    if (loc.includes("Lower back")) issueTypes.push("l5_s1");
+    if (loc.includes("Sciatica")) issueTypes.push("sciatica");
+  }
+  if (issueTypes.length === 0) return days;
+
+  const getRestrictionLevel = (ex: Exercise): string | null => {
+    if (!ex.back_issue_restrictions) return null;
+    for (const r of ex.back_issue_restrictions) {
+      if (issueTypes.includes(r.issue_type)) return r.restriction_level;
+    }
+    return null;
+  };
+
+  const globalUsedIds = new Set<number>(
+    days.flatMap((d) => d.exercises.map((e) => Number(e.id)))
+  );
+
+  return days.map((day) => {
+    const mediumIndices: number[] = [];
+    day.exercises.forEach((ex, i) => {
+      if (getRestrictionLevel(ex) === "medium") mediumIndices.push(i);
+    });
+
+    if (mediumIndices.length <= 1) return day;
+
+    // Keep the first medium, replace the rest
+    const exercises = day.exercises.slice();
+    for (let k = 1; k < mediumIndices.length; k++) {
+      const idx = mediumIndices[k];
+      const targetMuscles = exercises[idx].muscle_groups;
+      const replacement = allExercises.find(
+        (alt) =>
+          !globalUsedIds.has(Number(alt.id)) &&
+          alt.muscle_groups.some((mg) => targetMuscles.includes(mg)) &&
+          getRestrictionLevel(alt) !== "medium" &&
+          getRestrictionLevel(alt) !== "high" &&
+          getRestrictionLevel(alt) !== "avoid"
+      );
+      if (replacement) {
+        exercises[idx] = replacement;
+        globalUsedIds.add(Number(replacement.id));
+      }
+    }
+
+    return { ...day, exercises };
+  });
+}
+
+/**
  * Enforce variability in horizontal pulls: avoid repeating Seated Cable Row on all days
  * Swaps one duplicate with a back-friendly alternative if available
  */
@@ -1114,7 +1375,7 @@ function enforceRowVariability(
     });
   });
 
-  if (occurrences.length <= 2) return days; // Allow up to 2 times per week
+  if (occurrences.length <= 1) return days; // Allow max 1 occurrence per week
 
   // Find alternatives
   const alternatives = [
@@ -1867,11 +2128,13 @@ function generatePlanId(): string {
  */
 function generatePlanName(settings: PlanSettings, sourceOnboarding?: SourceOnboarding | null): string {
   const frequency = parseWorkoutsPerWeek(settings.workoutsPerWeek);
-  if (sourceOnboarding?.split?.name) {
-    return `${sourceOnboarding.split.name} - ${frequency}x per week`;
+  const trainingDays = sourceOnboarding?.split?.days?.length ?? frequency;
+  const splitName = sourceOnboarding?.split?.name ?? settings.trainingSplit;
+
+  if (trainingDays < frequency) {
+    return `${splitName} - ${trainingDays} training days + recovery`;
   }
-  const split = settings.trainingSplit;
-  return `${split} - ${frequency}x per week`;
+  return `${splitName} - ${frequency}x per week`;
 }
 
 function getSafeSetsFromSettings(settings: PlanSettings): number | null {

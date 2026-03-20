@@ -19,8 +19,8 @@
         "id": 12,
         "exercise_id": 1,
         "issue_type": "l5_s1",
-        "restriction_level": "low",
-        "recommendation": "Keep spine neutral and avoid hyperextending at the top. Move slowly and avoid jerky motions.",
+        "restriction_level": "medium",
+        "recommendation": "Keep spine neutral and avoid hyperextending at the top. Move slowly and avoid jerky motions. Use caution with L5-S1 history.",
         "created_at": "2025-10-26T12:00:00Z",
         "updated_at": "2025-10-26T12:00:00Z"
       }
