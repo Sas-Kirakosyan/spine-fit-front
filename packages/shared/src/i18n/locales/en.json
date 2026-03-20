@@ -154,6 +154,24 @@
       "close": "Close"
     }
   },
+  "createProgramPage": {
+    "titleCreate": "Create Program",
+    "titleEdit": "Edit Program",
+    "programNameLabel": "Program Name",
+    "programNamePlaceholder": "e.g. My PPL Program",
+    "trainingDays": "Training Days ({{count}})",
+    "noTrainingDaysTitle": "No training days added yet",
+    "noTrainingDaysHint": "Tap the button below to add a training day",
+    "addTrainingDay": "Add Training Day",
+    "saveProgram": "Save Program",
+    "saved": "Saved!",
+    "newDayName": "Day {{number}}",
+    "exerciseCount_one": "{{count}} exercise",
+    "exerciseCount_other": "{{count}} exercises",
+    "addExercise": "Add Exercise",
+    "sets": "Sets",
+    "reps": "Reps"
+  },
   "allExercisePage": {
     "title": "Add an exercise",
     "noExercisesFound": "No exercises found",

@@ -154,6 +154,26 @@
       "close": "Закрыть"
     }
   },
+  "createProgramPage": {
+    "titleCreate": "Создать программу",
+    "titleEdit": "Редактировать программу",
+    "programNameLabel": "Название программы",
+    "programNamePlaceholder": "напр. Моя PPL программа",
+    "trainingDays": "Тренировочные дни ({{count}})",
+    "noTrainingDaysTitle": "Тренировочные дни не добавлены",
+    "noTrainingDaysHint": "Нажмите кнопку ниже, чтобы добавить тренировочный день",
+    "addTrainingDay": "Добавить тренировочный день",
+    "saveProgram": "Сохранить программу",
+    "saved": "Сохранено!",
+    "newDayName": "День {{number}}",
+    "exerciseCount_one": "{{count}} упражнение",
+    "exerciseCount_few": "{{count}} упражнения",
+    "exerciseCount_many": "{{count}} упражнений",
+    "exerciseCount_other": "{{count}} упражнений",
+    "addExercise": "Добавить упражнение",
+    "sets": "Подходы",
+    "reps": "Повторения"
+  },
   "allExercisePage": {
     "title": "Добавить упражнение",
     "noExercisesFound": "Упражнения не найдены",
