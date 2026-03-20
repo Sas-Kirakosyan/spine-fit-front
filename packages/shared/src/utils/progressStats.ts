@@ -22,6 +22,12 @@ export interface ProgressDataPoint {
   label: string;
 }
 
+export interface PainDataPoint {
+  date: string;
+  painLevel: number;
+  label: string;
+}
+
 export interface PersonalRecord {
   exerciseName: string;
   exerciseId: number;
@@ -406,6 +412,37 @@ export function getAllExercisesWithProgress(
     (a, b) =>
       new Date(b.lastPerformed).getTime() - new Date(a.lastPerformed).getTime()
   );
+}
+
+export function getPainDataByPeriod(
+  workouts: FinishedWorkoutSummary[],
+  period: VolumePeriod
+): PainDataPoint[] {
+  const now = new Date();
+  const cutoff = new Date(
+    now.getTime() - PERIOD_DAYS[period] * 24 * 60 * 60 * 1000
+  );
+
+  const filtered = workouts.filter(
+    (w) =>
+      new Date(w.finishedAt).getTime() >= cutoff.getTime() &&
+      w.averagePainLevel !== undefined
+  );
+
+  const sorted = [...filtered].sort(
+    (a, b) =>
+      new Date(a.finishedAt).getTime() - new Date(b.finishedAt).getTime()
+  );
+
+  return sorted.map((w) => {
+    const date = new Date(w.finishedAt);
+    const label = `${date.getDate()}/${date.getMonth() + 1}`;
+    return {
+      date: w.finishedAt,
+      painLevel: w.averagePainLevel!,
+      label,
+    };
+  });
 }
 
 export function getMuscleGroupDistribution(

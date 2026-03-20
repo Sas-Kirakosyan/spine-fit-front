@@ -17,10 +17,12 @@ import {
 } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
 import { LazyImage } from "@/components/ui/LazyImage";
+import { QuizSlider } from "@/components/Quiz/QuizSlider";
 import {
   loadPlanFromLocalStorage,
   savePlanToLocalStorage,
 } from "@/utils/planGenerator";
+import { shouldShowPainTracking, getStoredPainStatus } from "@/utils/painStatus";
 
 const toolbarButtons = [
   {
@@ -94,6 +96,7 @@ function ExerciseSetsPage({
   onStartWorkoutSession,
   onNavigateToHistory,
   onMarkExerciseComplete,
+  onSkipExercise,
   isDuringActiveWorkout = false,
   exerciseLogs = {},
 }: ExerciseSetsPageProps) {
@@ -102,7 +105,7 @@ function ExerciseSetsPage({
     `set-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
   const createNewSet = (
-    template?: Partial<ExerciseSetRow>,
+    template?: Partial<ExerciseSetRow>
   ): ExerciseSetRow => ({
     id: generateSetId(),
     reps:
@@ -131,6 +134,8 @@ function ExerciseSetsPage({
   const allExercises = allExercisesData as Exercise[];
 
   const isBodyweight = exercise.equipment === "bodyweight";
+  const showPainSlider = shouldShowPainTracking();
+  const painRequired = getStoredPainStatus() === "Active Symptoms";
 
   // Get saved logs for this exercise if they exist
   const savedLogs = exerciseLogs[exercise.id];
@@ -157,7 +162,7 @@ function ExerciseSetsPage({
         savedLogs.map((log) => ({
           ...log,
           id: log.id || generateSetId(),
-        })),
+        }))
       );
       // Find first incomplete set or set to -1 if all completed
       const firstIncomplete = savedLogs.findIndex((s) => !s.completed);
@@ -201,7 +206,7 @@ function ExerciseSetsPage({
     }
     restIntervalRef.current = setInterval(() => {
       setRestCountdownSeconds((prev) =>
-        prev !== null && prev > 0 ? prev - 1 : null,
+        prev !== null && prev > 0 ? prev - 1 : null
       );
     }, 1000);
     return () => {
@@ -214,7 +219,7 @@ function ExerciseSetsPage({
 
   const findNextPendingIndex = (
     list: ExerciseSetRow[],
-    startFrom = 0,
+    startFrom = 0
   ): number => {
     for (let i = startFrom; i < list.length; i += 1) {
       if (!list[i].completed) {
@@ -250,7 +255,7 @@ function ExerciseSetsPage({
   const handleSetValueChange = (
     index: number,
     field: SetField,
-    value: string,
+    value: string
   ) => {
     if (sets[index]?.completed) {
       return;
@@ -273,8 +278,8 @@ function ExerciseSetsPage({
     setActiveSetIndex(index);
     setSets((prev) =>
       prev.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [field]: value } : item,
-      ),
+        itemIndex === index ? { ...item, [field]: value } : item
+      )
     );
   };
 
@@ -339,7 +344,7 @@ function ExerciseSetsPage({
 
     setSets((prev) => {
       const updated = prev.map((item, index) =>
-        index === targetIndex ? { ...item, completed: !shouldUnlog } : item,
+        index === targetIndex ? { ...item, completed: !shouldUnlog } : item
       );
 
       if (shouldUnlog) {
@@ -368,7 +373,7 @@ function ExerciseSetsPage({
     }
 
     const allIncompleteSetsValid = incompleteSets.every((setEntry) =>
-      isSetValid(setEntry),
+      isSetValid(setEntry)
     );
     if (!allIncompleteSetsValid) {
       return;
@@ -386,10 +391,17 @@ function ExerciseSetsPage({
       onMarkExerciseComplete(
         exercise.id,
         sets.map((setEntry) => ({ ...setEntry })),
+        showPainSlider ? painLevel : undefined
       );
       return;
     }
     onStartWorkoutSession();
+  };
+
+  const handleSkipExercise = () => {
+    if (isDuringActiveWorkout && onSkipExercise) {
+      onSkipExercise(exercise.id);
+    }
   };
 
   const allSetsCompleted =
@@ -433,15 +445,6 @@ function ExerciseSetsPage({
     return `${weightValue}${unit} x ${repsValue}`;
   };
 
-  const sliderProgress = ((painLevel - 1) / 9) * 100;
-  const painFaces = [
-    { id: 1, label: "🙂", value: 1 },
-    { id: 2, label: "😊", value: 3 },
-    { id: 3, label: "😐", value: 5 },
-    { id: 4, label: "🙁", value: 7 },
-    { id: 5, label: "😣", value: 9 },
-  ];
-
   const filteredReplacementExercises = allExercises
     .filter((item) => {
       const query = replaceQuery.trim().toLowerCase();
@@ -457,7 +460,7 @@ function ExerciseSetsPage({
       if (!plan) return;
 
       const workoutIndex = plan.workoutDays.findIndex((day) =>
-        day.exercises.some((item) => item.id === exercise.id),
+        day.exercises.some((item) => item.id === exercise.id)
       );
 
       if (workoutIndex === -1) return;
@@ -483,7 +486,7 @@ function ExerciseSetsPage({
       plan.workoutDays[workoutIndex].exercises = plan.workoutDays[
         workoutIndex
       ].exercises.map((item) =>
-        item.id === exercise.id ? replacementWithCurrentSets : item,
+        item.id === exercise.id ? replacementWithCurrentSets : item
       );
 
       savePlanToLocalStorage(plan);
@@ -823,74 +826,45 @@ function ExerciseSetsPage({
           </div>
         </section>
 
-        {allSetsCompleted && (
+        {allSetsCompleted && showPainSlider && (
           <section className="rounded-[24px] border border-white/12 bg-[#161A30] p-5 shadow-inner shadow-white/5">
             <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
-                  Pain Level
-                </span>
-                <div className="rounded-full bg-main px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
-                  {painLevel}
-                </div>
-              </div>
-              <div className="flex items-center justify-between text-2xl">
-                {painFaces.map((face) => (
-                  <span
-                    key={face.id}
-                    className={`transition-opacity ${
-                      Math.abs(face.value - painLevel) <= 1
-                        ? "opacity-100"
-                        : "opacity-30"
-                    }`}
-                  >
-                    {face.label}
-                  </span>
-                ))}
-              </div>
-              <div className="relative mt-2">
-                <input
-                  type="range"
-                  min={1}
-                  max={10}
-                  step={1}
-                  value={painLevel}
-                  onChange={(event) => setPainLevel(Number(event.target.value))}
-                  className="h-2 w-full appearance-none rounded-full bg-white/10"
-                  style={{
-                    background: `linear-gradient(to right, #e77d10 ${sliderProgress}%, rgba(231,125,16,0.15) ${sliderProgress}%)`,
-                  }}
-                />
-                <div
-                  className="pointer-events-none absolute -top-4 flex h-7 w-7 items-center justify-center rounded-full bg-main text-sm font-semibold text-white shadow-lg"
-                  style={{
-                    left: `calc(${sliderProgress}% - 14px)`,
-                  }}
-                >
-                  {painLevel}
-                </div>
-                <div className="mt-3 flex justify-between text-xs font-semibold uppercase tracking-[0.32em] text-white/40">
-                  <span>1</span>
-                  <span>1-10</span>
-                </div>
-              </div>
+              <span className="text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
+                Pain Level
+              </span>
+              <QuizSlider
+                value={String(painLevel)}
+                min={1}
+                max={10}
+                onChange={(val) => setPainLevel(Number(val))}
+              />
             </div>
           </section>
         )}
 
         {allSetsCompleted ? (
-          <Button
-            onClick={handleCompleteExercise}
-            className="mx-5 h-[44px] rounded-[12px] bg-emerald-500 text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30"
-          >
-            DONE
-          </Button>
+          <div className="flex justify-between">
+            <Button
+              onClick={handleCompleteExercise}
+              className={`h-[50px] ${painRequired ? "w-full" : "w-[180px]"} rounded-[12px] bg-emerald-500 text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30`}
+            >
+              DONE
+            </Button>
+            {!painRequired && (
+              <Button
+                onClick={handleSkipExercise}
+                className="h-[50px] w-[180px] rounded-[12px] bg-main text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30"
+              >
+                SKIP
+              </Button>
+            )}
+          </div>
         ) : isDuringActiveWorkout ? (
           <div className="mx-5 flex flex-col gap-3 sm:flex-row">
             <Button
               onClick={handleLogAllSets}
               disabled={!canLogAllSets}
-              className="h-[50px] flex-1 rounded-[10px] bg-main text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[54px] flex-1 rounded-[10px] bg-main text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
             >
               LOG ALL SETS
             </Button>

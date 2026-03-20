@@ -65,6 +65,7 @@ function App() {
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>([]);
   const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(null);
   const [exerciseLogs, setExerciseLogs] = useState<Record<number, ExerciseSetRow[]>>({});
+  const [exercisePainLevels, setExercisePainLevels] = useState<Record<number, number>>({});
 
   const [workoutHistory, setWorkoutHistory] = useState<FinishedWorkoutSummary[]>(() => {
     const savedHistory = localStorage.getItem("workoutHistory");
@@ -129,6 +130,7 @@ function App() {
   const resetWorkoutState = () => {
     setCompletedExerciseIds([]);
     setExerciseLogs({});
+    setExercisePainLevels({});
     setWorkoutStartTime(null);
   };
 
@@ -268,9 +270,23 @@ function App() {
     });
   };
 
-  const markExerciseComplete = (exerciseId: number, sets: ExerciseSetRow[]) => {
+  const markExerciseComplete = (exerciseId: number, sets: ExerciseSetRow[], painLevel: number | undefined) => {
     const completedSets = sets.filter((s) => s.completed).map((s) => ({ ...s }));
     setExerciseLogs((prev) => ({ ...prev, [exerciseId]: completedSets }));
+    if (painLevel !== undefined) {
+      setExercisePainLevels((prev) => ({ ...prev, [exerciseId]: painLevel }));
+    }
+    setCompletedExerciseIds((prev) =>
+      prev.includes(exerciseId) ? prev : [...prev, exerciseId]
+    );
+    setExerciseSetsMode("preWorkout");
+    startPageTransition(() => {
+      setSelectedExercise(null);
+      setCurrentPage("activeWorkout");
+    });
+  };
+
+  const skipExercise = (exerciseId: number) => {
     setCompletedExerciseIds((prev) =>
       prev.includes(exerciseId) ? prev : [...prev, exerciseId]
     );
@@ -365,6 +381,7 @@ function App() {
             onStartWorkoutSession={navigateToActiveWorkout}
             onNavigateToHistory={navigateToHistory}
             onMarkExerciseComplete={markExerciseComplete}
+            onSkipExercise={skipExercise}
             isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
             exerciseLogs={exerciseLogs}
           />
@@ -390,6 +407,7 @@ function App() {
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
             exerciseLogs={exerciseLogs}
+            exercisePainLevels={exercisePainLevels}
             completedWorkoutIds={completedWorkoutIds}
             setCompletedWorkoutIds={setCompletedWorkoutIds}
             customExercises={isCustomWorkoutMode ? workoutExercises : undefined}

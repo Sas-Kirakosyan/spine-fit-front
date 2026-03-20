@@ -38,6 +38,7 @@ function ActiveWorkoutPage({
   completedExerciseIds = [],
   workoutStartTime,
   exerciseLogs = {},
+  exercisePainLevels = {},
   completedWorkoutIds = new Set(),
   setCompletedWorkoutIds,
   customExercises,
@@ -205,6 +206,10 @@ function ActiveWorkoutPage({
       completedExercises,
       exerciseLogs
     );
+    const painValues = Object.values(exercisePainLevels);
+    const averagePainLevel = painValues.length > 0
+      ? Math.round((painValues.reduce((a, b) => a + b, 0) / painValues.length) * 10) / 10
+      : undefined;
     const summary: FinishedWorkoutSummary = {
       id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
       finishedAt: new Date().toISOString(),
@@ -214,6 +219,7 @@ function ActiveWorkoutPage({
       caloriesBurned,
       completedExercises,
       completedExerciseLogs: exerciseLogs,
+      averagePainLevel,
     };
     setShowFinishModal(false);
 
@@ -263,6 +269,7 @@ function ActiveWorkoutPage({
   }, [
     completedExercises,
     exerciseLogs,
+    exercisePainLevels,
     fixedDuration,
     todaysExercises,
     completedWorkoutIds,
@@ -324,7 +331,7 @@ function ActiveWorkoutPage({
         })}
         <Button
           onClick={handleFinishWorkout}
-          className="mx-5 h-[40px] rounded-[10px] bg-[#228B22] text-white uppercase"
+          className="mx-5 h-[55px] rounded-[10px] bg-[#228B22] text-white uppercase"
         >
           {t("workoutPage.buttons.finishWorkout")}
         </Button>
