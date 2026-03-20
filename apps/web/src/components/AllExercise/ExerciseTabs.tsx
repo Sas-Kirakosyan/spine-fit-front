@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 export type TabType = "all" | "muscle" | "categories";
 
 interface ExerciseTabsProps {
@@ -6,6 +8,7 @@ interface ExerciseTabsProps {
 }
 
 export function ExerciseTabs({ activeTab, onTabChange }: ExerciseTabsProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex gap-6 mb-4 border-b border-white/10">
       <button
@@ -16,7 +19,7 @@ export function ExerciseTabs({ activeTab, onTabChange }: ExerciseTabsProps) {
             : "text-gray-400 hover:text-white"
         }`}
       >
-        All Exercises
+        {t("allExercisePage.tabs.all")}
       </button>
       <button
         onClick={() => onTabChange("muscle")}
@@ -26,7 +29,7 @@ export function ExerciseTabs({ activeTab, onTabChange }: ExerciseTabsProps) {
             : "text-gray-400 hover:text-white"
         }`}
       >
-        By Muscle
+        {t("allExercisePage.tabs.muscle")}
       </button>
       <button
         onClick={() => onTabChange("categories")}
@@ -36,7 +39,7 @@ export function ExerciseTabs({ activeTab, onTabChange }: ExerciseTabsProps) {
             : "text-gray-400 hover:text-white"
         }`}
       >
-        Categories
+        {t("allExercisePage.tabs.categories")}
       </button>
     </div>
   );

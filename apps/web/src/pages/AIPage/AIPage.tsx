@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -26,6 +27,7 @@ function AIPage({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const streamingMessageRef = useRef<string>("");
+  const { t } = useTranslation();
 
   // Загрузка истории из localStorage при монтировании
   useEffect(() => {
@@ -130,14 +132,14 @@ function AIPage({
       const errorMessage =
         err instanceof Error
           ? err.message
-          : "Не удалось подключиться к Gemini API. Проверьте подключение к интернету.";
+          : t("aiPage.errorConnection");
 
       setError(errorMessage);
 
       // Добавляем сообщение об ошибке
       const errorChatMessage: ChatMessage = {
         role: "assistant",
-        content: `Ошибка: ${errorMessage}`,
+        content: `${t("aiPage.errorPrefix")}${errorMessage}`,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorChatMessage]);
@@ -153,10 +155,10 @@ function AIPage({
         <div>
           <Logo />
           <h1 className="mt-3 text-3xl mx-2.5 font-semibold text-white">
-            AI Assistant
+            {t("aiPage.title")}
           </h1>
           <p className="mt-1 text-sm text-slate-300 mx-2.5">
-            Your personal AI assistant for fitness
+            {t("aiPage.subtitle")}
           </p>
         </div>
       </header>

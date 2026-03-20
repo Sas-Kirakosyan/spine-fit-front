@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/Buttons/Button";
 
 interface ExerciseActionBarProps {
@@ -12,6 +13,7 @@ function ExerciseActionBar({
   onGroupAs,
   onAddExercises,
 }: ExerciseActionBarProps) {
+  const { t } = useTranslation();
   if (selectedCount === 0) {
     return null;
   }
@@ -23,14 +25,19 @@ function ExerciseActionBar({
           onClick={onGroupAs}
           className="flex-1 px-4 py-3 rounded-[10px] bg-[#1B1E2B] text-white font-medium"
         >
-          Group as...
+          {t("allExercisePage.actionBar.groupAs")}
         </Button>
       )}
       <Button
         onClick={onAddExercises}
         className="flex-1 px-4 py-3 rounded-[10px] bg-red-500 text-white font-medium"
       >
-        Add {selectedCount} {selectedCount === 1 ? "Exercise" : "Exercises"}
+        {t(
+          selectedCount === 1
+            ? "allExercisePage.actionBar.addSingleExercise"
+            : "allExercisePage.actionBar.addMultipleExercises",
+          { count: selectedCount },
+        )}
       </Button>
     </div>
   );

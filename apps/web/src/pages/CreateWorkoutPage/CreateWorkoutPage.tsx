@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import { type Exercise } from "@/types/exercise";
 import { getExerciseImageUrl } from "@/utils/exercise";
@@ -39,22 +40,23 @@ export default function CreateProgramPage({
   programName,
   editProgramId,
 }: CreateProgramPageProps) {
+  const { t } = useTranslation();
   const [saved, setSaved] = useState(false);
   const [expandedDayId, setExpandedDayId] = useState<string | null>(
-    days.length > 0 ? days[0].id : null,
+    days.length > 0 ? days[0].id : null
   );
   const isEditing = Boolean(editProgramId);
 
   const handleAddDay = useCallback(() => {
     const newDay: TrainingDay = {
       id: `day-${Date.now()}`,
-      name: `Day ${days.length + 1}`,
+      name: t("createProgramPage.newDayName", { number: days.length + 1 }),
       exercises: [],
     };
     const updated = [...days, newDay];
     onDaysChange(updated);
     setExpandedDayId(newDay.id);
-  }, [days, onDaysChange]);
+  }, [days, onDaysChange, t]);
 
   const handleRemoveDay = useCallback(
     (dayId: string) => {
@@ -63,14 +65,14 @@ export default function CreateProgramPage({
         setExpandedDayId(null);
       }
     },
-    [days, onDaysChange, expandedDayId],
+    [days, onDaysChange, expandedDayId]
   );
 
   const handleDayNameChange = useCallback(
     (dayId: string, name: string) => {
       onDaysChange(days.map((d) => (d.id === dayId ? { ...d, name } : d)));
     },
-    [days, onDaysChange],
+    [days, onDaysChange]
   );
 
   const handleRemoveExercise = useCallback(
@@ -82,11 +84,11 @@ export default function CreateProgramPage({
                 ...d,
                 exercises: d.exercises.filter((ex) => ex.id !== exerciseId),
               }
-            : d,
-        ),
+            : d
+        )
       );
     },
-    [days, onDaysChange],
+    [days, onDaysChange]
   );
 
   const handleUpdateExercise = useCallback(
@@ -94,7 +96,7 @@ export default function CreateProgramPage({
       dayId: string,
       exerciseId: number,
       field: "sets" | "reps" | "weight",
-      value: number,
+      value: number
     ) => {
       onDaysChange(
         days.map((d) =>
@@ -102,14 +104,14 @@ export default function CreateProgramPage({
             ? {
                 ...d,
                 exercises: d.exercises.map((ex) =>
-                  ex.id === exerciseId ? { ...ex, [field]: value } : ex,
+                  ex.id === exerciseId ? { ...ex, [field]: value } : ex
                 ),
               }
-            : d,
-        ),
+            : d
+        )
       );
     },
-    [days, onDaysChange],
+    [days, onDaysChange]
   );
 
   const handleMoveExercise = useCallback(
@@ -125,10 +127,10 @@ export default function CreateProgramPage({
             updated[index],
           ];
           return { ...d, exercises: updated };
-        }),
+        })
       );
     },
-    [days, onDaysChange],
+    [days, onDaysChange]
   );
 
   const handleMoveDay = useCallback(
@@ -139,7 +141,7 @@ export default function CreateProgramPage({
       [updated[index], updated[newIndex]] = [updated[newIndex], updated[index]];
       onDaysChange(updated);
     },
-    [days, onDaysChange],
+    [days, onDaysChange]
   );
 
   const handleSave = useCallback(() => {
@@ -150,7 +152,7 @@ export default function CreateProgramPage({
     const existing = loadSavedPrograms();
     if (editProgramId) {
       const updated = existing.map((p) =>
-        p.id === editProgramId ? { ...p, name: programName.trim(), days } : p,
+        p.id === editProgramId ? { ...p, name: programName.trim(), days } : p
       );
       persistSavedPrograms(updated);
     } else {
@@ -194,20 +196,22 @@ export default function CreateProgramPage({
             </svg>
           </button>
           <h1 className="text-2xl font-bold text-white">
-            {isEditing ? "Edit Program" : "Create Program"}
+            {isEditing
+              ? t("createProgramPage.titleEdit")
+              : t("createProgramPage.titleCreate")}
           </h1>
         </div>
 
         {/* Program Name */}
         <div className="mb-6">
           <label className="block text-sm font-semibold text-white/70 mb-2 uppercase tracking-wider">
-            Program Name
+            {t("createProgramPage.programNameLabel")}
           </label>
           <input
             type="text"
             value={programName}
             onChange={(e) => onProgramNameChange(e.target.value)}
-            placeholder="e.g. My PPL Program"
+            placeholder={t("createProgramPage.programNamePlaceholder")}
             className="w-full px-4 py-3 rounded-xl bg-[#1B1E2B] text-white placeholder-white/30 border border-white/10 focus:border-main/50 focus:outline-none focus:ring-1 focus:ring-main/30 transition-colors"
           />
         </div>
@@ -216,7 +220,7 @@ export default function CreateProgramPage({
         <div className="mb-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wider">
-              Training Days ({days.length})
+              {t("createProgramPage.trainingDays", { count: days.length })}
             </h2>
           </div>
 
@@ -238,10 +242,10 @@ export default function CreateProgramPage({
                 />
               </svg>
               <p className="text-white/40 text-sm">
-                No training days added yet
+                {t("createProgramPage.noTrainingDaysTitle")}
               </p>
               <p className="text-white/25 text-xs mt-1">
-                Tap the button below to add a training day
+                {t("createProgramPage.noTrainingDaysHint")}
               </p>
             </div>
           ) : (
@@ -297,7 +301,9 @@ export default function CreateProgramPage({
               />
             </svg>
           </div>
-          <span className="text-main font-semibold">Add Training Day</span>
+          <span className="text-main font-semibold">
+            {t("createProgramPage.addTrainingDay")}
+          </span>
         </button>
       </div>
 
@@ -314,7 +320,9 @@ export default function CreateProgramPage({
               : "bg-main/30 text-white/30 cursor-not-allowed"
           }`}
         >
-          {saved ? "Saved!" : "Save Program"}
+          {saved
+            ? t("createProgramPage.saved")
+            : t("createProgramPage.saveProgram")}
         </button>
       </div>
     </PageContainer>
@@ -336,7 +344,7 @@ interface TrainingDayCardProps {
   onUpdateExercise: (
     exerciseId: number,
     field: "sets" | "reps" | "weight",
-    value: number,
+    value: number
   ) => void;
   onMoveExercise: (index: number, direction: "up" | "down") => void;
   onAddExercise: () => void;
@@ -356,6 +364,7 @@ function TrainingDayCard({
   onMoveExercise,
   onAddExercise,
 }: TrainingDayCardProps) {
+  const { t } = useTranslation();
   const [isEditingName, setIsEditingName] = useState(false);
 
   return (
@@ -430,8 +439,7 @@ function TrainingDayCard({
             </div>
           )}
           <p className="text-white/40 text-xs">
-            {day.exercises.length} exercise
-            {day.exercises.length !== 1 ? "s" : ""}
+            {t("createProgramPage.exerciseCount", { count: day.exercises.length })}
           </p>
         </div>
 
@@ -537,7 +545,7 @@ function TrainingDayCard({
               />
             </svg>
             <span className="text-main/70 group-hover:text-main text-sm font-medium">
-              Add Exercise
+              {t("createProgramPage.addExercise")}
             </span>
           </button>
         </div>
@@ -565,6 +573,7 @@ function ExerciseConfigCard({
   onUpdate,
   onMove,
 }: ExerciseConfigCardProps) {
+  const { t } = useTranslation();
   return (
     <div className="rounded-xl bg-white/5 p-3">
       {/* Top row: image + name + actions */}
@@ -647,14 +656,14 @@ function ExerciseConfigCard({
       {/* Config row: sets / reps / weight */}
       <div className="flex gap-2">
         <NumberStepper
-          label="Sets"
+          label={t("createProgramPage.sets")}
           value={exercise.sets}
           min={1}
           max={20}
           onChange={(v) => onUpdate("sets", v)}
         />
         <NumberStepper
-          label="Reps"
+          label={t("createProgramPage.reps")}
           value={exercise.reps}
           min={1}
           max={100}

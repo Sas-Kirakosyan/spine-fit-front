@@ -57,6 +57,10 @@
     "replaceExercise": "Заменить упражнение",
     "deleteFromWorkout": "Удалить из тренировки"
   },
+  "activeWorkoutPage": {
+    "noExercises": "Нет упражнений для сегодняшней тренировки.",
+    "generatePlanHint": "Создайте план на странице Мой План, чтобы начать."
+  },
   "swapWorkoutActionSheet": {
     "title": "Заменить тренировку",
     "weeklyPlan": "Текущий недельный план тренировок",
@@ -77,6 +81,20 @@
     "days": "дней",
     "oneMusclePerDay": "Одна мышца в день",
     "oneMusclePerTwoDay": "Одна мышца каждые два дня"
+  },
+  "aiPage": {
+      "title": "ИИ Ассистент",
+      "subtitle": "Ваш персональный ИИ-ассистент по фитнесу",
+      "errorPrefix": "Ошибка: ",
+      "errorConnection": "Не удалось подключиться к Gemini API. Проверьте подключение к интернету.",
+      "messageInput": {
+        "placeholder": "Напишите сообщение...",
+        "sendButton": "Отправить сообщение"
+      },
+    "messageList": {
+      "emptyState": "Начните разговор с ИИ ассистентом. Задайте вопрос о тренировках, питании или программах упражнений.",
+      "typing": "ИИ печатает..."
+    }
   },
   "settingsPage": {
     "title": "Настройки",
@@ -134,6 +152,41 @@
       "supportChatDesc": "Чат с поддержкой (9:00–18:00 МСК)",
       "supportFaqDesc": "Просмотреть частые вопросы",
       "close": "Закрыть"
+    }
+  },
+  "createProgramPage": {
+    "titleCreate": "Создать программу",
+    "titleEdit": "Редактировать программу",
+    "programNameLabel": "Название программы",
+    "programNamePlaceholder": "напр. Моя PPL программа",
+    "trainingDays": "Тренировочные дни ({{count}})",
+    "noTrainingDaysTitle": "Тренировочные дни не добавлены",
+    "noTrainingDaysHint": "Нажмите кнопку ниже, чтобы добавить тренировочный день",
+    "addTrainingDay": "Добавить тренировочный день",
+    "saveProgram": "Сохранить программу",
+    "saved": "Сохранено!",
+    "newDayName": "День {{number}}",
+    "exerciseCount_one": "{{count}} упражнение",
+    "exerciseCount_few": "{{count}} упражнения",
+    "exerciseCount_many": "{{count}} упражнений",
+    "exerciseCount_other": "{{count}} упражнений",
+    "addExercise": "Добавить упражнение",
+    "sets": "Подходы",
+    "reps": "Повторения"
+  },
+  "allExercisePage": {
+    "title": "Добавить упражнение",
+    "noExercisesFound": "Упражнения не найдены",
+    "searchPlaceholder": "Поиск упражнений...",
+    "tabs": {
+      "all": "Все упражнения",
+      "muscle": "По мышцам",
+      "categories": "Категории"
+    },
+    "actionBar": {
+      "groupAs": "Группировать как...",
+      "addSingleExercise": "Добавить {{count}} упражнение",
+      "addMultipleExercises": "Добавить {{count}} упражнений"
     }
   }
 }

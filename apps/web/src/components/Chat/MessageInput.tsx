@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface MessageInputProps {
   onSendMessage: (message: string) => void;
@@ -13,6 +14,7 @@ export function MessageInput({
 }: MessageInputProps) {
   const [message, setMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Автоматическое изменение высоты textarea
@@ -25,11 +27,11 @@ export function MessageInput({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedMessage = message.trim();
-    
+
     if (trimmedMessage && !isLoading && !disabled) {
       onSendMessage(trimmedMessage);
       setMessage("");
-      
+
       // Сброс высоты textarea
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";
@@ -52,19 +54,19 @@ export function MessageInput({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Напишите сообщение..."
+          placeholder={t("aiPage.messageInput.placeholder")}
           disabled={isLoading || disabled}
           rows={1}
           className="w-full rounded-[18px] border border-white/80 bg-transparent px-4 py-3 text-base font-medium text-white placeholder:text-slate-400 outline-none transition focus:border-main focus:ring-2 focus:ring-main/40 resize-none overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed max-h-32"
           style={{ minHeight: "48px" }}
         />
       </div>
-      
+
       <button
         type="submit"
         disabled={!message.trim() || isLoading || disabled}
         className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-main text-white transition hover:bg-main/90 focus:outline-none focus:ring-2 focus:ring-main/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-main"
-        aria-label="Отправить сообщение"
+        aria-label={t("messageInput.sendButton")}
       >
         {isLoading ? (
           <svg
