@@ -2,53 +2,80 @@ import {type ChangeEvent, useEffect, useState} from "react";
 import CalendarIcon from "@/assets/CalendarIcon/CalendarIcon.tsx";
 import QuizEmblaCarousel from "@/components/Quiz/QuizEmblaCarousel.tsx";
 
-function QuizScrollCalendar() {
-    const [inputValue, setInputValue] = useState("");
+interface IQuizScrollCalendarProps {
+    value: string
+    onChange: (value: string) => void
+}
+
+function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
     const [tempDate, setTempDate] = useState({ month: 'Jan', day: 1, year: 1990 });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const toggleDialog = () => setIsDialogOpen(!isDialogOpen);
+    const toggleDialog = () => {
+        if (!isDialogOpen) {
+            const [day, month, year] = value.split('/').map(Number);
 
-    const formatDateInput = (value: string) => {
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-        const digits = value.replace(/\D/g, '');
-        let formatted = '';
-
-        if (digits.length > 0) {
-            let month = digits.substring(0, 2);
-            if (month.length === 2) {
-                const mNum = parseInt(month);
-                if (mNum > 12) month = '12';
-                if (mNum === 0) month = '01';
-            }
-            formatted = month;
-
-            if (digits.length >= 3) {
-                let day = digits.substring(2, 4);
-                if (day.length === 2) {
-                    const mNum = parseInt(month);
-                    const dNum = parseInt(day);
-                    const yearPart = digits.length >= 8 ? parseInt(digits.substring(4, 8)) : 2026;
-
-                    const maxDays = new Date(yearPart, mNum, 0).getDate();
-
-                    if (dNum > maxDays) day = maxDays.toString().padStart(2, '0');
-                    if (dNum === 0) day = '01';
-                }
-                formatted += '/' + day;
-            }
-
-            if (digits.length >= 5) {
-                formatted += '/' + digits.substring(4, 8);
+            if (day && month >= 1 && month <= 12 && year >= 1930) {
+                setTempDate({
+                    month: monthNames[month - 1],
+                    day: day,
+                    year: year
+                });
+            } else {
+                setTempDate({ month: 'Jan', day: 1, year: 1990 });
             }
         }
+        setIsDialogOpen(!isDialogOpen);
+    };
+
+    const formatDateInput = (value: string) => {
+        let digits = value.replace(/\D/g, '');
+        if (digits.length > 8) digits = digits.substring(0, 8);
+
+        let dayStr = digits.substring(0, 2);
+        let monthStr = digits.substring(2, 4);
+        let yearStr = digits.substring(4, 8);
+
+        let day = parseInt(dayStr) || 0;
+        let month = parseInt(monthStr) || 0;
+        let year = parseInt(yearStr) || 0;
+
+        if (yearStr.length === 4 && year > 2026) {
+            yearStr = '2026';
+            year = 2026;
+        }
+
+        if (monthStr.length === 2 && (month > 12 || month === 0)) {
+            monthStr = '12';
+            month = 12;
+        }
+
+        if (month > 0 && yearStr.length === 4) {
+            const maxDays = new Date(year, month, 0).getDate();
+            if (day > maxDays) {
+                day = maxDays;
+                dayStr = maxDays.toString();
+            }
+        }
+        else if (day > 31) {
+            day = 31;
+            dayStr = '31';
+        }
+
+        let formatted = dayStr;
+        if (digits.length >= 3) formatted += '/' + monthStr;
+        if (digits.length >= 5) formatted += '/' + yearStr;
+
         return formatted;
     };
+
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const formatted = formatDateInput(value);
-        setInputValue(formatted);
+        onChange(formatted);
     };
 
     const handleConfirm = () => {
@@ -57,11 +84,11 @@ function QuizScrollCalendar() {
             Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
         };
 
-        const monthNum = months[tempDate.month];
         const dayNum = tempDate.day.toString().padStart(2, '0');
+        const monthNum = months[tempDate.month];
         const yearNum = tempDate.year.toString();
 
-        setInputValue(`${monthNum}/${dayNum}/${yearNum}`);
+        onChange(`${dayNum}/${monthNum}/${yearNum}`);
         setIsDialogOpen(false);
     };
 
@@ -86,9 +113,9 @@ function QuizScrollCalendar() {
             <input
                 className="w-full bg-background border placeholder-white border-gray-700 text-white px-4 py-3 rounded-xl focus:outline-none"
                 type="text"
-                value={inputValue}
+                value={value}
                 onChange={handleInputChange}
-                placeholder="MM/DD/YYYY"
+                placeholder="DD/MM/YYYY"
                 maxLength={10}
             />
             <button
@@ -110,7 +137,7 @@ function QuizScrollCalendar() {
                         <h3 className="text-xl font-bold mb-4 text-white">Date of Birth</h3>
 
                         <div className="h-[150px] w-full flex justify-center items-center overflow-hidden">
-                            <QuizEmblaCarousel onChange={(val: any) => setTempDate(val)} />
+                            <QuizEmblaCarousel onChange={(val: any) => setTempDate(val)} initialDate={tempDate}/>
                         </div>
 
                         <div className="flex justify-end gap-10 mt-6 pr-2">

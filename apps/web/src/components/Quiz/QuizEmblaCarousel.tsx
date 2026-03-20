@@ -3,17 +3,18 @@ import {useEffect, useMemo, useState, useCallback, useRef} from "react";
 
 interface IQuizEmblaCarouselProps {
     onChange: (date: { month: string; day: number; year: number }) => void
+    initialDate?: { month: string; day: number; year: number }
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const YEARS = Array.from({ length: 91 }, (_, i) => 1930 + i);
+const YEARS = Array.from({ length: 97 }, (_, i) => 1930 + i);
 
 function QuizEmblaCarousel(props: IQuizEmblaCarouselProps) {
-    const { onChange } = props;
+    const { onChange, initialDate } = props;
 
-    const [selectedMonth, setSelectedMonth] = useState('Jan');
-    const [selectedDay, setSelectedDay] = useState(1);
-    const [selectedYear, setSelectedYear] = useState(1990);
+    const [selectedMonth, setSelectedMonth] = useState(initialDate?.month || 'Jan');
+    const [selectedDay, setSelectedDay] = useState(initialDate?. day || 1);
+    const [selectedYear, setSelectedYear] = useState(initialDate?.year || 1990);
 
     const handleMonthSelect = useCallback((val: string | number) => {
         setSelectedMonth(val as string);
@@ -57,14 +58,17 @@ function QuizEmblaCarousel(props: IQuizEmblaCarouselProps) {
 
     return (
         <div className="relative flex w-full h-[96px] max-w-[320px] mx-auto overflow-hidden bg-background">
-            <div className="absolute top-1/2 left-0 w-full h-10 -translate-y-1/2 border-t border-b border-white/10 pointer-events-none z-10" />
 
-            <div className="flex w-full items-center justify-between relative z-20">
+            <div className="absolute inset-0 z-50 pointer-events-none bg-gradient-to-b from-background via-transparent to-background" />
+
+            <div className="absolute inset-x-0 h-[35px] border-t-2 border-b-2 border-white pointer-events-none top-1/2 -translate-y-1/2 z-60" />
+
+            <div className="flex w-full items-center justify-between relative z-10">
                 <div className="flex-1 h-full">
                     <IosPickerItem
                         items={MONTHS}
                         perspective="center"
-                        startIndex={MONTHS.indexOf('Jan')}
+                        startIndex={MONTHS.indexOf(selectedMonth)}
                         onSelect={handleMonthSelect}
                     />
                 </div>
@@ -82,13 +86,11 @@ function QuizEmblaCarousel(props: IQuizEmblaCarouselProps) {
                     <IosPickerItem
                         items={YEARS}
                         perspective="center"
-                        startIndex={YEARS.indexOf(1990)}
+                        startIndex={YEARS.indexOf(selectedYear)}
                         onSelect={handleYearSelect}
                     />
                 </div>
             </div>
-
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-background via-transparent to-background z-[5]" />
         </div>
     );
 }
