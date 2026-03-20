@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface AllExercisePageHeaderProps {
   onClose: () => void;
   onToggleSearch: () => void;
@@ -9,6 +11,7 @@ export function AllExercisePageHeader({
   onToggleSearch,
   onToggleFilter,
 }: AllExercisePageHeaderProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-4 mb-6">
       <button
@@ -32,7 +35,7 @@ export function AllExercisePageHeader({
       </button>
 
       <h1 className="flex-1 text-xl font-semibold text-white">
-        Add an exercise
+        {t("allExercisePage.title")}
       </h1>
 
       <div className="flex items-center gap-2">

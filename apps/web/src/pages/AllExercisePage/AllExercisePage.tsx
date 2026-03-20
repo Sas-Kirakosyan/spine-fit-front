@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -19,6 +20,7 @@ interface AllExercisePageProps {
 }
 
 function AllExercisePage({ onClose, onAddExercises }: AllExercisePageProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -81,7 +83,7 @@ function AllExercisePage({ onClose, onAddExercises }: AllExercisePageProps) {
         >
           {Object.keys(groupedExercises).length === 0 ? (
             <div className="text-center text-gray-400 py-8">
-              No exercises found
+              {t("allExercisePage.noExercisesFound")}
             </div>
           ) : (
             Object.entries(groupedExercises).map(

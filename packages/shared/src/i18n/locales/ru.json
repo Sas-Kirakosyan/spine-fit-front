@@ -153,5 +153,20 @@
       "supportFaqDesc": "Просмотреть частые вопросы",
       "close": "Закрыть"
     }
+  },
+  "allExercisePage": {
+    "title": "Добавить упражнение",
+    "noExercisesFound": "Упражнения не найдены",
+    "searchPlaceholder": "Поиск упражнений...",
+    "tabs": {
+      "all": "Все упражнения",
+      "muscle": "По мышцам",
+      "categories": "Категории"
+    },
+    "actionBar": {
+      "groupAs": "Группировать как...",
+      "addSingleExercise": "Добавить {{count}} упражнение",
+      "addMultipleExercises": "Добавить {{count}} упражнений"
+    }
   }
 }

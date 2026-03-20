@@ -153,5 +153,20 @@
       "supportFaqDesc": "Browse frequently asked questions",
       "close": "Close"
     }
+  },
+  "allExercisePage": {
+    "title": "Add an exercise",
+    "noExercisesFound": "No exercises found",
+    "searchPlaceholder": "Search exercises...",
+    "tabs": {
+      "all": "All Exercises",
+      "muscle": "By Muscle",
+      "categories": "Categories"
+    },
+    "actionBar": {
+      "groupAs": "Group as...",
+      "addSingleExercise": "Add {{count}} Exercise",
+      "addMultipleExercises": "Add {{count}} Exercises"
+    }
   }
 }
