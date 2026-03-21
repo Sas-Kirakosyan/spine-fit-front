@@ -1,4 +1,5 @@
 import {type ChangeEvent, useEffect, useState} from "react";
+import { useTranslation } from "react-i18next";
 import CalendarIcon from "@/assets/CalendarIcon/CalendarIcon.tsx";
 import QuizEmblaCarousel from "@/components/Quiz/QuizEmblaCarousel.tsx";
 
@@ -8,6 +9,7 @@ interface IQuizScrollCalendarProps {
 }
 
 function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
+    const { t } = useTranslation();
     const [tempDate, setTempDate] = useState({ month: 'Jan', day: 1, year: 1990 });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -115,7 +117,7 @@ function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
                 type="text"
                 value={value}
                 onChange={handleInputChange}
-                placeholder="DD/MM/YYYY"
+                placeholder={t("quiz.calendar.placeholder")}
                 maxLength={10}
             />
             <button
@@ -134,7 +136,7 @@ function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
                     />
 
                     <div className="relative z-[101] w-full max-w-[340px] bg-background rounded-[30px] p-6 shadow-2xl border border-white/5 flex flex-col">
-                        <h3 className="text-xl font-bold mb-4 text-white">Date of Birth</h3>
+                        <h3 className="text-xl font-bold mb-4 text-white">{t("quiz.calendar.dateOfBirth")}</h3>
 
                         <div className="h-[150px] w-full flex justify-center items-center overflow-hidden">
                             <QuizEmblaCarousel onChange={(val: any) => setTempDate(val)} initialDate={tempDate}/>
@@ -145,13 +147,13 @@ function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
                                 onClick={handleCancel}
                                 className="text-main font-bold text-lg active:scale-95 transition-transform"
                             >
-                                Cancel
+                                {t("quiz.calendar.cancel")}
                             </button>
                             <button
                                 onClick={handleConfirm}
                                 className="text-main font-bold text-lg active:scale-95 transition-transform"
                             >
-                                OK
+                                {t("quiz.calendar.ok")}
                             </button>
                         </div>
                     </div>

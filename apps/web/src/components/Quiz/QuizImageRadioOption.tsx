@@ -32,9 +32,9 @@ export function QuizImageRadioOption({
             />
           </div>
         )}
-        <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <span className="font-semibold text-gray-900">{option.label}</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-semibold text-gray-900 break-words min-w-0">{option.label}</span>
             <div
               className={`flex h-5 w-5 items-center justify-center rounded-full flex-shrink-0 ${
                 isSelected ? "bg-main" : "border-2 border-gray-300"

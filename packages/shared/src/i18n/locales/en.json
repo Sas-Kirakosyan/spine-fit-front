@@ -190,5 +190,205 @@
       "addSingleExercise": "Add {{count}} Exercise",
       "addMultipleExercises": "Add {{count}} Exercises"
     }
+  },
+  "homePage": {
+    "logoText": "Training app",
+    "heading1": "Strength instead",
+    "heading2": "Of pain",
+    "startProgram": "START PROGRAM",
+    "logIn": "Log In"
+  },
+  "loginPage": {
+    "title": "Login",
+    "subtitle": "Sign in to your account",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot your password?",
+    "signIn": "Sign In",
+    "noAccount": "Don't have an account?",
+    "register": "Register",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must contain at least 6 characters"
+    }
+  },
+  "registrationPage": {
+    "title": "Registration",
+    "subtitle": "Create your account",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter last name",
+    "username": "Username",
+    "usernamePlaceholder": "Enter username",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm password",
+    "register": "Register",
+    "haveAccount": "Already have an account?",
+    "login": "Login",
+    "errors": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "usernameRequired": "Username is required",
+      "usernameMinLength": "Username must contain at least 3 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must contain at least 6 characters",
+      "confirmPasswordRequired": "Password confirmation is required",
+      "passwordsMismatch": "Passwords do not match"
+    }
+  },
+  "quiz": {
+    "header": {
+      "title": "Personalizing your plan",
+      "questionCount": "Question {{current}} / {{total}}",
+      "home": "Home"
+    },
+    "nav": {
+      "startAssessment": "Start My Assessment",
+      "takesLessThan": "Takes less than 1 minute",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish"
+    },
+    "slider": {
+      "noPain": "No pain",
+      "worstPain": "Worst pain"
+    },
+    "multiField": {
+      "select": "Select {{label}}",
+      "weightInfo": "Weight needed to calculate calories burned"
+    },
+    "calendar": {
+      "placeholder": "DD/MM/YYYY",
+      "dateOfBirth": "Date of Birth",
+      "cancel": "Cancel",
+      "ok": "OK"
+    },
+    "input": {
+      "enterAnswer": "Enter your answer",
+      "enterHeightCm": "Enter height in cm",
+      "enterHeightFt": "Enter height in ft",
+      "enterWeightKg": "Enter weight in kg",
+      "enterWeightLbs": "Enter weight in lbs"
+    },
+    "questions": {
+      "1": {
+        "title": "Build Muscle, Protect Your Spine",
+        "description": "We combine professional coaching logic with spine-safe protocols to help you train hard without the fear of a flare-up. Let's customize your journey.",
+        "buttonText": "Start My Assessment"
+      },
+      "2": {
+        "question": "What is your main goal?",
+        "options": [
+          "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
+          "Structural Recovery (Reduce pain and restore movement capacity)"
+        ]
+      },
+      "3": {
+        "question": "Standard Metrics",
+        "description": "These stats allow us to calibrate your volume and intensity.",
+        "fields": {
+          "gender": {
+            "label": "Gender",
+            "options": ["Male", "Female", "Other"]
+          },
+          "dateOfBirth": {
+            "label": "Date of Birth"
+          },
+          "height": {
+            "label": "Height",
+            "placeholder": "Enter height"
+          },
+          "weight": {
+            "label": "Weight",
+            "placeholder": "Enter weight"
+          }
+        }
+      },
+      "7": {
+        "question": "Which physique profile best matches yours?",
+        "options": [
+          { "label": "8–15% (Lean / Athletic)", "description": "Visible muscle definition" },
+          { "label": "16–22% (Average)", "description": "Some definition, slight fat around waist" },
+          { "label": "23–30% (Overfat)", "description": "Soft midsection, limited muscle definition" },
+          { "label": "30%+ (High body fat)", "description": "Higher fat storage around waist and hips" }
+        ],
+        "optionsFemale": [
+          { "label": "18–24% (Lean / Athletic)", "description": "Visible muscle definition, athletic build" },
+          { "label": "25–31% (Fit/Average)", "description": "Healthy, balanced physique" },
+          { "label": "32–38% (Overfat)", "description": "Soft midsection, limited muscle definition" },
+          { "label": "38%+ (High body fat)", "description": "Higher fat storage around waist and hips" }
+        ]
+      },
+      "8": {
+        "question": "What is your resistance training experience?",
+        "options": [
+          "Beginner — new to training",
+          "Intermediate — 1 to 3 years",
+          "Advanced — 3+ years"
+        ]
+      },
+      "9": {
+        "question": "How many times per week can you train?",
+        "options": ["2 Days", "3 Days", "4 Days", "5+ Days"]
+      },
+      "10": {
+        "question": "What is your current spinal health status?",
+        "options": [
+          "Healthy (I am pain-free, but cautious)",
+          "Recovered (Past history of pain/injury)",
+          "Active Symptoms (Currently experiencing discomfort)"
+        ]
+      },
+      "11": {
+        "question": "Where do you feel or did you feel pain?",
+        "options": [
+          "Lower Back (L4-L5/S1 area)",
+          "Sciatica (Pain radiating down leg)",
+          "Glute / Deep Hip discomfort",
+          "Calf or Foot (Numbness/Tingling)"
+        ]
+      },
+      "12": {
+        "question": "How intense is the pain currently?"
+      },
+      "13": {
+        "question": "Which movements trigger or provoke your symptoms?",
+        "options": [
+          "Bending forward (e.g., reaching for the floor)",
+          "Arching backward (e.g., reaching overhead)",
+          "Lifting or carrying heavy objects",
+          "Sitting for longer than 20–30 minutes",
+          "Impact movements (Running, Jumping)",
+          "Rotating or twisting the torso",
+          "Straining (Heavy bracing/holding breath)"
+        ]
+      },
+      "14": {
+        "question": "How do you feel about squatting with extra weight?",
+        "options": [
+          "Confident (I squat with weights regularly)",
+          "Cautious (I only squat with light weights)",
+          "Technical (I can squat bodyweight, but weights trigger pain)",
+          "Avoidant (I strictly avoid all squatting movements)",
+          "Untested (I haven't tried squatting recently)"
+        ]
+      },
+      "15": {
+        "question": "How long should your workouts be?",
+        "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min"]
+      }
+    }
   }
 }
