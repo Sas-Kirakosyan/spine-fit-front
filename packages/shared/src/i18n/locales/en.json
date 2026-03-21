@@ -55,7 +55,11 @@
     "viewDetails": "View details",
     "viewSets": "View sets",
     "replaceExercise": "Replace exercise",
-    "deleteFromWorkout": "Delete from workout"
+    "deleteFromWorkout": "Delete from workout",
+    "feedbackAboutExercise": "Feedback about exercise",
+    "feedbackPlaceholder": "Describe your feedback about this exercise...",
+    "send": "Send",
+    "feedbackSent": "Feedback sent. Thank you!"
   },
   "activeWorkoutPage": {
     "noExercises": "No exercises for today's workout.",

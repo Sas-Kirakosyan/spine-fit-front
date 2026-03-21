@@ -2,7 +2,7 @@ interface ActionButtonProps {
   icon: React.ReactNode;
   text: string;
   onClick: () => void;
-  variant?: "default" | "blue" | "red" | "green";
+  variant?: "default" | "blue" | "red" | "green" | "violet";
 }
 
 const variantClasses = {
@@ -10,6 +10,7 @@ const variantClasses = {
   blue: "bg-main/10 text-main/70 hover:bg-main/20",
   red: "bg-rose-600/10 text-rose-300 hover:bg-rose-600/20",
   green: "bg-emerald-600/10 text-emerald-300 hover:bg-emerald-600/20",
+  violet: "bg-violet-600/10 text-violet-300 hover:bg-violet-600/20",
 };
 
 const iconVariantClasses = {
@@ -17,6 +18,7 @@ const iconVariantClasses = {
   blue: "bg-main/20 text-main/70",
   red: "bg-rose-500/20 text-rose-300",
   green: "bg-emerald-500/20 text-emerald-300",
+  violet: "bg-violet-500/20 text-violet-300",
 };
 
 export function ActionButton({
@@ -33,8 +35,8 @@ export function ActionButton({
         variant === "default"
           ? "focus-visible:ring-main/80"
           : variant === "blue"
-          ? "focus-visible:ring-main/80"
-          : "focus-visible:ring-rose-400/80"
+            ? "focus-visible:ring-main/80"
+            : "focus-visible:ring-rose-400/80"
       } ${variantClasses[variant]}`}
     >
       <span className="flex items-center gap-3 text-sm font-semibold">

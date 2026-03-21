@@ -55,7 +55,11 @@
     "viewDetails": "Подробнее",
     "viewSets": "Посмотреть подходы",
     "replaceExercise": "Заменить упражнение",
-    "deleteFromWorkout": "Удалить из тренировки"
+    "deleteFromWorkout": "Удалить из тренировки",
+    "feedbackAboutExercise": "Отзывы об упражнении",
+    "feedbackPlaceholder": "Опишите ваш отзыв об этом упражнении...",
+    "send": "Отправить",
+    "feedbackSent": "Отзыв отправлен. Спасибо!"
   },
   "activeWorkoutPage": {
     "noExercises": "Нет упражнений для сегодняшней тренировки.",
@@ -83,14 +87,14 @@
     "oneMusclePerTwoDay": "Одна мышца каждые два дня"
   },
   "aiPage": {
-      "title": "ИИ Ассистент",
-      "subtitle": "Ваш персональный ИИ-ассистент по фитнесу",
-      "errorPrefix": "Ошибка: ",
-      "errorConnection": "Не удалось подключиться к Gemini API. Проверьте подключение к интернету.",
-      "messageInput": {
-        "placeholder": "Напишите сообщение...",
-        "sendButton": "Отправить сообщение"
-      },
+    "title": "ИИ Ассистент",
+    "subtitle": "Ваш персональный ИИ-ассистент по фитнесу",
+    "errorPrefix": "Ошибка: ",
+    "errorConnection": "Не удалось подключиться к Gemini API. Проверьте подключение к интернету.",
+    "messageInput": {
+      "placeholder": "Напишите сообщение...",
+      "sendButton": "Отправить сообщение"
+    },
     "messageList": {
       "emptyState": "Начните разговор с ИИ ассистентом. Задайте вопрос о тренировках, питании или программах упражнений.",
       "typing": "ИИ печатает..."
