@@ -187,7 +187,11 @@ export function ThreeDotsIcon({
   );
 }
 
-export function SettingsIcon({ className = "h-8 w-8" }: { className?: string }) {
+export function SettingsIcon({
+  className = "h-8 w-8",
+}: {
+  className?: string;
+}) {
   return (
     <svg
       className={className}
@@ -202,7 +206,6 @@ export function SettingsIcon({ className = "h-8 w-8" }: { className?: string }) 
       <circle cx="12" cy="12" r="3"></circle>
       <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
     </svg>
-
   );
 }
 
@@ -224,6 +227,45 @@ export function ReplaceIcon({ className = "h-4 w-4" }: { className?: string }) {
 
       <path d="M20 17H7"></path>
       <path d="M11 21l-4-4 4-4"></path>
+    </svg>
+  );
+}
+
+export function FeedbackIcon() {
+  return (
+    <svg
+      width="20px"
+      height="20px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M21 15C21 16.1046 20.1046 17 19 17H7L3 21V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V15Z"
+        stroke="violet"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+
+      <path
+        d="M7 8H17"
+        stroke="violet"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+      <path
+        d="M7 12H17"
+        stroke="violet"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+      <path
+        d="M7 16H13"
+        stroke="violet"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
     </svg>
   );
 }

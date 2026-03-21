@@ -1,9 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import type { ExerciseActionSheetProps } from "@/types/workout";
 import { ActionButton } from "@/components/ActionSheet/ActionButton/ActionButton";
-import { InfoIcon, PlayIcon, TrashIcon, ReplaceIcon } from "@/components/Icons/Icons";
+import {
+  InfoIcon,
+  PlayIcon,
+  TrashIcon,
+  ReplaceIcon,
+  FeedbackIcon,
+} from "@/components/Icons/Icons";
 
 export function ExerciseActionSheet({
   exercise,
@@ -15,6 +21,10 @@ export function ExerciseActionSheet({
   //containerRef: _containerRef,
 }: ExerciseActionSheetProps) {
   const { t } = useTranslation();
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackSent, setFeedbackSent] = useState(false);
+
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -88,9 +98,66 @@ export function ExerciseActionSheet({
               }}
               variant="red"
             />
+            <ActionButton
+              icon={<FeedbackIcon />}
+              text={t("exerciseActionSheet.feedbackAboutExercise")}
+              onClick={() => setShowFeedback(true)}
+              variant="violet"
+            />
           </div>
         </div>
       </div>
+
+      {showFeedback && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+          <div
+            role="button"
+            tabIndex={-1}
+            aria-label="close feedback modal"
+            onClick={() => {
+              setShowFeedback(false);
+              setFeedbackText("");
+              setFeedbackSent(false);
+            }}
+            className="absolute inset-0 cursor-default bg-black/60"
+          />
+          <div className="relative z-[70] w-full max-w-[400px] mx-4 bg-[#161827] rounded-2xl p-6">
+            {feedbackSent ? (
+              <p className="text-center text-green-400 text-lg font-medium">
+                {t("exerciseActionSheet.feedbackSent")}
+              </p>
+            ) : (
+              <>
+                <h3 className="text-xl font-semibold text-white mb-1">
+                  {t("exerciseActionSheet.feedbackAboutExercise")}
+                </h3>
+                <p className="text-md text-slate-400 mb-4">{exercise.name}</p>
+                <textarea
+                  value={feedbackText}
+                  onChange={(e) => setFeedbackText(e.target.value)}
+                  placeholder={t("exerciseActionSheet.feedbackPlaceholder")}
+                  className="w-full h-32 rounded-xl bg-[#1e2035] text-white placeholder-slate-500 p-3 resize-none outline-none focus:ring-2 focus:ring-main"
+                />
+                <button
+                  disabled={!feedbackText.trim()}
+                  onClick={() => {
+                    setFeedbackSent(true);
+                    setTimeout(() => {
+                      setShowFeedback(false);
+                      setFeedbackText("");
+                      setFeedbackSent(false);
+                      onClose();
+                    }, 1500);
+                  }}
+                  className="mt-4 w-full rounded-xl bg-main py-3 text-white font-semibold disabled:opacity-40"
+                >
+                  {t("exerciseActionSheet.send")}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 
