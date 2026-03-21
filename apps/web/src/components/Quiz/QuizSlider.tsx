@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface QuizSliderProps {
   value: string;
   min: number;
@@ -6,6 +8,7 @@ interface QuizSliderProps {
 }
 
 export function QuizSlider({ value, min, max, onChange }: QuizSliderProps) {
+  const { t } = useTranslation();
   const numValue = value ? parseFloat(value) : min;
 
   // Calculate color based on value (green to red gradient)
@@ -29,11 +32,11 @@ export function QuizSlider({ value, min, max, onChange }: QuizSliderProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <span className="text-sm text-gray-500">No pain</span>
+        <span className="text-sm text-gray-500">{t("quiz.slider.noPain")}</span>
         <div className="text-3xl font-bold" style={{ color: currentColor }}>
           {value || min}
         </div>
-        <span className="text-sm text-gray-500">Worst pain</span>
+        <span className="text-sm text-gray-500">{t("quiz.slider.worstPain")}</span>
       </div>
 
       <div className="relative">

@@ -846,11 +846,11 @@ function ExerciseSetsPage({
           <div className="flex justify-between">
             <Button
               onClick={handleCompleteExercise}
-              className={`h-[50px] ${painRequired ? "w-full" : "w-[180px]"} rounded-[12px] bg-emerald-500 text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30`}
+              className={`h-[50px] ${showPainSlider && !painRequired ? "w-[180px]" : "w-full"} rounded-[12px] bg-emerald-500 text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30`}
             >
               DONE
             </Button>
-            {!painRequired && (
+            {showPainSlider && !painRequired && (
               <Button
                 onClick={handleSkipExercise}
                 className="h-[50px] w-[180px] rounded-[12px] bg-main text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-emerald-500/30"

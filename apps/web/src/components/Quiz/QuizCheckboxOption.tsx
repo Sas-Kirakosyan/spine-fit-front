@@ -26,7 +26,7 @@ export function QuizCheckboxOption({
     >
       <div className="flex items-center">
         <div
-          className={`mr-3 flex h-5 w-5 items-center justify-center rounded ${
+          className={`mr-3 flex h-5 w-5 shrink-0 items-center justify-center rounded ${
             isSelected ? "bg-main" : "border-2 border-gray-300"
           }`}
         >

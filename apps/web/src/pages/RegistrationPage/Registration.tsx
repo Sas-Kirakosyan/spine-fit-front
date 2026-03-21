@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { RegistrationFormData, RegistrationProps } from "@/types/auth";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -15,6 +16,7 @@ function Registration({
   onNavigateToHome,
   onNavigateToWorkout,
 }: RegistrationProps) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<RegistrationFormData>({
     username: "",
     email: "",
@@ -45,35 +47,35 @@ function Registration({
     const newErrors: Partial<RegistrationFormData> = {};
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+      newErrors.firstName = t("registrationPage.errors.firstNameRequired");
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+      newErrors.lastName = t("registrationPage.errors.lastNameRequired");
     }
 
     if (!formData.username.trim()) {
-      newErrors.username = "Username is required";
+      newErrors.username = t("registrationPage.errors.usernameRequired");
     } else if (formData.username.length < 3) {
-      newErrors.username = "Username must contain at least 3 characters";
+      newErrors.username = t("registrationPage.errors.usernameMinLength");
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t("registrationPage.errors.emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
+      newErrors.email = t("registrationPage.errors.emailInvalid");
     }
 
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = t("registrationPage.errors.passwordRequired");
     } else if (formData.password.length < 6) {
-      newErrors.password = "Password must contain at least 6 characters";
+      newErrors.password = t("registrationPage.errors.passwordMinLength");
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Password confirmation is required";
+      newErrors.confirmPassword = t("registrationPage.errors.confirmPasswordRequired");
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
+      newErrors.confirmPassword = t("registrationPage.errors.passwordsMismatch");
     }
 
     setErrors(newErrors);
@@ -97,76 +99,76 @@ function Registration({
 
       <div className="mt-8 flex-1 overflow-y-auto">
         <FormCard>
-          <FormHeader title="Registration" subtitle="Create your account" />
+          <FormHeader title={t("registrationPage.title")} subtitle={t("registrationPage.subtitle")} />
 
           <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-4">
               <FormField
-                label="First Name"
+                label={t("registrationPage.firstName")}
                 id="firstName"
                 name="firstName"
                 type="text"
                 value={formData.firstName}
                 onChange={handleInputChange}
                 error={errors.firstName}
-                placeholder="Enter first name"
+                placeholder={t("registrationPage.firstNamePlaceholder")}
               />
 
               <FormField
-                label="Last Name"
+                label={t("registrationPage.lastName")}
                 id="lastName"
                 name="lastName"
                 type="text"
                 value={formData.lastName}
                 onChange={handleInputChange}
                 error={errors.lastName}
-                placeholder="Enter last name"
+                placeholder={t("registrationPage.lastNamePlaceholder")}
               />
             </div>
 
             <FormField
-              label="Username"
+              label={t("registrationPage.username")}
               id="username"
               name="username"
               type="text"
               value={formData.username}
               onChange={handleInputChange}
               error={errors.username}
-              placeholder="Enter username"
+              placeholder={t("registrationPage.usernamePlaceholder")}
             />
 
             <FormField
-              label="Email"
+              label={t("registrationPage.email")}
               id="email"
               name="email"
               type="email"
               value={formData.email}
               onChange={handleInputChange}
               error={errors.email}
-              placeholder="Enter email"
+              placeholder={t("registrationPage.emailPlaceholder")}
             />
 
             <PasswordInput
-              label="Password"
+              label={t("registrationPage.password")}
               id="password"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
               error={errors.password}
-              placeholder="Enter password"
+              placeholder={t("registrationPage.passwordPlaceholder")}
             />
 
             <PasswordInput
-              label="Confirm Password"
+              label={t("registrationPage.confirmPassword")}
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleInputChange}
               error={errors.confirmPassword}
-              placeholder="Confirm password"
+              placeholder={t("registrationPage.confirmPasswordPlaceholder")}
             />
 
-            <SubmitButton text="Register" />
+            <SubmitButton text={t("registrationPage.register")} />
 
             <Divider />
           </form>
@@ -174,8 +176,8 @@ function Registration({
       </div>
 
       <AuthSwitchLink
-        question="Already have an account?"
-        linkText="Login"
+        question={t("registrationPage.haveAccount")}
+        linkText={t("registrationPage.login")}
         onClick={onSwitchToLogin || (() => {})}
       />
     </PageContainer>
