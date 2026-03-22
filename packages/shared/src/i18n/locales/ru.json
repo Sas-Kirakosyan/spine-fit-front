@@ -425,5 +425,58 @@
       "select": "Выбрать",
       "deselect": "Снять выбор"
     }
+  },
+  "myPlanPage": {
+    "header": {
+      "title": "Мой план",
+      "goBack": "Назад"
+    },
+    "goal": "Цель",
+    "sections": {
+      "location": "МЕСТО",
+      "trainingProfile": "ПРОФИЛЬ ТРЕНИРОВОК",
+      "trainingFormat": "ФОРМАТ ТРЕНИРОВОК",
+      "preferences": "НАСТРОЙКИ",
+      "generatedPlan": "СГЕНЕРИРОВАННЫЙ ПЛАН"
+    },
+    "location": {
+      "myGym": "Мой Спортзал",
+      "equipment": "Оборудование",
+      "selected": "{{count}} выбрано",
+      "bodyweightOnly": "Только с весом тела"
+    },
+    "trainingProfile": {
+      "workoutsPerWeek": "Тренировок / Неделю",
+      "duration": "Длительность",
+      "experience": "Опыт"
+    },
+    "trainingFormat": {
+      "trainingSplit": "Сплит тренировок",
+      "exerciseVariability": "Вариативность упражнений",
+      "warmUpSets": "Разминочные подходы",
+      "circuitsAndSupersets": "Круговые и суперсеты"
+    },
+    "preferences": {
+      "units": "Единицы",
+      "cardio": "Кардио",
+      "stretching": "Растяжка",
+      "manageExercises": "Управление упражнениями"
+    },
+    "generatePlan": "Создать план",
+    "generating": "Создаём...",
+    "generatedPlan": {
+      "created": "Создан:",
+      "exercisesPerDay": "{{count}} упражнений \u2022 {{sets}} подходов каждое",
+      "missingMuscleGroups": "\u26a0\ufe0f Недостающие группы мышц",
+      "alternativeExercises": "{{count}} альтернативных упражнения предложено"
+    },
+    "alerts": {
+      "quizRequired": "\u26a0\ufe0f Пожалуйста, сначала пройдите вступительный тест для создания персонального плана.",
+      "planGenerated": "\u2705 План создан!\n\n{{name}}\n\n{{workouts}} тренировок в неделю с {{exercises}} упражнениями в день.",
+      "generateFailed": "Не удалось создать план. Проверьте настройки и попробуйте снова."
+    }
+  },
+  "selectionModal": {
+    "close": "Закрыть"
   }
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { MyPlanPageProps } from "@/types/pages";
 import type { EquipmentCategory } from "@/types/equipment";
@@ -30,6 +31,7 @@ function MyPlanPage({
   onNavigateBack,
   onNavigateToAvailableEquipment,
 }: MyPlanPageProps) {
+  const { t } = useTranslation();
   const [bodyweightOnly, setBodyweightOnly] = useState(false);
   const [warmUpSets, setWarmUpSets] = useState(true);
   const [circuitsAndSupersets, setCircuitsAndSupersets] = useState(true);
@@ -118,9 +120,7 @@ function MyPlanPage({
 
       // Validate that quiz/onboarding was completed
       if (!quizData) {
-        alert(
-          "⚠️ Please complete the onboarding quiz first to generate a personalized plan.",
-        );
+        alert(t("myPlanPage.alerts.quizRequired"));
         setIsGenerating(false);
         return;
       }
@@ -174,17 +174,15 @@ function MyPlanPage({
       setGeneratedPlan(plan);
 
       alert(
-        `✅ Plan Generated!\n\n${plan.name}\n\n${
-          plan.workoutDays.length
-        } workouts per week with ${
-          plan.workoutDays[0]?.exercises.length || 0
-        } exercises per day.`,
+        t("myPlanPage.alerts.planGenerated", {
+          name: plan.name,
+          workouts: plan.workoutDays.length,
+          exercises: plan.workoutDays[0]?.exercises.length || 0,
+        }),
       );
     } catch (error) {
       console.error("Error generating plan:", error);
-      alert(
-        "Failed to generate plan. Please check your settings and try again.",
-      );
+      alert(t("myPlanPage.alerts.generateFailed"));
     } finally {
       setIsGenerating(false);
     }
@@ -200,7 +198,7 @@ function MyPlanPage({
           onClick={() => handleFieldClick("goal")}
           className="w-full rounded-[14px] bg-main p-4 flex items-center justify-between text-white"
         >
-          <span className="text-lg font-semibold">Goal</span>
+          <span className="text-lg font-semibold">{t("myPlanPage.goal")}</span>
           <div className="flex items-center gap-2">
             <span className="text-l ml-10 font-semibold">
               {planSettings.goal}
@@ -212,11 +210,11 @@ function MyPlanPage({
         {/* Location Section */}
         <div className="flex flex-col gap-3">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">
-            LOCATION
+            {t("myPlanPage.sections.location")}
           </h2>
           <div className="flex items-center justify-between">
             <Button className="text-lg font-semibold text-white flex items-center gap-2 hover:text-white/80 transition-colors">
-              My Gym
+              {t("myPlanPage.location.myGym")}
               <ChevronDownIcon />
             </Button>
             <Button className="text-white hover:bg-white/10 rounded-full p-2 transition-colors">
@@ -232,11 +230,11 @@ function MyPlanPage({
                 className="w-full flex items-center justify-between text-left"
               >
                 <span className="text-base font-medium text-white">
-                  Equipment
+                  {t("myPlanPage.location.equipment")}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
-                    {selectedCount} Selected
+                    {t("myPlanPage.location.selected", { count: selectedCount })}
                   </span>
                   <ChevronRightIcon className="h-5 w-5" />
                 </div>
@@ -244,7 +242,7 @@ function MyPlanPage({
 
               <div className="flex items-center justify-between">
                 <span className="text-base font-medium text-white">
-                  Bodyweight-Only
+                  {t("myPlanPage.location.bodyweightOnly")}
                 </span>
                 <Button
                   onClick={() => setBodyweightOnly(!bodyweightOnly)}
@@ -266,7 +264,7 @@ function MyPlanPage({
         {/* Training Profile Section */}
         <div className="flex flex-col gap-3">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">
-            TRAINING PROFILE
+            {t("myPlanPage.sections.trainingProfile")}
           </h2>
           <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
             <div className="space-y-4">
@@ -275,7 +273,7 @@ function MyPlanPage({
                 className="w-full flex items-center justify-between text-left"
               >
                 <span className="text-base font-medium text-white">
-                  Workouts / Week
+                  {t("myPlanPage.trainingProfile.workoutsPerWeek")}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
@@ -290,7 +288,7 @@ function MyPlanPage({
                 className="w-full flex items-center justify-between text-left"
               >
                 <span className="text-base font-medium text-white">
-                  Duration
+                  {t("myPlanPage.trainingProfile.duration")}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
@@ -305,7 +303,7 @@ function MyPlanPage({
                 className="w-full flex items-center justify-between text-left"
               >
                 <span className="text-base font-medium text-white">
-                  Experience
+                  {t("myPlanPage.trainingProfile.experience")}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
@@ -321,7 +319,7 @@ function MyPlanPage({
         {/* Training Format Section */}
         <div className="flex flex-col gap-3">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">
-            TRAINING FORMAT
+            {t("myPlanPage.sections.trainingFormat")}
           </h2>
           <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
             <div className="space-y-4">
@@ -330,7 +328,7 @@ function MyPlanPage({
                 className="w-full flex items-center justify-between text-left"
               >
                 <span className="text-base font-medium text-white">
-                  Training Split
+                  {t("myPlanPage.trainingFormat.trainingSplit")}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
@@ -345,7 +343,7 @@ function MyPlanPage({
                 className="w-full flex items-center justify-between text-left"
               >
                 <span className="text-base font-medium text-white">
-                  Exercise Variability
+                  {t("myPlanPage.trainingFormat.exerciseVariability")}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
@@ -357,7 +355,7 @@ function MyPlanPage({
 
               <div className="flex items-center justify-between">
                 <span className="text-base font-medium text-white">
-                  Warm-Up Sets
+                  {t("myPlanPage.trainingFormat.warmUpSets")}
                 </span>
                 <Button
                   onClick={() => setWarmUpSets(!warmUpSets)}
@@ -375,7 +373,7 @@ function MyPlanPage({
 
               <div className="flex items-center justify-between">
                 <span className="text-base font-medium text-white">
-                  Circuits & Supersets
+                  {t("myPlanPage.trainingFormat.circuitsAndSupersets")}
                 </span>
                 <Button
                   onClick={() => setCircuitsAndSupersets(!circuitsAndSupersets)}
@@ -397,7 +395,7 @@ function MyPlanPage({
         {/* Preferences Section */}
         <div className="flex flex-col gap-3">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">
-            PREFERENCES
+            {t("myPlanPage.sections.preferences")}
           </h2>
           <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
             <div className="space-y-4">
@@ -405,7 +403,7 @@ function MyPlanPage({
                 onClick={() => handleFieldClick("units")}
                 className="w-full flex items-center justify-between text-left"
               >
-                <span className="text-base font-medium text-white">Units</span>
+                <span className="text-base font-medium text-white">{t("myPlanPage.preferences.units")}</span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
                     {planSettings.units}
@@ -418,7 +416,7 @@ function MyPlanPage({
                 onClick={() => handleFieldClick("cardio")}
                 className="w-full flex items-center justify-between text-left"
               >
-                <span className="text-base font-medium text-white">Cardio</span>
+                <span className="text-base font-medium text-white">{t("myPlanPage.preferences.cardio")}</span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
                     {planSettings.cardio}
@@ -432,7 +430,7 @@ function MyPlanPage({
                 className="w-full flex items-center justify-between text-left"
               >
                 <span className="text-base font-medium text-white">
-                  Stretching
+                  {t("myPlanPage.preferences.stretching")}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-base font-medium text-white">
@@ -444,7 +442,7 @@ function MyPlanPage({
 
               <Button className="w-full flex items-center justify-between text-left">
                 <span className="text-base font-medium text-white">
-                  Manage Exercises
+                  {t("myPlanPage.preferences.manageExercises")}
                 </span>
                 <ChevronRightIcon className="h-5 w-5" />
               </Button>
@@ -459,7 +457,7 @@ function MyPlanPage({
             disabled={isGenerating}
             className="w-full max-w-[380px] fixed bottom-0 left-1/2 -translate-x-1/2 z-50 rounded-[10px] bg-main h-[46px] text-white font-semibold text-lg"
           >
-            {isGenerating ? "Generating..." : "Generate Plan"}
+            {isGenerating ? t("myPlanPage.generating") : t("myPlanPage.generatePlan")}
           </Button>
         </div>
 
@@ -476,7 +474,7 @@ function MyPlanPage({
                     {generatedPlan.name}
                   </p>
                   <p className="text-sm text-white/60 mt-1">
-                    Created:{" "}
+                    {t("myPlanPage.generatedPlan.created")}{" "}
                     {new Date(generatedPlan.createdAt).toLocaleDateString()}
                   </p>
                 </div>
@@ -490,8 +488,10 @@ function MyPlanPage({
                       {day.dayName}
                     </p>
                     <p className="text-sm text-white/60">
-                      {day.exercises.length} exercises •{" "}
-                      {day.exercises[0]?.sets || 0} sets each
+                      {t("myPlanPage.generatedPlan.exercisesPerDay", {
+                        count: day.exercises.length,
+                        sets: day.exercises[0]?.sets || 0,
+                      })}
                     </p>
                   </div>
                 ))}
@@ -499,15 +499,16 @@ function MyPlanPage({
                 {generatedPlan.missingMuscleGroups.length > 0 && (
                   <div className="mt-3 p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
                     <p className="text-sm font-medium text-yellow-500 mb-1">
-                      ⚠️ Missing Muscle Groups
+                      {t("myPlanPage.generatedPlan.missingMuscleGroups")}
                     </p>
                     <p className="text-xs text-white/60">
                       {generatedPlan.missingMuscleGroups.join(", ")}
                     </p>
                     {generatedPlan.alternativeExercises.length > 0 && (
                       <p className="text-xs text-white/60 mt-2">
-                        {generatedPlan.alternativeExercises.length} alternative
-                        exercises suggested
+                        {t("myPlanPage.generatedPlan.alternativeExercises", {
+                          count: generatedPlan.alternativeExercises.length,
+                        })}
                       </p>
                     )}
                   </div>
