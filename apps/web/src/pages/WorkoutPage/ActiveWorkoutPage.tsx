@@ -226,11 +226,21 @@ function ActiveWorkoutPage({
     // Mark current workout as completed
     const generatedPlan = loadPlanFromLocalStorage();
     if (generatedPlan && todaysExercises.length > 0) {
-      // Find the current active workout by matching exercises
-      const currentWorkout = getNextAvailableWorkout(
-        generatedPlan,
-        completedWorkoutIds
-      );
+      // Prefer the manually selected day (from swap sheet), fallback to rotation
+      let currentWorkout = null;
+      const manualIndex = localStorage.getItem("selectedWorkoutDayIndex");
+      if (manualIndex !== null) {
+        const idx = parseInt(manualIndex, 10);
+        if (!isNaN(idx) && idx < generatedPlan.workoutDays.length) {
+          currentWorkout = generatedPlan.workoutDays[idx];
+        }
+      }
+      if (!currentWorkout) {
+        currentWorkout = getNextAvailableWorkout(
+          generatedPlan,
+          completedWorkoutIds
+        );
+      }
 
       if (currentWorkout) {
         const workoutId = `${generatedPlan.id}_${currentWorkout.dayNumber}_${currentWorkout.dayName}`;
@@ -240,6 +250,9 @@ function ActiveWorkoutPage({
         if (setCompletedWorkoutIds) {
           setCompletedWorkoutIds(updatedIds);
         }
+
+        // Clear manual selection so WorkoutPage advances to the next day
+        localStorage.removeItem("selectedWorkoutDayIndex");
 
         console.log(
           `✅ Marked workout complete: ${currentWorkout.dayName} (${workoutId})`
