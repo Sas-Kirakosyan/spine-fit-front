@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { DayPicker } from "react-day-picker";
 import { months } from "@/utils/date";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
@@ -15,6 +16,7 @@ function HistoryPage({
   activePage,
   workouts,
 }: HistoryPageProps) {
+  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
@@ -86,7 +88,7 @@ function HistoryPage({
               <button
                 onClick={handlePreviousMonth}
                 className="h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-main transition-colors"
-                aria-label="Previous month"
+                aria-label={t("historyPage.navigation.previousMonth")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +107,7 @@ function HistoryPage({
               <button
                 onClick={handleNextMonth}
                 className="h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-main transition-colors"
-                aria-label="Next month"
+                aria-label={t("historyPage.navigation.nextMonth")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

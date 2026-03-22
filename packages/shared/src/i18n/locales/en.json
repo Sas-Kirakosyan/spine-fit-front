@@ -391,6 +391,19 @@
         "question": "How long should your workouts be?",
         "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min"]
       }
-    }
-  }
+    }  },
+  "historyPage": {
+    "noWorkoutsOnDate": "No workouts on selected date",
+    "noCompletedWorkouts": "No completed workouts",
+    "duration": "Duration",
+    "metrics": {
+      "volume": "Volume",
+      "calories": "Calories",
+      "exercises": "Exercises",
+      "records": "Records"
+    },
+    "navigation": {
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month"
+    }  }
 }
