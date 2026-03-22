@@ -1,4 +1,5 @@
 import type { EquipmentItem as EquipmentItemType } from "@/types/equipment";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/Buttons/Button";
 
 interface EquipmentItemProps {
@@ -14,6 +15,7 @@ export function EquipmentItem({
   onEdit,
   formatWeights,
 }: EquipmentItemProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-start gap-3 p-3 rounded-lg bg-[#1B1E2B]/90">
       {/* Image */}
@@ -26,7 +28,7 @@ export function EquipmentItem({
           />
         ) : (
           <div className="w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-gray-400 text-xs">
-            No img
+            {t("availableEquipmentPage.item.noImage")}
           </div>
         )}
       </div>
@@ -41,7 +43,7 @@ export function EquipmentItem({
               onClick={onEdit}
               className="text-white hover:text-white/80 transition-colors font-medium"
             >
-              Edit
+              {t("availableEquipmentPage.item.edit")}
             </Button>
           )}
         </div>
@@ -55,7 +57,7 @@ export function EquipmentItem({
             ? "border-white bg-white"
             : "border-gray-600 hover:border-gray-500"
         } transition-colors`}
-        ariaLabel={item.selected ? "Deselect equipment" : "Select equipment"}
+        ariaLabel={item.selected ? t("availableEquipmentPage.item.deselect") : t("availableEquipmentPage.item.select")}
       >
         {item.selected && (
           <svg

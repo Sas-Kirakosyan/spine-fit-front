@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { AvailableEquipmentPageProps } from "@/types/pages";
 import type {
@@ -15,6 +16,7 @@ import { AvailableEquipmentPageHeader } from "./AvailableEquipmentPageHeader";
 function AvailableEquipmentPage({
   onNavigateBack,
 }: AvailableEquipmentPageProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<EquipmentTab>(() => {
     try {
       const saved = localStorage.getItem("equipmentActiveTab");
@@ -89,7 +91,7 @@ function AvailableEquipmentPage({
 
   const formatWeights = (weights: EquipmentItemType["weights"]) => {
     if (weights.length === 0) {
-      return "No weights";
+      return t("availableEquipmentPage.noWeights");
     }
     const sorted = [...weights].sort((a, b) => a.weight - b.weight);
     const display = sorted.slice(0, 4);
@@ -116,7 +118,7 @@ function AvailableEquipmentPage({
                 : "bg-[#1B1E2B] text-gray-400"
             }`}
           >
-            {tab === "all" ? "All" : "Selected"}
+            {tab === "all" ? t("availableEquipmentPage.tabs.all") : t("availableEquipmentPage.tabs.selected")}
           </Button>
         ))}
       </div>

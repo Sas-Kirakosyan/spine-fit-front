@@ -407,5 +407,23 @@
     "navigation": {
       "previousMonth": "Предыдущий месяц",
       "nextMonth": "Следующий месяц"
-    }  }
+    }
+  },
+  "availableEquipmentPage": {
+    "tabs": {
+      "all": "Все",
+      "selected": "Выбранные"
+    },
+    "noWeights": "Нет весов",
+    "header": {
+      "title": "Доступное оборудование",
+      "goBack": "Назад"
+    },
+    "item": {
+      "noImage": "Нет фото",
+      "edit": "Изменить",
+      "select": "Выбрать",
+      "deselect": "Снять выбор"
+    }
+  }
 }

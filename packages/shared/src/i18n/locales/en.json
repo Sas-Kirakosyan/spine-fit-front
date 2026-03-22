@@ -405,5 +405,23 @@
     "navigation": {
       "previousMonth": "Previous month",
       "nextMonth": "Next month"
-    }  }
+    }
+  },
+  "availableEquipmentPage": {
+    "tabs": {
+      "all": "All",
+      "selected": "Selected"
+    },
+    "noWeights": "No weights",
+    "header": {
+      "title": "Available Equipment",
+      "goBack": "Go back"
+    },
+    "item": {
+      "noImage": "No img",
+      "edit": "Edit",
+      "select": "Select equipment",
+      "deselect": "Deselect equipment"
+    }
+  }
 }
