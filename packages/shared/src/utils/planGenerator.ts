@@ -6,7 +6,7 @@ import type { QuizAnswers } from "../types/quiz";
 import { filterExercisesByProfile, getAlternativeExercises, type FilterCriteria, type PainProfile } from "./exerciseFilter";
 import { mapSplitToMuscleGroups, assignExercisesToDays, getMissingMuscleGroups, type WorkoutDay } from "./splitScheduler";
 import { calculateVolume, calculateExercisesPerWorkout } from "./volumeCalculator";
-import { applyProgressionToExercises } from "./progressiveOverload";
+import { applyProgressionToExercises, getDefaultProgression } from "./progressiveOverload";
 import { buildSourceOnboarding, determineWorkoutSplit, enforceFullBodyABRequirements, type SourceOnboarding } from "./planGeneratorHelpers";
 
 export type { WorkoutDay };
@@ -538,9 +538,36 @@ export function generateTrainingPlan(
   // Days 3-4: Hypertrophy (more reps, moderate weight)
   const isStrengthHypertrophySplit = primarySplitType === "UPPER_LOWER_STRENGTH_HYPERTROPHY";
 
+  // Helper: check if exercise has a "medium" restriction for the user's condition
+  // Map user's painLocation strings to restriction issue_type keys (case-insensitive)
+  const painIssueTypes: string[] = [];
+  for (const loc of (painProfile.painLocation || [])) {
+    const lower = loc.toLowerCase();
+    if (lower.includes("lower back") || lower.includes("l4") || lower.includes("l5") || lower.includes("s1")) painIssueTypes.push("l5_s1");
+    if (lower.includes("sciatica")) painIssueTypes.push("sciatica");
+  }
+
+  const hasMediumRestriction = (ex: Exercise): boolean => {
+    if (!ex.back_issue_restrictions?.length || !painIssueTypes.length) return false;
+    return ex.back_issue_restrictions.some(
+      r => painIssueTypes.includes(r.issue_type) && r.restriction_level === "medium"
+    );
+  };
+
+  // Helper: get restriction recommendation note for the user's condition
+  const getRestrictionNote = (ex: Exercise): string | undefined => {
+    if (!ex.back_issue_restrictions?.length || !painIssueTypes.length) return undefined;
+    const restriction = ex.back_issue_restrictions.find(
+      r => painIssueTypes.includes(r.issue_type) && (r.restriction_level === "medium" || r.restriction_level === "low")
+    );
+    return restriction?.recommendation;
+  };
+
   // Fix 6: Experience-based weight floors to prevent unrealistically light weights
+  // Skip floor for medium-restricted exercises to respect lighter-weight recommendations
   const getWeightFloor = (ex: Exercise, experience: string): number => {
     if (isCoreStability(ex)) return 0;
+    if (hasMediumRestriction(ex)) return 0;
     const isCompound = ex.muscle_groups.length >= 3;
     const floors: Record<string, { compound: number; isolation: number }> = {
       Beginner: { compound: 10, isolation: 5 },
@@ -570,6 +597,8 @@ export function generateTrainingPlan(
       ...day,
       exercises: day.exercises.map((exercise) => {
 
+        const progression = getDefaultProgression(exercise);
+
         // Core stability exercises should not have weight assigned
         if (isCoreStability(exercise)) {
           return {
@@ -579,6 +608,7 @@ export function generateTrainingPlan(
             weight: 0,
             weight_unit: "bodyweight",
             load_mode: undefined,
+            progression,
           };
         }
 
@@ -592,6 +622,7 @@ export function generateTrainingPlan(
             reps: rearDeltReps,
             weight: Math.max(rearDeltWeight, getWeightFloor(exercise, effectivePlanSettings.experience)),
             weight_unit: exercise.weight_unit || "kg",
+            progression,
           };
         }
 
@@ -604,17 +635,37 @@ export function generateTrainingPlan(
             reps: 20,
             weight_unit: "meters",
             weight: exercise.weight || 0,
+            progression,
+          };
+        }
+
+        // Medium-restricted exercises: use 50% of DB default, skip weight floor
+        if (hasMediumRestriction(exercise)) {
+          const restrictedWeight = exercise.weight
+            ? Math.round(exercise.weight * 0.5 * 2) / 2
+            : 0;
+          return {
+            ...exercise,
+            sets: daySets,
+            reps: dayReps,
+            weight: restrictedWeight,
+            weight_unit: restrictedWeight === 0 ? "bodyweight" : (exercise.weight_unit || "kg"),
+            restriction_note: getRestrictionNote(exercise),
+            progression,
           };
         }
 
         // For all other exercises: set sets/reps based on day type and experience level
         const calculatedWeight = exercise.weight ? Math.round(exercise.weight * dayWeightMultiplier * 2) / 2 : exercise.weight;
         const weightFloor = getWeightFloor(exercise, effectivePlanSettings.experience);
+        const restrictionNote = getRestrictionNote(exercise);
         return {
           ...exercise,
           sets: daySets,
           reps: dayReps,
           weight: calculatedWeight ? Math.max(calculatedWeight, weightFloor) : calculatedWeight,
+          ...(restrictionNote ? { restriction_note: restrictionNote } : {}),
+          progression,
         };
       }),
     };
@@ -1568,18 +1619,38 @@ function restructureThreeDayFullBody(
       ].filter(Boolean) as Exercise[]
     );
 
-    // Day 2 Lower: hinge + non-hinge quad + hamstring (isolation) + second quad
+    // Day 2 Lower: quad compound (Leg Press) → unilateral compound (Step-Up) → hamstring isolation
+    // Only 3 exercises to keep session ≤ 35 min. Avoid stacking Hip Thrust + Back Hyperextension.
     const nonHingeQuads = quadExercises.filter(q => !hingeExercises.some(h => h.id === q.id));
+
+    // Prefer a unilateral leg compound (Step-Up, Lunge, Split Squat) as the 2nd exercise
+    const unilateralKeywords = ["step-up", "step up", "lunge", "split squat", "single-leg", "single leg"];
+    const unilateralLeg = legExercises.find(
+      e => unilateralKeywords.some(kw => e.name.toLowerCase().includes(kw)) &&
+           e.id !== nonHingeQuads[0]?.id
+    );
+
+    // Hamstring isolation: exclude exercises that also target erector_spinae (Back Hyperextension)
+    // to avoid stacking two medium-restricted lower-back-loading exercises
+    const pureHamstringIsolation = hamstringExercises.find(
+      h =>
+        !hingeExercises.some(hi => hi.id === h.id) &&
+        !(h.muscle_groups || []).includes("erector_spinae") &&
+        h.id !== nonHingeQuads[0]?.id &&
+        h.id !== unilateralLeg?.id
+    );
+    // Fallback: any hamstring that isn't the same as slots 1-2
+    const hamstringFallback = hamstringExercises.find(
+      h =>
+        h.id !== nonHingeQuads[0]?.id &&
+        h.id !== unilateralLeg?.id
+    );
+
     const uluDay2 = dedupeExercises(
       [
-        hingeExercises[0] || legExercises[0],
-        nonHingeQuads[0],
-        hamstringExercises.find(
-          h =>
-            !hingeExercises.some(hi => hi.id === h.id) &&
-            h.id !== nonHingeQuads[0]?.id
-        ),
-        nonHingeQuads[1],
+        nonHingeQuads[0] || legExercises[0],                       // 1. Quad compound (Leg Press)
+        unilateralLeg || nonHingeQuads[1] || legExercises[1],      // 2. Unilateral (Step-Up)
+        pureHamstringIsolation || hamstringFallback,               // 3. Hamstring isolation
       ].filter(Boolean) as Exercise[]
     );
 
@@ -1598,14 +1669,27 @@ function restructureThreeDayFullBody(
       ].filter(Boolean) as Exercise[]
     );
 
-    // Pad upper days to at least 4 exercises using non-leg pool exercises
-    const padUpperToFour = (exercises: Exercise[], avoidIds?: Set<number>): Exercise[] => {
-      if (exercises.length >= 4) return exercises.slice(0, 5);
+    // Pad upper days to 5 exercises, prioritizing arm isolation for the extra slot
+    const padUpperToFive = (
+      exercises: Exercise[],
+      avoidIds?: Set<number>,
+      preferArmIsolation?: "biceps" | "triceps"
+    ): Exercise[] => {
+      if (exercises.length >= 5) return exercises.slice(0, 5);
       const usedIds = new Set(exercises.map(e => e.id));
       const pool = allDayExercises.filter(e => !usedIds.has(e.id) && !isPureLeg(e));
       const preferred = pool.filter(e => !avoidIds?.has(e.id));
       const fallback = pool.filter(e => avoidIds?.has(e.id));
-      return dedupeExercises([...exercises, ...preferred, ...fallback].slice(0, 4));
+
+      // Prioritize arm isolation exercises (1-2 muscle groups targeting the preferred arm muscle)
+      const armIso = preferArmIsolation
+        ? preferred.filter(e =>
+            e.muscle_groups.includes(preferArmIsolation) &&
+            e.muscle_groups.length <= 2
+          )
+        : [];
+      const orderedPool = [...armIso, ...preferred.filter(e => !armIso.includes(e)), ...fallback];
+      return dedupeExercises([...exercises, ...orderedPool].slice(0, 5));
     };
 
     return [
@@ -1613,7 +1697,7 @@ function restructureThreeDayFullBody(
         ...days[0],
         dayName: "Day 1 (Upper - Push & Pull)",
         muscleGroups: ["chest", "front_delts", "triceps", "lats", "upper_back", "rear_delts", "biceps"],
-        exercises: padUpperToFour(uluDay1),
+        exercises: padUpperToFive(uluDay1, undefined, "triceps"),
       },
       {
         ...days[1],
@@ -1625,7 +1709,7 @@ function restructureThreeDayFullBody(
         ...days[2],
         dayName: "Day 3 (Upper - Pull & Push)",
         muscleGroups: ["lats", "upper_back", "rear_delts", "biceps", "chest", "front_delts"],
-        exercises: padUpperToFour(uluDay3, day1Ids),
+        exercises: padUpperToFive(uluDay3, day1Ids, "biceps"),
       },
     ];
   }

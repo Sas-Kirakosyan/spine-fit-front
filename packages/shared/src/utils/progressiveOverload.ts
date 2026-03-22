@@ -370,3 +370,37 @@ export function checkTrainingConsistency(
     totalWorkouts: recentWorkouts.length,
   };
 }
+
+/**
+ * Returns default progression guidance for an exercise in a new plan (no history).
+ */
+export function getDefaultProgression(exercise: Exercise): { increment_kg: number; rule: string } {
+  const isLowerBody = (exercise.muscle_groups || []).some(mg =>
+    ["quadriceps", "glutes", "hamstrings"].includes(mg)
+  );
+  const isCompound = (exercise.muscle_groups || []).length >= 3;
+  const isBodyweight = exercise.weight === 0 || exercise.weight_unit === "bodyweight";
+
+  if (isBodyweight) {
+    return {
+      increment_kg: 0,
+      rule: "When you complete all sets at target reps, add 1 rep per set next session",
+    };
+  }
+  if (isLowerBody && isCompound) {
+    return {
+      increment_kg: 5,
+      rule: "When you complete all sets at target reps, increase weight by 5kg next session",
+    };
+  }
+  if (isCompound) {
+    return {
+      increment_kg: 2.5,
+      rule: "When you complete all sets at target reps, increase weight by 2.5kg next session",
+    };
+  }
+  return {
+    increment_kg: 1,
+    rule: "When you complete all sets at target reps, increase weight by 1kg next session",
+  };
+}

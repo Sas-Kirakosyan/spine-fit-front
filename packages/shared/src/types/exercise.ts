@@ -35,5 +35,10 @@ export interface Exercise {
   weight: number;
   weight_unit: string;
   load_mode?: "external" | "assistance";
+  restriction_note?: string;
+  progression?: {
+    increment_kg: number;
+    rule: string;
+  };
 }
 
