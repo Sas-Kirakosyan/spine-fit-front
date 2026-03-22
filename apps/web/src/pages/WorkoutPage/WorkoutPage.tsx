@@ -235,7 +235,16 @@ function WorkoutPage({
   );
   const [isLoadingPlan, setIsLoadingPlan] = useState(!isCustomWorkout);
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const selectedDayIndexRef = useRef<number | null>(null);
+  const selectedDayIndexRef = useRef<number | null>(
+    (() => {
+      const stored = localStorage.getItem("selectedWorkoutDayIndex");
+      if (stored !== null) {
+        const idx = parseInt(stored, 10);
+        return isNaN(idx) ? null : idx;
+      }
+      return null;
+    })()
+  );
   const [c, setC] = useState(0); // counter to trigger re-generation
   const allExercises = allExercisesData as Exercise[];
 
@@ -297,8 +306,21 @@ function WorkoutPage({
           // Load existing plan
           let plan = JSON.parse(existingPlan) as GeneratedPlan;
           plan = syncGeneratedPlanWithSavedProgram(plan);
-          // Get next uncompleted workout based on completion status
 
+          // Prefer manually selected day from swap sheet
+          if (selectedDayIndexRef.current !== null) {
+            const idx = selectedDayIndexRef.current;
+            if (idx < plan.workoutDays.length && plan.workoutDays[idx].exercises.length > 0) {
+              setWorkoutExercises(plan.workoutDays[idx].exercises);
+              console.log(
+                `📋 Loaded manually selected ${plan.workoutDays[idx].dayName} workout (${plan.workoutDays[idx].exercises.length} exercises)`
+              );
+              setIsLoadingPlan(false);
+              return;
+            }
+          }
+
+          // Get next uncompleted workout based on completion status
           const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
           console.log("nextWorkout:", nextWorkout);
           if (nextWorkout && nextWorkout.exercises.length > 0) {
@@ -400,12 +422,16 @@ function WorkoutPage({
       if (e.key === "generatedPlan" && e.newValue) {
         try {
           const plan = JSON.parse(e.newValue);
-          const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
-          if (nextWorkout && nextWorkout.exercises.length > 0) {
-            setWorkoutExercises(nextWorkout.exercises);
+          // Respect manually selected day
+          const targetWorkout =
+            selectedDayIndexRef.current !== null && selectedDayIndexRef.current < plan.workoutDays.length
+              ? plan.workoutDays[selectedDayIndexRef.current]
+              : getNextAvailableWorkout(plan, completedWorkoutIds);
+          if (targetWorkout && targetWorkout.exercises.length > 0) {
+            setWorkoutExercises(targetWorkout.exercises);
             console.log(
-              `Updated to ${nextWorkout.dayName} workout from storage event:`,
-              nextWorkout.exercises.map((e: any) => e.name)
+              `Updated to ${targetWorkout.dayName} workout from storage event:`,
+              targetWorkout.exercises.map((e: any) => e.name)
             );
           }
         } catch (error) {
