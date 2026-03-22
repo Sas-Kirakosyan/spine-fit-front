@@ -23,6 +23,19 @@ export function useExerciseManagement(
     const generatedPlan = loadPlanFromLocalStorage();
 
     if (generatedPlan) {
+      // Prefer manually selected day from swap sheet
+      const manualIndex = localStorage.getItem("selectedWorkoutDayIndex");
+      if (manualIndex !== null) {
+        const idx = parseInt(manualIndex, 10);
+        if (
+          !isNaN(idx) &&
+          idx < generatedPlan.workoutDays.length &&
+          generatedPlan.workoutDays[idx].exercises.length > 0
+        ) {
+          return generatedPlan.workoutDays[idx].exercises;
+        }
+      }
+
       // Get the next available workout based on completion status
       const activeWorkout = getNextAvailableWorkout(
         generatedPlan,
@@ -52,17 +65,29 @@ export function useExerciseManagement(
       const generatedPlan = loadPlanFromLocalStorage();
       if (!generatedPlan) return false;
 
-      const currentWorkout = getNextAvailableWorkout(
-        generatedPlan,
-        completedWorkoutIds
-      );
-      if (!currentWorkout) return false;
+      // Prefer manually selected day
+      let workoutIndex = -1;
+      const manualIndex = localStorage.getItem("selectedWorkoutDayIndex");
+      if (manualIndex !== null) {
+        const idx = parseInt(manualIndex, 10);
+        if (!isNaN(idx) && idx < generatedPlan.workoutDays.length) {
+          workoutIndex = idx;
+        }
+      }
 
-      const workoutIndex = generatedPlan.workoutDays.findIndex(
-        (day) =>
-          day.dayNumber === currentWorkout.dayNumber &&
-          day.dayName === currentWorkout.dayName
-      );
+      if (workoutIndex === -1) {
+        const currentWorkout = getNextAvailableWorkout(
+          generatedPlan,
+          completedWorkoutIds
+        );
+        if (!currentWorkout) return false;
+
+        workoutIndex = generatedPlan.workoutDays.findIndex(
+          (day) =>
+            day.dayNumber === currentWorkout.dayNumber &&
+            day.dayName === currentWorkout.dayName
+        );
+      }
       if (workoutIndex === -1) return false;
 
       generatedPlan.workoutDays[workoutIndex].exercises = updateExercises(
