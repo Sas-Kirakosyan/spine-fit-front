@@ -15,7 +15,7 @@ import { QuizNavigationButtons } from "./QuizNavigationButtons";
 import { QuizMultiField } from "./QuizMultiField";
 
 export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
-  const [workoutType] = useState<"home" | "gym">("gym");
+  const [workoutType] = useState<"gym">("gym");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<number[]>([]);
@@ -28,14 +28,20 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const [units, setUnits] = useState<
     Record<number, "cm" | "ft" | "kg" | "lbs" | Record<string, string>>
   >({});
-  const [multiFieldValues, setMultiFieldValues] = useState<Record<string, string | number>>({});
-  const [multiFieldUnits, setMultiFieldUnits] = useState<Record<string, string>>({});
+  const [multiFieldValues, setMultiFieldValues] = useState<
+    Record<string, string | number>
+  >({});
+  const [multiFieldUnits, setMultiFieldUnits] = useState<
+    Record<string, string>
+  >({});
 
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
       if (!question.showIf) return true;
       const { fieldName, equals, in: inArray } = question.showIf;
-      const dependentQuestion = questions.find((q) => q.fieldName === fieldName);
+      const dependentQuestion = questions.find(
+        (q) => q.fieldName === fieldName,
+      );
       if (!dependentQuestion) return true;
       const dependentAnswer = answers[dependentQuestion.id];
       if (dependentAnswer === undefined) return false;
@@ -46,15 +52,21 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         const optionIndex = dependentAnswer as number;
         const selectedOption = dependentQuestion.options?.[optionIndex];
         if (equals !== undefined) return selectedOption === equals;
-        if (inArray !== undefined) return inArray.includes(selectedOption as string);
+        if (inArray !== undefined)
+          return inArray.includes(selectedOption as string);
       } else if (dependentQuestion.type === "checkbox") {
         const selectedIndices = dependentAnswer as number[];
-        const selectedOptions = selectedIndices.map((i) => dependentQuestion.options?.[i]);
-        if (equals !== undefined) return selectedOptions.includes(equals as string);
-        if (inArray !== undefined) return selectedOptions.some((o) => inArray.includes(o as string));
+        const selectedOptions = selectedIndices.map(
+          (i) => dependentQuestion.options?.[i],
+        );
+        if (equals !== undefined)
+          return selectedOptions.includes(equals as string);
+        if (inArray !== undefined)
+          return selectedOptions.some((o) => inArray.includes(o as string));
       } else if (dependentQuestion.type === "input") {
         if (equals !== undefined) return dependentAnswer === equals;
-        if (inArray !== undefined) return inArray.includes(dependentAnswer as string);
+        if (inArray !== undefined)
+          return inArray.includes(dependentAnswer as string);
       }
       return true;
     });
@@ -62,12 +74,15 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
   const actualQuestionsCount = useMemo(
     () => filteredQuestions.filter((q) => q.type !== "info").length,
-    [filteredQuestions]
+    [filteredQuestions],
   );
 
   const currentQuestionNumber = useMemo(
-    () => filteredQuestions.slice(0, currentQuestion + 1).filter((q) => q.type !== "info").length,
-    [filteredQuestions, currentQuestion]
+    () =>
+      filteredQuestions
+        .slice(0, currentQuestion + 1)
+        .filter((q) => q.type !== "info").length,
+    [filteredQuestions, currentQuestion],
   );
 
   const handleAnswerSelect = (answerIndex: number) => {
@@ -80,15 +95,22 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
   const handleCheckboxToggle = (index: number) => {
     setSelectedCheckboxes((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
   };
 
   const handleInputChange = (value: string) => {
     const question = filteredQuestions[currentQuestion];
-    if (question.fieldName === "painLevel" && question.type === "slider" && question.inputType === "number") {
+    if (
+      question.fieldName === "painLevel" &&
+      question.type === "slider" &&
+      question.inputType === "number"
+    ) {
       const numValue = parseFloat(value);
-      if (value === "" || (!isNaN(numValue) && numValue >= 0 && numValue <= 10)) {
+      if (
+        value === "" ||
+        (!isNaN(numValue) && numValue >= 0 && numValue <= 10)
+      ) {
         setInputValue(value);
       }
     } else {
@@ -98,10 +120,17 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
   const isAnswered = () => {
     const question = filteredQuestions[currentQuestion];
-    if (question.type === "info" || question.optional || question.type === "multi_field") return true;
-    if (question.type === "radio" || question.type === "image_radio") return selectedAnswer !== null;
+    if (
+      question.type === "info" ||
+      question.optional ||
+      question.type === "multi_field"
+    )
+      return true;
+    if (question.type === "radio" || question.type === "image_radio")
+      return selectedAnswer !== null;
     if (question.type === "checkbox") return selectedCheckboxes.length > 0;
-    if (question.type === "input" || question.type === "slider") return inputValue.trim() !== "";
+    if (question.type === "input" || question.type === "slider")
+      return inputValue.trim() !== "";
     return false;
   };
 
@@ -117,7 +146,9 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setMultiFieldValues({});
         setMultiFieldUnits({});
       } else if (question.type === "multi_field") {
-        const saved = savedAnswer as unknown as Record<string, string | number> | undefined;
+        const saved = savedAnswer as unknown as
+          | Record<string, string | number>
+          | undefined;
         setMultiFieldValues(saved || {});
         const savedUnits = units[question.id];
         if (typeof savedUnits === "object") {
@@ -129,13 +160,17 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setSelectedCheckboxes([]);
         setInputValue("");
       } else if (question.type === "radio") {
-        setSelectedAnswer(savedAnswer !== undefined ? (savedAnswer as number) : null);
+        setSelectedAnswer(
+          savedAnswer !== undefined ? (savedAnswer as number) : null,
+        );
         setSelectedCheckboxes([]);
         setInputValue("");
         setMultiFieldValues({});
         setMultiFieldUnits({});
       } else if (question.type === "checkbox") {
-        setSelectedCheckboxes(savedAnswer !== undefined ? (savedAnswer as number[]) : []);
+        setSelectedCheckboxes(
+          savedAnswer !== undefined ? (savedAnswer as number[]) : [],
+        );
         setSelectedAnswer(null);
         setInputValue("");
         setMultiFieldValues({});
@@ -146,23 +181,32 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setMultiFieldValues({});
         setMultiFieldUnits({});
         const savedUnit = units[question.id];
-        if (question.fieldName === "height") setHeightUnit(savedUnit === "ft" ? "ft" : "cm");
-        else if (question.fieldName === "weight") setWeightUnit(savedUnit === "lbs" ? "lbs" : "kg");
+        if (question.fieldName === "height")
+          setHeightUnit(savedUnit === "ft" ? "ft" : "cm");
+        else if (question.fieldName === "weight")
+          setWeightUnit(savedUnit === "lbs" ? "lbs" : "kg");
       }
     },
-    [answers, units, filteredQuestions]
+    [answers, units, filteredQuestions],
   );
 
   const saveCurrentAnswer = () => {
     const question = filteredQuestions[currentQuestion];
     if (question.type === "info") return;
 
-    let answerValue: number | number[] | string | Record<string, string | number>;
+    let answerValue:
+      | number
+      | number[]
+      | string
+      | Record<string, string | number>;
 
     if (question.type === "multi_field") {
       answerValue = multiFieldValues;
       if (Object.keys(multiFieldUnits).length > 0) {
-        setUnits((prev) => ({ ...prev, [question.id]: multiFieldUnits as any }));
+        setUnits((prev) => ({
+          ...prev,
+          [question.id]: multiFieldUnits as any,
+        }));
       }
     } else if (question.type === "radio" || question.type === "image_radio") {
       answerValue = selectedAnswer!;
@@ -170,8 +214,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       answerValue = selectedCheckboxes;
     } else if (question.type === "input" || question.type === "slider") {
       answerValue = inputValue;
-      if (question.fieldName === "height") setUnits((prev) => ({ ...prev, [question.id]: heightUnit }));
-      else if (question.fieldName === "weight") setUnits((prev) => ({ ...prev, [question.id]: weightUnit }));
+      if (question.fieldName === "height")
+        setUnits((prev) => ({ ...prev, [question.id]: heightUnit }));
+      else if (question.fieldName === "weight")
+        setUnits((prev) => ({ ...prev, [question.id]: weightUnit }));
     } else {
       return;
     }
@@ -211,8 +257,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         currentAnswerValue = selectedCheckboxes;
       } else if (question.type === "input" || question.type === "slider") {
         currentAnswerValue = inputValue;
-        if (question.fieldName === "height") finalUnits[question.id] = heightUnit;
-        else if (question.fieldName === "weight") finalUnits[question.id] = weightUnit;
+        if (question.fieldName === "height")
+          finalUnits[question.id] = heightUnit;
+        else if (question.fieldName === "weight")
+          finalUnits[question.id] = weightUnit;
       }
 
       const allAnswers = { ...answers, [question.id]: currentAnswerValue };
@@ -257,9 +305,13 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
   const getDisplayOptions = () => {
     if (question.fieldName === "bodyType" && question.type === "image_radio") {
-      const baselineStatsQuestion = questions.find((q) => q.fieldName === "baselineStats");
+      const baselineStatsQuestion = questions.find(
+        (q) => q.fieldName === "baselineStats",
+      );
       if (baselineStatsQuestion) {
-        const baselineStats = answers[baselineStatsQuestion.id] as unknown as Record<string, string | number> | undefined;
+        const baselineStats = answers[baselineStatsQuestion.id] as unknown as
+          | Record<string, string | number>
+          | undefined;
         if (baselineStats?.gender === "Female" && question.optionsFemale) {
           return question.optionsFemale;
         }
@@ -271,7 +323,11 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const displayOptions = getDisplayOptions();
 
   return (
-    <Modal visible={isOpen} animationType="slide" presentationStyle="fullScreen">
+    <Modal
+      visible={isOpen}
+      animationType="slide"
+      presentationStyle="fullScreen"
+    >
       <SafeAreaView className="flex-1 bg-[#080A14]">
         <View className="flex-1 justify-between">
           <QuizHeader
@@ -281,7 +337,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
             onClose={onClose}
           />
 
-          <ScrollView className="flex-1 mt-6 px-2.5" contentContainerStyle={{ paddingBottom: 20 }}>
+          <ScrollView
+            className="flex-1 mt-6 px-2.5"
+            contentContainerStyle={{ paddingBottom: 20 }}
+          >
             <View className="rounded-2xl bg-white/95 p-4">
               <QuizProgressBar
                 currentQuestionNumber={currentQuestionNumber}
@@ -292,11 +351,17 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
               <View className="gap-6">
                 {question.type === "info" ? (
                   <View className="gap-4">
-                    <Text className="text-2xl font-bold text-gray-900">{question.title}</Text>
-                    <Text className="text-base text-gray-600 leading-relaxed">{question.description}</Text>
+                    <Text className="text-2xl font-bold text-gray-900">
+                      {question.title}
+                    </Text>
+                    <Text className="text-base text-gray-600 leading-relaxed">
+                      {question.description}
+                    </Text>
                   </View>
                 ) : (
-                  <Text className="text-xl font-semibold text-gray-800">{question.question}</Text>
+                  <Text className="text-xl font-semibold text-gray-800">
+                    {question.question}
+                  </Text>
                 )}
 
                 {question.type === "radio" && (
@@ -324,7 +389,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                           isSelected={selectedAnswer === index}
                           onSelect={handleAnswerSelect}
                         />
-                      ) : null
+                      ) : null,
                     )}
                   </View>
                 )}
@@ -350,12 +415,19 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                         value={inputValue}
                         unit={heightUnit}
                         unitOptions={["cm", "ft"]}
-                        placeholder={heightUnit === "cm" ? "Enter height in cm" : "Enter height in ft"}
+                        placeholder={
+                          heightUnit === "cm"
+                            ? "Enter height in cm"
+                            : "Enter height in ft"
+                        }
                         inputType={question.inputType}
                         onChange={handleInputChange}
                         onUnitChange={(unit) => {
                           setHeightUnit(unit as "cm" | "ft");
-                          setUnits((prev) => ({ ...prev, [question.id]: unit as "cm" | "ft" }));
+                          setUnits((prev) => ({
+                            ...prev,
+                            [question.id]: unit as "cm" | "ft",
+                          }));
                         }}
                       />
                     )}
@@ -364,12 +436,19 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                         value={inputValue}
                         unit={weightUnit}
                         unitOptions={["kg", "lbs"]}
-                        placeholder={weightUnit === "kg" ? "Enter weight in kg" : "Enter weight in lbs"}
+                        placeholder={
+                          weightUnit === "kg"
+                            ? "Enter weight in kg"
+                            : "Enter weight in lbs"
+                        }
                         inputType={question.inputType}
                         onChange={handleInputChange}
                         onUnitChange={(unit) => {
                           setWeightUnit(unit as "kg" | "lbs");
-                          setUnits((prev) => ({ ...prev, [question.id]: unit as "kg" | "lbs" }));
+                          setUnits((prev) => ({
+                            ...prev,
+                            [question.id]: unit as "kg" | "lbs",
+                          }));
                         }}
                       />
                     )}
@@ -391,10 +470,16 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                     values={multiFieldValues}
                     units={multiFieldUnits}
                     onValueChange={(fieldName, value) => {
-                      setMultiFieldValues((prev) => ({ ...prev, [fieldName]: value }));
+                      setMultiFieldValues((prev) => ({
+                        ...prev,
+                        [fieldName]: value,
+                      }));
                     }}
                     onUnitChange={(fieldName, unit) => {
-                      setMultiFieldUnits((prev) => ({ ...prev, [fieldName]: unit }));
+                      setMultiFieldUnits((prev) => ({
+                        ...prev,
+                        [fieldName]: unit,
+                      }));
                     }}
                     description={question.description}
                   />

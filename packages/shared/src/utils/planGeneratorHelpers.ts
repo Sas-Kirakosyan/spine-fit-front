@@ -18,7 +18,7 @@ function calculateAge(dateOfBirth: string): number {
 }
 
 export interface SourceOnboarding {
-  workoutType: "gym" | "home";
+  workoutType: "gym";
   goal: string;
   gender?: string;
   age?: number;
@@ -32,9 +32,11 @@ export interface SourceOnboarding {
   trainingFrequency: string;
   painStatus?: string;
   painLocation?: string[];
+  painLevel?: number;
   painTriggers?: string[];
   canSquat?: string;
   workoutDuration: string;
+  availableEquipment?: string[];
   split?: WorkoutSplit;
 }
 
@@ -230,15 +232,15 @@ export function determineWorkoutSplit(
     if (experience === "Advanced" && isPainMinimal) {
       return {
         type: "PUSH_PULL_LEGS",
-        name: "Push / Pull / Legs (5+ days)",
+        name: "Push / Pull / Legs (5-day, legs 2×)",
         days: [
           { dayLabel: "Day 1", focus: ["Push (chest + shoulders + triceps)"] },
           { dayLabel: "Day 2", focus: ["Pull (back + rear delts + biceps)"] },
           { dayLabel: "Day 3", focus: ["Legs (quads + glutes + hamstrings + core)"] },
           { dayLabel: "Day 4", focus: ["Push (chest + shoulders + triceps)"] },
-          { dayLabel: "Day 5", focus: ["Pull (back + rear delts + biceps)"] },
+          { dayLabel: "Day 5", focus: ["Legs (quads + glutes + hamstrings + core)"] },
         ],
-        rationale: "Classic PPL split for advanced users with minimal pain, allows high frequency training",
+        rationale: "Classic PPL split for advanced users with legs 2× per week for balanced development",
       };
     }
 
@@ -383,13 +385,18 @@ export function enforceFullBodyABRequirements<T extends {
 
   console.log(`[enforceFullBodyABRequirements] ✓ Starting enforcement for ${split.type}`);
   console.log(`[enforceFullBody AB] Total exercises available: ${allExercises.length}`);
-  console.log(`[enforceFullBodyAB] Current state:`, workoutDays.map(d => ({ 
-    day: d.dayName, 
+  console.log(`[enforceFullBodyAB] Current state:`, workoutDays.map(d => ({
+    day: d.dayName,
     exercises: d.exercises.length,
-    names: d.exercises.map((e: any) => e.name) 
+    names: d.exercises.map((e: any) => e.name)
   })));
 
   const updatedDays = [...workoutDays];
+
+  // Global set tracking all exercise IDs across both days to prevent cross-day duplicates
+  const globalUsedIds = new Set(
+    workoutDays.flatMap((d) => d.exercises.map((ex: any) => ex.id))
+  );
 
   // Helper functions to identify exercise types
   const isPush = (ex: any) =>
@@ -447,7 +454,8 @@ export function enforceFullBodyABRequirements<T extends {
 
     const requiredTypes = daySpec.requiredExerciseTypes || [];
     const dayExercises = [...day.exercises];
-    const usedIds = new Set(dayExercises.map((ex) => ex.id));
+    // Use the global set for dedup so exercises are not repeated across days
+    const usedIds = globalUsedIds;
 
     // Check for push requirement
     if (requiredTypes.includes("push_horizontal")) {
@@ -574,10 +582,10 @@ export function enforceFullBodyABRequirements<T extends {
     updatedDays[dayIndex] = { ...day, exercises: dayExercises };
   });
 
-  console.log(`[enforceFullBodyAB] ✓ Enforcement complete. Final state:`, updatedDays.map(d => ({ 
-    day: d.dayName, 
+  console.log(`[enforceFullBodyAB] ✓ Enforcement complete. Final state:`, updatedDays.map(d => ({
+    day: d.dayName,
     exercises: d.exercises.length,
-    names: d.exercises.map((e: any) => e.name) 
+    names: d.exercises.map((e: any) => e.name)
   })));
 
   return updatedDays;
@@ -710,10 +718,16 @@ export function buildSourceOnboarding(
 
   const split = determineWorkoutSplit(experience, trainingFrequency, painStatus);
   console.log(`[buildSourceOnboarding] Generated split for frequency=${trainingFrequency}, experience=${experience}:`, split);
-  console.log(`[buildSourceOnboarding] Split requirements:`, split?.days?.map(d => ({ 
-    day: d.dayLabel, 
-    requiredTypes: d.requiredExerciseTypes 
+  console.log(`[buildSourceOnboarding] Split requirements:`, split?.days?.map(d => ({
+    day: d.dayLabel,
+    requiredTypes: d.requiredExerciseTypes
   })));
+
+  // Question 12: painLevel - slider (returns string or number 0-10)
+  const painLevelAnswer = answers[12];
+  const painLevel = painLevelAnswer !== undefined
+    ? (typeof painLevelAnswer === "number" ? painLevelAnswer : Number(painLevelAnswer))
+    : undefined;
 
   return {
     workoutType: quizAnswers.workoutType,
@@ -730,6 +744,7 @@ export function buildSourceOnboarding(
     trainingFrequency,
     painStatus,
     painLocation,
+    painLevel: Number.isFinite(painLevel) ? painLevel : undefined,
     painTriggers,
     canSquat,
     workoutDuration,
