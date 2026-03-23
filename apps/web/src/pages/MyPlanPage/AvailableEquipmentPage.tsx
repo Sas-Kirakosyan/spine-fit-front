@@ -94,8 +94,8 @@ function AvailableEquipmentPage({
       return t("availableEquipmentPage.noWeights");
     }
     const sorted = [...weights].sort((a, b) => a.weight - b.weight);
-    const newLocal = 4;
-    const display = sorted.slice(0, newLocal);
+    const MAX_DISPLAYED_WEIGHTS = 4;
+    const display = sorted.slice(0, MAX_DISPLAYED_WEIGHTS);
     const remaining = sorted.length - display.length;
     const displayText = display
       .map((w) => `${w.weight.toFixed(1)} ${w.unit}`)
