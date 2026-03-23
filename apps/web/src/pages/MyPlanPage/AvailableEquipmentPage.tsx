@@ -60,12 +60,12 @@ function AvailableEquipmentPage({
           return {
             ...category,
             items: category.items.map((item) =>
-              item.id === itemId ? { ...item, selected: !item.selected } : item,
+              item.id === itemId ? { ...item, selected: !item.selected } : item
             ),
           };
         }
         return category;
-      }),
+      })
     );
   };
 
@@ -94,7 +94,8 @@ function AvailableEquipmentPage({
       return t("availableEquipmentPage.noWeights");
     }
     const sorted = [...weights].sort((a, b) => a.weight - b.weight);
-    const display = sorted.slice(0, 4);
+    const newLocal = 4;
+    const display = sorted.slice(0, newLocal);
     const remaining = sorted.length - display.length;
     const displayText = display
       .map((w) => `${w.weight.toFixed(1)} ${w.unit}`)
@@ -118,7 +119,9 @@ function AvailableEquipmentPage({
                 : "bg-[#1B1E2B] text-gray-400"
             }`}
           >
-            {tab === "all" ? t("availableEquipmentPage.tabs.all") : t("availableEquipmentPage.tabs.selected")}
+            {tab === "all"
+              ? t("availableEquipmentPage.tabs.all")
+              : t("availableEquipmentPage.tabs.selected")}
           </Button>
         ))}
       </div>
