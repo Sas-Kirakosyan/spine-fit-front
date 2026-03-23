@@ -5,7 +5,8 @@
       "backToHome": "Вернуться на Главную",
       "myPlan": "Мой План",
       "addExercise": "Добавить упражнение",
-      "startWorkout": "НАЧАТЬ Тренировку"
+      "startWorkout": "НАЧАТЬ Тренировку",
+      "finishWorkout": "ЗАВЕРШИТЬ Тренировку"
     },
     "messages": {
       "loading": "Загрузка плана тренировки...",

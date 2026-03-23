@@ -5,7 +5,8 @@
       "backToHome": "Back to Home",
       "myPlan": "My Plan",
       "addExercise": "Add Exercise",
-      "startWorkout": "START Workout"
+      "startWorkout": "START Workout",
+      "finishWorkout": "FINISH Workout"
     },
     "messages": {
       "loading": "Loading workout plan...",
