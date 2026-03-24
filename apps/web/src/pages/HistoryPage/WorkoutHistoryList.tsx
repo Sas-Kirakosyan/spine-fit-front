@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { formatDateTime, isSameDay } from "@/utils/date";
 import type { FinishedWorkoutSummary } from "@/types/workout";
 
@@ -11,6 +12,7 @@ export function WorkoutHistoryList({
   workouts,
   selectedDate,
 }: WorkoutHistoryListProps) {
+  const { t } = useTranslation();
   const sorted = useMemo(() => {
     return [...workouts].sort(
       (a, b) =>
@@ -31,8 +33,8 @@ export function WorkoutHistoryList({
         <div className="rounded-[12px] border border-white/10 bg-[#111427]/80 p-8 text-center">
           <p className="text-slate-400">
             {selectedDate
-              ? "No workouts on selected date"
-              : "No completed workouts"}
+              ? t("historyPage.noWorkoutsOnDate")
+              : t("historyPage.noCompletedWorkouts")}
           </p>
         </div>
       ) : (
@@ -44,25 +46,25 @@ export function WorkoutHistoryList({
             <div className="flex flex-wrap items-center justify-between text-sm text-white">
               <span>{formatDateTime(workout.finishedAt)}</span>
               <span className="font-semibold">
-                Duration: {workout.duration}
+                {t("historyPage.duration")}: {workout.duration}
               </span>
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-4 text-white sm:grid-cols-4">
               <HistoryMetric
-                label="Volume"
+                label={t("historyPage.metrics.volume")}
                 value={`${workout.totalVolume.toLocaleString()} kg`}
               />
               <HistoryMetric
-                label="Calories"
+                label={t("historyPage.metrics.calories")}
                 value={`${workout.caloriesBurned} kcal`}
               />
               <HistoryMetric
-                label="Exercises"
+                label={t("historyPage.metrics.exercises")}
                 value={`${workout.exerciseCount}`}
               />
               <HistoryMetric
-                label="Records"
+                label={t("historyPage.metrics.records")}
                 value={`${
                   workout.completedExerciseLogs
                     ? Object.keys(workout.completedExerciseLogs).length

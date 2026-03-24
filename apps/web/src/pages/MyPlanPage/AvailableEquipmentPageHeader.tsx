@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/Buttons/Button";
 import { ChevronLeftIcon } from "@/components/Icons/Icons";
 
@@ -8,17 +9,17 @@ interface AvailableEquipmentPageHeaderProps {
 export function AvailableEquipmentPageHeader({
   onNavigateBack,
 }: AvailableEquipmentPageHeaderProps) {
+  const { t } = useTranslation();
   return (
     <header className="flex items-center gap-2 mt-2 px-3">
       <Button
         onClick={onNavigateBack}
         className="flex items-center justify-center w-8 h-8 text-white"
-        ariaLabel="Go back"
-      >
+        ariaLabel={t("availableEquipmentPage.header.goBack")}>
         <ChevronLeftIcon />
       </Button>
       <div className="text-2xl font-semibold text-white flex-1">
-        Available Equipment
+        {t("availableEquipmentPage.header.title")}
       </div>
       <Button className="flex items-center justify-center w-8 h-8 text-white hover:bg-white/10 rounded-full transition-colors">
         <svg

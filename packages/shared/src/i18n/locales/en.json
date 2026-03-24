@@ -391,6 +391,91 @@
         "question": "How long should your workouts be?",
         "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min"]
       }
+    }  
+  },
+  "historyPage": {
+    "noWorkoutsOnDate": "No workouts on selected date",
+    "noCompletedWorkouts": "No completed workouts",
+    "duration": "Duration",
+    "metrics": {
+      "volume": "Volume",
+      "calories": "Calories",
+      "exercises": "Exercises",
+      "records": "Records"
+    },
+    "navigation": {
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month"
     }
+  },
+  "availableEquipmentPage": {
+    "tabs": {
+      "all": "All",
+      "selected": "Selected"
+    },
+    "noWeights": "No weights",
+    "header": {
+      "title": "Available Equipment",
+      "goBack": "Go back"
+    },
+    "item": {
+      "noImage": "No img",
+      "edit": "Edit",
+      "select": "Select equipment",
+      "deselect": "Deselect equipment"
+    }
+  },
+  "myPlanPage": {
+    "header": {
+      "title": "My Plan",
+      "goBack": "Go back"
+    },
+    "goal": "Goal",
+    "sections": {
+      "location": "LOCATION",
+      "trainingProfile": "TRAINING PROFILE",
+      "trainingFormat": "TRAINING FORMAT",
+      "preferences": "PREFERENCES",
+      "generatedPlan": "GENERATED PLAN"
+    },
+    "location": {
+      "myGym": "My Gym",
+      "equipment": "Equipment",
+      "selected": "{{count}} Selected",
+      "bodyweightOnly": "Bodyweight-Only"
+    },
+    "trainingProfile": {
+      "workoutsPerWeek": "Workouts / Week",
+      "duration": "Duration",
+      "experience": "Experience"
+    },
+    "trainingFormat": {
+      "trainingSplit": "Training Split",
+      "exerciseVariability": "Exercise Variability",
+      "warmUpSets": "Warm-Up Sets",
+      "circuitsAndSupersets": "Circuits & Supersets"
+    },
+    "preferences": {
+      "units": "Units",
+      "cardio": "Cardio",
+      "stretching": "Stretching",
+      "manageExercises": "Manage Exercises"
+    },
+    "generatePlan": "Generate Plan",
+    "generating": "Generating...",
+    "generatedPlan": {
+      "created": "Created:",
+      "exercisesPerDay": "{{count}} exercises \u2022 {{sets}} sets each",
+      "missingMuscleGroups": "\u26a0\ufe0f Missing Muscle Groups",
+      "alternativeExercises": "{{count}} alternative exercises suggested"
+    },
+    "alerts": {
+      "quizRequired": "\u26a0\ufe0f Please complete the onboarding quiz first to generate a personalized plan.",
+      "planGenerated": "\u2705 Plan Generated!\n\n{{name}}\n\n{{workouts}} workouts per week with {{exercises}} exercises per day.",
+      "generateFailed": "Failed to generate plan. Please check your settings and try again."
+    }
+  },
+  "selectionModal": {
+    "close": "Close"
   }
 }
