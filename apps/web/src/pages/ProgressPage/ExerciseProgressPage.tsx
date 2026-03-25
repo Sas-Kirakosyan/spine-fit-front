@@ -333,7 +333,7 @@ function RecordsTab({
         <RecordCard
           label={t("exerciseProgressPage.personalRecords.estimated1RM")}
           record={records.estimated1RM}
-          unit="kg"
+          unit={`${t("exerciseProgressPage.personalRecords.weight")}`}
           detail={
             records.estimated1RM
               ? `${records.estimated1RM.weight}${t("exerciseProgressPage.personalRecords.weight")} x ${records.estimated1RM.reps} ${t("exerciseProgressPage.personalRecords.reps")}`
@@ -343,7 +343,7 @@ function RecordsTab({
         <RecordCard
           label={t("exerciseProgressPage.personalRecords.maxWeight")}
           record={records.maxWeight}
-          unit="kg"
+          unit={`${t("exerciseProgressPage.personalRecords.weight")}`}
           detail={
             records.maxWeight
               ? `${records.maxWeight.weight}${t("exerciseProgressPage.personalRecords.weight")} x ${records.maxWeight.reps} ${t("exerciseProgressPage.personalRecords.reps")}`
@@ -363,7 +363,7 @@ function RecordsTab({
         <RecordCard
           label={t("exerciseProgressPage.personalRecords.maxSessionVolume")}
           record={records.maxSessionVolume}
-          unit="kg"
+          unit={`${t("exerciseProgressPage.personalRecords.weight")}`}
           detail={
             records.maxSessionVolume
               ? `${records.maxSessionVolume.setCount} ${t("exerciseProgressPage.personalRecords.sets")} - ${formatVolume(records.maxSessionVolume.value)}${t("exerciseProgressPage.personalRecords.weight")}`
@@ -373,7 +373,7 @@ function RecordsTab({
         <RecordCard
           label={t("exerciseProgressPage.personalRecords.maxSingleSetVolume")}
           record={records.maxSingleSetVolume}
-          unit="kg"
+          unit={`${t("exerciseProgressPage.personalRecords.weight")}`}
           detail={
             records.maxSingleSetVolume
               ? `${records.maxSingleSetVolume.weight}${t("exerciseProgressPage.personalRecords.weight")} x ${records.maxSingleSetVolume.reps} ${t("exerciseProgressPage.personalRecords.reps")}`
