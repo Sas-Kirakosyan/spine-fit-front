@@ -318,6 +318,12 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
 
+    fetch("http://localhost:4000/api/quiz", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(quizData),
+    }).catch((err) => console.error("Failed to send quiz to API:", err));
+
     localStorage.removeItem("generatedPlan");
 
     setCurrentQuestion(0);
