@@ -76,20 +76,20 @@ function parseDuration(durationRange: string): string {
 function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   const { answers, units: rawUnits } = data;
 
-  // Q2: Goal
+  // Goal
   const goalOptions = [
     "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
     "Structural Recovery (Reduce pain and restore movement capacity)",
   ];
-  const goal = typeof answers[2] === "number" ? goalOptions[answers[2]] : goalOptions[0];
+  const goal = typeof answers[QUESTIONS.GOAL] === "number" ? goalOptions[answers[QUESTIONS.GOAL] as number] : goalOptions[0];
 
-  // Q3: Baseline stats (multi_field)
+  // Baseline stats (multi_field)
   let gender: string | undefined;
   let height: string | undefined;
   let weight: string | undefined;
   let dateOfBirth: string | undefined;
 
-  const stats = answers[3];
+  const stats = answers[QUESTIONS.STATS];
   if (stats && typeof stats === "object" && !Array.isArray(stats)) {
     const s = stats as Record<string, string | number>;
     gender = typeof s.gender === "string" ? s.gender : undefined;
@@ -98,52 +98,52 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
     dateOfBirth = typeof s.dateOfBirth === "string" ? s.dateOfBirth : undefined;
   }
 
-  // Units for Q3
+  // Units for stats question
   let heightUnit = "cm";
   let weightUnit = "kg";
-  const unitsQ3 = rawUnits?.[3];
+  const unitsQ3 = rawUnits?.[QUESTIONS.STATS];
   if (unitsQ3 && typeof unitsQ3 === "object" && !Array.isArray(unitsQ3)) {
     const u = unitsQ3 as Record<string, string>;
     heightUnit = u.height ?? "cm";
     weightUnit = u.weight ?? "kg";
   }
 
-  // Q7: Body type (gender-dependent)
+  // Body type (gender-dependent)
   let bodyType: string | undefined;
-  if (typeof answers[7] === "number") {
+  if (typeof answers[QUESTIONS.BODY_TYPE] === "number") {
     const isFemale = gender === "Female";
     const options = isFemale ? ["18-24", "25-31", "32-38", "38+"] : ["8-15", "16-22", "23-30", "30+"];
-    bodyType = options[answers[7] as number];
+    bodyType = options[answers[QUESTIONS.BODY_TYPE] as number];
   }
 
-  // Q8: Experience
+  // Experience
   const experienceOptions = ["Beginner", "Intermediate", "Advanced"];
-  const experience = typeof answers[8] === "number" ? experienceOptions[answers[8]] : "Intermediate";
+  const experience = typeof answers[QUESTIONS.EXPERIENCE] === "number" ? experienceOptions[answers[QUESTIONS.EXPERIENCE] as number] : "Intermediate";
 
-  // Q9: Training frequency
+  // Training frequency
   const frequencyOptions = ["2", "3", "4", "5+"];
-  const trainingFrequency = typeof answers[9] === "number" ? frequencyOptions[answers[9]] : "3";
+  const trainingFrequency = typeof answers[QUESTIONS.TRAINING_FREQUENCY] === "number" ? frequencyOptions[answers[QUESTIONS.TRAINING_FREQUENCY] as number] : "3";
   const workoutsPerWeek = `${trainingFrequency.replace("+", "")} days per week`;
 
-  // Q10: Pain status
+  // Pain status
   const painStatusOptions = ["Healthy", "Recovered", "Active Symptoms"];
-  const painStatus = typeof answers[10] === "number" ? painStatusOptions[answers[10]] : undefined;
+  const painStatus = typeof answers[QUESTIONS.PAIN_STATUS] === "number" ? painStatusOptions[answers[QUESTIONS.PAIN_STATUS] as number] : undefined;
 
-  // Q11: Pain location (checkbox → array of indices)
+  // Pain location (checkbox → array of indices)
   const painLocationOptions = [
     "Lower Back (L4-L5/S1 area)",
     "Sciatica (Pain radiating down leg)",
     "Glute / Deep Hip discomfort",
     "Calf or Foot (Numbness/Tingling)",
   ];
-  const painLocation = Array.isArray(answers[11])
-    ? (answers[11] as number[]).map((i) => painLocationOptions[i])
+  const painLocation = Array.isArray(answers[QUESTIONS.PAIN_LOCATION])
+    ? (answers[QUESTIONS.PAIN_LOCATION] as number[]).map((i) => painLocationOptions[i])
     : undefined;
 
-  // Q12: Pain level (slider 0-10)
-  const painLevel = answers[12] !== undefined ? Number(answers[12]) : undefined;
+  // Pain level (slider 0-10)
+  const painLevel = answers[QUESTIONS.PAIN_LEVEL] !== undefined ? Number(answers[QUESTIONS.PAIN_LEVEL]) : undefined;
 
-  // Q13: Pain triggers (checkbox → array of indices)
+  // Pain triggers (checkbox → array of indices)
   const painTriggersOptions = [
     "Walking long distances",
     "Bending forward (Flexion)",
@@ -153,11 +153,11 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
     "Weighted Squats or Deadlifts",
     "Other functional movements",
   ];
-  const painTriggers = Array.isArray(answers[13])
-    ? (answers[13] as number[]).map((i) => painTriggersOptions[i])
+  const painTriggers = Array.isArray(answers[QUESTIONS.PAIN_TRIGGERS])
+    ? (answers[QUESTIONS.PAIN_TRIGGERS] as number[]).map((i) => painTriggersOptions[i])
     : undefined;
 
-  // Q14: Squat confidence
+  // Squat confidence
   const canSquatOptions = [
     "Confident (I squat with weights regularly)",
     "Cautious (I only squat with light weights)",
@@ -165,11 +165,11 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
     "Avoidant (I strictly avoid all squatting movements)",
     "Untested (I haven't tried squatting recently)",
   ];
-  const canSquat = typeof answers[14] === "number" ? canSquatOptions[answers[14]] : undefined;
+  const canSquat = typeof answers[QUESTIONS.SQUAT_CONFIDENCE] === "number" ? canSquatOptions[answers[QUESTIONS.SQUAT_CONFIDENCE] as number] : undefined;
 
-  // Q15: Workout duration
+  // Workout duration
   const durationOptions = ["10–20 min", "20–30 min", "30–45 min", "45–60 min"];
-  const durationRange = typeof answers[15] === "number" ? durationOptions[answers[15]] : "30–45 min";
+  const durationRange = typeof answers[QUESTIONS.WORKOUT_DURATION] === "number" ? durationOptions[answers[QUESTIONS.WORKOUT_DURATION] as number] : "30–45 min";
   const duration = parseDuration(durationRange);
 
   // Derived fields
@@ -201,34 +201,44 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   };
 }
 
+const QUESTIONS = {
+  GOAL: 2,
+  STATS: 3,
+  BODY_TYPE: 7,
+  EXPERIENCE: 8,
+  TRAINING_FREQUENCY: 9,
+  PAIN_STATUS: 10,
+  PAIN_LOCATION: 11,
+  PAIN_LEVEL: 12,
+  PAIN_TRIGGERS: 13,
+  SQUAT_CONFIDENCE: 14,
+  WORKOUT_DURATION: 15,
+} as const;
+
 const router = Router();
 
 router.post("/", async (req: Request, res: Response) => {
-  const data = req.body as QuizAnswers;
-
-  if (!data.answers || typeof data.answers !== "object") {
-    res.status(400).json({ error: "Invalid quiz data" });
-    return;
-  }
-
-  const parsed = parseQuizAnswers(data);
-  console.log("Parsed quiz answers:\n", JSON.stringify(parsed, null, 2));
-
-  const filteredExercises = prepareExercisesForPrompt(
-    allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
-    parsed.painStatus,
-  );
-
   try {
+    const data = req.body as QuizAnswers;
+
+    if (!data.answers || typeof data.answers !== "object") {
+      return res.status(400).json({ error: "Invalid quiz data" });
+    }
+
+    const parsed = parseQuizAnswers(data);
+    console.log("Parsed quiz answers:\n", JSON.stringify(parsed, null, 2));
+
+    const filteredExercises = prepareExercisesForPrompt(
+      allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
+      parsed.painStatus,
+    );
+
     const plan = await generatePlan(parsed, filteredExercises, allExercisesRaw);
     console.log(`Generated plan "${plan.name}" with ${plan.workoutDays.length} days`);
-    res.status(200).json({ success: true, planSettings: parsed, plan });
+    return res.status(200).json({ success: true, planSettings: parsed, plan });
   } catch (error) {
-    console.error("Gemini plan generation failed:", error);
-    res.status(500).json({
-      error: "Failed to generate plan",
-      details: error instanceof Error ? error.message : String(error),
-    });
+    console.error("Quiz parsing error:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 

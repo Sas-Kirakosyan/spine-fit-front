@@ -44,14 +44,17 @@ export function PainChart({
   onPeriodChange,
 }: PainChartProps) {
   const { t } = useTranslation();
+
   const PERIOD_OPTIONS: { key: VolumePeriod; label: string }[] = [
     { key: "week", label: t("progressPage.progressChart.periods.week") },
     { key: "month", label: t("progressPage.progressChart.periods.month") },
     { key: "3months", label: t("progressPage.progressChart.periods.3months") },
     { key: "year", label: t("progressPage.progressChart.periods.year") },
   ];
+
   const chartTitle = title ?? t("progressPage.painChart.defaultTitle");
-  const showPeriodSelector = activePeriod !== undefined && onPeriodChange !== undefined;
+  const showPeriodSelector =
+    activePeriod !== undefined && onPeriodChange !== undefined;
 
   const percentageChange = (() => {
     if (data.length < 2) return null;
@@ -109,7 +112,8 @@ export function PainChart({
                 percentageChange > 0 ? "text-red-400" : "text-green-400"
               }`}
             >
-              {percentageChange > 0 ? "+" : ""}{percentageChange}%
+              {percentageChange > 0 ? "+" : ""}
+              {percentageChange}%
             </span>
           )}
         </div>

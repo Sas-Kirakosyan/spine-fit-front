@@ -6,7 +6,7 @@ import quizRouter from "./routes/quiz.js";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000" }));
 app.use(express.json());
 
 app.use("/api/quiz", quizRouter);

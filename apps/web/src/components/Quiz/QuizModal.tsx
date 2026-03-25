@@ -36,6 +36,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     Record<string, string>
   >({});
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
 
   const filteredQuestions = useMemo(() => {
@@ -323,6 +324,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     localStorage.removeItem("generatedPlan");
 
     setIsGeneratingPlan(true);
+    setApiError(null);
 
     try {
       const response = await fetch("http://localhost:4000/api/quiz", {
@@ -331,33 +333,32 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         body: JSON.stringify(quizData),
       });
 
-      if (response.ok) {
-        const result = await response.json() as { success: boolean; plan: GeneratedPlan };
-        if (result.success && result.plan) {
-          savePlanToLocalStorage(result.plan);
-        }
-      } else {
-        console.error("Quiz API returned error:", response.status);
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+      const result = await response.json() as { success: boolean; plan: GeneratedPlan };
+      if (result.success && result.plan) {
+        savePlanToLocalStorage(result.plan);
+      }
+
+      setCurrentQuestion(0);
+      setSelectedAnswer(null);
+      setSelectedCheckboxes([]);
+      setInputValue("");
+      setAnswers({});
+      setUnits({});
+      setHeightUnit("cm");
+      setWeightUnit("kg");
+      setMultiFieldValues({});
+      setMultiFieldUnits({});
+      onClose();
+      if (onQuizComplete) {
+        onQuizComplete();
       }
     } catch (err) {
       console.error("Failed to send quiz to API:", err);
+      setApiError("Failed to generate your plan. Please check your connection and try again.");
     } finally {
       setIsGeneratingPlan(false);
-    }
-
-    setCurrentQuestion(0);
-    setSelectedAnswer(null);
-    setSelectedCheckboxes([]);
-    setInputValue("");
-    setAnswers({});
-    setUnits({});
-    setHeightUnit("cm");
-    setWeightUnit("kg");
-    setMultiFieldValues({});
-    setMultiFieldUnits({});
-    onClose();
-    if (onQuizComplete) {
-      onQuizComplete();
     }
   };
 
@@ -467,6 +468,20 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
         <p className="text-lg font-medium text-foreground">Generating your personalized plan…</p>
         <p className="text-sm text-muted-foreground">This may take up to 15 seconds</p>
+      </div>
+    );
+  }
+
+  if (apiError) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6 px-6 text-center">
+        <p className="text-lg font-medium text-red-500">{apiError}</p>
+        <button
+          onClick={() => setApiError(null)}
+          className="rounded-lg bg-primary px-6 py-3 text-white font-medium hover:opacity-90 transition"
+        >
+          Try again
+        </button>
       </div>
     );
   }
