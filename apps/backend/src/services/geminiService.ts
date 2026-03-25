@@ -191,6 +191,15 @@ export async function generatePlan(
 
   const prompt = buildPrompt(parsedQuiz, exercises);
   const result = await model.generateContent(prompt);
+
+  const usage = result.response.usageMetadata;
+  if (usage) {
+    const thinking = (usage as unknown as Record<string, unknown>).thoughtsTokenCount ?? 0;
+    console.log(
+      `[Gemini ${model.model}] Tokens \n prompt: ${usage.promptTokenCount}\n thinking: ${thinking}\n response: ${usage.candidatesTokenCount}\n total: ${usage.totalTokenCount}\n`,
+    );
+  }
+
   const text = result.response.text();
   const geminiPlan = JSON.parse(text) as GeminiPlanResponse;
 
