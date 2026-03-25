@@ -479,5 +479,40 @@
   },
   "selectionModal": {
     "close": "Закрыть"
+  },
+  "exerciseProgressPage": {
+    "tabs": {
+      "history": "История",
+      "progress": "Прогресс",
+      "records": "Рекорды"
+    },
+    "noRecords": "Пока нет рекордов",
+    "noHistory": "Пока нет истории",
+    "noProgress": "Пока нет данных о прогрессе",
+    "exerciseFallback": "Упражнение",
+    "personalRecords": {
+      "title": "Личные Рекорды",
+      "subtitle": "Ваши лучшие результаты по {{name}}",
+      "estimated1RM": "Примерный 1ПМ",
+      "maxWeight": "Макс. вес",
+      "maxReps": "Макс. повторения",
+      "maxSessionVolume": "Макс. объём за тренировку",
+      "maxSingleSetVolume": "Макс. объём за подход",
+      "viewHistory": "История рекордов",
+      "reps":"повторения",
+      "weight":"кг",
+      "sets":"подходы",
+      "pr":"ЛР"
+    },
+    "history": {
+      "workoutLabel": "Тренировка",
+      "setsPerformed": "Выполненные подходы"
+    },
+    "progress": {
+      "estimatedStrength": "Примерная сила",
+      "sessionVolume": "Объём тренировки",
+      "maxWeight": "Макс. вес",
+      "maxReps": "Макс. повторения"
+    }
   }
 }

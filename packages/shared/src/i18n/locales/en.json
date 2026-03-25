@@ -477,5 +477,40 @@
   },
   "selectionModal": {
     "close": "Close"
+  },
+  "exerciseProgressPage": {
+    "tabs": {
+      "history": "History",
+      "progress": "Progress",
+      "records": "Records"
+    },
+    "noRecords": "No records yet",
+    "noHistory": "No history yet",
+    "noProgress": "No progress data yet",
+    "exerciseFallback": "Exercise",
+    "personalRecords": {
+      "title": "Personal Records",
+      "subtitle": "See your best lifts for {{name}}",
+      "estimated1RM": "Estimated 1RM",
+      "maxWeight": "Max weight",
+      "maxReps": "Max reps",
+      "maxSessionVolume": "Max session Volume",
+      "maxSingleSetVolume": "Max Single Set Volume",
+      "viewHistory": "View Record History",
+      "reps":"reps",
+      "weight":"kg",
+      "sets":"Sets",
+      "pr":"PR"
+    },
+    "history": {
+      "workoutLabel": "Workout",
+      "setsPerformed": "Sets Performed"
+    },
+    "progress": {
+      "estimatedStrength": "Estimated Strength",
+      "sessionVolume": "Session Volume",
+      "maxWeight": "Max Weight",
+      "maxReps": "Max Reps"
+    }
   }
 }
