@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/config";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseProgressPageProps } from "@/types/pages";
 import { getExerciseEstimated1RM, calculate1RM } from "@/utils/oneRepMax";
@@ -75,7 +76,7 @@ function useExerciseHistory(
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr);
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString(i18n.language, {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -84,7 +85,7 @@ function formatDate(dateStr: string): string {
 
 function formatDateTime(dateStr: string): string {
   const d = new Date(dateStr);
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString(i18n.language, {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -241,7 +242,7 @@ function usePersonalRecords(sessions: ExerciseSession[]) {
 
 function formatRecordDate(dateStr: string): string {
   const d = new Date(dateStr);
-  return d.toLocaleDateString("en-GB", {
+  return d.toLocaleDateString(i18n.language, {
     day: "2-digit",
     month: "short",
     year: "numeric",

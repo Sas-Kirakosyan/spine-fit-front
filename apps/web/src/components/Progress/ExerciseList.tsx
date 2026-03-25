@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type { ExerciseProgress } from "@/utils/progressStats";
 import { ExerciseProgressItem } from "@/components/Progress/ExerciseProgressItem";
 
@@ -9,7 +10,11 @@ interface ExerciseListProps {
 
 type SortOption = "recent" | "name" | "1rm";
 
-export function ExerciseList({ exercises, onExerciseClick }: ExerciseListProps) {
+export function ExerciseList({
+  exercises,
+  onExerciseClick,
+}: ExerciseListProps) {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("recent");
 
@@ -66,7 +71,7 @@ export function ExerciseList({ exercises, onExerciseClick }: ExerciseListProps) 
         </div>
         <input
           type="text"
-          placeholder="Search for exercise"
+          placeholder={t("progressPage.exerciseList.searchPlaceholder")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full rounded-lg bg-[#1B1E2B]/80 border border-white/10 px-10 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-main focus:border-transparent"
@@ -101,10 +106,10 @@ export function ExerciseList({ exercises, onExerciseClick }: ExerciseListProps) 
         </svg>
         <span>
           {sortBy === "recent"
-            ? "Recent Performed"
+            ? t("progressPage.exerciseList.sort.recent")
             : sortBy === "name"
-              ? "Name (A-Z)"
-              : "1RM (High to Low)"}
+              ? t("progressPage.exerciseList.sort.name")
+              : t("progressPage.exerciseList.sort.1rm")}
         </span>
       </button>
 
@@ -113,8 +118,8 @@ export function ExerciseList({ exercises, onExerciseClick }: ExerciseListProps) 
         <div className="rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center ring-1 ring-white/5">
           <p className="text-sm text-slate-400">
             {searchQuery
-              ? "No exercises found matching your search"
-              : "No exercises performed yet"}
+              ? t("progressPage.exerciseList.noResults")
+              : t("progressPage.exerciseList.noExercises")}
           </p>
         </div>
       ) : (
@@ -123,7 +128,11 @@ export function ExerciseList({ exercises, onExerciseClick }: ExerciseListProps) 
             <ExerciseProgressItem
               key={exercise.exerciseId}
               exercise={exercise}
-              onClick={onExerciseClick ? () => onExerciseClick(exercise.exerciseId) : undefined}
+              onClick={
+                onExerciseClick
+                  ? () => onExerciseClick(exercise.exerciseId)
+                  : undefined
+              }
             />
           ))}
         </div>

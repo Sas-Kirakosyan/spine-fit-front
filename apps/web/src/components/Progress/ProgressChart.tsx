@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -10,12 +11,6 @@ import {
 import type { ProgressDataPoint, VolumePeriod } from "@/utils/progressStats";
 import { formatVolume } from "@/utils/progressStats";
 
-const PERIOD_OPTIONS: { key: VolumePeriod; label: string }[] = [
-  { key: "week", label: "W" },
-  { key: "month", label: "M" },
-  { key: "3months", label: "3M" },
-  { key: "year", label: "Y" },
-];
 
 interface ProgressChartProps {
   data: ProgressDataPoint[];
@@ -31,12 +26,15 @@ interface CustomTooltipProps {
 }
 
 function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
+  const { t } = useTranslation();
+
   if (active && payload && payload.length) {
     return (
       <div className="rounded-lg bg-[#1B1E2B] px-3 py-2 shadow-xl ring-1 ring-white/10">
         <p className="text-xs text-slate-400">{label}</p>
         <p className="text-sm font-semibold text-white">
-          {formatVolume(payload[0].value)} kg
+          {formatVolume(payload[0].value)}{" "}
+          {t("progressPage.progressChart.weight")}
         </p>
       </div>
     );
@@ -46,18 +44,26 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
 
 export function ProgressChart({
   data,
-  title = "Progress Volume",
+  title,
   activePeriod,
   onPeriodChange,
 }: ProgressChartProps) {
-  const showPeriodSelector = activePeriod !== undefined && onPeriodChange !== undefined;
-
+  const showPeriodSelector =
+    activePeriod !== undefined && onPeriodChange !== undefined;
+  const { t } = useTranslation();
+  const PERIOD_OPTIONS: { key: VolumePeriod; label: string }[] = [
+    { key: "week", label: t("progressPage.progressChart.periods.week") },
+    { key: "month", label: t("progressPage.progressChart.periods.month") },
+    { key: "3months", label: t("progressPage.progressChart.periods.3months") },
+    { key: "year", label: t("progressPage.progressChart.periods.year") },
+  ];
+  const chartTitle = title ?? t("progressPage.progressChart.defaultTitle");
   if (data.length === 0) {
     return (
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-medium uppercase tracking-wider text-slate-400">
-            {title}
+            {chartTitle}
           </h3>
           {showPeriodSelector && (
             <div className="flex rounded-lg bg-white/5 p-0.5">
@@ -80,7 +86,7 @@ export function ProgressChart({
         </div>
         <div className="flex h-[180px] items-center justify-center">
           <p className="text-sm text-slate-500">
-            No data for this period
+            {t("progressPage.progressChart.noData")}
           </p>
         </div>
       </div>
@@ -91,7 +97,7 @@ export function ProgressChart({
     <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-medium uppercase tracking-wider text-slate-400">
-          {title}
+          {chartTitle}
         </h3>
         {showPeriodSelector && (
           <div className="flex rounded-lg bg-white/5 p-0.5">
