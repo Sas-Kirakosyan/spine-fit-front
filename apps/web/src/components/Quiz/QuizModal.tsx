@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { QuizModalProps } from "@/types/quiz";
+import type { GeneratedPlan } from "@spinefit/shared";
+import { savePlanToLocalStorage } from "@/storage/planStorage";
 import { questions } from "./questions";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -33,6 +35,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const [multiFieldUnits, setMultiFieldUnits] = useState<
     Record<string, string>
   >({});
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
 
 
   const filteredQuestions = useMemo(() => {
@@ -293,7 +296,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     }
   };
 
-  const handleSubmitWithAnswer = (answerValue: number | number[] | string) => {
+  const handleSubmitWithAnswer = async (answerValue: number | number[] | string) => {
     const question = filteredQuestions[currentQuestion];
     const finalUnits = { ...units };
 
@@ -317,14 +320,30 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
 
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
-
-    fetch("http://localhost:4000/api/quiz", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(quizData),
-    }).catch((err) => console.error("Failed to send quiz to API:", err));
-
     localStorage.removeItem("generatedPlan");
+
+    setIsGeneratingPlan(true);
+
+    try {
+      const response = await fetch("http://localhost:4000/api/quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(quizData),
+      });
+
+      if (response.ok) {
+        const result = await response.json() as { success: boolean; plan: GeneratedPlan };
+        if (result.success && result.plan) {
+          savePlanToLocalStorage(result.plan);
+        }
+      } else {
+        console.error("Quiz API returned error:", response.status);
+      }
+    } catch (err) {
+      console.error("Failed to send quiz to API:", err);
+    } finally {
+      setIsGeneratingPlan(false);
+    }
 
     setCurrentQuestion(0);
     setSelectedAnswer(null);
@@ -441,6 +460,16 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
 
   const displayOptions = getDisplayOptions();
+
+  if (isGeneratingPlan) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6">
+        <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+        <p className="text-lg font-medium text-foreground">Generating your personalized plan…</p>
+        <p className="text-sm text-muted-foreground">This may take up to 15 seconds</p>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">

@@ -1,5 +1,12 @@
 import { Router } from "express";
 import type { Request, Response } from "express";
+import { createRequire } from "module";
+import { prepareExercisesForPrompt } from "../utils/exerciseFilter.js";
+import { generatePlan } from "../services/geminiService.js";
+
+const require = createRequire(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const allExercisesRaw: Record<string, unknown>[] = require("../../../../packages/shared/src/MockData/allExercise.json");
 
 interface QuizAnswers {
   workoutType: "gym";
@@ -196,7 +203,7 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
 
 const router = Router();
 
-router.post("/", (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
   const data = req.body as QuizAnswers;
 
   if (!data.answers || typeof data.answers !== "object") {
@@ -207,7 +214,22 @@ router.post("/", (req: Request, res: Response) => {
   const parsed = parseQuizAnswers(data);
   console.log("Parsed quiz answers:\n", JSON.stringify(parsed, null, 2));
 
-  res.status(200).json({ success: true, data: parsed });
+  const filteredExercises = prepareExercisesForPrompt(
+    allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
+    parsed.painStatus,
+  );
+
+  try {
+    const plan = await generatePlan(parsed, filteredExercises, allExercisesRaw);
+    console.log(`Generated plan "${plan.name}" with ${plan.workoutDays.length} days`);
+    res.status(200).json({ success: true, planSettings: parsed, plan });
+  } catch (error) {
+    console.error("Gemini plan generation failed:", error);
+    res.status(500).json({
+      error: "Failed to generate plan",
+      details: error instanceof Error ? error.message : String(error),
+    });
+  }
 });
 
 export default router;

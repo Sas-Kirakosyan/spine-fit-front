@@ -34,3 +34,6 @@ apps/mobile/.expo/
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env
