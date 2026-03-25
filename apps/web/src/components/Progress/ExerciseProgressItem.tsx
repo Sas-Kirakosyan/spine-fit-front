@@ -1,14 +1,20 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type { ExerciseProgress } from "@/utils/progressStats";
 import { LazyImage } from "@/components/ui/LazyImage";
-import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 interface ExerciseProgressItemProps {
   exercise: ExerciseProgress;
   onClick?: () => void;
 }
 
-function MiniProgressChart({ data }: { data: Array<{ date: string; value: number }> }) {
+function MiniProgressChart({
+  data,
+}: {
+  data: Array<{ date: string; value: number }>;
+}) {
+  const { t } = useTranslation();
   const chartData = useMemo(() => {
     // Take last 10 data points for mini chart
     const recent = data.slice(-10);
@@ -20,7 +26,7 @@ function MiniProgressChart({ data }: { data: Array<{ date: string; value: number
   if (chartData.length === 0) {
     return (
       <div className="h-12 w-20 flex items-center justify-center text-slate-600 text-xs">
-        No data
+        {t("progressPage.exerciseList.exerciseProgressItem.noData")}
       </div>
     );
   }
@@ -32,7 +38,10 @@ function MiniProgressChart({ data }: { data: Array<{ date: string; value: number
   return (
     <div className="h-12 w-20">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={chartData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+        <LineChart
+          data={chartData}
+          margin={{ top: 2, right: 2, left: 2, bottom: 2 }}
+        >
           <Line
             type="monotone"
             dataKey="value"
@@ -42,14 +51,21 @@ function MiniProgressChart({ data }: { data: Array<{ date: string; value: number
             isAnimationActive={false}
           />
           <XAxis hide />
-          <YAxis hide domain={[minValue - range * 0.1, maxValue + range * 0.1]} />
+          <YAxis
+            hide
+            domain={[minValue - range * 0.1, maxValue + range * 0.1]}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>
   );
 }
 
-export function ExerciseProgressItem({ exercise, onClick }: ExerciseProgressItemProps) {
+export function ExerciseProgressItem({
+  exercise,
+  onClick,
+}: ExerciseProgressItemProps) {
+  const { t } = useTranslation();
   const hasImprovement = useMemo(() => {
     if (exercise.progressData.length < 2) return false;
     const sorted = [...exercise.progressData].sort(
@@ -106,14 +122,19 @@ export function ExerciseProgressItem({ exercise, onClick }: ExerciseProgressItem
       </div>
 
       <div className="flex-1 min-w-0">
-        <h3 className="text-sm font-semibold text-white truncate">{exercise.exerciseName}</h3>
+        <h3 className="text-sm font-semibold text-white truncate">
+          {exercise.exerciseName}
+        </h3>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-xs text-slate-400">
-            Est 1RM. {Math.round(exercise.estimated1RM)}kg
+            {t("progressPage.exerciseList.exerciseProgressItem.estimated1RM")}{" "}
+            {Math.round(exercise.estimated1RM)}
+            {t("progressPage.exerciseList.exerciseProgressItem.weight")}
           </span>
           {hasImprovement && exercise.currentBest1RM > 0 && (
             <span className="text-xs text-green-400">
-              ~ {Math.round(exercise.currentBest1RM)}kg
+              ~ {Math.round(exercise.currentBest1RM)}
+              {t("progressPage.exerciseList.exerciseProgressItem.weight")}
             </span>
           )}
         </div>

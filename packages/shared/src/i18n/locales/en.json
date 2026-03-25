@@ -512,5 +512,73 @@
       "maxWeight": "Max Weight",
       "maxReps": "Max Reps"
     }
+  },
+  "progressPage": {
+    "title": "Progress",
+    "tabs": {
+      "overview": "Overview",
+      "exercise": "Exercises"
+    },
+    "empty": {
+      "title": "Start training",
+      "description": "Your progress, workout stats, personal records and charts will appear here after your first completed workout",
+      "goToWorkout": "Go to workout"
+    },
+    "noExercises": "Your estimated 1RM by exercise will appear here after completed workouts.",
+    "exerciseList": {
+      "searchPlaceholder": "Search for exercise",
+      "sort": {
+        "recent": "Recent Performed",
+        "name": "Name (A-Z)",
+        "1rm": "1RM (High to Low)"
+      },
+      "noResults": "No exercises found matching your search",
+      "noExercises": "No exercises performed yet",
+      "exerciseProgressItem": {
+        "noData": "No data",
+        "estimated1RM": "Est 1RM.",
+        "weight": "kg"
+      }
+    },
+    "weeklyActivity": {
+      "title": "Weekly Activity",
+      "days": {
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat"
+      }
+    },
+    "progressChart": {
+      "noData": "No data for this period",
+      "defaultTitle": "Progress Volume",
+      "volumeProgress": "Volume progress",
+      "painLevel": "Pain level",
+      "weight":"kg",
+      "periods": {
+        "week": "W",
+        "month": "M",
+        "3months": "3M",
+        "year": "Y"
+      }
+    },
+    "statsGrid": {
+      "workouts": "Workouts",
+      "volume": "Volume",
+      "weight": "kg"
+
+    },
+    "painChart": {
+      "noData": "No data for this period",
+      "defaultTitle": "Pain Level"
+    },
+    "muscleGroupChart": {
+      "title": "Muscle groups",
+      "noData": "No data to display",
+      "exercises": "exercises"
+    }
   }
 }
