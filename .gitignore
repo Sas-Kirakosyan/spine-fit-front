@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 .cursor
+.claude
 *.local
 CLAUDE.md
 
@@ -33,3 +34,6 @@ apps/mobile/.expo/
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env

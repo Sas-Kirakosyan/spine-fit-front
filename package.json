@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev:web": "pnpm --filter @spinefit/web dev",
+    "dev:api": "pnpm --filter @spinefit/api dev",
     "dev:mobile": "pnpm --filter @spinefit/mobile start",
     "build:web": "pnpm --filter @spinefit/web build",
     "test": "pnpm -r run test",

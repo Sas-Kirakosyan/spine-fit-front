@@ -246,6 +246,10 @@ function WorkoutPage({
     })()
   );
   const [c, setC] = useState(0); // counter to trigger re-generation
+  const [planMode, setPlanMode] = useState<"ai" | "local">(
+    () => (localStorage.getItem("planMode") as "ai" | "local") || "ai"
+  );
+  const [isSwitchingMode, setIsSwitchingMode] = useState(false);
   const allExercises = allExercisesData as Exercise[];
 
   const syncGeneratedPlanWithSavedProgram = (plan: GeneratedPlan): GeneratedPlan => {
@@ -539,6 +543,97 @@ function WorkoutPage({
     }
   };
 
+  const handlePlanModeSwitch = async (newMode: "ai" | "local") => {
+    if (newMode === planMode || isSwitchingMode) return;
+    setIsSwitchingMode(true);
+
+    try {
+      // Cache current plan under current mode key
+      const currentPlan = localStorage.getItem("generatedPlan");
+      if (currentPlan) {
+        localStorage.setItem(`generatedPlan_${planMode}`, currentPlan);
+      }
+
+      // Check if target mode has a cached plan
+      const cachedPlan = localStorage.getItem(`generatedPlan_${newMode}`);
+
+      if (cachedPlan) {
+        // Restore cached plan
+        localStorage.setItem("generatedPlan", cachedPlan);
+        console.log(`🔄 Restored cached ${newMode} plan`);
+      } else if (newMode === "local") {
+        // Generate local plan
+        const quizDataString = localStorage.getItem("quizAnswers");
+        const quizData: QuizAnswers | null = quizDataString ? JSON.parse(quizDataString) : null;
+        const planSettings = loadPlanSettings();
+        const equipmentDataString = localStorage.getItem("equipmentData");
+        const equipmentData: EquipmentCategory[] = equipmentDataString
+          ? JSON.parse(equipmentDataString)
+          : [];
+        const availableEquipment = equipmentData.flatMap((category) =>
+          category.items.filter((item) => item.selected).map((item) => item.name)
+        );
+        const finalEquipment =
+          availableEquipment.length > 0
+            ? availableEquipment
+            : equipmentData.length === 0
+              ? Array.from(
+                  new Set((allExercisesData as Exercise[]).map((ex) => ex.equipment))
+                ).filter((eq) => eq && eq !== "none")
+              : ["bodyweight"];
+        const bodyweightOnly = localStorage.getItem("bodyweightOnly") === "true";
+        const historyString = localStorage.getItem("workoutHistory");
+        const workoutHistory: FinishedWorkoutSummary[] = historyString
+          ? JSON.parse(historyString)
+          : [];
+
+        const plan = generateTrainingPlan(
+          allExercisesData as Exercise[],
+          planSettings,
+          quizData,
+          bodyweightOnly ? ["bodyweight"] : finalEquipment,
+          workoutHistory
+        );
+        savePlanToLocalStorage(plan);
+        localStorage.setItem(`generatedPlan_${newMode}`, JSON.stringify(plan));
+        console.log("🔄 Generated new local plan");
+      } else {
+        // newMode === "ai" — fetch from backend
+        const quizDataString = localStorage.getItem("quizAnswers");
+        if (quizDataString) {
+          const quizData = JSON.parse(quizDataString);
+          try {
+            const response = await fetch("http://localhost:4000/api/quiz", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(quizData),
+            });
+            if (response.ok) {
+              const result = await response.json() as { success: boolean; plan: GeneratedPlan };
+              if (result.success && result.plan) {
+                savePlanToLocalStorage(result.plan);
+                localStorage.setItem(`generatedPlan_${newMode}`, JSON.stringify(result.plan));
+                console.log("🔄 Generated new AI plan from backend");
+              }
+            } else {
+              console.error("AI plan API error:", response.status);
+            }
+          } catch (err) {
+            console.error("Failed to fetch AI plan:", err);
+          }
+        }
+      }
+
+      // Update mode
+      setPlanMode(newMode);
+      localStorage.setItem("planMode", newMode);
+      // Trigger re-load of exercises
+      setC((prev) => prev + 1);
+    } finally {
+      setIsSwitchingMode(false);
+    }
+  };
+
   const updateCurrentWorkoutInPlan = (
     updateExercises: (exercises: Exercise[]) => Exercise[]
   ): boolean => {
@@ -684,7 +779,7 @@ function WorkoutPage({
               localStorage.removeItem("completedWorkoutIds");
               setC(c + 1);
             }}
-            className="border border-2 border-white/50 rounded-full p-1 mb-1"
+            className="border border-2 border-white/50 rounded-full p-1"
           >
             {t("workoutPage.buttons.regeneratePlan")}
           </div>
@@ -741,6 +836,9 @@ function WorkoutPage({
               setWorkoutExercises(p.workoutDays[dayIndex].exercises);
             }
           }}
+          planMode={planMode}
+          onPlanModeSwitch={handlePlanModeSwitch}
+          isSwitchingMode={isSwitchingMode}
         />
 
         <section className="flex-1 space-y-3 mx-2.5">
