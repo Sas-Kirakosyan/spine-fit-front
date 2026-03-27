@@ -17,7 +17,7 @@ export function AllExercisePageHeader({
       <button
         onClick={onClose}
         className="flex items-center justify-center w-8 h-8 text-red-500 hover:opacity-80 transition-opacity"
-        aria-label="Закрыть"
+        aria-label={t("allExercisePage.header.close")}
       >
         <svg
           className="w-6 h-6"
@@ -43,7 +43,7 @@ export function AllExercisePageHeader({
           <button
             onClick={onToggleFilter}
             className="flex items-center justify-center w-10 h-10 text-white hover:bg-white/10 rounded-full transition-colors"
-            aria-label="Фильтр"
+            aria-label={t("allExercisePage.header.filter")}
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <circle cx="6" cy="5" r="2" />
@@ -83,7 +83,7 @@ export function AllExercisePageHeader({
         <button
           onClick={onToggleSearch}
           className="flex items-center justify-center w-10 h-10 text-white hover:bg-white/10 rounded-full transition-colors"
-          aria-label="Поиск"
+          aria-label={t("allExercisePage.header.search")}
         >
           <svg
             className="w-5 h-5"

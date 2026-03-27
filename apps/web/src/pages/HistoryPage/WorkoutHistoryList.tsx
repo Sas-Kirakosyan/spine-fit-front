@@ -53,11 +53,11 @@ export function WorkoutHistoryList({
             <div className="mt-4 grid grid-cols-2 gap-4 text-white sm:grid-cols-4">
               <HistoryMetric
                 label={t("historyPage.metrics.volume")}
-                value={`${workout.totalVolume.toLocaleString()} kg`}
+                value={`${workout.totalVolume.toLocaleString()} ${t("historyPage.metrics.kg")}`}
               />
               <HistoryMetric
                 label={t("historyPage.metrics.calories")}
-                value={`${workout.caloriesBurned} kcal`}
+                value={`${workout.caloriesBurned} ${t("historyPage.metrics.kcal")}`}
               />
               <HistoryMetric
                 label={t("historyPage.metrics.exercises")}
