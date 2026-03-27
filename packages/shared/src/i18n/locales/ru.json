@@ -193,6 +193,14 @@
       "groupAs": "Группировать как...",
       "addSingleExercise": "Добавить {{count}} упражнение",
       "addMultipleExercises": "Добавить {{count}} упражнений"
+    },
+    "header": {
+      "close": "Закрыть",
+      "filter": "Фильтр",
+      "search": "Поиск"
+    },
+    "exerciseItem": {
+      "actionsFor": "Действия для {{name}}"
     }
   },
   "homePage": {
@@ -403,7 +411,9 @@
       "volume": "Объём",
       "calories": "Калории",
       "exercises": "Упражнения",
-      "records": "Рекорды"
+      "records": "Рекорды",
+      "kg": "кг",
+      "kcal": "ккал"
     },
     "navigation": {
       "previousMonth": "Предыдущий месяц",

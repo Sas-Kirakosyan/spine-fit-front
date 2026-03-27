@@ -191,6 +191,14 @@
       "groupAs": "Group as...",
       "addSingleExercise": "Add {{count}} Exercise",
       "addMultipleExercises": "Add {{count}} Exercises"
+    },
+    "header": {
+      "close": "Close",
+      "filter": "Filter",
+      "search": "Search"
+    },
+    "exerciseItem": {
+      "actionsFor": "Actions for {{name}}"
     }
   },
   "homePage": {
@@ -401,7 +409,9 @@
       "volume": "Volume",
       "calories": "Calories",
       "exercises": "Exercises",
-      "records": "Records"
+      "records": "Records",
+      "kg": "kg",
+      "kcal": "kcal"
     },
     "navigation": {
       "previousMonth": "Previous month",

@@ -66,7 +66,7 @@ export function MessageInput({
         type="submit"
         disabled={!message.trim() || isLoading || disabled}
         className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-main text-white transition hover:bg-main/90 focus:outline-none focus:ring-2 focus:ring-main/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-main"
-        aria-label={t("messageInput.sendButton")}
+        aria-label={t("aiPage.messageInput.sendButton")}
       >
         {isLoading ? (
           <svg
