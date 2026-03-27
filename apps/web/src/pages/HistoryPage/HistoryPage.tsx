@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DayPicker } from "react-day-picker";
-import { months } from "@/utils/date";
+import { ru, enUS } from "date-fns/locale";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { HistoryPageProps } from "@/types/pages";
@@ -16,7 +16,11 @@ function HistoryPage({
   activePage,
   workouts,
 }: HistoryPageProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language.startsWith("ru") ? ru : enUS;
+  const months = t("historyPage.navigation.months", {
+    returnObjects: true,
+  }) as string[];
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
@@ -131,8 +135,9 @@ function HistoryPage({
             onSelect={setSelectedDate}
             month={currentMonth}
             onMonthChange={setCurrentMonth}
+            locale={locale}
             // navLayout="around"
-            className="rounded-lg"
+            className="rounded-lg capitalize"
             classNames={{
               months:
                 "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
