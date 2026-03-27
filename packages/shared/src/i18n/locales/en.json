@@ -594,6 +594,16 @@
       "title": "Muscle groups",
       "noData": "No data to display",
       "exercises": "exercises"
+    },
+    "personalRecords": {
+      "workoutRecords": "Workout records",
+      "volumeUnit": "kg",
+      "exercisesUnit": "exercises",
+      "estimatedTitle": "Estimated 1RM (Top {{count}})",
+      "bestSet": "Best set: {{weight}}kg × {{reps}}",
+      "oneRmUnit": "kg 1RM",
+      "emptyExercise": "Your estimated 1RM by exercise will appear here after completed workouts.",
+      "emptyAll": "Complete workouts to see your personal records"
     }
   }
 }
