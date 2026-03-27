@@ -8,7 +8,7 @@ interface FormCardProps {
 
 export function FormCard({ children, className = "" }: FormCardProps) {
   return (
-    <View className={`rounded-2xl bg-white/95 p-6 mx-4 ${className}`}>
+    <View className={`rounded-[14px] bg-white p-5 mx-2.5 shadow-lg ${className}`}>
       {children}
     </View>
   );

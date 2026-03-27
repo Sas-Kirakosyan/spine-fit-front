@@ -328,7 +328,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       animationType="slide"
       presentationStyle="fullScreen"
     >
-      <SafeAreaView className="flex-1 bg-[#080A14]">
+      <SafeAreaView className="flex-1 py-5 bg-[#132f54]">
         <View className="flex-1 justify-between">
           <QuizHeader
             currentQuestionNumber={currentQuestionNumber}
@@ -354,12 +354,12 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                     <Text className="text-2xl font-bold text-gray-900">
                       {question.title}
                     </Text>
-                    <Text className="text-base text-gray-600 leading-relaxed">
+                    <Text className="text-xl text-gray-600 leading-relaxed">
                       {question.description}
                     </Text>
                   </View>
                 ) : (
-                  <Text className="text-xl font-semibold text-gray-800">
+                  <Text className="text-2xl font-semibold text-gray-800">
                     {question.question}
                   </Text>
                 )}

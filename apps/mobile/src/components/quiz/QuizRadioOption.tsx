@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 
 interface QuizRadioOptionProps {
-  option: string | { value: string; label: string; image: string; description: string };
+  option: string | { value: string; label: string; image: string; description?: string };
   index: number;
   isSelected: boolean;
   onSelect: (index: number) => void;
