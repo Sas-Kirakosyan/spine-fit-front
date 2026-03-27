@@ -47,6 +47,9 @@ importers:
       '@react-native-async-storage/async-storage':
         specifier: ^2.2.0
         version: 2.2.0(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))
+      '@react-native-community/slider':
+        specifier: ^5.1.2
+        version: 5.1.2
       '@react-native-picker/picker':
         specifier: ^2.11.4
         version: 2.11.4(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)
@@ -74,6 +77,9 @@ importers:
       expo-image:
         specifier: ^55.0.6
         version: 55.0.6(expo@55.0.6)(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)
+      expo-linear-gradient:
+        specifier: ^55.0.9
+        version: 55.0.9(expo@55.0.6)(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)
       expo-linking:
         specifier: ^55.0.8
         version: 55.0.8(expo@55.0.6)(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
@@ -1431,6 +1437,9 @@ packages:
     resolution: {integrity: sha512-gvRvjR5JAaUZF8tv2Kcq/Gbt3JHwbKFYfmb445rhOj6NUMx3qPLixmDx5pZAyb9at1bYvJ4/eTUipU5aki45xw==}
     peerDependencies:
       react-native: ^0.0.0-0 || >=0.65 <1.0
+
+  '@react-native-community/slider@5.1.2':
+    resolution: {integrity: sha512-UV/MjCyCtSjS5BQDrrGIMmCXm309xEG6XbR0Dj65kzTraJSVDxSjQS2uBUXgX+5SZUOCzCxzv3OufOZBdtQY4w==}
 
   '@react-native-picker/picker@2.11.4':
     resolution: {integrity: sha512-Kf8h1AMnBo54b1fdiVylP2P/iFcZqzpMYcglC28EEFB1DEnOjsNr6Ucqc+3R9e91vHxEDnhZFbYDmAe79P2gjA==}
@@ -2870,6 +2879,13 @@ packages:
     peerDependencies:
       expo: '*'
       react: '*'
+
+  expo-linear-gradient@55.0.9:
+    resolution: {integrity: sha512-S82iF+CVoSBVHdwusLQGh6Th/kcWLHU47jZhBPwyTrYWnsHZtb0oCqU96YvhDYvhbTdsuOaKEi+Xu+r/I2R8ow==}
+    peerDependencies:
+      expo: '*'
+      react: '*'
+      react-native: '*'
 
   expo-linking@55.0.8:
     resolution: {integrity: sha512-O9QgKAfEqKfsjL6IKs5p7pFAjo/3/TQwjMzzNPl8BCndbxWMPQfMeViXPYYNS9bA2ujUqrtF1OYhO6woI7GNQQ==}
@@ -6365,6 +6381,8 @@ snapshots:
       merge-options: 3.0.4
       react-native: 0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0)
 
+  '@react-native-community/slider@5.1.2': {}
+
   '@react-native-picker/picker@2.11.4(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)':
     dependencies:
       react: 19.2.0
@@ -7943,6 +7961,12 @@ snapshots:
     dependencies:
       expo: 55.0.6(@babel/core@7.29.0)(@expo/dom-webview@55.0.3)(react-dom@19.2.4(react@19.2.0))(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       react: 19.2.0
+
+  expo-linear-gradient@55.0.9(expo@55.0.6)(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0):
+    dependencies:
+      expo: 55.0.6(@babel/core@7.29.0)(@expo/dom-webview@55.0.3)(react-dom@19.2.4(react@19.2.0))(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+      react: 19.2.0
+      react-native: 0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0)
 
   expo-linking@55.0.8(expo@55.0.6)(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
     dependencies:
