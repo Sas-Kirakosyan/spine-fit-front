@@ -1,34 +1,10 @@
 import { GoogleGenerativeAI, SchemaType, type Schema } from "@google/generative-ai";
 import type { PromptExercise } from "../utils/exerciseFilter.js";
+import type { ParsedQuizData } from "../types.js";
+
+export type { ParsedQuizData };
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
-
-// ── Types ────────────────────────────────────────────────────────────────────
-
-export interface ParsedQuizData {
-  goal: string;
-  workoutsPerWeek: string;
-  duration: string;
-  durationRange: string;
-  experience: string;
-  trainingSplit: string;
-  exerciseVariability: string;
-  units: string;
-  cardio: string;
-  stretching: string;
-  gender?: string;
-  height?: string;
-  heightUnit: string;
-  weight?: string;
-  weightUnit: string;
-  dateOfBirth?: string;
-  bodyType?: string;
-  painStatus?: string;
-  painLocation?: string[];
-  painLevel?: number;
-  painTriggers?: string[];
-  canSquat?: string;
-}
 
 interface GeminiExercise {
   exerciseId: number;
@@ -46,7 +22,6 @@ interface GeminiDay {
 
 interface GeminiPlanResponse {
   planName: string;
-  trainingSplit: string;
   weeks: number;
   days: GeminiDay[];
 }
@@ -56,6 +31,7 @@ export interface GeneratedPlanResult {
   id: string;
   name: string;
   splitType: string;
+  weeks: number;
   createdAt: string;
   settings: {
     goal: string;
@@ -97,7 +73,6 @@ const PLAN_SCHEMA: Schema = {
   type: SchemaType.OBJECT,
   properties: {
     planName: { type: SchemaType.STRING },
-    trainingSplit: { type: SchemaType.STRING },
     weeks: { type: SchemaType.NUMBER },
     days: {
       type: SchemaType.ARRAY,
@@ -125,14 +100,38 @@ const PLAN_SCHEMA: Schema = {
       },
     },
   },
-  required: ["planName", "trainingSplit", "weeks", "days"],
+  required: ["planName", "weeks", "days"],
 };
 
 // ── Prompt Builder ───────────────────────────────────────────────────────────
 
-function buildPrompt(quiz: ParsedQuizData, exercises: PromptExercise[]): string {
+function formatExercisesAsTable(exercises: PromptExercise[]): string {
+  const header = "ID|Name|Muscles|Equipment|Difficulty|BackFriendly|Restrictions";
+  const rows = exercises.map((ex) => {
+    const muscles = ex.muscle_groups.join(",");
+    const restrictions = ex.restrictions.length
+      ? ex.restrictions.map((r) => `${r.issue_type}:${r.restriction_level}`).join(",")
+      : "none";
+    return `${ex.id}|${ex.name}|${muscles}|${ex.equipment}|${ex.difficulty}|${ex.is_back_friendly}|${restrictions}`;
+  });
+  return [header, ...rows].join("\n");
+}
+
+function buildSystemInstruction(): string {
+  return `You are an expert spine-safe fitness coach specializing in back rehabilitation.
+
+RULES (apply to every plan you generate):
+1. Only reference exercises provided in the user message using their numeric "id" as "exerciseId".
+2. If painStatus is "Active Symptoms", only select exercises where BackFriendly is true.
+3. Avoid exercises with restriction_level "high" that match the user's pain triggers.
+4. Match exercise difficulty to user experience level.
+5. Include 3-5 exercises per day.
+6. Set weight to 0 for bodyweight exercises; suggest a starter weight for weighted ones.`;
+}
+
+function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[]): string {
   const daysCount = quiz.workoutsPerWeek.replace(/\D+/g, "").trim() || "3";
-  return `You are an expert spine-safe fitness coach. Create a structured ${quiz.workoutsPerWeek} training plan.
+  return `Create a structured ${quiz.workoutsPerWeek} training plan.
 
 USER PROFILE:
 - Goal: ${quiz.goal}
@@ -147,19 +146,26 @@ USER PROFILE:
 - Preferred units: ${quiz.units}
 
 AVAILABLE EXERCISES (use only IDs from this list):
-${JSON.stringify(exercises)}
+EXERCISE FORMAT: ID|Name|Muscles|Equipment|Difficulty|BackFriendly|Restrictions(type:level,...)
+${formatExercisesAsTable(exercises)}
 
-RULES:
-1. Only reference exercises from the list above using their numeric "id" as "exerciseId"
-2. If painStatus is "Active Symptoms", only select exercises where is_back_friendly is true
-3. Avoid exercises with restriction_level "high" that match the user's pain triggers
-4. Match exercise difficulty to user experience level
-5. Each training day must fit within ${quiz.duration}
-6. Return exactly ${daysCount} unique training days
-7. Include 3-5 exercises per day
-8. Set weight to 0 for bodyweight exercises; suggest a starter weight for weighted ones
-9. Use "${quiz.units}" as the weight_unit`;
+ADDITIONAL CONSTRAINTS FOR THIS REQUEST:
+- Each training day must fit within ${quiz.duration}
+- Return exactly ${daysCount} unique training days
+- Use "${quiz.units}" as the weight_unit`;
 }
+
+// ── Split target muscles ─────────────────────────────────────────────────────
+
+const SPLIT_TARGET_MUSCLES: Record<string, string[]> = {
+  FULL_BODY_ABC:  ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
+  FULL_BODY_AB:   ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
+  FULL_BODY_4X:   ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
+  UPPER_LOWER_UPPER: ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
+  UPPER_LOWER_4X:    ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
+  PUSH_PULL_LEGS:    ["chest", "front_delts", "triceps", "lats", "upper_back", "rear_delts", "biceps", "quadriceps", "glutes", "hamstrings"],
+  BRO_SPLIT:         ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
+};
 
 // ── Split type mapper ────────────────────────────────────────────────────────
 
@@ -183,13 +189,14 @@ export async function generatePlan(
 ): Promise<GeneratedPlanResult> {
   const model = genAI.getGenerativeModel({
     model: "gemini-2.5-flash",
+    systemInstruction: buildSystemInstruction(),
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: PLAN_SCHEMA,
     },
   });
 
-  const prompt = buildPrompt(parsedQuiz, exercises);
+  const prompt = buildUserPrompt(parsedQuiz, exercises);
   const result = await model.generateContent(prompt);
 
   const usage = result.response.usageMetadata;
@@ -202,11 +209,19 @@ export async function generatePlan(
 
   const text = result.response.text();
   const geminiPlan = JSON.parse(text) as GeminiPlanResponse;
+  console.log("geminiPlan", JSON.stringify(geminiPlan))
 
   // Build a lookup map from exercise ID → full exercise object
   const exerciseMap = new Map<number, Record<string, unknown>>();
   for (const ex of allExercisesRaw) {
     exerciseMap.set(ex.id as number, ex);
+  }
+
+  // Validate returned exercise IDs against the known exercise map
+  const allReturnedIds = geminiPlan.days.flatMap((d) => d.exercises.map((e) => e.exerciseId));
+  const missingIds = allReturnedIds.filter((id) => !exerciseMap.has(id));
+  if (missingIds.length > 0) {
+    console.warn(`[Gemini] ⚠ ${missingIds.length} unknown exercise ID(s): [${missingIds.join(", ")}] — these will be dropped`);
   }
 
   // Convert Gemini days → WorkoutDay[] (with full exercise objects)
@@ -238,10 +253,43 @@ export async function generatePlan(
     };
   });
 
+  // Guard: fail fast if any day ended up with 0 exercises
+  const emptyDays = workoutDays.filter((d) => d.exercises.length === 0);
+  if (emptyDays.length > 0) {
+    throw new Error(
+      `Plan generation failed: days [${emptyDays.map((d) => d.dayName).join(", ")}] have 0 valid exercises (Gemini returned unknown IDs)`,
+    );
+  }
+
+  // Compute missing muscle groups
+  const splitType = mapSplitType(parsedQuiz.trainingSplit);
+  const targetMuscles = SPLIT_TARGET_MUSCLES[splitType] ?? [];
+  const coveredMuscles = new Set(
+    workoutDays.flatMap((d) => d.exercises.flatMap((ex) => (ex.muscle_groups as string[]) ?? [])),
+  );
+  const missingMuscleGroups = targetMuscles.filter((mg) => !coveredMuscles.has(mg));
+
+  // Find back-friendly alternative exercises for missing muscle groups (not already in the plan)
+  const usedIds = new Set(workoutDays.flatMap((d) => d.exercises.map((ex) => ex.id as number)));
+  const alternativeExercises: Record<string, unknown>[] = [];
+  for (const mg of missingMuscleGroups) {
+    const candidate = (allExercisesRaw as Record<string, unknown>[])
+      .filter((ex) => !usedIds.has(ex.id as number))
+      .filter((ex) => ((ex.muscle_groups as string[]) ?? []).includes(mg))
+      .find((ex) => ex.is_back_friendly === true) ??
+      (allExercisesRaw as Record<string, unknown>[])
+        .filter((ex) => !usedIds.has(ex.id as number))
+        .find((ex) => ((ex.muscle_groups as string[]) ?? []).includes(mg));
+    if (candidate && !alternativeExercises.find((e) => e.id === candidate.id)) {
+      alternativeExercises.push(candidate);
+    }
+  }
+
   return {
     id: `ai-plan-${Date.now()}`,
     name: geminiPlan.planName,
-    splitType: mapSplitType(geminiPlan.trainingSplit),
+    splitType,
+    weeks: geminiPlan.weeks,
     createdAt: new Date().toISOString(),
     settings: {
       goal: parsedQuiz.goal,
@@ -268,7 +316,7 @@ export async function generatePlan(
       canSquat: parsedQuiz.canSquat,
     },
     workoutDays,
-    missingMuscleGroups: [],
-    alternativeExercises: [],
+    missingMuscleGroups,
+    alternativeExercises,
   };
 }
