@@ -49,6 +49,20 @@ function parseDuration(durationRange: string): string {
   return midpoints[durationRange] ?? "35 min";
 }
 
+const QUESTIONS = {
+  GOAL: 2,
+  STATS: 3,
+  BODY_TYPE: 7,
+  EXPERIENCE: 8,
+  TRAINING_FREQUENCY: 9,
+  PAIN_STATUS: 10,
+  PAIN_LOCATION: 11,
+  PAIN_LEVEL: 12,
+  PAIN_TRIGGERS: 13,
+  SQUAT_CONFIDENCE: 14,
+  WORKOUT_DURATION: 15,
+} as const;
+
 function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   const { answers, units: rawUnits } = data;
 
@@ -176,20 +190,6 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
     canSquat,
   };
 }
-
-const QUESTIONS = {
-  GOAL: 2,
-  STATS: 3,
-  BODY_TYPE: 7,
-  EXPERIENCE: 8,
-  TRAINING_FREQUENCY: 9,
-  PAIN_STATUS: 10,
-  PAIN_LOCATION: 11,
-  PAIN_LEVEL: 12,
-  PAIN_TRIGGERS: 13,
-  SQUAT_CONFIDENCE: 14,
-  WORKOUT_DURATION: 15,
-} as const;
 
 const router = Router();
 

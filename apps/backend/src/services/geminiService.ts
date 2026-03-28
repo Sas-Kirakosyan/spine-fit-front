@@ -2,7 +2,6 @@ import { GoogleGenerativeAI, SchemaType, type Schema } from "@google/generative-
 import type { PromptExercise } from "../utils/exerciseFilter.js";
 import type { ParsedQuizData } from "../types.js";
 
-export type { ParsedQuizData };
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 
@@ -280,7 +279,7 @@ export async function generatePlan(
       (allExercisesRaw as Record<string, unknown>[])
         .filter((ex) => !usedIds.has(ex.id as number))
         .find((ex) => ((ex.muscle_groups as string[]) ?? []).includes(mg));
-    if (candidate && !alternativeExercises.find((e) => e.id === candidate.id)) {
+    if (candidate && !alternativeExercises.find((e) => (e.id as number) === (candidate.id as number))) {
       alternativeExercises.push(candidate);
     }
   }
