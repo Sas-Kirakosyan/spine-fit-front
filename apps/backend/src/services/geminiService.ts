@@ -1,29 +1,11 @@
-import { GoogleGenerativeAI, SchemaType, type Schema } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { PromptExercise } from "../utils/exerciseFilter.js";
 import type { ParsedQuizData } from "../types.js";
-
+import { PLAN_SCHEMA, type GeminiPlanResponse } from "../schemas/planSchema.js";
+import { buildSystemInstruction, buildUserPrompt } from "../utils/promptBuilder.js";
+import { SPLIT_TARGET_MUSCLES, mapSplitType } from "../utils/splitUtils.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
-
-interface GeminiExercise {
-  exerciseId: number;
-  sets: number;
-  reps: number;
-  weight: number;
-  weight_unit: string;
-  notes?: string;
-}
-
-interface GeminiDay {
-  dayName: string;
-  exercises: GeminiExercise[];
-}
-
-interface GeminiPlanResponse {
-  planName: string;
-  weeks: number;
-  days: GeminiDay[];
-}
 
 // Shape compatible with the frontend's GeneratedPlan type from @spinefit/shared
 export interface GeneratedPlanResult {
@@ -66,119 +48,6 @@ export interface GeneratedPlanResult {
   alternativeExercises: unknown[];
 }
 
-// ── Response Schema ──────────────────────────────────────────────────────────
-
-const PLAN_SCHEMA: Schema = {
-  type: SchemaType.OBJECT,
-  properties: {
-    planName: { type: SchemaType.STRING },
-    weeks: { type: SchemaType.NUMBER },
-    days: {
-      type: SchemaType.ARRAY,
-      items: {
-        type: SchemaType.OBJECT,
-        properties: {
-          dayName: { type: SchemaType.STRING },
-          exercises: {
-            type: SchemaType.ARRAY,
-            items: {
-              type: SchemaType.OBJECT,
-              properties: {
-                exerciseId: { type: SchemaType.NUMBER },
-                sets: { type: SchemaType.NUMBER },
-                reps: { type: SchemaType.NUMBER },
-                weight: { type: SchemaType.NUMBER },
-                weight_unit: { type: SchemaType.STRING },
-                notes: { type: SchemaType.STRING },
-              },
-              required: ["exerciseId", "sets", "reps", "weight", "weight_unit"],
-            },
-          },
-        },
-        required: ["dayName", "exercises"],
-      },
-    },
-  },
-  required: ["planName", "weeks", "days"],
-};
-
-// ── Prompt Builder ───────────────────────────────────────────────────────────
-
-function formatExercisesAsTable(exercises: PromptExercise[]): string {
-  const header = "ID|Name|Muscles|Equipment|Difficulty|BackFriendly|Restrictions";
-  const rows = exercises.map((ex) => {
-    const muscles = ex.muscle_groups.join(",");
-    const restrictions = ex.restrictions.length
-      ? ex.restrictions.map((r) => `${r.issue_type}:${r.restriction_level}`).join(",")
-      : "none";
-    return `${ex.id}|${ex.name}|${muscles}|${ex.equipment}|${ex.difficulty}|${ex.is_back_friendly}|${restrictions}`;
-  });
-  return [header, ...rows].join("\n");
-}
-
-function buildSystemInstruction(): string {
-  return `You are an expert spine-safe fitness coach specializing in back rehabilitation.
-
-RULES (apply to every plan you generate):
-1. Only reference exercises provided in the user message using their numeric "id" as "exerciseId".
-2. If painStatus is "Active Symptoms", only select exercises where BackFriendly is true.
-3. Avoid exercises with restriction_level "high" that match the user's pain triggers.
-4. Match exercise difficulty to user experience level.
-5. Include 3-5 exercises per day.
-6. Set weight to 0 for bodyweight exercises; suggest a starter weight for weighted ones.`;
-}
-
-function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[]): string {
-  const daysCount = quiz.workoutsPerWeek.replace(/\D+/g, "").trim() || "3";
-  return `Create a structured ${quiz.workoutsPerWeek} training plan.
-
-USER PROFILE:
-- Goal: ${quiz.goal}
-- Experience: ${quiz.experience}
-- Training split: ${quiz.trainingSplit}
-- Session duration: ${quiz.duration}
-- Pain status: ${quiz.painStatus ?? "Healthy"}
-- Pain locations: ${quiz.painLocation?.join(", ") ?? "None"}
-- Pain level (0-10): ${quiz.painLevel ?? 0}
-- Pain triggers: ${quiz.painTriggers?.join(", ") ?? "None"}
-- Squat confidence: ${quiz.canSquat ?? "Confident"}
-- Preferred units: ${quiz.units}
-
-AVAILABLE EXERCISES (use only IDs from this list):
-EXERCISE FORMAT: ID|Name|Muscles|Equipment|Difficulty|BackFriendly|Restrictions(type:level,...)
-${formatExercisesAsTable(exercises)}
-
-ADDITIONAL CONSTRAINTS FOR THIS REQUEST:
-- Each training day must fit within ${quiz.duration}
-- Return exactly ${daysCount} unique training days
-- Use "${quiz.units}" as the weight_unit`;
-}
-
-// ── Split target muscles ─────────────────────────────────────────────────────
-
-const SPLIT_TARGET_MUSCLES: Record<string, string[]> = {
-  FULL_BODY_ABC:  ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
-  FULL_BODY_AB:   ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
-  FULL_BODY_4X:   ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
-  UPPER_LOWER_UPPER: ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
-  UPPER_LOWER_4X:    ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
-  PUSH_PULL_LEGS:    ["chest", "front_delts", "triceps", "lats", "upper_back", "rear_delts", "biceps", "quadriceps", "glutes", "hamstrings"],
-  BRO_SPLIT:         ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
-};
-
-// ── Split type mapper ────────────────────────────────────────────────────────
-
-function mapSplitType(split: string): string {
-  if (/Full Body.*A.*B.*C/i.test(split)) return "FULL_BODY_ABC";
-  if (/Full Body.*A.*B/i.test(split)) return "FULL_BODY_AB";
-  if (/Full Body/i.test(split)) return "FULL_BODY_4X";
-  if (/Upper.*Lower.*Upper/i.test(split)) return "UPPER_LOWER_UPPER";
-  if (/Upper.*Lower/i.test(split)) return "UPPER_LOWER_4X";
-  if (/Push.*Pull.*Legs/i.test(split)) return "PUSH_PULL_LEGS";
-  if (/Bro Split/i.test(split)) return "BRO_SPLIT";
-  return "FULL_BODY_ABC";
-}
-
 // ── Main export ──────────────────────────────────────────────────────────────
 
 export async function generatePlan(
@@ -188,7 +57,7 @@ export async function generatePlan(
 ): Promise<GeneratedPlanResult> {
   const model = genAI.getGenerativeModel({
     model: "gemini-2.5-flash",
-    systemInstruction: buildSystemInstruction(),
+    systemInstruction: buildSystemInstruction(parsedQuiz.duration),
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: PLAN_SCHEMA,
