@@ -52,6 +52,7 @@ function SwipeableExerciseCard({
   onDelete,
   children,
 }: SwipeableExerciseCardProps) {
+  const { t } = useTranslation();
   const [offsetX, setOffsetX] = useState(isOpen ? -SWIPE_MAX_OFFSET : 0);
   const [isDragging, setIsDragging] = useState(false);
   const startXRef = useRef(0);
@@ -123,7 +124,7 @@ function SwipeableExerciseCard({
           aria-label="Replace exercise"
         >
           <ReplaceIcon className="h-6 w-6" />
-          <span className="text-xs font-semibold">Replace</span>
+          <span className="text-xs font-semibold">{t("workoutPage.swipeCard.replace")}</span>
         </button>
         <button
           type="button"
@@ -140,7 +141,7 @@ function SwipeableExerciseCard({
           aria-label="Delete exercise"
         >
           <TrashIcon className="h-6 w-6" />
-          <span className="text-xs font-semibold">Delete</span>
+          <span className="text-xs font-semibold">{t("workoutPage.swipeCard.delete")}</span>
         </button>
       </div>
 
@@ -506,7 +507,7 @@ function WorkoutPage({
   // Calculate current workout day name based on manual selection or rotation index
   const getCurrentDayName = (): string => {
     const plan = loadPlanFromLocalStorage();
-    if (!plan || plan.workoutDays.length === 0) return "No Workout";
+    if (!plan || plan.workoutDays.length === 0) return t("workoutPage.messages.noWorkout");
 
     // Prefer manually selected day
     const manual = localStorage.getItem("selectedWorkoutDayIndex");
@@ -522,10 +523,10 @@ function WorkoutPage({
       id.startsWith(plan.id)
     ).length;
     const rotationIndex = planCompletedCount % plan.workoutDays.length;
-    return plan.workoutDays[rotationIndex]?.dayName || "Today's Workout";
+    return plan.workoutDays[rotationIndex]?.dayName || t("workoutPage.labels.todayWorkout");
   };
 
-  const currentDayName = displayExercises.length > 0 ? getCurrentDayName() : "No Workout";
+  const currentDayName = displayExercises.length > 0 ? getCurrentDayName() : t("workoutPage.messages.noWorkout");
 
   console.log("plan", JSON.parse(localStorage.getItem("generatedPlan") || "{}")); // dont remove this log
 
@@ -805,7 +806,7 @@ function WorkoutPage({
         <WorkoutPlanCard
           containerRef={cardRef}
           onPlanSwitched={handlePlanSwitched}
-          planName={loadPlanFromLocalStorage()?.name || "My Workout Plan"}
+          planName={loadPlanFromLocalStorage()?.name || t("workoutPage.labels.myWorkoutPlan")}
           dayName={currentDayName}
           exerciseCount={displayExercises.length}
           muscleCount={new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size}

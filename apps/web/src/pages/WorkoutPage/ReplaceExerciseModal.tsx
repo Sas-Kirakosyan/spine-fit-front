@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { type Exercise } from "@/types/exercise";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import { Button } from "@/components/Buttons/Button";
@@ -25,6 +26,7 @@ export function ReplaceExerciseModal({
   onConfirmSwap,
   onClose,
 }: ReplaceExerciseModalProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"suggested" | "all">("suggested");
   const [selectedReplacementId, setSelectedReplacementId] = useState<
     number | null
@@ -50,14 +52,14 @@ export function ReplaceExerciseModal({
 
   const emptyStateText =
     activeTab === "suggested"
-      ? `No suggested alternatives found for ${replaceExercise.name}`
-      : "No exercises found";
+      ? t("replaceExerciseModal.noSuggested", { name: replaceExercise.name })
+      : t("replaceExerciseModal.noExercises");
 
   return (
     <div className="fixed inset-0 z-[60] flex items-end bg-black/70">
       <div className="mx-auto w-full max-w-[440px] rounded-t-[24px] border-t border-white/10 bg-[#161827] px-4 pb-5 pt-4">
         <div className="mb-3 text-center">
-          <h3 className="text-lg font-semibold text-white">Replace exercise</h3>
+          <h3 className="text-lg font-semibold text-white">{t("replaceExerciseModal.title")}</h3>
         </div>
 
         <div className="mb-3 flex h-10 rounded-[10px] bg-white/10 p-1">
@@ -70,7 +72,7 @@ export function ReplaceExerciseModal({
                 : "text-slate-300 hover:text-white"
             }`}
           >
-            Suggested Alternatives
+            {t("replaceExerciseModal.tabs.suggested")}
           </button>
           <button
             type="button"
@@ -81,14 +83,14 @@ export function ReplaceExerciseModal({
                 : "text-slate-300 hover:text-white"
             }`}
           >
-            All Exercises
+            {t("replaceExerciseModal.tabs.all")}
           </button>
         </div>
 
         <input
           value={searchQuery}
           onChange={(event) => onSearchChange(event.target.value)}
-          placeholder="Search exercise..."
+          placeholder={t("replaceExerciseModal.searchPlaceholder")}
           className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
         />
 
@@ -129,7 +131,7 @@ export function ReplaceExerciseModal({
         </div>
 
         <div className="mt-3 border-t border-white/10 pt-3">
-          <p className="text-sm font-semibold text-white">Swap duration</p>
+          <p className="text-sm font-semibold text-white">{t("replaceExerciseModal.swapDuration")}</p>
           <div className="mt-2 space-y-2">
             <button
               type="button"
@@ -147,7 +149,7 @@ export function ReplaceExerciseModal({
                   <span className="h-2.5 w-2.5 rounded-full bg-main" />
                 )}
               </span>
-              <span className="text-[15px]">Only for this workout</span>
+              <span className="text-[15px]">{t("replaceExerciseModal.onlyForWorkout")}</span>
             </button>
 
             <button
@@ -164,7 +166,7 @@ export function ReplaceExerciseModal({
                   <span className="h-2.5 w-2.5 rounded-full bg-main" />
                 )}
               </span>
-              <span className="text-[15px]">Permanent replacement in plan</span>
+              <span className="text-[15px]">{t("replaceExerciseModal.permanentReplacement")}</span>
             </button>
           </div>
 
@@ -173,7 +175,7 @@ export function ReplaceExerciseModal({
               onClick={onClose}
               className="h-11 flex-1 rounded-[10px] bg-[#6B7280] text-sm font-semibold text-white"
             >
-              Cancel
+              {t("replaceExerciseModal.cancel")}
             </Button>
             <Button
               onClick={() => {
@@ -184,7 +186,7 @@ export function ReplaceExerciseModal({
               disabled={!selectedReplacement}
               className="h-11 flex-1 rounded-[10px] bg-main text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Confirm Swap
+              {t("replaceExerciseModal.confirmSwap")}
             </Button>
           </div>
         </div>

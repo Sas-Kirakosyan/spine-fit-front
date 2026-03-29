@@ -6,7 +6,12 @@
       "myPlan": "My Plan",
       "addExercise": "Add Exercise",
       "startWorkout": "START Workout",
-      "finishWorkout": "FINISH Workout"
+      "finishWorkout": "FINISH Workout",
+      "goToMyPlan": "Go to My Plan"
+    },
+    "swipeCard": {
+      "replace": "Replace",
+      "delete": "Delete"
     },
     "messages": {
       "loading": "Loading workout plan...",
@@ -65,6 +70,21 @@
   "activeWorkoutPage": {
     "noExercises": "No exercises for today's workout.",
     "generatePlanHint": "Generate a plan in My Plan page to get started."
+  },
+  "replaceExerciseModal": {
+    "title": "Replace exercise",
+    "tabs": {
+      "suggested": "Suggested Alternatives",
+      "all": "All Exercises"
+    },
+    "searchPlaceholder": "Search exercise...",
+    "noSuggested": "No suggested alternatives found for {{name}}",
+    "noExercises": "No exercises found",
+    "swapDuration": "Swap duration",
+    "onlyForWorkout": "Only for this workout",
+    "permanentReplacement": "Permanent replacement in plan",
+    "cancel": "Cancel",
+    "confirmSwap": "Confirm Swap"
   },
   "swapWorkoutActionSheet": {
     "title": "Swap Workout",
