@@ -44,7 +44,7 @@ export function QuizImageRadioOption({
             </View>
           </View>
           {option.description && (
-            <Text className="mt-1 text-sm text-gray-600">{option.description}</Text>
+            <Text className="mt-1 text-lg text-gray-600">{option.description}</Text>
           )}
         </View>
       </View>

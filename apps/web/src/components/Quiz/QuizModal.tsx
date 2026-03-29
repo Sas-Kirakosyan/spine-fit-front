@@ -327,7 +327,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     setApiError(null);
 
     try {
-      const response = await fetch("http://localhost:4000/api/quiz", {
+      const response = await fetch(`${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(quizData),

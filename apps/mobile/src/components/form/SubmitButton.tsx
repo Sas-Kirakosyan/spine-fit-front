@@ -11,7 +11,7 @@ export function SubmitButton({ text, onPress, disabled = false }: SubmitButtonPr
     <Pressable
       onPress={onPress}
       disabled={disabled}
-      className={`w-full rounded-lg bg-main py-3 items-center ${disabled ? "opacity-50" : ""}`}
+      className={`w-full rounded-[14px] bg-main py-3 items-center shadow-lg ${disabled ? "opacity-50" : ""}`}
     >
       <Text className="text-base font-semibold text-white">{text}</Text>
     </Pressable>

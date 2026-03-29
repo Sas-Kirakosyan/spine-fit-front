@@ -24,18 +24,18 @@ export function QuizNavigationButtons({
   onSubmit,
 }: QuizNavigationButtonsProps) {
   const isLastQuestion = currentQuestion >= totalQuestions - 1;
-  const isStartScreen = currentQuestion === 0 && isInfoScreen && buttonText === "Start";
+  const isStartScreen = currentQuestion === 0 && isInfoScreen;
 
   if (isStartScreen) {
     return (
       <View className="items-center pb-8">
         <Pressable
           onPress={onNext}
-          className="w-full max-w-[300px] rounded-[18px] bg-main py-4 items-center"
+          className="w-full max-w-[300px] h-[60px] rounded-[18px] bg-main py-4 items-center"
         >
-          <Text className="text-lg font-semibold text-white">{buttonText}</Text>
+          <Text className="text-2xl font-semibold text-white">{buttonText}</Text>
         </Pressable>
-        <Text className="mt-2 text-sm text-gray-400">Takes less than 1 minute</Text>
+        <Text className="mt-2 text-md text-white/50">Takes less than 1 minute</Text>
       </View>
     );
   }
@@ -46,21 +46,21 @@ export function QuizNavigationButtons({
         {currentQuestion > 0 && (
           <Pressable
             onPress={onBack}
-            className="rounded-full bg-white/10 px-6 py-2"
+            className="rounded-[18px] bg-white/10 px-8 py-4"
           >
-            <Text className="text-sm font-medium text-white">Back</Text>
+            <Text className="text-2xl font-medium text-white">Back</Text>
           </Pressable>
         )}
         {!hideNextButton && !isLastQuestion ? (
           <Pressable
             onPress={onNext}
             disabled={!isAnswered}
-            className={`rounded-full px-6 py-2 ${
+            className={`rounded-[18px] px-8 py-4 ${
               isAnswered ? "bg-main" : "bg-white/10"
             }`}
           >
             <Text
-              className={`text-sm font-semibold ${
+              className={`text-2xl font-semibold ${
                 isAnswered ? "text-white" : "text-white/60"
               }`}
             >
@@ -71,12 +71,12 @@ export function QuizNavigationButtons({
           <Pressable
             onPress={onSubmit}
             disabled={!isAnswered}
-            className={`rounded-full px-6 py-2 ${
+            className={`rounded-[18px] px-8 py-4 ${
               isAnswered ? "bg-green-500" : "bg-white/10"
             }`}
           >
             <Text
-              className={`text-sm font-semibold ${
+              className={`text-2xl font-semibold ${
                 isAnswered ? "text-white" : "text-white/60"
               }`}
             >

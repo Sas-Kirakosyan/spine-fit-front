@@ -49,7 +49,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#080A14]">
+    <SafeAreaView className="flex-1 bg-[#132f54]">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
@@ -62,10 +62,10 @@ export default function LoginScreen() {
           className="flex-1 mt-8"
           contentContainerStyle={{ paddingBottom: 20 }}
         >
-          <FormCard>
+          <FormCard className="mt-20">
             <FormHeader title="Login" subtitle="Sign in to your account" />
 
-            <View className="mt-7 gap-5">
+            <View className="mt-8 gap-5">
               <FormField
                 label="Email"
                 value={formData.email}

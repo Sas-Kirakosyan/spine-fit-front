@@ -3,9 +3,9 @@ import type { Request, Response } from "express";
 import { createRequire } from "module";
 import { prepareExercisesForPrompt } from "../utils/exerciseFilter.js";
 import { generatePlan } from "../services/geminiService.js";
+import type { ParsedQuizData } from "../types.js";
 
 const require = createRequire(import.meta.url);
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const allExercisesRaw: Record<string, unknown>[] = require("../../../../packages/shared/src/MockData/allExercise.json");
 
 interface QuizAnswers {
@@ -15,30 +15,6 @@ interface QuizAnswers {
   timestamp?: string;
 }
 
-interface ParsedQuizData {
-  goal: string;
-  workoutsPerWeek: string;
-  duration: string;
-  durationRange: string;
-  experience: string;
-  trainingSplit: string;
-  exerciseVariability: string;
-  units: string;
-  cardio: string;
-  stretching: string;
-  gender?: string;
-  height?: string;
-  heightUnit: string;
-  weight?: string;
-  weightUnit: string;
-  dateOfBirth?: string;
-  bodyType?: string;
-  painStatus?: string;
-  painLocation?: string[];
-  painLevel?: number;
-  painTriggers?: string[];
-  canSquat?: string;
-}
 
 function determineSplitName(experience: string, frequency: string, painStatus?: string): string {
   const freq = parseInt(frequency, 10) || 3;
@@ -72,6 +48,20 @@ function parseDuration(durationRange: string): string {
   };
   return midpoints[durationRange] ?? "35 min";
 }
+
+const QUESTIONS = {
+  GOAL: 2,
+  STATS: 3,
+  BODY_TYPE: 7,
+  EXPERIENCE: 8,
+  TRAINING_FREQUENCY: 9,
+  PAIN_STATUS: 10,
+  PAIN_LOCATION: 11,
+  PAIN_LEVEL: 12,
+  PAIN_TRIGGERS: 13,
+  SQUAT_CONFIDENCE: 14,
+  WORKOUT_DURATION: 15,
+} as const;
 
 function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   const { answers, units: rawUnits } = data;
@@ -201,41 +191,50 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   };
 }
 
-const QUESTIONS = {
-  GOAL: 2,
-  STATS: 3,
-  BODY_TYPE: 7,
-  EXPERIENCE: 8,
-  TRAINING_FREQUENCY: 9,
-  PAIN_STATUS: 10,
-  PAIN_LOCATION: 11,
-  PAIN_LEVEL: 12,
-  PAIN_TRIGGERS: 13,
-  SQUAT_CONFIDENCE: 14,
-  WORKOUT_DURATION: 15,
-} as const;
-
 const router = Router();
 
 router.post("/", async (req: Request, res: Response) => {
+  const startTime = Date.now();
+  console.log("\n========== POST /api/quiz ==========");
+  console.log("[REQ] Raw body:", JSON.stringify(req.body, null, 2));
+
   try {
     const data = req.body as QuizAnswers;
 
     if (!data.answers || typeof data.answers !== "object") {
+      console.log("[REQ] ❌ Invalid quiz data — missing or bad 'answers' field");
       return res.status(400).json({ error: "Invalid quiz data" });
     }
 
+    console.log(`[REQ] Answer keys: [${Object.keys(data.answers).join(", ")}]`);
+
     const parsed = parseQuizAnswers(data);
-    console.log("Parsed quiz answers:\n", JSON.stringify(parsed, null, 2));
+    console.log("\n[PARSED] Quiz answers:\n", JSON.stringify(parsed, null, 2));
 
     const filteredExercises = prepareExercisesForPrompt(
       allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
       parsed.painStatus,
+      { experience: parsed.experience, painTriggers: parsed.painTriggers },
     );
+    console.log(`[FILTER] ${filteredExercises.length} exercises sent to AI (from ${allExercisesRaw.length} total)`);
 
     const plan = await generatePlan(parsed, filteredExercises, allExercisesRaw);
-    console.log(`Generated plan "${plan.name}" with ${plan.workoutDays.length} days`);
-    return res.status(200).json({ success: true, planSettings: parsed, plan });
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    console.log(`[AI] ✅ Done in ${elapsed}s`);
+
+    console.log(`\n[AI RESPONSE] Plan: "${plan.name}" | Split: ${plan.splitType}`);
+    console.log(`[AI RESPONSE] ${plan.workoutDays.length} workout days:`);
+    for (const day of plan.workoutDays) {
+      const exerciseNames = day.exercises.map((ex) => (ex as Record<string, unknown>).name ?? `#${(ex as Record<string, unknown>).id}`);
+      console.log(`  Day ${day.dayNumber} (${day.dayName}): ${day.exercises.length} exercises — [${exerciseNames.join(", ")}]`);
+      console.log(`    Muscle groups: [${day.muscleGroups.join(", ")}]`);
+    }
+
+    const responsePayload = { success: true, planSettings: parsed, plan };
+    console.log(`\n[RES] Sending 200 — payload size: ${JSON.stringify(responsePayload).length} bytes`);
+    console.log("========== END /api/quiz ==========\n");
+
+    return res.status(200).json(responsePayload);
   } catch (error) {
     console.error("Quiz parsing error:", error);
     return res.status(500).json({ error: "Internal server error" });

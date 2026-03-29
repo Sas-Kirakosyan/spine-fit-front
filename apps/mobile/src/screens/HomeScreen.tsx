@@ -20,7 +20,9 @@ export default function HomeScreen() {
   return (
     <>
       <ImageBackground
-        source={{ uri: "https://ignitefitness.com/wp-content/uploads/2024/06/Gym-Equipment.jpg" }}
+        source={{
+          uri: "https://blog.nasm.org/hubfs/bodybuilding-divisions.jpg",
+        }}
         className="flex-1"
         resizeMode="cover"
       >
@@ -30,18 +32,19 @@ export default function HomeScreen() {
               <Logo size="lg" />
             </View>
 
-            <View className="px-4">
-              <Text className="text-white text-4xl font-semibold leading-tight">
-                Strength instead{"\n"}Of pain
-              </Text>
-            </View>
-
-            <View className="items-center mt-10 gap-6 px-4">
+            <View className="mt-10 gap-6 px-4">
+              <View className="px-4">
+                <Text className="text-white mb-10 text-4xl font-semibold leading-tight">
+                  Strength instead{"\n"}Of pain
+                </Text>
+              </View>
               <Pressable
                 onPress={() => setIsQuizOpen(true)}
                 className="w-full max-w-[370px] rounded-[18px] bg-main py-4 items-center"
               >
-                <Text className="text-lg font-semibold text-white">START PROGRAM</Text>
+                <Text className="text-lg font-semibold text-white">
+                  START PROGRAM
+                </Text>
               </Pressable>
 
               <Pressable

@@ -19,12 +19,47 @@ interface RawExercise {
   [key: string]: unknown;
 }
 
+export interface QuizContext {
+  experience?: string;     // "Beginner" | "Intermediate" | "Advanced"
+  painTriggers?: string[]; // e.g. ["Weighted Squats or Deadlifts"]
+}
+
+// Difficulty levels that are too advanced for a given experience level
+const EXCLUDED_DIFFICULTIES: Record<string, string[]> = {
+  Beginner: ["advanced"],
+  Intermediate: ["advanced"],
+  Advanced: [],
+};
+
+// Pain trigger keywords that map to high-restriction filtering
+const HIGH_LOAD_TRIGGERS = [
+  "Weighted Squats or Deadlifts",
+  "Lifting objects from the floor",
+];
+
 export function prepareExercisesForPrompt(
   exercises: RawExercise[],
   painStatus?: string,
+  context?: QuizContext,
 ): PromptExercise[] {
+  const excludedDifficulties = context?.experience
+    ? (EXCLUDED_DIFFICULTIES[context.experience] ?? [])
+    : [];
+
+  const filterHighLoad = context?.painTriggers?.some((t) =>
+    HIGH_LOAD_TRIGGERS.some((kw) => t.includes(kw)),
+  ) ?? false;
+
   return exercises
-    .filter((ex) => painStatus !== "Active Symptoms" || ex.is_back_friendly)
+    .filter((ex) => {
+      // Active symptoms: only back-friendly
+      if (painStatus === "Active Symptoms" && !ex.is_back_friendly) return false;
+      // Experience-based difficulty filter
+      if (excludedDifficulties.includes(ex.difficulty)) return false;
+      // Pain trigger: drop exercises with any "high" restriction
+      if (filterHighLoad && ex.back_issue_restrictions.some((r) => r.restriction_level === "high")) return false;
+      return true;
+    })
     .map((ex) => ({
       id: ex.id,
       name: ex.name,
