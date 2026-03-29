@@ -6,7 +6,12 @@
       "myPlan": "Мой План",
       "addExercise": "Добавить упражнение",
       "startWorkout": "НАЧАТЬ Тренировку",
-      "finishWorkout": "ЗАВЕРШИТЬ Тренировку"
+      "finishWorkout": "ЗАВЕРШИТЬ Тренировку",
+      "goToMyPlan": "Перейти к Моему Плану"
+    },
+    "swipeCard": {
+      "replace": "Заменить",
+      "delete": "Удалить"
     },
     "messages": {
       "loading": "Загрузка плана тренировки...",
@@ -65,6 +70,21 @@
   "activeWorkoutPage": {
     "noExercises": "Нет упражнений для сегодняшней тренировки.",
     "generatePlanHint": "Создайте план на странице Мой План, чтобы начать."
+  },
+  "replaceExerciseModal": {
+    "title": "Заменить упражнение",
+    "tabs": {
+      "suggested": "Похожие альтернативы",
+      "all": "Все упражнения"
+    },
+    "searchPlaceholder": "Поиск упражнения...",
+    "noSuggested": "Нет похожих альтернатив для {{name}}",
+    "noExercises": "Упражнения не найдены",
+    "swapDuration": "Период замены",
+    "onlyForWorkout": "Только для этой тренировки",
+    "permanentReplacement": "Постоянная замена в плане",
+    "cancel": "Отмена",
+    "confirmSwap": "Подтвердить замену"
   },
   "swapWorkoutActionSheet": {
     "title": "Заменить тренировку",
@@ -595,6 +615,16 @@
       "title": "Мышечные группы",
       "noData": "Нет данных для отображения",
       "exercises": "упр."
+    },
+    "personalRecords": {
+      "workoutRecords": "Рекорды тренировок",
+      "volumeUnit": "кг",
+      "exercisesUnit": "упр.",
+      "estimatedTitle": "Примерный 1ПМ (Топ {{count}})",
+      "bestSet": "Лучший подход: {{weight}}кг × {{reps}}",
+      "oneRmUnit": "кг 1ПМ",
+      "emptyExercise": "Ваш примерный 1ПМ по упражнениям появится здесь после завершённых тренировок.",
+      "emptyAll": "Завершите тренировки, чтобы увидеть личные рекорды"
     }
   }
 }
