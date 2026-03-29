@@ -604,8 +604,7 @@ function WorkoutPage({
         if (quizDataString) {
           const quizData = JSON.parse(quizDataString);
           try {
-            const apiBase = import.meta.env.VITE_GENARATE_PLAN_API || "http://localhost:4000";
-            const response = await fetch(`${apiBase}/api/quiz`, {
+            const response = await fetch(`${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(quizData),
