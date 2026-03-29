@@ -176,7 +176,8 @@
     "exerciseCount_other": "{{count}} exercises",
     "addExercise": "Add Exercise",
     "sets": "Sets",
-    "reps": "Reps"
+    "reps": "Reps",
+    "weightUnit": "kg"
   },
   "allExercisePage": {
     "title": "Add an exercise",
@@ -415,7 +416,11 @@
     },
     "navigation": {
       "previousMonth": "Previous month",
-      "nextMonth": "Next month"
+      "nextMonth": "Next month",
+      "months": [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ]
     }
   },
   "availableEquipmentPage": {
