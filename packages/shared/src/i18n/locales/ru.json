@@ -68,8 +68,20 @@
     "feedbackSent": "Отзыв отправлен. Спасибо!"
   },
   "activeWorkoutPage": {
+    "title": "Активная тренировка",
     "noExercises": "Нет упражнений для сегодняшней тренировки.",
     "generatePlanHint": "Создайте план на странице Мой План, чтобы начать."
+  },
+  "finishWorkoutModal": {
+    "title": "Завершить и записать тренировку?",
+    "volume": "ОБЪЕМ",
+    "volumeUnit": "кг",
+    "calories": "КАЛОРИИ",
+    "caloriesUnit": "ккал",
+    "exercises": "УПРАЖНЕНИЯ",
+    "duration": "ДЛИТЕЛЬНОСТЬ",
+    "resume": "Продолжить",
+    "logWorkout": "Записать тренировку"
   },
   "replaceExerciseModal": {
     "title": "Заменить упражнение",

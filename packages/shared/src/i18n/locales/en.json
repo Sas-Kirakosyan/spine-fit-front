@@ -68,8 +68,20 @@
     "feedbackSent": "Feedback sent. Thank you!"
   },
   "activeWorkoutPage": {
+    "title": "Active workout",
     "noExercises": "No exercises for today's workout.",
     "generatePlanHint": "Generate a plan in My Plan page to get started."
+  },
+  "finishWorkoutModal": {
+    "title": "Finish and log your workout?",
+    "volume": "VOLUME",
+    "volumeUnit": "kg",
+    "calories": "CALORIES",
+    "caloriesUnit": "kcal",
+    "exercises": "EXERCISES",
+    "duration": "DURATION",
+    "resume": "Resume",
+    "logWorkout": "Log Workout"
   },
   "replaceExerciseModal": {
     "title": "Replace exercise",

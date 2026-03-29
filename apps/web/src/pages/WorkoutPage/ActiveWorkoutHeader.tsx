@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/Buttons/Button";
 
 interface ActiveWorkoutHeaderProps {
@@ -9,8 +10,10 @@ interface ActiveWorkoutHeaderProps {
 export function ActiveWorkoutHeader({
   onNavigateBack,
   buttonClass = "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-main transition-colors",
-  title = "Active workout",
+  title,
 }: ActiveWorkoutHeaderProps) {
+  const { t } = useTranslation();
+  const displayTitle = title ?? t("activeWorkoutPage.title");
   return (
     <header className="flex items-center justify-between">
       <Button
@@ -36,7 +39,7 @@ export function ActiveWorkoutHeader({
 
       <div className="text-center">
         <p className="text-sm uppercase tracking-[0.3em] text-slate-300">
-          {title}
+          {displayTitle}
         </p>
       </div>
 
