@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useExerciseName } from "@spinefit/shared";
 import type { ExerciseProgress } from "@/utils/progressStats";
 import { ExerciseProgressItem } from "@/components/Progress/ExerciseProgressItem";
 
@@ -15,6 +16,7 @@ export function ExerciseList({
   onExerciseClick,
 }: ExerciseListProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("recent");
 
@@ -25,7 +27,7 @@ export function ExerciseList({
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = exercises.filter((ex) =>
-        ex.exerciseName.toLowerCase().includes(query)
+        getExerciseName({ id: ex.exerciseId, name: ex.exerciseName }).toLowerCase().includes(query)
       );
     }
 
@@ -38,7 +40,7 @@ export function ExerciseList({
             new Date(a.lastPerformed).getTime()
           );
         case "name":
-          return a.exerciseName.localeCompare(b.exerciseName);
+          return getExerciseName({ id: a.exerciseId, name: a.exerciseName }).localeCompare(getExerciseName({ id: b.exerciseId, name: b.exerciseName }));
         case "1rm":
           return b.estimated1RM - a.estimated1RM;
         default:

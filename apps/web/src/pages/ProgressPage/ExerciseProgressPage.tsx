@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useExerciseName } from "@spinefit/shared";
 import i18n from "@/i18n/config";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseProgressPageProps } from "@/types/pages";
@@ -936,14 +937,18 @@ function ExerciseProgressPage({
   workoutHistory,
 }: ExerciseProgressPageProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
   const [activeTab, setActiveTab] = useState<
     "history" | "progress" | "records"
   >("history");
   const [showRecordHistory, setShowRecordHistory] = useState(false);
-  const { sessions, exerciseName } = useExerciseHistory(
+  const { sessions, exerciseName: rawExerciseName } = useExerciseHistory(
     exerciseId,
     workoutHistory
   );
+  const exerciseName = rawExerciseName
+    ? getExerciseName({ id: exerciseId, name: rawExerciseName })
+    : "";
 
   if (showRecordHistory) {
     return (
