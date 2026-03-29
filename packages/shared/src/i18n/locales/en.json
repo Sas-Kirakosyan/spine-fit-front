@@ -6,7 +6,12 @@
       "myPlan": "My Plan",
       "addExercise": "Add Exercise",
       "startWorkout": "START Workout",
-      "finishWorkout": "FINISH Workout"
+      "finishWorkout": "FINISH Workout",
+      "goToMyPlan": "Go to My Plan"
+    },
+    "swipeCard": {
+      "replace": "Replace",
+      "delete": "Delete"
     },
     "messages": {
       "loading": "Loading workout plan...",
@@ -65,6 +70,21 @@
   "activeWorkoutPage": {
     "noExercises": "No exercises for today's workout.",
     "generatePlanHint": "Generate a plan in My Plan page to get started."
+  },
+  "replaceExerciseModal": {
+    "title": "Replace exercise",
+    "tabs": {
+      "suggested": "Suggested Alternatives",
+      "all": "All Exercises"
+    },
+    "searchPlaceholder": "Search exercise...",
+    "noSuggested": "No suggested alternatives found for {{name}}",
+    "noExercises": "No exercises found",
+    "swapDuration": "Swap duration",
+    "onlyForWorkout": "Only for this workout",
+    "permanentReplacement": "Permanent replacement in plan",
+    "cancel": "Cancel",
+    "confirmSwap": "Confirm Swap"
   },
   "swapWorkoutActionSheet": {
     "title": "Swap Workout",
@@ -176,7 +196,8 @@
     "exerciseCount_other": "{{count}} exercises",
     "addExercise": "Add Exercise",
     "sets": "Sets",
-    "reps": "Reps"
+    "reps": "Reps",
+    "weightUnit": "kg"
   },
   "allExercisePage": {
     "title": "Add an exercise",
@@ -415,7 +436,11 @@
     },
     "navigation": {
       "previousMonth": "Previous month",
-      "nextMonth": "Next month"
+      "nextMonth": "Next month",
+      "months": [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ]
     }
   },
   "availableEquipmentPage": {
@@ -589,6 +614,16 @@
       "title": "Muscle groups",
       "noData": "No data to display",
       "exercises": "exercises"
+    },
+    "personalRecords": {
+      "workoutRecords": "Workout records",
+      "volumeUnit": "kg",
+      "exercisesUnit": "exercises",
+      "estimatedTitle": "Estimated 1RM (Top {{count}})",
+      "bestSet": "Best set: {{weight}}kg × {{reps}}",
+      "oneRmUnit": "kg 1RM",
+      "emptyExercise": "Your estimated 1RM by exercise will appear here after completed workouts.",
+      "emptyAll": "Complete workouts to see your personal records"
     }
   }
 }

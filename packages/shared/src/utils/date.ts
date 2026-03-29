@@ -1,10 +1,11 @@
+import i18n from "i18next"; // Adjust the import path based on your i18n setup
 
 export const formatDateTime = (isoDate: string) => {
   const date = new Date(isoDate);
   if (Number.isNaN(date.getTime())) {
     return isoDate;
   }
-  return date.toLocaleString(undefined, {
+  return date.toLocaleString(i18n.language, {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -29,7 +30,7 @@ export const formatTime = (totalSeconds: number) => {
 
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
     2,
-    "0"
+    "0",
   )}:${String(seconds).padStart(2, "0")}`;
 };
 

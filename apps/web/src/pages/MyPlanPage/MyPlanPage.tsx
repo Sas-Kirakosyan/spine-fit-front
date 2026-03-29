@@ -465,7 +465,7 @@ function MyPlanPage({
         {generatedPlan && (
           <div className="flex flex-col gap-3">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">
-              GENERATED PLAN
+              {t("myPlanPage.sections.generatedPlan")}
             </h2>
             <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
               <div className="space-y-3">
