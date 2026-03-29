@@ -90,24 +90,52 @@ export function SwapWorkoutActionSheet({
   const [savedPrograms, setSavedPrograms] = useState<SavedProgram[]>([]);
   const [actionMenuId, setActionMenuId] = useState<string | null>(null);
 
-  // Current day index — prefer manually selected day, fallback to rotation
+  // Current day index — prefer manually selected day (if not completed), fallback to rotation
   const currentDayIndex = useMemo(() => {
     if (!plan) return 0;
     try {
-      const manual = localStorage.getItem("selectedWorkoutDayIndex");
-      if (manual !== null) {
-        const idx = parseInt(manual, 10);
-        if (!isNaN(idx) && idx < plan.workoutDays.length) return idx;
-      }
       const completedIds: string[] = JSON.parse(
         localStorage.getItem("completedWorkoutIds") || "[]"
       );
+      const completedSet = new Set(completedIds);
+
+      const manual = localStorage.getItem("selectedWorkoutDayIndex");
+      if (manual !== null) {
+        const idx = parseInt(manual, 10);
+        if (!isNaN(idx) && idx < plan.workoutDays.length) {
+          const day = plan.workoutDays[idx];
+          const workoutId = `${plan.id}_${day.dayNumber}_${day.dayName}`;
+          if (!completedSet.has(workoutId)) return idx;
+        }
+      }
+
       const count = completedIds.filter((id) => id.startsWith(plan.id)).length;
-      return count % plan.workoutDays.length;
+      const baseIndex = count % plan.workoutDays.length;
+
+      // If the rotation index is completed, find the next uncompleted day
+      for (let i = 0; i < plan.workoutDays.length; i++) {
+        const idx = (baseIndex + i) % plan.workoutDays.length;
+        const d = plan.workoutDays[idx];
+        const wId = `${plan.id}_${d.dayNumber}_${d.dayName}`;
+        if (!completedSet.has(wId)) return idx;
+      }
+      return baseIndex;
     } catch {
       return 0;
     }
   }, [plan]);
+
+  // Set of completed workout IDs for visual marking
+  const completedWorkoutIds = useMemo<Set<string>>(() => {
+    try {
+      const ids: string[] = JSON.parse(
+        localStorage.getItem("completedWorkoutIds") || "[]"
+      );
+      return new Set(ids);
+    } catch {
+      return new Set();
+    }
+  }, []);
 
   // Load plan on mount
   useEffect(() => {
@@ -204,33 +232,53 @@ export function SwapWorkoutActionSheet({
                     <>
                       <p className="text-xs text-white/50 mb-3">{plan.name}</p>
                       <div className="space-y-2">
-                        {plan.workoutDays.map((day, index) => (
+                        {plan.workoutDays.map((day, index) => {
+                          const workoutId = `${plan.id}_${day.dayNumber}_${day.dayName}`;
+                          const isCompleted = completedWorkoutIds.has(workoutId);
+                          return (
                           <button
                             key={index}
+                            disabled={isCompleted}
                             onClick={() => {
                               onSelectPlanDay?.(index);
                               onClose();
                             }}
-                            className="w-full flex items-center gap-3 p-3 rounded-xl bg-gray-800/50 hover:bg-gray-800/70 transition-colors text-left"
+                            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors text-left ${
+                              isCompleted
+                                ? "bg-green-900/20 border border-green-500/60 opacity-60 cursor-not-allowed"
+                                : "bg-gray-800/50 hover:bg-gray-800/70"
+                            }`}
                           >
-                            <div className="w-8 h-8 rounded-lg bg-main/10 flex items-center justify-center flex-shrink-0">
-                              <span className="text-main text-xs font-bold">{index + 1}</span>
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                              isCompleted ? "bg-green-500/20" : "bg-main/10"
+                            }`}>
+                              {isCompleted ? (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-green-400">
+                                  <path d="M20 6L9 17l-5-5" />
+                                </svg>
+                              ) : (
+                                <span className="text-main text-xs font-bold">{index + 1}</span>
+                              )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-white text-sm font-medium">{day.dayName}</p>
+                              <p className={`text-sm font-medium ${isCompleted ? "text-green-300/80" : "text-white"}`}>{day.dayName}</p>
                               {day.muscleGroups.length > 0 && (
-                                <p className="text-white/40 text-xs truncate">
+                                <p className={`text-xs truncate ${isCompleted ? "text-green-400/40" : "text-white/40"}`}>
                                   {day.muscleGroups.slice(0, 3).join(" · ")}
                                 </p>
                               )}
                             </div>
-                            {currentDayIndex === index && (
+                            {isCompleted ? (
+                              <span className="text-[10px] font-semibold text-green-400 bg-green-500/15 px-2 py-0.5 rounded-full flex-shrink-0">
+                                {t("swapWorkoutActionSheet.completed")}
+                              </span>
+                            ) : currentDayIndex === index ? (
                               <span className="text-[10px] font-semibold text-main bg-main/10 px-2 py-0.5 rounded-full flex-shrink-0">
                                 {t("swapWorkoutActionSheet.current")}
                               </span>
-                            )}
+                            ) : null}
                             <svg
-                              className="h-4 w-4 text-white/30 flex-shrink-0"
+                              className={`h-4 w-4 flex-shrink-0 ${isCompleted ? "text-green-500/30" : "text-white/30"}`}
                               viewBox="0 0 16 16"
                               fill="none"
                               stroke="currentColor"
@@ -241,7 +289,8 @@ export function SwapWorkoutActionSheet({
                               <path d="M6 4l4 4-4 4" />
                             </svg>
                           </button>
-                        ))}
+                          );
+                        })}
                       </div>
                     </>
                   )}

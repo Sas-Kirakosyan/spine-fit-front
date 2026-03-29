@@ -40,7 +40,7 @@ export interface QuizModalProps {
 }
 
 export interface QuizAnswers {
-  workoutType: "home" | "gym";
+  workoutType: "gym";
   answers: Record<number, number | number[] | string | Record<string, string | number>>;
   units?: Record<number, string | Record<string, string>>;
   timestamp?: string;

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { PersonalRecord, WorkoutRecord } from "@/utils/progressStats";
 
 type PersonalRecordsSection = "all" | "workoutOnly" | "exerciseOnly";
@@ -54,11 +55,18 @@ export function PersonalRecords({
   maxItems = 5,
   section = "all",
 }: PersonalRecordsProps) {
+  const { t } = useTranslation();
   const topExercises = exerciseRecords.slice(0, maxItems);
-  const showWorkoutRecords = (section === "all" || section === "workoutOnly") && workoutRecords.length > 0;
-  const showExerciseRecords = (section === "all" || section === "exerciseOnly") && topExercises.length > 0;
+  const showWorkoutRecords =
+    (section === "all" || section === "workoutOnly") &&
+    workoutRecords.length > 0;
+  const showExerciseRecords =
+    (section === "all" || section === "exerciseOnly") &&
+    topExercises.length > 0;
   const showEmptyState =
-    (section === "all" && exerciseRecords.length === 0 && workoutRecords.length === 0) ||
+    (section === "all" &&
+      exerciseRecords.length === 0 &&
+      workoutRecords.length === 0) ||
     (section === "workoutOnly" && workoutRecords.length === 0) ||
     (section === "exerciseOnly" && exerciseRecords.length === 0);
 
@@ -71,7 +79,7 @@ export function PersonalRecords({
               <TrophyIcon />
             </span>
             <h3 className="text-sm font-medium uppercase tracking-wider text-slate-400">
-              Workout records
+              {t("progressPage.personalRecords.workoutRecords")}
             </h3>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -87,7 +95,9 @@ export function PersonalRecords({
                     : record.value}
                 </p>
                 <p className="text-[10px] text-slate-500">
-                  {record.type === "volume" ? "kg" : "exercises"}
+                  {record.type === "volume"
+                    ? t("progressPage.personalRecords.volumeUnit")
+                    : t("progressPage.personalRecords.exercisesUnit")}
                 </p>
               </div>
             ))}
@@ -98,7 +108,9 @@ export function PersonalRecords({
       {showExerciseRecords && (
         <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
           <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-slate-400">
-            Estimated 1RM (Top {maxItems})
+            {t("progressPage.personalRecords.estimatedTitle", {
+              count: maxItems,
+            })}
           </h3>
           <div className="flex flex-col gap-2">
             {topExercises.map((record, index) => (
@@ -112,14 +124,19 @@ export function PersonalRecords({
                     {record.exerciseName}
                   </p>
                   <p className="text-xs text-slate-400">
-                    Best set: {record.bestWeight}kg × {record.bestReps}
+                    {t("progressPage.personalRecords.bestSet", {
+                      weight: record.bestWeight,
+                      reps: record.bestReps,
+                    })}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-lg font-bold text-main">
                     {Math.round(record.estimated1RM)}
                   </p>
-                  <p className="text-[10px] text-slate-500">kg 1RM</p>
+                  <p className="text-[10px] text-slate-500">
+                    {t("progressPage.personalRecords.oneRmUnit")}
+                  </p>
                 </div>
               </div>
             ))}
@@ -134,8 +151,8 @@ export function PersonalRecords({
           </span>
           <p className="text-sm text-slate-400">
             {section === "exerciseOnly"
-              ? "Your estimated 1RM by exercise will appear here after completed workouts."
-              : "Complete workouts to see your personal records"}
+              ? t("progressPage.personalRecords.emptyExercise")
+              : t("progressPage.personalRecords.emptyAll")}
           </p>
         </div>
       )}

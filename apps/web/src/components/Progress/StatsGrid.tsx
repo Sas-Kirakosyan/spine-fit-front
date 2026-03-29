@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { StatCard } from "./StatCard";
 import { formatVolume, type TotalStats } from "@/utils/progressStats";
 
@@ -53,19 +54,20 @@ function VolumeIcon() {
 }
 
 export function StatsGrid({ stats }: StatsGridProps) {
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-2 gap-3">
       <StatCard
         icon={<WorkoutIcon />}
-        label="Workouts"
+        label={t("progressPage.statsGrid.workouts")}
         value={stats.totalWorkouts}
         accentColor="text-main"
       />
       <StatCard
         icon={<VolumeIcon />}
-        label="Volume"
+        label={t("progressPage.statsGrid.volume")}
         value={formatVolume(stats.totalVolume)}
-        subValue="kg"
+        subValue={t("progressPage.statsGrid.weight")}
         accentColor="text-blue-400"
       />
     </div>

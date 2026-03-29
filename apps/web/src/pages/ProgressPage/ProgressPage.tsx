@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -32,6 +33,7 @@ function ProgressPage({
   activePage,
   workoutHistory,
 }: ProgressPageProps) {
+  const { t } = useTranslation();
   const stats = useMemo(() => calculateTotalStats(workoutHistory), [workoutHistory]);
 
   const weeklyActivity = useMemo(() => getWeeklyActivity(workoutHistory), [workoutHistory]);
@@ -65,7 +67,7 @@ function ProgressPage({
       <header className="flex items-start justify-between">
         <div>
           <Logo />
-          <h1 className="mx-2.5 text-3xl font-semibold text-white">Progress</h1>
+          <h1 className="mx-2.5 text-3xl font-semibold text-white">{t("progressPage.title")}</h1>
         </div>
         <Button
           onClick={onNavigateToSettings}
@@ -86,7 +88,7 @@ function ProgressPage({
               : "border-transparent text-slate-400 hover:text-slate-300"
           }`}
         >
-          Overview
+          {t("progressPage.tabs.overview")}
         </button>
         <button
           type="button"
@@ -97,7 +99,7 @@ function ProgressPage({
               : "border-transparent text-slate-400 hover:text-slate-300"
           }`}
         >
-          Exercises
+          {t("progressPage.tabs.exercise")}
         </button>
       </nav>
 
@@ -109,14 +111,14 @@ function ProgressPage({
               <WeeklyActivity days={weeklyActivity} />
               <ProgressChart
                 data={progressData}
-                title="Volume progress"
+                title={t("progressPage.progressChart.volumeProgress")}
                 activePeriod={volumePeriod}
                 onPeriodChange={setVolumePeriod}
               />
               {showPain && (
                 <PainChart
                   data={painData}
-                  title="Pain level"
+                  title={t("progressPage.progressChart.painLevel")}
                   activePeriod={painPeriod}
                   onPeriodChange={setPainPeriod}
                 />
@@ -147,16 +149,15 @@ function ProgressPage({
                   <path d="m14 21 7-7" />
                 </svg>
               </div>
-              <h2 className="text-xl font-semibold">Start training</h2>
+              <h2 className="text-xl font-semibold">{t("progressPage.empty.title")}</h2>
               <p className="max-w-xs text-sm text-slate-400">
-                Your progress, workout stats, personal records and charts will appear here after
-                your first completed workout
+                {t("progressPage.empty.description")}
               </p>
               <button
                 onClick={onNavigateToWorkout}
                 className="mt-4 rounded-xl bg-main px-6 py-3 font-semibold text-white transition-colors hover:bg-main/90 cursor-pointer"
               >
-                Go to workout
+                {t("progressPage.empty.goToWorkout")}
               </button>
             </section>
           )}
@@ -190,7 +191,7 @@ function ProgressPage({
                 <path d="m14 21 7-7" />
               </svg>
               <p className="text-sm text-slate-400">
-                Your estimated 1RM by exercise will appear here after completed workouts.
+                {t("progressPage.noExercises")}
               </p>
             </div>
           )}

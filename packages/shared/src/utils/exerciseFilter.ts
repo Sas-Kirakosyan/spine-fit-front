@@ -13,6 +13,7 @@ export interface FilterCriteria {
   painProfile: PainProfile;
   experience: "Beginner" | "Intermediate" | "Advanced";
   goal: string;
+  workoutType?: "gym";
 }
 
 /**
@@ -25,8 +26,8 @@ export function filterExercisesByProfile(
   console.log("[filterExercisesByProfile] Starting with", exercises.length, "exercises");
 
   const filtered = exercises.filter((exercise) => {
-    // Filter by equipment availability
-    if (!isEquipmentAvailable(exercise.equipment, criteria.availableEquipment)) {
+    // Filter by equipment availability (and home-gym restrictions if applicable)
+    if (!isEquipmentAvailable(exercise.equipment, criteria.availableEquipment, criteria.workoutType)) {
       return false;
     }
 
@@ -59,7 +60,8 @@ export function filterExercisesByProfile(
  */
 function isEquipmentAvailable(
   requiredEquipment: string,
-  availableEquipment: string[]
+  availableEquipment: string[],
+  workoutType?: "gym"
 ): boolean {
   // Bodyweight exercises are always available
   if (requiredEquipment === "bodyweight") {

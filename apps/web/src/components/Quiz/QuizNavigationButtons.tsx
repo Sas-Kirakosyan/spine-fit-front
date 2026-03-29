@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface QuizNavigationButtonsProps {
   currentQuestion: number;
   totalQuestions: number;
@@ -19,6 +21,7 @@ export function QuizNavigationButtons({
   onNext,
   onSubmit,
 }: QuizNavigationButtonsProps) {
+  const { t } = useTranslation();
   const isLastQuestion = currentQuestion >= totalQuestions - 1;
   const isStartScreen = currentQuestion === 0 && isInfoScreen;
 
@@ -30,9 +33,9 @@ export function QuizNavigationButtons({
             onClick={onNext}
             className="w-full rounded-full bg-main py-4 text-base font-semibold text-white transition hover:bg-main/90"
           >
-            Start My Assessment
+            {t("quiz.nav.startAssessment")}
           </button>
-          <p className="mt-2 text-center text-sm text-white/50">Takes less than 1 minute</p>
+          <p className="mt-2 text-center text-sm text-white/50">{t("quiz.nav.takesLessThan")}</p>
         </div>
       </div>
     );
@@ -46,7 +49,7 @@ export function QuizNavigationButtons({
             onClick={onBack}
             className="rounded-full bg-white/10 px-8 py-4 text-base font-medium transition hover:bg-white/20"
           >
-            Back
+            {t("quiz.nav.back")}
           </button>
         )}
         {!hideNextButton && !isLastQuestion ? (
@@ -59,7 +62,7 @@ export function QuizNavigationButtons({
                 : "bg-white/10 text-white/60 cursor-not-allowed"
             }`}
           >
-            Next
+            {t("quiz.nav.next")}
           </button>
         ) : !hideNextButton && isLastQuestion ? (
           <button
@@ -71,7 +74,7 @@ export function QuizNavigationButtons({
                 : "bg-white/10 text-white/60 cursor-not-allowed"
             }`}
           >
-            Finish
+            {t("quiz.nav.finish")}
           </button>
         ) : null}
       </div>

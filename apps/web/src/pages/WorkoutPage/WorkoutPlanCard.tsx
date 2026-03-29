@@ -18,6 +18,9 @@ interface WorkoutPlanCardProps {
   onSelectSavedProgram?: (program: SavedProgram) => void;
   onEditSavedProgram?: (program: SavedProgram) => void;
   onSelectPlanDay?: (dayIndex: number) => void;
+  planMode?: "ai" | "local";
+  onPlanModeSwitch?: (mode: "ai" | "local") => void;
+  isSwitchingMode?: boolean;
 }
 
 export function WorkoutPlanCard({
@@ -34,6 +37,9 @@ export function WorkoutPlanCard({
   onSelectSavedProgram,
   onEditSavedProgram,
   onSelectPlanDay,
+  planMode = "ai",
+  onPlanModeSwitch,
+  isSwitchingMode = false,
 }: WorkoutPlanCardProps) {
   const { t } = useTranslation();
   const [showSwapSheet, setShowSwapSheet] = useState(false);
@@ -50,44 +56,74 @@ export function WorkoutPlanCard({
     <>
       <div className="relative rounded-[14px] bg-[#1B1E2B]/90 p-4 mx-2.5 shadow-xl ring-1 ring-white/5">
         {/* Top right buttons */}
-        <div className="absolute top-4 right-4 flex items-center gap-2">
-          <button
-            onClick={() => setShowSwapSheet(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-main px-3 py-1.5 text-sm font-medium text-white hover:bg-main/80 transition-colors"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowSwapSheet(true)}
+              className="flex items-center gap-1.5 rounded-lg bg-main px-3 py-1.5 text-sm font-medium text-white hover:bg-main/80 transition-colors"
             >
-              <path d="M8 3 4 7l4 4" />
-              <path d="M4 7h16" />
-              <path d="M16 21l4-4-4-4" />
-              <path d="M20 17H4" />
-            </svg>
-            {t("workoutPage.workoutPlanCard.swap")}
-          </button>
-          <button className="text-white hover:text-white/80 transition-colors p-1">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="1" />
-              <circle cx="12" cy="5" r="1" />
-              <circle cx="12" cy="19" r="1" />
-            </svg>
-          </button>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M8 3 4 7l4 4" />
+                <path d="M4 7h16" />
+                <path d="M16 21l4-4-4-4" />
+                <path d="M20 17H4" />
+              </svg>
+              {t("workoutPage.workoutPlanCard.swap")}
+            </button>
+            <button className="text-white hover:text-white/80 transition-colors p-1">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="12" cy="5" r="1" />
+                <circle cx="12" cy="19" r="1" />
+              </svg>
+            </button>
+          </div>
+          {onPlanModeSwitch && (
+            <div className="flex mt-5 mr-5 rounded-full border border-white/30 overflow-hidden text-md font-medium">
+              <button
+                type="button"
+                onClick={() => onPlanModeSwitch("ai")}
+                disabled={isSwitchingMode}
+                className={`px-2.5 py-1 transition-colors ${
+                  planMode === "ai"
+                    ? "bg-main text-white"
+                    : "bg-transparent text-white/60"
+                }`}
+              >
+                AI
+              </button>
+              <button
+                type="button"
+                onClick={() => onPlanModeSwitch("local")}
+                disabled={isSwitchingMode}
+                className={`px-2.5 py-1 transition-colors ${
+                  planMode === "local"
+                    ? "bg-main text-white"
+                    : "bg-transparent text-white/60"
+                }`}
+              >
+                Local
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Main content */}

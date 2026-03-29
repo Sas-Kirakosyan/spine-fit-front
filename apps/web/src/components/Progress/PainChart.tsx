@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -8,13 +9,6 @@ import {
   CartesianGrid,
 } from "recharts";
 import type { PainDataPoint, VolumePeriod } from "@/utils/progressStats";
-
-const PERIOD_OPTIONS: { key: VolumePeriod; label: string }[] = [
-  { key: "week", label: "W" },
-  { key: "month", label: "M" },
-  { key: "3months", label: "3M" },
-  { key: "year", label: "Y" },
-];
 
 interface PainChartProps {
   data: PainDataPoint[];
@@ -45,11 +39,22 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
 
 export function PainChart({
   data,
-  title = "Pain Level",
+  title,
   activePeriod,
   onPeriodChange,
 }: PainChartProps) {
-  const showPeriodSelector = activePeriod !== undefined && onPeriodChange !== undefined;
+  const { t } = useTranslation();
+
+  const PERIOD_OPTIONS: { key: VolumePeriod; label: string }[] = [
+    { key: "week", label: t("progressPage.progressChart.periods.week") },
+    { key: "month", label: t("progressPage.progressChart.periods.month") },
+    { key: "3months", label: t("progressPage.progressChart.periods.3months") },
+    { key: "year", label: t("progressPage.progressChart.periods.year") },
+  ];
+
+  const chartTitle = title ?? t("progressPage.painChart.defaultTitle");
+  const showPeriodSelector =
+    activePeriod !== undefined && onPeriodChange !== undefined;
 
   const percentageChange = (() => {
     if (data.length < 2) return null;
@@ -64,7 +69,7 @@ export function PainChart({
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-medium uppercase tracking-wider text-slate-400">
-            {title}
+            {chartTitle}
           </h3>
           {showPeriodSelector && (
             <div className="flex rounded-lg bg-white/5 p-0.5">
@@ -87,7 +92,7 @@ export function PainChart({
         </div>
         <div className="flex h-[180px] items-center justify-center">
           <p className="text-sm text-slate-500">
-            No data for this period
+            {t("progressPage.painChart.noData")}
           </p>
         </div>
       </div>
@@ -99,7 +104,7 @@ export function PainChart({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-medium uppercase tracking-wider text-slate-400">
-            {title}
+            {chartTitle}
           </h3>
           {percentageChange !== null && (
             <span
@@ -107,7 +112,8 @@ export function PainChart({
                 percentageChange > 0 ? "text-red-400" : "text-green-400"
               }`}
             >
-              {percentageChange > 0 ? "+" : ""}{percentageChange}%
+              {percentageChange > 0 ? "+" : ""}
+              {percentageChange}%
             </span>
           )}
         </div>

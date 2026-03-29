@@ -4,10 +4,10 @@ import type { FinishedWorkoutSummary } from "../types/workout";
 import type { QuizAnswers } from "../types/quiz";
 
 import { filterExercisesByProfile, getAlternativeExercises, type FilterCriteria, type PainProfile } from "./exerciseFilter";
-import { mapSplitToMuscleGroups, assignExercisesToDays, getMissingMuscleGroups, createWeeklySchedule, type WorkoutDay } from "./splitScheduler";
+import { mapSplitToMuscleGroups, assignExercisesToDays, getMissingMuscleGroups, type WorkoutDay } from "./splitScheduler";
 import { calculateVolume, calculateExercisesPerWorkout } from "./volumeCalculator";
-import { applyProgressionToExercises } from "./progressiveOverload";
-import { buildSourceOnboarding, enforceFullBodyABRequirements, type SourceOnboarding } from "./planGeneratorHelpers";
+import { applyProgressionToExercises, getDefaultProgression } from "./progressiveOverload";
+import { buildSourceOnboarding, determineWorkoutSplit, enforceFullBodyABRequirements, type SourceOnboarding } from "./planGeneratorHelpers";
 
 export type { WorkoutDay };
 
@@ -164,7 +164,7 @@ function generateAlternativeSplits(
       alternatives.push({
         id: generatePlanId(),
         name: "Upper/Lower Split",
-        splitType: "BRO_SPLIT",
+        splitType: "UPPER_LOWER_4X",
         description: `${frequency} days per week - Upper and lower body days. Each muscle group trained 2x per week for optimal growth.`,
         workoutDays: upperLowerWorkoutDays,
         createdAt: new Date().toISOString(),
@@ -217,7 +217,7 @@ function generateAlternativeSplits(
       alternatives.push({
         id: generatePlanId(),
         name: "Bro Split",
-        splitType: "FRESH_MUSCLES",
+        splitType: "BRO_SPLIT",
         description: "5 days per week - One muscle group per day. Classic bodybuilding approach for maximum pump.",
         workoutDays: broSplitWorkoutDays,
         createdAt: new Date().toISOString(),
@@ -246,10 +246,11 @@ export function generateAlternativeSplitsForPlan(
 
   // Filter exercises same way as primary plan
   const filterCriteria: FilterCriteria = {
-    availableEquipment: [], // TODO: Store and retrieve from plan
+    availableEquipment: plan.sourceOnboarding?.availableEquipment || [],
     painProfile,
     experience: plan.settings.experience as "Beginner" | "Intermediate" | "Advanced",
     goal: plan.settings.goal,
+    workoutType: plan.sourceOnboarding?.workoutType as "gym" | undefined,
   };
 
   const filteredExercises = filterExercisesByProfile(allExercises, filterCriteria);
@@ -275,35 +276,19 @@ export function generateTrainingPlan(
     ? mergePlanSettingsWithQuizAnswers(planSettings, quizAnswers)
     : planSettings;
 
-  // 1. Extract pain profile (prefer quiz when available, fallback to plan settings)
+  // 1. Extract pain profile from both sources, always take the most restrictive value
   const painProfileFromQuiz = extractPainProfile(quizAnswers);
   const painProfileFromSettings = extractPainProfileFromSettings(effectivePlanSettings);
-  const settingsHasPain = painProfileFromSettings.painStatus !== "Healthy";
   const painProfile: PainProfile = {
-    painStatus:
-      painProfileFromQuiz.painStatus === "Healthy" && settingsHasPain
-        ? painProfileFromSettings.painStatus
-        : painProfileFromQuiz.painStatus,
-    painLocation: painProfileFromQuiz.painLocation ?? painProfileFromSettings.painLocation,
-    painLevel:
-      typeof painProfileFromQuiz.painLevel === "number"
-        ? painProfileFromQuiz.painLevel
-        : painProfileFromSettings.painLevel,
-    painTriggers: painProfileFromQuiz.painTriggers ?? painProfileFromSettings.painTriggers,
-    canSquat: painProfileFromQuiz.canSquat ?? painProfileFromSettings.canSquat,
+    painStatus: mostRestrictivePainStatus(painProfileFromQuiz.painStatus, painProfileFromSettings.painStatus),
+    painLocation: mergePainLocations(painProfileFromQuiz.painLocation, painProfileFromSettings.painLocation),
+    painLevel: Math.max(
+      typeof painProfileFromQuiz.painLevel === "number" ? painProfileFromQuiz.painLevel : 0,
+      typeof painProfileFromSettings.painLevel === "number" ? painProfileFromSettings.painLevel : 0,
+    ) || undefined,
+    painTriggers: mergePainTriggers(painProfileFromQuiz.painTriggers, painProfileFromSettings.painTriggers),
+    canSquat: mostRestrictiveSquat(painProfileFromQuiz.canSquat, painProfileFromSettings.canSquat),
   };
-
-  // Fix 2: Infer back/sciatica history from goal text even when painStatus is "Healthy"
-  const goalLower = effectivePlanSettings.goal.toLowerCase();
-  if (goalLower.includes("back") && (goalLower.includes("sciatica") || goalLower.includes("history"))) {
-    if (painProfile.painStatus === "Healthy") {
-      painProfile.painStatus = "Recovered";
-    }
-    const locations = painProfile.painLocation || [];
-    if (!locations.some(l => l.includes("Lower back"))) locations.push("Lower back");
-    if (goalLower.includes("sciatica") && !locations.some(l => l.includes("Sciatica"))) locations.push("Sciatica");
-    painProfile.painLocation = locations;
-  }
 
   // 2. Create filter criteria
   const filterCriteria: FilterCriteria = {
@@ -311,6 +296,7 @@ export function generateTrainingPlan(
     painProfile,
     experience: effectivePlanSettings.experience as "Beginner" | "Intermediate" | "Advanced",
     goal: effectivePlanSettings.goal,
+    workoutType: quizAnswers?.workoutType,
   };
 
   // 3. Filter exercises based on user profile
@@ -371,20 +357,14 @@ export function generateTrainingPlan(
   const hypertrophyBoost = isHypertrophyGoal && isIntermediateOrAbove;
 
   let minEx: number, maxEx: number;
-  if (durationMin <= 20)      { minEx = 2; maxEx = 3; }
+  if (durationMin <= 20) { minEx = 2; maxEx = 3; }
   else if (durationMin <= 30) { minEx = hypertrophyBoost ? 4 : 3; maxEx = hypertrophyBoost ? 5 : 4; }
   else if (durationMin <= 45) { minEx = hypertrophyBoost ? 4 : 3; maxEx = hypertrophyBoost ? 6 : 5; }
-  else                        { minEx = 4; maxEx = 6; }
+  else { minEx = 4; maxEx = 6; }
   const exercisesPerWorkout = Math.min(Math.max(rawExercisesPerWorkout, minEx), maxEx);
 
   // 7. Parse workouts per week from plan settings
   const workoutsPerWeek = parseWorkoutsPerWeek(effectivePlanSettings.workoutsPerWeek);
-
-  // 8. Create weekly schedule structure
-  createWeeklySchedule(
-    effectivePlanSettings.trainingSplit,
-    workoutsPerWeek
-  );
 
   // 9. Map training split to muscle groups per day
   const muscleGroupsByDay = mapSplitToMuscleGroups(
@@ -402,6 +382,10 @@ export function generateTrainingPlan(
 
   // Build sourceOnboarding early so we have the user-selected split type for restructuring
   const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
+  // Persist equipment list on sourceOnboarding so alternative split generation can use it
+  if (sourceOnboarding) {
+    sourceOnboarding.availableEquipment = availableEquipment;
+  }
 
   // 10.1. Restructure 3-day Full Body splits with rotating focus (Push/Lower/Pull)
   // Pass allExercises so it can access unfiltered pulls for Day C
@@ -505,6 +489,27 @@ export function generateTrainingPlan(
     ? enforceFullBodyABRequirements(restrictionLimitedDays, allExercises, sourceOnboarding.split)
     : restrictionLimitedDays;
 
+  // Cap exercise count per day after all post-processing passes.
+  // This prevents the sequential injection passes from inflating a day beyond
+  // what the session duration allows.
+  // Sort required exercise types (core, hamstring, vertical pull) to the front
+  // so they survive the trim — they were injected by enforceFullBodyABRequirements
+  // and would otherwise be cut since they were appended at the end.
+  const cappedDays = fullBodyABEnforcedDays.map((day) => {
+    if (day.exercises.length > maxEx) {
+      const sorted = day.exercises.slice().sort((a, b) => {
+        const isRequired = (e: Exercise) =>
+          isCoreStability(e) ||
+          (e.muscle_groups || []).includes("hamstrings") ||
+          hasVerticalPull(e);
+        return (isRequired(b) ? 1 : 0) - (isRequired(a) ? 1 : 0);
+      });
+      console.log(`[capExercises] Trimming ${day.dayName} from ${day.exercises.length} to ${maxEx} exercises (required types prioritized)`);
+      return { ...day, exercises: sorted.slice(0, maxEx) };
+    }
+    return day;
+  });
+
   const durationMinutes = Number(effectivePlanSettings.duration.match(/(\d+)/)?.[1] || 30);
   const hasMeaningfulPain = typeof painProfile.painLevel === "number" && painProfile.painLevel > 3;
   const cannotSquat = (painProfile.canSquat || "").toLowerCase().includes("avoidant");
@@ -520,75 +525,151 @@ export function generateTrainingPlan(
       : Math.min(safeSetsPerExercise, 3);
   }
 
+  // Determine the plan's split type from sourceOnboarding
+  const primarySplitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES" =
+    sourceOnboarding?.split?.type || "FULL_BODY_AB";
+
   // 12. Apply volume (sets/reps) to final workout days
   // Beginner weight reduction: use 60% of database defaults for beginners
   const beginnerWeightMultiplier = effectivePlanSettings.experience === "Beginner" ? 0.6 : 1.0;
 
+  // Strength/Hypertrophy periodization for UPPER_LOWER_STRENGTH_HYPERTROPHY split
+  // Days 1-2: Strength (fewer reps, heavier weight)
+  // Days 3-4: Hypertrophy (more reps, moderate weight)
+  const isStrengthHypertrophySplit = primarySplitType === "UPPER_LOWER_STRENGTH_HYPERTROPHY";
+
+  // Helper: check if exercise has a "medium" restriction for the user's condition
+  // Map user's painLocation strings to restriction issue_type keys (case-insensitive)
+  const painIssueTypes: string[] = [];
+  for (const loc of (painProfile.painLocation || [])) {
+    const lower = loc.toLowerCase();
+    if (lower.includes("lower back") || lower.includes("l4") || lower.includes("l5") || lower.includes("s1")) painIssueTypes.push("l5_s1");
+    if (lower.includes("sciatica")) painIssueTypes.push("sciatica");
+  }
+
+  const hasMediumRestriction = (ex: Exercise): boolean => {
+    if (!ex.back_issue_restrictions?.length || !painIssueTypes.length) return false;
+    return ex.back_issue_restrictions.some(
+      r => painIssueTypes.includes(r.issue_type) && r.restriction_level === "medium"
+    );
+  };
+
+  // Helper: get restriction recommendation note for the user's condition
+  const getRestrictionNote = (ex: Exercise): string | undefined => {
+    if (!ex.back_issue_restrictions?.length || !painIssueTypes.length) return undefined;
+    const restriction = ex.back_issue_restrictions.find(
+      r => painIssueTypes.includes(r.issue_type) && (r.restriction_level === "medium" || r.restriction_level === "low")
+    );
+    return restriction?.recommendation;
+  };
+
   // Fix 6: Experience-based weight floors to prevent unrealistically light weights
+  // Skip floor for medium-restricted exercises to respect lighter-weight recommendations
   const getWeightFloor = (ex: Exercise, experience: string): number => {
     if (isCoreStability(ex)) return 0;
+    if (hasMediumRestriction(ex)) return 0;
     const isCompound = ex.muscle_groups.length >= 3;
     const floors: Record<string, { compound: number; isolation: number }> = {
-      Beginner:     { compound: 10, isolation: 5 },
+      Beginner: { compound: 10, isolation: 5 },
       Intermediate: { compound: 20, isolation: 10 },
-      Advanced:     { compound: 30, isolation: 15 },
+      Advanced: { compound: 30, isolation: 15 },
     };
     const f = floors[experience] || floors.Intermediate;
     return isCompound ? f.compound : f.isolation;
   };
 
-  const adjustedWorkoutDaysWithVolume = fullBodyABEnforcedDays.map((day) => ({
-    ...day,
-    exercises: day.exercises.map((exercise) => {
+  const adjustedWorkoutDaysWithVolume = cappedDays.map((day, dayIndex) => {
+    // Per-day volume for strength/hypertrophy periodization
+    const isStrengthDay = isStrengthHypertrophySplit && dayIndex < 2;
+    const isHypertrophyDay = isStrengthHypertrophySplit && dayIndex >= 2;
+    const daySets = isStrengthDay ? Math.max(safeSetsPerExercise, 4)
+      : isHypertrophyDay ? Math.max(safeSetsPerExercise, 3)
+        : safeSetsPerExercise;
+    const dayReps = isStrengthDay ? Math.min(volumeRecommendation.repsPerSet, 6)
+      : isHypertrophyDay ? Math.max(volumeRecommendation.repsPerSet, 10)
+        : volumeRecommendation.repsPerSet;
+    // Strength days still respect beginner reduction, hypertrophy days use moderate weight
+    const dayWeightMultiplier = isStrengthDay ? beginnerWeightMultiplier
+      : isHypertrophyDay ? 0.75 * beginnerWeightMultiplier
+        : beginnerWeightMultiplier;
 
-      // Core stability exercises should not have weight assigned
-      if (isCoreStability(exercise)) {
+    return {
+      ...day,
+      exercises: day.exercises.map((exercise) => {
 
+        const progression = getDefaultProgression(exercise);
+
+        // Core stability exercises should not have weight assigned
+        if (isCoreStability(exercise)) {
+          return {
+            ...exercise,
+            sets: daySets,
+            reps: dayReps,
+            weight: 0,
+            weight_unit: "bodyweight",
+            load_mode: undefined,
+            progression,
+          };
+        }
+
+        // Rear-delt exercises get light-weight, higher-rep treatment for shoulder health
+        if (isRearDeltExercise(exercise)) {
+          const rearDeltReps = Math.max(dayReps, 15);
+          const rearDeltWeight = exercise.weight ? Math.round(exercise.weight * 0.5 * 2) / 2 : 5;
+          return {
+            ...exercise,
+            sets: daySets,
+            reps: rearDeltReps,
+            weight: Math.max(rearDeltWeight, getWeightFloor(exercise, effectivePlanSettings.experience)),
+            weight_unit: exercise.weight_unit || "kg",
+            progression,
+          };
+        }
+
+        // Carry exercises use distance (meters) instead of reps
+        const isCarryExercise = /carry|farmer|suitcase/i.test(exercise.name);
+        if (isCarryExercise) {
+          return {
+            ...exercise,
+            sets: daySets,
+            reps: 20,
+            weight_unit: "meters",
+            weight: exercise.weight || 0,
+            progression,
+          };
+        }
+
+        // Medium-restricted exercises: use 50% of DB default, skip weight floor
+        if (hasMediumRestriction(exercise)) {
+          const restrictedWeight = exercise.weight
+            ? Math.round(exercise.weight * 0.5 * 2) / 2
+            : 0;
+          return {
+            ...exercise,
+            sets: daySets,
+            reps: dayReps,
+            weight: restrictedWeight,
+            weight_unit: restrictedWeight === 0 ? "bodyweight" : (exercise.weight_unit || "kg"),
+            restriction_note: getRestrictionNote(exercise),
+            progression,
+          };
+        }
+
+        // For all other exercises: set sets/reps based on day type and experience level
+        const calculatedWeight = exercise.weight ? Math.round(exercise.weight * dayWeightMultiplier * 2) / 2 : exercise.weight;
+        const weightFloor = getWeightFloor(exercise, effectivePlanSettings.experience);
+        const restrictionNote = getRestrictionNote(exercise);
         return {
           ...exercise,
-          sets: safeSetsPerExercise,
-          reps: volumeRecommendation.repsPerSet,
-          weight: 0,
-          weight_unit: "bodyweight",
-          load_mode: undefined,
+          sets: daySets,
+          reps: dayReps,
+          weight: calculatedWeight ? Math.max(calculatedWeight, weightFloor) : calculatedWeight,
+          ...(restrictionNote ? { restriction_note: restrictionNote } : {}),
+          progression,
         };
-      }
-
-      // Preserve rear-delt exercise volume if already set (light weight, higher reps)
-      if (isRearDeltExercise(exercise) && exercise.sets && exercise.reps) {
-        // BUT: Always update sets to match current experience level
-        const rearDeltWeight = exercise.weight ? Math.round(exercise.weight * beginnerWeightMultiplier * 2) / 2 : exercise.weight;
-        return {
-          ...exercise,
-          sets: safeSetsPerExercise, // Force update sets
-          weight: rearDeltWeight ? Math.max(rearDeltWeight, getWeightFloor(exercise, effectivePlanSettings.experience)) : rearDeltWeight,
-        };
-      }
-
-      // Fix 11: Carry exercises use distance (meters) instead of reps
-      const isCarryExercise = /carry|farmer|suitcase/i.test(exercise.name);
-      if (isCarryExercise) {
-        return {
-          ...exercise,
-          sets: safeSetsPerExercise,
-          reps: 20,
-          weight_unit: "meters",
-          weight: exercise.weight || 0,
-        };
-      }
-
-      // For all other exercises: ALWAYS set sets/reps based on current experience level
-      // This ensures exercises from history get updated sets (e.g., 3 -> 4 for intermediate)
-      const calculatedWeight = exercise.weight ? Math.round(exercise.weight * beginnerWeightMultiplier * 2) / 2 : exercise.weight;
-      const weightFloor = getWeightFloor(exercise, effectivePlanSettings.experience);
-      return {
-        ...exercise,
-        sets: safeSetsPerExercise,
-        reps: volumeRecommendation.repsPerSet,
-        weight: calculatedWeight ? Math.max(calculatedWeight, weightFloor) : calculatedWeight,
-      };
-    }),
-  }));
+      }),
+    };
+  });
 
   // 13. Check for missing muscle groups
   const allTargetMuscleGroups = muscleGroupsByDay.flat();
@@ -605,10 +686,6 @@ export function generateTrainingPlan(
   // 15. Generate plan metadata
   const planId = generatePlanId();
   const planName = generatePlanName(effectivePlanSettings, sourceOnboarding);
-
-  // Determine the plan's split type from sourceOnboarding
-  const primarySplitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES" =
-    sourceOnboarding?.split?.type || "FULL_BODY_AB"; // Use split type from sourceOnboarding, fallback to FULL_BODY_AB
 
   // 15. Return primary plan (alternatives stored separately)
   return {
@@ -1269,18 +1346,11 @@ function ensureRearDeltWork(
 
   const updated = days.map((d) => ({ ...d, exercises: d.exercises.slice() }));
 
-  // Add rear-delt exercise with specific volume parameters (2-3 sets × 12-15 reps, light)
-  const rearDeltWithVolume = {
-    ...rearDeltCandidate,
-    sets: 3,
-    reps: 15,
-    weight: rearDeltCandidate.weight ? Math.round(rearDeltCandidate.weight * 0.5) : 5, // Light weight (50% of default or 5kg)
-    weight_unit: "kg",
-  };
-
+  // Add raw rear-delt exercise without volume — the centralised volume pass (step 12)
+  // will stamp proper sets/reps/weight so we avoid dual-stamping.
   updated[targetDayIndex].exercises = [
     ...updated[targetDayIndex].exercises,
-    rearDeltWithVolume,
+    rearDeltCandidate,
   ];
 
   // Deduplicate
@@ -1429,19 +1499,18 @@ function restructureFiveDayPPL(
   const pushPool = allPossibleExercises.filter(
     (e) => isPress(e) && !(e.muscle_groups || []).some((mg) => ["quadriceps", "glutes", "hamstrings"].includes(mg))
   );
-  const pullPool = allPossibleExercises.filter(
-    (e) => isPull(e) && !(e.muscle_groups || []).some((mg) => ["quadriceps", "glutes", "hamstrings"].includes(mg))
+  const legPool = allPossibleExercises.filter(
+    (e) => (e.muscle_groups || []).some((mg) => ["quadriceps", "glutes", "hamstrings"].includes(mg))
   );
 
   const pushAIds = new Set(days[0].exercises.map((e) => e.id));
-  const pullAIds = new Set(days[1].exercises.map((e) => e.id));
+  const legsAIds = new Set(days[2].exercises.map((e) => e.id));
 
   // Push B: prefer exercises NOT in Push A; ensure at least 1 compound press
   const freshPushes = pushPool.filter((e) => !pushAIds.has(e.id));
   const fallbackPushes = pushPool.filter((e) => pushAIds.has(e.id));
   const pushBCandidates = [...freshPushes, ...fallbackPushes];
 
-  // Ensure compound press is first (name includes "press" or "bench")
   const pushBCompound = pushBCandidates.find((e) => {
     const n = (e.name || "").toLowerCase();
     return n.includes("press") || n.includes("bench");
@@ -1451,26 +1520,22 @@ function restructureFiveDayPPL(
     [pushBCompound, ...pushBRest].filter(Boolean) as Exercise[]
   ).slice(0, exercisesPerWorkout);
 
-  // Pull B: prefer exercises NOT in Pull A; ensure at least 1 vertical pull
-  const freshPulls = pullPool.filter((e) => !pullAIds.has(e.id));
-  const fallbackPulls = pullPool.filter((e) => pullAIds.has(e.id));
-  const pullBCandidates = [...freshPulls, ...fallbackPulls];
-
-  const pullBVertical = pullBCandidates.find((e) => hasVerticalPull(e));
-  const pullBRest = pullBCandidates.filter((e) => e.id !== pullBVertical?.id);
-  const pullBExercises = dedupeExercises(
-    [pullBVertical, ...pullBRest].filter(Boolean) as Exercise[]
-  ).slice(0, exercisesPerWorkout);
+  // Legs B: prefer exercises NOT in Legs A for variety
+  const freshLegs = legPool.filter((e) => !legsAIds.has(e.id));
+  const fallbackLegs = legPool.filter((e) => legsAIds.has(e.id));
+  const legsBCandidates = [...freshLegs, ...fallbackLegs];
+  const legsBExercises = dedupeExercises(legsBCandidates).slice(0, exercisesPerWorkout);
 
   console.log(`[restructureFiveDayPPL] Push B: ${pushBExercises.map(e => e.name).join(", ")}`);
-  console.log(`[restructureFiveDayPPL] Pull B: ${pullBExercises.map(e => e.name).join(", ")}`);
+  console.log(`[restructureFiveDayPPL] Legs B: ${legsBExercises.map(e => e.name).join(", ")}`);
 
+  // 5-day PPL with legs 2×: Push A / Pull A / Legs A / Push B / Legs B
   return [
     days[0], // Push A — untouched
     days[1], // Pull A — untouched
-    days[2], // Legs  — untouched
-    { ...days[3], exercises: pushBExercises },
-    { ...days[4], exercises: pullBExercises },
+    days[2], // Legs A — untouched
+    { ...days[3], exercises: pushBExercises, dayName: "Push B", muscleGroups: days[0].muscleGroups },
+    { ...days[4], exercises: legsBExercises, dayName: "Legs B", muscleGroups: days[2].muscleGroups },
   ];
 }
 
@@ -1554,18 +1619,38 @@ function restructureThreeDayFullBody(
       ].filter(Boolean) as Exercise[]
     );
 
-    // Day 2 Lower: hinge + non-hinge quad + hamstring (isolation) + second quad
+    // Day 2 Lower: quad compound (Leg Press) → unilateral compound (Step-Up) → hamstring isolation
+    // Only 3 exercises to keep session ≤ 35 min. Avoid stacking Hip Thrust + Back Hyperextension.
     const nonHingeQuads = quadExercises.filter(q => !hingeExercises.some(h => h.id === q.id));
+
+    // Prefer a unilateral leg compound (Step-Up, Lunge, Split Squat) as the 2nd exercise
+    const unilateralKeywords = ["step-up", "step up", "lunge", "split squat", "single-leg", "single leg"];
+    const unilateralLeg = legExercises.find(
+      e => unilateralKeywords.some(kw => e.name.toLowerCase().includes(kw)) &&
+           e.id !== nonHingeQuads[0]?.id
+    );
+
+    // Hamstring isolation: exclude exercises that also target erector_spinae (Back Hyperextension)
+    // to avoid stacking two medium-restricted lower-back-loading exercises
+    const pureHamstringIsolation = hamstringExercises.find(
+      h =>
+        !hingeExercises.some(hi => hi.id === h.id) &&
+        !(h.muscle_groups || []).includes("erector_spinae") &&
+        h.id !== nonHingeQuads[0]?.id &&
+        h.id !== unilateralLeg?.id
+    );
+    // Fallback: any hamstring that isn't the same as slots 1-2
+    const hamstringFallback = hamstringExercises.find(
+      h =>
+        h.id !== nonHingeQuads[0]?.id &&
+        h.id !== unilateralLeg?.id
+    );
+
     const uluDay2 = dedupeExercises(
       [
-        hingeExercises[0] || legExercises[0],
-        nonHingeQuads[0],
-        hamstringExercises.find(
-          h =>
-            !hingeExercises.some(hi => hi.id === h.id) &&
-            h.id !== nonHingeQuads[0]?.id
-        ),
-        nonHingeQuads[1],
+        nonHingeQuads[0] || legExercises[0],                       // 1. Quad compound (Leg Press)
+        unilateralLeg || nonHingeQuads[1] || legExercises[1],      // 2. Unilateral (Step-Up)
+        pureHamstringIsolation || hamstringFallback,               // 3. Hamstring isolation
       ].filter(Boolean) as Exercise[]
     );
 
@@ -1584,14 +1669,27 @@ function restructureThreeDayFullBody(
       ].filter(Boolean) as Exercise[]
     );
 
-    // Pad upper days to at least 4 exercises using non-leg pool exercises
-    const padUpperToFour = (exercises: Exercise[], avoidIds?: Set<number>): Exercise[] => {
-      if (exercises.length >= 4) return exercises.slice(0, 5);
+    // Pad upper days to 5 exercises, prioritizing arm isolation for the extra slot
+    const padUpperToFive = (
+      exercises: Exercise[],
+      avoidIds?: Set<number>,
+      preferArmIsolation?: "biceps" | "triceps"
+    ): Exercise[] => {
+      if (exercises.length >= 5) return exercises.slice(0, 5);
       const usedIds = new Set(exercises.map(e => e.id));
       const pool = allDayExercises.filter(e => !usedIds.has(e.id) && !isPureLeg(e));
       const preferred = pool.filter(e => !avoidIds?.has(e.id));
       const fallback = pool.filter(e => avoidIds?.has(e.id));
-      return dedupeExercises([...exercises, ...preferred, ...fallback].slice(0, 4));
+
+      // Prioritize arm isolation exercises (1-2 muscle groups targeting the preferred arm muscle)
+      const armIso = preferArmIsolation
+        ? preferred.filter(e =>
+            e.muscle_groups.includes(preferArmIsolation) &&
+            e.muscle_groups.length <= 2
+          )
+        : [];
+      const orderedPool = [...armIso, ...preferred.filter(e => !armIso.includes(e)), ...fallback];
+      return dedupeExercises([...exercises, ...orderedPool].slice(0, 5));
     };
 
     return [
@@ -1599,7 +1697,7 @@ function restructureThreeDayFullBody(
         ...days[0],
         dayName: "Day 1 (Upper - Push & Pull)",
         muscleGroups: ["chest", "front_delts", "triceps", "lats", "upper_back", "rear_delts", "biceps"],
-        exercises: padUpperToFour(uluDay1),
+        exercises: padUpperToFive(uluDay1, undefined, "triceps"),
       },
       {
         ...days[1],
@@ -1611,7 +1709,7 @@ function restructureThreeDayFullBody(
         ...days[2],
         dayName: "Day 3 (Upper - Pull & Push)",
         muscleGroups: ["lats", "upper_back", "rear_delts", "biceps", "chest", "front_delts"],
-        exercises: padUpperToFour(uluDay3, day1Ids),
+        exercises: padUpperToFive(uluDay3, day1Ids, "biceps"),
       },
     ];
   }
@@ -1837,22 +1935,25 @@ function mergePlanSettingsWithQuizAnswers(
   else if (durationValue.includes("60-120")) duration = "1 hr";
   else duration = planSettings.duration;
 
-  // Determine appropriate training split based on frequency
-  let trainingSplit = planSettings.trainingSplit;
-  const numWorkouts = parseInt(frequencyValue);
-  if (numWorkouts <= 2) {
-    trainingSplit = "Full Body";
-  } else if (numWorkouts === 3) {
-    trainingSplit = "Full Body"; // or "Push/Pull/Legs"
-  } else if (numWorkouts === 4) {
-    trainingSplit = "Upper/Lower";
-  } else if (numWorkouts >= 5) {
-    if (experience === "Beginner" || experience === "Intermediate") {
-      trainingSplit = "Upper/Lower";
-    } else {
-      trainingSplit = "Push/Pull/Legs";
-    }
-  }
+  // Determine training split using the single source of truth (determineWorkoutSplit)
+  // This keeps mergePlanSettings and buildSourceOnboarding in sync.
+  const splitPainStatusAnswer = answers[10];
+  const splitPainStatusOptions = ["Healthy", "Recovered", "Active Symptoms"];
+  const mergedPainStatus = typeof splitPainStatusAnswer === "number"
+    ? splitPainStatusOptions[splitPainStatusAnswer]
+    : "Healthy";
+  const splitResult = determineWorkoutSplit(experience, frequencyValue, mergedPainStatus);
+  const splitTypeToTrainingSplit: Record<string, string> = {
+    FULL_BODY_ABC: "Full Body",
+    FULL_BODY_AB: "Full Body",
+    FULL_BODY_4X: "Full Body",
+    UPPER_LOWER_UPPER: "Upper/Lower",
+    UPPER_LOWER_4X: "Upper/Lower",
+    UPPER_LOWER_STRENGTH_HYPERTROPHY: "Upper/Lower",
+    PUSH_PULL_LEGS: "Push/Pull/Legs",
+    PPL: "Push/Pull/Legs",
+  };
+  const trainingSplit = splitTypeToTrainingSplit[splitResult.type] || planSettings.trainingSplit;
 
   // Extract personal profile data from quiz
   // Question 3 is now a multi_field containing gender, dateOfBirth, height, weight
@@ -1886,12 +1987,8 @@ function mergePlanSettingsWithQuizAnswers(
 
   const bodyTypeAnswer = answers[7]; // bodyType
 
-  // Extract pain profile from quiz
-  const painStatusAnswer = answers[10]; // painStatus (returns index)
-  const painStatusOptions = ["Healthy", "Recovered", "Active Symptoms"];
-  const painStatus = typeof painStatusAnswer === "number"
-    ? (painStatusOptions[painStatusAnswer] as "Healthy" | "Recovered" | "Active Symptoms")
-    : "Healthy";
+  // Extract pain profile from quiz (reuse painStatus from split determination above)
+  const painStatus = mergedPainStatus as "Healthy" | "Recovered" | "Active Symptoms";
 
   const painLocationAnswer = answers[11]; // painLocation (returns array of indices)
   const painLocationOptions = [
@@ -2086,10 +2183,61 @@ function extractPainProfileFromSource(sourceOnboarding: SourceOnboarding | null)
   return {
     painStatus: (sourceOnboarding.painStatus as "Healthy" | "Recovered" | "Active Symptoms") || "Healthy",
     painLocation: sourceOnboarding.painLocation,
-    painLevel: undefined, // Not stored in SourceOnboarding
+    painLevel: sourceOnboarding.painLevel,
     painTriggers: sourceOnboarding.painTriggers,
     canSquat: sourceOnboarding.canSquat,
   };
+}
+
+/**
+ * Return the more restrictive of two pain statuses.
+ * Severity order: Active Symptoms > Recovered > Healthy
+ */
+const PAIN_STATUS_SEVERITY: Record<string, number> = {
+  "Healthy": 0,
+  "Recovered": 1,
+  "Active Symptoms": 2,
+};
+function mostRestrictivePainStatus(
+  a: PainProfile["painStatus"],
+  b: PainProfile["painStatus"],
+): PainProfile["painStatus"] {
+  return (PAIN_STATUS_SEVERITY[a] ?? 0) >= (PAIN_STATUS_SEVERITY[b] ?? 0) ? a : b;
+}
+
+/** Merge two pain-location arrays, deduplicating by label. */
+function mergePainLocations(
+  a: string[] | undefined,
+  b: string[] | undefined,
+): string[] | undefined {
+  if (!a && !b) return undefined;
+  return [...new Set([...(a ?? []), ...(b ?? [])])];
+}
+
+/** Merge two pain-triggers arrays, deduplicating by label. */
+function mergePainTriggers(
+  a: string[] | undefined,
+  b: string[] | undefined,
+): string[] | undefined {
+  if (!a && !b) return undefined;
+  return [...new Set([...(a ?? []), ...(b ?? [])])];
+}
+
+/** Return the more restrictive canSquat answer. */
+const SQUAT_SEVERITY: Record<string, number> = {
+  "Confident (I squat with weights regularly)": 0,
+  "Untested (I haven't tried squatting recently)": 1,
+  "Cautious (I only squat with light weights)": 2,
+  "Technical (I can squat bodyweight, but weights trigger pain)": 3,
+  "Avoidant (I strictly avoid all squatting movements)": 4,
+};
+function mostRestrictiveSquat(
+  a: string | undefined,
+  b: string | undefined,
+): string | undefined {
+  if (!a) return b;
+  if (!b) return a;
+  return (SQUAT_SEVERITY[a] ?? 0) >= (SQUAT_SEVERITY[b] ?? 0) ? a : b;
 }
 
 /**
@@ -2106,19 +2254,19 @@ function findAnswerByFieldName(
  * Parse workouts per week from plan settings
  */
 function parseWorkoutsPerWeek(workoutsPerWeek: string): number {
-  // Extract number from string like "3 days per week" or "5+"
   const match = workoutsPerWeek.match(/(\d+)/);
   if (match) {
     return parseInt(match[1], 10);
   }
-  return 3; // Default to 3 if parsing fails
+  console.warn(`[parseWorkoutsPerWeek] Could not parse "${workoutsPerWeek}", defaulting to 3`);
+  return 3;
 }
 
 /**
  * Generate unique plan ID
  */
 function generatePlanId(): string {
-  return `plan_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `plan_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 }
 
 /**

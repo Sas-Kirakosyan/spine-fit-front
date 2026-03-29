@@ -107,6 +107,14 @@ export function mapSplitToMuscleGroups(
         ["quadriceps", "glutes", "hamstrings", "core_stabilizers"], // Lower 2
       ];
     }
+    // 3-day Upper/Lower/Upper (ULU)
+    if (workoutsPerWeek === 3) {
+      return [
+        ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps"], // Upper A
+        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"],                          // Lower
+        ["lats", "upper_back", "rear_delts", "biceps", "chest", "front_delts", "triceps"],  // Upper B
+      ];
+    }
     // 2-day Upper/Lower
     return [
       ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps"], // Upper

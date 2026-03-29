@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type { QuizModalProps } from "@/types/quiz";
+import type { GeneratedPlan } from "@spinefit/shared";
+import { savePlanToLocalStorage } from "@/storage/planStorage";
 import { questions } from "./questions";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -12,6 +15,7 @@ import { QuizNavigationButtons } from "./QuizNavigationButtons";
 import { QuizMultiField } from "./QuizMultiField";
 
 export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
+  const { t } = useTranslation();
   const [workoutType] = useState<"home" | "gym">("gym");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -31,6 +35,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const [multiFieldUnits, setMultiFieldUnits] = useState<
     Record<string, string>
   >({});
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
 
   const filteredQuestions = useMemo(() => {
@@ -291,7 +297,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     }
   };
 
-  const handleSubmitWithAnswer = (answerValue: number | number[] | string) => {
+  const handleSubmitWithAnswer = async (answerValue: number | number[] | string) => {
     const question = filteredQuestions[currentQuestion];
     const finalUnits = { ...units };
 
@@ -315,22 +321,44 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
 
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
-
     localStorage.removeItem("generatedPlan");
 
-    setCurrentQuestion(0);
-    setSelectedAnswer(null);
-    setSelectedCheckboxes([]);
-    setInputValue("");
-    setAnswers({});
-    setUnits({});
-    setHeightUnit("cm");
-    setWeightUnit("kg");
-    setMultiFieldValues({});
-    setMultiFieldUnits({});
-    onClose();
-    if (onQuizComplete) {
-      onQuizComplete();
+    setIsGeneratingPlan(true);
+    setApiError(null);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(quizData),
+      });
+
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+      const result = await response.json() as { success: boolean; plan: GeneratedPlan };
+      if (result.success && result.plan) {
+        savePlanToLocalStorage(result.plan);
+      }
+
+      setCurrentQuestion(0);
+      setSelectedAnswer(null);
+      setSelectedCheckboxes([]);
+      setInputValue("");
+      setAnswers({});
+      setUnits({});
+      setHeightUnit("cm");
+      setWeightUnit("kg");
+      setMultiFieldValues({});
+      setMultiFieldUnits({});
+      onClose();
+      if (onQuizComplete) {
+        onQuizComplete();
+      }
+    } catch (err) {
+      console.error("Failed to send quiz to API:", err);
+      setApiError("Failed to generate your plan. Please check your connection and try again.");
+    } finally {
+      setIsGeneratingPlan(false);
     }
   };
 
@@ -434,6 +462,30 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
   const displayOptions = getDisplayOptions();
 
+  if (isGeneratingPlan) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6">
+        <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+        <p className="text-lg font-medium text-foreground">Generating your personalized plan…</p>
+        <p className="text-sm text-muted-foreground">This may take up to 15 seconds</p>
+      </div>
+    );
+  }
+
+  if (apiError) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6 px-6 text-center">
+        <p className="text-lg font-medium text-red-500">{apiError}</p>
+        <button
+          onClick={() => setApiError(null)}
+          className="rounded-lg bg-primary px-6 py-3 text-white font-medium hover:opacity-90 transition"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
       <div className="relative w-full h-full max-w-full md:max-w-[400px] md:h-auto md:max-h-[90vh]">
@@ -461,15 +513,15 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                   {filteredQuestions[currentQuestion].type === "info" ? (
                     <div className="space-y-4">
                       <h3 className="text-2xl font-bold text-gray-900">
-                        {filteredQuestions[currentQuestion].title}
+                        {t(`quiz.questions.${question.id}.title`, { defaultValue: filteredQuestions[currentQuestion].title })}
                       </h3>
                       <p className="text-base text-gray-600 leading-relaxed">
-                        {filteredQuestions[currentQuestion].description}
+                        {t(`quiz.questions.${question.id}.description`, { defaultValue: filteredQuestions[currentQuestion].description })}
                       </p>
                     </div>
                   ) : (
                     <h3 className="text-xl font-semibold">
-                      {filteredQuestions[currentQuestion].question}
+                      {t(`quiz.questions.${question.id}.question`, { defaultValue: filteredQuestions[currentQuestion].question })}
                     </h3>
                   )}
 
@@ -478,7 +530,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                       {displayOptions?.map((option, index) => (
                         <QuizRadioOption
                           key={index}
-                          option={option}
+                          option={t(`quiz.questions.${question.id}.options.${index}`, { defaultValue: typeof option === "string" ? option : (option as any).label })}
                           index={index}
                           isSelected={selectedAnswer === index}
                           onSelect={handleAnswerSelect}
@@ -490,22 +542,29 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                   {filteredQuestions[currentQuestion].type ===
                     "image_radio" && (
                     <div className={optionListClass}>
-                      {displayOptions?.map((option, index) => (
-                        <QuizImageRadioOption
-                          key={index}
-                          option={
-                            option as {
-                              value: string;
-                              label: string;
-                              image: string;
-                              description: string;
-                            }
-                          }
-                          index={index}
-                          isSelected={selectedAnswer === index}
-                          onSelect={handleAnswerSelect}
-                        />
-                      ))}
+                      {displayOptions?.map((option, index) => {
+                        const imgOption = option as {
+                          value: string;
+                          label: string;
+                          image: string;
+                          description: string;
+                        };
+                        const isFemaleOptions = displayOptions === question.optionsFemale;
+                        const optionsKey = isFemaleOptions ? "optionsFemale" : "options";
+                        return (
+                          <QuizImageRadioOption
+                            key={index}
+                            option={{
+                              ...imgOption,
+                              label: t(`quiz.questions.${question.id}.${optionsKey}.${index}.label`, { defaultValue: imgOption.label }),
+                              description: t(`quiz.questions.${question.id}.${optionsKey}.${index}.description`, { defaultValue: imgOption.description }),
+                            }}
+                            index={index}
+                            isSelected={selectedAnswer === index}
+                            onSelect={handleAnswerSelect}
+                          />
+                        );
+                      })}
                     </div>
                   )}
 
@@ -515,7 +574,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                         (option, index) => (
                           <QuizCheckboxOption
                             key={index}
-                            option={option}
+                            option={t(`quiz.questions.${question.id}.options.${index}`, { defaultValue: typeof option === "string" ? option : (option as any).label })}
                             index={index}
                             isSelected={selectedCheckboxes.includes(index)}
                             onToggle={handleCheckboxToggle}
@@ -535,8 +594,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                           unitOptions={["cm", "ft"]}
                           placeholder={
                             heightUnit === "cm"
-                              ? "Enter height in cm"
-                              : "Enter height in ft"
+                              ? t("quiz.input.enterHeightCm")
+                              : t("quiz.input.enterHeightFt")
                           }
                           inputType={
                             filteredQuestions[currentQuestion].inputType
@@ -562,8 +621,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                           unitOptions={["kg", "lbs"]}
                           placeholder={
                             weightUnit === "kg"
-                              ? "Enter weight in kg"
-                              : "Enter weight in lbs"
+                              ? t("quiz.input.enterWeightKg")
+                              : t("quiz.input.enterWeightLbs")
                           }
                           inputType={
                             filteredQuestions[currentQuestion].inputType
@@ -594,7 +653,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                             onChange={(e) => handleInputChange(e.target.value)}
                             placeholder={
                               filteredQuestions[currentQuestion].placeholder ||
-                              "Enter your answer"
+                              t("quiz.input.enterAnswer")
                             }
                             className="w-full rounded-lg border-2 border-gray-300 px-4 py-3 text-lg focus:border-main focus:outline-none transition"
                             min={filteredQuestions[currentQuestion].min}
@@ -634,6 +693,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                         description={
                           filteredQuestions[currentQuestion].description
                         }
+                        questionId={question.id}
                       />
                     )}
                 </div>

@@ -2,7 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
 interface QuizCheckboxOptionProps {
-  option: string | { value: string; label: string; image: string; description: string };
+  option: string | { value: string; label: string; image: string; description?: string };
   index: number;
   isSelected: boolean;
   onToggle: (index: number) => void;

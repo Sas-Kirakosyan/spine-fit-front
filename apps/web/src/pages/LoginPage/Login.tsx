@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import { FormCard } from "@/components/Form/FormCard/FormCard";
 import { FormHeader } from "@/components/Form/FormHeader/FormHeader";
@@ -16,6 +17,7 @@ function Login({
   onNavigateToHome,
   onNavigateToWorkout,
 }: LoginProps) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -42,15 +44,15 @@ function Login({
     const newErrors: Partial<LoginFormData> = {};
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t("loginPage.errors.emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
+      newErrors.email = t("loginPage.errors.emailInvalid");
     }
 
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = t("loginPage.errors.passwordRequired");
     } else if (formData.password.length < 6) {
-      newErrors.password = "Password must contain at least 6 characters";
+      newErrors.password = t("loginPage.errors.passwordMinLength");
     }
 
     setErrors(newErrors);
@@ -74,28 +76,28 @@ function Login({
 
       <div className="mt-10 flex-1 overflow-y-auto">
         <FormCard>
-          <FormHeader title="Login" subtitle="Sign in to your account" />
+          <FormHeader title={t("loginPage.title")} subtitle={t("loginPage.subtitle")} />
 
           <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
             <FormField
-              label="Email"
+              label={t("loginPage.email")}
               id="email"
               name="email"
               type="email"
               value={formData.email}
               onChange={handleInputChange}
               error={errors.email}
-              placeholder="Enter email"
+              placeholder={t("loginPage.emailPlaceholder")}
             />
 
             <PasswordInput
-              label="Password"
+              label={t("loginPage.password")}
               id="password"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
               error={errors.password}
-              placeholder="Enter password"
+              placeholder={t("loginPage.passwordPlaceholder")}
             />
 
             <div className="flex items-center justify-between">
@@ -106,18 +108,18 @@ function Login({
                   type="checkbox"
                   className="h-4 w-4"
                 />
-                Remember me
+                {t("loginPage.rememberMe")}
               </label>
 
               <a
                 href="#"
                 className="text-sm font-medium text-main transition hover:text-main/80"
               >
-                Forgot your password?
+                {t("loginPage.forgotPassword")}
               </a>
             </div>
 
-            <SubmitButton text="Sign In" />
+            <SubmitButton text={t("loginPage.signIn")} />
 
             <Divider />
           </form>
@@ -125,8 +127,8 @@ function Login({
       </div>
 
       <AuthSwitchLink
-        question="Don't have an account?"
-        linkText="Register"
+        question={t("loginPage.noAccount")}
+        linkText={t("loginPage.register")}
         onClick={onSwitchToRegister || (() => {})}
       />
     </PageContainer>

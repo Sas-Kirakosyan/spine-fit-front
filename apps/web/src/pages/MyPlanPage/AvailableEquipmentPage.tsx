@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { AvailableEquipmentPageProps } from "@/types/pages";
 import type {
@@ -15,6 +16,7 @@ import { AvailableEquipmentPageHeader } from "./AvailableEquipmentPageHeader";
 function AvailableEquipmentPage({
   onNavigateBack,
 }: AvailableEquipmentPageProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<EquipmentTab>(() => {
     try {
       const saved = localStorage.getItem("equipmentActiveTab");
@@ -58,12 +60,12 @@ function AvailableEquipmentPage({
           return {
             ...category,
             items: category.items.map((item) =>
-              item.id === itemId ? { ...item, selected: !item.selected } : item,
+              item.id === itemId ? { ...item, selected: !item.selected } : item
             ),
           };
         }
         return category;
-      }),
+      })
     );
   };
 
@@ -89,10 +91,11 @@ function AvailableEquipmentPage({
 
   const formatWeights = (weights: EquipmentItemType["weights"]) => {
     if (weights.length === 0) {
-      return "No weights";
+      return t("availableEquipmentPage.noWeights");
     }
     const sorted = [...weights].sort((a, b) => a.weight - b.weight);
-    const display = sorted.slice(0, 4);
+    const MAX_DISPLAYED_WEIGHTS = 4;
+    const display = sorted.slice(0, MAX_DISPLAYED_WEIGHTS);
     const remaining = sorted.length - display.length;
     const displayText = display
       .map((w) => `${w.weight.toFixed(1)} ${w.unit}`)
@@ -116,7 +119,9 @@ function AvailableEquipmentPage({
                 : "bg-[#1B1E2B] text-gray-400"
             }`}
           >
-            {tab === "all" ? "All" : "Selected"}
+            {tab === "all"
+              ? t("availableEquipmentPage.tabs.all")
+              : t("availableEquipmentPage.tabs.selected")}
           </Button>
         ))}
       </div>

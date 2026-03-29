@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/config";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseProgressPageProps } from "@/types/pages";
 import { getExerciseEstimated1RM, calculate1RM } from "@/utils/oneRepMax";
@@ -32,11 +34,14 @@ function useExerciseHistory(
     let exerciseName = "";
 
     const sorted = [...workoutHistory].sort(
-      (a, b) => new Date(b.finishedAt).getTime() - new Date(a.finishedAt).getTime()
+      (a, b) =>
+        new Date(b.finishedAt).getTime() - new Date(a.finishedAt).getTime()
     );
 
     sorted.forEach((workout) => {
-      const exercise = workout.completedExercises.find((ex) => ex.id === exerciseId);
+      const exercise = workout.completedExercises.find(
+        (ex) => ex.id === exerciseId
+      );
       if (!exercise) return;
 
       if (!exerciseName) exerciseName = exercise.name;
@@ -71,7 +76,7 @@ function useExerciseHistory(
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr);
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString(i18n.language, {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -80,7 +85,7 @@ function formatDate(dateStr: string): string {
 
 function formatDateTime(dateStr: string): string {
   const d = new Date(dateStr);
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString(i18n.language, {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -153,7 +158,8 @@ function usePersonalRecords(sessions: ExerciseSession[]) {
       if (session.estimated1RM > best1RM) {
         best1RM = session.estimated1RM;
         const bestSet = completedSets.reduce((best, set) => {
-          return calculate1RM(set.weight, set.reps) > calculate1RM(best.weight, best.reps)
+          return calculate1RM(set.weight, set.reps) >
+            calculate1RM(best.weight, best.reps)
             ? set
             : best;
         }, completedSets[0]);
@@ -236,7 +242,7 @@ function usePersonalRecords(sessions: ExerciseSession[]) {
 
 function formatRecordDate(dateStr: string): string {
   const d = new Date(dateStr);
-  return d.toLocaleDateString("en-GB", {
+  return d.toLocaleDateString(i18n.language, {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -247,7 +253,9 @@ function PRBadge() {
   return (
     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/20">
       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500">
-        <span className="text-[10px] font-black text-black tracking-tight">PR</span>
+        <span className="text-[10px] font-black text-black tracking-tight">
+          PR
+        </span>
       </div>
     </div>
   );
@@ -270,7 +278,9 @@ function RecordCard({
       <PRBadge />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-white">{label}</p>
-        <p className="text-xs text-slate-400">{formatRecordDate(record.date)}</p>
+        <p className="text-xs text-slate-400">
+          {formatRecordDate(record.date)}
+        </p>
       </div>
       <div className="text-right shrink-0">
         <p className="text-base font-bold text-white">
@@ -294,12 +304,15 @@ function RecordsTab({
   exerciseName: string;
   onViewHistory: () => void;
 }) {
+  const { t } = useTranslation();
   const { records } = usePersonalRecords(sessions);
 
   if (sessions.length === 0) {
     return (
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center ring-1 ring-white/5">
-        <p className="text-sm text-slate-400">No records yet</p>
+        <p className="text-sm text-slate-400">
+          {t("exerciseProgressPage.noRecords")}
+        </p>
       </div>
     );
   }
@@ -307,60 +320,64 @@ function RecordsTab({
   return (
     <div className="flex flex-col gap-4 rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
       <div>
-        <h2 className="text-xl font-bold text-white">Personal Records</h2>
+        <h2 className="text-xl font-bold text-white">
+          {t("exerciseProgressPage.personalRecords.title")}
+        </h2>
         <p className="text-sm text-slate-400 mt-1">
-          See your best lifts for {exerciseName}
+          {t("exerciseProgressPage.personalRecords.subtitle", {
+            name: exerciseName,
+          })}
         </p>
       </div>
 
       <div className="flex flex-col">
         <RecordCard
-          label="Estimated 1RM"
+          label={t("exerciseProgressPage.personalRecords.estimated1RM")}
           record={records.estimated1RM}
-          unit="kg"
+          unit={`${t("exerciseProgressPage.personalRecords.weight")}`}
           detail={
             records.estimated1RM
-              ? `${records.estimated1RM.weight}kg x ${records.estimated1RM.reps} reps`
+              ? `${records.estimated1RM.weight}${t("exerciseProgressPage.personalRecords.weight")} x ${records.estimated1RM.reps} ${t("exerciseProgressPage.personalRecords.reps")}`
               : ""
           }
         />
         <RecordCard
-          label="Max weight"
+          label={t("exerciseProgressPage.personalRecords.maxWeight")}
           record={records.maxWeight}
-          unit="kg"
+          unit={`${t("exerciseProgressPage.personalRecords.weight")}`}
           detail={
             records.maxWeight
-              ? `${records.maxWeight.weight}kg x ${records.maxWeight.reps} reps`
+              ? `${records.maxWeight.weight}${t("exerciseProgressPage.personalRecords.weight")} x ${records.maxWeight.reps} ${t("exerciseProgressPage.personalRecords.reps")}`
               : ""
           }
         />
         <RecordCard
-          label="Max reps"
+          label={t("exerciseProgressPage.personalRecords.maxReps")}
           record={records.maxReps}
           unit=""
           detail={
             records.maxReps
-              ? `${records.maxReps.weight}kg x ${records.maxReps.reps} reps`
+              ? `${records.maxReps.weight}${t("exerciseProgressPage.personalRecords.weight")} x ${records.maxReps.reps} ${t("exerciseProgressPage.personalRecords.reps")}`
               : ""
           }
         />
         <RecordCard
-          label="Max session Volume"
+          label={t("exerciseProgressPage.personalRecords.maxSessionVolume")}
           record={records.maxSessionVolume}
-          unit="kg"
+          unit={`${t("exerciseProgressPage.personalRecords.weight")}`}
           detail={
             records.maxSessionVolume
-              ? `${records.maxSessionVolume.setCount} Sets`
+              ? `${records.maxSessionVolume.setCount} ${t("exerciseProgressPage.personalRecords.sets")} - ${formatVolume(records.maxSessionVolume.value)}${t("exerciseProgressPage.personalRecords.weight")}`
               : ""
           }
         />
         <RecordCard
-          label="Max Single Set Volume"
+          label={t("exerciseProgressPage.personalRecords.maxSingleSetVolume")}
           record={records.maxSingleSetVolume}
-          unit="kg"
+          unit={`${t("exerciseProgressPage.personalRecords.weight")}`}
           detail={
             records.maxSingleSetVolume
-              ? `${records.maxSingleSetVolume.weight}kg x ${records.maxSingleSetVolume.reps} reps`
+              ? `${records.maxSingleSetVolume.weight}${t("exerciseProgressPage.personalRecords.weight")} x ${records.maxSingleSetVolume.reps} ${t("exerciseProgressPage.personalRecords.reps")}`
               : ""
           }
         />
@@ -371,7 +388,7 @@ function RecordsTab({
         onClick={onViewHistory}
         className="w-full mt-2 py-3.5 rounded-full bg-white text-black text-sm font-semibold transition-colors hover:bg-white/90 cursor-pointer"
       >
-        View Record History
+        {t("exerciseProgressPage.personalRecords.viewHistory")}
       </button>
     </div>
   );
@@ -392,7 +409,9 @@ function RecordHistorySection({
 
   return (
     <div className="mb-6">
-      <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">{title}</p>
+      <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">
+        {title}
+      </p>
       <div className="flex flex-col">
         {entries.map((entry, idx) => {
           const displayValue = formatValue
@@ -403,8 +422,12 @@ function RecordHistorySection({
               key={idx}
               className="flex items-center justify-between py-3 border-b border-white/5 last:border-b-0"
             >
-              <p className="text-base font-semibold text-white">{displayValue}</p>
-              <p className="text-sm text-slate-400">{formatRecordDate(entry.date)}</p>
+              <p className="text-base font-semibold text-white">
+                {displayValue}
+              </p>
+              <p className="text-sm text-slate-400">
+                {formatRecordDate(entry.date)}
+              </p>
             </div>
           );
         })}
@@ -422,6 +445,7 @@ function RecordHistoryView({
   exerciseName: string;
   onBack: () => void;
 }) {
+  const { t } = useTranslation();
   const { history } = usePersonalRecords(sessions);
 
   return (
@@ -451,28 +475,28 @@ function RecordHistoryView({
 
       <div className="px-4 mt-2">
         <RecordHistorySection
-          title="Estimated 1RM"
+          title={t("exerciseProgressPage.personalRecords.estimated1RM")}
           entries={history.estimated1RMs}
           unit="kg"
         />
         <RecordHistorySection
-          title="Max weight"
+          title={t("exerciseProgressPage.personalRecords.maxWeight")}
           entries={history.maxWeights}
           unit="kg"
         />
         <RecordHistorySection
-          title="Max reps"
+          title={t("exerciseProgressPage.personalRecords.maxReps")}
           entries={history.maxReps}
           unit=""
           formatValue={(e) => `${e.value}`}
         />
         <RecordHistorySection
-          title="Max session Volume"
+          title={t("exerciseProgressPage.personalRecords.maxSessionVolume")}
           entries={history.maxSessionVolumes}
           unit="kg"
         />
         <RecordHistorySection
-          title="Max Single Set Volume"
+          title={t("exerciseProgressPage.personalRecords.maxSingleSetVolume")}
           entries={history.maxSingleSetVolumes}
           unit="kg"
         />
@@ -487,10 +511,10 @@ interface SetPR {
 }
 
 function calculateSetRecords(
-  sessions: ExerciseSession[],
+  sessions: ExerciseSession[]
 ): Map<string, Map<number, SetPR>> {
   const chronological = [...sessions].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
   const bestByReps = new Map<number, number>();
   const result = new Map<string, Map<number, SetPR>>();
@@ -516,12 +540,15 @@ function calculateSetRecords(
 }
 
 function HistoryTab({ sessions }: { sessions: ExerciseSession[] }) {
+  const { t } = useTranslation();
   const setRecords = useMemo(() => calculateSetRecords(sessions), [sessions]);
 
   if (sessions.length === 0) {
     return (
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center ring-1 ring-white/5">
-        <p className="text-sm text-slate-400">No history yet</p>
+        <p className="text-sm text-slate-400">
+          {t("exerciseProgressPage.noHistory")}
+        </p>
       </div>
     );
   }
@@ -538,14 +565,18 @@ function HistoryTab({ sessions }: { sessions: ExerciseSession[] }) {
               Fb
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-white">Workout</h3>
-              <p className="text-xs text-slate-400">{formatDateTime(session.date)}</p>
+              <h3 className="text-sm font-semibold text-white">
+                {t("exerciseProgressPage.history.workoutLabel")}
+              </h3>
+              <p className="text-xs text-slate-400">
+                {formatDateTime(session.date)}
+              </p>
             </div>
           </div>
 
           <div className="mb-2">
             <span className="text-xs text-slate-400 uppercase tracking-wider">
-              Sets Performed
+              {t("exerciseProgressPage.history.setsPerformed")}
             </span>
           </div>
 
@@ -555,16 +586,28 @@ function HistoryTab({ sessions }: { sessions: ExerciseSession[] }) {
               .map((set, idx) => {
                 const pr = setRecords.get(session.workoutId)?.get(idx);
                 return (
-                  <div key={idx} className="flex items-center justify-between py-1">
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between py-1"
+                  >
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-main font-semibold w-4">{idx + 1}</span>
+                      <span className="text-xs text-main font-semibold w-4">
+                        {idx + 1}
+                      </span>
                       <span className="text-sm font-medium text-white">
-                        {set.weight}kg x {set.reps} reps
+                        {set.weight}
+                        {t(
+                          "exerciseProgressPage.personalRecords.weight"
+                        )} x {set.reps}{" "}
+                        {t("exerciseProgressPage.personalRecords.reps")}
                       </span>
                     </div>
                     {pr?.isPR && (
                       <span className="text-xs font-semibold text-green-400">
-                        PR{pr.diff > 0 ? ` +${pr.diff}kg` : ""}
+                        {t("exerciseProgressPage.personalRecords.pr")}
+                        {pr.diff > 0
+                          ? ` +${pr.diff}${t("exerciseProgressPage.personalRecords.weight")}`
+                          : ""}
                       </span>
                     )}
                   </div>
@@ -596,6 +639,7 @@ function renderChartTooltip(unit: string, formatFn?: (v: number) => string) {
 }
 
 function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
+  const { t } = useTranslation();
   const reversedSessions = useMemo(() => [...sessions].reverse(), [sessions]);
 
   const latest1RM = sessions.length > 0 ? sessions[0].estimated1RM : 0;
@@ -603,13 +647,17 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
   const latestVolume = sessions.length > 0 ? sessions[0].sessionVolume : 0;
 
   const getSessionMaxWeight = (s: ExerciseSession) =>
-    s.sets.filter((x) => x.completed).reduce((m, x) => Math.max(m, x.weight), 0);
+    s.sets
+      .filter((x) => x.completed)
+      .reduce((m, x) => Math.max(m, x.weight), 0);
 
   const getSessionMaxReps = (s: ExerciseSession) =>
     s.sets.filter((x) => x.completed).reduce((m, x) => Math.max(m, x.reps), 0);
 
-  const latestMaxWeight = sessions.length > 0 ? getSessionMaxWeight(sessions[0]) : 0;
-  const latestMaxReps = sessions.length > 0 ? getSessionMaxReps(sessions[0]) : 0;
+  const latestMaxWeight =
+    sessions.length > 0 ? getSessionMaxWeight(sessions[0]) : 0;
+  const latestMaxReps =
+    sessions.length > 0 ? getSessionMaxReps(sessions[0]) : 0;
 
   const strengthData = useMemo(
     () =>
@@ -650,7 +698,9 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
   if (sessions.length === 0) {
     return (
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center ring-1 ring-white/5">
-        <p className="text-sm text-slate-400">No progress data yet</p>
+        <p className="text-sm text-slate-400">
+          {t("exerciseProgressPage.noProgress")}
+        </p>
       </div>
     );
   }
@@ -660,18 +710,29 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
       {/* Estimated Strength card */}
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-base font-semibold text-white">Estimated Strength</h3>
+          <h3 className="text-base font-semibold text-white">
+            {t("exerciseProgressPage.progress.estimatedStrength")}
+          </h3>
         </div>
         <p className="text-3xl font-bold text-white">
           {Math.round(latest1RM)}
-          <span className="text-lg font-normal text-slate-400">kg</span>
+          <span className="text-lg font-normal text-slate-400">
+            {t("exerciseProgressPage.personalRecords.weight")}
+          </span>
         </p>
         <p className="text-xs text-slate-400 mb-4">{formatDate(latestDate)}</p>
 
         <div className="h-[200px] w-full outline-none [&_*]:outline-none">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={strengthData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+            <LineChart
+              data={strengthData}
+              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#334155"
+                vertical={false}
+              />
               <XAxis
                 dataKey="date"
                 axisLine={false}
@@ -706,18 +767,29 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
       {/* Session Volume card */}
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-base font-semibold text-white">Session Volume</h3>
+          <h3 className="text-base font-semibold text-white">
+            {t("exerciseProgressPage.progress.sessionVolume")}
+          </h3>
         </div>
         <p className="text-3xl font-bold text-white">
           {formatVolume(latestVolume)}
-          <span className="text-lg font-normal text-slate-400">kg</span>
+          <span className="text-lg font-normal text-slate-400">
+            {t("exerciseProgressPage.personalRecords.weight")}
+          </span>
         </p>
         <p className="text-xs text-slate-400 mb-4">{formatDate(latestDate)}</p>
 
         <div className="h-[200px] w-full outline-none [&_*]:outline-none">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={volumeData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+            <BarChart
+              data={volumeData}
+              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#334155"
+                vertical={false}
+              />
               <XAxis
                 dataKey="date"
                 axisLine={false}
@@ -731,7 +803,10 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
                 tickFormatter={(v) => formatVolume(v)}
                 width={40}
               />
-              <Tooltip cursor={false} content={renderChartTooltip("kg", (v) => formatVolume(v))} />
+              <Tooltip
+                cursor={false}
+                content={renderChartTooltip("kg", (v) => formatVolume(v))}
+              />
               <Bar dataKey="value" fill="#1e5a8a" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -741,18 +816,29 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
       {/* Max Weight card */}
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-base font-semibold text-white">Max Weight</h3>
+          <h3 className="text-base font-semibold text-white">
+            {t("exerciseProgressPage.progress.maxWeight")}
+          </h3>
         </div>
         <p className="text-3xl font-bold text-white">
           {latestMaxWeight}
-          <span className="text-lg font-normal text-slate-400">kg</span>
+          <span className="text-lg font-normal text-slate-400">
+            {t("exerciseProgressPage.personalRecords.weight")}
+          </span>
         </p>
         <p className="text-xs text-slate-400 mb-4">{formatDate(latestDate)}</p>
 
         <div className="h-[200px] w-full outline-none [&_*]:outline-none">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={maxWeightData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+            <LineChart
+              data={maxWeightData}
+              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#334155"
+                vertical={false}
+              />
               <XAxis
                 dataKey="date"
                 axisLine={false}
@@ -787,18 +873,29 @@ function ProgressTab({ sessions }: { sessions: ExerciseSession[] }) {
       {/* Max Reps card */}
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-base font-semibold text-white">Max Reps</h3>
+          <h3 className="text-base font-semibold text-white">
+            {t("exerciseProgressPage.progress.maxReps")}
+          </h3>
         </div>
         <p className="text-3xl font-bold text-white">
           {latestMaxReps}
-          <span className="text-lg font-normal text-slate-400">reps</span>
+          <span className="text-lg font-normal text-slate-400">
+            {t("exerciseProgressPage.personalRecords.reps")}
+          </span>
         </p>
         <p className="text-xs text-slate-400 mb-4">{formatDate(latestDate)}</p>
 
         <div className="h-[200px] w-full outline-none [&_*]:outline-none">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={maxRepsData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+            <LineChart
+              data={maxRepsData}
+              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#334155"
+                vertical={false}
+              />
               <XAxis
                 dataKey="date"
                 axisLine={false}
@@ -838,15 +935,23 @@ function ExerciseProgressPage({
   onNavigateBack,
   workoutHistory,
 }: ExerciseProgressPageProps) {
-  const [activeTab, setActiveTab] = useState<"history" | "progress" | "records">("history");
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState<
+    "history" | "progress" | "records"
+  >("history");
   const [showRecordHistory, setShowRecordHistory] = useState(false);
-  const { sessions, exerciseName } = useExerciseHistory(exerciseId, workoutHistory);
+  const { sessions, exerciseName } = useExerciseHistory(
+    exerciseId,
+    workoutHistory
+  );
 
   if (showRecordHistory) {
     return (
       <RecordHistoryView
         sessions={sessions}
-        exerciseName={exerciseName || "Exercise"}
+        exerciseName={
+          exerciseName || t("exerciseProgressPage.exerciseFallback")
+        }
         onBack={() => setShowRecordHistory(false)}
       />
     );
@@ -876,7 +981,7 @@ function ExerciseProgressPage({
           </svg>
         </button>
         <h1 className="text-lg font-semibold text-white flex-1 text-center mr-8">
-          {exerciseName || "Exercise"}
+          {exerciseName || t("exerciseProgressPage.exerciseFallback")}
         </h1>
         <button
           type="button"
@@ -901,7 +1006,10 @@ function ExerciseProgressPage({
       </header>
 
       {/* Tabs */}
-      <nav className="flex border-b border-white/10 px-4" aria-label="Exercise sections">
+      <nav
+        className="flex border-b border-white/10 px-4"
+        aria-label="Exercise sections"
+      >
         <button
           type="button"
           onClick={() => setActiveTab("history")}
@@ -911,7 +1019,7 @@ function ExerciseProgressPage({
               : "border-transparent text-slate-400 hover:text-slate-300"
           }`}
         >
-          History
+          {t("exerciseProgressPage.tabs.history")}
         </button>
         <button
           type="button"
@@ -922,7 +1030,7 @@ function ExerciseProgressPage({
               : "border-transparent text-slate-400 hover:text-slate-300"
           }`}
         >
-          Progress
+          {t("exerciseProgressPage.tabs.progress")}
         </button>
         <button
           type="button"
@@ -933,7 +1041,7 @@ function ExerciseProgressPage({
               : "border-transparent text-slate-400 hover:text-slate-300"
           }`}
         >
-          Records
+          {t("exerciseProgressPage.tabs.records")}
         </button>
       </nav>
 
@@ -944,7 +1052,9 @@ function ExerciseProgressPage({
         {activeTab === "records" && (
           <RecordsTab
             sessions={sessions}
-            exerciseName={exerciseName || "Exercise"}
+            exerciseName={
+              exerciseName || t("exerciseProgressPage.exerciseFallback")
+            }
             onViewHistory={() => setShowRecordHistory(true)}
           />
         )}

@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { DayPicker } from "react-day-picker";
-import { months } from "@/utils/date";
+import { ru, enUS } from "date-fns/locale";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { HistoryPageProps } from "@/types/pages";
@@ -15,6 +16,11 @@ function HistoryPage({
   activePage,
   workouts,
 }: HistoryPageProps) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language.startsWith("ru") ? ru : enUS;
+  const months = t("historyPage.navigation.months", {
+    returnObjects: true,
+  }) as string[];
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
@@ -86,7 +92,7 @@ function HistoryPage({
               <button
                 onClick={handlePreviousMonth}
                 className="h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-main transition-colors"
-                aria-label="Previous month"
+                aria-label={t("historyPage.navigation.previousMonth")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +111,7 @@ function HistoryPage({
               <button
                 onClick={handleNextMonth}
                 className="h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 text-white flex items-center justify-center rounded-md hover:bg-main transition-colors"
-                aria-label="Next month"
+                aria-label={t("historyPage.navigation.nextMonth")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -129,8 +135,9 @@ function HistoryPage({
             onSelect={setSelectedDate}
             month={currentMonth}
             onMonthChange={setCurrentMonth}
+            locale={locale}
             // navLayout="around"
-            className="rounded-lg"
+            className="rounded-lg capitalize"
             classNames={{
               months:
                 "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",

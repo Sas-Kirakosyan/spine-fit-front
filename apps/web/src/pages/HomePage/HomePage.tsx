@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { QuizModal } from "@/components/Quiz/QuizModal";
 import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
+import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import type { HomePageProps } from "@/types/pages";
 
 function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
+  const { t } = useTranslation();
   const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   const handleStartQuiz = () => {
@@ -21,12 +24,17 @@ function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
         backgroundImage="url('https://ignitefitness.com/wp-content/uploads/2024/06/Gym-Equipment.jpg')"
         overlayClassName="bg-black/30"
       >
-        <Logo text="Traning app" />
+        <div className="flex items-center justify-between">
+          <Logo text={t("homePage.logoText")} />
+          <div className="mr-4 mt-4">
+            <LanguageSelector />
+          </div>
+        </div>
         <div className="mt-auto px-4 py-4">
           <h2 className="text-white text-4xl font-semibold leading-tight">
-            Strength instead
+            {t("homePage.heading1")}
             <br />
-            Of pain
+            {t("homePage.heading2")}
           </h2>
         </div>
 
@@ -35,14 +43,14 @@ function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
             onClick={handleStartQuiz}
             className="w-full max-w-[370px] rounded-[18px] bg-main py-4 text-lg font-semibold text-white"
           >
-            START PROGRAM
+            {t("homePage.startProgram")}
           </button>
 
           <button
             onClick={onNavigateToLogin}
             className="w-full py-2 text-center text-md font-medium text-white hover:text-white/50"
           >
-            Log In
+            {t("homePage.logIn")}
           </button>
         </div>
       </PageContainer>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { MuscleGroupData } from "@/utils/progressStats";
 
@@ -21,13 +22,14 @@ interface CustomTooltipProps {
 }
 
 function CustomTooltip({ active, payload }: CustomTooltipProps) {
+  const { t } = useTranslation();
   if (active && payload?.length) {
     const d = payload[0].payload;
     return (
       <div className="rounded-lg bg-[#1B1E2B] px-3 py-2 shadow-xl ring-1 ring-white/10">
         <p className="text-sm font-semibold text-white">{d.name}</p>
         <p className="text-xs text-slate-400">
-          {d.percentage}% &middot; {d.value} exercises
+          {d.percentage}% &middot; {d.value} {t("progressPage.muscleGroupChart.exercises")}
         </p>
       </div>
     );
@@ -36,14 +38,15 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
 }
 
 export function MuscleGroupChart({ data }: MuscleGroupChartProps) {
+  const { t } = useTranslation();
   if (data.length === 0) {
     return (
       <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
         <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-slate-400">
-          Muscle groups
+          {t("progressPage.muscleGroupChart.title")}
         </h3>
         <div className="flex h-[180px] items-center justify-center">
-          <p className="text-sm text-slate-500">No data to display</p>
+          <p className="text-sm text-slate-500">{t("progressPage.muscleGroupChart.noData")}</p>
         </div>
       </div>
     );
@@ -52,7 +55,7 @@ export function MuscleGroupChart({ data }: MuscleGroupChartProps) {
   return (
     <div className="rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5">
       <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-slate-400">
-        Muscle groups
+        {t("progressPage.muscleGroupChart.title")}
       </h3>
 
       <div className="flex items-center gap-4">

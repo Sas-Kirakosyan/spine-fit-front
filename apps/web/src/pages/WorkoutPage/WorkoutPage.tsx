@@ -52,6 +52,7 @@ function SwipeableExerciseCard({
   onDelete,
   children,
 }: SwipeableExerciseCardProps) {
+  const { t } = useTranslation();
   const [offsetX, setOffsetX] = useState(isOpen ? -SWIPE_MAX_OFFSET : 0);
   const [isDragging, setIsDragging] = useState(false);
   const startXRef = useRef(0);
@@ -123,7 +124,7 @@ function SwipeableExerciseCard({
           aria-label="Replace exercise"
         >
           <ReplaceIcon className="h-6 w-6" />
-          <span className="text-xs font-semibold">Replace</span>
+          <span className="text-xs font-semibold">{t("workoutPage.swipeCard.replace")}</span>
         </button>
         <button
           type="button"
@@ -140,7 +141,7 @@ function SwipeableExerciseCard({
           aria-label="Delete exercise"
         >
           <TrashIcon className="h-6 w-6" />
-          <span className="text-xs font-semibold">Delete</span>
+          <span className="text-xs font-semibold">{t("workoutPage.swipeCard.delete")}</span>
         </button>
       </div>
 
@@ -235,8 +236,21 @@ function WorkoutPage({
   );
   const [isLoadingPlan, setIsLoadingPlan] = useState(!isCustomWorkout);
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const selectedDayIndexRef = useRef<number | null>(null);
+  const selectedDayIndexRef = useRef<number | null>(
+    (() => {
+      const stored = localStorage.getItem("selectedWorkoutDayIndex");
+      if (stored !== null) {
+        const idx = parseInt(stored, 10);
+        return isNaN(idx) ? null : idx;
+      }
+      return null;
+    })()
+  );
   const [c, setC] = useState(0); // counter to trigger re-generation
+  const [planMode, setPlanMode] = useState<"ai" | "local">(
+    () => (localStorage.getItem("planMode") as "ai" | "local") || "ai"
+  );
+  const [isSwitchingMode, setIsSwitchingMode] = useState(false);
   const allExercises = allExercisesData as Exercise[];
 
   const syncGeneratedPlanWithSavedProgram = (plan: GeneratedPlan): GeneratedPlan => {
@@ -297,8 +311,21 @@ function WorkoutPage({
           // Load existing plan
           let plan = JSON.parse(existingPlan) as GeneratedPlan;
           plan = syncGeneratedPlanWithSavedProgram(plan);
-          // Get next uncompleted workout based on completion status
 
+          // Prefer manually selected day from swap sheet
+          if (selectedDayIndexRef.current !== null) {
+            const idx = selectedDayIndexRef.current;
+            if (idx < plan.workoutDays.length && plan.workoutDays[idx].exercises.length > 0) {
+              setWorkoutExercises(plan.workoutDays[idx].exercises);
+              console.log(
+                `📋 Loaded manually selected ${plan.workoutDays[idx].dayName} workout (${plan.workoutDays[idx].exercises.length} exercises)`
+              );
+              setIsLoadingPlan(false);
+              return;
+            }
+          }
+
+          // Get next uncompleted workout based on completion status
           const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
           console.log("nextWorkout:", nextWorkout);
           if (nextWorkout && nextWorkout.exercises.length > 0) {
@@ -400,12 +427,16 @@ function WorkoutPage({
       if (e.key === "generatedPlan" && e.newValue) {
         try {
           const plan = JSON.parse(e.newValue);
-          const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
-          if (nextWorkout && nextWorkout.exercises.length > 0) {
-            setWorkoutExercises(nextWorkout.exercises);
+          // Respect manually selected day
+          const targetWorkout =
+            selectedDayIndexRef.current !== null && selectedDayIndexRef.current < plan.workoutDays.length
+              ? plan.workoutDays[selectedDayIndexRef.current]
+              : getNextAvailableWorkout(plan, completedWorkoutIds);
+          if (targetWorkout && targetWorkout.exercises.length > 0) {
+            setWorkoutExercises(targetWorkout.exercises);
             console.log(
-              `Updated to ${nextWorkout.dayName} workout from storage event:`,
-              nextWorkout.exercises.map((e: any) => e.name)
+              `Updated to ${targetWorkout.dayName} workout from storage event:`,
+              targetWorkout.exercises.map((e: any) => e.name)
             );
           }
         } catch (error) {
@@ -476,7 +507,7 @@ function WorkoutPage({
   // Calculate current workout day name based on manual selection or rotation index
   const getCurrentDayName = (): string => {
     const plan = loadPlanFromLocalStorage();
-    if (!plan || plan.workoutDays.length === 0) return "No Workout";
+    if (!plan || plan.workoutDays.length === 0) return t("workoutPage.messages.noWorkout");
 
     // Prefer manually selected day
     const manual = localStorage.getItem("selectedWorkoutDayIndex");
@@ -492,10 +523,10 @@ function WorkoutPage({
       id.startsWith(plan.id)
     ).length;
     const rotationIndex = planCompletedCount % plan.workoutDays.length;
-    return plan.workoutDays[rotationIndex]?.dayName || "Today's Workout";
+    return plan.workoutDays[rotationIndex]?.dayName || t("workoutPage.labels.todayWorkout");
   };
 
-  const currentDayName = displayExercises.length > 0 ? getCurrentDayName() : "No Workout";
+  const currentDayName = displayExercises.length > 0 ? getCurrentDayName() : t("workoutPage.messages.noWorkout");
 
   console.log("plan", JSON.parse(localStorage.getItem("generatedPlan") || "{}")); // dont remove this log
 
@@ -510,6 +541,97 @@ function WorkoutPage({
       console.log(
         `📋 Switched to ${firstWorkout.dayName} (${firstWorkout.exercises.length} exercises)`
       );
+    }
+  };
+
+  const handlePlanModeSwitch = async (newMode: "ai" | "local") => {
+    if (newMode === planMode || isSwitchingMode) return;
+    setIsSwitchingMode(true);
+
+    try {
+      // Cache current plan under current mode key
+      const currentPlan = localStorage.getItem("generatedPlan");
+      if (currentPlan) {
+        localStorage.setItem(`generatedPlan_${planMode}`, currentPlan);
+      }
+
+      // Check if target mode has a cached plan
+      const cachedPlan = localStorage.getItem(`generatedPlan_${newMode}`);
+
+      if (cachedPlan) {
+        // Restore cached plan
+        localStorage.setItem("generatedPlan", cachedPlan);
+        console.log(`🔄 Restored cached ${newMode} plan`);
+      } else if (newMode === "local") {
+        // Generate local plan
+        const quizDataString = localStorage.getItem("quizAnswers");
+        const quizData: QuizAnswers | null = quizDataString ? JSON.parse(quizDataString) : null;
+        const planSettings = loadPlanSettings();
+        const equipmentDataString = localStorage.getItem("equipmentData");
+        const equipmentData: EquipmentCategory[] = equipmentDataString
+          ? JSON.parse(equipmentDataString)
+          : [];
+        const availableEquipment = equipmentData.flatMap((category) =>
+          category.items.filter((item) => item.selected).map((item) => item.name)
+        );
+        const finalEquipment =
+          availableEquipment.length > 0
+            ? availableEquipment
+            : equipmentData.length === 0
+              ? Array.from(
+                  new Set((allExercisesData as Exercise[]).map((ex) => ex.equipment))
+                ).filter((eq) => eq && eq !== "none")
+              : ["bodyweight"];
+        const bodyweightOnly = localStorage.getItem("bodyweightOnly") === "true";
+        const historyString = localStorage.getItem("workoutHistory");
+        const workoutHistory: FinishedWorkoutSummary[] = historyString
+          ? JSON.parse(historyString)
+          : [];
+
+        const plan = generateTrainingPlan(
+          allExercisesData as Exercise[],
+          planSettings,
+          quizData,
+          bodyweightOnly ? ["bodyweight"] : finalEquipment,
+          workoutHistory
+        );
+        savePlanToLocalStorage(plan);
+        localStorage.setItem(`generatedPlan_${newMode}`, JSON.stringify(plan));
+        console.log("🔄 Generated new local plan");
+      } else {
+        // newMode === "ai" — fetch from backend
+        const quizDataString = localStorage.getItem("quizAnswers");
+        if (quizDataString) {
+          const quizData = JSON.parse(quizDataString);
+          try {
+            const response = await fetch(`${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(quizData),
+            });
+            if (response.ok) {
+              const result = await response.json() as { success: boolean; plan: GeneratedPlan };
+              if (result.success && result.plan) {
+                savePlanToLocalStorage(result.plan);
+                localStorage.setItem(`generatedPlan_${newMode}`, JSON.stringify(result.plan));
+                console.log("🔄 Generated new AI plan from backend");
+              }
+            } else {
+              console.error("AI plan API error:", response.status);
+            }
+          } catch (err) {
+            console.error("Failed to fetch AI plan:", err);
+          }
+        }
+      }
+
+      // Update mode
+      setPlanMode(newMode);
+      localStorage.setItem("planMode", newMode);
+      // Trigger re-load of exercises
+      setC((prev) => prev + 1);
+    } finally {
+      setIsSwitchingMode(false);
     }
   };
 
@@ -658,7 +780,7 @@ function WorkoutPage({
               localStorage.removeItem("completedWorkoutIds");
               setC(c + 1);
             }}
-            className="border border-2 border-white/50 rounded-full p-1 mb-1"
+            className="border border-2 border-white/50 rounded-full p-1"
           >
             {t("workoutPage.buttons.regeneratePlan")}
           </div>
@@ -684,7 +806,7 @@ function WorkoutPage({
         <WorkoutPlanCard
           containerRef={cardRef}
           onPlanSwitched={handlePlanSwitched}
-          planName={loadPlanFromLocalStorage()?.name || "My Workout Plan"}
+          planName={loadPlanFromLocalStorage()?.name || t("workoutPage.labels.myWorkoutPlan")}
           dayName={currentDayName}
           exerciseCount={displayExercises.length}
           muscleCount={new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size}
@@ -715,6 +837,9 @@ function WorkoutPage({
               setWorkoutExercises(p.workoutDays[dayIndex].exercises);
             }
           }}
+          planMode={planMode}
+          onPlanModeSwitch={handlePlanModeSwitch}
+          isSwitchingMode={isSwitchingMode}
         />
 
         <section className="flex-1 space-y-3 mx-2.5">

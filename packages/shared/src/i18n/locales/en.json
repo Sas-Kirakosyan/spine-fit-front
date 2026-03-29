@@ -5,7 +5,13 @@
       "backToHome": "Back to Home",
       "myPlan": "My Plan",
       "addExercise": "Add Exercise",
-      "startWorkout": "START Workout"
+      "startWorkout": "START Workout",
+      "finishWorkout": "FINISH Workout",
+      "goToMyPlan": "Go to My Plan"
+    },
+    "swipeCard": {
+      "replace": "Replace",
+      "delete": "Delete"
     },
     "messages": {
       "loading": "Loading workout plan...",
@@ -55,11 +61,30 @@
     "viewDetails": "View details",
     "viewSets": "View sets",
     "replaceExercise": "Replace exercise",
-    "deleteFromWorkout": "Delete from workout"
+    "deleteFromWorkout": "Delete from workout",
+    "feedbackAboutExercise": "Feedback about exercise",
+    "feedbackPlaceholder": "Describe your feedback about this exercise...",
+    "send": "Send",
+    "feedbackSent": "Feedback sent. Thank you!"
   },
   "activeWorkoutPage": {
     "noExercises": "No exercises for today's workout.",
     "generatePlanHint": "Generate a plan in My Plan page to get started."
+  },
+  "replaceExerciseModal": {
+    "title": "Replace exercise",
+    "tabs": {
+      "suggested": "Suggested Alternatives",
+      "all": "All Exercises"
+    },
+    "searchPlaceholder": "Search exercise...",
+    "noSuggested": "No suggested alternatives found for {{name}}",
+    "noExercises": "No exercises found",
+    "swapDuration": "Swap duration",
+    "onlyForWorkout": "Only for this workout",
+    "permanentReplacement": "Permanent replacement in plan",
+    "cancel": "Cancel",
+    "confirmSwap": "Confirm Swap"
   },
   "swapWorkoutActionSheet": {
     "title": "Swap Workout",
@@ -67,6 +92,7 @@
     "suggestedSplits": "Suggested Splits (Coach-Recommended)",
     "customWorkout": "Custom Workout Plan",
     "current": "CURRENT",
+    "completed": "COMPLETED",
     "savedPrograms": "Saved Programs",
     "edit": "Edit",
     "duplicate": "Duplicate",
@@ -170,7 +196,8 @@
     "exerciseCount_other": "{{count}} exercises",
     "addExercise": "Add Exercise",
     "sets": "Sets",
-    "reps": "Reps"
+    "reps": "Reps",
+    "weightUnit": "kg"
   },
   "allExercisePage": {
     "title": "Add an exercise",
@@ -185,6 +212,418 @@
       "groupAs": "Group as...",
       "addSingleExercise": "Add {{count}} Exercise",
       "addMultipleExercises": "Add {{count}} Exercises"
+    },
+    "header": {
+      "close": "Close",
+      "filter": "Filter",
+      "search": "Search"
+    },
+    "exerciseItem": {
+      "actionsFor": "Actions for {{name}}"
+    }
+  },
+  "homePage": {
+    "logoText": "Training app",
+    "heading1": "Strength instead",
+    "heading2": "Of pain",
+    "startProgram": "START PROGRAM",
+    "logIn": "Log In"
+  },
+  "loginPage": {
+    "title": "Login",
+    "subtitle": "Sign in to your account",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot your password?",
+    "signIn": "Sign In",
+    "noAccount": "Don't have an account?",
+    "register": "Register",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must contain at least 6 characters"
+    }
+  },
+  "registrationPage": {
+    "title": "Registration",
+    "subtitle": "Create your account",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter last name",
+    "username": "Username",
+    "usernamePlaceholder": "Enter username",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm password",
+    "register": "Register",
+    "haveAccount": "Already have an account?",
+    "login": "Login",
+    "errors": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "usernameRequired": "Username is required",
+      "usernameMinLength": "Username must contain at least 3 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must contain at least 6 characters",
+      "confirmPasswordRequired": "Password confirmation is required",
+      "passwordsMismatch": "Passwords do not match"
+    }
+  },
+  "quiz": {
+    "header": {
+      "title": "Personalizing your plan",
+      "questionCount": "Question {{current}} / {{total}}",
+      "home": "Home"
+    },
+    "nav": {
+      "startAssessment": "Start My Assessment",
+      "takesLessThan": "Takes less than 1 minute",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish"
+    },
+    "slider": {
+      "noPain": "No pain",
+      "worstPain": "Worst pain"
+    },
+    "multiField": {
+      "select": "Select {{label}}",
+      "weightInfo": "Weight needed to calculate calories burned"
+    },
+    "calendar": {
+      "placeholder": "DD/MM/YYYY",
+      "dateOfBirth": "Date of Birth",
+      "cancel": "Cancel",
+      "ok": "OK"
+    },
+    "input": {
+      "enterAnswer": "Enter your answer",
+      "enterHeightCm": "Enter height in cm",
+      "enterHeightFt": "Enter height in ft",
+      "enterWeightKg": "Enter weight in kg",
+      "enterWeightLbs": "Enter weight in lbs"
+    },
+    "questions": {
+      "1": {
+        "title": "Build Muscle, Protect Your Spine",
+        "description": "We combine professional coaching logic with spine-safe protocols to help you train hard without the fear of a flare-up. Let's customize your journey.",
+        "buttonText": "Start My Assessment"
+      },
+      "2": {
+        "question": "What is your main goal?",
+        "options": [
+          "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
+          "Structural Recovery (Reduce pain and restore movement capacity)"
+        ]
+      },
+      "3": {
+        "question": "Standard Metrics",
+        "description": "These stats allow us to calibrate your volume and intensity.",
+        "fields": {
+          "gender": {
+            "label": "Gender",
+            "options": ["Male", "Female", "Other"]
+          },
+          "dateOfBirth": {
+            "label": "Date of Birth"
+          },
+          "height": {
+            "label": "Height",
+            "placeholder": "Enter height"
+          },
+          "weight": {
+            "label": "Weight",
+            "placeholder": "Enter weight"
+          }
+        }
+      },
+      "7": {
+        "question": "Which physique profile best matches yours?",
+        "options": [
+          { "label": "8–15% (Lean / Athletic)", "description": "Visible muscle definition" },
+          { "label": "16–22% (Average)", "description": "Some definition, slight fat around waist" },
+          { "label": "23–30% (Overfat)", "description": "Soft midsection, limited muscle definition" },
+          { "label": "30%+ (High body fat)", "description": "Higher fat storage around waist and hips" }
+        ],
+        "optionsFemale": [
+          { "label": "18–24% (Lean / Athletic)", "description": "Visible muscle definition, athletic build" },
+          { "label": "25–31% (Fit/Average)", "description": "Healthy, balanced physique" },
+          { "label": "32–38% (Overfat)", "description": "Soft midsection, limited muscle definition" },
+          { "label": "38%+ (High body fat)", "description": "Higher fat storage around waist and hips" }
+        ]
+      },
+      "8": {
+        "question": "What is your resistance training experience?",
+        "options": [
+          "Beginner — new to training",
+          "Intermediate — 1 to 3 years",
+          "Advanced — 3+ years"
+        ]
+      },
+      "9": {
+        "question": "How many times per week can you train?",
+        "options": ["2 Days", "3 Days", "4 Days", "5+ Days"]
+      },
+      "10": {
+        "question": "What is your current spinal health status?",
+        "options": [
+          "Healthy (I am pain-free, but cautious)",
+          "Recovered (Past history of pain/injury)",
+          "Active Symptoms (Currently experiencing discomfort)"
+        ]
+      },
+      "11": {
+        "question": "Where do you feel or did you feel pain?",
+        "options": [
+          "Lower Back (L4-L5/S1 area)",
+          "Sciatica (Pain radiating down leg)",
+          "Glute / Deep Hip discomfort",
+          "Calf or Foot (Numbness/Tingling)"
+        ]
+      },
+      "12": {
+        "question": "How intense is the pain currently?"
+      },
+      "13": {
+        "question": "Which movements trigger or provoke your symptoms?",
+        "options": [
+          "Bending forward (e.g., reaching for the floor)",
+          "Arching backward (e.g., reaching overhead)",
+          "Lifting or carrying heavy objects",
+          "Sitting for longer than 20–30 minutes",
+          "Impact movements (Running, Jumping)",
+          "Rotating or twisting the torso",
+          "Straining (Heavy bracing/holding breath)"
+        ]
+      },
+      "14": {
+        "question": "How do you feel about squatting with extra weight?",
+        "options": [
+          "Confident (I squat with weights regularly)",
+          "Cautious (I only squat with light weights)",
+          "Technical (I can squat bodyweight, but weights trigger pain)",
+          "Avoidant (I strictly avoid all squatting movements)",
+          "Untested (I haven't tried squatting recently)"
+        ]
+      },
+      "15": {
+        "question": "How long should your workouts be?",
+        "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min"]
+      }
+    }  
+  },
+  "historyPage": {
+    "noWorkoutsOnDate": "No workouts on selected date",
+    "noCompletedWorkouts": "No completed workouts",
+    "duration": "Duration",
+    "metrics": {
+      "volume": "Volume",
+      "calories": "Calories",
+      "exercises": "Exercises",
+      "records": "Records",
+      "kg": "kg",
+      "kcal": "kcal"
+    },
+    "navigation": {
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "months": [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ]
+    }
+  },
+  "availableEquipmentPage": {
+    "tabs": {
+      "all": "All",
+      "selected": "Selected"
+    },
+    "noWeights": "No weights",
+    "header": {
+      "title": "Available Equipment",
+      "goBack": "Go back"
+    },
+    "item": {
+      "noImage": "No img",
+      "edit": "Edit",
+      "select": "Select equipment",
+      "deselect": "Deselect equipment"
+    }
+  },
+  "myPlanPage": {
+    "header": {
+      "title": "My Plan",
+      "goBack": "Go back"
+    },
+    "goal": "Goal",
+    "sections": {
+      "location": "LOCATION",
+      "trainingProfile": "TRAINING PROFILE",
+      "trainingFormat": "TRAINING FORMAT",
+      "preferences": "PREFERENCES",
+      "generatedPlan": "GENERATED PLAN"
+    },
+    "location": {
+      "myGym": "My Gym",
+      "equipment": "Equipment",
+      "selected": "{{count}} Selected",
+      "bodyweightOnly": "Bodyweight-Only"
+    },
+    "trainingProfile": {
+      "workoutsPerWeek": "Workouts / Week",
+      "duration": "Duration",
+      "experience": "Experience"
+    },
+    "trainingFormat": {
+      "trainingSplit": "Training Split",
+      "exerciseVariability": "Exercise Variability",
+      "warmUpSets": "Warm-Up Sets",
+      "circuitsAndSupersets": "Circuits & Supersets"
+    },
+    "preferences": {
+      "units": "Units",
+      "cardio": "Cardio",
+      "stretching": "Stretching",
+      "manageExercises": "Manage Exercises"
+    },
+    "generatePlan": "Generate Plan",
+    "generating": "Generating...",
+    "generatedPlan": {
+      "created": "Created:",
+      "exercisesPerDay": "{{count}} exercises \u2022 {{sets}} sets each",
+      "missingMuscleGroups": "\u26a0\ufe0f Missing Muscle Groups",
+      "alternativeExercises": "{{count}} alternative exercises suggested"
+    },
+    "alerts": {
+      "quizRequired": "\u26a0\ufe0f Please complete the onboarding quiz first to generate a personalized plan.",
+      "planGenerated": "\u2705 Plan Generated!\n\n{{name}}\n\n{{workouts}} workouts per week with {{exercises}} exercises per day.",
+      "generateFailed": "Failed to generate plan. Please check your settings and try again."
+    }
+  },
+  "selectionModal": {
+    "close": "Close"
+  },
+  "exerciseProgressPage": {
+    "tabs": {
+      "history": "History",
+      "progress": "Progress",
+      "records": "Records"
+    },
+    "noRecords": "No records yet",
+    "noHistory": "No history yet",
+    "noProgress": "No progress data yet",
+    "exerciseFallback": "Exercise",
+    "personalRecords": {
+      "title": "Personal Records",
+      "subtitle": "See your best lifts for {{name}}",
+      "estimated1RM": "Estimated 1RM",
+      "maxWeight": "Max weight",
+      "maxReps": "Max reps",
+      "maxSessionVolume": "Max session Volume",
+      "maxSingleSetVolume": "Max Single Set Volume",
+      "viewHistory": "View Record History",
+      "reps":"reps",
+      "weight":"kg",
+      "sets":"Sets",
+      "pr":"PR"
+    },
+    "history": {
+      "workoutLabel": "Workout",
+      "setsPerformed": "Sets Performed"
+    },
+    "progress": {
+      "estimatedStrength": "Estimated Strength",
+      "sessionVolume": "Session Volume",
+      "maxWeight": "Max Weight",
+      "maxReps": "Max Reps"
+    }
+  },
+  "progressPage": {
+    "title": "Progress",
+    "tabs": {
+      "overview": "Overview",
+      "exercise": "Exercises"
+    },
+    "empty": {
+      "title": "Start training",
+      "description": "Your progress, workout stats, personal records and charts will appear here after your first completed workout",
+      "goToWorkout": "Go to workout"
+    },
+    "noExercises": "Your estimated 1RM by exercise will appear here after completed workouts.",
+    "exerciseList": {
+      "searchPlaceholder": "Search for exercise",
+      "sort": {
+        "recent": "Recent Performed",
+        "name": "Name (A-Z)",
+        "1rm": "1RM (High to Low)"
+      },
+      "noResults": "No exercises found matching your search",
+      "noExercises": "No exercises performed yet",
+      "exerciseProgressItem": {
+        "noData": "No data",
+        "estimated1RM": "Est 1RM.",
+        "weight": "kg"
+      }
+    },
+    "weeklyActivity": {
+      "title": "Weekly Activity",
+      "days": {
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat"
+      }
+    },
+    "progressChart": {
+      "noData": "No data for this period",
+      "defaultTitle": "Progress Volume",
+      "volumeProgress": "Volume progress",
+      "painLevel": "Pain level",
+      "weight":"kg",
+      "periods": {
+        "week": "W",
+        "month": "M",
+        "3months": "3M",
+        "year": "Y"
+      }
+    },
+    "statsGrid": {
+      "workouts": "Workouts",
+      "volume": "Volume",
+      "weight": "kg"
+
+    },
+    "painChart": {
+      "noData": "No data for this period",
+      "defaultTitle": "Pain Level"
+    },
+    "muscleGroupChart": {
+      "title": "Muscle groups",
+      "noData": "No data to display",
+      "exercises": "exercises"
+    },
+    "personalRecords": {
+      "workoutRecords": "Workout records",
+      "volumeUnit": "kg",
+      "exercisesUnit": "exercises",
+      "estimatedTitle": "Estimated 1RM (Top {{count}})",
+      "bestSet": "Best set: {{weight}}kg × {{reps}}",
+      "oneRmUnit": "kg 1RM",
+      "emptyExercise": "Your estimated 1RM by exercise will appear here after completed workouts.",
+      "emptyAll": "Complete workouts to see your personal records"
     }
   }
 }

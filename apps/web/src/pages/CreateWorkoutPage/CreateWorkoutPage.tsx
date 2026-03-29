@@ -670,7 +670,7 @@ function ExerciseConfigCard({
           onChange={(v) => onUpdate("reps", v)}
         />
         <NumberStepper
-          label={exercise.weight_unit || "kg"}
+          label={exercise.weight_unit || t("createProgramPage.weightUnit")}
           value={exercise.weight}
           min={0}
           max={500}
