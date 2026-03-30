@@ -68,8 +68,20 @@
     "feedbackSent": "Отзыв отправлен. Спасибо!"
   },
   "activeWorkoutPage": {
+    "title": "Активная тренировка",
     "noExercises": "Нет упражнений для сегодняшней тренировки.",
     "generatePlanHint": "Создайте план на странице Мой План, чтобы начать."
+  },
+  "finishWorkoutModal": {
+    "title": "Завершить и записать тренировку?",
+    "volume": "ОБЪЕМ",
+    "volumeUnit": "кг",
+    "calories": "КАЛОРИИ",
+    "caloriesUnit": "ккал",
+    "exercises": "УПРАЖНЕНИЯ",
+    "duration": "ДЛИТЕЛЬНОСТЬ",
+    "resume": "Продолжить",
+    "logWorkout": "Записать тренировку"
   },
   "replaceExerciseModal": {
     "title": "Заменить упражнение",
@@ -625,6 +637,48 @@
       "oneRmUnit": "кг 1ПМ",
       "emptyExercise": "Ваш примерный 1ПМ по упражнениям появится здесь после завершённых тренировок.",
       "emptyAll": "Завершите тренировки, чтобы увидеть личные рекорды"
+    }
+  },
+  "exerciseSetsPage": {
+    "toolbar": {
+      "timer": "Таймер отдыха",
+      "replace": "Заменить",
+      "history": "История",
+      "timerOn": "вкл",
+      "timerOff": "выкл"
+    },
+    "howTo": "Инструкция",
+    "restTimer": {
+      "rest": "Отдых"
+    },
+    "replaceModal": {
+      "title": "Заменить упражнение",
+      "subtitle": "Выберите из всех упражнений",
+      "searchPlaceholder": "Поиск упражнения...",
+      "noExercises": "Упражнения не найдены",
+      "cancel": "Отмена"
+    },
+    "table": {
+      "set": "Подход",
+      "previous": "Предыдущий",
+      "reps": "Повторения",
+      "bw": "МТ",
+      "kg": "Кг"
+    },
+    "addSet": "+ Добавить подход",
+    "painLevel": "Уровень боли",
+    "done": "ГОТОВО",
+    "skip": "ПРОПУСТИТЬ",
+    "logAllSets": "ЗАПИСАТЬ ВСЕ ПОДХОДЫ",
+    "startWorkout": "НАЧАТЬ ТРЕНИРОВКУ",
+    "swipeDelete": "Удалить",
+    "restTimerModal": {
+      "title": "Таймер отдыха",
+      "subtitle": "Между подходами",
+      "continue": "Продолжить",
+      "pause": "Пауза",
+      "min": "мин",
+      "sec": "сек"
     }
   },
   "exerciseNames": {

@@ -1,5 +1,6 @@
 import { createPortal } from "react-dom";
 import { useRef, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const MINUTES_OPTIONS = [0, 1, 2, 3, 4, 5];
 const SECONDS_OPTIONS = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
@@ -35,6 +36,7 @@ export function RestTimerModal({
   onPause,
   onResume,
 }: RestTimerModalProps) {
+  const { t } = useTranslation();
   const minutesRef = useRef<HTMLDivElement>(null);
   const secondsRef = useRef<HTMLDivElement>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
@@ -144,8 +146,8 @@ export function RestTimerModal({
               </svg>
             </span>
             <div>
-              <h2 className="text-lg font-semibold text-white">Rest Timer</h2>
-              <p className="text-xs text-white/60">Between sets</p>
+              <h2 className="text-lg font-semibold text-white">{t("exerciseSetsPage.restTimerModal.title")}</h2>
+              <p className="text-xs text-white/60">{t("exerciseSetsPage.restTimerModal.subtitle")}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -155,7 +157,7 @@ export function RestTimerModal({
                 onClick={() => (isRestPaused ? onResume?.() : onPause?.())}
                 className="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
               >
-                {isRestPaused ? "Continue" : "Pause"}
+                {isRestPaused ? t("exerciseSetsPage.restTimerModal.continue") : t("exerciseSetsPage.restTimerModal.pause")}
               </button>
             )}
           </div>
@@ -176,7 +178,7 @@ export function RestTimerModal({
 
         <div className="mt-6 flex justify-center gap-4">
           <div className="flex flex-col items-center">
-            <span className={`mb-2 text-xs font-semibold uppercase tracking-wider ${enabled ? "text-white/50" : "text-white/20"}`}>min</span>
+            <span className={`mb-2 text-xs font-semibold uppercase tracking-wider ${enabled ? "text-white/50" : "text-white/20"}`}>{t("exerciseSetsPage.restTimerModal.min")}</span>
             <div
               ref={minutesRef}
               onScroll={enabled ? handleMinutesScroll : undefined}
@@ -192,13 +194,13 @@ export function RestTimerModal({
                     } ${durationMinutes === m ? "font-semibold text-white" : "text-white/50"}`}
                   style={{ scrollSnapAlign: "center" }}
                 >
-                  {m} min
+                  {m} {t("exerciseSetsPage.restTimerModal.min")}
                 </div>
               ))}
             </div>
           </div>
           <div className="flex flex-col items-center">
-            <span className={`mb-2 text-xs font-semibold uppercase tracking-wider ${enabled ? "text-white/50" : "text-white/20"}`}>sec</span>
+            <span className={`mb-2 text-xs font-semibold uppercase tracking-wider ${enabled ? "text-white/50" : "text-white/20"}`}>{t("exerciseSetsPage.restTimerModal.sec")}</span>
             <div
               ref={secondsRef}
               onScroll={enabled ? handleSecondsScroll : undefined}
@@ -214,7 +216,7 @@ export function RestTimerModal({
                     } ${durationSeconds === s ? "font-semibold text-white" : "text-white/50"}`}
                   style={{ scrollSnapAlign: "center" }}
                 >
-                  {s} sec
+                  {s} {t("exerciseSetsPage.restTimerModal.sec")}
                 </div>
               ))}
             </div>
