@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useExerciseName } from "@spinefit/shared";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -25,9 +26,10 @@ function AllExercisePage({ onClose, onAddExercises }: AllExercisePageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
 
+  const { getExerciseName } = useExerciseName();
   const exercises: Exercise[] = allExercisesData as Exercise[];
 
-  const groupedExercises = useExerciseGrouping(exercises, searchQuery);
+  const groupedExercises = useExerciseGrouping(exercises, searchQuery, getExerciseName);
 
   const {
     selectedExercises,

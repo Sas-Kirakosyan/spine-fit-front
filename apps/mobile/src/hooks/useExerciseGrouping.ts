@@ -1,16 +1,20 @@
 import { useMemo } from "react";
 import type { Exercise } from "@spinefit/shared";
 
-export function useExerciseGrouping(exercises: Exercise[], searchQuery: string) {
+export function useExerciseGrouping(
+  exercises: Exercise[],
+  searchQuery: string,
+  getExerciseName: (exercise: { id: number; name: string }) => string
+) {
   return useMemo(() => {
     const filtered = exercises.filter((exercise) => {
       if (searchQuery.trim() === "") return true;
-      return exercise.name.toLowerCase().includes(searchQuery.toLowerCase().trim());
+      return getExerciseName(exercise).toLowerCase().includes(searchQuery.toLowerCase().trim());
     });
 
     const grouped: Record<string, Exercise[]> = {};
     for (const exercise of filtered) {
-      const key = exercise.name.charAt(0).toUpperCase();
+      const key = getExerciseName(exercise).charAt(0).toUpperCase();
       if (!grouped[key]) grouped[key] = [];
       grouped[key].push(exercise);
     }
@@ -25,9 +29,9 @@ export function useExerciseGrouping(exercises: Exercise[], searchQuery: string) 
         return a.localeCompare(b);
       })
       .forEach((key) => {
-        sorted[key] = grouped[key].sort((a, b) => a.name.localeCompare(b.name));
+        sorted[key] = grouped[key].sort((a, b) => getExerciseName(a).localeCompare(getExerciseName(b)));
       });
 
     return sorted;
-  }, [exercises, searchQuery]);
+  }, [exercises, searchQuery, getExerciseName]);
 }

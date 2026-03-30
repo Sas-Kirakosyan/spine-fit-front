@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import type { ProgressStackParamList } from "../navigation/types";
 import { ChevronLeftIcon } from "../components/icons/Icons";
 import { useHistoryStore } from "../store/historyStore";
-import { formatVolume } from "@spinefit/shared";
+import { formatVolume, useExerciseName } from "@spinefit/shared";
 
 type Route = RouteProp<ProgressStackParamList, "ExerciseProgress">;
 
@@ -14,6 +14,7 @@ export default function ExerciseProgressScreen() {
   const navigation = useNavigation();
   const route = useRoute<Route>();
   const { exerciseId } = route.params;
+  const { getExerciseName } = useExerciseName();
   const { workoutHistory } = useHistoryStore();
 
   const exerciseData = useMemo(() => {
@@ -74,7 +75,7 @@ export default function ExerciseProgressScreen() {
           <ChevronLeftIcon size={20} color="white" />
         </Pressable>
         <Text className="flex-1 text-white text-lg font-semibold text-center mr-10" numberOfLines={1}>
-          {exerciseData.exerciseName || "Exercise"}
+          {exerciseData.exerciseName ? getExerciseName({ id: exerciseId, name: exerciseData.exerciseName }) : "Exercise"}
         </Text>
       </View>
 

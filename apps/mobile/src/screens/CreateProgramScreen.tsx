@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { TrainingDay, SavedProgram } from "@spinefit/shared";
+import { useExerciseName } from "@spinefit/shared";
 import type { WorkoutStackParamList } from "../navigation/types";
 import { ChevronLeftIcon, ChevronRightIcon, TrashIcon, PlusIcon } from "../components/icons/Icons";
 import { useCreateProgramStore } from "../store/createProgramStore";
@@ -13,6 +14,7 @@ type Nav = NativeStackNavigationProp<WorkoutStackParamList>;
 
 export default function CreateProgramScreen() {
   const navigation = useNavigation<Nav>();
+  const { getExerciseName } = useExerciseName();
   const { days, programName, editingProgramId, setDays, setProgramName, setActiveDayId, reset } = useCreateProgramStore();
   const [expandedDayId, setExpandedDayId] = useState<string | null>(days.length > 0 ? days[0]?.id : null);
   const isEditing = Boolean(editingProgramId);
@@ -148,7 +150,7 @@ export default function CreateProgramScreen() {
                     {day.exercises.map((exercise) => (
                       <View key={exercise.id} className="flex-row items-center p-3 rounded-xl bg-white/5 mt-2 gap-3">
                         <View className="flex-1">
-                          <Text className="text-white font-medium text-sm">{exercise.name}</Text>
+                          <Text className="text-white font-medium text-sm">{getExerciseName(exercise)}</Text>
                           <Text className="text-white/40 text-xs">{exercise.sets}×{exercise.reps} @ {exercise.weight}{exercise.weight_unit || "kg"}</Text>
                         </View>
                         <Pressable onPress={() => handleRemoveExercise(day.id, exercise.id)} className="p-1">

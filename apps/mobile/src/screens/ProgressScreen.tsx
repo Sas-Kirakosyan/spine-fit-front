@@ -10,6 +10,7 @@ import {
   getProgressDataByPeriod,
   getAllExercisesWithProgress,
   formatVolume,
+  useExerciseName,
 } from "@spinefit/shared";
 import type { ProgressStackParamList } from "../navigation/types";
 import { Logo } from "../components/common/Logo";
@@ -35,6 +36,7 @@ function DumbbellIcon({ size = 40, color = "#e77d10" }: { size?: number; color?:
 
 export default function ProgressScreen() {
   const navigation = useNavigation<Nav>();
+  const { getExerciseName } = useExerciseName();
   const { workoutHistory } = useHistoryStore();
   const [activeTab, setActiveTab] = useState<"overview" | "exercise">("overview");
   const [volumePeriod, setVolumePeriod] = useState<VolumePeriod>("month");
@@ -190,7 +192,7 @@ export default function ProgressScreen() {
                   className="flex-row items-center justify-between rounded-2xl bg-[#1B1E2B] p-4 border border-white/5"
                 >
                   <View className="flex-1">
-                    <Text className="text-white text-sm font-semibold">{ex.exerciseName}</Text>
+                    <Text className="text-white text-sm font-semibold">{getExerciseName({ id: ex.exerciseId, name: ex.exerciseName })}</Text>
                     <Text className="text-white/40 text-xs mt-1">
                       Est. 1RM: {ex.estimated1RM > 0 ? `${ex.estimated1RM.toFixed(1)} kg` : "—"}
                     </Text>

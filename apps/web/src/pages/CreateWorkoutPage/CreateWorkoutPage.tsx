@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import { type Exercise } from "@/types/exercise";
+import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import type { SavedProgram, TrainingDay } from "@/types/workout";
 import { LazyImage } from "@/components/ui/LazyImage";
@@ -574,6 +575,8 @@ function ExerciseConfigCard({
   onMove,
 }: ExerciseConfigCardProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
+  const name = getExerciseName(exercise);
   return (
     <div className="rounded-xl bg-white/5 p-3">
       {/* Top row: image + name + actions */}
@@ -581,14 +584,14 @@ function ExerciseConfigCard({
         <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg">
           <LazyImage
             src={getExerciseImageUrl(exercise)}
-            alt={exercise.name}
+            alt={name}
             className="h-full w-full object-cover"
           />
         </div>
 
         <div className="flex-1 min-w-0">
           <p className="text-white font-semibold text-sm truncate">
-            {exercise.name}
+            {name}
           </p>
           <p className="text-white/40 text-xs truncate">
             {exercise.muscle_groups.join(", ")}

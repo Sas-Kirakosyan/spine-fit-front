@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import QuizScrollCalendar from "@/components/Quiz/QuizScrollCalendar.tsx";
+import type {ChangeEvent} from "react";
 
 interface Field {
   id: number;
@@ -21,6 +22,15 @@ interface QuizMultiFieldProps {
   onUnitChange?: (fieldName: string, unit: string) => void;
   description?: string;
   questionId?: number;
+}
+
+interface ConversionParams {
+    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>;
+    fieldName: string;
+    units: Record<string, string>;
+    values: Record<string, any>;
+    onUnitChange?: (name: string, unit: string) => void;
+    onValueChange: (name: string, value: any) => void;
 }
 
 export function QuizMultiField({
@@ -72,6 +82,60 @@ export function QuizMultiField({
 
   const translatedDescription = getDescription();
 
+
+    const MAX_CM = 300;
+    const MAX_KG = 300;
+    const KG_TO_LBS = 2.20462;
+    const CM_TO_FT = 30.48;
+
+    const handleInputChangeAction = (
+        e: ChangeEvent<HTMLInputElement>,
+        fieldName: string,
+        currentUnit: string,
+        onValueChange: (name: string, value: any) => void
+    ) => {
+        const val = e.target.value;
+        if (val === "") return onValueChange(fieldName, "");
+
+        const num = Number(val);
+        if (isNaN(num)) return;
+
+        if (fieldName === "height") {
+            if (currentUnit === "cm" && num > MAX_CM) return;
+            if (currentUnit === "ft" && num > +(MAX_CM / CM_TO_FT).toFixed(2)) return;
+        }
+
+        if (fieldName === "weight") {
+            if (currentUnit === "kg" && num > MAX_KG) return;
+            if (currentUnit === "lbs" && num > +(MAX_KG * KG_TO_LBS).toFixed(1)) return;
+        }
+
+        onValueChange(fieldName, val);
+    };
+
+    const handleUnitChangeAction = ({e, fieldName, units, values, onUnitChange, onValueChange,}: ConversionParams) => {
+        const newUnit = e.target.value;
+        const oldUnit = units[fieldName];
+        const rawValue = values[fieldName];
+        const currentValue = Number(rawValue);
+
+        let converted = rawValue;
+
+        if (!isNaN(currentValue) && rawValue !== "") {
+            if (fieldName === "weight") {
+                if (oldUnit === "kg" && newUnit === "lbs") converted = +(currentValue * KG_TO_LBS).toFixed(1);
+                if (oldUnit === "lbs" && newUnit === "kg") converted = +(currentValue / KG_TO_LBS).toFixed(1);
+            }
+            if (fieldName === "height") {
+                if (oldUnit === "cm" && newUnit === "ft") converted = +(currentValue / CM_TO_FT).toFixed(2);
+                if (oldUnit === "ft" && newUnit === "cm") converted = +(currentValue * CM_TO_FT).toFixed(0);
+            }
+        }
+
+        onUnitChange?.(fieldName, newUnit);
+        onValueChange(fieldName, converted);
+    };
+
   return (
     <div className="flex flex-col gap-4 w-full">
       {translatedDescription && (
@@ -109,12 +173,12 @@ export function QuizMultiField({
                   type={field.inputType || "text"}
                   value={values[field.fieldName] || ""}
                   onChange={(e) =>
-                    onValueChange(
-                      field.fieldName,
-                      field.inputType === "number"
-                        ? parseFloat(e.target.value) || ""
-                        : e.target.value,
-                    )
+                      handleInputChangeAction(
+                          e,
+                          field.fieldName,
+                          units[field.fieldName] || (field.unitOptions?.[0] ?? ""),
+                          onValueChange
+                      )
                   }
                   placeholder={getFieldPlaceholder(field)}
                   className="appearance-none
@@ -136,7 +200,14 @@ export function QuizMultiField({
                   <select
                     value={units[field.fieldName] || field.unitOptions[0]}
                     onChange={(e) =>
-                      onUnitChange?.(field.fieldName, e.target.value)
+                        handleUnitChangeAction({
+                            e,
+                            fieldName: field.fieldName,
+                            units,
+                            values,
+                            onUnitChange,
+                            onValueChange
+                        })
                     }
                     className="bg-background border placeholder-white border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 min-w-[80px]"
                   >

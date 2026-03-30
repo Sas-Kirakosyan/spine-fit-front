@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
+import { useExerciseName } from "@spinefit/shared";
 import type { ExerciseActionSheetProps } from "@/types/workout";
 import { ActionButton } from "@/components/ActionSheet/ActionButton/ActionButton";
 import {
@@ -21,6 +22,8 @@ export function ExerciseActionSheet({
   //containerRef: _containerRef,
 }: ExerciseActionSheetProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
+  const name = getExerciseName(exercise);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackText, setFeedbackText] = useState("");
   const [feedbackSent, setFeedbackSent] = useState(false);
@@ -57,7 +60,7 @@ export function ExerciseActionSheet({
           <div className="space-y-6 px-5 pb-8 pt-4 sm:px-6 flex-1 overflow-y-auto">
             <div>
               <h2 className="mt-2 text-2xl text-center font-semibold text-white">
-                {exercise.name}
+                {name}
               </h2>
             </div>
             <ActionButton
@@ -131,7 +134,7 @@ export function ExerciseActionSheet({
                 <h3 className="text-xl font-semibold text-white mb-1">
                   {t("exerciseActionSheet.feedbackAboutExercise")}
                 </h3>
-                <p className="text-md text-slate-400 mb-4">{exercise.name}</p>
+                <p className="text-md text-slate-400 mb-4">{name}</p>
                 <textarea
                   value={feedbackText}
                   onChange={(e) => setFeedbackText(e.target.value)}
