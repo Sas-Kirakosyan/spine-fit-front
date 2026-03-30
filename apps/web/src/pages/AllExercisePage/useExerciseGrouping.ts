@@ -3,19 +3,20 @@ import type { Exercise } from "@/types/exercise";
 
 export function useExerciseGrouping(
   exercises: Exercise[],
-  searchQuery: string
+  searchQuery: string,
+  getExerciseName: (exercise: { id: number; name: string }) => string
 ) {
   const groupedExercises = useMemo(() => {
     const filtered = exercises.filter((exercise) => {
       if (searchQuery.trim() === "") return true;
-      return exercise.name
+      return getExerciseName(exercise)
         .toLowerCase()
         .includes(searchQuery.toLowerCase().trim());
     });
 
     const grouped: Record<string, Exercise[]> = {};
     filtered.forEach((exercise) => {
-      const firstChar = exercise.name.charAt(0).toUpperCase();
+      const firstChar = getExerciseName(exercise).charAt(0).toUpperCase();
       const groupKey = /[0-9]/.test(firstChar) ? firstChar : firstChar;
       if (!grouped[groupKey]) {
         grouped[groupKey] = [];
@@ -36,12 +37,12 @@ export function useExerciseGrouping(
       })
       .forEach((key) => {
         sortedGroups[key] = grouped[key].sort((a, b) =>
-          a.name.localeCompare(b.name)
+          getExerciseName(a).localeCompare(getExerciseName(b))
         );
       });
 
     return sortedGroups;
-  }, [exercises, searchQuery]);
+  }, [exercises, searchQuery, getExerciseName]);
 
   return groupedExercises;
 }

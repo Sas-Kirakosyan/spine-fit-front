@@ -1,5 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import type { Exercise } from "@spinefit/shared";
+import { useExerciseName } from "@spinefit/shared";
 import { LazyImage } from "../common/LazyImage";
 import { getExerciseImageSource } from "../../utils/imageResolver";
 import { ThreeDotsIcon } from "../icons/Icons";
@@ -20,6 +21,8 @@ export function ExerciseCard({
   onActionPress,
   isCompleted = false,
 }: ExerciseCardProps) {
+  const { getExerciseName } = useExerciseName();
+  const name = getExerciseName(exercise);
   const imageSource = getExerciseImageSource(exercise);
 
   return (
@@ -43,7 +46,7 @@ export function ExerciseCard({
 
       <View className="flex-1">
         <Text className="text-white font-semibold text-sm" numberOfLines={1}>
-          {exercise.name}
+          {name}
         </Text>
         <Text className="text-white/50 text-xs mt-1">
           {exercise.sets} sets x {exercise.reps} reps

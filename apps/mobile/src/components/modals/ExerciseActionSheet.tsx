@@ -1,5 +1,6 @@
 import { View, Text, Pressable, Modal } from "react-native";
 import type { Exercise } from "@spinefit/shared";
+import { useExerciseName } from "@spinefit/shared";
 import { InfoIcon, ReplaceIcon, TrashIcon } from "../icons/Icons";
 import Svg, { Path } from "react-native-svg";
 
@@ -59,6 +60,8 @@ export function ExerciseActionSheet({
   onReplace,
   onDelete,
 }: ExerciseActionSheetProps) {
+  const { getExerciseName } = useExerciseName();
+  const name = getExerciseName(exercise);
   return (
     <Modal
       visible
@@ -73,7 +76,7 @@ export function ExerciseActionSheet({
           </View>
           <View className="px-4 pb-2">
             <Text className="text-white text-lg font-semibold text-center" numberOfLines={1}>
-              {exercise.name}
+              {name}
             </Text>
           </View>
           <View className="px-4 pb-6 gap-2">

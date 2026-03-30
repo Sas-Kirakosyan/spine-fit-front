@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import { type Exercise } from "@/types/exercise";
+import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import type {
   ExerciseSetsPageProps,
@@ -100,6 +101,8 @@ function ExerciseSetsPage({
   isDuringActiveWorkout = false,
   exerciseLogs = {},
 }: ExerciseSetsPageProps) {
+  const { getExerciseName } = useExerciseName();
+  const exerciseDisplayName = getExerciseName(exercise);
   // Generate unique ID for each set
   const generateSetId = () =>
     `set-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -509,7 +512,7 @@ function ExerciseSetsPage({
         <header className="relative overflow-hidden rounded-[26px] border border-white/12 bg-[#191E31] shadow-xl">
           <LazyImage
             src={getExerciseImageUrl(exercise)}
-            alt={exercise.name}
+            alt={exerciseDisplayName}
             className="h-56 w-full object-cover brightness-[0.88]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0E1122] via-transparent to-black/40" />
@@ -561,7 +564,7 @@ function ExerciseSetsPage({
           </div>
           <div className="absolute bottom-6 left-6 right-6 space-y-3">
             <h1 className="text-[28px] font-semibold text-white">
-              {exercise.name}
+              {exerciseDisplayName}
             </h1>
           </div>
         </header>

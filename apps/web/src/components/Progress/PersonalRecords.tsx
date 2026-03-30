@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useExerciseName } from "@spinefit/shared";
 import type { PersonalRecord, WorkoutRecord } from "@/utils/progressStats";
 
 type PersonalRecordsSection = "all" | "workoutOnly" | "exerciseOnly";
@@ -56,6 +57,7 @@ export function PersonalRecords({
   section = "all",
 }: PersonalRecordsProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
   const topExercises = exerciseRecords.slice(0, maxItems);
   const showWorkoutRecords =
     (section === "all" || section === "workoutOnly") &&
@@ -121,7 +123,7 @@ export function PersonalRecords({
                 <MedalIcon place={index + 1} />
                 <div className="flex-1 min-w-0">
                   <p className="truncate text-sm font-medium text-white">
-                    {record.exerciseName}
+                    {getExerciseName({ id: record.exerciseId, name: record.exerciseName })}
                   </p>
                   <p className="text-xs text-slate-400">
                     {t("progressPage.personalRecords.bestSet", {
