@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseDetailsProps } from "@/types/workout";
 import { type Exercise } from "@/types/exercise";
@@ -10,19 +11,19 @@ const formatLabel = (value: string) =>
     .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
     .join(" ");
 
-const detailPills = (exercise: Exercise) => [
+const detailPills = (exercise: Exercise, t: (key: string) => string) => [
   {
-    label: "Difficulty",
+    label: t("exerciseHowToPage.pills.difficulty"),
     value: formatLabel(exercise.difficulty),
     color: "from-main/70 to-main/80",
   },
   {
-    label: "Equipment",
+    label: t("exerciseHowToPage.pills.equipment"),
     value: formatLabel(exercise.equipment),
     color: "from-emerald-500/70 to-emerald-600/80",
   },
   {
-    label: "Primary Muscles",
+    label: t("exerciseHowToPage.pills.primaryMuscles"),
     value: exercise.muscle_groups.map(formatLabel).join(", "),
     color: "from-purple-500/70 to-purple-600/80",
   },
@@ -33,6 +34,8 @@ function ExerciseDetails({
   onNavigateBack,
   onStartWorkout,
 }: ExerciseDetailsProps) {
+  const { t } = useTranslation();
+
   const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onNavigateBack();
@@ -79,7 +82,7 @@ function ExerciseDetails({
           </button>
           <div className="absolute bottom-6 left-6">
             <span className="text-xs font-semibold uppercase tracking-[0.3em] text-main/70">
-              Technique Breakdown
+              {t("exerciseHowToPage.techniqueBreakdown")}
             </span>
             <h2 className="mt-3 text-3xl font-semibold text-white">
               {exercise.name}
@@ -92,7 +95,7 @@ function ExerciseDetails({
 
         <div className="flex flex-1 flex-col space-y-8 overflow-y-auto p-6">
           <div className="grid gap-4 sm:grid-cols-3">
-            {detailPills(exercise).map((pill) => (
+            {detailPills(exercise, t).map((pill) => (
               <div
                 key={pill.label}
                 className="rounded-2xl bg-slate-900/60 p-4 ring-1 ring-white/5"
@@ -111,7 +114,9 @@ function ExerciseDetails({
           </div>
 
           <section className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">Instructions</h3>
+            <h3 className="text-lg font-semibold text-white">
+              {t("exerciseHowToPage.instructions")}
+            </h3>
             <p className="text-sm leading-relaxed text-slate-300">
               {exercise.instructions}
             </p>
@@ -150,7 +155,7 @@ function ExerciseDetails({
               </span>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-                  Back-Friendly Guidance
+                  {t("exerciseHowToPage.backFriendly.label")}
                 </p>
                 <p
                   className={`text-sm font-semibold ${
@@ -160,8 +165,8 @@ function ExerciseDetails({
                   }`}
                 >
                   {exercise.is_back_friendly
-                    ? "Approved for most back issues"
-                    : "Use with caution"}
+                    ? t("exerciseHowToPage.backFriendly.approved")
+                    : t("exerciseHowToPage.backFriendly.caution")}
                 </p>
               </div>
             </div>
@@ -175,10 +180,11 @@ function ExerciseDetails({
                     {formatLabel(restriction.issue_type)}
                   </p>
                   <p className="mt-2 text-sm text-amber-100/90">
-                    Recommendation: {restriction.recommendation}
+                    {t("exerciseHowToPage.backFriendly.recommendation")}:{" "}
+                    {restriction.recommendation}
                   </p>
                   <p className="mt-1 text-xs uppercase tracking-wider text-amber-300/80">
-                    Restriction level:{" "}
+                    {t("exerciseHowToPage.backFriendly.restrictionLevel")}:{" "}
                     {formatLabel(restriction.restriction_level)}
                   </p>
                 </div>
@@ -188,7 +194,7 @@ function ExerciseDetails({
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
-              Ready to perform?
+              {t("exerciseHowToPage.readyToPerform")}
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
               <a
@@ -197,7 +203,7 @@ function ExerciseDetails({
                 rel="noreferrer"
                 className="inline-flex items-center justify-center rounded-full bg-main px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-main/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
               >
-                Watch Demo
+                {t("exerciseHowToPage.watchDemo")}
               </a>
               {onStartWorkout && (
                 <button
@@ -205,7 +211,7 @@ function ExerciseDetails({
                   onClick={() => onStartWorkout(exercise)}
                   className="inline-flex items-center justify-center rounded-full border border-main/60 px-5 py-3 text-sm font-semibold text-main/70 transition hover:border-main/80 hover:text-main/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
                 >
-                  View Sets
+                  {t("exerciseHowToPage.viewSets")}
                 </button>
               )}
             </div>
