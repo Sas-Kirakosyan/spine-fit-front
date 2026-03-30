@@ -680,6 +680,25 @@
       "sec": "sec"
     }
   },
+  "exerciseHowToPage": {
+    "techniqueBreakdown": "Technique Breakdown",
+    "pills": {
+      "difficulty": "Difficulty",
+      "equipment": "Equipment",
+      "primaryMuscles": "Primary Muscles"
+    },
+    "instructions": "Instructions",
+    "backFriendly": {
+      "label": "Back-Friendly Guidance",
+      "approved": "Approved for most back issues",
+      "caution": "Use with caution",
+      "recommendation": "Recommendation",
+      "restrictionLevel": "Restriction level"
+    },
+    "readyToPerform": "Ready to perform?",
+    "watchDemo": "Watch Demo",
+    "viewSets": "View Sets"
+  },
   "exerciseNames": {
     "1": "Back Hyperextension",
     "2": "Single-Leg Glute Bridge",

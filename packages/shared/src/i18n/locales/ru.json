@@ -681,6 +681,25 @@
       "sec": "сек"
     }
   },
+  "exerciseHowToPage": {
+    "techniqueBreakdown": "Техника выполнения",
+    "pills": {
+      "difficulty": "Сложность",
+      "equipment": "Оборудование",
+      "primaryMuscles": "Основные мышцы"
+    },
+    "instructions": "Инструкция",
+    "backFriendly": {
+      "label": "Безопасность для спины",
+      "approved": "Подходит при большинстве проблем со спиной",
+      "caution": "Применять с осторожностью",
+      "recommendation": "Рекомендация",
+      "restrictionLevel": "Уровень ограничения"
+    },
+    "readyToPerform": "Готовы выполнять?",
+    "watchDemo": "Смотреть демо",
+    "viewSets": "Посмотреть подходы"
+  },
   "exerciseNames": {
     "1": "Гиперэкстензия",
     "2": "Ягодичный мост на одной ноге",
