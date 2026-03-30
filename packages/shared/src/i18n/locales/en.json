@@ -637,5 +637,47 @@
       "emptyExercise": "Your estimated 1RM by exercise will appear here after completed workouts.",
       "emptyAll": "Complete workouts to see your personal records"
     }
+  },
+  "exerciseSetsPage": {
+    "toolbar": {
+      "timer": "Rest timer",
+      "replace": "Replace",
+      "history": "History",
+      "timerOn": "on",
+      "timerOff": "off"
+    },
+    "howTo": "How-To",
+    "restTimer": {
+      "rest": "Rest"
+    },
+    "replaceModal": {
+      "title": "Replace exercise",
+      "subtitle": "Choose from all exercises",
+      "searchPlaceholder": "Search exercise...",
+      "noExercises": "No exercises found",
+      "cancel": "Cancel"
+    },
+    "table": {
+      "set": "Set",
+      "previous": "Previous",
+      "reps": "Reps",
+      "bw": "BW",
+      "kg": "Kg"
+    },
+    "addSet": "+ Add Set",
+    "painLevel": "Pain Level",
+    "done": "DONE",
+    "skip": "SKIP",
+    "logAllSets": "LOG ALL SETS",
+    "startWorkout": "START Workout",
+    "swipeDelete": "Delete",
+    "restTimerModal": {
+      "title": "Rest Timer",
+      "subtitle": "Between sets",
+      "continue": "Continue",
+      "pause": "Pause",
+      "min": "min",
+      "sec": "sec"
+    }
   }
 }

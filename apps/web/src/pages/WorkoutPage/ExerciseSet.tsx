@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import type { ExerciseSetProps } from "@/types/workout";
 
 export type { ExerciseSetRow, SetField } from "@/types/workout";
@@ -19,6 +20,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   onLogSet,
   onDelete,
 }) => {
+  const { t } = useTranslation();
   const isBodyweight = exercise.equipment === "bodyweight" || exercise.weight_unit === "bodyweight";
   const [translateX, setTranslateX] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -144,7 +146,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
             <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
             <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
           </svg>
-          <span className="text-sm">Delete</span>
+          <span className="text-sm">{t("exerciseSetsPage.swipeDelete")}</span>
         </div>
       </div>
 
