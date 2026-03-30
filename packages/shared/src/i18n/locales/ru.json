@@ -38,7 +38,13 @@
     "workoutPlanCard": {
       "swap": "Заменить",
       "exercises": "Упражнения",
-      "muscles": "Мышцы"
+      "muscles": "Мышцы",
+      "defaultPlanName": "День тяги",
+      "defaultDayName": "День тяги",
+      "defaultDuration": "1ч 1м",
+      "defaultLocation": "Мой спортзал",
+      "aiMode": "ИИ",
+      "localMode": "Локально"
     }
   },
   "common": {
@@ -116,6 +122,11 @@
     "pickMuscles": "Выбрать мышцы",
     "createFromScratch": "Создать с нуля",
     "import": "Импортировать тренировку",
+    "copySuffix": "(Копия)",
+    "closeActionSheet": "закрыть меню действий",
+    "day": "день",
+    "exercise": "упражнение",
+    "exercises": "упражнений",
     "days": "дней",
     "oneMusclePerDay": "Одна мышца в день",
     "oneMusclePerTwoDay": "Одна мышца каждые два дня"
