@@ -35,13 +35,10 @@ function ExerciseDetails({
   onNavigateBack,
   onStartWorkout,
 }: ExerciseDetailsProps) {
-<<<<<<< HEAD
   const { t } = useTranslation();
 
-=======
   const { getExerciseName } = useExerciseName();
   const name = getExerciseName(exercise);
->>>>>>> 8e41dbb7476f2a76bef00efba03f90cbb2473400
   const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onNavigateBack();
@@ -90,9 +87,7 @@ function ExerciseDetails({
             <span className="text-xs font-semibold uppercase tracking-[0.3em] text-main/70">
               {t("exerciseHowToPage.techniqueBreakdown")}
             </span>
-            <h2 className="mt-3 text-3xl font-semibold text-white">
-              {name}
-            </h2>
+            <h2 className="mt-3 text-3xl font-semibold text-white">{name}</h2>
             <p className="mt-2 max-w-xl text-sm text-slate-200/80">
               {exercise.description}
             </p>
