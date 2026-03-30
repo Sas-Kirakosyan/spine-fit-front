@@ -64,6 +64,9 @@ export { getAllReplacementExercises, getSuggestedReplacementExercises } from "./
 export type { PainStatusValue } from "./utils/painStatus";
 export { getPainStatusFromQuizAnswers } from "./utils/painStatus";
 
+// Hooks
+export { useExerciseName } from "./hooks/useExerciseName";
+
 // Events
 export { appEmitter } from "./events/appEmitter";
 

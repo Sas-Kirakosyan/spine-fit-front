@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import { type Exercise } from "@/types/exercise";
+import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import type {
   ExerciseSetsPageProps,
@@ -23,7 +24,10 @@ import {
   loadPlanFromLocalStorage,
   savePlanToLocalStorage,
 } from "@/utils/planGenerator";
-import { shouldShowPainTracking, getStoredPainStatus } from "@/utils/painStatus";
+import {
+  shouldShowPainTracking,
+  getStoredPainStatus,
+} from "@/utils/painStatus";
 
 const toolbarButtons = [
   {
@@ -102,6 +106,8 @@ function ExerciseSetsPage({
   exerciseLogs = {},
 }: ExerciseSetsPageProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
+  const exerciseDisplayName = getExerciseName(exercise);
   // Generate unique ID for each set
   const generateSetId = () =>
     `set-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -511,7 +517,7 @@ function ExerciseSetsPage({
         <header className="relative overflow-hidden rounded-[26px] border border-white/12 bg-[#191E31] shadow-xl">
           <LazyImage
             src={getExerciseImageUrl(exercise)}
-            alt={exercise.name}
+            alt={exerciseDisplayName}
             className="h-56 w-full object-cover brightness-[0.88]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0E1122] via-transparent to-black/40" />
@@ -563,7 +569,7 @@ function ExerciseSetsPage({
           </div>
           <div className="absolute bottom-6 left-6 right-6 space-y-3">
             <h1 className="text-[28px] font-semibold text-white">
-              {exercise.name}
+              {exerciseDisplayName}
             </h1>
           </div>
         </header>
@@ -607,7 +613,9 @@ function ExerciseSetsPage({
                     </span>
                     <span>
                       {t(`exerciseSetsPage.toolbar.${item.id}`)}
-                      {isTimer ? `: ${restTimerEnabled ? t("exerciseSetsPage.toolbar.timerOn") : t("exerciseSetsPage.toolbar.timerOff")}` : ""}
+                      {isTimer
+                        ? `: ${restTimerEnabled ? t("exerciseSetsPage.toolbar.timerOn") : t("exerciseSetsPage.toolbar.timerOff")}`
+                        : ""}
                     </span>
                   </span>
                 </button>
@@ -638,7 +646,8 @@ function ExerciseSetsPage({
                 </svg>
               </span>
               <span className="min-w-[4rem] text-center text-lg font-semibold tabular-nums text-white">
-                {t("exerciseSetsPage.restTimer.rest")}: {Math.floor(restCountdownSeconds / 60)}:
+                {t("exerciseSetsPage.restTimer.rest")}:{" "}
+                {Math.floor(restCountdownSeconds / 60)}:
                 {(restCountdownSeconds % 60).toString().padStart(2, "0")}
               </span>
               <div className="flex shrink-0 items-center gap-1">
@@ -714,7 +723,9 @@ function ExerciseSetsPage({
               <input
                 value={replaceQuery}
                 onChange={(event) => setReplaceQuery(event.target.value)}
-                placeholder={t("exerciseSetsPage.replaceModal.searchPlaceholder")}
+                placeholder={t(
+                  "exerciseSetsPage.replaceModal.searchPlaceholder"
+                )}
                 className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
               />
 
@@ -795,10 +806,20 @@ function ExerciseSetsPage({
         <section className="flex-1 rounded-[26px] border border-white/12 bg-[#13172A] p-3 shadow-xl ring-1 ring-white/5">
           <div className="space-y-3">
             <div className="grid grid-cols-[44px_minmax(0,1fr)_68px_68px_52px] items-center gap-2 px-2.5 pb-1 text-[14px] font-medium text-white/80">
-              <span className="text-center">{t("exerciseSetsPage.table.set")}</span>
-              <span className="text-left">{t("exerciseSetsPage.table.previous")}</span>
-              <span className="text-center">{isBodyweight ? t("exerciseSetsPage.table.bw") : t("exerciseSetsPage.table.kg")}</span>
-              <span className="text-center">{t("exerciseSetsPage.table.reps")}</span>
+              <span className="text-center">
+                {t("exerciseSetsPage.table.set")}
+              </span>
+              <span className="text-left">
+                {t("exerciseSetsPage.table.previous")}
+              </span>
+              <span className="text-center">
+                {isBodyweight
+                  ? t("exerciseSetsPage.table.bw")
+                  : t("exerciseSetsPage.table.kg")}
+              </span>
+              <span className="text-center">
+                {t("exerciseSetsPage.table.reps")}
+              </span>
               <span />
             </div>
             {sets.map((setEntry, index) => (
@@ -823,7 +844,9 @@ function ExerciseSetsPage({
               onClick={handleAddSet}
               className="mt-5 flex h-[56px] w-full items-center justify-center rounded-full bg-[#1D1F27] text-[34px] font-semibold leading-none text-white/90 transition hover:bg-[#272A35]"
             >
-              <span className="mt-0.5 text-[28px]">{t("exerciseSetsPage.addSet")}</span>
+              <span className="mt-0.5 text-[28px]">
+                {t("exerciseSetsPage.addSet")}
+              </span>
             </button>
           </div>
         </section>

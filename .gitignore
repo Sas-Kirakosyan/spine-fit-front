@@ -37,3 +37,4 @@ apps/mobile/.expo/
 
 # Environment variables
 .env
+.env.production

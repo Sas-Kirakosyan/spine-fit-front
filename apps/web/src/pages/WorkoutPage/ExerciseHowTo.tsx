@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseDetailsProps } from "@/types/workout";
 import { type Exercise } from "@/types/exercise";
+import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import { LazyImage } from "@/components/ui/LazyImage";
 
@@ -34,8 +35,13 @@ function ExerciseDetails({
   onNavigateBack,
   onStartWorkout,
 }: ExerciseDetailsProps) {
+<<<<<<< HEAD
   const { t } = useTranslation();
 
+=======
+  const { getExerciseName } = useExerciseName();
+  const name = getExerciseName(exercise);
+>>>>>>> 8e41dbb7476f2a76bef00efba03f90cbb2473400
   const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onNavigateBack();
@@ -50,7 +56,7 @@ function ExerciseDetails({
         <div className="relative h-56 w-full overflow-hidden">
           <LazyImage
             src={getExerciseImageUrl(exercise)}
-            alt={exercise.name}
+            alt={name}
             className="h-full w-full object-cover"
           />
           <video
@@ -85,7 +91,7 @@ function ExerciseDetails({
               {t("exerciseHowToPage.techniqueBreakdown")}
             </span>
             <h2 className="mt-3 text-3xl font-semibold text-white">
-              {exercise.name}
+              {name}
             </h2>
             <p className="mt-2 max-w-xl text-sm text-slate-200/80">
               {exercise.description}

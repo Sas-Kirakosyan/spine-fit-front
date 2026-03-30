@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { type Exercise } from "@/types/exercise";
+import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import TreeDotButton from "@/components/TreeDotButton/TreeDotButton";
 import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
@@ -21,6 +22,8 @@ export function ExerciseCard({
   isCompleted = false,
 }: ExerciseCardProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
+  const name = getExerciseName(exercise);
   return (
     <div
       className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B] p-3 text-left shadow-xl ring-1 ring-white/5"
@@ -35,11 +38,11 @@ export function ExerciseCard({
           onDetailsClick();
         }}
         className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
-        aria-label={`Открыть детали упражнения ${exercise.name}`}
+        aria-label={`Открыть детали упражнения ${name}`}
       >
         <LazyImage
           src={getExerciseImageUrl(exercise)}
-          alt={exercise.name}
+          alt={name}
           className="h-full w-full object-cover"
         />
         <div className="pointer-events-none absolute inset-0 rounded-3xl border border-white/10" />
@@ -53,7 +56,7 @@ export function ExerciseCard({
 
       <div className="flex flex-1 flex-col justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-lg font-semibold text-white sm:text-xl">{exercise.name}</span>
+          <span className="text-lg font-semibold text-white sm:text-xl">{name}</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-1 text-sm font-medium text-slate-200">

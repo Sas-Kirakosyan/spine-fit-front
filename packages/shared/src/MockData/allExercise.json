@@ -726,7 +726,7 @@
     "difficulty": "intermediate",
     "instructions": "Stand with feet hip-width apart, barbell over mid-foot. Hinge at hips, grip bar just outside legs. Brace core, keep spine neutral, chest up. Drive through heels, extend hips and knees simultaneously. Keep bar close to body. Lower with control by hinging hips first.",
     "video_url": "https://cdn.spinefit.app/videos/deadlift.mp4",
-    "is_back_friendly": true,
+    "is_back_friendly": false,
     "back_issue_restrictions": [
       {
         "id": 33,
@@ -3075,7 +3075,7 @@
     "difficulty": "beginner",
     "instructions": "Pick up two weights and stand tall with shoulders down and back. Brace your core and walk with short controlled steps while maintaining upright posture. Keep ribs stacked over pelvis and avoid leaning to either side. Turn under control and set weights down safely.",
     "video_url": "https://www.youtube.com/watch?v=Fkzk_RqlYig",
-    "is_back_friendly": true,
+    "is_back_friendly": false,
     "back_issue_restrictions": [
       {
         "id": 76,
@@ -4231,6 +4231,186 @@
         "type": "equipment",
         "source": "local",
         "url": "/assets/equipment/cable-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
+  },
+  {
+    "id": 106,
+    "name": "Barbell Squat",
+    "description": "A compound lower-body exercise performed with a barbell on the upper back. Targets the quadriceps, glutes, and hamstrings while requiring significant core and spinal stabilization.",
+    "category": "strength",
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Position the barbell on your upper traps (high bar) or rear delts (low bar). Stand with feet shoulder-width apart and toes slightly out. Brace your core, take a deep breath, and descend by pushing your knees out and hinging at the hips simultaneously. Keep your chest up and spine neutral throughout. Descend until thighs are parallel to the floor or as depth allows. Drive through your heels to return to standing.",
+    "video_url": "https://cdn.spinefit.app/videos/barbell-squat.mp4",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 92,
+        "exercise_id": 106,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Avoid heavy loading with L5-S1 issues. If cleared by a specialist, use very light weight, maintain strict neutral spine, and avoid rounding the lower back at any point. Consider goblet squat or leg press as safer alternatives.",
+        "created_at": "2026-03-29T12:00:00Z",
+        "updated_at": "2026-03-29T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-03-29T12:00:00Z",
+    "updated_at": "2026-03-29T12:00:00Z",
+    "sets": 4,
+    "reps": 8,
+    "weight": 60,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/barbell-squat.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/barbell-squat.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
+  },
+  {
+    "id": 107,
+    "name": "Barbell Bicep Curl",
+    "description": "A classic isolation exercise for the biceps brachii performed standing with a barbell. Also engages the brachialis and brachioradialis with minimal spinal loading when performed with strict form.",
+    "category": "strength",
+    "muscle_groups": [
+      "biceps_brachii",
+      "brachialis",
+      "brachioradialis"
+    ],
+    "equipment": "barbell",
+    "difficulty": "beginner",
+    "instructions": "Stand with feet shoulder-width apart holding a barbell with an underhand (supinated) grip. Keep your elbows pinned close to your torso and your upper arms stationary. Curl the bar toward your shoulders by contracting the biceps. Pause briefly at the top, then lower the bar with full control. Avoid swinging the torso or using momentum.",
+    "video_url": "https://cdn.spinefit.app/videos/barbell-bicep-curl.mp4",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 93,
+        "exercise_id": 107,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Standing barbell curls create axial spinal compression — keep loads moderate (under 35% of bodyweight). Maintain a strict upright posture, do not lean back or swing the torso. Consider seated or preacher curl variations to reduce lumbar loading.",
+        "created_at": "2026-03-29T12:00:00Z",
+        "updated_at": "2026-03-29T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-03-29T12:00:00Z",
+    "updated_at": "2026-03-29T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 20,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/barbell-bicep-curl.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/barbell-curl.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ]
+  },
+  {
+    "id": 108,
+    "name": "Barbell Shoulder Press",
+    "description": "A compound overhead pressing exercise performed seated or standing with a barbell. Primarily targets the deltoids and triceps while demanding significant spinal stabilization under axial load.",
+    "category": "strength",
+    "muscle_groups": [
+      "anterior_deltoids",
+      "medial_deltoids",
+      "triceps",
+      "upper_trapezius",
+      "core_stabilizers"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Sit on an upright bench or stand with feet shoulder-width apart. Grip the barbell just outside shoulder width with an overhand grip. Unrack and hold at upper-chest level with elbows slightly in front of the bar. Brace your core and press the bar straight overhead until your arms are fully extended. Lower under control back to the starting position. Avoid arching the lower back — keep your ribcage down throughout.",
+    "video_url": "https://cdn.spinefit.app/videos/barbell-shoulder-press.mp4",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 94,
+        "exercise_id": 108,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Overhead pressing places significant compressive and shear forces on the lumbar spine, especially when standing. Avoid unless cleared by a specialist. If permitted, use the seated variation with back support, keep loads light, and maintain a strict neutral spine — no lumbar hyperextension at the top.",
+        "created_at": "2026-03-29T12:00:00Z",
+        "updated_at": "2026-03-29T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-03-29T12:00:00Z",
+    "updated_at": "2026-03-29T12:00:00Z",
+    "sets": 4,
+    "reps": 8,
+    "weight": 40,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/barbell-shoulder-press.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/barbell-overhead-press.png",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
         "primary": true
       },
       {
