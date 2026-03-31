@@ -38,7 +38,13 @@
     "workoutPlanCard": {
       "swap": "Swap",
       "exercises": "Exercises",
-      "muscles": "Muscles"
+      "muscles": "Muscles",
+      "defaultPlanName": "Pull Day",
+      "defaultDayName": "Pull Day",
+      "defaultDuration": "1h 1m",
+      "defaultLocation": "My Gym",
+      "aiMode": "AI",
+      "localMode": "Local"
     }
   },
   "common": {
@@ -116,6 +122,11 @@
     "pickMuscles": "Pick Muscles",
     "createFromScratch": "Create Program From Scratch",
     "import": "Import Workout",
+    "copySuffix": "(Copy)",
+    "closeActionSheet": "close action sheet",
+    "day": "day",
+    "exercise": "exercise",
+    "exercises": "exercises",
     "days": "days",
     "oneMusclePerDay": "One muscle per day",
     "oneMusclePerTwoDay": "One muscle every two days"
