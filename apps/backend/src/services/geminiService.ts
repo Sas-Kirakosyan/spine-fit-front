@@ -2,7 +2,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { PromptExercise } from "../utils/exerciseFilter.js";
 import type { ParsedQuizData } from "../types.js";
 import { PLAN_SCHEMA, type GeminiPlanResponse } from "../schemas/planSchema.js";
-import { buildSystemInstruction, buildUserPrompt } from "../utils/promptBuilder.js";
+import {
+  buildSystemInstruction,
+  buildUserPrompt,
+} from "../utils/promptBuilder.js";
 import { SPLIT_TARGET_MUSCLES, mapSplitType } from "../utils/splitUtils.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
@@ -56,7 +59,7 @@ export async function generatePlan(
   allExercisesRaw: Record<string, unknown>[],
 ): Promise<GeneratedPlanResult> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-flash", // gemini-3.1-flash-lite-preview
     systemInstruction: buildSystemInstruction(parsedQuiz.duration),
     generationConfig: {
       responseMimeType: "application/json",
@@ -69,7 +72,8 @@ export async function generatePlan(
 
   const usage = result.response.usageMetadata;
   if (usage) {
-    const thinking = (usage as unknown as Record<string, unknown>).thoughtsTokenCount ?? 0;
+    const thinking =
+      (usage as unknown as Record<string, unknown>).thoughtsTokenCount ?? 0;
     console.log(
       `[Gemini ${model.model}] Tokens \n prompt: ${usage.promptTokenCount}\n thinking: ${thinking}\n response: ${usage.candidatesTokenCount}\n total: ${usage.totalTokenCount}\n`,
     );
@@ -77,7 +81,7 @@ export async function generatePlan(
 
   const text = result.response.text();
   const geminiPlan = JSON.parse(text) as GeminiPlanResponse;
-  console.log("geminiPlan", JSON.stringify(geminiPlan))
+  console.log("geminiPlan", JSON.stringify(geminiPlan));
 
   // Build a lookup map from exercise ID → full exercise object
   const exerciseMap = new Map<number, Record<string, unknown>>();
@@ -86,10 +90,14 @@ export async function generatePlan(
   }
 
   // Validate returned exercise IDs against the known exercise map
-  const allReturnedIds = geminiPlan.days.flatMap((d) => d.exercises.map((e) => e.exerciseId));
+  const allReturnedIds = geminiPlan.days.flatMap((d) =>
+    d.exercises.map((e) => e.exerciseId),
+  );
   const missingIds = allReturnedIds.filter((id) => !exerciseMap.has(id));
   if (missingIds.length > 0) {
-    console.warn(`[Gemini] ⚠ ${missingIds.length} unknown exercise ID(s): [${missingIds.join(", ")}] — these will be dropped`);
+    console.warn(
+      `[Gemini] ⚠ ${missingIds.length} unknown exercise ID(s): [${missingIds.join(", ")}] — these will be dropped`,
+    );
   }
 
   // Convert Gemini days → WorkoutDay[] (with full exercise objects)
@@ -110,7 +118,9 @@ export async function generatePlan(
       .filter(Boolean) as Record<string, unknown>[];
 
     const muscleGroups = [
-      ...new Set(resolvedExercises.flatMap((ex) => (ex.muscle_groups as string[]) ?? [])),
+      ...new Set(
+        resolvedExercises.flatMap((ex) => (ex.muscle_groups as string[]) ?? []),
+      ),
     ];
 
     return {
@@ -133,22 +143,34 @@ export async function generatePlan(
   const splitType = mapSplitType(parsedQuiz.trainingSplit);
   const targetMuscles = SPLIT_TARGET_MUSCLES[splitType] ?? [];
   const coveredMuscles = new Set(
-    workoutDays.flatMap((d) => d.exercises.flatMap((ex) => (ex.muscle_groups as string[]) ?? [])),
+    workoutDays.flatMap((d) =>
+      d.exercises.flatMap((ex) => (ex.muscle_groups as string[]) ?? []),
+    ),
   );
-  const missingMuscleGroups = targetMuscles.filter((mg) => !coveredMuscles.has(mg));
+  const missingMuscleGroups = targetMuscles.filter(
+    (mg) => !coveredMuscles.has(mg),
+  );
 
   // Find back-friendly alternative exercises for missing muscle groups (not already in the plan)
-  const usedIds = new Set(workoutDays.flatMap((d) => d.exercises.map((ex) => ex.id as number)));
+  const usedIds = new Set(
+    workoutDays.flatMap((d) => d.exercises.map((ex) => ex.id as number)),
+  );
   const alternativeExercises: Record<string, unknown>[] = [];
   for (const mg of missingMuscleGroups) {
-    const candidate = (allExercisesRaw as Record<string, unknown>[])
-      .filter((ex) => !usedIds.has(ex.id as number))
-      .filter((ex) => ((ex.muscle_groups as string[]) ?? []).includes(mg))
-      .find((ex) => ex.is_back_friendly === true) ??
+    const candidate =
+      (allExercisesRaw as Record<string, unknown>[])
+        .filter((ex) => !usedIds.has(ex.id as number))
+        .filter((ex) => ((ex.muscle_groups as string[]) ?? []).includes(mg))
+        .find((ex) => ex.is_back_friendly === true) ??
       (allExercisesRaw as Record<string, unknown>[])
         .filter((ex) => !usedIds.has(ex.id as number))
         .find((ex) => ((ex.muscle_groups as string[]) ?? []).includes(mg));
-    if (candidate && !alternativeExercises.find((e) => (e.id as number) === (candidate.id as number))) {
+    if (
+      candidate &&
+      !alternativeExercises.find(
+        (e) => (e.id as number) === (candidate.id as number),
+      )
+    ) {
       alternativeExercises.push(candidate);
     }
   }

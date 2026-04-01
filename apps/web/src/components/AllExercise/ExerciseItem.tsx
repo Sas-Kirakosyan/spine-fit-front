@@ -41,7 +41,7 @@ export function ExerciseItem({
         <div className="pointer-events-none absolute inset-0 rounded-[10px] border border-white/10" />
         {isSelected && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-[10px]">
-            <div className="bg-red-500 rounded-full p-1">
+            <div className="bg-main rounded-full p-1">
               <svg
                 className="w-4 h-4 text-white"
                 fill="none"
@@ -63,7 +63,7 @@ export function ExerciseItem({
       <div className="flex flex-1 items-center justify-between min-w-0">
         <span
           className={`text-base font-medium break-words ${
-            isSelected ? "text-red-500" : "text-white"
+            isSelected ? "text-main" : "text-white"
           }`}
         >
           {name}
@@ -73,7 +73,7 @@ export function ExerciseItem({
       <TreeDotButton
         onClick={() => {}}
         ariaLabel={t("allExercisePage.exerciseItem.actionsFor", { name })}
-        className="ml-2 flex-shrink-0 rounded-full p-2 text-slate-400 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/60"
+        className="ml-2 flex-shrink-0 rounded-full p-2 text-slate-400 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-main/60"
       />
     </div>
   );

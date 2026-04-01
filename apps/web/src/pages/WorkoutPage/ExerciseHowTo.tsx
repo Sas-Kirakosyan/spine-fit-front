@@ -1,4 +1,5 @@
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { useExerciseName } from "@spinefit/shared";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseDetailsProps } from "@/types/workout";
 import type { Exercise } from "@/types/exercise";
@@ -8,7 +9,7 @@ import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 const exerciseYoutubeMap = new Map(
   (allExercisesData as Exercise[])
     .filter((ex) => ex.youtube_id)
-    .map((ex) => [ex.id, ex.youtube_id!]),
+    .map((ex) => [ex.id, ex.youtube_id!])
 );
 
 const formatLabel = (value: string) =>
@@ -27,14 +28,11 @@ const playerOpts: YouTubeProps["opts"] = {
   },
 };
 
-function ExerciseDetails({
-  exercise,
-  onNavigateBack,
-}: ExerciseDetailsProps) {
-  // const { t } = useTranslation();
+function ExerciseDetails({ exercise, onNavigateBack }: ExerciseDetailsProps) {
+  const { t } = useTranslation();
 
-  // const { getExerciseName } = useExerciseName();
-  // const name = getExerciseName(exercise);
+  const { getExerciseName } = useExerciseName();
+  const name = getExerciseName(exercise);
   const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onNavigateBack();
@@ -48,9 +46,11 @@ function ExerciseDetails({
       <div className="flex h-full flex-col">
         {/* ── Video Section ── */}
         <div className="relative w-full bg-black aspect-video">
-          {(exercise.youtube_id || exerciseYoutubeMap.get(exercise.id)) ? (
+          {exercise.youtube_id || exerciseYoutubeMap.get(exercise.id) ? (
             <YouTube
-              videoId={exercise.youtube_id || exerciseYoutubeMap.get(exercise.id)}
+              videoId={
+                exercise.youtube_id || exerciseYoutubeMap.get(exercise.id)
+              }
               opts={playerOpts}
               className="absolute inset-0 h-full w-full"
               iframeClassName="h-full w-full"
@@ -63,7 +63,6 @@ function ExerciseDetails({
             />
           )}
 
-          {/* Back button */}
           <button
             type="button"
             onClick={handleBackClick}
@@ -88,14 +87,13 @@ function ExerciseDetails({
         {/* ── Content ── */}
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
           <h2 className="text-2xl font-semibold tracking-tight text-white">
-            {exercise.name}
+            {name}
           </h2>
 
           <p className="text-sm leading-relaxed text-slate-400">
             {exercise.description}
           </p>
 
-          {/* Target Muscles */}
           <div className="space-y-3">
             <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
               Target Muscles
