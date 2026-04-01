@@ -1,3 +1,4 @@
+// import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseDetailsProps } from "@/types/workout";
 import type { Exercise } from "@/types/exercise";
@@ -30,6 +31,10 @@ function ExerciseDetails({
   exercise,
   onNavigateBack,
 }: ExerciseDetailsProps) {
+  // const { t } = useTranslation();
+
+  // const { getExerciseName } = useExerciseName();
+  // const name = getExerciseName(exercise);
   const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onNavigateBack();

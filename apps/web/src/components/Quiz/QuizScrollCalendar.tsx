@@ -49,6 +49,11 @@ function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
             year = 2026;
         }
 
+        if (yearStr.length === 4 && year < 1930) {
+            yearStr = '1930';
+            year = 1930;
+        }
+
         if (monthStr.length === 2 && (month > 12 || month === 0)) {
             monthStr = '12';
             month = 12;

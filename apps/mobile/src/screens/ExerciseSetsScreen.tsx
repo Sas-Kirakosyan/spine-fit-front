@@ -5,6 +5,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RouteProp } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { Exercise, ExerciseSetRow, SetField } from "@spinefit/shared";
+import { useExerciseName } from "@spinefit/shared";
 import type { WorkoutStackParamList } from "../navigation/types";
 import { ExerciseSet } from "../components/exercise/ExerciseSet";
 import { RestTimerModal } from "../components/modals/RestTimerModal";
@@ -41,6 +42,8 @@ export default function ExerciseSetsScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const { exercise, mode } = route.params;
+  const { getExerciseName } = useExerciseName();
+  const exerciseDisplayName = getExerciseName(exercise);
   const isDuringActiveWorkout = mode === "activeWorkout";
 
   const { exerciseLogs, markExerciseComplete, setWorkoutStartTime } = useWorkoutStore();
@@ -269,7 +272,7 @@ export default function ExerciseSetsScreen() {
           )}
           {/* Exercise name */}
           <View className="absolute bottom-4 left-4 right-4">
-            <Text className="text-white text-2xl font-bold">{exercise.name}</Text>
+            <Text className="text-white text-2xl font-bold">{exerciseDisplayName}</Text>
           </View>
         </View>
 

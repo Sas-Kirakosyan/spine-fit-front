@@ -22,7 +22,6 @@ interface SwapWorkoutActionSheetProps {
 const customWorkoutOptions = [
   {
     id: "create-scratch",
-    name: "Create Program From Scratch",
     nameKey: "swapWorkoutActionSheet.createFromScratch",
     icon: (
       <svg
@@ -41,9 +40,8 @@ const customWorkoutOptions = [
       </svg>
     ),
   },
-    {
+  {
     id: "saved-programs",
-    name: "Saved Programs",
     nameKey: "swapWorkoutActionSheet.savedPrograms",
     icon: (
       <svg
@@ -60,7 +58,7 @@ const customWorkoutOptions = [
         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
       </svg>
     ),
-  }
+  },
 ];
 
 function loadSavedPrograms(): SavedProgram[] {
@@ -164,7 +162,7 @@ export function SwapWorkoutActionSheet({
     const duplicate: SavedProgram = {
       ...program,
       id: `program-${Date.now()}`,
-      name: `${program.name} (Copy)`,
+      name: `${program.name} ${t("swapWorkoutActionSheet.copySuffix")}`,
       createdAt: new Date().toISOString(),
       days: program.days.map((day) => ({
         ...day,
@@ -178,14 +176,14 @@ export function SwapWorkoutActionSheet({
       return updated;
     });
     setActionMenuId(null);
-  }, []);
+  }, [t]);
 
   const sheetContent = (
     <div className="fixed inset-0 z-40 flex flex-col justify-end">
       <div
         role="button"
         tabIndex={-1}
-        aria-label="close action sheet"
+        aria-label={t("swapWorkoutActionSheet.closeActionSheet")}
         onClick={onClose}
         className="absolute inset-0 cursor-default bg-black/50"
       />
@@ -460,9 +458,15 @@ function SavedProgramsView({
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-semibold text-sm truncate">{program.name}</p>
                     <p className="text-white/40 text-xs mt-0.5">
-                      {program.days.length} day{program.days.length !== 1 ? "s" : ""}
+                      {program.days.length}{" "}
+                      {program.days.length === 1
+                        ? t("swapWorkoutActionSheet.day")
+                        : t("swapWorkoutActionSheet.days")}
                       {" · "}
-                      {totalExercises} exercise{totalExercises !== 1 ? "s" : ""}
+                      {totalExercises}{" "}
+                      {totalExercises === 1
+                        ? t("swapWorkoutActionSheet.exercise")
+                        : t("swapWorkoutActionSheet.exercises")}
                       {" · "}
                       {new Date(program.createdAt).toLocaleDateString()}
                     </p>

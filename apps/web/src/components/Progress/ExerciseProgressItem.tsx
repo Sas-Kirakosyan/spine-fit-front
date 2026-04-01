@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useExerciseName } from "@spinefit/shared";
 import type { ExerciseProgress } from "@/utils/progressStats";
 import { LazyImage } from "@/components/ui/LazyImage";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
@@ -66,6 +67,8 @@ export function ExerciseProgressItem({
   onClick,
 }: ExerciseProgressItemProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
+  const translatedName = getExerciseName({ id: exercise.exerciseId, name: exercise.exerciseName });
   const hasImprovement = useMemo(() => {
     if (exercise.progressData.length < 2) return false;
     const sorted = [...exercise.progressData].sort(
@@ -94,7 +97,7 @@ export function ExerciseProgressItem({
         {exercise.imageUrl ? (
           <LazyImage
             src={exercise.imageUrl}
-            alt={exercise.exerciseName}
+            alt={translatedName}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -123,7 +126,7 @@ export function ExerciseProgressItem({
 
       <div className="flex-1 min-w-0">
         <h3 className="text-sm font-semibold text-white truncate">
-          {exercise.exerciseName}
+          {translatedName}
         </h3>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-xs text-slate-400">
