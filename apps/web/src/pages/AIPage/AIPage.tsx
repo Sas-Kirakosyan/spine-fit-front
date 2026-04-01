@@ -130,9 +130,7 @@ function AIPage({
       });
     } catch (err) {
       const errorMessage =
-        err instanceof Error
-          ? err.message
-          : t("aiPage.errorConnection");
+        err instanceof Error ? err.message : t("aiPage.errorConnection");
 
       setError(errorMessage);
 
@@ -176,7 +174,6 @@ function AIPage({
           <MessageInput
             onSendMessage={handleSendMessage}
             isLoading={isLoading}
-            disabled={!!error}
           />
         </div>
       </section>

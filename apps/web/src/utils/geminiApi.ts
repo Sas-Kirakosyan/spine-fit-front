@@ -1,7 +1,7 @@
 import type { ChatMessage } from "@/types/chat";
 
-const GEMINI_API_KEY = "";
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`;
+const GEMINI_API_KEY = import.meta.env.VITE_AI_ASSISTANT_API_KEY || "";
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`;
 
 export interface GeminiMessage {
   role: "user" | "model";
@@ -28,6 +28,12 @@ export async function sendMessageToGemini(
   messages: GeminiMessage[],
   onChunk: (content: string) => void
 ): Promise<string> {
+  if (!GEMINI_API_KEY) {
+    throw new Error(
+      "Gemini API key is not configured. Set VITE_GEMINI_API_KEY in your .env file."
+    );
+  }
+
   try {
     const response = await fetch(GEMINI_API_URL, {
       method: "POST",
@@ -36,6 +42,13 @@ export async function sendMessageToGemini(
       },
       body: JSON.stringify({
         contents: messages,
+        systemInstruction: {
+          parts: [
+            {
+              text: "You are SpineFit AI — a knowledgeable fitness assistant specializing in safe training for people with spine issues (disc bulges, herniations, especially L5-S1). You help users build workout programs, suggest safe exercises, explain proper form, and provide guidance on progressive overload while protecting the spine. Always prioritize safety. If an exercise could be risky for the spine, warn the user and suggest a safer alternative. Respond in the same language the user writes in.",
+            },
+          ],
+        },
       }),
     });
 
@@ -71,9 +84,9 @@ export async function sendMessageToGemini(
             if (jsonStr === "[DONE]") {
               return fullResponse;
             }
-            
+
             const data = JSON.parse(jsonStr) as GeminiStreamChunk;
-            
+
             const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
             if (text) {
               fullResponse += text;
