@@ -18,7 +18,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const { t } = useTranslation();
   const [workoutType] = useState<"home" | "gym">("gym");
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<number[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [heightUnit, setHeightUnit] = useState<"cm" | "ft">("cm");
@@ -37,6 +36,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   >({});
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+
 
 
   const filteredQuestions = useMemo(() => {
@@ -96,6 +96,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     });
   }, [answers]);
 
+    console.log(answers[filteredQuestions[currentQuestion].id])
+
   const actualQuestionsCount = useMemo(() => {
     return filteredQuestions.filter((q) => q.type !== "info").length;
   }, [filteredQuestions]);
@@ -108,9 +110,12 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   }, [filteredQuestions, currentQuestion]);
 
   const handleAnswerSelect = (answerIndex: number) => {
-    setSelectedAnswer(answerIndex);
-
     const question = filteredQuestions[currentQuestion];
+
+    if (!question) {
+        return
+    }
+
     if (question.type === "radio" || question.type === "image_radio") {
       setAnswers((prev) => ({
         ...prev,
@@ -145,6 +150,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   };
 
   const isAnswered = () => {
+      const filteredQuestion = filteredQuestions[currentQuestion];
+      const currentSavedAnswer = answers[filteredQuestion.id];
     const question = filteredQuestions[currentQuestion];
     if (question.type === "info") {
       return true;
@@ -156,7 +163,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         return true;
     }
     if (question.type === "radio" || question.type === "image_radio") {
-      return selectedAnswer !== null;
+        return currentSavedAnswer !== undefined && currentSavedAnswer !== null
     } else if (question.type === "checkbox") {
       return selectedCheckboxes.length > 0;
     } else if (question.type === "input" || question.type === "slider") {
@@ -172,7 +179,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       const savedUnit = units[question.id];
 
       if (question.type === "info") {
-        setSelectedAnswer(null);
         setSelectedCheckboxes([]);
         setInputValue("");
         setMultiFieldValues({});
@@ -194,13 +200,9 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
           });
         }
 
-        setSelectedAnswer(null);
         setSelectedCheckboxes([]);
         setInputValue("");
       } else if (question.type === "radio") {
-        setSelectedAnswer(
-          savedAnswer !== undefined ? (savedAnswer as number) : null
-        );
         setSelectedCheckboxes([]);
         setInputValue("");
         setMultiFieldValues({});
@@ -209,12 +211,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setSelectedCheckboxes(
           savedAnswer !== undefined ? (savedAnswer as number[]) : []
         );
-        setSelectedAnswer(null);
         setInputValue("");
         setMultiFieldValues({});
       } else if (question.type === "input" || question.type === "slider") {
         setInputValue(savedAnswer !== undefined ? String(savedAnswer) : "");
-        setSelectedAnswer(null);
         setSelectedCheckboxes([]);
         setMultiFieldValues({});
         setMultiFieldUnits({});
@@ -251,7 +251,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         }));
       }
     } else if (question.type === "radio" || question.type === "image_radio") {
-      answerValue = selectedAnswer!;
+      answerValue = answers[question.id];
     } else if (question.type === "checkbox") {
       answerValue = selectedCheckboxes;
     } else if (question.type === "input" || question.type === "slider") {
@@ -341,7 +341,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       }
 
       setCurrentQuestion(0);
-      setSelectedAnswer(null);
       setSelectedCheckboxes([]);
       setInputValue("");
       setAnswers({});
@@ -369,7 +368,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       const finalUnits = { ...units };
 
       if (question.type === "radio" || question.type === "image_radio") {
-        currentAnswerValue = selectedAnswer!;
+        currentAnswerValue = answers[question.id] as number;
       } else if (question.type === "checkbox") {
         currentAnswerValue = selectedCheckboxes;
       } else if (question.type === "input" || question.type === "slider") {
@@ -412,7 +411,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   useEffect(() => {
     if (!isOpen) {
       setCurrentQuestion(0);
-      setSelectedAnswer(null);
       setSelectedCheckboxes([]);
       setInputValue("");
       setAnswers({});
@@ -525,48 +523,49 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                     </h3>
                   )}
 
-                  {filteredQuestions[currentQuestion].type === "radio" && (
-                    <div className={optionListClass}>
-                      {displayOptions?.map((option, index) => (
-                        <QuizRadioOption
-                          key={index}
-                          option={t(`quiz.questions.${question.id}.options.${index}`, { defaultValue: typeof option === "string" ? option : (option as any).label })}
-                          index={index}
-                          isSelected={selectedAnswer === index}
-                          onSelect={handleAnswerSelect}
-                        />
-                      ))}
+                    <div key={filteredQuestions[currentQuestion].id}>
+                        {filteredQuestions[currentQuestion].type === "radio" && (
+                            <div className={optionListClass}>
+                                {displayOptions?.map((option, index) => (
+                                    <QuizRadioOption
+                                        key={index}
+                                        option={t(`quiz.questions.${question.id}.options.${index}`, { defaultValue: typeof option === "string" ? option : (option as any).label })}
+                                        index={index}
+                                        isSelected={answers[filteredQuestions[currentQuestion].id] === index}
+                                        onSelect={handleAnswerSelect}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                        {filteredQuestions[currentQuestion].type ===
+                            "image_radio" && (
+                                <div className={optionListClass}>
+                                    {displayOptions?.map((option, index) => {
+                                        const imgOption = option as {
+                                            value: string;
+                                            label: string;
+                                            image: string;
+                                            description: string;
+                                        };
+                                        const isFemaleOptions = displayOptions === question.optionsFemale;
+                                        const optionsKey = isFemaleOptions ? "optionsFemale" : "options";
+                                        return (
+                                            <QuizImageRadioOption
+                                                key={index}
+                                                option={{
+                                                    ...imgOption,
+                                                    label: t(`quiz.questions.${question.id}.${optionsKey}.${index}.label`, { defaultValue: imgOption.label }),
+                                                    description: t(`quiz.questions.${question.id}.${optionsKey}.${index}.description`, { defaultValue: imgOption.description }),
+                                                }}
+                                                index={index}
+                                                isSelected={answers[filteredQuestions[currentQuestion].id] === index}
+                                                onSelect={handleAnswerSelect}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            )}
                     </div>
-                  )}
-
-                  {filteredQuestions[currentQuestion].type ===
-                    "image_radio" && (
-                    <div className={optionListClass}>
-                      {displayOptions?.map((option, index) => {
-                        const imgOption = option as {
-                          value: string;
-                          label: string;
-                          image: string;
-                          description: string;
-                        };
-                        const isFemaleOptions = displayOptions === question.optionsFemale;
-                        const optionsKey = isFemaleOptions ? "optionsFemale" : "options";
-                        return (
-                          <QuizImageRadioOption
-                            key={index}
-                            option={{
-                              ...imgOption,
-                              label: t(`quiz.questions.${question.id}.${optionsKey}.${index}.label`, { defaultValue: imgOption.label }),
-                              description: t(`quiz.questions.${question.id}.${optionsKey}.${index}.description`, { defaultValue: imgOption.description }),
-                            }}
-                            index={index}
-                            isSelected={selectedAnswer === index}
-                            onSelect={handleAnswerSelect}
-                          />
-                        );
-                      })}
-                    </div>
-                  )}
 
                   {filteredQuestions[currentQuestion].type === "checkbox" && (
                     <div className={optionListClass}>
