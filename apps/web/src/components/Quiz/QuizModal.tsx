@@ -37,8 +37,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
-
-
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
       if (!question.showIf) return true;
@@ -95,8 +93,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       return true;
     });
   }, [answers]);
-
-    console.log(answers[filteredQuestions[currentQuestion].id])
 
   const actualQuestionsCount = useMemo(() => {
     return filteredQuestions.filter((q) => q.type !== "info").length;
