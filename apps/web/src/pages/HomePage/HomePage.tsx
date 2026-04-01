@@ -21,7 +21,7 @@ function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
   return (
     <>
       <PageContainer
-        backgroundImage="url('https://ignitefitness.com/wp-content/uploads/2024/06/Gym-Equipment.jpg')"
+        backgroundImage="url('https://aestheticxfitness.com/wp-content/uploads/slider/cache/b0321dd7df42008a1983d29db8732f10/WEQD.jpg')"
         overlayClassName="bg-black/30"
       >
         <div className="flex items-center justify-between">

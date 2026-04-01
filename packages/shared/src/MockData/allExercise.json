@@ -56,7 +56,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 2,
@@ -115,7 +116,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 3,
@@ -174,7 +176,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 4,
@@ -234,7 +237,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 5,
@@ -294,7 +298,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 6,
@@ -355,7 +360,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 7,
@@ -414,7 +420,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 406,
@@ -469,7 +476,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 407,
@@ -522,7 +530,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 408,
@@ -576,7 +585,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 409,
@@ -630,7 +640,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 11,
@@ -708,7 +719,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 12,
@@ -787,7 +799,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 13,
@@ -846,7 +859,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 14,
@@ -906,7 +920,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 15,
@@ -964,7 +979,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "1Aiauie2lyM"
   },
   {
     "id": 16,
@@ -979,7 +995,7 @@
     "equipment": "incline_bench or_decline_bench",
     "difficulty": "intermediate",
     "instructions": "Lie on incline bench, grip handles behind head. Keep lower back pressed to bench. Raise legs up toward chest with controlled movement. Lower slowly without letting lower back arch. Keep knees slightly bent if needed.",
-    "video_url": "https://cdn.spinefit.app/videos/incline_leg_raise.mp4",
+    "video_url": "https://www.youtube.com/shorts/wJbX3erkOxA",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1023,7 +1039,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "yRj5oSt9q9g"
   },
   {
     "id": 17,
@@ -1083,7 +1100,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 18,
@@ -1141,7 +1159,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "HdkhI1NpdVo"
   },
   {
     "id": 19,
@@ -1199,7 +1218,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "aUoFXUdcuO8"
   },
   {
     "id": 20,
@@ -1256,7 +1276,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 21,
@@ -1313,7 +1334,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 32,
@@ -1370,7 +1392,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 22,
@@ -1428,7 +1451,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "qOnt7qAsJSU"
   },
   {
     "id": 23,
@@ -1487,7 +1511,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 24,
@@ -1555,7 +1580,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 25,
@@ -1612,7 +1638,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 26,
@@ -1671,7 +1698,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 27,
@@ -1730,7 +1758,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "KTCeeLXwhiQ"
   },
   {
     "id": 28,
@@ -1789,7 +1818,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 29,
@@ -1849,7 +1879,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 30,
@@ -1908,7 +1939,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 31,
@@ -1967,7 +1999,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "28x0JJJ4_Oc"
   },
   {
     "id": 33,
@@ -2036,7 +2069,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 34,
@@ -2096,7 +2130,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 35,
@@ -2157,7 +2192,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 36,
@@ -2217,7 +2253,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "N6f6gg4wxJE"
   },
   {
     "id": 37,
@@ -2276,7 +2313,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 38,
@@ -2336,7 +2374,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 39,
@@ -2404,7 +2443,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 40,
@@ -2471,7 +2511,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 41,
@@ -2529,7 +2570,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 42,
@@ -2586,7 +2628,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": "QUNxuE3GgEc"
   },
   {
     "id": 43,
@@ -2644,7 +2687,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 44,
@@ -2703,7 +2747,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 45,
@@ -2762,7 +2807,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 46,
@@ -2821,7 +2867,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 47,
@@ -2881,7 +2928,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 48,
@@ -2940,7 +2988,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 49,
@@ -2999,7 +3048,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 50,
@@ -3058,7 +3108,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 51,
@@ -3118,7 +3169,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 52,
@@ -3178,7 +3230,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 53,
@@ -3235,7 +3288,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 54,
@@ -3293,7 +3347,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 55,
@@ -3350,7 +3405,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 56,
@@ -3428,7 +3484,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 57,
@@ -3485,7 +3542,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 58,
@@ -3542,7 +3600,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 59,
@@ -3599,7 +3658,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 60,
@@ -3657,7 +3717,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 61,
@@ -3715,7 +3776,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 62,
@@ -3774,7 +3836,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 63,
@@ -3832,7 +3895,8 @@
         "url": "",
         "primary": false
       }
-    ]
+    ],
+    "youtube_id": ""
   },
   {
     "id": 64,
@@ -3891,354 +3955,7 @@
         "url": "",
         "primary": false
       }
-    ]
-  },
-  {
-    "id": 100,
-    "name": "Լյամկով ռուչկով վերևից բոկ",
-    "description": "Լյամկով ռուչկով վերևից բոկ",
-    "category": "rehab",
-    "muscle_groups": [
-      "rotator_cuff",
-      "rear_delts"
     ],
-    "equipment": "cable_machine",
-    "difficulty": "beginner",
-    "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
-    "video_url": "https://www.youtube.com/watch?v=ml6pserey5u",
-    "is_back_friendly": true,
-    "back_issue_restrictions": [
-      {
-        "id": 88,
-        "exercise_id": 61,
-        "issue_type": "l5_s1",
-        "restriction_level": "low",
-        "recommendation": "Zero spinal loading. Keep the torso completely still — this is a shoulder stabilization drill, not a strength movement. Use 2–4 kg maximum. Strengthening the rotator cuff helps correct the rounded-shoulder posture that often drives chronic lower back compensation.",
-        "created_at": "2025-12-20T12:00:00Z",
-        "updated_at": "2025-12-20T12:00:00Z"
-      }
-    ],
-    "created_at": "2025-12-20T12:00:00Z",
-    "updated_at": "2025-12-20T12:00:00Z",
-    "sets": 3,
-    "reps": 15,
-    "weight": 3,
-    "weight_unit": "kg",
-    "media": [
-      {
-        "type": "exercise",
-        "source": "local",
-        "url": "/exercisesSm/standing-cable-external-rotion.webp",
-        "primary": true
-      },
-      {
-        "type": "exercise",
-        "source": "remote",
-        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/standing-cable-external-rotation.png",
-        "primary": false
-      },
-      {
-        "type": "equipment",
-        "source": "local",
-        "url": "/assets/equipment/cable-machine.png",
-        "primary": true
-      },
-      {
-        "type": "equipment",
-        "source": "remote",
-        "url": "",
-        "primary": false
-      }
-    ]
-  },
-  {
-    "id": 101,
-    "name": "Կոնաձև ռուչկով դեմից դոշին",
-    "description": "Կոնաձև ռուչկով դեմից դոշին",
-    "category": "rehab",
-    "muscle_groups": [
-      "rotator_cuff",
-      "rear_delts"
-    ],
-    "equipment": "cable_machine",
-    "difficulty": "beginner",
-    "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
-    "video_url": "https://www.youtube.com/watch?v=ml6pserey5u",
-    "is_back_friendly": true,
-    "back_issue_restrictions": [
-      {
-        "id": 88,
-        "exercise_id": 61,
-        "issue_type": "l5_s1",
-        "restriction_level": "low",
-        "recommendation": "Zero spinal loading. Keep the torso completely still — this is a shoulder stabilization drill, not a strength movement. Use 2–4 kg maximum. Strengthening the rotator cuff helps correct the rounded-shoulder posture that often drives chronic lower back compensation.",
-        "created_at": "2025-12-20T12:00:00Z",
-        "updated_at": "2025-12-20T12:00:00Z"
-      }
-    ],
-    "created_at": "2025-12-20T12:00:00Z",
-    "updated_at": "2025-12-20T12:00:00Z",
-    "sets": 3,
-    "reps": 15,
-    "weight": 3,
-    "weight_unit": "kg",
-    "media": [
-      {
-        "type": "exercise",
-        "source": "local",
-        "url": "/exercisesSm/standing-cable-external-rotion.webp",
-        "primary": true
-      },
-      {
-        "type": "exercise",
-        "source": "remote",
-        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/standing-cable-external-rotation.png",
-        "primary": false
-      },
-      {
-        "type": "equipment",
-        "source": "local",
-        "url": "/assets/equipment/cable-machine.png",
-        "primary": true
-      },
-      {
-        "type": "equipment",
-        "source": "remote",
-        "url": "",
-        "primary": false
-      }
-    ]
-  },
-  {
-    "id": 102,
-    "name": "Լուչ ատվիդենյա ներքևից մեջքով",
-    "description": "Լուչ ատվիդենյա ներքևից մեջքով",
-    "category": "rehab",
-    "muscle_groups": [
-      "rotator_cuff",
-      "rear_delts"
-    ],
-    "equipment": "cable_machine",
-    "difficulty": "beginner",
-    "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
-    "video_url": "https://www.youtube.com/watch?v=ml6pserey5u",
-    "is_back_friendly": true,
-    "back_issue_restrictions": [
-      {
-        "id": 88,
-        "exercise_id": 61,
-        "issue_type": "l5_s1",
-        "restriction_level": "low",
-        "recommendation": "Zero spinal loading. Keep the torso completely still — this is a shoulder stabilization drill, not a strength movement. Use 2–4 kg maximum. Strengthening the rotator cuff helps correct the rounded-shoulder posture that often drives chronic lower back compensation.",
-        "created_at": "2025-12-20T12:00:00Z",
-        "updated_at": "2025-12-20T12:00:00Z"
-      }
-    ],
-    "created_at": "2025-12-20T12:00:00Z",
-    "updated_at": "2025-12-20T12:00:00Z",
-    "sets": 3,
-    "reps": 15,
-    "weight": 3,
-    "weight_unit": "kg",
-    "media": [
-      {
-        "type": "exercise",
-        "source": "local",
-        "url": "/exercisesSm/standing-cable-external-rotion.webp",
-        "primary": true
-      },
-      {
-        "type": "exercise",
-        "source": "remote",
-        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/standing-cable-external-rotation.png",
-        "primary": false
-      },
-      {
-        "type": "equipment",
-        "source": "local",
-        "url": "/assets/equipment/cable-machine.png",
-        "primary": true
-      },
-      {
-        "type": "equipment",
-        "source": "remote",
-        "url": "",
-        "primary": false
-      }
-    ]
-  },
-  {
-    "id": 103,
-    "name": "Պռանացիայի ուդերժանի",
-    "description": "Պռանացիայի ուդերժանի",
-    "category": "rehab",
-    "muscle_groups": [
-      "rotator_cuff",
-      "rear_delts"
-    ],
-    "equipment": "cable_machine",
-    "difficulty": "beginner",
-    "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
-    "video_url": "https://www.youtube.com/watch?v=ml6pserey5u",
-    "is_back_friendly": true,
-    "back_issue_restrictions": [
-      {
-        "id": 88,
-        "exercise_id": 61,
-        "issue_type": "l5_s1",
-        "restriction_level": "low",
-        "recommendation": "Zero spinal loading. Keep the torso completely still — this is a shoulder stabilization drill, not a strength movement. Use 2–4 kg maximum. Strengthening the rotator cuff helps correct the rounded-shoulder posture that often drives chronic lower back compensation.",
-        "created_at": "2025-12-20T12:00:00Z",
-        "updated_at": "2025-12-20T12:00:00Z"
-      }
-    ],
-    "created_at": "2025-12-20T12:00:00Z",
-    "updated_at": "2025-12-20T12:00:00Z",
-    "sets": 3,
-    "reps": 15,
-    "weight": 3,
-    "weight_unit": "kg",
-    "media": [
-      {
-        "type": "exercise",
-        "source": "local",
-        "url": "/exercisesSm/standing-cable-external-rotion.webp",
-        "primary": true
-      },
-      {
-        "type": "exercise",
-        "source": "remote",
-        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/standing-cable-external-rotation.png",
-        "primary": false
-      },
-      {
-        "type": "equipment",
-        "source": "local",
-        "url": "/assets/equipment/cable-machine.png",
-        "primary": true
-      },
-      {
-        "type": "equipment",
-        "source": "remote",
-        "url": "",
-        "primary": false
-      }
-    ]
-  },
-  {
-    "id": 104,
-    "name": "Լյամկով ռուչկով կիստ",
-    "description": "Լյամկով ռուչկով կիստ",
-    "category": "rehab",
-    "muscle_groups": [
-      "rotator_cuff",
-      "rear_delts"
-    ],
-    "equipment": "cable_machine",
-    "difficulty": "beginner",
-    "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
-    "video_url": "https://www.youtube.com/watch?v=ml6pserey5u",
-    "is_back_friendly": true,
-    "back_issue_restrictions": [
-      {
-        "id": 88,
-        "exercise_id": 61,
-        "issue_type": "l5_s1",
-        "restriction_level": "low",
-        "recommendation": "Zero spinal loading. Keep the torso completely still — this is a shoulder stabilization drill, not a strength movement. Use 2–4 kg maximum. Strengthening the rotator cuff helps correct the rounded-shoulder posture that often drives chronic lower back compensation.",
-        "created_at": "2025-12-20T12:00:00Z",
-        "updated_at": "2025-12-20T12:00:00Z"
-      }
-    ],
-    "created_at": "2025-12-20T12:00:00Z",
-    "updated_at": "2025-12-20T12:00:00Z",
-    "sets": 3,
-    "reps": 15,
-    "weight": 3,
-    "weight_unit": "kg",
-    "media": [
-      {
-        "type": "exercise",
-        "source": "local",
-        "url": "/exercisesSm/standing-cable-external-rotion.webp",
-        "primary": true
-      },
-      {
-        "type": "exercise",
-        "source": "remote",
-        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/standing-cable-external-rotation.png",
-        "primary": false
-      },
-      {
-        "type": "equipment",
-        "source": "local",
-        "url": "/assets/equipment/cable-machine.png",
-        "primary": true
-      },
-      {
-        "type": "equipment",
-        "source": "remote",
-        "url": "",
-        "primary": false
-      }
-    ]
-  },
-  {
-    "id": 105,
-    "name": "Հաստ ռուչկով կիստ",
-    "description": "Հաստ ռուչկով կիստ",
-    "category": "rehab",
-    "muscle_groups": [
-      "rotator_cuff",
-      "rear_delts"
-    ],
-    "equipment": "cable_machine",
-    "difficulty": "beginner",
-    "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
-    "video_url": "https://www.youtube.com/watch?v=ml6pserey5u",
-    "is_back_friendly": true,
-    "back_issue_restrictions": [
-      {
-        "id": 88,
-        "exercise_id": 61,
-        "issue_type": "l5_s1",
-        "restriction_level": "low",
-        "recommendation": "Zero spinal loading. Keep the torso completely still — this is a shoulder stabilization drill, not a strength movement. Use 2–4 kg maximum. Strengthening the rotator cuff helps correct the rounded-shoulder posture that often drives chronic lower back compensation.",
-        "created_at": "2025-12-20T12:00:00Z",
-        "updated_at": "2025-12-20T12:00:00Z"
-      }
-    ],
-    "created_at": "2025-12-20T12:00:00Z",
-    "updated_at": "2025-12-20T12:00:00Z",
-    "sets": 3,
-    "reps": 15,
-    "weight": 3,
-    "weight_unit": "kg",
-    "media": [
-      {
-        "type": "exercise",
-        "source": "local",
-        "url": "/exercisesSm/standing-cable-external-rotion.webp",
-        "primary": true
-      },
-      {
-        "type": "exercise",
-        "source": "remote",
-        "url": "https://www.weighttraining.guide/wp-content/uploads/2021/05/standing-cable-external-rotation.png",
-        "primary": false
-      },
-      {
-        "type": "equipment",
-        "source": "local",
-        "url": "/assets/equipment/cable-machine.png",
-        "primary": true
-      },
-      {
-        "type": "equipment",
-        "source": "remote",
-        "url": "",
-        "primary": false
-      }
-    ]
+    "youtube_id": ""
   }
 ]
