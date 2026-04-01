@@ -62,7 +62,7 @@ USER PROFILE:
 - Pain level (0-10): ${quiz.painLevel ?? 0}
 - Pain triggers: ${quiz.painTriggers?.join(", ") ?? "None"}
 - Squat confidence: ${quiz.canSquat ?? "Confident"}
-- Preferred units: ${quiz.units}
+- Preferred units: ${quiz.units}${quiz.additionalNotes ? `\n- Additional user notes: ${quiz.additionalNotes}` : ""}
 
 AVAILABLE EXERCISES (use only IDs from this list):
 EXERCISE FORMAT: ID|Name|Muscles|Equipment|Difficulty|BackFriendly|Restrictions(type:level,...)

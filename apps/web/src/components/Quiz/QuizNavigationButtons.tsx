@@ -74,7 +74,7 @@ export function QuizNavigationButtons({
                 : "bg-white/10 text-white/60 cursor-not-allowed"
             }`}
           >
-            {t("quiz.nav.finish")}
+            {t("quiz.nav.generate")}
           </button>
         ) : null}
       </div>
