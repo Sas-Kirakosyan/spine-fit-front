@@ -17,7 +17,7 @@ export function ExerciseSearchBar({
         placeholder={t("allExercisePage.searchPlaceholder")}
         value={searchQuery}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="w-full px-4 py-2 rounded-lg bg-[#1B1E2B]/90 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-500"
+        className="w-full px-4 py-2 rounded-lg bg-[#1B1E2B] text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:ring-2 focus:ring-main"
         autoFocus
       />
     </div>

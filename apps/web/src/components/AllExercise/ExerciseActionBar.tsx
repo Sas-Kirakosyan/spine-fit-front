@@ -30,7 +30,7 @@ function ExerciseActionBar({
       )}
       <Button
         onClick={onAddExercises}
-        className="flex-1 px-4 py-3 rounded-[10px] bg-red-500 text-white font-medium"
+        className="flex-1 px-4 py-3 rounded-[10px] bg-main text-white font-medium"
       >
         {t(
           selectedCount === 1
