@@ -686,8 +686,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                         rows={5}
                       />
                       <div className="flex flex-wrap gap-2">
-                        {[0, 1, 2, 3, 4].map((i) => {
-                          const templateText = t(`quiz.questions.${question.id}.templates.${i}`);
+                        {(t(`quiz.questions.${question.id}.templates`, { returnObjects: true, defaultValue: [] }) as string[]).map((templateText, i) => {
                           const isActive = inputValue.includes(templateText);
                           return (
                             <button
