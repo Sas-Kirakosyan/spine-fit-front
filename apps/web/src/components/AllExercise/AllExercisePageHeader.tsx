@@ -16,7 +16,7 @@ export function AllExercisePageHeader({
     <div className="flex items-center gap-4 mb-6">
       <button
         onClick={onClose}
-        className="flex items-center justify-center w-8 h-8 text-red-500 hover:opacity-80 transition-opacity"
+        className="flex items-center justify-center w-8 h-8 text-main hover:opacity-80 transition-opacity"
         aria-label={t("allExercisePage.header.close")}
       >
         <svg

@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { type Exercise } from "@/types/exercise";
+import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import { TreeDotButton } from "@/components/TreeDotButton/TreeDotButton";
 import { LazyImage } from "@/components/ui/LazyImage";
@@ -16,6 +17,8 @@ export function ExerciseItem({
   onSelect,
 }: ExerciseItemProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
+  const name = getExerciseName(exercise);
   return (
     <div
       className="group flex w-full cursor-pointer items-center gap-4 rounded-[14px] bg-[#1B1E2B]/90 p-3 text-left shadow-xl ring-1 ring-white/5 hover:bg-[#1B1E2B] transition-colors"
@@ -31,14 +34,14 @@ export function ExerciseItem({
       <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-[10px]">
         <LazyImage
           src={getExerciseImageUrl(exercise)}
-          alt={exercise.name}
+          alt={name}
           className="h-full w-full object-cover"
           fallback={exercise.media?.find((m) => m.source === "remote")?.url}
         />
         <div className="pointer-events-none absolute inset-0 rounded-[10px] border border-white/10" />
         {isSelected && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-[10px]">
-            <div className="bg-red-500 rounded-full p-1">
+            <div className="bg-main rounded-full p-1">
               <svg
                 className="w-4 h-4 text-white"
                 fill="none"
@@ -60,17 +63,17 @@ export function ExerciseItem({
       <div className="flex flex-1 items-center justify-between min-w-0">
         <span
           className={`text-base font-medium break-words ${
-            isSelected ? "text-red-500" : "text-white"
+            isSelected ? "text-main" : "text-white"
           }`}
         >
-          {exercise.name}
+          {name}
         </span>
       </div>
 
       <TreeDotButton
         onClick={() => {}}
-        ariaLabel={t("allExercisePage.exerciseItem.actionsFor", { name: exercise.name })}
-        className="ml-2 flex-shrink-0 rounded-full p-2 text-slate-400 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/60"
+        ariaLabel={t("allExercisePage.exerciseItem.actionsFor", { name })}
+        className="ml-2 flex-shrink-0 rounded-full p-2 text-slate-400 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-main/60"
       />
     </div>
   );

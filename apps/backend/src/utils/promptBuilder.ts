@@ -35,8 +35,17 @@ export function exerciseCountForDuration(duration: string): string {
   return "4-6";
 }
 
-export function buildSystemInstruction(duration: string): string {
+export function buildSystemInstruction(duration: string, painLevel?: number): string {
   const exerciseRange = exerciseCountForDuration(duration);
+
+  // Derive pain-level sub-rule for Rule 13
+  const painLevelGuidance =
+    painLevel !== undefined && painLevel >= 7
+      ? `\n    - Pain level ${painLevel}/10 (severe): RPE 4-5 maximum, 2 sets only, bodyweight or minimal load preferred. Include "Consult your physician before increasing intensity." in the pain rule.`
+      : painLevel !== undefined && painLevel >= 4
+        ? `\n    - Pain level ${painLevel}/10 (moderate): stay at the lower bound of Active Symptoms targets; do not progress load until pain drops below 4.`
+        : "";
+
   return `You are an expert spine-safe fitness coach specializing in back rehabilitation.
 
 RULES (apply to every plan you generate):
@@ -49,11 +58,11 @@ RULES (apply to every plan you generate):
 7. Set weight to 0 for bodyweight exercises; suggest a starter weight for weighted ones.
 8. MOVEMENT PATTERN BALANCE: Every Upper Body day or Full Body day MUST include both a vertical pull (lat pulldown, pull-up, cable pulldown) AND a horizontal pull (seated row, cable row, machine row). Never program only one pull plane per session.
 9. PUSH REQUIREMENT: Every Full Body or Upper Body day MUST include at least 1 push movement (chest press, overhead press, push-up, or dip variation).
-10. LOWER BODY & SQUAT CONFIDENCE: Every Full Body day MUST include at least 1 lower body compound exercise. If squat confidence is "Avoiding" or "Not confident", substitute squat patterns with hip hinge (Romanian deadlift, good morning) or leg press — never program barbell/goblet squats for these users.
+10. LOWER BODY & SQUAT CONFIDENCE: Every Full Body day MUST include at least 1 lower body compound exercise. If squat confidence starts with "Avoidant" or "Technical", substitute squat patterns with hip hinge (Romanian deadlift, good morning) or leg press — never program barbell/goblet squats for these users.
 11. VOLUME CONTROL: Do not include more than 2 exercises targeting the same movement pattern in a single session (e.g., no 3 row variations in one day, no 3 chest press variants). For Active Symptoms plans, limit to 1 exercise per movement pattern.
 12. EXERCISE DIVERSITY: Never repeat the same exercise (same exerciseId) more than once within a single training day.
 13. INTENSITY BY PAIN STATUS:
-    - "Active Symptoms": RPE 5-6 in W1, conservative load, high rep (12-15), short sets.
+    - "Active Symptoms": RPE 5-6 in W1, conservative load, high rep (12-15), short sets.${painLevelGuidance}
     - "Recovered": RPE 6-7 in W1, moderate load.
     - "Healthy": RPE 7-8 in W1, standard progressive overload (5 kg increments for compounds, 2.5 kg for isolation).
 14. NOTES FIELD FORMAT: For every exercise, write the notes field using this exact structure (all parts on one line, separated by " | "):
@@ -62,8 +71,10 @@ RULES (apply to every plan you generate):
     - [load rule]: "Increase weight by 2.5 kg (or 5 lb) when all reps completed with good form."
     - [pain rule]: Include ONLY for Active Symptoms or Recovered — "If pain increases → reduce load or ROM. Sharp/nerve pain → stop immediately."
     Set the sets/reps fields to Week 1 values.
-15. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".
-16. WEEKS: Always set weeks to 4.`;
+15. ADDITIONAL USER NOTES: If "Additional user notes" are present in the user profile, treat them as high-priority personal constraints or preferences. They override default choices (e.g. a user saying "I hate machines, prefer free weights" should shift equipment selection accordingly).
+16. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".
+17. WEEKS: Always set weeks to 4.
+18. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 3, 8, 9, 10, 11) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
 }
 
 function buildSplitDayGuidance(trainingSplit: string): string {
@@ -113,7 +124,7 @@ USER PROFILE:
 - Pain level (0-10): ${quiz.painLevel ?? 0}
 - Pain triggers: ${quiz.painTriggers?.join(", ") ?? "None"}
 - Squat confidence: ${quiz.canSquat ?? "Confident"}
-- Preferred units: ${quiz.units}
+- Preferred units: ${quiz.units}${quiz.additionalNotes ? `\n- Additional user notes: ${quiz.additionalNotes}` : ""}
 ${variabilityLine}
 ${splitGuidance ? `\n${splitGuidance}\n` : ""}
 AVAILABLE EXERCISES (use only IDs from this list):

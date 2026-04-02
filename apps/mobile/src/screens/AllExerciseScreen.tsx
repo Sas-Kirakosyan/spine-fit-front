@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import type { RouteProp } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { Exercise } from "@spinefit/shared";
+import { useExerciseName } from "@spinefit/shared";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import type { WorkoutStackParamList } from "../navigation/types";
 import { ChevronLeftIcon, SearchIcon, CloseIcon, CheckIcon } from "../components/icons/Icons";
@@ -21,8 +22,9 @@ export default function AllExerciseScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
 
+  const { getExerciseName } = useExerciseName();
   const exercises = allExercisesData as Exercise[];
-  const groupedExercises = useExerciseGrouping(exercises, searchQuery);
+  const groupedExercises = useExerciseGrouping(exercises, searchQuery, getExerciseName);
   const { selectedExercises, toggleExercise, clearSelection, getSelectedExercises, selectedCount } = useExerciseSelection();
 
   const addExercises = useWorkoutStore((s) => s.addExercises);
@@ -90,7 +92,7 @@ export default function AllExerciseScreen() {
                       className={`flex-row items-center p-3 rounded-xl ${isSelected ? "bg-[#e77d10]/20 border border-[#e77d10]/40" : "bg-[#1B1E2B] border border-white/5"}`}
                     >
                       <View className="flex-1">
-                        <Text className="text-white text-sm font-medium">{exercise.name}</Text>
+                        <Text className="text-white text-sm font-medium">{getExerciseName(exercise)}</Text>
                         <Text className="text-white/40 text-xs">{exercise.muscle_groups?.join(", ")}</Text>
                       </View>
                       <View className={`h-6 w-6 rounded-full border-2 items-center justify-center ${isSelected ? "border-[#e77d10] bg-[#e77d10]" : "border-white/20"}`}>

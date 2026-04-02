@@ -61,6 +61,7 @@ const QUESTIONS = {
   PAIN_TRIGGERS: 13,
   SQUAT_CONFIDENCE: 14,
   WORKOUT_DURATION: 15,
+  ADDITIONAL_NOTES: 16,
 } as const;
 
 function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
@@ -162,6 +163,11 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   const durationRange = typeof answers[QUESTIONS.WORKOUT_DURATION] === "number" ? durationOptions[answers[QUESTIONS.WORKOUT_DURATION] as number] : "30–45 min";
   const duration = parseDuration(durationRange);
 
+  // Additional notes (optional textarea)
+  const additionalNotes = typeof answers[QUESTIONS.ADDITIONAL_NOTES] === "string"
+    ? (answers[QUESTIONS.ADDITIONAL_NOTES] as string).trim() || undefined
+    : undefined;
+
   // Derived fields
   const trainingSplit = determineSplitName(experience, trainingFrequency, painStatus);
 
@@ -188,6 +194,7 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
     ...(Number.isFinite(painLevel) && { painLevel }),
     painTriggers,
     canSquat,
+    additionalNotes,
   };
 }
 

@@ -18,7 +18,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const { t } = useTranslation();
   const [workoutType] = useState<"home" | "gym">("gym");
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<number[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [heightUnit, setHeightUnit] = useState<"cm" | "ft">("cm");
@@ -37,7 +36,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   >({});
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-
 
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
@@ -108,9 +106,12 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   }, [filteredQuestions, currentQuestion]);
 
   const handleAnswerSelect = (answerIndex: number) => {
-    setSelectedAnswer(answerIndex);
-
     const question = filteredQuestions[currentQuestion];
+
+    if (!question) {
+        return
+    }
+
     if (question.type === "radio" || question.type === "image_radio") {
       setAnswers((prev) => ({
         ...prev,
@@ -145,6 +146,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   };
 
   const isAnswered = () => {
+      const filteredQuestion = filteredQuestions[currentQuestion];
+      const currentSavedAnswer = answers[filteredQuestion.id];
     const question = filteredQuestions[currentQuestion];
     if (question.type === "info") {
       return true;
@@ -152,11 +155,11 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     if (question.optional) {
       return true;
     }
-    if (question.type === "multi_field") {
+    if (question.type === "multi_field" || question.type === "textarea") {
         return true;
     }
     if (question.type === "radio" || question.type === "image_radio") {
-      return selectedAnswer !== null;
+        return currentSavedAnswer !== undefined && currentSavedAnswer !== null
     } else if (question.type === "checkbox") {
       return selectedCheckboxes.length > 0;
     } else if (question.type === "input" || question.type === "slider") {
@@ -172,7 +175,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       const savedUnit = units[question.id];
 
       if (question.type === "info") {
-        setSelectedAnswer(null);
         setSelectedCheckboxes([]);
         setInputValue("");
         setMultiFieldValues({});
@@ -194,13 +196,14 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
           });
         }
 
-        setSelectedAnswer(null);
         setSelectedCheckboxes([]);
         setInputValue("");
+      } else if (question.type === "textarea") {
+        setInputValue(savedAnswer !== undefined ? String(savedAnswer) : "");
+        setSelectedCheckboxes([]);
+        setMultiFieldValues({});
+        setMultiFieldUnits({});
       } else if (question.type === "radio") {
-        setSelectedAnswer(
-          savedAnswer !== undefined ? (savedAnswer as number) : null
-        );
         setSelectedCheckboxes([]);
         setInputValue("");
         setMultiFieldValues({});
@@ -209,12 +212,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         setSelectedCheckboxes(
           savedAnswer !== undefined ? (savedAnswer as number[]) : []
         );
-        setSelectedAnswer(null);
         setInputValue("");
         setMultiFieldValues({});
       } else if (question.type === "input" || question.type === "slider") {
         setInputValue(savedAnswer !== undefined ? String(savedAnswer) : "");
-        setSelectedAnswer(null);
         setSelectedCheckboxes([]);
         setMultiFieldValues({});
         setMultiFieldUnits({});
@@ -250,8 +251,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
           [question.id]: multiFieldUnits as any,
         }));
       }
+    } else if (question.type === "textarea") {
+      answerValue = inputValue;
     } else if (question.type === "radio" || question.type === "image_radio") {
-      answerValue = selectedAnswer!;
+      answerValue = answers[question.id];
     } else if (question.type === "checkbox") {
       answerValue = selectedCheckboxes;
     } else if (question.type === "input" || question.type === "slider") {
@@ -341,7 +344,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       }
 
       setCurrentQuestion(0);
-      setSelectedAnswer(null);
       setSelectedCheckboxes([]);
       setInputValue("");
       setAnswers({});
@@ -369,9 +371,11 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       const finalUnits = { ...units };
 
       if (question.type === "radio" || question.type === "image_radio") {
-        currentAnswerValue = selectedAnswer!;
+        currentAnswerValue = answers[question.id] as number;
       } else if (question.type === "checkbox") {
         currentAnswerValue = selectedCheckboxes;
+      } else if (question.type === "textarea") {
+        currentAnswerValue = inputValue;
       } else if (question.type === "input" || question.type === "slider") {
         currentAnswerValue = inputValue;
 
@@ -412,7 +416,6 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   useEffect(() => {
     if (!isOpen) {
       setCurrentQuestion(0);
-      setSelectedAnswer(null);
       setSelectedCheckboxes([]);
       setInputValue("");
       setAnswers({});
@@ -525,48 +528,49 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                     </h3>
                   )}
 
-                  {filteredQuestions[currentQuestion].type === "radio" && (
-                    <div className={optionListClass}>
-                      {displayOptions?.map((option, index) => (
-                        <QuizRadioOption
-                          key={index}
-                          option={t(`quiz.questions.${question.id}.options.${index}`, { defaultValue: typeof option === "string" ? option : (option as any).label })}
-                          index={index}
-                          isSelected={selectedAnswer === index}
-                          onSelect={handleAnswerSelect}
-                        />
-                      ))}
+                    <div key={filteredQuestions[currentQuestion].id}>
+                        {filteredQuestions[currentQuestion].type === "radio" && (
+                            <div className={optionListClass}>
+                                {displayOptions?.map((option, index) => (
+                                    <QuizRadioOption
+                                        key={index}
+                                        option={t(`quiz.questions.${question.id}.options.${index}`, { defaultValue: typeof option === "string" ? option : (option as any).label })}
+                                        index={index}
+                                        isSelected={answers[filteredQuestions[currentQuestion].id] === index}
+                                        onSelect={handleAnswerSelect}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                        {filteredQuestions[currentQuestion].type ===
+                            "image_radio" && (
+                                <div className={optionListClass}>
+                                    {displayOptions?.map((option, index) => {
+                                        const imgOption = option as {
+                                            value: string;
+                                            label: string;
+                                            image: string;
+                                            description: string;
+                                        };
+                                        const isFemaleOptions = displayOptions === question.optionsFemale;
+                                        const optionsKey = isFemaleOptions ? "optionsFemale" : "options";
+                                        return (
+                                            <QuizImageRadioOption
+                                                key={index}
+                                                option={{
+                                                    ...imgOption,
+                                                    label: t(`quiz.questions.${question.id}.${optionsKey}.${index}.label`, { defaultValue: imgOption.label }),
+                                                    description: t(`quiz.questions.${question.id}.${optionsKey}.${index}.description`, { defaultValue: imgOption.description }),
+                                                }}
+                                                index={index}
+                                                isSelected={answers[filteredQuestions[currentQuestion].id] === index}
+                                                onSelect={handleAnswerSelect}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            )}
                     </div>
-                  )}
-
-                  {filteredQuestions[currentQuestion].type ===
-                    "image_radio" && (
-                    <div className={optionListClass}>
-                      {displayOptions?.map((option, index) => {
-                        const imgOption = option as {
-                          value: string;
-                          label: string;
-                          image: string;
-                          description: string;
-                        };
-                        const isFemaleOptions = displayOptions === question.optionsFemale;
-                        const optionsKey = isFemaleOptions ? "optionsFemale" : "options";
-                        return (
-                          <QuizImageRadioOption
-                            key={index}
-                            option={{
-                              ...imgOption,
-                              label: t(`quiz.questions.${question.id}.${optionsKey}.${index}.label`, { defaultValue: imgOption.label }),
-                              description: t(`quiz.questions.${question.id}.${optionsKey}.${index}.description`, { defaultValue: imgOption.description }),
-                            }}
-                            index={index}
-                            isSelected={selectedAnswer === index}
-                            onSelect={handleAnswerSelect}
-                          />
-                        );
-                      })}
-                    </div>
-                  )}
 
                   {filteredQuestions[currentQuestion].type === "checkbox" && (
                     <div className={optionListClass}>
@@ -670,6 +674,50 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                       max={filteredQuestions[currentQuestion].max || 10}
                       onChange={handleInputChange}
                     />
+                  )}
+
+                  {filteredQuestions[currentQuestion].type === "textarea" && (
+                    <div className="space-y-4">
+                      <textarea
+                        value={inputValue}
+                        onChange={(e) => handleInputChange(e.target.value)}
+                        placeholder={t(`quiz.questions.${question.id}.placeholder`, { defaultValue: filteredQuestions[currentQuestion].placeholder || t("quiz.input.enterAnswer") })}
+                        className="w-full rounded-lg border-2 border-gray-300 px-4 py-3 text-base focus:border-main focus:outline-none transition resize-none"
+                        rows={5}
+                      />
+                      <div className="flex flex-wrap gap-2">
+                        {(t(`quiz.questions.${question.id}.templates`, { returnObjects: true, defaultValue: [] }) as string[]).map((templateText, i) => {
+                          const isActive = inputValue.includes(templateText);
+                          return (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => {
+                                if (isActive) {
+                                  const updated = inputValue
+                                    .replace(templateText, "")
+                                    .replace(/\n{2,}/g, "\n")
+                                    .trim();
+                                  handleInputChange(updated);
+                                } else {
+                                  handleInputChange(
+                                    inputValue ? `${inputValue}\n${templateText}` : templateText
+                                  );
+                                }
+                              }}
+                              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-medium tracking-wide transition ${
+                                isActive
+                                  ? "border-2 border-main text-main bg-main/10"
+                                  : "border-2 border-gray-200 text-gray-700 hover:border-gray-300"
+                              }`}
+                            >
+                              <span className="text-sm">{isActive ? "✓" : "+"}</span>
+                              {templateText}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   )}
 
                   {filteredQuestions[currentQuestion].type === "multi_field" &&

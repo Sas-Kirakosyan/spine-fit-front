@@ -4,6 +4,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RouteProp } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { Exercise } from "@spinefit/shared";
+import { useExerciseName } from "@spinefit/shared";
 import type { WorkoutStackParamList } from "../navigation/types";
 import { LazyImage } from "../components/common/LazyImage";
 import { getExerciseImageSource } from "../utils/imageResolver";
@@ -22,6 +23,8 @@ export default function ExerciseDetailsScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const { exercise } = route.params;
+  const { getExerciseName } = useExerciseName();
+  const exerciseDisplayName = getExerciseName(exercise);
   const imageSource = getExerciseImageSource(exercise);
 
   const detailPills = [
@@ -53,7 +56,7 @@ export default function ExerciseDetailsScreen() {
             <Text className="text-[#e77d10]/70 text-[10px] font-semibold uppercase tracking-[3px] mb-2">
               Technique Breakdown
             </Text>
-            <Text className="text-white text-2xl font-bold">{exercise.name}</Text>
+            <Text className="text-white text-2xl font-bold">{exerciseDisplayName}</Text>
             {exercise.description && (
               <Text className="text-white/70 text-sm mt-1" numberOfLines={3}>
                 {exercise.description}

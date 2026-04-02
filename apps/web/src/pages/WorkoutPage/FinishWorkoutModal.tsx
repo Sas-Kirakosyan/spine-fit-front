@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/Buttons/Button";
 import type { Exercise } from "@/types/exercise";
 import type { ExerciseSetRow } from "@/types/workout";
@@ -23,6 +24,7 @@ export function FinishWorkoutModal({
   containerRef,
   completedExerciseLogs = {},
 }: FinishWorkoutModalProps) {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   const volume = calculateWorkoutVolume(
@@ -53,30 +55,30 @@ export function FinishWorkoutModal({
           <div className="space-y-6 px-6 pb-8 pt-6 safe-area-bottom">
             <div className="text-center">
               <h2 className="text-xl font-semibold text-white">
-                Finish and log your workout?
+                {t("finishWorkoutModal.title")}
               </h2>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">
-                  VOLUME
+                  {t("finishWorkoutModal.volume")}
                 </p>
                 <p className="text-lg font-semibold text-white">
-                  {volume.toLocaleString()} kg
+                  {volume.toLocaleString()} {t("finishWorkoutModal.volumeUnit")}
                 </p>
               </div>
               <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">
-                  CALORIES
+                  {t("finishWorkoutModal.calories")}
                 </p>
                 <p className="text-lg font-semibold text-white">
-                  {calories} kcal
+                  {calories} {t("finishWorkoutModal.caloriesUnit")}
                 </p>
               </div>
               <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">
-                  EXERCISES
+                  {t("finishWorkoutModal.exercises")}
                 </p>
                 <p className="text-lg font-semibold text-white">
                   {exerciseCount}
@@ -84,7 +86,7 @@ export function FinishWorkoutModal({
               </div>
               <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">
-                  DURATION
+                  {t("finishWorkoutModal.duration")}
                 </p>
                 <p className="text-lg font-semibold text-white">{duration}</p>
               </div>
@@ -95,13 +97,13 @@ export function FinishWorkoutModal({
                 onClick={onClose}
                 className="flex-1 h-[48px] rounded-[10px] bg-[#1A1F35] text-white font-semibold uppercase tracking-[0.1em] hover:bg-[#242940] transition-colors"
               >
-                Resume
+                {t("finishWorkoutModal.resume")}
               </Button>
               <Button
                 onClick={onLogWorkout}
                 className="flex-1 h-[48px] rounded-[10px] bg-main text-white font-semibold uppercase tracking-[0.1em]"
               >
-                Log Workout
+                {t("finishWorkoutModal.logWorkout")}
               </Button>
             </div>
           </div>

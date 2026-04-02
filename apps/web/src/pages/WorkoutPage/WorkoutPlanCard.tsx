@@ -24,12 +24,12 @@ interface WorkoutPlanCardProps {
 }
 
 export function WorkoutPlanCard({
-  planName = "Pull Day",
-  dayName = "Pull Day",
+  planName,
+  dayName,
   exerciseCount = 3,
   muscleCount = 3,
-  duration = "1h 1m",
-  location = "My Gym",
+  duration,
+  location,
   containerRef,
   onWorkoutSwap,
   onPlanSwitched,
@@ -44,8 +44,17 @@ export function WorkoutPlanCard({
   const { t } = useTranslation();
   const [showSwapSheet, setShowSwapSheet] = useState(false);
 
+  const resolvedPlanName =
+    planName ?? t("workoutPage.workoutPlanCard.defaultPlanName");
+  const resolvedDayName =
+    dayName ?? t("workoutPage.workoutPlanCard.defaultDayName");
+  const resolvedDuration =
+    duration ?? t("workoutPage.workoutPlanCard.defaultDuration");
+  const resolvedLocation =
+    location ?? t("workoutPage.workoutPlanCard.defaultLocation");
+
   const getCurrentWorkoutId = () => {
-    const name = planName.toLowerCase();
+    const name = (planName ?? "").toLowerCase();
     if (name.includes("push")) return "push";
     if (name.includes("pull")) return "pull";
     if (name.includes("leg")) return "legs";
@@ -108,7 +117,7 @@ export function WorkoutPlanCard({
                     : "bg-transparent text-white/60"
                 }`}
               >
-                AI
+                {t("workoutPage.workoutPlanCard.aiMode")}
               </button>
               <button
                 type="button"
@@ -120,7 +129,7 @@ export function WorkoutPlanCard({
                     : "bg-transparent text-white/60"
                 }`}
               >
-                Local
+                {t("workoutPage.workoutPlanCard.localMode")}
               </button>
             </div>
           )}
@@ -128,16 +137,17 @@ export function WorkoutPlanCard({
 
         {/* Main content */}
         <div className="pr-32">
-          <h2 className="text-2xl font-bold text-white mb-1">{dayName}</h2>
-          <p className="text-xs text-white/60 mb-3">{planName}</p>
+          <h2 className="text-2xl font-bold text-white mb-1">{resolvedDayName}</h2>
+          <p className="text-xs text-white/60 mb-3">{resolvedPlanName}</p>
           <p className="text-sm text-white/80">
-            {exerciseCount} {t("workoutPage.workoutPlanCard.exercises")} • {muscleCount} {t("workoutPage.workoutPlanCard.muscles")}
+            {exerciseCount} {t("workoutPage.workoutPlanCard.exercises")} •{" "}
+            {muscleCount} {t("workoutPage.workoutPlanCard.muscles")}
           </p>
 
           {/* Bottom buttons */}
           <div className="flex items-center gap-2">
             <button className="flex items-center gap-1.5 rounded-full bg-gray-700/60 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700/80 transition-colors">
-              {duration}
+              {resolvedDuration}
               <svg
                 width="14"
                 height="14"
@@ -152,7 +162,7 @@ export function WorkoutPlanCard({
               </svg>
             </button>
             <button className="flex items-center gap-1.5 rounded-full bg-gray-700/60 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700/80 transition-colors">
-              {location}
+              {resolvedLocation}
               <svg
                 width="14"
                 height="14"
