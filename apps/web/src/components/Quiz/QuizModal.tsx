@@ -155,7 +155,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     if (question.optional) {
       return true;
     }
-    if (question.type === "multi_field") {
+    if (question.type === "multi_field" || question.type === "textarea") {
         return true;
     }
     if (question.type === "radio" || question.type === "image_radio") {
@@ -198,6 +198,11 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
         setSelectedCheckboxes([]);
         setInputValue("");
+      } else if (question.type === "textarea") {
+        setInputValue(savedAnswer !== undefined ? String(savedAnswer) : "");
+        setSelectedCheckboxes([]);
+        setMultiFieldValues({});
+        setMultiFieldUnits({});
       } else if (question.type === "radio") {
         setSelectedCheckboxes([]);
         setInputValue("");
@@ -246,6 +251,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
           [question.id]: multiFieldUnits as any,
         }));
       }
+    } else if (question.type === "textarea") {
+      answerValue = inputValue;
     } else if (question.type === "radio" || question.type === "image_radio") {
       answerValue = answers[question.id];
     } else if (question.type === "checkbox") {
@@ -367,6 +374,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         currentAnswerValue = answers[question.id] as number;
       } else if (question.type === "checkbox") {
         currentAnswerValue = selectedCheckboxes;
+      } else if (question.type === "textarea") {
+        currentAnswerValue = inputValue;
       } else if (question.type === "input" || question.type === "slider") {
         currentAnswerValue = inputValue;
 
@@ -665,6 +674,51 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                       max={filteredQuestions[currentQuestion].max || 10}
                       onChange={handleInputChange}
                     />
+                  )}
+
+                  {filteredQuestions[currentQuestion].type === "textarea" && (
+                    <div className="space-y-4">
+                      <textarea
+                        value={inputValue}
+                        onChange={(e) => handleInputChange(e.target.value)}
+                        placeholder={t(`quiz.questions.${question.id}.placeholder`, { defaultValue: filteredQuestions[currentQuestion].placeholder || t("quiz.input.enterAnswer") })}
+                        className="w-full rounded-lg border-2 border-gray-300 px-4 py-3 text-base focus:border-main focus:outline-none transition resize-none"
+                        rows={5}
+                      />
+                      <div className="flex flex-wrap gap-2">
+                        {[0, 1, 2, 3, 4].map((i) => {
+                          const templateText = t(`quiz.questions.${question.id}.templates.${i}`);
+                          const isActive = inputValue.includes(templateText);
+                          return (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => {
+                                if (isActive) {
+                                  const updated = inputValue
+                                    .replace(templateText, "")
+                                    .replace(/\n{2,}/g, "\n")
+                                    .trim();
+                                  handleInputChange(updated);
+                                } else {
+                                  handleInputChange(
+                                    inputValue ? `${inputValue}\n${templateText}` : templateText
+                                  );
+                                }
+                              }}
+                              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-medium tracking-wide transition ${
+                                isActive
+                                  ? "border-2 border-main text-main bg-main/10"
+                                  : "border-2 border-gray-200 text-gray-700 hover:border-gray-300"
+                              }`}
+                            >
+                              <span className="text-sm">{isActive ? "✓" : "+"}</span>
+                              {templateText}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   )}
 
                   {filteredQuestions[currentQuestion].type === "multi_field" &&

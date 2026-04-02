@@ -37,6 +37,7 @@ export interface GeneratedPlanResult {
     painLevel?: number;
     painTriggers?: string[];
     canSquat?: string;
+    additionalNotes?: string;
   };
   workoutDays: {
     dayNumber: number;

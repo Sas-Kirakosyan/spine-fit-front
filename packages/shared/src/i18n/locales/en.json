@@ -313,7 +313,8 @@
       "takesLessThan": "Takes less than 1 minute",
       "back": "Back",
       "next": "Next",
-      "finish": "Finish"
+      "finish": "Finish",
+      "generate": "Generate"
     },
     "slider": {
       "noPain": "No pain",
@@ -442,8 +443,19 @@
       "15": {
         "question": "How long should your workouts be?",
         "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min"]
+      },
+      "16": {
+        "question": "Anything else we should know?",
+        "placeholder": "E.g., specific injuries, preferences, equipment limitations...",
+        "templates": [
+          "I have a shoulder injury",
+          "I prefer dumbbells over barbells",
+          "I want more core work",
+          "I want to avoid heavy lifting",
+          "I want to focus on posture correction"
+        ]
       }
-    }  
+    }
   },
   "historyPage": {
     "noWorkoutsOnDate": "No workouts on selected date",

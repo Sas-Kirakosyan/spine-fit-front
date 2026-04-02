@@ -2,7 +2,7 @@ export interface QuizQuestion {
   id: number;
   fieldName?: string;
   question?: string;
-  type: "radio" | "checkbox" | "input" | "info" | "slider" | "image_radio" | "multi_field";
+  type: "radio" | "checkbox" | "input" | "info" | "slider" | "image_radio" | "multi_field" | "textarea";
   title?: string;
   description?: string;
   buttonText?: string;

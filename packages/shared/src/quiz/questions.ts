@@ -244,4 +244,12 @@ export const questions: QuizQuestion[] = [
     type: "radio",
     options: ["10–20 min", "20–30 min", "30–45 min", "45–60 min"],
   },
+  {
+    id: 16,
+    fieldName: "additionalNotes",
+    question: "Anything else we should know?",
+    type: "textarea",
+    optional: true,
+    placeholder: "E.g., specific injuries, preferences, equipment limitations...",
+  },
 ];
