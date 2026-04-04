@@ -376,7 +376,7 @@ export function checkTrainingConsistency(
  */
 export function getDefaultProgression(exercise: Exercise): { increment_kg: number; rule: string } {
   const isLowerBody = (exercise.muscle_groups || []).some(mg =>
-    ["quadriceps", "glutes", "hamstrings"].includes(mg)
+    ["quads", "glutes", "hamstrings"].includes(mg)
   );
   const isCompound = (exercise.muscle_groups || []).length >= 3;
   const isBodyweight = exercise.weight === 0 || exercise.weight_unit === "bodyweight";

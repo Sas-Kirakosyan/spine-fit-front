@@ -64,7 +64,7 @@ const mockExercises: Exercise[] = [
     name: "Barbell Squat",
     description: "Heavy compound leg exercise",
     category: "strength",
-    muscle_groups: ["quadriceps", "glutes", "hamstrings"],
+    muscle_groups: ["quads", "glutes", "hamstrings"],
     equipment: "barbell",
     difficulty: "intermediate",
     instructions: "Test instructions",

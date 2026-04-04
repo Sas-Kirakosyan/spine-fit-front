@@ -20,17 +20,14 @@
 **Example Exercises** (4-5 exercises):
 
 1. Bench Press (or variations)
-
    - 3 sets x 10 reps @ 60kg
    - Muscle groups: chest, front_delts, triceps
 
 2. Shoulder Press
-
    - 3 sets x 10 reps @ 30kg
    - Muscle groups: front_delts, triceps
 
 3. Chest Fly
-
    - 3 sets x 12 reps @ 15kg
    - Muscle groups: chest
 
@@ -47,18 +44,15 @@
 **Example Exercises** (4-5 exercises):
 
 1. Cable Pull / Lat Pulldown
-
    - 3 sets x 12 reps @ 20kg
    - Muscle groups: lats, upper_back
 
 2. Back Hyperextension ✅ (back-safe)
-
    - 3 sets x 15 reps @ 0kg
    - Muscle groups: erector_spinae, glutes
    - ⚠️ Safety: Keep spine neutral
 
 3. Row Variation
-
    - 3 sets x 10 reps @ 40kg
    - Muscle groups: lats, upper_back, rear_delts
 
@@ -70,27 +64,23 @@
 
 ### 📅 Friday - LEGS DAY
 
-**Target Muscles**: Quadriceps, Glutes, Hamstrings
+**Target Muscles**: Quads, Glutes, Hamstrings
 
 **Example Exercises** (4-5 exercises):
 
 1. Single-Leg Glute Bridge ✅ (back-safe)
-
    - 3 sets x 12 reps @ 0kg
    - Muscle groups: glutes, hamstrings, core_stabilizers
 
 2. Bulgarian Split Squats
-
    - 3 sets x 10 reps @ 4kg (dumbbells)
-   - Muscle groups: quadriceps, glutes
+   - Muscle groups: quads, glutes
 
 3. Leg Extension (machine)
-
    - 4 sets x 12 reps @ 25kg
-   - Muscle groups: quadriceps
+   - Muscle groups: quads
 
 4. Leg Curls
-
    - 3 sets x 12 reps @ 20kg
    - Muscle groups: hamstrings
 
@@ -119,7 +109,7 @@ Input: "Push/Pull/Legs" + 3 days/week
 Output:
 - Day 1 (Monday): ["chest", "front_delts", "triceps"]
 - Day 2 (Wednesday): ["lats", "upper_back", "rear_delts", "biceps"]
-- Day 3 (Friday): ["quadriceps", "glutes", "hamstrings"]
+- Day 3 (Friday): ["quads", "glutes", "hamstrings"]
 ```
 
 ### 2. Exercise Filter (`exerciseFilter.ts`)
@@ -165,7 +155,7 @@ For PULL day:
 - Repeat process
 
 For LEGS day:
-- Need exercises that target: quadriceps, glutes, hamstrings
+- Need exercises that target: quads, glutes, hamstrings
 - Repeat process
 ```
 

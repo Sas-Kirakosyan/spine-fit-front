@@ -153,9 +153,9 @@ function generateAlternativeSplits(
         allExercises,
         [
           ["chest", "front_delts", "lats", "upper_back", "rear_delts", "triceps", "biceps"],
-          ["quadriceps", "glutes", "hamstrings"],
+          ["quads", "glutes", "hamstrings"],
           ["chest", "front_delts", "lats", "upper_back", "rear_delts", "triceps", "biceps"],
-          ["quadriceps", "glutes", "hamstrings"],
+          ["quads", "glutes", "hamstrings"],
         ].slice(0, frequency),
         4,
         "Upper/Lower"
@@ -177,7 +177,7 @@ function generateAlternativeSplits(
       const pplMuscleGroups = [
         ["chest", "front_delts", "triceps"], // Push
         ["lats", "upper_back", "rear_delts", "biceps"], // Pull
-        ["quadriceps", "glutes", "hamstrings"], // Legs
+        ["quads", "glutes", "hamstrings"], // Legs
       ];
 
       const pplWorkoutDays = assignExercisesToDays(
@@ -204,7 +204,7 @@ function generateAlternativeSplits(
         ["lats", "upper_back", "rear_delts"], // Back day
         ["front_delts", "rear_delts"], // Shoulders day
         ["biceps", "triceps"], // Arms day
-        ["quadriceps", "glutes", "hamstrings"], // Legs day
+        ["quads", "glutes", "hamstrings"], // Legs day
       ];
 
       const broSplitWorkoutDays = assignExercisesToDays(
@@ -408,7 +408,7 @@ export function generateTrainingPlan(
   );
 
   // For Upper/Lower 4-day splits, cap lower-day exercises to reduce weekly leg/glute volume
-  const lowerBodyGroups = new Set(["quadriceps", "glutes", "hamstrings"]);
+  const lowerBodyGroups = new Set(["quads", "glutes", "hamstrings"]);
   // 10.2. Rebalance upper/lower days for back-safe programming
   const adjustedWorkoutDays = pplRestructuredDays.map((day) => {
     const isLowerDay =
@@ -729,7 +729,7 @@ function rebalanceUpperLowerDays(
     ].includes(mg);
 
   const isLowerGroupSet = (mgs: string[]) => {
-    const lowerSet = new Set(["quadriceps", "glutes", "hamstrings"]);
+    const lowerSet = new Set(["quads", "glutes", "hamstrings"]);
     return mgs.length > 0 && mgs.every((m) => lowerSet.has(m));
   };
   const isCore = (e: Exercise) => (e as any).category === "core";
@@ -1497,10 +1497,10 @@ function restructureFiveDayPPL(
   ]);
 
   const pushPool = allPossibleExercises.filter(
-    (e) => isPress(e) && !(e.muscle_groups || []).some((mg) => ["quadriceps", "glutes", "hamstrings"].includes(mg))
+    (e) => isPress(e) && !(e.muscle_groups || []).some((mg) => ["quads", "glutes", "hamstrings"].includes(mg))
   );
   const legPool = allPossibleExercises.filter(
-    (e) => (e.muscle_groups || []).some((mg) => ["quadriceps", "glutes", "hamstrings"].includes(mg))
+    (e) => (e.muscle_groups || []).some((mg) => ["quads", "glutes", "hamstrings"].includes(mg))
   );
 
   const pushAIds = new Set(days[0].exercises.map((e) => e.id));
@@ -1573,11 +1573,11 @@ function restructureThreeDayFullBody(
       isPush: isPress(e),
       isPull: isPull(e),
       isVerticalPull: hasVerticalPull(e),
-      isLeg: muscleGroups.some(mg => ["quadriceps", "glutes", "hamstrings"].includes(mg)),
+      isLeg: muscleGroups.some(mg => ["quads", "glutes", "hamstrings"].includes(mg)),
       isCore: isCoreStability(e),
       isRearDelt: isRearDeltExercise(e),
       isHinge: name.includes("deadlift") || name.includes("rdl") || name.includes("hip thrust"),
-      isQuad: muscleGroups.includes("quadriceps"),
+      isQuad: muscleGroups.includes("quads"),
       isHamstring: muscleGroups.includes("hamstrings"),
     };
   };
@@ -1604,7 +1604,7 @@ function restructureThreeDayFullBody(
 
   // Helper: true when exercise targets only leg muscles (no upper body)
   const isPureLeg = (e: Exercise) =>
-    (e.muscle_groups || []).some(mg => ["quadriceps", "glutes", "hamstrings"].includes(mg)) &&
+    (e.muscle_groups || []).some(mg => ["quads", "glutes", "hamstrings"].includes(mg)) &&
     !isPull(e) && !isPress(e);
 
   // ─── UPPER_LOWER_UPPER (ULU) path ────────────────────────────────────────────
@@ -1702,7 +1702,7 @@ function restructureThreeDayFullBody(
       {
         ...days[1],
         dayName: "Day 2 (Lower Body)",
-        muscleGroups: ["quadriceps", "glutes", "hamstrings"],
+        muscleGroups: ["quads", "glutes", "hamstrings"],
         exercises: uluDay2,
       },
       {
@@ -1800,19 +1800,19 @@ function restructureThreeDayFullBody(
     {
       ...days[0],
       dayName: "Day A (Full Body - Push Bias)",
-      muscleGroups: ["chest", "front_delts", "triceps", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
+      muscleGroups: ["chest", "front_delts", "triceps", "lats", "upper_back", "quads", "glutes", "hamstrings"],
       exercises: finalDayA,
     },
     {
       ...days[1],
       dayName: "Day B (Lower Focus)",
-      muscleGroups: ["quadriceps", "glutes", "hamstrings"],
+      muscleGroups: ["quads", "glutes", "hamstrings"],
       exercises: finalDayB,
     },
     {
       ...days[2],
       dayName: "Day C (Pull Focus)",
-      muscleGroups: ["lats", "upper_back", "rear_delts", "biceps", "quadriceps", "glutes", "hamstrings"],
+      muscleGroups: ["lats", "upper_back", "rear_delts", "biceps", "quads", "glutes", "hamstrings"],
       exercises: finalDayC,
     },
   ];

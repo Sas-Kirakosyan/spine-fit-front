@@ -159,7 +159,7 @@
     "weight_stack_kg": 95,
     "height_range_cm": { "min": 30, "max": 200, "increment_cm": 5 },
     "attachments_supported": [],
-    "primary_muscles": ["quadriceps"],
+    "primary_muscles": ["quads"],
     "movement_patterns": ["knee_extension"],
     "execution_cues": [
       "Don’t slam lockout",
@@ -178,7 +178,7 @@
       ],
       "video_overview": null
     },
-    "details_overview": "A leg-extension machine that isolates the quadriceps by extending the knee against a padded lever. Useful for targeted quad strengthening but should be used with controlled range and moderate load to protect the knee joint; avoid locking out aggressively.",
+    "details_overview": "A leg-extension machine that isolates the quads by extending the knee against a padded lever. Useful for targeted quad strengthening but should be used with controlled range and moderate load to protect the knee joint; avoid locking out aggressively.",
     "is_back_friendly": true,
     "created_at": "2025-10-26T12:00:00Z",
     "updated_at": "2025-10-26T12:00:00Z",
@@ -726,7 +726,7 @@
     "weight_stack_kg": null,
     "height_range_cm": { "min": null, "max": null, "increment_cm": null },
     "attachments_supported": null,
-    "primary_muscles": ["glutes", "quadriceps"],
+    "primary_muscles": ["glutes", "quads"],
     "movement_patterns": [
       "inclined_horizontal_push",
       "knee_extension",
@@ -746,7 +746,7 @@
     "created_at": null,
     "updated_at": null,
     "version": 1,
-    "details_overview": "The Leg Press Machine is a lower-body strength station built in a **45-degree seated sled position** where the lifter pushes a plate or sled **away from the body** by extending the ankles, knees, and hips. It primarily trains the **glutes and quadriceps** by focusing on **hip and knee extension** without overhead spine load. Resistance is usually **plate-loaded**, commonly added in increments **between 2.5 LB and 45 LB per plate** (≈1.25 kg – 20 kg each, often paired). Most commercial gym models include **safety stop-stoppers that lock the plate/sled in place**, which are activated by **rotating or pulling a handle near the seat**, allowing users to safely exit. The start position of the plate/sled and backrest angle are often adjustable to fit different torso and leg lengths. This movement is considered spinally safe when the user keeps the pelvis neutral, avoids excessive lumbar bracing to create force, never jerks the bottom press, and works within a smooth controlled motion. The station is commonly used for both **Leg Press and Calf Press variations** to increase lower-body strength, positional stability, and controlled strength endurance."
+    "details_overview": "The Leg Press Machine is a lower-body strength station built in a **45-degree seated sled position** where the lifter pushes a plate or sled **away from the body** by extending the ankles, knees, and hips. It primarily trains the **glutes and quads** by focusing on **hip and knee extension** without overhead spine load. Resistance is usually **plate-loaded**, commonly added in increments **between 2.5 LB and 45 LB per plate** (≈1.25 kg – 20 kg each, often paired). Most commercial gym models include **safety stop-stoppers that lock the plate/sled in place**, which are activated by **rotating or pulling a handle near the seat**, allowing users to safely exit. The start position of the plate/sled and backrest angle are often adjustable to fit different torso and leg lengths. This movement is considered spinally safe when the user keeps the pelvis neutral, avoids excessive lumbar bracing to create force, never jerks the bottom press, and works within a smooth controlled motion. The station is commonly used for both **Leg Press and Calf Press variations** to increase lower-body strength, positional stability, and controlled strength endurance."
   },
   {
     "id": "eq_assisted_weight_01",
@@ -1051,7 +1051,7 @@
     "weight_stack_kg": null,
     "height_range_cm": { "min": null, "max": null, "increment_cm": null },
     "attachments_supported": null,
-    "primary_muscles": ["glutes", "quadriceps"],
+    "primary_muscles": ["glutes", "quads"],
     "movement_patterns": ["horizontal_push", "knee_extension", "hip_extension"],
     "execution_cues": null,
     "safety_notes": null,
@@ -1067,7 +1067,7 @@
     "created_at": null,
     "updated_at": null,
     "version": 1,
-    "details_overview": "The Leg Press Machine is a vertical-seated lower-body strength station with a foot plate that can be pushed horizontally away from the seat using knee and hip extension. Most gym versions are plate-loaded or sled-based rather than selectorized, so resistance plates are added externally in increments (e.g., 2.5LB to 45LB ≈ 1.25kg to 20kg+20kg pairs). The seat, backrest angle, or foot-plate starting distance can be adjusted to accommodate a wide range of body sizes and strength levels. When pressing, the user keeps the core braced, avoids forcing the movement with lumbar arch drive, pushes smoothly without bottom jerks, controls the lowering eccentric, and stops if any sharp pain or nerve tension increases. This machine is commonly used for machine leg press, inward-press elbow positioning for quad isolation, 45° leverage-safe presses, and calf-press variations (when supported). It enables progressive glute and quadriceps hypertrophy with minimal spinal loading when posture stays tall and pelvis neutral."
+    "details_overview": "The Leg Press Machine is a vertical-seated lower-body strength station with a foot plate that can be pushed horizontally away from the seat using knee and hip extension. Most gym versions are plate-loaded or sled-based rather than selectorized, so resistance plates are added externally in increments (e.g., 2.5LB to 45LB ≈ 1.25kg to 20kg+20kg pairs). The seat, backrest angle, or foot-plate starting distance can be adjusted to accommodate a wide range of body sizes and strength levels. When pressing, the user keeps the core braced, avoids forcing the movement with lumbar arch drive, pushes smoothly without bottom jerks, controls the lowering eccentric, and stops if any sharp pain or nerve tension increases. This machine is commonly used for machine leg press, inward-press elbow positioning for quad isolation, 45° leverage-safe presses, and calf-press variations (when supported). It enables progressive glute and quads hypertrophy with minimal spinal loading when posture stays tall and pelvis neutral."
   },
   {
     "id": "eq_bicep_curl_01",

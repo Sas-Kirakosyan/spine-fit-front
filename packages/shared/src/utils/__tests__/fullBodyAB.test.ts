@@ -106,7 +106,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
           "chest",
           "lats",
           "upper_back",
-          "quadriceps",
+          "quads",
           "glutes",
           "hamstrings"
         ],
@@ -249,10 +249,10 @@ describe('Full Body A/B Plan - Real World Test', () => {
           {
             "id": 24,
             "name": "Leg Press",
-            "description": "A machine-based compound leg exercise that targets quadriceps, glutes, and hamstrings with no spinal compression. Excellent alternative to squats for those with back issues.",
+            "description": "A machine-based compound leg exercise that targets quads, glutes, and hamstrings with no spinal compression. Excellent alternative to squats for those with back issues.",
             "category": "strength",
             "muscle_groups": [
-              "quadriceps",
+              "quads",
               "glutes",
               "hamstrings"
             ],
@@ -331,7 +331,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
           "chest",
           "lats",
           "upper_back",
-          "quadriceps",
+          "quads",
           "glutes",
           "hamstrings"
         ],
@@ -483,10 +483,10 @@ describe('Full Body A/B Plan - Real World Test', () => {
           {
             "id": 407,
             "name": "Leg Extension",
-            "description": "Quadriceps isolation using a machine with zero compression through the lumbar spine.",
+            "description": "Quads isolation using a machine with zero compression through the lumbar spine.",
             "category": "strength",
             "muscle_groups": [
-              "quadriceps"
+              "quads"
             ],
             "equipment": "leg_extension_machine",
             "media": [{ "type": "exercise", "source": "local", "url": "/exercises/leg-extension.png", "primary": true }],
@@ -616,7 +616,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
 
     // Should have leg exercises
     const hasLegExercise = dayA.exercises.some(ex =>
-      ex.muscle_groups.includes('quadriceps') ||
+      ex.muscle_groups.includes('quads') ||
       ex.muscle_groups.includes('glutes') ||
       ex.muscle_groups.includes('hamstrings')
     );
@@ -669,7 +669,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
 
     // Should have leg exercises
     const hasLegExercise = dayB.exercises.some(ex =>
-      ex.muscle_groups.includes('quadriceps') ||
+      ex.muscle_groups.includes('quads') ||
       ex.muscle_groups.includes('glutes') ||
       ex.muscle_groups.includes('hamstrings')
     );
@@ -891,7 +891,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
     console.log('Covered muscle groups:', muscleList.join(', '));
 
     // Essential muscle groups for full body
-    const essentialGroups = ['chest', 'lats', 'upper_back', 'quadriceps', 'glutes'];
+    const essentialGroups = ['chest', 'lats', 'upper_back', 'quads', 'glutes'];
 
     essentialGroups.forEach(essential => {
       expect(muscleList).toContain(essential);
@@ -985,7 +985,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
       const lowerBodySets = day.exercises
         .filter(ex =>
           ex.muscle_groups.some(mg =>
-            ['quadriceps', 'glutes', 'hamstrings', 'calves'].includes(mg)
+            ['quads', 'glutes', 'hamstrings', 'calves'].includes(mg)
           )
         )
         .reduce((sum, ex) => sum + ex.sets, 0);
@@ -1086,7 +1086,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
         .reduce((sum, ex) => sum + ex.sets, 0);
 
       const anteriorSets = day.exercises
-        .filter(ex => ex.muscle_groups.some(mg => ['chest', 'front_delts', 'quadriceps'].includes(mg)))
+        .filter(ex => ex.muscle_groups.some(mg => ['chest', 'front_delts', 'quads'].includes(mg)))
         .reduce((sum, ex) => sum + ex.sets, 0);
 
       console.log(`  Posterior Chain Sets: ${posteriorSets}`);
@@ -1157,7 +1157,7 @@ describe('Full Body A/B Plan - Real World Test', () => {
       'Horizontal Push': (ex: any) => ex.muscle_groups.includes('chest'),
       'Horizontal Pull': (ex: any) => ex.name.toLowerCase().includes('row'),
       'Vertical Pull': (ex: any) => ex.name.toLowerCase().includes('pulldown') || ex.name.toLowerCase().includes('pull-up'),
-      'Knee Extension': (ex: any) => ex.muscle_groups.includes('quadriceps'),
+      'Knee Extension': (ex: any) => ex.muscle_groups.includes('quads'),
       'Hip Extension': (ex: any) => ex.muscle_groups.includes('glutes') || ex.muscle_groups.includes('hamstrings')
     };
 

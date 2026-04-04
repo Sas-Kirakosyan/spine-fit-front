@@ -326,7 +326,7 @@ export function validateFullBodyABSplit(
 
     const hasLegCompound = dayExercises.some(
       (ex) =>
-        (ex.muscle_groups.includes("quadriceps") ||
+        (ex.muscle_groups.includes("quads") ||
           ex.muscle_groups.includes("glutes") ||
           ex.muscle_groups.includes("hamstrings")) &&
         (ex.name.toLowerCase().includes("press") ||
@@ -419,7 +419,7 @@ export function enforceFullBodyABRequirements<T extends {
     const name = ex.name?.toLowerCase() || "";
     const muscleGroups = ex.muscle_groups || [];
     const trainsLowerBody =
-      muscleGroups.includes("quadriceps") ||
+      muscleGroups.includes("quads") ||
       muscleGroups.includes("glutes") ||
       muscleGroups.includes("hamstrings");
 

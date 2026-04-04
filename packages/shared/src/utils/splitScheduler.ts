@@ -65,7 +65,7 @@ export function mapSplitToMuscleGroups(
       return [
         ["chest", "front_delts", "triceps"],            // Push A
         ["lats", "upper_back", "rear_delts", "biceps"], // Pull A
-        ["quadriceps", "glutes", "hamstrings"],          // Legs
+        ["quads", "glutes", "hamstrings"],          // Legs
         ["chest", "front_delts", "triceps"],            // Push B
         ["lats", "upper_back", "rear_delts", "biceps"], // Pull B
       ];
@@ -74,17 +74,17 @@ export function mapSplitToMuscleGroups(
       return [
         ["chest", "front_delts", "triceps"], // Push 1
         ["lats", "upper_back", "rear_delts", "biceps"], // Pull 1
-        ["quadriceps", "glutes", "hamstrings"], // Legs 1
+        ["quads", "glutes", "hamstrings"], // Legs 1
         ["chest", "front_delts", "triceps"], // Push 2
         ["lats", "upper_back", "rear_delts", "biceps"], // Pull 2
-        ["quadriceps", "glutes", "hamstrings"], // Legs 2
+        ["quads", "glutes", "hamstrings"], // Legs 2
       ];
     }
     // 3-day PPL
     return [
       ["chest", "front_delts", "triceps"], // Push
       ["lats", "upper_back", "rear_delts", "biceps"], // Pull
-      ["quadriceps", "glutes", "hamstrings"], // Legs
+      ["quads", "glutes", "hamstrings"], // Legs
     ];
   }
 
@@ -93,32 +93,32 @@ export function mapSplitToMuscleGroups(
     if (workoutsPerWeek === 5) {
       return [
         ["chest", "lats", "upper_back", "front_delts", "rear_delts"], // Upper A
-        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"],    // Lower A
+        ["quads", "glutes", "hamstrings", "core_stabilizers"],    // Lower A
         ["core_stabilizers"],                                          // Rest Day
         ["chest", "lats", "upper_back", "triceps", "biceps"],         // Upper B
-        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"],    // Lower B
+        ["quads", "glutes", "hamstrings", "core_stabilizers"],    // Lower B
       ];
     }
     if (workoutsPerWeek === 4) {
       return [
         ["chest", "lats", "upper_back", "front_delts", "rear_delts"], // Upper 1
-        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"], // Lower 1
+        ["quads", "glutes", "hamstrings", "core_stabilizers"], // Lower 1
         ["chest", "lats", "upper_back", "triceps", "biceps"], // Upper 2
-        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"], // Lower 2
+        ["quads", "glutes", "hamstrings", "core_stabilizers"], // Lower 2
       ];
     }
     // 3-day Upper/Lower/Upper (ULU)
     if (workoutsPerWeek === 3) {
       return [
         ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps"], // Upper A
-        ["quadriceps", "glutes", "hamstrings", "core_stabilizers"],                          // Lower
+        ["quads", "glutes", "hamstrings", "core_stabilizers"],                          // Lower
         ["lats", "upper_back", "rear_delts", "biceps", "chest", "front_delts", "triceps"],  // Upper B
       ];
     }
     // 2-day Upper/Lower
     return [
       ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps"], // Upper
-      ["quadriceps", "glutes", "hamstrings"], // Lower
+      ["quads", "glutes", "hamstrings"], // Lower
     ];
   }
 
@@ -128,7 +128,7 @@ export function mapSplitToMuscleGroups(
       "chest",
       "lats",
       "upper_back",
-      "quadriceps",
+      "quads",
       "glutes",
       "hamstrings",
     ];
@@ -141,7 +141,7 @@ export function mapSplitToMuscleGroups(
     "chest",
     "lats",
     "upper_back",
-    "quadriceps",
+    "quads",
     "glutes",
     "hamstrings",
     "core_stabilizers",
@@ -237,7 +237,7 @@ function selectExercisesForMuscleGroups(
   const selected: Exercise[] = [];
   const usedExerciseIds = new Set<number>(globalUsedIds); // Start with globally used IDs
 
-  const lowerBodyGroups = new Set(["quadriceps", "glutes", "hamstrings"]);
+  const lowerBodyGroups = new Set(["quads", "glutes", "hamstrings"]);
   const dayTargetsLowerBody = targetMuscleGroups.some((mg) => lowerBodyGroups.has(mg));
   const targetsCore = targetMuscleGroups.includes("core_stabilizers");
 
@@ -406,11 +406,11 @@ function selectExercisesForMuscleGroups(
     }
   }
 
-  // Ensure at least one quadriceps and one hamstrings/glute posterior-chain movement when targeted
-  const needsQuads = targetMuscleGroups.includes("quadriceps");
+  // Ensure at least one quads and one hamstrings/glute posterior-chain movement when targeted
+  const needsQuads = targetMuscleGroups.includes("quads");
   const needsHam = targetMuscleGroups.includes("hamstrings") || targetMuscleGroups.includes("glutes");
 
-  const hasQuads = selected.some((ex) => ex.muscle_groups.includes("quadriceps"));
+  const hasQuads = selected.some((ex) => ex.muscle_groups.includes("quads"));
   const hasHam = selected.some((ex) =>
     ex.muscle_groups.includes("hamstrings") || ex.muscle_groups.includes("glutes")
   );
@@ -442,7 +442,7 @@ function selectExercisesForMuscleGroups(
   };
 
   if (needsQuads && !hasQuads) {
-    ensureGroup("quadriceps", false);
+    ensureGroup("quads", false);
   }
 
   if (needsHam && !hasHam) {

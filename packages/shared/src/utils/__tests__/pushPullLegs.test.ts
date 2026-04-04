@@ -97,7 +97,7 @@ describe('Push/Pull/Legs 3-Day Split - Real World Example', () => {
 
     // Day 3 should be Legs (quads, glutes, hamstrings)
     const isLegDay = day3.muscleGroups.some(mg =>
-      mg.includes('quadriceps') || mg.includes('glutes') || mg.includes('hamstrings')
+      mg.includes('quads') || mg.includes('glutes') || mg.includes('hamstrings')
     );
     console.log('Day 3 is Legs day:', isLegDay);
     expect(isLegDay).toBe(true);
@@ -127,7 +127,7 @@ describe('Push/Pull/Legs 3-Day Split - Real World Example', () => {
 
     // Legs Day (Day 3)
     console.log('Legs Day (Day 3):', muscleGroupsByDay[2].join(', '));
-    expect(muscleGroupsByDay[2]).toContain('quadriceps');
+    expect(muscleGroupsByDay[2]).toContain('quads');
     expect(muscleGroupsByDay[2]).toContain('glutes');
     expect(muscleGroupsByDay[2]).toContain('hamstrings');
 
@@ -251,7 +251,7 @@ describe('Example Output: What User Sees', () => {
     console.log('└───────────────────────────────────────────────────┘');
     console.log('\n');
     console.log('┌─ FRIDAY - Legs Day ───────────────────────────────┐');
-    console.log('│ Target: Quadriceps, Glutes, Hamstrings           │');
+    console.log('│ Target: Quads, Glutes, Hamstrings           │');
     console.log('│ Exercises: 4-5                                    │');
     console.log('│ Sets per exercise: 3                              │');
     console.log('│ Reps: 10-12                                       │');

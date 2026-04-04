@@ -83,12 +83,12 @@ function buildSplitDayGuidance(trainingSplit: string): string {
     return `SPLIT DAY STRUCTURE (Push / Pull / Legs):
 - Push day  → chest, front_delts, triceps
 - Pull day  → lats, upper_back, rear_delts, biceps  (must include vertical pull + horizontal pull)
-- Legs day  → quadriceps, hamstrings, glutes`;
+- Legs day  → quads, hamstrings, glutes`;
   }
   if (s.includes("upper") && s.includes("lower")) {
     return `SPLIT DAY STRUCTURE (Upper / Lower):
 - Upper day → chest, lats, upper_back, front_delts, rear_delts, triceps, biceps  (must include vertical pull + horizontal pull)
-- Lower day → quadriceps, hamstrings, glutes`;
+- Lower day → quads, hamstrings, glutes`;
   }
   if (s.includes("full body")) {
     return `SPLIT DAY STRUCTURE (Full Body):

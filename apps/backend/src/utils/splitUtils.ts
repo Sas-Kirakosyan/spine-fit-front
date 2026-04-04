@@ -1,11 +1,11 @@
 export const SPLIT_TARGET_MUSCLES: Record<string, string[]> = {
-  FULL_BODY_ABC: ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
-  FULL_BODY_AB: ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
-  FULL_BODY_4X: ["chest", "lats", "upper_back", "quadriceps", "glutes", "hamstrings"],
-  UPPER_LOWER_UPPER: ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
-  UPPER_LOWER_4X: ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
-  PUSH_PULL_LEGS: ["chest", "front_delts", "triceps", "lats", "upper_back", "rear_delts", "biceps", "quadriceps", "glutes", "hamstrings"],
-  BRO_SPLIT: ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quadriceps", "glutes", "hamstrings"],
+  FULL_BODY_ABC: ["chest", "lats", "upper_back", "quads", "glutes", "hamstrings"],
+  FULL_BODY_AB: ["chest", "lats", "upper_back", "quads", "glutes", "hamstrings"],
+  FULL_BODY_4X: ["chest", "lats", "upper_back", "quads", "glutes", "hamstrings"],
+  UPPER_LOWER_UPPER: ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quads", "glutes", "hamstrings"],
+  UPPER_LOWER_4X: ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quads", "glutes", "hamstrings"],
+  PUSH_PULL_LEGS: ["chest", "front_delts", "triceps", "lats", "upper_back", "rear_delts", "biceps", "quads", "glutes", "hamstrings"],
+  BRO_SPLIT: ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps", "quads", "glutes", "hamstrings"],
 };
 
 export function mapSplitType(split: string): string {
