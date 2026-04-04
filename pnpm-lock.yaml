@@ -6,11 +6,7 @@ settings:
 
 importers:
 
-  .:
-    dependencies:
-      use-sync-external-store:
-        specifier: ^1.6.0
-        version: 1.6.0(react@19.2.4)
+  .: {}
 
   apps/backend:
     dependencies:
