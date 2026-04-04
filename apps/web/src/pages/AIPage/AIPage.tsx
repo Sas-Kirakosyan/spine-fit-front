@@ -7,11 +7,7 @@ import type { AIPageProps } from "@/types/pages";
 import type { ChatMessage } from "@/types/chat";
 import { MessageList } from "@/components/Chat/MessageList";
 import { MessageInput } from "@/components/Chat/MessageInput";
-import {
-  sendMessageToGemini,
-  chatMessageToGemini,
-  type GeminiMessage,
-} from "@/utils/geminiApi";
+import { sendChatMessage } from "@/utils/geminiApi";
 
 const CHAT_HISTORY_KEY = "aiChatHistory";
 const MAX_HISTORY_MESSAGES = 50;
@@ -76,14 +72,12 @@ function AIPage({
     streamingMessageRef.current = "";
 
     try {
-      // Подготавливаем историю сообщений для Gemini
-      const geminiMessages: GeminiMessage[] = [
-        ...messages.map(chatMessageToGemini),
-        chatMessageToGemini(userMessage),
+      const chatMessages = [
+        ...messages.map((m) => ({ role: m.role, content: m.content })),
+        { role: userMessage.role, content: userMessage.content },
       ];
 
-      // Отправляем запрос с обработкой streaming
-      await sendMessageToGemini(geminiMessages, (chunk: string) => {
+      await sendChatMessage(chatMessages, (chunk: string) => {
         streamingMessageRef.current += chunk;
 
         // Обновляем последнее сообщение ассистента или создаем новое

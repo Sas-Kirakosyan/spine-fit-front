@@ -1,126 +1,72 @@
-import type { ChatMessage } from "@/types/chat";
-
-const GEMINI_API_KEY = import.meta.env.VITE_AI_ASSISTANT_API_KEY || "";
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`;
-
-export interface GeminiMessage {
-  role: "user" | "model";
-  parts: { text: string }[];
-}
-
-export interface GeminiStreamChunk {
-  candidates?: {
-    content?: {
-      parts?: { text?: string }[];
-      role?: string;
-    };
-    finishReason?: string;
-  }[];
-}
+const API_URL = `${import.meta.env.VITE_GENARATE_PLAN_API}/api/chat`;
 
 /**
- * Отправляет сообщение в Gemini API с поддержкой streaming
- * @param messages История сообщений для контекста
- * @param onChunk Callback для обработки каждого чанка streaming ответа
- * @returns Promise с полным ответом
+ * Sends chat messages to the backend and streams the response via SSE.
  */
-export async function sendMessageToGemini(
-  messages: GeminiMessage[],
-  onChunk: (content: string) => void
+export async function sendChatMessage(
+  messages: { role: "user" | "assistant"; content: string }[],
+  onChunk: (content: string) => void,
+  signal?: AbortSignal
 ): Promise<string> {
-  if (!GEMINI_API_KEY) {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages }),
+    signal,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
     throw new Error(
-      "Gemini API key is not configured. Set VITE_GEMINI_API_KEY in your .env file."
+      `Chat API error: ${response.status} ${response.statusText} - ${errorText}`
     );
   }
 
-  try {
-    const response = await fetch(GEMINI_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contents: messages,
-        systemInstruction: {
-          parts: [
-            {
-              text: "You are SpineFit AI — a knowledgeable fitness assistant specializing in safe training for people with spine issues (disc bulges, herniations, especially L5-S1). You help users build workout programs, suggest safe exercises, explain proper form, and provide guidance on progressive overload while protecting the spine. Always prioritize safety. If an exercise could be risky for the spine, warn the user and suggest a safer alternative. Respond in the same language the user writes in.",
-            },
-          ],
-        },
-      }),
-    });
+  if (!response.body) {
+    throw new Error("Response body is null");
+  }
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Gemini API error: ${response.status} ${response.statusText} - ${errorText}`
-      );
-    }
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let fullResponse = "";
 
-    if (!response.body) {
-      throw new Error("Response body is null");
-    }
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let fullResponse = "";
+    const chunk = decoder.decode(value, { stream: true });
+    const lines = chunk.split("\n").filter((line) => line.trim() !== "");
 
-    while (true) {
-      const { done, value } = await reader.read();
+    for (const line of lines) {
+      if (line.startsWith("data: ")) {
+        const jsonStr = line.slice(6);
+        if (jsonStr === "[DONE]") {
+          return fullResponse;
+        }
 
-      if (done) {
-        break;
-      }
+        try {
+          const data = JSON.parse(jsonStr) as {
+            text?: string;
+            error?: string;
+          };
 
-      const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split("\n").filter((line) => line.trim() !== "");
-
-      for (const line of lines) {
-        if (line.startsWith("data: ")) {
-          try {
-            const jsonStr = line.slice(6);
-            if (jsonStr === "[DONE]") {
-              return fullResponse;
-            }
-
-            const data = JSON.parse(jsonStr) as GeminiStreamChunk;
-
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (text) {
-              fullResponse += text;
-              onChunk(text);
-            }
-
-            const finishReason = data.candidates?.[0]?.finishReason;
-            if (finishReason && finishReason !== "STOP") {
-              console.warn("Gemini finish reason:", finishReason);
-            }
-          } catch (e) {
-            // Игнорируем ошибки парсинга отдельных чанков
-            console.warn("Failed to parse chunk:", line, e);
+          if (data.error) {
+            throw new Error(data.error);
           }
+
+          if (data.text) {
+            fullResponse += data.text;
+            onChunk(data.text);
+          }
+        } catch (e) {
+          if (e instanceof Error && e.message !== jsonStr) {
+            throw e;
+          }
+          console.warn("Failed to parse chunk:", line);
         }
       }
     }
-
-    return fullResponse;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error("Unknown error occurred while communicating with Gemini");
   }
-}
 
-/**
- * Конвертирует ChatMessage в формат Gemini
- */
-export function chatMessageToGemini(message: ChatMessage): GeminiMessage {
-  return {
-    // Gemini использует "model" вместо "assistant"
-    role: message.role === "assistant" ? "model" : "user",
-    parts: [{ text: message.content }],
-  };
+  return fullResponse;
 }
