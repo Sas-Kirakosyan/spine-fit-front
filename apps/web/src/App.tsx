@@ -31,6 +31,7 @@ import type {
 import { loadPlanSettings } from "@/types/planSettings";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
+import { trackPageView } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
 
 function App() {
@@ -106,6 +107,10 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    trackPageView(currentPage);
   }, [currentPage]);
 
   useEffect(() => {
