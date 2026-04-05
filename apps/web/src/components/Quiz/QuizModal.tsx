@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import { useTranslation } from "react-i18next";
 import type { QuizModalProps } from "@/types/quiz";
 import type { GeneratedPlan } from "@spinefit/shared";
@@ -467,11 +468,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
   if (isGeneratingPlan) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6">
-        <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-        <p className="text-lg font-medium text-foreground">Generating your personalized plan…</p>
-        <p className="text-sm text-muted-foreground">This may take up to 15 seconds</p>
-      </div>
+      <PlanGeneratingLoader />
     );
   }
 

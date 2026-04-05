@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useMemo } from "react";
+import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
@@ -242,10 +243,7 @@ function WorkoutPage({
     })()
   );
   const [c, setC] = useState(0); // counter to trigger re-generation
-  const [planMode, setPlanMode] = useState<"ai" | "local">(
-    () => (localStorage.getItem("planMode") as "ai" | "local") || "ai"
-  );
-  const [isSwitchingMode, setIsSwitchingMode] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
   const allExercises = allExercisesData as Exercise[];
 
   const syncGeneratedPlanWithSavedProgram = (plan: GeneratedPlan): GeneratedPlan => {
@@ -473,60 +471,37 @@ function WorkoutPage({
     }
   };
 
-  const handlePlanModeSwitch = async (newMode: "ai" | "local") => {
-    if (newMode === planMode || isSwitchingMode) return;
-    setIsSwitchingMode(true);
-
+  const handleRegeneratePlan = async () => {
+    if (isRegenerating) return;
+    setIsRegenerating(true);
     try {
-      // Cache current plan under current mode key
-      const currentPlan = localStorage.getItem("generatedPlan");
-      if (currentPlan) {
-        localStorage.setItem(`generatedPlan_${planMode}`, currentPlan);
-      }
-
-      // Check if target mode has a cached plan
-      const cachedPlan = localStorage.getItem(`generatedPlan_${newMode}`);
-
-      if (cachedPlan) {
-        // Restore cached plan
-        localStorage.setItem("generatedPlan", cachedPlan);
-        console.log(`🔄 Restored cached ${newMode} plan`);
-      } else {
-        // newMode === "ai" — fetch from backend
-        const quizDataString = localStorage.getItem("quizAnswers");
-        if (quizDataString) {
-          const quizData = JSON.parse(quizDataString);
-          try {
-            const response = await fetch(`${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(quizData),
-            });
-            if (response.ok) {
-              const result = await response.json() as { success: boolean; plan: GeneratedPlan };
-              if (result.success && result.plan) {
-                savePlanToLocalStorage(result.plan);
-                localStorage.setItem(`generatedPlan_${newMode}`, JSON.stringify(result.plan));
-                console.log("🔄 Generated new AI plan from backend");
-              }
-            } else {
-              console.error("AI plan API error:", response.status);
-            }
-          } catch (err) {
-            console.error("Failed to fetch AI plan:", err);
-          }
+      const quizDataString = localStorage.getItem("quizAnswers");
+      if (!quizDataString) return;
+      const quizData = JSON.parse(quizDataString);
+      const response = await fetch(`${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(quizData),
+      });
+      if (response.ok) {
+        const result = await response.json() as { success: boolean; plan: GeneratedPlan };
+        if (result.success && result.plan) {
+          localStorage.removeItem("completedWorkoutIds");
+          localStorage.removeItem("selectedWorkoutDayIndex");
+          selectedDayIndexRef.current = null;
+          savePlanToLocalStorage(result.plan);
+          setC((prev) => prev + 1);
         }
+      } else {
+        console.error("Regenerate plan API error:", response.status);
       }
-
-      // Update mode
-      setPlanMode(newMode);
-      localStorage.setItem("planMode", newMode);
-      // Trigger re-load of exercises
-      setC((prev) => prev + 1);
+    } catch (err) {
+      console.error("Failed to regenerate plan:", err);
     } finally {
-      setIsSwitchingMode(false);
+      setIsRegenerating(false);
     }
   };
+
 
   const updateCurrentWorkoutInPlan = (
     updateExercises: (exercises: Exercise[]) => Exercise[]
@@ -668,12 +643,8 @@ function WorkoutPage({
         <Logo />
         <div className="text-[12px] font-semibold text-white">
           <div
-            onClick={() => {
-              localStorage.removeItem("generatedPlan");
-              localStorage.removeItem("completedWorkoutIds");
-              setC(c + 1);
-            }}
-            className="border border-2 border-white/50 rounded-full p-1"
+            onClick={handleRegeneratePlan}
+            className="border border-2 border-white/50 rounded-full p-1 cursor-pointer"
           >
             {t("workoutPage.buttons.regeneratePlan")}
           </div>
@@ -730,9 +701,6 @@ function WorkoutPage({
               setWorkoutExercises(p.workoutDays[dayIndex].exercises);
             }
           }}
-          planMode={planMode}
-          onPlanModeSwitch={handlePlanModeSwitch}
-          isSwitchingMode={isSwitchingMode}
         />
 
         <section className="flex-1 space-y-3 mx-2.5">
@@ -875,6 +843,9 @@ function WorkoutPage({
           onConfirmSwap={handleConfirmSwap}
           onClose={handleCloseReplaceModal}
         />
+      )}
+      {isRegenerating && (
+        <PlanGeneratingLoader />
       )}
     </PageContainer>
   );

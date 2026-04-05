@@ -314,7 +314,9 @@
       "back": "Back",
       "next": "Next",
       "finish": "Finish",
-      "generate": "Generate"
+      "generate": "Generate",
+      "generatingTitle": "Generating your personalized plan…",
+      "generatingSubtitle": "This may take up to 15 seconds"
     },
     "slider": {
       "noPain": "No pain",
