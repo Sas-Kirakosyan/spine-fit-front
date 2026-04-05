@@ -23,7 +23,7 @@ import { QuizSlider } from "@/components/Quiz/QuizSlider";
 import {
   loadPlanFromLocalStorage,
   savePlanToLocalStorage,
-} from "@/utils/planGenerator";
+} from "@/storage/planStorage";
 import {
   shouldShowPainTracking,
   getStoredPainStatus,

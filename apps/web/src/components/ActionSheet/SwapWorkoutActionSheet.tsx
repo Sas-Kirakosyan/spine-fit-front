@@ -1,10 +1,8 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
-import {
-  type GeneratedPlan,
-  loadPlanFromLocalStorage,
-} from "@/utils/planGenerator";
+import type { GeneratedPlan } from "@spinefit/shared";
+import { loadPlanFromLocalStorage } from "@/storage/planStorage";
 import type { SavedProgram } from "@/types/workout";
 
 interface SwapWorkoutActionSheetProps {

@@ -1,17 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
-import { View, Text, Pressable, ScrollView, Switch, Alert, Modal, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, ScrollView, Switch, Modal } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
-import type { PlanSettings, PlanFieldId, EquipmentCategory, GeneratedPlan, QuizAnswers, Exercise, FinishedWorkoutSummary } from "@spinefit/shared";
-import { planFieldsConfig, generateTrainingPlan } from "@spinefit/shared";
-import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
+import type { PlanSettings, PlanFieldId, EquipmentCategory } from "@spinefit/shared";
+import { planFieldsConfig } from "@spinefit/shared";
 import type { WorkoutStackParamList } from "../navigation/types";
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon, ThreeDotsIcon } from "../components/icons/Icons";
 import { loadPlanSettings, savePlanSettings } from "../storage/planSettingsStorage";
-import { savePlanToLocalStorage } from "../storage/planStorage";
 import { storage } from "../storage/storageAdapter";
-import { useHistoryStore } from "../store/historyStore";
 
 type Nav = NativeStackNavigationProp<WorkoutStackParamList>;
 
@@ -33,15 +30,12 @@ function SectionTitle({ title }: { title: string }) {
 
 export default function MyPlanScreen() {
   const navigation = useNavigation<Nav>();
-  const { workoutHistory } = useHistoryStore();
 
   const [planSettings, setPlanSettings] = useState<PlanSettings | null>(null);
   const [bodyweightOnly, setBodyweightOnly] = useState(false);
   const [warmUpSets, setWarmUpSets] = useState(true);
   const [circuitsAndSupersets, setCircuitsAndSupersets] = useState(true);
   const [selectedCount, setSelectedCount] = useState(0);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedPlan, setGeneratedPlan] = useState<GeneratedPlan | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentField, setCurrentField] = useState<PlanFieldId | null>(null);
   const [modalSelectedIndex, setModalSelectedIndex] = useState<number | null>(null);
@@ -83,39 +77,6 @@ export default function MyPlanScreen() {
     }
     setModalVisible(false);
     setCurrentField(null);
-  };
-
-  const handleGeneratePlan = async () => {
-    if (!planSettings) return;
-    setIsGenerating(true);
-    try {
-      const quizData = await storage.getJSON<QuizAnswers>("quizAnswers");
-      if (!quizData) {
-        Alert.alert("Quiz Required", "Please complete the onboarding quiz first.");
-        setIsGenerating(false);
-        return;
-      }
-      const eqData = (await storage.getJSON<EquipmentCategory[]>("equipmentData")) ?? [];
-      const available = eqData.flatMap((c) => c.items.filter((i) => i.selected).map((i) => i.name));
-      const finalEquipment =
-        available.length > 0 ? available
-        : eqData.length === 0
-          ? Array.from(new Set((allExercisesData as Exercise[]).map((ex) => ex.equipment))).filter((eq) => eq && eq !== "none")
-          : ["bodyweight"];
-
-      const plan = generateTrainingPlan(
-        allExercisesData as Exercise[], planSettings, quizData,
-        bodyweightOnly ? ["bodyweight"] : finalEquipment,
-        workoutHistory as FinishedWorkoutSummary[]
-      );
-      await savePlanToLocalStorage(plan);
-      setGeneratedPlan(plan);
-      Alert.alert("Plan Generated!", `${plan.name}\n\n${plan.workoutDays.length} workouts/week, ${plan.workoutDays[0]?.exercises.length || 0} exercises/day.`);
-    } catch {
-      Alert.alert("Error", "Failed to generate plan. Check settings and try again.");
-    } finally {
-      setIsGenerating(false);
-    }
   };
 
   if (!planSettings) return null;
@@ -201,28 +162,7 @@ export default function MyPlanScreen() {
           </View>
         </View>
 
-        {generatedPlan && (
-          <View>
-            <SectionTitle title="GENERATED PLAN" />
-            <View className="rounded-2xl bg-[#1B1E2B] p-4 border border-white/5 gap-3">
-              <Text className="text-lg font-semibold text-white">{generatedPlan.name}</Text>
-              <Text className="text-sm text-white/40">Created: {new Date(generatedPlan.createdAt).toLocaleDateString()}</Text>
-              {generatedPlan.workoutDays.map((day) => (
-                <View key={day.dayNumber} className="border-t border-white/10 pt-3">
-                  <Text className="text-base font-medium text-white">{day.dayName}</Text>
-                  <Text className="text-sm text-white/40">{day.exercises.length} exercises</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
       </ScrollView>
-
-      <View className="px-4 pb-6 pt-2">
-        <Pressable onPress={handleGeneratePlan} disabled={isGenerating} className={`h-[50px] rounded-2xl items-center justify-center ${isGenerating ? "bg-[#e77d10]/50" : "bg-[#e77d10]"}`}>
-          {isGenerating ? <ActivityIndicator color="white" /> : <Text className="text-white font-semibold text-lg">Generate Plan</Text>}
-        </Pressable>
-      </View>
 
       <Modal visible={modalVisible} animationType="slide" transparent>
         <View className="flex-1 bg-black/60 justify-end">

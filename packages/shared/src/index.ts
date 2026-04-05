@@ -1,4 +1,5 @@
 // Types
+export type { GeneratedPlan, WorkoutDay } from "./types/plan";
 export type { ExerciseRestriction, ExerciseMedia, Exercise } from "./types/exercise";
 export type { SetField, ExerciseSetRow, ExerciseSetProps, ExerciseSetsPageProps, WorkoutPageProps, SavedWorkout, TrainingDay, SavedProgram, ExerciseDetailsProps, ExerciseActionSheetProps, FinishedWorkoutSummary, ActiveWorkoutPageProps } from "./types/workout";
 export type { PlanFieldId, FieldConfig, PlanSettings } from "./types/planSettings";
@@ -9,19 +10,6 @@ export type { ChatMessageRole, ChatMessage, ChatState } from "./types/chat";
 export type { LoginFormData, RegistrationFormData, LoginProps, RegistrationProps } from "./types/auth";
 export type { Page } from "./types/navigation";
 export type { HomePageProps, ProgressPageProps, HistoryPageProps, MyPlanPageProps, AvailableEquipmentPageProps, AIPageProps, SettingsPageProps, ExerciseProgressPageProps } from "./types/pages";
-
-// Utils - planGenerator
-export type { GeneratedPlan, AlternativeSplit } from "./utils/planGenerator";
-export type { WorkoutDay } from "./utils/planGenerator";
-export { generateTrainingPlan, generateAlternativeSplitsForPlan, applyVolumeSafetyToLoadedPlan, getTodaysWorkout } from "./utils/planGenerator";
-
-// Utils - planGeneratorHelpers
-export type { SourceOnboarding, SplitType, AlternativeSplitType, WorkoutSplit, DayStructure } from "./utils/planGeneratorHelpers";
-export { determineWorkoutSplit, validateFullBodyABSplit, enforceFullBodyABRequirements, buildSourceOnboarding } from "./utils/planGeneratorHelpers";
-
-// Utils - splitScheduler
-export type { WeeklySchedule } from "./utils/splitScheduler";
-export { createWeeklySchedule, mapSplitToMuscleGroups, assignExercisesToDays, getMissingMuscleGroups } from "./utils/splitScheduler";
 
 // Utils - volumeCalculator
 export type { VolumeParameters, VolumeRecommendation } from "./utils/volumeCalculator";

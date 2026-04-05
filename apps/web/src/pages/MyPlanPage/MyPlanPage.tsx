@@ -17,15 +17,6 @@ import {
   loadPlanSettings,
   savePlanSettings,
 } from "@/types/planSettings";
-import {
-  generateTrainingPlan,
-  savePlanToLocalStorage,
-  type GeneratedPlan,
-} from "@/utils/planGenerator";
-import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
-import type { Exercise } from "@/types/exercise";
-import type { FinishedWorkoutSummary } from "@/types/workout";
-import type { QuizAnswers } from "@/types/quiz";
 
 function MyPlanPage({
   onNavigateBack,
@@ -40,10 +31,6 @@ function MyPlanPage({
     useState<PlanSettings>(loadPlanSettings());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentField, setCurrentField] = useState<PlanFieldId | null>(null);
-  const [generatedPlan, setGeneratedPlan] = useState<GeneratedPlan | null>(
-    null,
-  );
-  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     const calculateSelectedCount = () => {
@@ -106,86 +93,6 @@ function MyPlanPage({
   const handleModalClose = () => {
     setIsModalOpen(false);
     setCurrentField(null);
-  };
-
-  const handleGeneratePlan = () => {
-    setIsGenerating(true);
-
-    try {
-      // Load quiz answers from localStorage
-      const quizDataString = localStorage.getItem("quizAnswers");
-      const quizData: QuizAnswers | null = quizDataString
-        ? JSON.parse(quizDataString)
-        : null;
-
-      // Validate that quiz/onboarding was completed
-      if (!quizData) {
-        alert(t("myPlanPage.alerts.quizRequired"));
-        setIsGenerating(false);
-        return;
-      }
-
-      // Load equipment data
-      const equipmentDataString = localStorage.getItem("equipmentData");
-      const equipmentData: EquipmentCategory[] = equipmentDataString
-        ? JSON.parse(equipmentDataString)
-        : [];
-
-      // Extract available equipment names from configured equipment
-      const availableEquipment = equipmentData.flatMap((category) =>
-        category.items.filter((item) => item.selected).map((item) => item.name),
-      );
-
-      // If no equipment configured yet, assume all equipment exists (extract from exercise database)
-      // Once user configures equipment preferences, only selected equipment will be used
-      const finalEquipment =
-        availableEquipment.length > 0
-          ? availableEquipment
-          : equipmentData.length === 0
-            ? // No equipment data configured - assume all equipment exists
-              Array.from(
-                new Set(
-                  (allExercisesData as Exercise[]).map((ex) => ex.equipment),
-                ),
-              ).filter((eq) => eq && eq !== "none")
-            : ["bodyweight"];
-
-      // Load workout history
-      const historyString = localStorage.getItem("workoutHistory");
-      const workoutHistory: FinishedWorkoutSummary[] = historyString
-        ? JSON.parse(historyString)
-        : [];
-
-      // Generate the plan
-      const plan = generateTrainingPlan(
-        allExercisesData as Exercise[],
-        planSettings,
-        quizData,
-        bodyweightOnly ? ["bodyweight"] : finalEquipment,
-        workoutHistory,
-      );
-
-      console.log("Generated plan:", plan);
-
-      // Save to localStorage
-      savePlanToLocalStorage(plan);
-
-      // Update state
-      setGeneratedPlan(plan);
-
-      alert(
-        t("myPlanPage.alerts.planGenerated", {
-          name: plan.name,
-          workouts: plan.workoutDays.length,
-          exercises: plan.workoutDays[0]?.exercises.length || 0,
-        }),
-      );
-    } catch (error) {
-      console.error("Error generating plan:", error);
-      alert(t("myPlanPage.alerts.generateFailed"));
-    } finally {
-      setIsGenerating(false);
-    }
   };
 
   return (
@@ -450,73 +357,6 @@ function MyPlanPage({
           </div>
         </div>
 
-        {/* Generate Plan Button */}
-        <div className="flex justify-center items-center mx-2.5">
-          <Button
-            onClick={handleGeneratePlan}
-            disabled={isGenerating}
-            className="w-full max-w-[380px] fixed bottom-0 left-1/2 -translate-x-1/2 z-50 rounded-[10px] bg-main h-[46px] text-white font-semibold text-lg"
-          >
-            {isGenerating ? t("myPlanPage.generating") : t("myPlanPage.generatePlan")}
-          </Button>
-        </div>
-
-        {/* Generated Plan Preview */}
-        {generatedPlan && (
-          <div className="flex flex-col gap-3">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">
-              {t("myPlanPage.sections.generatedPlan")}
-            </h2>
-            <div className="rounded-[14px] bg-[#1B1E2B]/90 p-4 shadow-xl ring-1 ring-white/5">
-              <div className="space-y-3">
-                <div>
-                  <p className="text-lg font-semibold text-white">
-                    {generatedPlan.name}
-                  </p>
-                  <p className="text-sm text-white/60 mt-1">
-                    {t("myPlanPage.generatedPlan.created")}{" "}
-                    {new Date(generatedPlan.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-
-                {generatedPlan.workoutDays.map((day) => (
-                  <div
-                    key={day.dayNumber}
-                    className="border-t border-white/10 pt-3"
-                  >
-                    <p className="text-base font-medium text-white mb-1">
-                      {day.dayName}
-                    </p>
-                    <p className="text-sm text-white/60">
-                      {t("myPlanPage.generatedPlan.exercisesPerDay", {
-                        count: day.exercises.length,
-                        sets: day.exercises[0]?.sets || 0,
-                      })}
-                    </p>
-                  </div>
-                ))}
-
-                {generatedPlan.missingMuscleGroups.length > 0 && (
-                  <div className="mt-3 p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
-                    <p className="text-sm font-medium text-yellow-500 mb-1">
-                      {t("myPlanPage.generatedPlan.missingMuscleGroups")}
-                    </p>
-                    <p className="text-xs text-white/60">
-                      {generatedPlan.missingMuscleGroups.join(", ")}
-                    </p>
-                    {generatedPlan.alternativeExercises.length > 0 && (
-                      <p className="text-xs text-white/60 mt-2">
-                        {t("myPlanPage.generatedPlan.alternativeExercises", {
-                          count: generatedPlan.alternativeExercises.length,
-                        })}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Selection Modal */}

@@ -21,7 +21,7 @@ import {
 import {
   loadPlanFromLocalStorage,
   savePlanToLocalStorage,
-} from "@/utils/planGenerator";
+} from "@/storage/planStorage";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import {
   getAllReplacementExercises,

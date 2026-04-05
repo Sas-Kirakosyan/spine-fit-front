@@ -3,7 +3,7 @@ import type { Exercise } from "@/types/exercise";
 import {
   loadPlanFromLocalStorage,
   savePlanToLocalStorage,
-} from "@/utils/planGenerator";
+} from "@/storage/planStorage";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 
 interface UseExerciseManagementReturn {

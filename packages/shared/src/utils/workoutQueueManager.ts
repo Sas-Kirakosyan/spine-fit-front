@@ -1,4 +1,4 @@
-import type { GeneratedPlan, WorkoutDay } from "./planGenerator";
+import type { GeneratedPlan, WorkoutDay } from "../types/plan";
 
 /**
  * Get the next available workout (regardless of day)

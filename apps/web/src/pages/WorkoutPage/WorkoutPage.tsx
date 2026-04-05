@@ -15,16 +15,11 @@ import {
   type SwapDurationOption,
 } from "@/pages/WorkoutPage/ReplaceExerciseModal";
 import {
-  generateTrainingPlan,
   savePlanToLocalStorage,
   loadPlanFromLocalStorage,
-  type GeneratedPlan,
-} from "@/utils/planGenerator";
+} from "@/storage/planStorage";
+import type { GeneratedPlan } from "@spinefit/shared";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
-import { loadPlanSettings } from "@/types/planSettings";
-import type { EquipmentCategory } from "@/types/equipment";
-import type { QuizAnswers } from "@/types/quiz";
-import type { FinishedWorkoutSummary } from "@/types/workout";
 import { ReplaceIcon, TrashIcon } from "@/components/Icons/Icons";
 import {
   getAllReplacementExercises,
@@ -343,73 +338,7 @@ function WorkoutPage({
           return;
         }
 
-        // No existing plan, check if user completed quiz
-        const quizDataString = localStorage.getItem("quizAnswers");
-        const quizData: QuizAnswers | null = quizDataString ? JSON.parse(quizDataString) : null;
-
-        if (!quizData) {
-          setIsLoadingPlan(false);
-          return;
-        }
-
-        // User completed onboarding, generate plan
-        const planSettings = loadPlanSettings();
-
-        // Load equipment data
-        const equipmentDataString = localStorage.getItem("equipmentData");
-        const equipmentData: EquipmentCategory[] = equipmentDataString
-          ? JSON.parse(equipmentDataString)
-          : [];
-
-        // Extract available equipment names from configured equipment
-        const availableEquipment = equipmentData.flatMap((category) =>
-          category.items.filter((item) => item.selected).map((item) => item.name)
-        );
-
-        // If no equipment configured yet, assume all equipment exists (extract from exercise database)
-        // Once user configures equipment preferences, only selected equipment will be used
-        const finalEquipment =
-          availableEquipment.length > 0
-            ? availableEquipment
-            : equipmentData.length === 0
-              ? // No equipment data configured - assume all equipment exists
-                Array.from(
-                  new Set((allExercisesData as Exercise[]).map((ex) => ex.equipment))
-                ).filter((eq) => eq && eq !== "none")
-              : ["bodyweight"];
-
-        // Load workout history
-        const historyString = localStorage.getItem("workoutHistory");
-        const workoutHistory: FinishedWorkoutSummary[] = historyString
-          ? JSON.parse(historyString)
-          : [];
-
-        // Check if bodyweight-only mode is enabled
-        const bodyweightOnly = localStorage.getItem("bodyweightOnly") === "true";
-
-        // Generate the plan
-        const plan = generateTrainingPlan(
-          allExercisesData as Exercise[],
-          planSettings,
-          quizData,
-          bodyweightOnly ? ["bodyweight"] : finalEquipment,
-          workoutHistory
-        );
-
-        // Save the generated plan
-        savePlanToLocalStorage(plan);
-        console.log("Plan generated after onboarding:", plan);
-
-        // Load next available workout exercises from the plan
-        const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
-        if (nextWorkout && nextWorkout.exercises.length > 0) {
-          setWorkoutExercises(nextWorkout.exercises);
-        } else {
-          // Fallback to first workout day if no workout is found
-          if (plan.workoutDays.length > 0 && plan.workoutDays[0].exercises.length > 0) {
-            setWorkoutExercises(plan.workoutDays[0].exercises);
-          }
-        }
+        // No existing plan — user needs to generate one via the AI page
       } catch (error) {
         console.error("Error initializing workout plan:", error);
       } finally {
@@ -562,42 +491,6 @@ function WorkoutPage({
         // Restore cached plan
         localStorage.setItem("generatedPlan", cachedPlan);
         console.log(`🔄 Restored cached ${newMode} plan`);
-      } else if (newMode === "local") {
-        // Generate local plan
-        const quizDataString = localStorage.getItem("quizAnswers");
-        const quizData: QuizAnswers | null = quizDataString ? JSON.parse(quizDataString) : null;
-        const planSettings = loadPlanSettings();
-        const equipmentDataString = localStorage.getItem("equipmentData");
-        const equipmentData: EquipmentCategory[] = equipmentDataString
-          ? JSON.parse(equipmentDataString)
-          : [];
-        const availableEquipment = equipmentData.flatMap((category) =>
-          category.items.filter((item) => item.selected).map((item) => item.name)
-        );
-        const finalEquipment =
-          availableEquipment.length > 0
-            ? availableEquipment
-            : equipmentData.length === 0
-              ? Array.from(
-                  new Set((allExercisesData as Exercise[]).map((ex) => ex.equipment))
-                ).filter((eq) => eq && eq !== "none")
-              : ["bodyweight"];
-        const bodyweightOnly = localStorage.getItem("bodyweightOnly") === "true";
-        const historyString = localStorage.getItem("workoutHistory");
-        const workoutHistory: FinishedWorkoutSummary[] = historyString
-          ? JSON.parse(historyString)
-          : [];
-
-        const plan = generateTrainingPlan(
-          allExercisesData as Exercise[],
-          planSettings,
-          quizData,
-          bodyweightOnly ? ["bodyweight"] : finalEquipment,
-          workoutHistory
-        );
-        savePlanToLocalStorage(plan);
-        localStorage.setItem(`generatedPlan_${newMode}`, JSON.stringify(plan));
-        console.log("🔄 Generated new local plan");
       } else {
         // newMode === "ai" — fetch from backend
         const quizDataString = localStorage.getItem("quizAnswers");

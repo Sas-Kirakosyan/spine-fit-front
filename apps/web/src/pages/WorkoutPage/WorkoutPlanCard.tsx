@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SwapWorkoutActionSheet } from "../../components/ActionSheet/SwapWorkoutActionSheet";
-import type { GeneratedPlan } from "@/utils/planGenerator";
+import type { GeneratedPlan } from "@spinefit/shared";
 import type { SavedProgram } from "@/types/workout";
 
 interface WorkoutPlanCardProps {
@@ -18,9 +18,6 @@ interface WorkoutPlanCardProps {
   onSelectSavedProgram?: (program: SavedProgram) => void;
   onEditSavedProgram?: (program: SavedProgram) => void;
   onSelectPlanDay?: (dayIndex: number) => void;
-  planMode?: "ai" | "local";
-  onPlanModeSwitch?: (mode: "ai" | "local") => void;
-  isSwitchingMode?: boolean;
 }
 
 export function WorkoutPlanCard({
@@ -37,9 +34,6 @@ export function WorkoutPlanCard({
   onSelectSavedProgram,
   onEditSavedProgram,
   onSelectPlanDay,
-  planMode = "ai",
-  onPlanModeSwitch,
-  isSwitchingMode = false,
 }: WorkoutPlanCardProps) {
   const { t } = useTranslation();
   const [showSwapSheet, setShowSwapSheet] = useState(false);
@@ -105,34 +99,6 @@ export function WorkoutPlanCard({
               </svg>
             </button>
           </div>
-          {onPlanModeSwitch && (
-            <div className="flex mt-5 mr-5 rounded-full border border-white/30 overflow-hidden text-md font-medium">
-              <button
-                type="button"
-                onClick={() => onPlanModeSwitch("ai")}
-                disabled={isSwitchingMode}
-                className={`px-2.5 py-1 transition-colors ${
-                  planMode === "ai"
-                    ? "bg-main text-white"
-                    : "bg-transparent text-white/60"
-                }`}
-              >
-                {t("workoutPage.workoutPlanCard.aiMode")}
-              </button>
-              <button
-                type="button"
-                onClick={() => onPlanModeSwitch("local")}
-                disabled={isSwitchingMode}
-                className={`px-2.5 py-1 transition-colors ${
-                  planMode === "local"
-                    ? "bg-main text-white"
-                    : "bg-transparent text-white/60"
-                }`}
-              >
-                {t("workoutPage.workoutPlanCard.localMode")}
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Main content */}

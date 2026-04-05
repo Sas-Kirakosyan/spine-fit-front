@@ -1,10 +1,9 @@
-import type { GeneratedPlan } from "./planGenerator";
-import type { WorkoutDay } from "./splitScheduler";
+import type { GeneratedPlan, WorkoutDay } from "@spinefit/shared";
 import type { FinishedWorkoutSummary } from "@/types/workout";
 import type { ExerciseSetRow } from "@/types/workout";
 import type { Exercise } from "@/types/exercise";
 import { calculateWorkoutVolume } from "./workoutStats";
-import { loadPlanFromLocalStorage } from "./planGenerator";
+import { loadPlanFromLocalStorage } from "@/storage/planStorage";
 
 /**
  * Данные о прогрессии для упражнения

@@ -6,9 +6,8 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
-import type { Exercise, QuizAnswers, EquipmentCategory, FinishedWorkoutSummary } from "@spinefit/shared";
+import type { Exercise } from "@spinefit/shared";
 import {
-  generateTrainingPlan,
   getNextAvailableWorkout,
   getAllReplacementExercises,
   getSuggestedReplacementExercises,
@@ -62,51 +61,7 @@ export default function WorkoutScreen() {
         return;
       }
 
-      // No plan — try generating from quiz
-      const quizDataString = await storage.getItem("quizAnswers");
-      if (!quizDataString) return;
-
-      const quizData: QuizAnswers = JSON.parse(quizDataString);
-      const planSettingsStr = await storage.getItem("planSettings");
-      const planSettings = planSettingsStr ? JSON.parse(planSettingsStr) : {};
-
-      const equipmentDataStr = await storage.getItem("equipmentData");
-      const equipmentData: EquipmentCategory[] = equipmentDataStr ? JSON.parse(equipmentDataStr) : [];
-
-      const availableEquipment = equipmentData.flatMap((cat) =>
-        cat.items.filter((item) => item.selected).map((item) => item.name)
-      );
-      const finalEquipment =
-        availableEquipment.length > 0
-          ? availableEquipment
-          : equipmentData.length === 0
-            ? Array.from(new Set(allExercises.map((ex) => ex.equipment))).filter((eq) => eq && eq !== "none")
-            : ["bodyweight"];
-
-      const historyStr = await storage.getItem("workoutHistory");
-      const history: FinishedWorkoutSummary[] = historyStr ? JSON.parse(historyStr) : [];
-
-      const bodyweightOnly = (await storage.getItem("bodyweightOnly")) === "true";
-
-      const plan = generateTrainingPlan(
-        allExercises,
-        planSettings,
-        quizData,
-        bodyweightOnly ? ["bodyweight"] : finalEquipment,
-        history
-      );
-
-      await savePlanToLocalStorage(plan);
-      setPlanName(plan.name || "My Workout Plan");
-
-      const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
-      if (nextWorkout && nextWorkout.exercises.length > 0) {
-        setWorkoutExercises(nextWorkout.exercises);
-        setCurrentDayName(nextWorkout.dayName);
-      } else if (plan.workoutDays.length > 0) {
-        setWorkoutExercises(plan.workoutDays[0].exercises);
-        setCurrentDayName(plan.workoutDays[0].dayName);
-      }
+      // No plan — user needs to generate one via the AI screen
     } catch (error) {
       console.error("Error loading plan:", error);
     } finally {
