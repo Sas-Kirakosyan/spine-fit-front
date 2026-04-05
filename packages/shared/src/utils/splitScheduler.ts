@@ -55,7 +55,8 @@ function distributeWorkoutDays(workoutsPerWeek: number): number[] {
  */
 export function mapSplitToMuscleGroups(
   split: string,
-  workoutsPerWeek: number
+  workoutsPerWeek: number,
+  splitType?: string
 ): string[][] {
   const splitLower = split.toLowerCase();
 
@@ -105,6 +106,17 @@ export function mapSplitToMuscleGroups(
         ["quads", "glutes", "hamstrings", "core_stabilizers"], // Lower 1
         ["chest", "lats", "upper_back", "triceps", "biceps"], // Upper 2
         ["quads", "glutes", "hamstrings", "core_stabilizers"], // Lower 2
+      ];
+    }
+    // 3-day Alternating ULU/LUL (6 workout days: Upper A / Lower A / Upper B / Lower B / Upper C / Lower C)
+    if (workoutsPerWeek === 3 && splitType === "UPPER_LOWER_ALTERNATING") {
+      return [
+        ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps"], // Upper A
+        ["quads", "glutes", "hamstrings", "core_stabilizers"],                              // Lower A (quad-led)
+        ["lats", "upper_back", "rear_delts", "biceps", "chest", "front_delts", "triceps"], // Upper B
+        ["glutes", "hamstrings", "quads", "core_stabilizers"],                              // Lower B (glute-led)
+        ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps"], // Upper C
+        ["quads", "glutes", "hamstrings", "core_stabilizers"],                              // Lower C
       ];
     }
     // 3-day Upper/Lower/Upper (ULU)
@@ -160,6 +172,7 @@ export function assignExercisesToDays(
   const dayNamesBySplit: Record<string, string[]> = {
     "push/pull/legs": ["Push A", "Pull A", "Legs A", "Push B", "Pull B", "Legs B", "Push C"],
     "upper/lower": ["Upper A", "Lower A", "Upper B", "Lower B", "Upper C", "Lower C", "Upper D"],
+    "lower/upper/lower": ["Lower A", "Upper", "Lower B"],
     "full body": Array(7).fill("Full Body"),
   };
 

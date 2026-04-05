@@ -40,7 +40,7 @@ export interface SourceOnboarding {
   split?: WorkoutSplit;
 }
 
-export type SplitType = "FULL_BODY_ABC" | "FULL_BODY_AB" | "UPPER_LOWER_UPPER" | "PUSH_PULL_LEGS" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "BRO_SPLIT" | "FRESH_MUSCLES";
+export type SplitType = "FULL_BODY_ABC" | "FULL_BODY_AB" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_ALTERNATING" | "PUSH_PULL_LEGS" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "BRO_SPLIT" | "FRESH_MUSCLES" | "LOWER_UPPER_LOWER";
 
 export type AlternativeSplitType = "BRO_SPLIT" | "PPL" | "FRESH_MUSCLES";
 
@@ -85,14 +85,17 @@ export function determineWorkoutSplit(
 
     if (experience === "Intermediate") {
       return {
-        type: "UPPER_LOWER_UPPER",
-        name: "Upper / Lower / Upper (ULU)",
+        type: "UPPER_LOWER_ALTERNATING",
+        name: "Upper / Lower (Alternating)",
         days: [
-          { dayLabel: "Day 1", focus: ["Upper body (push + pull + arms)"] },
-          { dayLabel: "Day 2", focus: ["Lower body (quads + glutes + hamstrings + core)"] },
-          { dayLabel: "Day 3", focus: ["Upper body (pull emphasis + push)"] },
+          { dayLabel: "Week A – Day 1", focus: ["Upper body (push + pull + arms)"] },
+          { dayLabel: "Week A – Day 2", focus: ["Lower body (glutes + quads + hamstrings + core)"] },
+          { dayLabel: "Week A – Day 3", focus: ["Upper body (pull emphasis + push)"] },
+          { dayLabel: "Week B – Day 1", focus: ["Lower body (glute emphasis + hamstrings)"] },
+          { dayLabel: "Week B – Day 2", focus: ["Upper body (push + pull)"] },
+          { dayLabel: "Week B – Day 3", focus: ["Lower body (quads + glutes + core)"] },
         ],
-        rationale: "Better volume control, feels like real bodybuilding, still back-friendly, easy progression tracking",
+        rationale: "Alternates ULU / LUL weeks — trains lower body twice every other week for glute-focused goals with full upper body maintenance",
       };
     }
 

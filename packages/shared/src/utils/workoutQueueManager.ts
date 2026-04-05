@@ -18,7 +18,8 @@ export function getNextAvailableWorkout(
     splitType === "FULL_BODY_AB" ||
     splitType === "FULL_BODY_ABC" ||
     splitType === "UPPER_LOWER" ||
-    splitType === "UPPER_LOWER_UPPER";
+    splitType === "UPPER_LOWER_UPPER" ||
+    splitType === "UPPER_LOWER_ALTERNATING";
 
   if (isSequentialSplit) {
     // For sequential splits: rotate through workouts in order based on completion count

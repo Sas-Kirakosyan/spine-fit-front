@@ -14,7 +14,7 @@ export type { WorkoutDay };
 export interface GeneratedPlan {
   id: string;
   name: string;
-  splitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES"; // Identifies the plan type
+  splitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_ALTERNATING" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES" | "LOWER_UPPER_LOWER"; // Identifies the plan type
   createdAt: string;
   settings: PlanSettings;
   sourceOnboarding?: SourceOnboarding;
@@ -26,7 +26,7 @@ export interface GeneratedPlan {
 export interface AlternativeSplit {
   id: string;
   name: string;
-  splitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES";
+  splitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_ALTERNATING" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES" | "LOWER_UPPER_LOWER";
   description: string;
   workoutDays: WorkoutDay[];
   createdAt: string;
@@ -171,7 +171,35 @@ function generateAlternativeSplits(
       });
     }
 
-    // Alternative 2: Push/Pull/Legs (3+ days/week, pain-free users)
+    // Alternative 2: Lower/Upper/Lower — legs & glutes focus (3+ days/week)
+    if (frequency >= 3) {
+      const lulMuscleGroups: string[][] = [
+        // Lower A — quad-led (squats, leg press prioritised)
+        ["quads", "glutes", "hamstrings", "core_stabilizers", "abdominals"],
+        // Upper
+        ["chest", "lats", "upper_back", "front_delts", "rear_delts", "triceps", "biceps"],
+        // Lower B — glute/hamstring-led (hip hinge, RDL, hip thrust prioritised)
+        ["glutes", "hamstrings", "quads", "core_stabilizers", "abdominals"],
+      ].slice(0, Math.min(frequency, 3));
+
+      const lulWorkoutDays = assignExercisesToDays(
+        allExercises,
+        lulMuscleGroups,
+        4,
+        "Lower/Upper/Lower"
+      );
+
+      alternatives.push({
+        id: generatePlanId(),
+        name: "Lower / Upper / Lower",
+        splitType: "LOWER_UPPER_LOWER",
+        description: "3 days per week — Lower A, Upper, Lower B rotation. 2× lower body volume per week for legs & glutes focus.",
+        workoutDays: lulWorkoutDays,
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    // Alternative 3: Push/Pull/Legs (3+ days/week, pain-free users)
     const isPainMinimal = painProfile.painStatus === "Healthy" || painProfile.painStatus === "Recovered";
     if (frequency >= 3 && isPainMinimal) {
       const pplMuscleGroups = [
@@ -366,10 +394,18 @@ export function generateTrainingPlan(
   // 7. Parse workouts per week from plan settings
   const workoutsPerWeek = parseWorkoutsPerWeek(effectivePlanSettings.workoutsPerWeek);
 
+  // Build sourceOnboarding early so we have the user-selected split type for muscle group mapping
+  const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
+  // Persist equipment list on sourceOnboarding so alternative split generation can use it
+  if (sourceOnboarding) {
+    sourceOnboarding.availableEquipment = availableEquipment;
+  }
+
   // 9. Map training split to muscle groups per day
   const muscleGroupsByDay = mapSplitToMuscleGroups(
     effectivePlanSettings.trainingSplit,
-    workoutsPerWeek
+    workoutsPerWeek,
+    sourceOnboarding?.split?.type
   );
 
   // 10. Assign exercises to workout days
@@ -379,13 +415,6 @@ export function generateTrainingPlan(
     exercisesPerWorkout,
     effectivePlanSettings.trainingSplit
   );
-
-  // Build sourceOnboarding early so we have the user-selected split type for restructuring
-  const sourceOnboarding = buildSourceOnboarding(quizAnswers, effectivePlanSettings);
-  // Persist equipment list on sourceOnboarding so alternative split generation can use it
-  if (sourceOnboarding) {
-    sourceOnboarding.availableEquipment = availableEquipment;
-  }
 
   // 10.1. Restructure 3-day Full Body splits with rotating focus (Push/Lower/Pull)
   // Pass allExercises so it can access unfiltered pulls for Day C
@@ -526,7 +555,7 @@ export function generateTrainingPlan(
   }
 
   // Determine the plan's split type from sourceOnboarding
-  const primarySplitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES" =
+  const primarySplitType: "FULL_BODY_ABC" | "FULL_BODY_AB" | "FULL_BODY_4X" | "UPPER_LOWER_4X" | "UPPER_LOWER_UPPER" | "UPPER_LOWER_ALTERNATING" | "UPPER_LOWER_STRENGTH_HYPERTROPHY" | "PUSH_PULL_LEGS" | "PPL" | "BRO_SPLIT" | "FRESH_MUSCLES" | "LOWER_UPPER_LOWER" =
     sourceOnboarding?.split?.type || "FULL_BODY_AB";
 
   // 12. Apply volume (sets/reps) to final workout days
@@ -1556,8 +1585,9 @@ function restructureThreeDayFullBody(
   allExercises: Exercise[] = [],
   splitType?: string
 ): WorkoutDay[] {
-  // Apply to 3-day Full Body OR 3-day Upper/Lower splits
-  const isThreeDaySplit = workoutsPerWeek === 3 && days.length === 3 &&
+  // Apply to 3-day Full Body OR 3-day Upper/Lower splits (including 6-day alternating variant)
+  const isThreeDaySplit = workoutsPerWeek === 3 &&
+    (days.length === 3 || splitType === "UPPER_LOWER_ALTERNATING") &&
     (trainingSplit === "Full Body" || trainingSplit === "Upper/Lower");
 
   if (!isThreeDaySplit) {
@@ -1627,7 +1657,7 @@ function restructureThreeDayFullBody(
     const unilateralKeywords = ["step-up", "step up", "lunge", "split squat", "single-leg", "single leg"];
     const unilateralLeg = legExercises.find(
       e => unilateralKeywords.some(kw => e.name.toLowerCase().includes(kw)) &&
-           e.id !== nonHingeQuads[0]?.id
+        e.id !== nonHingeQuads[0]?.id
     );
 
     // Hamstring isolation: exclude exercises that also target erector_spinae (Back Hyperextension)
@@ -1684,9 +1714,9 @@ function restructureThreeDayFullBody(
       // Prioritize arm isolation exercises (1-2 muscle groups targeting the preferred arm muscle)
       const armIso = preferArmIsolation
         ? preferred.filter(e =>
-            e.muscle_groups.includes(preferArmIsolation) &&
-            e.muscle_groups.length <= 2
-          )
+          e.muscle_groups.includes(preferArmIsolation) &&
+          e.muscle_groups.length <= 2
+        )
         : [];
       const orderedPool = [...armIso, ...preferred.filter(e => !armIso.includes(e)), ...fallback];
       return dedupeExercises([...exercises, ...orderedPool].slice(0, 5));
@@ -1948,10 +1978,12 @@ function mergePlanSettingsWithQuizAnswers(
     FULL_BODY_AB: "Full Body",
     FULL_BODY_4X: "Full Body",
     UPPER_LOWER_UPPER: "Upper/Lower",
+    UPPER_LOWER_ALTERNATING: "Upper/Lower",
     UPPER_LOWER_4X: "Upper/Lower",
     UPPER_LOWER_STRENGTH_HYPERTROPHY: "Upper/Lower",
     PUSH_PULL_LEGS: "Push/Pull/Legs",
     PPL: "Push/Pull/Legs",
+    LOWER_UPPER_LOWER: "Lower/Upper/Lower",
   };
   const trainingSplit = splitTypeToTrainingSplit[splitResult.type] || planSettings.trainingSplit;
 
