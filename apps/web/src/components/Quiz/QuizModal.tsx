@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import type { QuizModalProps } from "@/types/quiz";
 import type { GeneratedPlan } from "@spinefit/shared";
 import { savePlanToLocalStorage } from "@/storage/planStorage";
+import { savePlanSettings } from "@/storage/planSettingsStorage";
+import type { PlanSettings } from "@/types/planSettings";
 import { questions } from "./questions";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -339,9 +341,12 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
 
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
 
-      const result = await response.json() as { success: boolean; plan: GeneratedPlan };
+      const result = await response.json() as { success: boolean; plan: GeneratedPlan; planSettings: PlanSettings };
       if (result.success && result.plan) {
         savePlanToLocalStorage(result.plan);
+        if (result.planSettings) {
+          savePlanSettings(result.planSettings);
+        }
       }
 
       setCurrentQuestion(0);

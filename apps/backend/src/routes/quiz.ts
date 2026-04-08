@@ -248,4 +248,76 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+router.post("/regenerate", async (req: Request, res: Response) => {
+  const startTime = Date.now();
+  console.log("\n========== POST /api/quiz/regenerate ==========");
+  console.log("[REQ] Settings body:", JSON.stringify(req.body, null, 2));
+
+  try {
+    const settings = req.body as ParsedQuizData;
+
+    if (!settings.goal || !settings.experience || !settings.workoutsPerWeek) {
+      console.log("[REQ] ❌ Invalid settings — missing required fields");
+      return res.status(400).json({ error: "Invalid settings: goal, experience, and workoutsPerWeek are required" });
+    }
+
+    // Ensure defaults for fields that ParsedQuizData requires but PlanSettings may omit
+    const parsed: ParsedQuizData = {
+      goal: settings.goal,
+      workoutsPerWeek: settings.workoutsPerWeek,
+      duration: settings.duration,
+      durationRange: settings.durationRange ?? settings.duration,
+      experience: settings.experience,
+      trainingSplit: settings.trainingSplit,
+      exerciseVariability: settings.exerciseVariability ?? "Balanced",
+      units: settings.units ?? "kg",
+      cardio: settings.cardio ?? "Off",
+      stretching: settings.stretching ?? "Off",
+      gender: settings.gender,
+      height: settings.height,
+      heightUnit: settings.heightUnit ?? "cm",
+      weight: settings.weight,
+      weightUnit: settings.weightUnit ?? "kg",
+      dateOfBirth: settings.dateOfBirth,
+      bodyType: settings.bodyType,
+      painStatus: settings.painStatus,
+      painLocation: settings.painLocation,
+      ...(Number.isFinite(settings.painLevel) && { painLevel: settings.painLevel }),
+      painTriggers: settings.painTriggers,
+      canSquat: settings.canSquat,
+      additionalNotes: settings.additionalNotes,
+    };
+
+    console.log("\n[PARSED] Regenerate settings:\n", JSON.stringify(parsed, null, 2));
+
+    const filteredExercises = prepareExercisesForPrompt(
+      allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
+      parsed.painStatus,
+      { experience: parsed.experience, painTriggers: parsed.painTriggers },
+    );
+    console.log(`[FILTER] ${filteredExercises.length} exercises sent to AI (from ${allExercisesRaw.length} total)`);
+
+    const plan = await generatePlan(parsed, filteredExercises, allExercisesRaw);
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    console.log(`[AI] ✅ Done in ${elapsed}s`);
+
+    console.log(`\n[AI RESPONSE] Plan: "${plan.name}" | Split: ${plan.splitType}`);
+    console.log(`[AI RESPONSE] ${plan.workoutDays.length} workout days:`);
+    for (const day of plan.workoutDays) {
+      const exerciseNames = day.exercises.map((ex) => (ex as Record<string, unknown>).name ?? `#${(ex as Record<string, unknown>).id}`);
+      console.log(`  Day ${day.dayNumber} (${day.dayName}): ${day.exercises.length} exercises — [${exerciseNames.join(", ")}]`);
+      console.log(`    Muscle groups: [${day.muscleGroups.join(", ")}]`);
+    }
+
+    const responsePayload = { success: true, planSettings: parsed, plan };
+    console.log(`\n[RES] Sending 200 — payload size: ${JSON.stringify(responsePayload).length} bytes`);
+    console.log("========== END /api/quiz/regenerate ==========\n");
+
+    return res.status(200).json(responsePayload);
+  } catch (error) {
+    console.error("Regenerate plan error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default router;
