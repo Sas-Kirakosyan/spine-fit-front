@@ -40,7 +40,7 @@ export function getExerciseEstimated1RM(logs: ExerciseSetRow[]): number {
   if (!logs.length) return 0;
 
   const estimates = logs
-    .filter((set) => set.completed)
+    .filter((set) => set.completed && set.type !== "warmup")
     .map((set) => {
       const weight = Number(set.weight);
       const reps = Number(set.reps);

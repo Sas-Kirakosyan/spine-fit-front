@@ -2,12 +2,14 @@ import type { RefObject } from "react";
 import type { Exercise } from "./exercise";
 
 export type SetField = "reps" | "weight";
+export type SetType = "working" | "warmup";
 
 export interface ExerciseSetRow {
   id: string;
   reps: string;
   weight: string;
   completed: boolean;
+  type?: SetType;
 }
 
 export interface ExerciseSetProps {
@@ -23,6 +25,7 @@ export interface ExerciseSetProps {
   onValueChange: (index: number, field: SetField, value: string) => void;
   onLogSet: (index: number) => void;
   onDelete: (index: number) => void;
+  displayLabel?: string;
 }
 
 export interface ExerciseSetsPageProps {

@@ -670,7 +670,10 @@
       "replace": "Заменить",
       "history": "История",
       "timerOn": "вкл",
-      "timerOff": "выкл"
+      "timerOff": "выкл",
+      "warmup": "Разминка",
+      "warmupOn": "вкл",
+      "warmupOff": "выкл"
     },
     "howTo": "Инструкция",
     "restTimer": {
@@ -691,6 +694,7 @@
       "kg": "Кг"
     },
     "addSet": "+ Добавить подход",
+    "warmupSection": "РАЗМИНКА",
     "painLevel": "Уровень боли",
     "done": "ГОТОВО",
     "skip": "ПРОПУСТИТЬ",

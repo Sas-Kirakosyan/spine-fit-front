@@ -11,7 +11,7 @@ export function calculateExerciseVolume(
   }
 
   return logs.reduce((sum, setEntry) => {
-    if (!setEntry.completed) {
+    if (!setEntry.completed || setEntry.type === "warmup") {
       return sum;
     }
     const reps = Number(setEntry.reps);

@@ -19,9 +19,11 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   onValueChange,
   onLogSet,
   onDelete,
+  displayLabel,
 }) => {
   const { t } = useTranslation();
   const isBodyweight = exercise.equipment === "bodyweight" || exercise.weight_unit === "bodyweight";
+  const isWarmup = setEntry.type === "warmup";
   const [translateX, setTranslateX] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const startXRef = useRef(0);
@@ -153,7 +155,11 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
       {/* Swipeable content */}
       <div
         className={`relative z-10 grid select-none grid-cols-[44px_minmax(0,1fr)_68px_68px_52px] items-center gap-2 rounded-[14px] px-2.5 py-2 transition-colors ${
-          isCompleted ? "bg-[#0F4A05]" : isActive ? "bg-[#171C2F]" : "bg-[#0E1326]"
+          isCompleted
+            ? isWarmup ? "bg-[#3A3A05]" : "bg-[#0F4A05]"
+            : isActive
+              ? isWarmup ? "bg-[#1F1A14]" : "bg-[#171C2F]"
+              : isWarmup ? "bg-[#161210]" : "bg-[#0E1326]"
         }`}
         style={{
           transform: `translateX(${translateX}px)`,
@@ -170,8 +176,10 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="justify-self-center text-center text-[30px] font-semibold leading-none text-main/90 tabular-nums">
-          {index + 1}
+        <div className={`justify-self-center text-center font-semibold leading-none tabular-nums ${
+          isWarmup ? "text-[20px] text-amber-400/80" : "text-[30px] text-main/90"
+        }`}>
+          {displayLabel ?? (index + 1)}
         </div>
         <div className="w-full truncate pr-1 text-left text-[15px] font-medium text-white/70">
           {previousValue}
@@ -203,7 +211,9 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
           aria-label={`Log set ${index + 1}`}
           className={`justify-self-center flex h-11 w-14 ml-4 items-center justify-center rounded-full border transition ${
             isCompleted
-              ? "border-[#69FF2F] bg-[#69FF2F] text-[#061404]"
+              ? isWarmup
+                ? "border-amber-400 bg-amber-400 text-[#140E04]"
+                : "border-[#69FF2F] bg-[#69FF2F] text-[#061404]"
               : canLogSet
                 ? "border-white/20 bg-white/20 text-white hover:bg-white/30"
                 : "border-white/10 bg-white/10 text-white/50"
