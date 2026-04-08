@@ -28,8 +28,8 @@ export function ReplaceExerciseModal({
 }: ReplaceExerciseModalProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"suggested" | "all">("suggested");
-  const [selectedReplacementId, setSelectedReplacementId] = useState<
-    number | null
+  const [selectedReplacement, setSelectedReplacement] = useState<
+    Exercise | null
   >(null);
   const [swapDuration, setSwapDuration] =
     useState<SwapDurationOption>("workout");
@@ -39,14 +39,8 @@ export function ReplaceExerciseModal({
     [activeTab, suggestedExercises, allExercises],
   );
 
-  const selectedReplacement = useMemo(
-    () =>
-      allExercises.find((exercise) => exercise.id === selectedReplacementId),
-    [allExercises, selectedReplacementId],
-  );
-
   useEffect(() => {
-    setSelectedReplacementId(null);
+    setSelectedReplacement(null);
     setSwapDuration("workout");
   }, [replaceExercise.id]);
 
@@ -103,9 +97,9 @@ export function ReplaceExerciseModal({
               <button
                 key={item.id}
                 type="button"
-                onClick={() => setSelectedReplacementId(item.id)}
+                onClick={() => setSelectedReplacement(item)}
                 className={`flex w-full items-center gap-3 rounded-[12px] p-2 text-left text-white ring-1 transition-colors ${
-                  selectedReplacementId === item.id
+                  selectedReplacement?.id === item.id
                     ? "bg-main/20 ring-main"
                     : "bg-[#1F2232] ring-white/5"
                 }`}
