@@ -669,7 +669,10 @@
       "replace": "Replace",
       "history": "History",
       "timerOn": "on",
-      "timerOff": "off"
+      "timerOff": "off",
+      "warmup": "Warm-up",
+      "warmupOn": "on",
+      "warmupOff": "off"
     },
     "howTo": "How-To",
     "restTimer": {
@@ -690,6 +693,7 @@
       "kg": "Kg"
     },
     "addSet": "+ Add Set",
+    "warmupSection": "WARM-UP",
     "painLevel": "Pain Level",
     "done": "DONE",
     "skip": "SKIP",

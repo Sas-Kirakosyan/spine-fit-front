@@ -52,6 +52,25 @@ const toolbarButtons = [
     ),
   },
   {
+    id: "warmup",
+    label: "Warm-up",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-4 w-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.294 -2.333 5.588c0 3.704 3.134 6.706 7 6.706c3.866 0 7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235" />
+      </svg>
+    ),
+  },
+  {
     id: "replace",
     label: "Replace",
     icon: (
@@ -136,6 +155,7 @@ function ExerciseSetsPage({
     number | null
   >(null);
   const [restPaused, setRestPaused] = useState(false);
+  const [warmupEnabled, setWarmupEnabled] = useState(false);
   const [replaceModalOpen, setReplaceModalOpen] = useState(false);
   const [replaceQuery, setReplaceQuery] = useState("");
   const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -224,6 +244,35 @@ function ExerciseSetsPage({
       }
     };
   }, [restCountdownSeconds, restPaused]);
+
+  const generateWarmupSets = (): ExerciseSetRow[] => {
+    const workingWeight = Number(exercise.weight);
+    if (!workingWeight || workingWeight <= 0 || isBodyweight) return [];
+
+    const warmupWeight = String(Math.round((workingWeight * 0.2) / 2.5) * 2.5);
+    return [
+      createNewSet({ weight: warmupWeight, reps: "10", type: "warmup" }),
+      createNewSet({ weight: warmupWeight, reps: "10", type: "warmup" }),
+    ];
+  };
+
+  const handleToggleWarmup = () => {
+    if (warmupEnabled) {
+      // Remove all warmup sets
+      setSets((prev) => {
+        const filtered = prev.filter((s) => s.type !== "warmup");
+        return filtered.length > 0 ? filtered : prev;
+      });
+      setWarmupEnabled(false);
+    } else {
+      // Prepend warmup sets
+      const warmupSets = generateWarmupSets();
+      if (warmupSets.length > 0) {
+        setSets((prev) => [...warmupSets, ...prev]);
+      }
+      setWarmupEnabled(true);
+    }
+  };
 
   const findNextPendingIndex = (
     list: ExerciseSetRow[],
@@ -398,7 +447,7 @@ function ExerciseSetsPage({
     if (isDuringActiveWorkout && onMarkExerciseComplete) {
       onMarkExerciseComplete(
         exercise.id,
-        sets.map((setEntry) => ({ ...setEntry })),
+        workingSets.map((setEntry) => ({ ...setEntry })),
         showPainSlider ? painLevel : undefined
       );
       return;
@@ -412,8 +461,16 @@ function ExerciseSetsPage({
     }
   };
 
+  const workingSets = sets.filter((s) => s.type !== "warmup");
+  const warmupSets = sets.filter((s) => s.type === "warmup");
+
   const allSetsCompleted =
-    sets.length > 0 && sets.every((setEntry) => setEntry.completed);
+    workingSets.length > 0 &&
+    workingSets.every((setEntry) => setEntry.completed);
+
+  const allWarmupCompleted =
+    warmupSets.length === 0 ||
+    warmupSets.every((setEntry) => setEntry.completed);
 
   const canLogAllSets = useMemo(() => {
     const incompleteSets = sets.filter((item) => !item.completed);
@@ -581,7 +638,9 @@ function ExerciseSetsPage({
           <div className="flex h-[50px] w-max gap-2 pr-2">
             {toolbarButtons.map((item) => {
               const isTimer = item.id === "timer";
-              const isActive = isTimer && restTimerEnabled;
+              const isWarmup = item.id === "warmup";
+              const isActive =
+                (isTimer && restTimerEnabled) || (isWarmup && warmupEnabled);
               return (
                 <button
                   key={item.id}
@@ -591,11 +650,13 @@ function ExerciseSetsPage({
                       ? isDuringActiveWorkout
                         ? () => setRestTimerModalOpen(true)
                         : undefined
-                      : item.id === "replace"
-                        ? () => setReplaceModalOpen(true)
-                        : item.id === "history"
-                          ? onNavigateToHistory
-                          : undefined
+                      : item.id === "warmup"
+                        ? handleToggleWarmup
+                        : item.id === "replace"
+                          ? () => setReplaceModalOpen(true)
+                          : item.id === "history"
+                            ? onNavigateToHistory
+                            : undefined
                   }
                   className={`${secondaryButtonClass} shrink-0 whitespace-nowrap ${
                     isActive
@@ -615,7 +676,9 @@ function ExerciseSetsPage({
                       {t(`exerciseSetsPage.toolbar.${item.id}`)}
                       {isTimer
                         ? `: ${restTimerEnabled ? t("exerciseSetsPage.toolbar.timerOn") : t("exerciseSetsPage.toolbar.timerOff")}`
-                        : ""}
+                        : isWarmup
+                          ? `: ${warmupEnabled ? t("exerciseSetsPage.toolbar.warmupOn") : t("exerciseSetsPage.toolbar.warmupOff")}`
+                          : ""}
                     </span>
                   </span>
                 </button>
@@ -822,23 +885,58 @@ function ExerciseSetsPage({
               </span>
               <span />
             </div>
-            {sets.map((setEntry, index) => (
-              <ExerciseSet
-                key={setEntry.id}
-                index={index}
-                setEntry={setEntry}
-                exercise={exercise}
-                previousValue={getPreviousValue(index)}
-                isActive={index === activeSetIndex}
-                isCompleted={setEntry.completed}
-                canDelete={sets.length > 1}
-                canLogSet={setEntry.completed || isSetValid(setEntry)}
-                onActivate={handleActivateSet}
-                onValueChange={handleSetValueChange}
-                onLogSet={handleLogSet}
-                onDelete={handleDeleteSet}
-              />
-            ))}
+            {warmupEnabled && warmupSets.length > 0 && (
+              <div className="mb-1 mt-1 px-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-amber-400/70">
+                {t("exerciseSetsPage.warmupSection")}
+              </div>
+            )}
+            {sets.map((setEntry, index) => {
+              const isFirstWorking =
+                index > 0 &&
+                setEntry.type !== "warmup" &&
+                sets[index - 1]?.type === "warmup";
+              // For display: warmup sets show W1, W2; working sets restart numbering from 1
+              const warmupIndex = sets
+                .slice(0, index + 1)
+                .filter((s) => s.type === "warmup").length;
+              const workingIndex = sets
+                .slice(0, index + 1)
+                .filter((s) => s.type !== "warmup").length;
+              return (
+                <div key={setEntry.id}>
+                  {isFirstWorking && (
+                    <div className="mb-1 mt-3 border-t border-white/8 pt-2 px-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white/50">
+                      {t("exerciseSetsPage.table.set")}
+                    </div>
+                  )}
+                  <ExerciseSet
+                    index={index}
+                    setEntry={setEntry}
+                    exercise={exercise}
+                    previousValue={
+                      setEntry.type === "warmup"
+                        ? "—"
+                        : getPreviousValue(workingIndex - 1)
+                    }
+                    isActive={index === activeSetIndex}
+                    isCompleted={setEntry.completed}
+                    canDelete={
+                      setEntry.type === "warmup"
+                        ? warmupSets.length > 1
+                        : workingSets.length > 1
+                    }
+                    canLogSet={setEntry.completed || isSetValid(setEntry)}
+                    onActivate={handleActivateSet}
+                    onValueChange={handleSetValueChange}
+                    onLogSet={handleLogSet}
+                    onDelete={handleDeleteSet}
+                    displayLabel={
+                      setEntry.type === "warmup" ? `W${warmupIndex}` : undefined
+                    }
+                  />
+                </div>
+              );
+            })}
             <button
               type="button"
               onClick={handleAddSet}
@@ -851,7 +949,7 @@ function ExerciseSetsPage({
           </div>
         </section>
 
-        {allSetsCompleted && showPainSlider && (
+        {allSetsCompleted && allWarmupCompleted && showPainSlider && (
           <section className="rounded-[24px] border border-white/12 bg-[#161A30] p-5 shadow-inner shadow-white/5">
             <div className="flex flex-col gap-4">
               <span className="text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
@@ -867,7 +965,7 @@ function ExerciseSetsPage({
           </section>
         )}
 
-        {allSetsCompleted ? (
+        {allSetsCompleted && allWarmupCompleted ? (
           <div className="flex justify-between">
             <Button
               onClick={handleCompleteExercise}

@@ -72,7 +72,7 @@ export function getLastPerformedData(
 
   const sets = lastWorkout.completedExerciseLogs[exerciseId];
   const completedSets = sets
-    .filter((set) => set.completed)
+    .filter((set) => set.completed && set.type !== "warmup")
     .map((set) => {
       const parsedWeight = parsePositiveNumber(set.weight);
       const parsedReps = parsePositiveNumber(set.reps);
