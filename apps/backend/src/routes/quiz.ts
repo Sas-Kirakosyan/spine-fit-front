@@ -4,6 +4,7 @@ import { createRequire } from "module";
 import { prepareExercisesForPrompt } from "../utils/exerciseFilter.js";
 import { generatePlan } from "../services/geminiService.js";
 import type { ParsedQuizData } from "../types.js";
+import { quizSettingsSchema } from "../schemas/quizSettingsSchema.js";
 
 const require = createRequire(import.meta.url);
 const allExercisesRaw: Record<string, unknown>[] = require("../../../../packages/shared/src/MockData/allExercise.json");
@@ -254,39 +255,15 @@ router.post("/regenerate", async (req: Request, res: Response) => {
   console.log("[REQ] Settings body:", JSON.stringify(req.body, null, 2));
 
   try {
-    const settings = req.body as ParsedQuizData;
-
-    if (!settings.goal || !settings.experience || !settings.workoutsPerWeek) {
-      console.log("[REQ] ❌ Invalid settings — missing required fields");
-      return res.status(400).json({ error: "Invalid settings: goal, experience, and workoutsPerWeek are required" });
+    const parseResult = quizSettingsSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      console.log("[REQ] ❌ Validation failed:", JSON.stringify(parseResult.error.flatten(), null, 2));
+      return res.status(400).json({
+        error: "Invalid settings",
+        details: parseResult.error.flatten().fieldErrors,
+      });
     }
-
-    // Ensure defaults for fields that ParsedQuizData requires but PlanSettings may omit
-    const parsed: ParsedQuizData = {
-      goal: settings.goal,
-      workoutsPerWeek: settings.workoutsPerWeek,
-      duration: settings.duration,
-      durationRange: settings.durationRange ?? settings.duration,
-      experience: settings.experience,
-      trainingSplit: settings.trainingSplit,
-      exerciseVariability: settings.exerciseVariability ?? "Balanced",
-      units: settings.units ?? "kg",
-      cardio: settings.cardio ?? "Off",
-      stretching: settings.stretching ?? "Off",
-      gender: settings.gender,
-      height: settings.height,
-      heightUnit: settings.heightUnit ?? "cm",
-      weight: settings.weight,
-      weightUnit: settings.weightUnit ?? "kg",
-      dateOfBirth: settings.dateOfBirth,
-      bodyType: settings.bodyType,
-      painStatus: settings.painStatus,
-      painLocation: settings.painLocation,
-      ...(Number.isFinite(settings.painLevel) && { painLevel: settings.painLevel }),
-      painTriggers: settings.painTriggers,
-      canSquat: settings.canSquat,
-      additionalNotes: settings.additionalNotes,
-    };
+    const parsed = parseResult.data as ParsedQuizData;
 
     console.log("\n[PARSED] Regenerate settings:\n", JSON.stringify(parsed, null, 2));
 

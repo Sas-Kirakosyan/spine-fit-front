@@ -4,6 +4,7 @@ import { Button } from "@/components/Buttons/Button";
 interface RegenerateModalProps {
   isOpen: boolean;
   isRegenerating: boolean;
+  error?: string | null;
   onCancel: () => void;
   onConfirm: () => void;
 }
@@ -11,6 +12,7 @@ interface RegenerateModalProps {
 export function RegenerateModal({
   isOpen,
   isRegenerating,
+  error,
   onCancel,
   onConfirm,
 }: RegenerateModalProps) {
@@ -27,6 +29,11 @@ export function RegenerateModal({
             "Do you really want to regenerate your plan?",
           )}
         </p>
+        {error && (
+          <div className="mb-4 rounded-lg bg-rose-600/20 border border-rose-500/30 px-4 py-2 text-sm text-rose-300">
+            {error}
+          </div>
+        )}
         <div className="flex gap-3">
           <Button
             onClick={onCancel}

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type { EquipmentCategory } from "@/types/equipment";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
 import {
@@ -13,6 +14,7 @@ interface UseMyPlanPageOptions {
 }
 
 export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
+  const { t } = useTranslation();
   const [bodyweightOnly, setBodyweightOnly] = useState(false);
   const [warmUpSets, setWarmUpSets] = useState(true);
   const [circuitsAndSupersets, setCircuitsAndSupersets] = useState(true);
@@ -24,6 +26,7 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isRegenerateModalOpen, setIsRegenerateModalOpen] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [regenerateError, setRegenerateError] = useState<string | null>(null);
   const initialSettingsRef = useRef<PlanSettings>(loadPlanSettings());
 
   const hasChanges = useMemo(() => {
@@ -114,6 +117,7 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
 
   const handleRegeneratePlan = async () => {
     setIsRegenerating(true);
+    setRegenerateError(null);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz/regenerate`,
@@ -146,9 +150,11 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
       }
     } catch (error) {
       console.error("Failed to regenerate plan:", error);
+      setRegenerateError(
+        t("myPlanPage.regenerateError", "Failed to regenerate your plan. Please try again."),
+      );
     } finally {
       setIsRegenerating(false);
-      setIsRegenerateModalOpen(false);
     }
   };
 
@@ -165,6 +171,8 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     isResetModalOpen,
     isRegenerateModalOpen,
     isRegenerating,
+    regenerateError,
+    setRegenerateError,
 
     // Toggles
     setBodyweightOnly,

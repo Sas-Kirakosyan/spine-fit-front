@@ -545,7 +545,8 @@
       "quizRequired": "\u26a0\ufe0f Please complete the onboarding quiz first to generate a personalized plan.",
       "planGenerated": "\u2705 Plan Generated!\n\n{{name}}\n\n{{workouts}} workouts per week with {{exercises}} exercises per day.",
       "generateFailed": "Failed to generate plan. Please check your settings and try again."
-    }
+    },
+    "regenerateError": "Failed to regenerate your plan. Please try again."
   },
   "selectionModal": {
     "close": "Close"

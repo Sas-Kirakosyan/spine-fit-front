@@ -72,7 +72,11 @@ function MyPlanPage({
       <RegenerateModal
         isOpen={plan.isRegenerateModalOpen}
         isRegenerating={plan.isRegenerating}
-        onCancel={() => plan.setIsRegenerateModalOpen(false)}
+        error={plan.regenerateError}
+        onCancel={() => {
+          plan.setIsRegenerateModalOpen(false);
+          plan.setRegenerateError(null);
+        }}
         onConfirm={plan.handleRegeneratePlan}
       />
 
