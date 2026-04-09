@@ -249,11 +249,15 @@ function ExerciseSetsPage({
     const workingWeight = Number(exercise.weight);
     if (!workingWeight || workingWeight <= 0 || isBodyweight) return [];
 
-    const warmupWeight = String(Math.round((workingWeight * 0.2) / 2.5) * 2.5);
-    return [
-      createNewSet({ weight: warmupWeight, reps: "10", type: "warmup" }),
-      createNewSet({ weight: warmupWeight, reps: "10", type: "warmup" }),
-    ];
+    const percents = [0.2, 0.4, 0.6];
+    const repsPerSet = [12, 8, 6];
+    return percents.map((pct, i) =>
+      createNewSet({
+        weight: String(Math.round((workingWeight * pct) / 2.5) * 2.5),
+        reps: String(repsPerSet[i]),
+        type: "warmup",
+      })
+    );
   };
 
   const handleToggleWarmup = () => {
