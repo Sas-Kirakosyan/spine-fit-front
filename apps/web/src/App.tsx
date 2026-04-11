@@ -31,7 +31,7 @@ import type {
 import { loadPlanSettings } from "@/types/planSettings";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
-import { trackPageView } from "@/utils/analytics";
+import { trackEvent, trackPageView } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
 
 function App() {
@@ -223,6 +223,10 @@ function App() {
     setCompletedWorkoutIds(new Set());
     setIsCustomWorkoutMode(false);
     resetWorkoutState();
+    trackEvent("saved_program_loaded", {
+      day_count: program.days.length,
+      total_exercises: program.days.reduce((sum, day) => sum + day.exercises.length, 0),
+    });
     navigateToPage("workout");
   };
 
@@ -239,7 +243,13 @@ function App() {
       setCompletedExerciseIds([]);
       setExerciseLogs({});
     }
-    setWorkoutStartTime((prevStartTime) => prevStartTime ?? Date.now());
+    const nextSessionStart = workoutStartTime ?? Date.now();
+    setWorkoutStartTime((prevStartTime) => prevStartTime ?? nextSessionStart);
+    trackEvent("workout_started", {
+      session_id: String(nextSessionStart),
+      exercise_count: workoutExercises.length,
+      is_custom_workout: isCustomWorkoutMode,
+    });
     setExerciseSetsMode("preWorkout");
     startPageTransition(() => {
       setSelectedExercise(null);
@@ -277,6 +287,11 @@ function App() {
 
   const markExerciseComplete = (exerciseId: number, sets: ExerciseSetRow[], painLevel: number | undefined) => {
     const completedSets = sets.filter((s) => s.completed).map((s) => ({ ...s }));
+    trackEvent("exercise_completed", {
+      exercise_id: exerciseId,
+      completed_sets_count: completedSets.length,
+      pain_level: painLevel,
+    });
     setExerciseLogs((prev) => ({ ...prev, [exerciseId]: completedSets }));
     if (painLevel !== undefined) {
       setExercisePainLevels((prev) => ({ ...prev, [exerciseId]: painLevel }));
@@ -292,6 +307,10 @@ function App() {
   };
 
   const skipExercise = (exerciseId: number) => {
+    trackEvent("exercise_skipped", {
+      exercise_id: exerciseId,
+      completed_so_far: completedExerciseIds.length,
+    });
     setCompletedExerciseIds((prev) =>
       prev.includes(exerciseId) ? prev : [...prev, exerciseId]
     );
@@ -304,6 +323,11 @@ function App() {
 
   const handleFinishWorkout = (summary?: FinishedWorkoutSummary) => {
     if (summary) {
+      trackEvent("workout_saved", {
+        duration: summary.duration,
+        total_volume: summary.totalVolume,
+        exercise_count: summary.exerciseCount,
+      });
       setWorkoutHistory((prev) => [...prev, summary]);
       resetWorkoutState();
       navigateToPage("workout");

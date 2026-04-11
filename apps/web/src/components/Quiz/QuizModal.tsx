@@ -16,6 +16,7 @@ import { QuizInputWithUnit } from "./QuizInputWithUnit";
 import { QuizSlider } from "./QuizSlider";
 import { QuizNavigationButtons } from "./QuizNavigationButtons";
 import { QuizMultiField } from "./QuizMultiField";
+import { trackEvent } from "@/utils/analytics";
 
 export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const { t } = useTranslation();
@@ -332,6 +333,12 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     setIsGeneratingPlan(true);
     setApiError(null);
 
+    const generationStartedAt = Date.now();
+    trackEvent("plan_generation_started", {
+      workout_type: workoutType,
+      answer_count: Object.keys(allAnswers).length,
+    });
+
     try {
       const response = await fetch(`${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`, {
         method: "POST",
@@ -347,6 +354,29 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
         if (result.planSettings) {
           savePlanSettings(result.planSettings);
         }
+
+        const workoutDaysCount = Array.isArray(result.plan.workoutDays)
+          ? result.plan.workoutDays.length
+          : 0;
+        const totalExercises = Array.isArray(result.plan.workoutDays)
+          ? result.plan.workoutDays.reduce(
+              (total, day) => total + (Array.isArray(day.exercises) ? day.exercises.length : 0),
+              0
+            )
+          : 0;
+
+        trackEvent("plan_generation_completed", {
+          workout_days_count: workoutDaysCount,
+          total_exercises: totalExercises,
+          generation_duration_ms: Date.now() - generationStartedAt,
+        });
+
+        trackEvent("onboarding_completed", {
+          workout_type: workoutType,
+          answer_count: Object.keys(allAnswers).length,
+        });
+      } else {
+        throw new Error("invalid_plan_payload");
       }
 
       setCurrentQuestion(0);
@@ -364,6 +394,16 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       }
     } catch (err) {
       console.error("Failed to send quiz to API:", err);
+      const errorMessage = err instanceof Error ? err.message : "unknown";
+
+      trackEvent("plan_generation_failed", {
+        error_type: errorMessage.includes("Server error") ? "server" : "client",
+      });
+
+      trackEvent("onboarding_failed", {
+        error_type: errorMessage.includes("Server error") ? "server" : "client",
+      });
+
       setApiError("Failed to generate your plan. Please check your connection and try again.");
     } finally {
       setIsGeneratingPlan(false);
