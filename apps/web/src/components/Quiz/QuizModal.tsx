@@ -2,7 +2,14 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import { useTranslation } from "react-i18next";
 import type { QuizModalProps } from "@/types/quiz";
-import type { GeneratedPlan } from "@spinefit/shared";
+import {
+  type GeneratedPlan,
+  GOAL_HYPERTROPHY,
+  GOAL_RECOVERY,
+  PAIN_STATUS_HEALTHY,
+  PAIN_STATUS_RECOVERED,
+  PAIN_STATUS_ACTIVE,
+} from "@spinefit/shared";
 import { savePlanToLocalStorage } from "@/storage/planStorage";
 import { savePlanSettings } from "@/storage/planSettingsStorage";
 import type { PlanSettings } from "@/types/planSettings";
@@ -16,6 +23,9 @@ import { QuizInputWithUnit } from "./QuizInputWithUnit";
 import { QuizSlider } from "./QuizSlider";
 import { QuizNavigationButtons } from "./QuizNavigationButtons";
 import { QuizMultiField } from "./QuizMultiField";
+
+const goalQuestion = questions.find((q) => q.fieldName === "goal");
+const painStatusQuestion = questions.find((q) => q.fieldName === "painStatus");
 
 export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   const { t } = useTranslation();
@@ -116,10 +126,17 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     }
 
     if (question.type === "radio" || question.type === "image_radio") {
-      setAnswers((prev) => ({
-        ...prev,
-        [question.id]: answerIndex,
-      }));
+      setAnswers((prev) => {
+        const next: typeof prev = { ...prev, [question.id]: answerIndex };
+        if (
+          question.fieldName === "goal" &&
+          painStatusQuestion &&
+          prev[question.id] !== answerIndex
+        ) {
+          delete next[painStatusQuestion.id];
+        }
+        return next;
+      });
     }
   };
 
@@ -433,11 +450,45 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     }
   }, [isOpen]);
 
+  const goalAnswerIndex = goalQuestion ? answers[goalQuestion.id] : undefined;
+  const goalValue =
+    goalQuestion && typeof goalAnswerIndex === "number"
+      ? goalQuestion.options?.[goalAnswerIndex]
+      : undefined;
+
+  const { painStatusDisabledIndices, painStatusDisabledNoteKey } = useMemo(() => {
+    const currentQ = filteredQuestions[currentQuestion];
+    if (currentQ?.fieldName !== "painStatus" || !painStatusQuestion) {
+      return { painStatusDisabledIndices: [] as number[], painStatusDisabledNoteKey: null as string | null };
+    }
+
+    const disabledValues: string[] =
+      goalValue === GOAL_HYPERTROPHY
+        ? [PAIN_STATUS_ACTIVE]
+        : goalValue === GOAL_RECOVERY
+        ? [PAIN_STATUS_HEALTHY, PAIN_STATUS_RECOVERED]
+        : [];
+
+    const indices = (currentQ.options ?? [])
+      .map((opt, i) => (disabledValues.includes(opt as string) ? i : -1))
+      .filter((i) => i !== -1);
+
+    const noteKey =
+      goalValue === GOAL_HYPERTROPHY
+        ? `quiz.questions.${currentQ.id}.disabledNoteHypertrophy`
+        : goalValue === GOAL_RECOVERY
+        ? `quiz.questions.${currentQ.id}.disabledNoteRecovery`
+        : null;
+
+    return { painStatusDisabledIndices: indices, painStatusDisabledNoteKey: noteKey };
+  }, [filteredQuestions, currentQuestion, goalValue]);
+
   if (!isOpen) return null;
 
   const optionListClass =
     "space-y-3 max-h-[50vh] md:max-h-[360px] overflow-y-auto pr-1 -mr-1";
   const question = filteredQuestions[currentQuestion];
+  const painStatusDisabledNote = painStatusDisabledNoteKey ? t(painStatusDisabledNoteKey) : null;
 
 
   const getDisplayOptions = () => {
@@ -525,9 +576,32 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                       </p>
                     </div>
                   ) : (
-                    <h3 className="text-xl font-semibold">
-                      {t(`quiz.questions.${question.id}.question`, { defaultValue: filteredQuestions[currentQuestion].question })}
-                    </h3>
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-semibold">
+                        {t(`quiz.questions.${question.id}.question`, { defaultValue: filteredQuestions[currentQuestion].question })}
+                      </h3>
+                      {painStatusDisabledNote && (
+                        <div
+                          className="flex items-start gap-2 rounded-md border-l-4 border-amber-500 bg-amber-100 px-3 py-2 text-sm text-amber-900"
+                          role="note"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="mt-0.5 h-4 w-4 shrink-0"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 6Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span>{painStatusDisabledNote}</span>
+                        </div>
+                      )}
+                    </div>
                   )}
 
                     <div key={filteredQuestions[currentQuestion].id}>
@@ -540,6 +614,7 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                                         index={index}
                                         isSelected={answers[filteredQuestions[currentQuestion].id] === index}
                                         onSelect={handleAnswerSelect}
+                                        disabled={painStatusDisabledIndices.includes(index)}
                                     />
                                 ))}
                             </div>

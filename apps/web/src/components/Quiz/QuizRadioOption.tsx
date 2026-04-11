@@ -3,16 +3,22 @@ interface QuizRadioOptionProps {
   index: number;
   isSelected: boolean;
   onSelect: (index: number) => void;
+  disabled?: boolean;
 }
 
-export function QuizRadioOption({ option, index, isSelected, onSelect }: QuizRadioOptionProps) {
+export function QuizRadioOption({ option, index, isSelected, onSelect, disabled = false }: QuizRadioOptionProps) {
   const displayText = typeof option === "string" ? option : option.label;
 
   return (
     <button
+      type="button"
       onClick={() => onSelect(index)}
+      disabled={disabled}
+      aria-disabled={disabled}
       className={`w-full rounded-lg border-2 p-4 text-left transition ${
-        isSelected
+        disabled
+          ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
+          : isSelected
           ? "border-main bg-main/10 text-main"
           : "border-gray-200 hover:border-main/50 hover:bg-gray-50"
       }`}
@@ -20,10 +26,14 @@ export function QuizRadioOption({ option, index, isSelected, onSelect }: QuizRad
       <div className="flex items-center">
         <div
           className={`mr-3 flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors ${
-            isSelected ? "bg-main" : "border-2 border-gray-300 bg-white"
+            disabled
+              ? "border-2 border-gray-300 bg-gray-200"
+              : isSelected
+              ? "bg-main"
+              : "border-2 border-gray-300 bg-white"
           }`}
         >
-          {isSelected && <div className="h-2.5 w-2.5 rounded-full bg-white" />}
+          {isSelected && !disabled && <div className="h-2.5 w-2.5 rounded-full bg-white" />}
         </div>
         <span className="font-medium">{displayText}</span>
       </div>

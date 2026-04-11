@@ -397,16 +397,18 @@
         ]
       },
       "9": {
-        "question": "How many times per week can you train?",
-        "options": ["2 Days", "3 Days", "4 Days", "5+ Days"]
-      },
-      "10": {
         "question": "What is your current spinal health status?",
         "options": [
           "Healthy (I am pain-free, but cautious)",
           "Recovered (Past history of pain/injury)",
           "Active Symptoms (Currently experiencing discomfort)"
-        ]
+        ],
+        "disabledNoteHypertrophy": "\"Active Symptoms\" is unavailable: muscle hypertrophy training is not recommended while you are currently experiencing pain.",
+        "disabledNoteRecovery": "\"Healthy\" and \"Recovered\" are unavailable: structural recovery is designed for users who currently have pain to reduce."
+      },
+      "10": {
+        "question": "How many times per week can you train?",
+        "options": ["2 Days", "3 Days", "4 Days", "5+ Days"]
       },
       "11": {
         "question": "Where do you feel or did you feel pain?",

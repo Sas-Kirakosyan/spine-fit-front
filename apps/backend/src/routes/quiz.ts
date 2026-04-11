@@ -6,6 +6,13 @@ import { generatePlan } from "../services/geminiService.js";
 import type { ParsedQuizData } from "../types.js";
 import { quizSettingsSchema } from "../schemas/quizSettingsSchema.js";
 
+// Keep in sync with packages/shared/src/quiz/constants.ts (GOAL_OPTIONS).
+// Backend does not depend on @spinefit/shared at build time.
+const GOAL_OPTIONS = [
+  "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
+  "Structural Recovery (Reduce pain and restore movement capacity)",
+] as const;
+
 const require = createRequire(import.meta.url);
 const allExercisesRaw: Record<string, unknown>[] = require("../../../../packages/shared/src/MockData/allExercise.json");
 
@@ -55,8 +62,8 @@ const QUESTIONS = {
   STATS: 3,
   BODY_TYPE: 7,
   EXPERIENCE: 8,
-  TRAINING_FREQUENCY: 9,
-  PAIN_STATUS: 10,
+  PAIN_STATUS: 9,
+  TRAINING_FREQUENCY: 10,
   PAIN_LOCATION: 11,
   PAIN_LEVEL: 12,
   PAIN_TRIGGERS: 13,
@@ -69,11 +76,7 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   const { answers, units: rawUnits } = data;
 
   // Goal
-  const goalOptions = [
-    "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
-    "Structural Recovery (Reduce pain and restore movement capacity)",
-  ];
-  const goal = typeof answers[QUESTIONS.GOAL] === "number" ? goalOptions[answers[QUESTIONS.GOAL] as number] : goalOptions[0];
+  const goal = typeof answers[QUESTIONS.GOAL] === "number" ? GOAL_OPTIONS[answers[QUESTIONS.GOAL] as number] : GOAL_OPTIONS[0];
 
   // Baseline stats (multi_field)
   let gender: string | undefined;
