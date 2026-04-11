@@ -78,7 +78,6 @@ const MUSCLE_GROUP_CATEGORIES: Record<string, string> = {
   core_stabilizers: "Core",
   hip_flexors: "Core",
   quads: "Legs",
-  quads: "Legs",
   glutes: "Legs",
   hamstrings: "Legs",
   calves: "Legs",
