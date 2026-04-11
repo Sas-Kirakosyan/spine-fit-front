@@ -19,6 +19,7 @@ import {
   savePlanToLocalStorage,
   loadPlanFromLocalStorage,
 } from "@/storage/planStorage";
+import { loadPlanSettings } from "@/storage/planSettingsStorage";
 import type { GeneratedPlan } from "@spinefit/shared";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { ReplaceIcon, TrashIcon } from "@/components/Icons/Icons";
@@ -674,7 +675,7 @@ function WorkoutPage({
           dayName={currentDayName}
           exerciseCount={displayExercises.length}
           muscleCount={new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size}
-          duration={`${Math.ceil(displayExercises.length * 3)}${t("workoutPage.labels.duration")}`}
+          duration={loadPlanSettings().duration}
           location={t("workoutPage.labels.myGym")}
           onWorkoutSwap={(workoutId) => {
             const plan = loadPlanFromLocalStorage();
