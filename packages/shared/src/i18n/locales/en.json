@@ -691,7 +691,8 @@
       "previous": "Previous",
       "reps": "Reps",
       "bw": "BW",
-      "kg": "Kg"
+      "kg": "Kg",
+      "min": "Min/Sec"
     },
     "addSet": "+ Add Set",
     "warmupSection": "WARM-UP",
@@ -700,6 +701,7 @@
     "skip": "SKIP",
     "logAllSets": "LOG ALL SETS",
     "startWorkout": "START Workout",
+    "start": "Start",
     "swipeDelete": "Delete",
     "restTimerModal": {
       "title": "Rest Timer",
@@ -708,6 +710,11 @@
       "pause": "Pause",
       "min": "min",
       "sec": "sec"
+    },
+    "setTimeModal": {
+      "title": "Set time",
+      "ok": "OK",
+      "cancel": "Cancel"
     }
   },
   "exerciseHowToPage": {

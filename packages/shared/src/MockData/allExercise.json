@@ -2844,7 +2844,7 @@
     "sets": 3,
     "reps": 30,
     "weight": 0,
-    "weight_unit": "seconds",
+    "weight_unit": "time",
     "media": [
       {
         "type": "exercise",
@@ -3590,7 +3590,7 @@
     "sets": 3,
     "reps": 30,
     "weight": 0,
-    "weight_unit": "seconds",
+    "weight_unit": "time",
     "media": [
       {
         "type": "exercise",

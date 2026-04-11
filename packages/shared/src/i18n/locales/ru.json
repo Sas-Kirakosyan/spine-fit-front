@@ -692,7 +692,8 @@
       "previous": "Предыдущий",
       "reps": "Повторения",
       "bw": "МТ",
-      "kg": "Кг"
+      "kg": "Кг",
+      "min": "Мин/сек"
     },
     "addSet": "+ Добавить подход",
     "warmupSection": "РАЗМИНКА",
@@ -701,6 +702,7 @@
     "skip": "ПРОПУСТИТЬ",
     "logAllSets": "ЗАПИСАТЬ ВСЕ ПОДХОДЫ",
     "startWorkout": "НАЧАТЬ ТРЕНИРОВКУ",
+    "start": "Старт",
     "swipeDelete": "Удалить",
     "restTimerModal": {
       "title": "Таймер отдыха",
@@ -709,6 +711,11 @@
       "pause": "Пауза",
       "min": "мин",
       "sec": "сек"
+    },
+    "setTimeModal": {
+      "title": "Задать время",
+      "ok": "OK",
+      "cancel": "Отмена"
     }
   },
   "exerciseHowToPage": {

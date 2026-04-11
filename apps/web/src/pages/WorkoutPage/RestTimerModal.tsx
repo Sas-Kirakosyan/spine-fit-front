@@ -13,14 +13,6 @@ interface RestTimerModalProps {
   durationMinutes: number;
   durationSeconds: number;
   onDurationChange: (minutes: number, seconds: number) => void;
-  /** Таймер отдыха сейчас идёт (обратный отсчёт на странице) */
-  isRestRunning?: boolean;
-  /** Таймер на паузе */
-  isRestPaused?: boolean;
-  onPause?: () => void;
-  onResume?: () => void;
-  /** Выключить таймер (остановить отсчёт и закрыть) */
-  onCancelRest?: () => void;
 }
 
 export function RestTimerModal({
@@ -31,29 +23,33 @@ export function RestTimerModal({
   durationMinutes,
   durationSeconds,
   onDurationChange,
-  isRestRunning = false,
-  isRestPaused = false,
-  onPause,
-  onResume,
 }: RestTimerModalProps) {
   const { t } = useTranslation();
   const minutesRef = useRef<HTMLDivElement>(null);
   const secondsRef = useRef<HTMLDivElement>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const userScrollChangeRef = useRef<{ minutes: number; seconds: number } | null>(null);
+  const userScrollChangeRef = useRef<{
+    minutes: number;
+    seconds: number;
+  } | null>(null);
 
   useEffect(() => {
     if (!isOpen || isUserScrolling) return;
     // Не вызывать scrollIntoView если изменение произошло из-за пользовательского скролла
-    if (userScrollChangeRef.current &&
+    if (
+      userScrollChangeRef.current &&
       userScrollChangeRef.current.minutes === durationMinutes &&
-      userScrollChangeRef.current.seconds === durationSeconds) {
+      userScrollChangeRef.current.seconds === durationSeconds
+    ) {
       userScrollChangeRef.current = null;
       return;
     }
     userScrollChangeRef.current = null;
-    const scrollToSelected = (ref: React.RefObject<HTMLDivElement | null>, index: number) => {
+    const scrollToSelected = (
+      ref: React.RefObject<HTMLDivElement | null>,
+      index: number
+    ) => {
       const element = ref.current?.querySelector(`[data-index="${index}"]`);
       element?.scrollIntoView({ block: "nearest", behavior: "auto" });
     };
@@ -85,7 +81,10 @@ export function RestTimerModal({
     const index = Math.round(scrollTop / itemHeight);
     const clamped = Math.max(0, Math.min(index, MINUTES_OPTIONS.length - 1));
     if (MINUTES_OPTIONS[clamped] !== durationMinutes) {
-      userScrollChangeRef.current = { minutes: MINUTES_OPTIONS[clamped], seconds: durationSeconds };
+      userScrollChangeRef.current = {
+        minutes: MINUTES_OPTIONS[clamped],
+        seconds: durationSeconds,
+      };
       onDurationChange(MINUTES_OPTIONS[clamped], durationSeconds);
     }
   };
@@ -106,7 +105,10 @@ export function RestTimerModal({
     const index = Math.round(scrollTop / itemHeight);
     const clamped = Math.max(0, Math.min(index, SECONDS_OPTIONS.length - 1));
     if (SECONDS_OPTIONS[clamped] !== durationSeconds) {
-      userScrollChangeRef.current = { minutes: durationMinutes, seconds: SECONDS_OPTIONS[clamped] };
+      userScrollChangeRef.current = {
+        minutes: durationMinutes,
+        seconds: SECONDS_OPTIONS[clamped],
+      };
       onDurationChange(durationMinutes, SECONDS_OPTIONS[clamped]);
     }
   };
@@ -146,52 +148,59 @@ export function RestTimerModal({
               </svg>
             </span>
             <div>
-              <h2 className="text-lg font-semibold text-white">{t("exerciseSetsPage.restTimerModal.title")}</h2>
-              <p className="text-xs text-white/60">{t("exerciseSetsPage.restTimerModal.subtitle")}</p>
+              <h2 className="text-lg font-semibold text-white">
+                {t("exerciseSetsPage.restTimerModal.title")}
+              </h2>
+              <p className="text-xs text-white/60">
+                {t("exerciseSetsPage.restTimerModal.subtitle")}
+              </p>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {isRestRunning && (
-              <button
-                type="button"
-                onClick={() => (isRestPaused ? onResume?.() : onPause?.())}
-                className="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
-              >
-                {isRestPaused ? t("exerciseSetsPage.restTimerModal.continue") : t("exerciseSetsPage.restTimerModal.pause")}
-              </button>
-            )}
           </div>
           <button
             type="button"
             role="switch"
             aria-checked={enabled}
             onClick={() => onEnabledChange(!enabled)}
-            className={`relative h-8 w-14 shrink-0 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70 ${enabled ? "bg-main" : "bg-white/20"
-              }`}
+            className={`relative h-8 w-14 shrink-0 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70 ${
+              enabled ? "bg-main" : "bg-white/20"
+            }`}
           >
             <span
-              className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-all duration-200 ${enabled ? "left-7" : "left-1"
-                }`}
+              className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-all duration-200 ${
+                enabled ? "left-7" : "left-1"
+              }`}
             />
           </button>
         </div>
 
         <div className="mt-6 flex justify-center gap-4">
           <div className="flex flex-col items-center">
-            <span className={`mb-2 text-xs font-semibold uppercase tracking-wider ${enabled ? "text-white/50" : "text-white/20"}`}>{t("exerciseSetsPage.restTimerModal.min")}</span>
+            <span
+              className={`mb-2 text-xs font-semibold uppercase tracking-wider ${enabled ? "text-white/50" : "text-white/20"}`}
+            >
+              {t("exerciseSetsPage.restTimerModal.min")}
+            </span>
             <div
               ref={minutesRef}
               onScroll={enabled ? handleMinutesScroll : undefined}
-              className={`scrollbar-hide h-[132px] w-20 snap-y snap-mandatory overflow-y-auto scroll-smooth rounded-lg py-2 transition ${enabled ? "bg-white/5 cursor-pointer" : "bg-white/5 opacity-40 pointer-events-none"
-                }`}
+              className={`scrollbar-hide h-[132px] w-20 snap-y snap-mandatory overflow-y-auto scroll-smooth rounded-lg py-2 transition ${
+                enabled
+                  ? "bg-white/5 cursor-pointer"
+                  : "bg-white/5 opacity-40 pointer-events-none"
+              }`}
             >
               {MINUTES_OPTIONS.map((m, i) => (
                 <div
                   key={m}
                   data-index={i}
-                  onClick={enabled ? () => onDurationChange(m, durationSeconds) : undefined}
-                  className={`flex h-11 shrink-0 items-center justify-center snap-center text-sm transition ${enabled ? "cursor-pointer" : "cursor-not-allowed"
-                    } ${durationMinutes === m ? "font-semibold text-white" : "text-white/50"}`}
+                  onClick={
+                    enabled
+                      ? () => onDurationChange(m, durationSeconds)
+                      : undefined
+                  }
+                  className={`flex h-11 shrink-0 items-center justify-center snap-center text-sm transition ${
+                    enabled ? "cursor-pointer" : "cursor-not-allowed"
+                  } ${durationMinutes === m ? "font-semibold text-white" : "text-white/50"}`}
                   style={{ scrollSnapAlign: "center" }}
                 >
                   {m} {t("exerciseSetsPage.restTimerModal.min")}
@@ -200,20 +209,32 @@ export function RestTimerModal({
             </div>
           </div>
           <div className="flex flex-col items-center">
-            <span className={`mb-2 text-xs font-semibold uppercase tracking-wider ${enabled ? "text-white/50" : "text-white/20"}`}>{t("exerciseSetsPage.restTimerModal.sec")}</span>
+            <span
+              className={`mb-2 text-xs font-semibold uppercase tracking-wider ${enabled ? "text-white/50" : "text-white/20"}`}
+            >
+              {t("exerciseSetsPage.restTimerModal.sec")}
+            </span>
             <div
               ref={secondsRef}
               onScroll={enabled ? handleSecondsScroll : undefined}
-              className={`scrollbar-hide h-[132px] w-20 snap-y snap-mandatory overflow-y-auto scroll-smooth rounded-lg py-2 transition ${enabled ? "bg-white/5 cursor-pointer" : "bg-white/5 opacity-40 pointer-events-none"
-                }`}
+              className={`scrollbar-hide h-[132px] w-20 snap-y snap-mandatory overflow-y-auto scroll-smooth rounded-lg py-2 transition ${
+                enabled
+                  ? "bg-white/5 cursor-pointer"
+                  : "bg-white/5 opacity-40 pointer-events-none"
+              }`}
             >
               {SECONDS_OPTIONS.map((s, i) => (
                 <div
                   key={s}
                   data-index={i}
-                  onClick={enabled ? () => onDurationChange(durationMinutes, s) : undefined}
-                  className={`flex h-11 shrink-0 items-center justify-center snap-center text-sm transition ${enabled ? "cursor-pointer" : "cursor-not-allowed"
-                    } ${durationSeconds === s ? "font-semibold text-white" : "text-white/50"}`}
+                  onClick={
+                    enabled
+                      ? () => onDurationChange(durationMinutes, s)
+                      : undefined
+                  }
+                  className={`flex h-11 shrink-0 items-center justify-center snap-center text-sm transition ${
+                    enabled ? "cursor-pointer" : "cursor-not-allowed"
+                  } ${durationSeconds === s ? "font-semibold text-white" : "text-white/50"}`}
                   style={{ scrollSnapAlign: "center" }}
                 >
                   {s} {t("exerciseSetsPage.restTimerModal.sec")}
