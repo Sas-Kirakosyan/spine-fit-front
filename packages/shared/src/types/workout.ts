@@ -12,6 +12,8 @@ export interface ExerciseSetRow {
   type?: SetType;
 }
 
+export type ExerciseTimerStatus = "idle" | "running" | "paused";
+
 export interface ExerciseSetProps {
   index: number;
   setEntry: ExerciseSetRow;
@@ -26,6 +28,14 @@ export interface ExerciseSetProps {
   onLogSet: (index: number) => void;
   onDelete: (index: number) => void;
   displayLabel?: string;
+  isTimeBased?: boolean;
+  timerStatus?: ExerciseTimerStatus;
+  timerElapsedSeconds?: number;
+  onStartTimer?: (index: number) => void;
+  onPauseTimer?: () => void;
+  onResumeTimer?: () => void;
+  onConfirmTimer?: (index: number) => void;
+  onOpenTimeModal?: (index: number) => void;
 }
 
 export interface ExerciseSetsPageProps {

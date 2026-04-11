@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import { type Exercise } from "@/types/exercise";
-import { useExerciseName } from "@spinefit/shared";
+import {
+  useExerciseName,
+  getAllBaseExercises,
+  getBaseExerciseById,
+  isTimeBasedExercise,
+  formatDurationSeconds,
+} from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import type {
   ExerciseSetsPageProps,
@@ -12,6 +17,7 @@ import type {
 import { PageContainer } from "@/Layout/PageContainer";
 import { ExerciseSet } from "@/pages/WorkoutPage/ExerciseSet";
 import { RestTimerModal } from "@/pages/WorkoutPage/RestTimerModal";
+import { SetTimeModal } from "@/pages/WorkoutPage/SetTimeModal";
 import {
   iconButtonClass,
   primaryButtonClass,
@@ -127,19 +133,30 @@ function ExerciseSetsPage({
   const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
   const exerciseDisplayName = getExerciseName(exercise);
+  const allExercises = getAllBaseExercises();
+  const baseExercise = getBaseExerciseById(exercise.id);
+  const isBodyweight = exercise.equipment === "bodyweight";
+  const isTimeBased = isTimeBasedExercise(exercise);
+
   // Generate unique ID for each set
   const generateSetId = () =>
     `set-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+  // Time-based sets start at zero so the user sees 00:00 + Start and can
+  // choose between manual entry (tap digits → modal) or the Start timer flow.
+  const defaultReps = isTimeBased
+    ? "0"
+    : exercise.reps !== undefined && exercise.reps !== null
+      ? String(exercise.reps)
+      : "";
 
   const createNewSet = (
     template?: Partial<ExerciseSetRow>
   ): ExerciseSetRow => ({
     id: generateSetId(),
-    reps:
-      exercise.reps !== undefined && exercise.reps !== null
-        ? String(exercise.reps)
-        : "",
+    reps: defaultReps,
     weight:
+      isTimeBased ? "0" :
       exercise.weight !== undefined && exercise.weight !== null
         ? String(exercise.weight)
         : "",
@@ -155,13 +172,21 @@ function ExerciseSetsPage({
     number | null
   >(null);
   const [restPaused, setRestPaused] = useState(false);
+  type ExerciseTimerState = {
+    setIndex: number;
+    elapsedSeconds: number;
+    status: "running" | "paused";
+  };
+  const [exerciseTimer, setExerciseTimer] = useState<ExerciseTimerState | null>(
+    null
+  );
+  const [setTimeModalIndex, setSetTimeModalIndex] = useState<number | null>(
+    null
+  );
   const [warmupEnabled, setWarmupEnabled] = useState(false);
   const [replaceModalOpen, setReplaceModalOpen] = useState(false);
   const [replaceQuery, setReplaceQuery] = useState("");
   const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const allExercises = allExercisesData as Exercise[];
-
-  const isBodyweight = exercise.equipment === "bodyweight";
   const showPainSlider = shouldShowPainTracking();
   const painRequired = getStoredPainStatus() === "Active Symptoms";
 
@@ -245,9 +270,27 @@ function ExerciseSetsPage({
     };
   }, [restCountdownSeconds, restPaused]);
 
+  useEffect(() => {
+    if (!exerciseTimer || exerciseTimer.status !== "running") {
+      return;
+    }
+    const id = setInterval(() => {
+      setExerciseTimer((prev) =>
+        prev && prev.status === "running"
+          ? { ...prev, elapsedSeconds: prev.elapsedSeconds + 1 }
+          : prev
+      );
+    }, 1000);
+    return () => clearInterval(id);
+  }, [exerciseTimer?.status, exerciseTimer?.setIndex]);
+
+  useEffect(() => {
+    setExerciseTimer(null);
+  }, [exercise.id]);
+
   const generateWarmupSets = (): ExerciseSetRow[] => {
     const workingWeight = Number(exercise.weight);
-    if (!workingWeight || workingWeight <= 0 || isBodyweight) return [];
+    if (!workingWeight || workingWeight <= 0 || isBodyweight || isTimeBased) return [];
 
     const percents = [0.2, 0.4, 0.6];
     const repsPerSet = [12, 8, 6];
@@ -294,7 +337,7 @@ function ExerciseSetsPage({
     const reps = Number(setEntry.reps);
     const hasValidReps =
       setEntry.reps.trim() !== "" && !Number.isNaN(reps) && reps > 0;
-    if (isBodyweight) {
+    if (isTimeBased || isBodyweight) {
       return hasValidReps;
     }
 
@@ -427,6 +470,66 @@ function ExerciseSetsPage({
     }
   };
 
+  const handleOpenSetTimeModal = (index: number) => {
+    setSetTimeModalIndex(index);
+  };
+
+  const handleConfirmSetTime = (minutes: number, seconds: number) => {
+    if (setTimeModalIndex === null) return;
+    const total = minutes * 60 + seconds;
+    handleSetValueChange(setTimeModalIndex, "reps", String(total));
+    setActiveSetIndex(setTimeModalIndex);
+    setSetTimeModalIndex(null);
+  };
+
+  const modalInitialSeconds = (() => {
+    if (setTimeModalIndex === null) return 0;
+    const raw = Number(sets[setTimeModalIndex]?.reps) || 0;
+    return Math.max(0, Math.floor(raw));
+  })();
+  const modalInitialMin = Math.floor(modalInitialSeconds / 60);
+  const modalInitialSec = modalInitialSeconds % 60;
+
+  const handleStartExerciseTimer = (index: number) => {
+    setExerciseTimer({ setIndex: index, elapsedSeconds: 0, status: "running" });
+    setActiveSetIndex(index);
+  };
+
+  const handlePauseExerciseTimer = () => {
+    setExerciseTimer((prev) => (prev ? { ...prev, status: "paused" } : prev));
+  };
+
+  const handleResumeExerciseTimer = () => {
+    setExerciseTimer((prev) => (prev ? { ...prev, status: "running" } : prev));
+  };
+
+  const handleConfirmExerciseTimer = (index: number) => {
+    if (!exerciseTimer || exerciseTimer.setIndex !== index) {
+      return;
+    }
+    const elapsed = Math.max(1, exerciseTimer.elapsedSeconds);
+    setSets((prev) => {
+      const updated = prev.map((item, itemIndex) =>
+        itemIndex === index
+          ? { ...item, reps: String(elapsed), completed: true }
+          : item
+      );
+      const nextAfter = findNextPendingIndex(updated, index + 1);
+      const fallback =
+        nextAfter !== -1 ? nextAfter : findNextPendingIndex(updated, 0);
+      setActiveSetIndex(fallback);
+      return updated;
+    });
+    setExerciseTimer(null);
+
+    if (restTimerEnabled && isDuringActiveWorkout) {
+      const totalSeconds = restDurationMinutes * 60 + restDurationSeconds;
+      if (totalSeconds > 0) {
+        setRestCountdownSeconds(totalSeconds);
+      }
+    }
+  };
+
   const handleLogAllSets = () => {
     const incompleteSets = sets.filter((item) => !item.completed);
     if (incompleteSets.length === 0) {
@@ -496,6 +599,11 @@ function ExerciseSetsPage({
         : "";
     if (!repsValue) {
       return "\u2014";
+    }
+
+    if (isTimeBased) {
+      const timeValue = baseExercise ? String(baseExercise.reps) : repsValue;
+      return formatDurationSeconds(Number(timeValue));
     }
 
     if (isBodyweight) {
@@ -856,19 +964,16 @@ function ExerciseSetsPage({
               setRestDurationMinutes(min);
               setRestDurationSeconds(sec);
             }}
-            isRestRunning={
-              restCountdownSeconds !== null && restCountdownSeconds > 0
-            }
-            isRestPaused={restPaused}
-            onPause={() => setRestPaused(true)}
-            onResume={() => setRestPaused(false)}
-            onCancelRest={() => {
-              setRestCountdownSeconds(null);
-              setRestPaused(false);
-              setRestTimerModalOpen(false);
-            }}
           />
         )}
+
+        <SetTimeModal
+          isOpen={setTimeModalIndex !== null}
+          onClose={() => setSetTimeModalIndex(null)}
+          initialMinutes={modalInitialMin}
+          initialSeconds={modalInitialSec}
+          onConfirm={handleConfirmSetTime}
+        />
 
         <section className="flex-1 rounded-[26px] border border-white/12 bg-[#13172A] p-3 shadow-xl ring-1 ring-white/5">
           <div className="space-y-3">
@@ -879,15 +984,23 @@ function ExerciseSetsPage({
               <span className="text-left">
                 {t("exerciseSetsPage.table.previous")}
               </span>
-              <span className="text-center">
-                {isBodyweight
-                  ? t("exerciseSetsPage.table.bw")
-                  : t("exerciseSetsPage.table.kg")}
-              </span>
-              <span className="text-center">
-                {t("exerciseSetsPage.table.reps")}
-              </span>
-              <span />
+              {isTimeBased ? (
+                <span className="col-span-3 text-center">
+                  {t("exerciseSetsPage.table.min")}
+                </span>
+              ) : (
+                <>
+                  <span className="text-center">
+                    {isBodyweight
+                      ? t("exerciseSetsPage.table.bw")
+                      : t("exerciseSetsPage.table.kg")}
+                  </span>
+                  <span className="text-center">
+                    {t("exerciseSetsPage.table.reps")}
+                  </span>
+                  <span />
+                </>
+              )}
             </div>
             {warmupEnabled && warmupSets.length > 0 && (
               <div className="mb-1 mt-1 px-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-amber-400/70">
@@ -936,6 +1049,24 @@ function ExerciseSetsPage({
                     onDelete={handleDeleteSet}
                     displayLabel={
                       setEntry.type === "warmup" ? `W${warmupIndex}` : undefined
+                    }
+                    isTimeBased={isTimeBased}
+                    timerStatus={
+                      exerciseTimer?.setIndex === index
+                        ? exerciseTimer.status
+                        : "idle"
+                    }
+                    timerElapsedSeconds={
+                      exerciseTimer?.setIndex === index
+                        ? exerciseTimer.elapsedSeconds
+                        : 0
+                    }
+                    onStartTimer={handleStartExerciseTimer}
+                    onPauseTimer={handlePauseExerciseTimer}
+                    onResumeTimer={handleResumeExerciseTimer}
+                    onConfirmTimer={handleConfirmExerciseTimer}
+                    onOpenTimeModal={
+                      isTimeBased ? handleOpenSetTimeModal : undefined
                     }
                   />
                 </div>

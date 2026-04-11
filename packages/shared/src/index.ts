@@ -1,7 +1,7 @@
 // Types
 export type { GeneratedPlan, WorkoutDay } from "./types/plan";
 export type { ExerciseRestriction, ExerciseMedia, Exercise } from "./types/exercise";
-export type { SetField, SetType, ExerciseSetRow, ExerciseSetProps, ExerciseSetsPageProps, WorkoutPageProps, SavedWorkout, TrainingDay, SavedProgram, ExerciseDetailsProps, ExerciseActionSheetProps, FinishedWorkoutSummary, ActiveWorkoutPageProps } from "./types/workout";
+export type { SetField, SetType, ExerciseSetRow, ExerciseSetProps, ExerciseSetsPageProps, WorkoutPageProps, SavedWorkout, TrainingDay, SavedProgram, ExerciseDetailsProps, ExerciseActionSheetProps, FinishedWorkoutSummary, ActiveWorkoutPageProps, ExerciseTimerStatus } from "./types/workout";
 export type { PlanFieldId, FieldConfig, PlanSettings } from "./types/planSettings";
 export { planFieldsConfig } from "./types/planSettings";
 export type { QuizQuestion, QuizModalProps, QuizAnswers } from "./types/quiz";
@@ -37,7 +37,7 @@ export { calculateExerciseVolume, calculateWorkoutVolume } from "./utils/workout
 export { formatDateTime, isSameDay, formatTime, months } from "./utils/date";
 
 // Utils - exercise
-export { getExerciseImageUrl } from "./utils/exercise";
+export { getExerciseImageUrl, getBaseExerciseById, getAllBaseExercises, isTimeBasedExercise, getExerciseTimeSeconds, formatDurationSeconds } from "./utils/exercise";
 
 // Utils - oneRepMax
 export { epley1RM, brzycki1RM, calculate1RM, getExerciseEstimated1RM, getPercentOf1RM } from "./utils/oneRepMax";
