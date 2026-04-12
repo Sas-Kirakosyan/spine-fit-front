@@ -60,7 +60,7 @@ export async function generatePlan(
   allExercisesRaw: Record<string, unknown>[],
 ): Promise<GeneratedPlanResult> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-3.1-flash-lite-preview", // gemini-2.5-flash
+    model: "gemini-2.5-flash",
     systemInstruction: buildSystemInstruction(
       parsedQuiz.duration,
       parsedQuiz.painLevel,

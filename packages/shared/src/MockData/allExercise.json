@@ -3508,6 +3508,118 @@
     "youtube_id": ""
   },
   {
+    "id": 160,
+    "name": "Seated Hip Adduction (Inner Side)",
+    "description": "A machine-based inner-thigh isolation exercise that targets the hip adductors from a seated position with back support. Pulling the legs inward against resistance strengthens the adductor group, improving pelvic stability and reducing compensatory lower back strain during walking and standing.",
+    "category": "strength",
+    "muscle_groups": ["hip_adductors"],
+    "equipment": "hip_adductor_machine",
+    "difficulty": "beginner",
+    "instructions": "Sit tall in the adductor machine with your back firmly against the pad and the leg pads positioned against the inner sides of your knees. Start with your legs open at a comfortable width. Squeeze your legs together in a slow, controlled motion, focusing on contracting the inner thigh muscles. Pause briefly at the fully closed position, then slowly open your legs back to the starting position under control. Keep your back flat against the pad and avoid using momentum or arching your lower back.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 542,
+        "exercise_id": 160,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent seated exercise with full back support. Keep pelvis neutral and avoid twisting to either side. The supported position makes this safe for all L5-S1 conditions.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 30,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/seated-hip-adduction-inner-side.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/hip-adductor-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 161,
+    "name": "Standing Cable Hip Adduction (Outer Side)",
+    "description": "A standing cable exercise that trains the hip adductors through a cross-body pulling motion from the outer side. The constant cable tension throughout the full range of motion strengthens the inner thigh muscles, improving pelvic control, gait stability, and reducing compensatory lower back strain.",
+    "category": "strength",
+    "muscle_groups": ["hip_adductors"],
+    "equipment": "cable_machine_ankle_attachment",
+    "difficulty": "beginner",
+    "instructions": "Attach an ankle strap to a low pulley and fasten it to the ankle of your working leg. Stand sideways to the machine with the working leg closest to the stack. Hold the machine lightly for balance. Keeping your leg straight and torso upright, sweep the working leg across the body past the standing leg. Control the return to the start position. Keep your hips level, core braced, and avoid leaning or rotating your torso throughout the movement.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 543,
+        "exercise_id": 161,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Keep the torso vertical and avoid any side-bending or hip drop. Hold the machine for support. Use a light load and slow tempo to avoid pelvic shift. Safe for L5-S1 conditions with controlled form.",
+        "created_at": "2025-12-20T12:00:00Z",
+        "updated_at": "2025-12-20T12:00:00Z"
+      }
+    ],
+    "created_at": "2025-12-20T12:00:00Z",
+    "updated_at": "2025-12-20T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 5,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/standing-cable-hip-adduction-outer-side.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine-ankle-attachment.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
     "id": 61,
     "name": "Standing Cable External Rotation",
     "description": "A shoulder stabilization exercise that targets the rotator cuff — specifically the infraspinatus and teres minor — to restore the shoulder's natural dynamic stability. The rotator cuff is responsible for centering the humeral head in the shoulder socket during all pressing and pulling movements. Weakness here leads to shoulder impingement, poor posture, and compensatory upper-back tension that often contributes to neck and lower back pain. This exercise directly retrains the stabilizers that protect the joint, making it essential for anyone with rounded shoulders, chronic upper-back tightness, or a history of shoulder or spine issues.",
