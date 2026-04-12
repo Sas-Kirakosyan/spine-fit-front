@@ -1,5 +1,6 @@
 {
-  "buildCommand": "pnpm --filter @spinefit/web build",
+  "installCommand": "pnpm install",
+  "buildCommand": "cd apps/web && pnpm build",
   "outputDirectory": "apps/web/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
