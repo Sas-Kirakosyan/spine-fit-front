@@ -1,4 +1,5 @@
 import type { QuizQuestion } from "../types/quiz";
+import { GOAL_OPTIONS, PAIN_STATUS_QUIZ_OPTIONS } from "./constants";
 
 export const allTriggers = [
   "squats",
@@ -24,10 +25,7 @@ export const questions: QuizQuestion[] = [
     fieldName: "goal",
     question: "What is your main goal?",
     type: "radio",
-    options: [
-      "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
-      "Structural Recovery (Reduce pain and restore movement capacity)",
-    ],
+    options: [...GOAL_OPTIONS],
   },
 
   {
@@ -153,22 +151,18 @@ export const questions: QuizQuestion[] = [
 
   {
     id: 9,
-    fieldName: "trainingFrequency",
-    question: "How many times per week can you train?",
+    fieldName: "painStatus",
+    question: "What is your current spinal health status?",
     type: "radio",
-    options: ["2 Days", "3 Days", "4 Days", "5+ Days"],
+    options: [...PAIN_STATUS_QUIZ_OPTIONS],
   },
 
   {
     id: 10,
-    fieldName: "painStatus",
-    question: "What is your current spinal health status?",
+    fieldName: "trainingFrequency",
+    question: "How many times per week can you train?",
     type: "radio",
-    options: [
-      "Healthy (I am pain-free, but cautious)",
-      "Recovered (Past history of pain/injury)",
-      "Active Symptoms (Currently experiencing discomfort)",
-    ],
+    options: ["2 Days", "3 Days", "4 Days", "5+ Days"],
   },
   {
     id: 11,
