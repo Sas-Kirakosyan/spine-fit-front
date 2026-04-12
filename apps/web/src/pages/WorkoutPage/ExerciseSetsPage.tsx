@@ -441,6 +441,9 @@ function ExerciseSetsPage({
   };
 
   const handleLogSet = (requestedIndex?: number) => {
+    if (!isDuringActiveWorkout) {
+      return;
+    }
     if (sets.length === 0) {
       return;
     }
@@ -476,7 +479,12 @@ function ExerciseSetsPage({
       return updated;
     });
 
-    if (!shouldUnlog && restTimerEnabled && isDuringActiveWorkout) {
+    if (
+      !shouldUnlog &&
+      restTimerEnabled &&
+      isDuringActiveWorkout &&
+      targetIndex < sets.length - 1
+    ) {
       const totalSeconds = restDurationMinutes * 60 + restDurationSeconds;
       if (totalSeconds > 0) {
         setRestCountdownSeconds(totalSeconds);
@@ -515,6 +523,9 @@ function ExerciseSetsPage({
   const modalInitialSec = modalInitialSeconds % 60;
 
   const handleStartExerciseTimer = (index: number) => {
+    if (!isDuringActiveWorkout) {
+      return;
+    }
     setExerciseTimer({ setIndex: index, elapsedSeconds: 0, status: "running" });
     setActiveSetIndex(index);
   };
@@ -528,6 +539,9 @@ function ExerciseSetsPage({
   };
 
   const handleConfirmExerciseTimer = (index: number) => {
+    if (!isDuringActiveWorkout) {
+      return;
+    }
     if (!exerciseTimer || exerciseTimer.setIndex !== index) {
       return;
     }
@@ -546,7 +560,11 @@ function ExerciseSetsPage({
     });
     setExerciseTimer(null);
 
-    if (restTimerEnabled && isDuringActiveWorkout) {
+    if (
+      restTimerEnabled &&
+      isDuringActiveWorkout &&
+      index < sets.length - 1
+    ) {
       const totalSeconds = restDurationMinutes * 60 + restDurationSeconds;
       if (totalSeconds > 0) {
         setRestCountdownSeconds(totalSeconds);
@@ -555,6 +573,9 @@ function ExerciseSetsPage({
   };
 
   const handleLogAllSets = () => {
+    if (!isDuringActiveWorkout) {
+      return;
+    }
     const incompleteSets = sets.filter((item) => !item.completed);
     if (incompleteSets.length === 0) {
       return;
@@ -604,12 +625,15 @@ function ExerciseSetsPage({
     warmupSets.every((setEntry) => setEntry.completed);
 
   const canLogAllSets = useMemo(() => {
+    if (!isDuringActiveWorkout) {
+      return false;
+    }
     const incompleteSets = sets.filter((item) => !item.completed);
     if (incompleteSets.length === 0) {
       return false;
     }
     return incompleteSets.every((setEntry) => isSetValid(setEntry));
-  }, [sets]);
+  }, [sets, isDuringActiveWorkout]);
 
   const getPreviousValue = (index: number) => {
     const hasTemplateRow = index < Math.max(exercise.sets || 1, 1);
@@ -1066,7 +1090,10 @@ function ExerciseSetsPage({
                         ? warmupSets.length > 1
                         : workingSets.length > 1
                     }
-                    canLogSet={setEntry.completed || isSetValid(setEntry)}
+                    canLogSet={
+                      isDuringActiveWorkout &&
+                      (setEntry.completed || isSetValid(setEntry))
+                    }
                     onActivate={handleActivateSet}
                     onValueChange={handleSetValueChange}
                     onLogSet={handleLogSet}
