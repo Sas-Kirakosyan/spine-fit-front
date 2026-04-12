@@ -11,7 +11,7 @@ import type {
 import { loadPlanSettings } from "@/types/planSettings";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
-import { trackPageView } from "@/utils/analytics";
+import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
 
 // --- LAZY LOADED COMPONENTS ---
@@ -246,6 +246,9 @@ function App() {
     setWorkoutExercises((prev) => {
       const existingIds = new Set(prev.map((ex) => ex.id));
       const newExercises = exercises.filter((ex) => !existingIds.has(ex.id));
+      if (newExercises.length > 0) {
+        trackEvent("exercises_added", { count: newExercises.length });
+      }
       return [...prev, ...newExercises];
     });
 
@@ -322,6 +325,7 @@ function App() {
   };
 
   const handleSelectSavedProgram = (program: SavedProgram) => {
+    trackEvent("program_selected", { program_id: program.id });
     const plan = {
       id: program.id,
       name: program.name,
@@ -347,6 +351,7 @@ function App() {
   };
 
   const handleEditSavedProgram = (program: SavedProgram) => {
+    trackEvent("program_edit_started", { program_id: program.id });
     setCreateProgramDays(program.days);
     setCreateProgramName(program.name);
     setEditingProgramId(program.id);
@@ -355,6 +360,7 @@ function App() {
   };
 
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
+    trackEvent("workout_started");
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
       setExerciseLogs({});
@@ -394,6 +400,7 @@ function App() {
     sets: ExerciseSetRow[],
     painLevel: number | undefined
   ) => {
+    trackEvent("exercise_completed", { exercise_id: exerciseId });
     const completedSets = sets
       .filter((s) => s.completed)
       .map((s) => ({ ...s }));
@@ -412,6 +419,7 @@ function App() {
   };
 
   const skipExercise = (exerciseId: number) => {
+    trackEvent("exercise_skipped", { exercise_id: exerciseId });
     setCompletedExerciseIds((prev) =>
       prev.includes(exerciseId) ? prev : [...prev, exerciseId]
     );
@@ -423,6 +431,7 @@ function App() {
   };
 
   const handleFinishWorkout = (summary?: FinishedWorkoutSummary) => {
+    trackEvent("workout_finished", { has_summary: !!summary });
     if (summary) {
       setWorkoutHistory((prev) => [...prev, summary]);
       resetWorkoutState();
