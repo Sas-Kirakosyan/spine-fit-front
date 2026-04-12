@@ -66,6 +66,9 @@ const MUSCLE_GROUP_CATEGORIES: Record<string, string> = {
   lats: "Back",
   upper_back: "Back",
   erector_spinae: "Back",
+  rhomboids: "Back",
+  traps: "Back",
+  thoracic_extensors: "Back",
   front_delts: "Shoulders",
   side_delts: "Shoulders",
   rear_delts: "Shoulders",
@@ -73,6 +76,7 @@ const MUSCLE_GROUP_CATEGORIES: Record<string, string> = {
   biceps: "Arms",
   triceps: "Arms",
   forearms: "Arms",
+  brachialis: "Arms",
   abdominals: "Core",
   obliques: "Core",
   core_stabilizers: "Core",
@@ -81,8 +85,12 @@ const MUSCLE_GROUP_CATEGORIES: Record<string, string> = {
   glutes: "Legs",
   hamstrings: "Legs",
   calves: "Legs",
+  soleus: "Legs",
+  tibialis_anterior: "Legs",
   hip_abductors: "Legs",
+  hip_adductors: "Legs",
   leg_biceps: "Legs",
+  hip_rotators: "Rehab",
 };
 
 /**

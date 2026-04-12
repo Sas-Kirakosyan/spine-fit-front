@@ -74,7 +74,13 @@ RULES (apply to every plan you generate):
 15. ADDITIONAL USER NOTES: If "Additional user notes" are present in the user profile, treat them as high-priority personal constraints or preferences. They override default choices (e.g. a user saying "I hate machines, prefer free weights" should shift equipment selection accordingly).
 16. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".
 17. WEEKS: Always set weeks to 4.
-18. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 3, 8, 9, 10, 11) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
+18. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 3, 8, 9, 10, 11) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.
+19. LOWER BACK / L5-S1 / SCIATICA PROTOCOL: Apply this rule when EITHER condition is true: (a) painStatus is "Active Symptoms" (any level), OR (b) the user's pain locations include lower back, L5/S1, lumbar, sciatica, or sciatic nerve. When this rule is active:
+    - CORE PRIORITY: Every training day MUST include at least 1–2 core stabilization exercises. Prefer (in order) when available in the provided list: cable knee drive, single-leg glute bridge, dead bug, bird dog, pallof press. If none exist in the list, skip silently.
+    - AVOID SEATED EXERCISES: Do not include seated machine exercises (seated row, seated leg press, seated cable exercises, seated chest press) unless no standing or lying alternative exists in the provided list. If a seated exercise is the only option for a required movement pattern, include at most 1 per day and append "Limit time seated — stand and walk between sets." to its notes.
+    - PREFERRED MOVEMENTS: When available in the provided list, prioritize these exercises as they decompress and stabilize the lumbar spine without axial load: cable knee drives, single-leg glute bridge, cable kickbacks.
+    - UNILATERAL UPPER BODY: For bicep and shoulder exercises, prefer single-arm (unilateral) variations where the non-working arm braces against a bench, rack, or knee for lumbar offloading. Append "Brace free hand against a surface to keep spine neutral and reduce lumbar shear." to the notes of every such exercise.
+    - SPINAL LOADING ORDER: Place core stabilization exercises early in the session (directly after any warm-up), before compound lower-body or loaded spinal movements, to pre-activate stabilizers.`;
 }
 
 function buildSplitDayGuidance(trainingSplit: string): string {

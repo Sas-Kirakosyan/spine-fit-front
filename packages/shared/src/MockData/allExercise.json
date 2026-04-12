@@ -3792,7 +3792,7 @@
     "name": "Barbell Bicep Curl",
     "description": "A classic isolation exercise for the biceps brachii performed standing with a barbell. Also engages the brachialis and brachioradialis with minimal spinal loading when performed with strict form.",
     "category": "strength",
-    "muscle_groups": ["biceps_brachii", "brachialis", "brachioradialis"],
+    "muscle_groups": ["biceps", "brachialis", "forearms"],
     "equipment": "barbell",
     "difficulty": "beginner",
     "instructions": "Stand with feet shoulder-width apart holding a barbell with an underhand (supinated) grip. Keep your elbows pinned close to your torso and your upper arms stationary. Curl the bar toward your shoulders by contracting the biceps. Pause briefly at the top, then lower the bar with full control. Avoid swinging the torso or using momentum.",
@@ -3904,5 +3904,3771 @@
       }
     ],
     "youtube_id": "pdBvfBMm-Y4"
+  },
+  {
+    "id": 109,
+    "name": "Lever Total Abdominal Crunch",
+    "description": "A machine-based crunch performed on a lever abdominal machine. Targets the rectus abdominis through controlled spinal flexion against resistance, with seated back support and a fixed movement path.",
+    "category": "core",
+    "muscle_groups": ["abdominals", "obliques", "core_stabilizers"],
+    "equipment": "ab_crunch_machine",
+    "difficulty": "beginner",
+    "instructions": "Sit on the machine with your back against the pad and feet secured under the rollers. Grip the handles near your shoulders. Brace your core and crunch forward by contracting your abs, bringing your chest toward your hips. Pause briefly, then return slowly under control. Avoid pulling with the arms or jerking the weight.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 95,
+        "exercise_id": 109,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Loaded spinal flexion can aggravate L5-S1 disc issues. Avoid unless cleared by a specialist. Consider dead bug or front plank as safer alternatives.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      },
+      {
+        "id": 96,
+        "exercise_id": 109,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Repeated loaded flexion is contraindicated for herniated discs. Avoid this exercise."
+      }
+    ],
+    "created_at": "2026-04-11T12:00:00Z",
+    "updated_at": "2026-04-11T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 20,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/lever-total-abdominal-crunch.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/ab-crunch-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 110,
+    "name": "Cable Kneeling Crunch",
+    "description": "A kneeling cable crunch performed with a rope attachment on a high pulley. Targets the rectus abdominis through resisted spinal flexion, allowing progressive overload of the abs.",
+    "category": "core",
+    "muscle_groups": ["abdominals", "obliques", "core_stabilizers"],
+    "equipment": "cable_machine",
+    "difficulty": "intermediate",
+    "instructions": "Attach a rope to a high pulley. Kneel facing the machine and hold the rope at the sides of your head. Hinge slightly at the hips, then crunch down by curling your torso toward your thighs using your abs. Keep hips stationary throughout. Pause at the bottom, then return slowly under control.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 97,
+        "exercise_id": 110,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Loaded repeated flexion stresses lumbar discs. Avoid with L5-S1 issues. Use dead bug or Pallof press instead.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      },
+      {
+        "id": 98,
+        "exercise_id": 110,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Contraindicated for herniated discs due to repeated loaded flexion."
+      }
+    ],
+    "created_at": "2026-04-11T12:00:00Z",
+    "updated_at": "2026-04-11T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 20,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/cable-kneeling-crunch.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 111,
+    "name": "Vertical Leg Raise (Captain's Chair, Bent Knee)",
+    "description": "A core exercise performed on a captain's chair with forearms supported on pads. The bent-knee variation targets the lower abs and hip flexors while reducing lumbar strain compared to the straight-leg version.",
+    "category": "core",
+    "muscle_groups": ["abdominals", "hip_flexors", "obliques"],
+    "equipment": "captains_chair",
+    "difficulty": "intermediate",
+    "instructions": "Position yourself in the captain's chair with forearms on the pads and back against the backrest. Brace your core. Bend your knees and lift them toward your chest in a controlled motion. Avoid swinging. Lower with control and keep the lower back pressed against the pad.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 99,
+        "exercise_id": 111,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Use bent-knee only. Keep pelvis neutral and lower back against the pad. Avoid swinging or going to full lumbar flexion.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-11T12:00:00Z",
+    "updated_at": "2026-04-11T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/vertical-leg-raise.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/captains-chair.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 112,
+    "name": "Captains Chair Straight Leg Raise",
+    "description": "An advanced core exercise performed on a captain's chair with straight legs. Strongly targets the lower abs and hip flexors but places significant demand on the lumbar spine.",
+    "category": "core",
+    "muscle_groups": ["abdominals", "hip_flexors", "quads", "obliques"],
+    "equipment": "captains_chair",
+    "difficulty": "advanced",
+    "instructions": "Position yourself in the captain's chair with forearms on the pads and back firmly against the backrest. Brace your core hard. Keeping legs straight, raise them in front of you until parallel to the floor or higher. Avoid swinging. Lower slowly under control while keeping the lower back pressed against the pad.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 100,
+        "exercise_id": 112,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Straight-leg raises create high shear forces on the lumbar spine via psoas pull. Avoid with L5-S1 issues. Use bent-knee variation instead.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      },
+      {
+        "id": 101,
+        "exercise_id": 112,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Contraindicated for herniated discs. Heavy psoas activation pulls on lumbar vertebrae."
+      }
+    ],
+    "created_at": "2026-04-11T12:00:00Z",
+    "updated_at": "2026-04-11T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/captains-chair-straight-leg-raise.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/captains-chair.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 113,
+    "name": "Lever Seated Crunch",
+    "description": "A seated machine crunch that isolates the rectus abdominis through resisted spinal flexion. The seated, supported position provides a stable movement path with adjustable resistance.",
+    "category": "core",
+    "muscle_groups": ["abdominals", "obliques", "core_stabilizers"],
+    "equipment": "ab_crunch_machine",
+    "difficulty": "beginner",
+    "instructions": "Sit on the machine with your back against the pad and grip the handles over your shoulders. Brace your core and crunch forward by contracting your abs, curling your chest toward your hips. Pause at the bottom of the contraction, then return slowly under control. Avoid pulling with the arms.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 102,
+        "exercise_id": 113,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Loaded spinal flexion stresses lumbar discs. Avoid with L5-S1 issues. Use anti-extension core work like dead bug or planks instead.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      },
+      {
+        "id": 103,
+        "exercise_id": 113,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Contraindicated for herniated discs due to repeated loaded flexion."
+      }
+    ],
+    "created_at": "2026-04-11T12:00:00Z",
+    "updated_at": "2026-04-11T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 20,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/lever-seated-crunch.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/ab-crunch-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 114,
+    "name": "Single-Arm Supported Dumbbell Curl",
+    "description": "A unilateral biceps curl performed while the non-working arm braces against a bench, rack, or incline pad for torso support. By offloading the spine onto the supporting arm, this variation removes nearly all axial compression from the lumbar region, making it an excellent biceps builder for individuals with L5-S1 disc issues or sciatic nerve pain. The supported position also eliminates body sway and forces strict form, increasing biceps tension.",
+    "category": "strength",
+    "muscle_groups": ["biceps", "forearms", "brachialis"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Stand next to a sturdy bench, incline pad, or squat rack. Place your non-working hand flat on the support and hinge slightly forward at the hips so your torso weight is transferred onto that supporting arm. Hold a dumbbell in the working hand with arm hanging straight down and palm facing forward. Brace your core lightly and curl the dumbbell toward your shoulder by contracting the biceps, keeping the upper arm stationary. Pause briefly at the top, then lower slowly under full control to a complete stretch. Keep the supporting arm locked throughout to maintain spinal offloading. Complete all reps on one side before switching.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 104,
+        "exercise_id": 114,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent choice for L5-S1 issues. The supporting arm transfers torso weight away from the lumbar spine, removing axial compression that occurs in standing curls. Keep the supporting arm firmly locked, avoid twisting the trunk, and use moderate weight with strict form.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      },
+      {
+        "id": 105,
+        "exercise_id": 114,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Spine-friendly biceps option for sciatica sufferers. The supported hinge position offloads the lumbar spine and reduces nerve root compression compared to standing curls. Stop immediately if any radiating leg pain occurs.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      },
+      {
+        "id": 106,
+        "exercise_id": 114,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Safer alternative to standing barbell or dumbbell curls. Torso support eliminates the axial loading that aggravates herniated discs. Maintain neutral spine throughout and avoid excessive forward rounding."
+      }
+    ],
+    "created_at": "2026-04-11T12:00:00Z",
+    "updated_at": "2026-04-11T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 8,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/single-arm-supported-dumbbell-curl.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 115,
+    "name": "Single-Arm Supported Dumbbell Lateral Raise",
+    "description": "A unilateral lateral raise performed while the non-working arm grips a sturdy upright (squat rack, pole, or machine frame) for support. Leaning slightly away from the support transfers torso weight onto the bracing arm, removing axial compression from the lumbar spine. This makes it a highly back-friendly side delt builder for individuals with L5-S1 disc issues or sciatic pain. The leaning angle also lengthens the side delt at the bottom, increasing range of motion and tension compared to standard standing raises.",
+    "category": "strength",
+    "muscle_groups": ["side_delts", "front_delts"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Stand next to a sturdy upright such as a squat rack post, cable column, or machine frame. Grip the upright firmly with your non-working hand at about shoulder height. Lean your body away from the support so your weight is suspended on the bracing arm and your working side is fully extended. Hold a dumbbell in the working hand with arm hanging across the front of your body and a slight bend in the elbow. Raise the dumbbell out to the side in a controlled arc until your hand reaches shoulder height, leading with the elbow. Pause briefly at the top, then lower slowly under full control to a complete stretch. Keep the supporting arm locked throughout. Complete all reps on one side before switching.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 107,
+        "exercise_id": 115,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent choice for L5-S1 issues. The supporting arm transfers body weight away from the lumbar spine, removing the axial compression present in standing dumbbell lateral raises. Keep the supporting arm firmly locked, avoid trunk twisting, and use light to moderate loads with strict form.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      },
+      {
+        "id": 108,
+        "exercise_id": 115,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Spine-friendly shoulder option for sciatica sufferers. The leaning supported position offloads the lumbar spine and reduces nerve root compression compared to standing raises. Stop immediately if any radiating leg pain occurs.",
+        "created_at": "2026-04-11T12:00:00Z",
+        "updated_at": "2026-04-11T12:00:00Z"
+      },
+      {
+        "id": 109,
+        "exercise_id": 115,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Safer alternative to standing lateral raises. Torso support eliminates the axial loading that aggravates herniated discs. Use light weight, maintain neutral spine, and avoid swinging or jerking the dumbbell up."
+      }
+    ],
+    "created_at": "2026-04-11T12:00:00Z",
+    "updated_at": "2026-04-11T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 5,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/single-arm-supported-dumbbell-lateral-raise.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 116,
+    "name": "Romanian Deadlift (RDL)",
+    "description": "A hip-hinge exercise that targets the hamstrings and glutes through a controlled eccentric stretch. Performed with a barbell or dumbbells, it is a cornerstone movement for posterior chain development.",
+    "category": "strength",
+    "muscle_groups": ["hamstrings", "glutes", "erector_spinae"],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Stand with feet hip-width apart, holding a barbell or dumbbells in front of your thighs. Hinge at the hips while keeping your back flat and knees slightly bent. Lower the weight along your legs until you feel a strong hamstring stretch, then drive your hips forward to return to standing. Keep the bar close to your body throughout.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 410,
+        "exercise_id": 116,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Maintain strict neutral spine throughout. Avoid rounding the lower back at the bottom. Start with light loads and limit range of motion to a pain-free depth. Stop if any lumbar pain or radiating symptoms occur.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 411,
+        "exercise_id": 116,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "Stop if sciatic pain or leg tingling occurs. Keep range of motion within pain-free limits. Dumbbell variation with lighter loads is preferred over heavy barbell.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 412,
+        "exercise_id": 116,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Perform only with clearance from a healthcare provider. Keep the spine neutral and avoid end-range lumbar flexion. Use moderate loads and prioritize hip hinge mechanics over depth.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 40,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/romanian-deadlift.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 117,
+    "name": "Front Squat",
+    "description": "A barbell squat variation with the bar racked on the front deltoids. The upright torso position reduces shear forces on the lumbar spine compared to the back squat, making it a more back-friendly quad-dominant compound lift.",
+    "category": "strength",
+    "muscle_groups": ["quads", "glutes", "core_stabilizers", "upper_back"],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Rack the barbell across your front deltoids with elbows high and parallel to the floor. Stand with feet shoulder-width apart, toes turned slightly out. Brace your core and descend by sitting the hips down and back while keeping the torso upright and elbows high. Drive through the floor to return to standing.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 413,
+        "exercise_id": 117,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "The upright torso reduces lumbar load compared to back squat. Keep elbows high to maintain torso position. Avoid forward lean. Use moderate loads until form is established.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 414,
+        "exercise_id": 117,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "Preferable to back squat for sciatica sufferers due to more upright torso. Stop if radiating pain occurs. Keep depth within pain-free range.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 415,
+        "exercise_id": 117,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Upright torso position reduces disc compressive forces versus back squat. Start with goblet squat pattern first, progress slowly. Stop if any back or leg symptoms appear.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 8,
+    "weight": 50,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/front-squat.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 118,
+    "name": "Trap Bar Deadlift",
+    "description": "A deadlift variation performed using a hexagonal (trap) bar. The lifter stands inside the bar and grips neutral handles at the sides, producing a more upright torso, reduced lumbar shear forces, and a safer loading pattern — making it the single most recommended deadlift variation for people with back issues.",
+    "category": "strength",
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "quads",
+      "erector_spinae",
+      "traps"
+    ],
+    "equipment": "trap_bar",
+    "difficulty": "beginner",
+    "instructions": "Step inside the trap bar with feet hip-width apart. Push your hips back and bend your knees to grip the handles at your sides. Keep your chest up, back flat, and core braced. Drive through the floor, extending hips and knees simultaneously. Lock out at the top with hips fully extended. Lower the bar with control.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 416,
+        "exercise_id": 118,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Highly recommended for L5-S1 issues. The neutral grip and upright torso significantly reduce lumbar shear compared to conventional deadlift. Start conservative with loads and ensure a neutral spine throughout.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 417,
+        "exercise_id": 118,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Preferred deadlift variation for sciatica. The upright torso reduces nerve root stress. Stop immediately if leg tingling or sciatic pain occurs. Build weight gradually.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 418,
+        "exercise_id": 118,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Best deadlift option for herniated disc. More upright torso reduces disc compressive load versus conventional or sumo deadlift. Prioritize form over load. Stop if any symptoms worsen.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 6,
+    "weight": 60,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/trap-bar-deadlift.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/trap-bar.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 119,
+    "name": "Flat Barbell Bench Press",
+    "description": "The foundational horizontal pressing movement. Performed lying flat on a bench, it is the most widely programmed chest exercise in strength training. Targets the pectorals, anterior deltoids, and triceps.",
+    "category": "strength",
+    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Lie flat on a bench with eyes under the bar. Grip the bar slightly wider than shoulder-width. Unrack with arms extended, lower the bar to mid-chest under control, then press back to full arm extension. Keep feet flat, shoulder blades retracted and depressed, and maintain a natural arch in the lower back.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 419,
+        "exercise_id": 119,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Lying position offloads the lumbar spine. Safe for most L5-S1 conditions. Avoid excessive arching of the lower back. Keep feet flat on the floor or on a raised surface if needed.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 420,
+        "exercise_id": 119,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Supine position is spine-neutral and generally safe for sciatica. Avoid excessive lower back arch during the lift. Use a spotter for heavy loads.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 421,
+        "exercise_id": 119,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Lying flat removes axial spinal load. Generally well-tolerated with herniated disc. Avoid bridge-style excessive arching. Focus on shoulder blade retraction rather than lumbar hyperextension.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 4,
+    "reps": 8,
+    "weight": 60,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/flat-barbell-bench-press.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 120,
+    "name": "Bent-Over Barbell Row",
+    "description": "A compound pulling movement performed with a barbell while hinging at the hips. One of the most effective back thickness builders, targeting the lats, rhomboids, traps, and rear deltoids.",
+    "category": "strength",
+    "muscle_groups": [
+      "lats",
+      "rhomboids",
+      "traps",
+      "rear_delts",
+      "biceps",
+      "erector_spinae"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Stand with feet hip-width apart and grip the bar slightly wider than shoulder-width. Hinge forward until your torso is roughly 45–70 degrees to the floor, keeping your back flat. Pull the bar into your lower abdomen or upper hip by driving your elbows back. Lower with control. Keep the spine neutral throughout.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 422,
+        "exercise_id": 120,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "High lumbar load in the bent-over position. Not recommended for active L5-S1 flare-ups. If cleared by a physician, use very light loads, a more upright torso angle, and keep reps low. Chest-supported row is a safer alternative.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 423,
+        "exercise_id": 120,
+        "issue_type": "sciatica",
+        "restriction_level": "high",
+        "recommendation": "Avoid during active sciatica flare-ups. The sustained hip-hinge position increases neural tension. Substitute with chest-supported or seated cable row.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 424,
+        "exercise_id": 120,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Generally contraindicated with herniated disc due to high compressive and shear forces in the hip-hinge position under load. Use chest-supported row or single-arm dumbbell row instead.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 4,
+    "reps": 8,
+    "weight": 50,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/bent-over-barbell-row.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 121,
+    "name": "Single-Arm Dumbbell Row",
+    "description": "A unilateral horizontal pulling exercise performed with one hand and knee braced on a bench. Targets the lats, rhomboids, and traps while the bench support removes much of the lumbar load, making it one of the most back-friendly rowing variations.",
+    "category": "strength",
+    "muscle_groups": ["lats", "rhomboids", "traps", "rear_delts", "biceps"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Place your right knee and right hand on a flat bench for support. Hold a dumbbell in your left hand with arm hanging straight down. Pull the dumbbell toward your hip by driving your elbow back and up, keeping your torso parallel to the floor. Lower slowly to full arm extension. Complete all reps then switch sides.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 425,
+        "exercise_id": 121,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent back-friendly rowing option. Bench support significantly reduces lumbar load compared to bilateral bent-over rows. Keep the supported arm locked and torso parallel to the floor. Use moderate loads.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 426,
+        "exercise_id": 121,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Bench support offloads the spine and reduces neural tension. Preferred horizontal pull for sciatica. Stop if any leg radiating pain occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 427,
+        "exercise_id": 121,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "One of the safest rowing exercises for herniated disc. Braced position removes axial load from the spine. Avoid rotating the torso and keep core braced throughout.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 20,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/single-arm-dumbbell-row.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 122,
+    "name": "Reverse Lunge",
+    "description": "A unilateral lower-body exercise where you step backward into the lunge rather than forward. The reverse mechanics place less stress on the knee and reduce lumbar shear, making it more back- and knee-friendly than the forward lunge.",
+    "category": "strength",
+    "muscle_groups": ["quads", "glutes", "hamstrings", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Stand tall with feet hip-width apart. Step one foot directly backward and lower your rear knee toward the floor, keeping your front shin vertical. Your front knee should stay above your ankle. Push through your front heel to return to standing. Alternate legs or complete all reps on one side. Can be loaded with dumbbells or a barbell.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 428,
+        "exercise_id": 122,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Reverse lunge is more back-friendly than forward lunge. Keep torso upright and avoid forward lean. Start bodyweight only and progress to loaded versions cautiously.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 429,
+        "exercise_id": 122,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Generally well-tolerated. Upright torso reduces nerve root stress. Stop if any radiating leg pain occurs during or after the movement.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 430,
+        "exercise_id": 122,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Upright torso reduces disc compressive load. Preferred over forward lunge for herniated disc. Use bodyweight only initially and progress slowly.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/reverse-lunge.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 123,
+    "name": "Walking Lunge",
+    "description": "A dynamic unilateral lower-body exercise where each step becomes a lunge, propelling you forward. Develops quads, glutes, and single-leg stability with a cardiovascular conditioning component.",
+    "category": "strength",
+    "muscle_groups": ["quads", "glutes", "hamstrings", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "instructions": "Stand tall. Step forward with one foot and lower your rear knee toward the floor, keeping your front shin vertical. Drive through the front heel and step forward with the opposite foot into the next lunge. Continue alternating legs across the floor. Can be loaded with dumbbells at your sides.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 431,
+        "exercise_id": 123,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Forward step creates more lumbar load than reverse lunge. Keep torso upright and take a conservative stride length. Avoid heavy loading. Prefer reverse lunge if pain is present.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 432,
+        "exercise_id": 123,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "The forward step and lateral stability demands can aggravate sciatica. Use bodyweight only. Stop if radiating pain occurs. Reverse lunge is a safer alternative.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 433,
+        "exercise_id": 123,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Keep torso upright and stride length moderate. Use bodyweight only. If symptoms increase, switch to reverse lunge or stationary lunge.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/walking-lunge.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 124,
+    "name": "Hack Squat",
+    "description": "A machine-based squat variation where the back is supported against a padded sled at an angle. Delivers high quad stimulus with significantly reduced spinal loading, making it one of the most back-friendly heavy leg exercises available.",
+    "category": "strength",
+    "muscle_groups": ["quads", "glutes", "hamstrings"],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "instructions": "Load the machine and place your shoulders under the pads with your back flat against the sled. Feet are shoulder-width apart on the platform. Release the safety handles and descend by bending your knees until your thighs are parallel to the platform or below. Push through your heels to return to the start and re-engage the safeties.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 434,
+        "exercise_id": 124,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent back-friendly quad builder. Back support removes lumbar shear forces present in free-weight squats. Keep the back firmly pressed against the pad throughout. Avoid bouncing at the bottom.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 435,
+        "exercise_id": 124,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Supported back position reduces sciatic nerve tension compared to free squats. Stop if leg tingling or radiating pain occurs. Avoid full depth if it aggravates symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 436,
+        "exercise_id": 124,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Preferred over barbell squat for herniated disc. The back pad eliminates free axial loading of the spine. Start with light loads and conservative depth.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 4,
+    "reps": 10,
+    "weight": 60,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/hack-squat.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 125,
+    "name": "Nordic Hamstring Curl",
+    "description": "A bodyweight eccentric hamstring exercise where you lower your torso toward the floor by resisting the pull of gravity on your hamstrings. Gold standard for hamstring eccentric strength and injury prevention.",
+    "category": "strength",
+    "muscle_groups": ["hamstrings", "glutes", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "instructions": "Kneel on a mat with ankles secured under a pad, barbell, or held by a partner. Keeping your hips fully extended and body in a straight line from knees to head, lower your torso toward the floor as slowly as possible by resisting with your hamstrings. Use your hands to catch yourself at the bottom, then push back up and use hamstring strength to return as far as possible. Do not allow hips to flex during the movement.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 437,
+        "exercise_id": 125,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Kneeling position with upright hips places minimal lumbar load. Strong hamstrings protect the lumbar spine. Keep hips fully extended throughout to avoid lumbar flexion compensation.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 438,
+        "exercise_id": 125,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "The extreme hamstring stretch at end-range may provoke sciatic tension. Start with partial range of motion and monitor symptoms. Stop if radiating pain occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 439,
+        "exercise_id": 125,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "The extreme hamstring stretch at end range can provoke neural tension similarly to sciatica. Perform only with proven hip extension control. Start with partial range of motion and monitor for any radiating symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 5,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/nordic-hamstring-curl.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 126,
+    "name": "Machine Glute Kickback",
+    "description": "A machine-based glute isolation exercise where one leg pushes a padded lever backward against resistance. Provides direct glute loading in a braced, supported position that keeps the lumbar spine unloaded.",
+    "category": "strength",
+    "muscle_groups": ["glutes", "hamstrings"],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "instructions": "Stand facing the machine and place your working leg's thigh pad behind your knee or lower thigh. Hold the support handles. Brace your core and push your leg backward and upward in a controlled arc, squeezing the glute at the top. Avoid hyperextending the lower back. Return slowly to the start. Complete all reps then switch legs.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 440,
+        "exercise_id": 126,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent glute isolator for L5-S1 issues. Machine support reduces lumbar loading. Avoid hyperextending the lower back at the top. Keep range of motion pain-free.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 441,
+        "exercise_id": 126,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Supported glute activation safe for most sciatica presentations. Stop if radiating pain occurs. Focus on glute contraction rather than range of motion.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 442,
+        "exercise_id": 126,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Safe for herniated disc. Machine support removes spinal load. Glute strengthening helps stabilize the lumbar spine long-term. Avoid excessive lumbar extension at peak contraction.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 30,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/machine-glute-kickback.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 127,
+    "name": "Flat Dumbbell Bench Press",
+    "description": "A horizontal chest press performed with dumbbells on a flat bench. Allows a greater range of motion and more independent arm movement than the barbell version, with each side working unilaterally.",
+    "category": "strength",
+    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Lie flat on a bench holding a dumbbell in each hand at chest height, palms facing forward. Press both dumbbells upward to full arm extension above your chest, then lower slowly to the starting position with elbows at roughly 45–75 degrees from your torso. Maintain shoulder blade retraction throughout.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 443,
+        "exercise_id": 127,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Supine position offloads the lumbar spine. Safe for L5-S1 conditions. Avoid excessive lower back arching. Use moderate loads and controlled tempo.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 444,
+        "exercise_id": 127,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Lying flat is spine-neutral and generally safe for sciatica. Avoid aggressive back arch. Keep feet flat on the floor.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 445,
+        "exercise_id": 127,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Supine position removes axial spinal load. Well-tolerated with herniated disc. Focus on shoulder blade retraction rather than lumbar hyperextension.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 20,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/flat-dumbbell-bench-press.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 128,
+    "name": "Arnold Press",
+    "description": "A seated dumbbell shoulder press variation developed by Arnold Schwarzenegger. It begins with the palms facing you and rotates to a pronated position during the press, engaging all three deltoid heads through a fuller range of motion.",
+    "category": "strength",
+    "muscle_groups": ["front_delts", "side_delts", "rear_delts", "triceps"],
+    "equipment": "dumbbells",
+    "difficulty": "intermediate",
+    "instructions": "Sit on a bench with back support, holding dumbbells in front of your shoulders with palms facing your face and elbows forward. As you press upward, rotate your wrists outward so palms face forward at the top. Lower by reversing the rotation. Keep your lower back against the pad and avoid arching.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 446,
+        "exercise_id": 128,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Seated with back support reduces lumbar load. Use a bench with full back support. Avoid arching the lower back during the press. Use moderate loads.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 447,
+        "exercise_id": 128,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Seated supported position is spine-friendly. Back-supported bench preferred. Stop if any radiating symptoms occur.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 448,
+        "exercise_id": 128,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Use a fully supported back rest. Avoid pressing to complete failure which can cause trunk compensation. Moderate loads with controlled tempo.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 12,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/arnold-press.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 129,
+    "name": "Preacher Curl",
+    "description": "A biceps curl performed with the upper arms braced against a preacher bench pad. The arm support eliminates cheating and shoulder involvement, isolating the biceps in a fully supported, back-friendly position.",
+    "category": "strength",
+    "muscle_groups": ["biceps", "brachialis"],
+    "equipment": "barbell",
+    "difficulty": "beginner",
+    "instructions": "Sit at a preacher bench and drape your upper arms over the angled pad. Grip a barbell or EZ-curl bar with an underhand grip. Curl the weight up toward your shoulders by flexing the elbows, keeping the upper arms on the pad. Lower slowly to near-full extension. Avoid slamming the weight down at the bottom.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 449,
+        "exercise_id": 129,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Seated and braced position eliminates spinal loading. Excellent choice for L5-S1 — upper arm support prevents any trunk swaying compensation.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 450,
+        "exercise_id": 129,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Seated, arm-braced position is spine-neutral. Very safe for sciatica. No restrictions beyond general form cues.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 451,
+        "exercise_id": 129,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "One of the safest biceps exercises for herniated disc. Upper arm support on the pad eliminates trunk compensation entirely.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 20,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/preacher-curl.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 130,
+    "name": "Concentration Curl",
+    "description": "A seated, single-arm biceps curl where the elbow is braced against the inner thigh. Removes all momentum and trunk sway, providing strict biceps isolation in a back-friendly seated position.",
+    "category": "strength",
+    "muscle_groups": ["biceps", "brachialis"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Sit on a bench with legs spread. Hold a dumbbell in one hand and brace the back of that upper arm against your inner thigh. Curl the dumbbell up toward your shoulder with a full range of motion. Squeeze at the top, then lower slowly. Keep your torso stable and avoid leaning back.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 452,
+        "exercise_id": 130,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Seated with arm braced against leg — no spinal loading. Excellent for L5-S1. Keep torso upright and avoid leaning forward excessively.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 453,
+        "exercise_id": 130,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Sitting with elbow braced is spine-neutral. Very safe for sciatica. No specific restrictions.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 454,
+        "exercise_id": 130,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Seated, braced position removes spinal loading entirely. Ideal for herniated disc patients who want upper body work without axial load.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 10,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/concentration-curl.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 131,
+    "name": "Overhead Tricep Extension",
+    "description": "A triceps isolation exercise performed with a dumbbell or cable with arms raised overhead. Targets the long head of the triceps through its fullest range of motion, which pushdowns and kickbacks cannot replicate.",
+    "category": "strength",
+    "muscle_groups": ["triceps"],
+    "equipment": "dumbbells",
+    "difficulty": "beginner",
+    "instructions": "Sit on a bench with back support and hold one dumbbell with both hands overhead, arms extended. Brace your core and keep your upper arms stationary next to your head. Lower the dumbbell behind your head by bending the elbows, then press back to full extension. Can also be performed with a cable and rope attachment.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 455,
+        "exercise_id": 131,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Seated with back support is spine-friendly. Avoid arching the lower back when the arms are overhead. Engage the core lightly throughout.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 456,
+        "exercise_id": 131,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Seated position is spine-neutral. Generally safe for sciatica. Use a fully supported back rest.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 457,
+        "exercise_id": 131,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Seated, supported position is appropriate for herniated disc. Avoid heavy loads overhead that cause lumbar compensation. Keep ribs down.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 16,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/overhead-tricep-extension.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/dumbbells.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 132,
+    "name": "Close-Grip Bench Press",
+    "description": "A barbell bench press performed with a narrow grip (hands inside shoulder width). Shifts emphasis from the chest onto the triceps while still being a compound movement, performed in the same back-friendly supine position as the flat bench press.",
+    "category": "strength",
+    "muscle_groups": ["triceps", "chest", "front_delts"],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Lie flat on a bench and grip the barbell with hands approximately shoulder-width apart or slightly narrower. Unrack with arms extended. Lower the bar to your lower chest / upper abdomen, keeping your elbows tucked at roughly 45 degrees. Press back to full extension. Avoid letting the elbows flare excessively.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 458,
+        "exercise_id": 132,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Supine position offloads the lumbar spine identically to the flat bench press. Avoid excessive lower back arching. Safe for most L5-S1 conditions.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 459,
+        "exercise_id": 132,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Lying flat is spine-neutral and well-tolerated for sciatica. Keep feet flat on the floor.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 460,
+        "exercise_id": 132,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Supine position removes axial spinal load. Well-tolerated with herniated disc. Prioritize shoulder blade retraction over lumbar arch.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 8,
+    "weight": 50,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/close-grip-bench-press.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 133,
+    "name": "Upright Row",
+    "description": "A vertical pulling movement performed with a barbell or dumbbells where the elbows rise above the hands to target the traps and lateral deltoids. A common trap and shoulder builder — note that shoulder internal rotation at the top may be contraindicated for those with impingement issues.",
+    "category": "strength",
+    "muscle_groups": ["traps", "side_delts", "front_delts", "biceps"],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "instructions": "Stand with feet hip-width apart, holding a barbell with an overhand grip slightly narrower than shoulder-width. Pull the bar straight up along your body, leading with the elbows until the bar reaches upper chest or chin level. Lower with control. Keep the torso upright and avoid swinging.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 461,
+        "exercise_id": 133,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Standing with load may compress the lumbar spine. Keep loads light to moderate. Avoid leaning back to complete reps. Use a slight forward torso lean to keep the bar close.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 462,
+        "exercise_id": 133,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "Standing loaded movement adds mild lumbar compressive load. Use light loads. Stop if radiating symptoms worsen. Seated cable upright row is a safer alternative.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 463,
+        "exercise_id": 133,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Axial loading in the standing position may stress a herniated disc. Use light loads and strict form. Prefer seated or machine-based trap exercises.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 30,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/upright-row.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/barbell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 134,
+    "name": "T-Bar Row",
+    "description": "A compound rowing movement performed on a T-bar machine or with a barbell in a landmine setup. A popular back thickness builder that allows heavier loading than dumbbell rows with a moderate lumbar demand.",
+    "category": "strength",
+    "muscle_groups": ["lats", "rhomboids", "traps", "rear_delts", "biceps"],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "instructions": "Stand on the T-bar platform with feet shoulder-width apart and straddle the bar. Hinge forward to roughly 45 degrees, keeping your back flat. Grip the handles and pull the weight into your chest by driving your elbows back. Squeeze your shoulder blades together at the top. Lower with control. Keep the core braced and spine neutral throughout.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 464,
+        "exercise_id": 134,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Sustained hip-hinge position under load places high lumbar demand. Not recommended during active L5-S1 flare-ups. If cleared, use lighter loads and a more upright torso. Chest-supported T-bar is a safer variant.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 465,
+        "exercise_id": 134,
+        "issue_type": "sciatica",
+        "restriction_level": "high",
+        "recommendation": "Hip-hinge position increases neural tension. Avoid during acute sciatica. Substitute with chest-supported row or single-arm dumbbell row.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 466,
+        "exercise_id": 134,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Contraindicated for active herniated disc. The hip-hinge under load generates high compressive and shear forces on the lumbar spine. Use chest-supported or machine rows instead.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 4,
+    "reps": 8,
+    "weight": 50,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/t-bar-row.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 135,
+    "name": "Inverted Row",
+    "description": "A bodyweight horizontal pulling exercise performed lying beneath a fixed bar (barbell in a rack, Smith machine, or rings). You pull your chest up to the bar with feet on the floor. A back-friendly, equipment-minimal alternative to bent-over rows.",
+    "category": "strength",
+    "muscle_groups": [
+      "lats",
+      "rhomboids",
+      "traps",
+      "rear_delts",
+      "biceps",
+      "core_stabilizers"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Set a barbell in a rack at waist height. Lie beneath it and grip it overhand, slightly wider than shoulder-width, with arms fully extended. Keeping your body in a straight line from heels to head, pull your chest up to the bar by driving your elbows back. Squeeze shoulder blades at the top, then lower with control. Increase difficulty by lowering the bar; decrease by bending the knees.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 467,
+        "exercise_id": 135,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Supine-angled position removes the lumbar compressive load present in bent-over rows. Excellent back-friendly horizontal pull. Keep hips fully extended and core braced.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 468,
+        "exercise_id": 135,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Semi-supine position reduces sciatic neural tension. Safe for most sciatica presentations. Avoid if the hamstring stretch at full extension provokes radiating symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 469,
+        "exercise_id": 135,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "One of the safest horizontal pulling exercises for herniated disc. No axial spinal load. Ensure hips do not sag during the movement.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/inverted-row.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 136,
+    "name": "Hollow Body Hold",
+    "description": "A gymnastics-derived anti-extension core exercise. Lying on your back with arms overhead and legs extended, you maintain a dish-like body position that deeply activates the entire anterior core while keeping the lumbar spine pressed flat.",
+    "category": "core",
+    "muscle_groups": ["abdominals", "hip_flexors", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "instructions": "Lie on your back with arms extended overhead. Simultaneously lift your shoulders, arms, and legs off the floor, pressing your lower back firmly into the ground. Hold the 'dish' position with everything off the floor and your body forming a shallow curve. Breathe steadily. Modify by bending the knees or keeping arms by your sides to reduce lever arm.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 470,
+        "exercise_id": 136,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "The lumbar-flat position is actually protective for L5-S1. However, if hip flexor tightness causes the lower back to lift off the floor, shorten the lever arm by bending the knees. Stop if lumbar pain occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 471,
+        "exercise_id": 136,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Supine with lumbar flat on floor reduces sciatic nerve tension. Suitable for most sciatica presentations. Bend knees if the extended-leg position provokes symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 472,
+        "exercise_id": 136,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "The lumbar-flat position is generally protective for herniated disc. However, if core fails during the hold, the lower back can arch and increase disc pressure. Shorten the lever arm by bending knees until core strength is sufficient. Stop if back pain occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 30,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/hollow-body-hold.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 137,
+    "name": "Ab Wheel Rollout",
+    "description": "A highly effective anti-extension core exercise performed by rolling a small wheel forward from a kneeling position. Demands peak anterior core strength and stability to prevent lumbar hyperextension.",
+    "category": "core",
+    "muscle_groups": ["abdominals", "core_stabilizers", "lats"],
+    "equipment": "ab_wheel",
+    "difficulty": "advanced",
+    "instructions": "Kneel on a mat and grip the ab wheel handles with both hands in front of you on the floor. Brace your core hard and roll forward slowly, extending your hips and keeping your lower back from sagging. Extend as far as you can maintain a neutral spine, then pull back to the start using your abs. Do not allow the lower back to arch at the end of the range.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 473,
+        "exercise_id": 137,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Advanced movement with high lumbar shear if core fails. Not recommended for active L5-S1 issues. Only attempt when core strength is already well-developed and pain is fully resolved. Start with very short range of motion.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 474,
+        "exercise_id": 137,
+        "issue_type": "sciatica",
+        "restriction_level": "high",
+        "recommendation": "Avoid during active sciatica. The lumbar extension stress at end range can worsen nerve root irritation. Return to this only when symptom-free and with strong core foundation.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 475,
+        "exercise_id": 137,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Contraindicated for active herniated disc. Lumbar hyperextension under load can increase disc pressure. Master plank, dead bug, and hollow body first before attempting this.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 8,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/ab-wheel-rollout.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/ab-wheel.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 138,
+    "name": "Russian Twist",
+    "description": "A seated rotational core exercise where the torso rotates side to side while the feet are elevated. Targets the obliques and rotational core. Typically contraindicated for L5-S1 disc issues due to combined flexion and rotation — use restrictions carefully.",
+    "category": "core",
+    "muscle_groups": ["obliques", "abdominals", "hip_flexors"],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "instructions": "Sit on a mat with knees bent and feet elevated off the floor, leaning back to about 45 degrees. Clasp your hands together or hold a weight. Rotate your torso to one side until your hands nearly touch the floor beside your hip, then rotate to the opposite side. Keep the movement controlled and initiated from the obliques, not momentum.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 476,
+        "exercise_id": 138,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Combined lumbar flexion and rotation under load significantly increases disc shear forces. Contraindicated for active L5-S1 issues. If pain-free, use feet-on-floor version without added weight only. Prefer Pallof press for rotational core work.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 477,
+        "exercise_id": 138,
+        "issue_type": "sciatica",
+        "restriction_level": "high",
+        "recommendation": "Rotational loading in a flexed seated position can aggravate sciatic nerve root. Avoid during active flare-ups. Pallof press is a safer anti-rotation alternative.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 478,
+        "exercise_id": 138,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Contraindicated for herniated disc. Flexion combined with rotation is the most stressful loading pattern for intervertebral discs. Use cable woodchopper or Pallof press instead.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 20,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/russian-twist.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 139,
+    "name": "Cable Woodchopper",
+    "description": "A rotational core exercise performed on a cable machine, pulling the handle diagonally from high to low (or low to high). Trains anti-rotation and transverse plane core strength in a controlled, spine-friendly manner.",
+    "category": "core",
+    "muscle_groups": ["obliques", "abdominals", "core_stabilizers", "glutes"],
+    "equipment": "cable_machine",
+    "difficulty": "beginner",
+    "instructions": "Set the cable at shoulder height (for high-to-low chop) or hip height (for low-to-high chop). Stand sideways to the machine with feet shoulder-width apart. Grip the handle with both hands and pull it diagonally across your body in a chopping motion, rotating your torso. Keep your arms relatively straight and initiate from the core. Return with control. Complete all reps then switch sides.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 479,
+        "exercise_id": 139,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Rotational loading should be approached cautiously with L5-S1. Use light to moderate loads. Keep the lumbar spine neutral — the rotation should come from the thoracic spine and hips. Stop if lumbar pain occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 480,
+        "exercise_id": 139,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "Controlled cable rotation is safer than free-weight rotational exercises. Use light loads. Avoid twisting past pain-free range. Stop if leg symptoms increase.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 481,
+        "exercise_id": 139,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Light cable chops with controlled rotation are well-tolerated by many herniated disc patients. Keep lumbar neutral and allow the thoracic spine to rotate. Avoid heavy loads and do not rotate into pain.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 10,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/cable-woodchopper.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/cable-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 140,
+    "name": "Stationary Bike",
+    "description": "Low-impact aerobic exercise performed on a stationary cycle. The seated, supported position makes it one of the most recommended cardio modalities for people with back issues — no spinal impact, no axial loading.",
+    "category": "cardio",
+    "muscle_groups": ["quads", "hamstrings", "glutes", "calves"],
+    "equipment": "stationary_bike",
+    "difficulty": "beginner",
+    "instructions": "Adjust the seat so your knee has a slight bend at the bottom of the pedal stroke. Sit upright or in a slight forward lean with hands on the handlebars. Pedal at a comfortable cadence, maintaining consistent resistance. Start with 15–20 minutes and progress duration and intensity over time.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 482,
+        "exercise_id": 140,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent low-impact cardio for L5-S1. No axial spinal loading. Avoid hunching over the handlebars. Recumbent bike is even more back-friendly if upright position causes discomfort.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 483,
+        "exercise_id": 140,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Ideal cardio for sciatica. Seated cycling avoids the neural tension of running. Use the recumbent bike if prolonged hip flexion provokes symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 484,
+        "exercise_id": 140,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Top recommended cardio for herniated disc. No impact, no axial load. Recumbent bike preferred if upright posture is uncomfortable. Start with short, easy sessions.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 1,
+    "reps": 20,
+    "weight": 0,
+    "weight_unit": "minutes",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/stationary-bike.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/stationary-bike.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 141,
+    "name": "Rowing Machine",
+    "description": "A full-body cardio exercise on an ergometer (rowing machine) that engages legs, core, and upper back in a coordinated pulling motion. Excellent cardiovascular conditioning with low joint impact and significant posterior chain benefit.",
+    "category": "cardio",
+    "muscle_groups": [
+      "lats",
+      "rhomboids",
+      "traps",
+      "glutes",
+      "hamstrings",
+      "quads",
+      "core_stabilizers"
+    ],
+    "equipment": "rowing_machine",
+    "difficulty": "intermediate",
+    "instructions": "Sit on the rower with feet secured in the foot straps. Begin with knees bent and arms extended, gripping the handle. Drive through your legs first, then lean back slightly, then pull the handle to your lower chest. Reverse the sequence to return: arms extend, lean forward, knees bend. Maintain a neutral spine throughout — avoid rounding the lower back at the catch.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 485,
+        "exercise_id": 141,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "The forward lean at the catch and layback at the finish creates cyclic lumbar loading. Use a shorter stroke with limited layback angle. Avoid rounding the lower back at the catch. Start at low resistance and monitor symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 486,
+        "exercise_id": 141,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "Repetitive hip flexion/extension cycle may aggravate sciatica in some individuals. Start with short sessions and low stroke rate. Stop if leg symptoms occur. Stationary bike may be more comfortable.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 487,
+        "exercise_id": 141,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Avoid rounding the lower back at the catch — this is the most dangerous position for disc herniation. Keep the stroke short and controlled. Reduce resistance if form degrades. Stop if back or leg pain increases.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 1,
+    "reps": 20,
+    "weight": 0,
+    "weight_unit": "minutes",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/rowing-machine.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/rowing-machine.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 142,
+    "name": "Elliptical",
+    "description": "A low-impact cardio machine that simulates running and stair-climbing movements without the joint impact. The smooth elliptical motion and upright posture make it one of the most joint- and back-friendly cardio options.",
+    "category": "cardio",
+    "muscle_groups": [
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves",
+      "core_stabilizers"
+    ],
+    "equipment": "elliptical",
+    "difficulty": "beginner",
+    "instructions": "Step onto the pedals and grip the handles. Begin with a comfortable stride at low resistance. Maintain an upright posture and avoid leaning heavily on the handles. Increase resistance and incline gradually. Aim for 20–40 minutes at moderate intensity. Push with the handle arms to engage the upper body.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 488,
+        "exercise_id": 142,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent low-impact cardio for L5-S1. No axial spinal impact. Keep upright posture and avoid hanging on the handles. Smooth motion reduces lumbar stress compared to running.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 489,
+        "exercise_id": 142,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Smooth, impact-free stride is well-tolerated for sciatica. Upright position reduces neural tension. Stop if radiating pain occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 490,
+        "exercise_id": 142,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Highly recommended for herniated disc. No spinal impact, no axial loading. Upright posture maintains natural spinal curves. Preferred over running or stair climbing.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 1,
+    "reps": 30,
+    "weight": 0,
+    "weight_unit": "minutes",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/elliptical.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/elliptical.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 143,
+    "name": "Treadmill Walk",
+    "description": "Brisk walking on a treadmill. One of the most evidence-backed cardio modalities for spinal rehabilitation — walking at a moderate pace promotes disc nutrition through cyclic loading without the high-impact forces of running.",
+    "category": "cardio",
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "quads",
+      "calves",
+      "core_stabilizers"
+    ],
+    "equipment": "treadmill",
+    "difficulty": "beginner",
+    "instructions": "Set the treadmill to a comfortable walking speed (4–6 km/h). Stand tall with shoulders back and arms swinging naturally. Look forward, not down. Start flat and gradually introduce a 1–3% incline to increase glute activation and reduce knee stress. Begin with 20 minutes and progress duration over time.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 491,
+        "exercise_id": 143,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Walking is among the most recommended activities for L5-S1 rehabilitation. Promotes disc nutrition and lumbar mobility. Avoid holding the handrails as this distorts gait. Stop if pain increases.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 492,
+        "exercise_id": 143,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Walking is widely recommended for sciatica management. Keep the stride natural and avoid an antalgic (pain-compensating) gait. Stop if leg radiating pain worsens during or after the walk.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 493,
+        "exercise_id": 143,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Walking is one of the primary recommended activities for herniated disc. Start with short, flat walks and gradually increase distance. Avoid inclines greater than 5% if they provoke symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 1,
+    "reps": 30,
+    "weight": 0,
+    "weight_unit": "minutes",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/treadmill-walk.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/treadmill.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 144,
+    "name": "Stairmaster",
+    "description": "A stepping machine that simulates continuous stair climbing. Provides high-calorie cardiovascular conditioning with significant glute, quad, and calf activation in an upright posture.",
+    "category": "cardio",
+    "muscle_groups": ["glutes", "quads", "hamstrings", "calves"],
+    "equipment": "stairmaster",
+    "difficulty": "intermediate",
+    "instructions": "Step onto the machine and set a comfortable step rate (60–80 steps per minute for beginners). Maintain an upright posture — avoid leaning on the handrails, which reduces glute activation and distorts posture. Step through the full range of each stride. Increase speed and duration progressively.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 494,
+        "exercise_id": 144,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Upright stepping is generally well-tolerated for L5-S1. Avoid leaning forward heavily on the rails, which flexes the lumbar spine under sustained load. Reduce step rate if back discomfort occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 495,
+        "exercise_id": 144,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "The hip flexion at each step may provoke sciatic symptoms for some individuals. Start at a low step rate and monitor leg symptoms. Stop if radiating pain occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 496,
+        "exercise_id": 144,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Generally safe for herniated disc when posture is upright. Avoid the temptation to lean on the handrails. If forward lean aggravates disc symptoms, switch to stationary bike or elliptical.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 1,
+    "reps": 20,
+    "weight": 0,
+    "weight_unit": "minutes",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/stairmaster.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/stairmaster.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 145,
+    "name": "Jump Rope",
+    "description": "High-intensity cardiovascular conditioning using a jump rope. Develops coordination, footwork, and aerobic capacity. The repetitive impact makes it contraindicated for active spinal conditions but suitable for those in maintenance phase.",
+    "category": "cardio",
+    "muscle_groups": ["calves", "core_stabilizers", "front_delts", "quads"],
+    "equipment": "jump_rope",
+    "difficulty": "intermediate",
+    "instructions": "Hold one handle in each hand with the rope behind your feet. Swing the rope over your head and jump with both feet simultaneously, keeping jumps low and landing softly on the balls of your feet with knees slightly bent. Maintain an upright torso. Begin with intervals of 30 seconds on / 30 seconds off.",
+    "video_url": "",
+    "is_back_friendly": false,
+    "back_issue_restrictions": [
+      {
+        "id": 497,
+        "exercise_id": 145,
+        "issue_type": "l5_s1",
+        "restriction_level": "high",
+        "recommendation": "Repetitive high-impact landings transmit compressive force through the lumbar spine. Contraindicated during active L5-S1 flare-ups. Only resume when fully pain-free with good core stability.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 498,
+        "exercise_id": 145,
+        "issue_type": "sciatica",
+        "restriction_level": "high",
+        "recommendation": "Impact loading aggravates sciatic nerve irritation. Avoid during active sciatica. Use stationary bike or elliptical instead.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 499,
+        "exercise_id": 145,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "Repetitive impact is contraindicated for herniated disc. The compressive spike at each landing can worsen disc damage. Choose zero-impact cardio alternatives.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 5,
+    "reps": 30,
+    "weight": 0,
+    "weight_unit": "seconds",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/jump-rope.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/jump-rope.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 146,
+    "name": "Battle Ropes",
+    "description": "High-intensity conditioning exercise using heavy ropes anchored to a wall or post. Creates powerful wave movements that develop upper body power, aerobic capacity, and anti-extension core stability.",
+    "category": "cardio",
+    "muscle_groups": [
+      "front_delts",
+      "traps",
+      "core_stabilizers",
+      "forearms",
+      "glutes"
+    ],
+    "equipment": "battle_ropes",
+    "difficulty": "intermediate",
+    "instructions": "Stand in an athletic stance facing the anchor point, feet shoulder-width apart and knees slightly bent. Hold one end of each rope with an overhand grip. Create alternating or simultaneous wave movements by lifting and slamming the ropes forcefully. Keep your core braced and back neutral. Work in 20–40 second intervals with rest periods.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 500,
+        "exercise_id": 146,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Standing and bracing with wave movements is generally manageable for L5-S1. Avoid excessive lumbar extension when slamming ropes. Keep the core braced and knees bent. Avoid double-arm slam variations which spike lumbar extension.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 501,
+        "exercise_id": 146,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "Alternating waves in an athletic stance are generally tolerable. Stop if radiating leg pain occurs. Avoid any movements that cause trunk rotation or forward flexion under load.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 502,
+        "exercise_id": 146,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Keep the lumbar spine in a neutral position throughout. Use alternating arm waves rather than bilateral slam variations. Reduce work intervals and monitor symptoms closely.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 5,
+    "reps": 20,
+    "weight": 0,
+    "weight_unit": "seconds",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/battle-ropes.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/battle-ropes.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 147,
+    "name": "Kettlebell Swing",
+    "description": "A ballistic hip-hinge exercise using a kettlebell. Develops powerful hip extension, posterior chain conditioning, and cardiovascular capacity. When performed with a neutral spine, it is a highly effective and moderately back-friendly conditioning tool.",
+    "category": "cardio",
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "erector_spinae",
+      "core_stabilizers",
+      "front_delts"
+    ],
+    "equipment": "kettlebell",
+    "difficulty": "intermediate",
+    "instructions": "Stand with feet slightly wider than shoulder-width, kettlebell on the floor in front of you. Hike the kettlebell back between your legs with a hip hinge, then drive explosively through the hips to swing it to chest height. Do not squat or use arm strength — the power comes entirely from the hip snap. Let the bell descend and hike it back in one smooth motion. Keep the spine neutral throughout.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 503,
+        "exercise_id": 147,
+        "issue_type": "l5_s1",
+        "restriction_level": "medium",
+        "recommendation": "Requires impeccable hip hinge mechanics. Any lumbar flexion during the swing creates high shear forces. Master the deadhinge pattern first. Start with a light kettlebell. Stop immediately if lumbar pain occurs.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 504,
+        "exercise_id": 147,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "The explosive hip extension can be therapeutic when performed correctly. However, the hike-back phase can irritate the sciatic nerve if form is poor. Learn form with light loads and stop if leg symptoms occur.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 505,
+        "exercise_id": 147,
+        "issue_type": "herniated_disc",
+        "restriction_level": "high",
+        "recommendation": "High dynamic load on the disc during the hike-back phase. Not recommended for active herniated disc. Only attempt when pain-free, with proven hip hinge mechanics, and using a very light bell. Stationary bike or elliptical are safer conditioning alternatives.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 4,
+    "reps": 15,
+    "weight": 16,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/kettlebell-swing.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/kettlebell.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 148,
+    "name": "Cat-Cow Stretch",
+    "description": "A fundamental spinal mobility exercise alternating between lumbar flexion (cat) and lumbar extension (cow) on hands and knees. One of the most universally prescribed exercises in spinal rehabilitation for restoring segmental mobility and reducing stiffness.",
+    "category": "rehab",
+    "muscle_groups": ["erector_spinae", "abdominals", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Start on hands and knees with wrists under shoulders and knees under hips. For Cat: exhale and round your back toward the ceiling, tucking your pelvis and chin. For Cow: inhale and let your belly drop toward the floor, lifting your head and tailbone. Move slowly between positions, matching the breath to the movement. Perform 10–15 repetitions.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 506,
+        "exercise_id": 148,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Widely prescribed for L5-S1 rehabilitation. Gentle cyclic movement promotes disc nutrition and lumbar mobility. Move within a pain-free range and avoid forcing either extreme of the range.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 507,
+        "exercise_id": 148,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Gentle and highly recommended for sciatica. The Cat position (flexion) can relieve neural tension. Move slowly and stay within a completely pain-free range.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 508,
+        "exercise_id": 148,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "One of the safest and most recommended exercises for herniated disc. Unloaded spinal mobility promotes disc health. Avoid the extreme Cow extension position if extension worsens symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 2,
+    "reps": 15,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/cat-cow-stretch.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 149,
+    "name": "Child's Pose",
+    "description": "A restorative yoga-derived stretch where you sit back onto your heels and extend your arms forward on the floor. Gently decompresses the lumbar spine, stretches the lats and thoracic extensors, and provides a calming hip flexor and lower back release.",
+    "category": "rehab",
+    "muscle_groups": ["erector_spinae", "lats", "glutes", "hip_flexors"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Kneel on a mat with big toes touching and knees spread wide (or together for a more narrow variation). Sit your hips back toward your heels and walk your hands forward on the floor, lowering your chest between or above your thighs. Rest your forehead on the mat and breathe deeply. Hold for 30–60 seconds.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 509,
+        "exercise_id": 149,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Gently decompresses the lumbar spine. Generally very comfortable for L5-S1. If lumbar flexion is provocative, place a pillow between thighs and chest to reduce the forward fold.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 510,
+        "exercise_id": 149,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Many sciatica sufferers find child's pose very relieving. If knee pressure or hip position aggravates symptoms, modify with narrower knee width. Stop if leg pain increases.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 511,
+        "exercise_id": 149,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Generally well-tolerated and therapeutic for herniated disc in the lumbar flexion-tolerant subgroup. If extension-biased (McKenzie), symptoms may worsen in this position — in that case, avoid and use cobra/press-up instead.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 2,
+    "reps": 1,
+    "weight": 0,
+    "weight_unit": "seconds",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/childs-pose.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 150,
+    "name": "Cobra Stretch (McKenzie Press-Up)",
+    "description": "A prone lumbar extension exercise where you press your upper body up with your arms while keeping your hips on the floor. The most evidence-backed exercise for posterior disc herniations, derived from the McKenzie Method. Produces centralization of discogenic pain.",
+    "category": "rehab",
+    "muscle_groups": ["erector_spinae", "abdominals"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Lie face down on a mat with hands placed under your shoulders. Keeping your hips and pelvis on the floor, press your upper body upward by straightening your arms, allowing your lower back to arch. Hold the top position for 1–2 seconds or sustain a gentle hold for 30 seconds. Lower slowly. Repeat 10 times. Hips must remain in contact with the floor throughout.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 512,
+        "exercise_id": 150,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "The McKenzie press-up is one of the most evidence-backed exercises for posterior L5-S1 disc issues. Lumbar extension is the primary therapeutic direction for most disc herniations. Start with gentle range and increase progressively. Stop if pain peripheralizes (spreads to the leg).",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 513,
+        "exercise_id": 150,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Highly recommended first-line exercise for discogenic sciatica. If pain centralizes (moves from leg toward spine) during the press-up, this is a positive sign. If pain peripheralizes, stop and consult a physiotherapist.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 514,
+        "exercise_id": 150,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "The single most recommended exercise for posterior herniated disc. Prone lumbar extension creates anterior disc pressure that can help reposition herniated material. Monitor centralization of symptoms. If extension worsens pain, stop and seek guidance.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 10,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/cobra-stretch-mckenzie-press-up.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 151,
+    "name": "Hip Flexor Stretch (Kneeling Lunge)",
+    "description": "A kneeling stretch targeting the hip flexors (iliopsoas and rectus femoris). Tight hip flexors anteriorly tilt the pelvis and increase lumbar lordosis, making this stretch particularly important for people with back pain.",
+    "category": "rehab",
+    "muscle_groups": ["hip_flexors", "quads"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Kneel on your right knee on a mat with your left foot forward. Shift your hips forward gently until you feel a stretch in the front of your right hip. Keep your torso upright and squeeze your right glute lightly to deepen the stretch. Hold for 30–45 seconds. You can raise your right arm overhead for an added lateral stretch. Switch sides.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 515,
+        "exercise_id": 151,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Releasing tight hip flexors reduces anterior pelvic tilt and lumbar lordosis — directly beneficial for L5-S1 pain. Squeeze the back glute to posteriorly tilt the pelvis and maximize the stretch.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 516,
+        "exercise_id": 151,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Hip flexor stretching reduces pelvic tension that can contribute to sciatic nerve irritation. Very safe for most sciatica presentations.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 517,
+        "exercise_id": 151,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Releasing hip flexors reduces the anterior pelvic tilt that loads the posterior disc. Highly recommended for herniated disc management. Gentle, sustained stretching is preferred.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 2,
+    "reps": 1,
+    "weight": 0,
+    "weight_unit": "seconds",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/hip-flexor-stretch.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 152,
+    "name": "Pigeon Pose",
+    "description": "A yoga-derived deep hip external rotation and glute stretch. Targets the piriformis and deep hip rotators, which when tight can compress the sciatic nerve — making this a primary stretch for piriformis-related sciatica.",
+    "category": "rehab",
+    "muscle_groups": ["glutes", "hip_rotators", "hip_flexors"],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "instructions": "From a tabletop position, bring your right shin forward at roughly 45–90 degrees and extend your left leg straight behind you. Lower your hips toward the floor, keeping your pelvis as square as possible. Walk your hands forward and lower your chest over your front shin for a deeper stretch. Hold for 45–60 seconds. Switch sides.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 518,
+        "exercise_id": 152,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Deep glute and piriformis stretch. Very useful for L5-S1 sufferers whose piriformis tightness contributes to local hip and lumbar discomfort. Move into the position slowly. Modify by keeping the front shin at a less acute angle.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 519,
+        "exercise_id": 152,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "Excellent for piriformis-related sciatica (pseudosciatica). However, for true discogenic sciatica, deep hip flexion may increase neural tension. Monitor carefully — if leg symptoms worsen, stop and substitute with supine figure-four stretch.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 520,
+        "exercise_id": 152,
+        "issue_type": "herniated_disc",
+        "restriction_level": "medium",
+        "recommendation": "Generally well-tolerated. Releasing piriformis tension reduces secondary sciatic compression. Avoid if the forward lean (lumbar flexion) portion of the pose aggravates back symptoms.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 2,
+    "reps": 1,
+    "weight": 0,
+    "weight_unit": "seconds",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/pigeon-pose.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 153,
+    "name": "90/90 Hip Stretch",
+    "description": "A seated hip mobility exercise with both legs bent at 90 degrees — one in internal rotation and one in external rotation. Simultaneously addresses both hip internal and external rotation restrictions that contribute to lumbar compensations.",
+    "category": "rehab",
+    "muscle_groups": ["glutes", "hip_rotators", "hip_flexors", "hip_adductors"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Sit on the floor with your front leg bent at 90 degrees with the shin parallel to the front, and your rear leg bent at 90 degrees out to your side. Keep your back tall and sit directly on your sit bones. Hinge forward over the front shin to stretch the external hip rotators. Then rotate your torso toward the rear leg to address the internal rotators. Hold each position for 30–45 seconds.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 521,
+        "exercise_id": 153,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Hip mobility restrictions cause lumbar compensation — releasing them reduces L5-S1 load. Stay tall and avoid collapsing the lower back. Move within a completely pain-free range.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 522,
+        "exercise_id": 153,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Improving hip rotation reduces neural tension patterns associated with sciatica. Monitor symptoms — if the front-leg external rotation position aggravates leg pain, reduce the forward hinge.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 523,
+        "exercise_id": 153,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Restoring hip mobility reduces lumbar compensatory loading that stresses discs. Generally very safe. Avoid rounding the lower back in the forward hinge variation.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 2,
+    "reps": 1,
+    "weight": 0,
+    "weight_unit": "seconds",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/90-90-hip-stretch.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 154,
+    "name": "Thoracic Spine Rotation",
+    "description": "A mobility exercise targeting rotation of the mid-back (thoracic spine). Stiff thoracic rotation forces the lumbar spine to compensate during everyday movements — restoring it directly reduces lumbar pain and injury risk.",
+    "category": "rehab",
+    "muscle_groups": ["thoracic_extensors", "obliques", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Sit in a 90/90 position or lie on your side with knees stacked at 90 degrees. Place one hand behind your head and rotate your upper back and elbow toward the ceiling, following with your eyes. Keep your knees stacked (do not let the hips rotate). Return slowly and repeat. Perform 10 reps per side. Can also be performed seated in a chair.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 524,
+        "exercise_id": 154,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Highly beneficial for L5-S1. Improving thoracic rotation reduces the lumbar rotation compensations that stress the L5-S1 segment. Keep knees stacked to isolate the thoracic spine.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 525,
+        "exercise_id": 154,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Safe and beneficial for sciatica. Thoracic mobility reduces the lumbar and hip compensations that increase sciatic nerve tension. Move gently and stay pain-free.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 526,
+        "exercise_id": 154,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Isolated thoracic rotation with stable hips is very safe for herniated disc. Prevents the lumbar rotation compensations that create dangerous shear forces on the disc.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 2,
+    "reps": 10,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/thoracic-spine-rotation.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 155,
+    "name": "Hamstring Stretch (Supine)",
+    "description": "A lying hamstring stretch where the leg is elevated with a strap or towel. Tight hamstrings posteriorly tilt the pelvis during bending, increasing lumbar rounding and disc stress — making hamstring flexibility a priority for spinal health.",
+    "category": "rehab",
+    "muscle_groups": ["hamstrings", "calves"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Lie on your back on a mat. Loop a towel, strap, or resistance band around one foot. Keeping the other leg flat on the floor, gently pull the elevated leg toward you with the knee as straight as possible. Hold when you feel a moderate stretch in the back of the thigh. Hold for 30–45 seconds. Do not force the stretch. Switch sides.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 527,
+        "exercise_id": 155,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Improving hamstring length directly reduces posterior pelvic tilt during lifting and forward bending — protective for L5-S1. Stay within a gentle stretch. Avoid pulling aggressively into the end range.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 528,
+        "exercise_id": 155,
+        "issue_type": "sciatica",
+        "restriction_level": "medium",
+        "recommendation": "The sciatic nerve runs with the hamstrings — an aggressive hamstring stretch can irritate the sciatic nerve. Use a gentle stretch only. If leg tingling or radiating pain occurs during the stretch, reduce the angle immediately. Neural flossing technique may be more appropriate.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 529,
+        "exercise_id": 155,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Supine position is safe for herniated disc. Improving hamstring flexibility reduces lumbar flexion compensation during bending. Keep the stretch gentle — do not force the range of motion.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 2,
+    "reps": 1,
+    "weight": 0,
+    "weight_unit": "seconds",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/hamstring-stretch-supine.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 156,
+    "name": "Glute Bridge (Two-Leg)",
+    "description": "The foundational bilateral glute activation exercise performed on the floor. A supine hip extension movement that strengthens the glutes and hamstrings while keeping the lumbar spine in a flat, protected position.",
+    "category": "rehab",
+    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Lie on your back with knees bent and feet flat on the floor, hip-width apart. Press both heels into the floor and lift your hips until your body forms a straight line from knees to shoulders. Squeeze your glutes at the top. Avoid arching the lower back — keep your ribs down. Lower slowly under control. Can be progressed with a barbell across the hips.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 530,
+        "exercise_id": 156,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "One of the most recommended exercises for L5-S1 rehabilitation. Supine position protects the spine while loading the glutes. Avoid hyperextending the hips at the top. Keep ribs down and core gently braced.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 531,
+        "exercise_id": 156,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Glute strengthening is therapeutic for sciatica management. Supine position is spine-friendly. Avoid excessive lumbar extension at the top of the bridge.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 532,
+        "exercise_id": 156,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Safe and recommended for herniated disc. Supine position removes spinal load. Strong glutes reduce lumbar compensatory loading in daily activities. Keep movement controlled and avoid pushing into lumbar hyperextension.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/glute-bridge-two-leg.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 157,
+    "name": "Clamshells",
+    "description": "A side-lying glute medius activation exercise using hip external rotation against resistance. Targets the often-neglected glute medius, which is critical for hip and pelvic stability — weakness here forces the lumbar spine to compensate laterally.",
+    "category": "rehab",
+    "muscle_groups": ["glutes", "hip_rotators"],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Lie on your side with hips stacked and knees bent to about 45 degrees. Keep your feet together and your core gently engaged. Rotate your top knee upward toward the ceiling like a clamshell opening, stopping before your pelvis rocks backward. Lower with control. A resistance band around the thighs increases the challenge. Complete all reps and switch sides.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 533,
+        "exercise_id": 157,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Excellent L5-S1 exercise. Side-lying position protects the lumbar spine while targeting the glute medius. Glute medius strength prevents the lateral pelvic drop that loads the L5-S1 segment asymmetrically.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 534,
+        "exercise_id": 157,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Side-lying position is comfortable and spine-neutral for sciatica. Glute medius activation directly reduces piriformis overload, which can contribute to sciatic nerve compression.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 535,
+        "exercise_id": 157,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Very safe for herniated disc. Side-lying with no spinal loading. An essential part of the foundational activation protocol for lumbar disc rehabilitation.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/clamshells.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 158,
+    "name": "Banded Lateral Walk",
+    "description": "A hip abductor activation exercise using a resistance band around the ankles or thighs, stepping laterally while maintaining a quarter-squat stance. Develops glute medius and hip stability that directly reduces lumbar compensatory movement.",
+    "category": "rehab",
+    "muscle_groups": ["glutes", "hip_abductors", "quads", "core_stabilizers"],
+    "equipment": "resistance_band",
+    "difficulty": "beginner",
+    "instructions": "Place a resistance band around both ankles or just above the knees. Stand with feet shoulder-width apart and assume a slight quarter-squat position. Keeping tension on the band, step sideways with your outside foot and follow with the inside foot — maintaining consistent band tension throughout. Keep the torso upright, hips level, and core lightly braced. Take 10–15 steps in each direction.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 536,
+        "exercise_id": 158,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Hip abductor strengthening reduces asymmetric pelvic loading on L5-S1. The quarter-squat stance is low-load and well-tolerated. Keep the torso upright and avoid excessive forward lean.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 537,
+        "exercise_id": 158,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Low-load glute medius activation is safe and beneficial for sciatica. Upright torso and supported stance reduce neural tension. Stop if leg symptoms increase.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 538,
+        "exercise_id": 158,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Very low spinal load. Ideal for herniated disc rehabilitation. Improves hip stability that unloads the lumbar spine during walking and functional movement.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 15,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/banded-lateral-walk.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/resistance-band.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
+  },
+  {
+    "id": 159,
+    "name": "Wall Angels",
+    "description": "A postural correction and scapular mobility exercise performed standing against a wall. Trains the deep neck flexors, thoracic extensors, and scapular retractors — muscles chronically weak in people with forward head posture and upper-cross syndrome, both common companions of back pain.",
+    "category": "rehab",
+    "muscle_groups": [
+      "rhomboids",
+      "traps",
+      "rear_delts",
+      "thoracic_extensors",
+      "core_stabilizers"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "instructions": "Stand with your back flat against a wall, feet a few inches from the base. Press your entire back, head, and the backs of your arms and hands against the wall. With arms bent at 90 degrees (goalpost position), slowly slide your arms overhead until fully extended, then return. Keep everything in contact with the wall throughout — if your lower back arches off, engage the core more and reduce the range of motion.",
+    "video_url": "",
+    "is_back_friendly": true,
+    "back_issue_restrictions": [
+      {
+        "id": 539,
+        "exercise_id": 159,
+        "issue_type": "l5_s1",
+        "restriction_level": "low",
+        "recommendation": "Standing against the wall prevents lumbar hyperextension during the overhead movement. Excellent for correcting the forward lean posture that loads L5-S1. If the lower back arches off the wall during the movement, place feet further from the wall and reduce the overhead range.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 540,
+        "exercise_id": 159,
+        "issue_type": "sciatica",
+        "restriction_level": "low",
+        "recommendation": "Very safe for sciatica. Upright standing position with wall support eliminates spinal loading. Posture correction exercises like this reduce the cumulative spinal stress that aggravates sciatic nerve irritation.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      },
+      {
+        "id": 541,
+        "exercise_id": 159,
+        "issue_type": "herniated_disc",
+        "restriction_level": "low",
+        "recommendation": "Wall support and the requirement to maintain lumbar contact make this very safe for herniated disc. The thoracic extension and scapular retraction components improve the postural patterns that contribute to chronic lumbar loading.",
+        "created_at": "2026-04-12T12:00:00Z",
+        "updated_at": "2026-04-12T12:00:00Z"
+      }
+    ],
+    "created_at": "2026-04-12T12:00:00Z",
+    "updated_at": "2026-04-12T12:00:00Z",
+    "sets": 3,
+    "reps": 12,
+    "weight": 0,
+    "weight_unit": "kg",
+    "media": [
+      {
+        "type": "exercise",
+        "source": "local",
+        "url": "/exercisesSm/wall-angels.webp",
+        "primary": true
+      },
+      {
+        "type": "exercise",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      },
+      {
+        "type": "equipment",
+        "source": "local",
+        "url": "/assets/equipment/bodyweight.png",
+        "primary": true
+      },
+      {
+        "type": "equipment",
+        "source": "remote",
+        "url": "",
+        "primary": false
+      }
+    ],
+    "youtube_id": ""
   }
 ]
