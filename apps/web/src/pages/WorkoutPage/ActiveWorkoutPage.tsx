@@ -30,6 +30,7 @@ import {
 import { useWorkoutTimer } from "./useWorkoutTimer";
 import { useExerciseManagement } from "./useExerciseManagement";
 import { useTranslation } from "react-i18next";
+import { trackEvent } from "@/utils/analytics";
 
 function ActiveWorkoutPage({
   onNavigateBack,
@@ -52,6 +53,14 @@ function ActiveWorkoutPage({
   const [fixedDuration, setFixedDuration] = useState<string>("00:00:00");
   const cardRef = useRef<HTMLDivElement | null>(null);
   const allExercises = allExercisesData as Exercise[];
+
+  const parseDurationToSeconds = (duration: string): number => {
+    const parts = duration.split(":").map((part) => Number(part));
+    if (parts.length !== 3 || parts.some((part) => Number.isNaN(part))) {
+      return 0;
+    }
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  };
 
   // Custom hooks
   const { elapsedSeconds, formattedTime, resetToElapsed } = useWorkoutTimer({
@@ -221,6 +230,15 @@ function ActiveWorkoutPage({
       completedExerciseLogs: exerciseLogs,
       averagePainLevel,
     };
+
+    trackEvent("workout_completed", {
+      exercise_count: summary.exerciseCount,
+      total_volume: summary.totalVolume,
+      duration_seconds: parseDurationToSeconds(summary.duration),
+      average_pain_level: summary.averagePainLevel,
+      calories_burned: summary.caloriesBurned,
+    });
+
     setShowFinishModal(false);
 
     // Mark current workout as completed
@@ -298,6 +316,11 @@ function ActiveWorkoutPage({
   const handleConfirmSwap = useCallback(
     (replacement: Exercise, duration: SwapDurationOption) => {
       if (replaceExercise) {
+        trackEvent("exercise_replaced", {
+          exercise_id_original: replaceExercise.id,
+          exercise_id_new: replacement.id,
+          replacement_duration: duration,
+        });
         handleReplaceExercise(replaceExercise, replacement, duration);
       }
     },

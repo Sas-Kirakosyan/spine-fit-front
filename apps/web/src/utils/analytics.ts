@@ -25,6 +25,26 @@ const pagePathMap: Record<Page, string> = {
 let initialized = false;
 let lastTrackedPath: string | null = null;
 
+type AnalyticsParams = Record<
+  string,
+  string | number | boolean | null | undefined
+>;
+
+const normalizeParams = (
+  params: AnalyticsParams
+): Record<string, string | number | boolean> => {
+  const normalized: Record<string, string | number | boolean> = {};
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value === null || value === undefined) continue;
+
+    normalized[key] =
+      typeof value === "string" ? value.trim().slice(0, 120) : value;
+  }
+
+  return normalized;
+};
+
 export const initAnalytics = (): void => {
   if (!GA_MEASUREMENT_ID || initialized) return;
   ReactGA.initialize(GA_MEASUREMENT_ID);
@@ -44,4 +64,13 @@ export const trackPageView = (page: Page): void => {
   });
 
   lastTrackedPath = path;
+};
+
+export const trackEvent = (
+  eventName: string,
+  params: AnalyticsParams = {}
+): void => {
+  if (!initialized) return;
+
+  ReactGA.event(eventName, normalizeParams(params));
 };

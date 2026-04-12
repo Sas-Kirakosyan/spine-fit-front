@@ -8,6 +8,7 @@ import type { ChatMessage } from "@/types/chat";
 import { MessageList } from "@/components/Chat/MessageList";
 import { MessageInput } from "@/components/Chat/MessageInput";
 import { sendChatMessage } from "@/utils/geminiApi";
+import { trackEvent } from "@/utils/analytics";
 
 const CHAT_HISTORY_KEY = "aiChatHistory";
 const MAX_HISTORY_MESSAGES = 50;
@@ -58,6 +59,7 @@ function AIPage({
 
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
+    const startedAt = Date.now();
 
     // Добавляем сообщение пользователя
     const userMessage: ChatMessage = {
@@ -70,6 +72,11 @@ function AIPage({
     setIsLoading(true);
     setError(null);
     streamingMessageRef.current = "";
+
+    trackEvent("ai_chat_message_sent", {
+      message_length: userMessage.content.length,
+      is_first_message: messages.length === 0,
+    });
 
     try {
       const chatMessages = [
@@ -121,6 +128,10 @@ function AIPage({
             ? prev.slice(0, -1)
             : prev;
         return [...withoutLast, finalAssistantMessage];
+      });
+
+      trackEvent("ai_chat_response_received", {
+        response_time_ms: Date.now() - startedAt,
       });
     } catch (err) {
       const errorMessage =

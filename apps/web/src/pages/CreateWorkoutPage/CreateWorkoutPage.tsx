@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { trackEvent } from "@/utils/analytics";
 import { PageContainer } from "@/Layout/PageContainer";
 import { type Exercise } from "@/types/exercise";
 import { useExerciseName } from "@spinefit/shared";
@@ -165,6 +166,10 @@ export default function CreateProgramPage({
       };
       persistSavedPrograms([...existing, program]);
     }
+    trackEvent(editProgramId ? "custom_plan_edited" : "custom_plan_created", {
+      day_count: days.length,
+      total_exercises: totalExercises,
+    });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
     onSave();

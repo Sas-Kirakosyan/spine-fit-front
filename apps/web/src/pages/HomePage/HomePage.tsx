@@ -5,12 +5,17 @@ import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
 import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import type { HomePageProps } from "@/types/pages";
+import { trackEvent } from "@/utils/analytics";
 
 function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   const handleStartQuiz = () => {
+    trackEvent("onboarding_started", {
+      entry_point: "home_start_button",
+      language: i18n.language,
+    });
     setIsQuizOpen(true);
   };
 

@@ -34,6 +34,7 @@ import {
   shouldShowPainTracking,
   getStoredPainStatus,
 } from "@/utils/painStatus";
+import { trackEvent } from "@/utils/analytics";
 
 const toolbarButtons = [
   {
@@ -390,6 +391,11 @@ function ExerciseSetsPage({
   const handleAddSet = () => {
     setSets((prev) => {
       const next = [...prev, createNewSet()];
+      trackEvent("set_added", {
+        exercise_id: exercise.id,
+        set_number: next.length,
+        mode: isDuringActiveWorkout ? "activeWorkout" : "preWorkout",
+      });
       if (activeSetIndex === -1) {
         setActiveSetIndex(next.length - 1);
       }
@@ -402,7 +408,15 @@ function ExerciseSetsPage({
       // Don't allow deletion if only one set remains
       if (prevSets.length <= 1) return prevSets;
 
+      const deletedSet = prevSets[index];
+
       const next = prevSets.filter((_, i) => i !== index);
+
+      trackEvent("set_deleted", {
+        exercise_id: exercise.id,
+        set_index: index + 1,
+        was_completed: deletedSet?.completed ?? false,
+      });
 
       // Adjust active index if needed
       setActiveSetIndex((prevIndex) => {
@@ -467,6 +481,16 @@ function ExerciseSetsPage({
       if (totalSeconds > 0) {
         setRestCountdownSeconds(totalSeconds);
       }
+    }
+
+    if (!shouldUnlog) {
+      trackEvent("set_logged", {
+        exercise_id: exercise.id,
+        set_index: targetIndex + 1,
+        reps: Number(targetSet.reps) || 0,
+        weight: Number(targetSet.weight) || 0,
+        is_warmup: targetSet.type === "warmup",
+      });
     }
   };
 

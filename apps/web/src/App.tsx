@@ -11,46 +11,60 @@ import type {
 import { loadPlanSettings } from "@/types/planSettings";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
-import { trackPageView } from "@/utils/analytics";
+import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
 
 // --- LAZY LOADED COMPONENTS ---
 // Note: Using .then() to handle named exports from your files
 const HomePage = lazy(() => import("@/pages/HomePage/HomePage"));
 
-const Registration = lazy(() => import("@/pages/RegistrationPage/Registration"));
+const Registration = lazy(
+  () => import("@/pages/RegistrationPage/Registration")
+);
 const Login = lazy(() => import("@/pages/LoginPage/Login"));
 const WorkoutPage = lazy(() => import("@/pages/WorkoutPage/WorkoutPage"));
 const ProgressPage = lazy(() => import("@/pages/ProgressPage/ProgressPage"));
-const ExerciseSetsPage = lazy(() => import("@/pages/WorkoutPage/ExerciseSetsPage"));
+const ExerciseSetsPage = lazy(
+  () => import("@/pages/WorkoutPage/ExerciseSetsPage")
+);
 const ExerciseDetails = lazy(() => import("@/pages/WorkoutPage/ExerciseHowTo"));
-const ActiveWorkoutPage = lazy(() => import("@/pages/WorkoutPage/ActiveWorkoutPage"));
+const ActiveWorkoutPage = lazy(
+  () => import("@/pages/WorkoutPage/ActiveWorkoutPage")
+);
 const HistoryPage = lazy(() => import("@/pages/HistoryPage/HistoryPage"));
-const AllExercisePage = lazy(() => import("@/pages/AllExercisePage/AllExercisePage"));
+const AllExercisePage = lazy(
+  () => import("@/pages/AllExercisePage/AllExercisePage")
+);
 const MyPlanPage = lazy(() => import("@/pages/MyPlanPage/MyPlanPage"));
-const AvailableEquipmentPage = lazy(() => import("@/pages/MyPlanPage/AvailableEquipmentPage"));
+const AvailableEquipmentPage = lazy(
+  () => import("@/pages/MyPlanPage/AvailableEquipmentPage")
+);
 const AIPage = lazy(() => import("@/pages/AIPage/AIPage"));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage/SettingsPage"));
-const CreateProgramPage = lazy(() => import("@/pages/CreateWorkoutPage/CreateWorkoutPage"));
-const ExerciseProgressPage = lazy(() => import("@/pages/ProgressPage/ExerciseProgressPage"));
+const CreateProgramPage = lazy(
+  () => import("@/pages/CreateWorkoutPage/CreateWorkoutPage")
+);
+const ExerciseProgressPage = lazy(
+  () => import("@/pages/ProgressPage/ExerciseProgressPage")
+);
 
 const PAGE_TO_PATH: Record<Page, string> = {
-  home:               "/",
-  login:              "/login",
-  register:           "/register",
-  workout:            "/workout",
-  progress:           "/progress",
-  history:            "/history",
-  ai:                 "/ai",
-  exerciseSets:       "/workout/exercise-sets",
-  exerciseDetails:    "/workout/exercise-details",
-  activeWorkout:      "/workout/active",
-  allExercise:        "/exercises",
-  myPlan:             "/my-plan",
+  home: "/",
+  login: "/login",
+  register: "/register",
+  workout: "/workout",
+  progress: "/progress",
+  history: "/history",
+  ai: "/ai",
+  exerciseSets: "/workout/exercise-sets",
+  exerciseDetails: "/workout/exercise-details",
+  activeWorkout: "/workout/active",
+  allExercise: "/exercises",
+  myPlan: "/my-plan",
   availableEquipment: "/my-plan/equipment",
-  settings:           "/settings",
-  createProgram:      "/create-program",
-  exerciseProgress:   "/progress/exercise",
+  settings: "/settings",
+  createProgram: "/create-program",
+  exerciseProgress: "/progress/exercise",
 };
 
 const PATH_TO_PAGE = Object.fromEntries(
@@ -78,24 +92,42 @@ function App() {
       "createProgram",
       "exerciseProgress",
     ];
-    const pageFromPath = PATH_TO_PAGE[window.location.pathname] as Page | undefined;
-    const resolvedPage = (pageFromPath ?? (localStorage.getItem("currentPage") as Page | null) ?? "home");
-    const validResolved = validPages.includes(resolvedPage) ? resolvedPage : "home";
+    const pageFromPath = PATH_TO_PAGE[window.location.pathname] as
+      | Page
+      | undefined;
+    const resolvedPage =
+      pageFromPath ??
+      (localStorage.getItem("currentPage") as Page | null) ??
+      "home";
+    const validResolved = validPages.includes(resolvedPage)
+      ? resolvedPage
+      : "home";
     // If the user has a generated plan, treat workout as home
-    if (validResolved === "home" && localStorage.getItem("generatedPlan")) return "workout";
+    if (validResolved === "home" && localStorage.getItem("generatedPlan"))
+      return "workout";
     return validResolved;
   });
 
-  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
-  const [exerciseSetsMode, setExerciseSetsMode] = useState<"preWorkout" | "activeWorkout">(
-    "preWorkout"
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
+    null
   );
-  const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>([]);
+  const [exerciseSetsMode, setExerciseSetsMode] = useState<
+    "preWorkout" | "activeWorkout"
+  >("preWorkout");
+  const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
+    []
+  );
   const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(null);
-  const [exerciseLogs, setExerciseLogs] = useState<Record<number, ExerciseSetRow[]>>({});
-  const [exercisePainLevels, setExercisePainLevels] = useState<Record<number, number>>({});
+  const [exerciseLogs, setExerciseLogs] = useState<
+    Record<number, ExerciseSetRow[]>
+  >({});
+  const [exercisePainLevels, setExercisePainLevels] = useState<
+    Record<number, number>
+  >({});
 
-  const [workoutHistory, setWorkoutHistory] = useState<FinishedWorkoutSummary[]>(() => {
+  const [workoutHistory, setWorkoutHistory] = useState<
+    FinishedWorkoutSummary[]
+  >(() => {
     const savedHistory = localStorage.getItem("workoutHistory");
     if (!savedHistory) return [];
     try {
@@ -117,24 +149,34 @@ function App() {
     }
   });
 
-  const [completedWorkoutIds, setCompletedWorkoutIds] = useState<Set<string>>(() => {
-    const saved = localStorage.getItem("completedWorkoutIds");
-    return saved ? new Set(JSON.parse(saved)) : new Set();
-  });
+  const [completedWorkoutIds, setCompletedWorkoutIds] = useState<Set<string>>(
+    () => {
+      const saved = localStorage.getItem("completedWorkoutIds");
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    }
+  );
 
   const [createProgramDays, setCreateProgramDays] = useState<TrainingDay[]>([]);
   const [createProgramName, setCreateProgramName] = useState("");
   const [activeDayId, setActiveDayId] = useState<string | null>(null);
-  const [allExerciseReturnPage, setAllExerciseReturnPage] = useState<"workout" | "createProgram">(
-    "workout"
-  );
+  const [allExerciseReturnPage, setAllExerciseReturnPage] = useState<
+    "workout" | "createProgram"
+  >("workout");
   const [isCustomWorkoutMode, setIsCustomWorkoutMode] = useState(false);
-  const [editingProgramId, setEditingProgramId] = useState<string | undefined>();
-  const [selectedExerciseProgressId, setSelectedExerciseProgressId] = useState<number | null>(null);
+  const [editingProgramId, setEditingProgramId] = useState<
+    string | undefined
+  >();
+  const [selectedExerciseProgressId, setSelectedExerciseProgressId] = useState<
+    number | null
+  >(null);
 
   // Sync URL to initial page on first mount (no history entry added)
   useEffect(() => {
-    window.history.replaceState({ page: currentPage }, "", PAGE_TO_PATH[currentPage]);
+    window.history.replaceState(
+      { page: currentPage },
+      "",
+      PAGE_TO_PATH[currentPage]
+    );
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle browser back/forward
@@ -176,10 +218,16 @@ function App() {
   }, [workoutExercises]);
 
   useEffect(() => {
-    localStorage.setItem("completedWorkoutIds", JSON.stringify([...completedWorkoutIds]));
+    localStorage.setItem(
+      "completedWorkoutIds",
+      JSON.stringify([...completedWorkoutIds])
+    );
   }, [completedWorkoutIds]);
 
-  const navigateToPage = (page: Page, historyState: Record<string, unknown> = {}) => {
+  const navigateToPage = (
+    page: Page,
+    historyState: Record<string, unknown> = {}
+  ) => {
     window.history.pushState({ page, ...historyState }, "", PAGE_TO_PATH[page]);
     startPageTransition(() => setCurrentPage(page));
   };
@@ -198,6 +246,9 @@ function App() {
     setWorkoutExercises((prev) => {
       const existingIds = new Set(prev.map((ex) => ex.id));
       const newExercises = exercises.filter((ex) => !existingIds.has(ex.id));
+      if (newExercises.length > 0) {
+        trackEvent("exercises_added", { count: newExercises.length });
+      }
       return [...prev, ...newExercises];
     });
 
@@ -205,22 +256,30 @@ function App() {
       const planString = localStorage.getItem("generatedPlan");
       if (planString) {
         const plan = JSON.parse(planString);
-        const activeWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
+        const activeWorkout = getNextAvailableWorkout(
+          plan,
+          completedWorkoutIds
+        );
 
         if (activeWorkout) {
           const workoutIndex = plan.workoutDays.findIndex(
             (day: any) =>
-              day.dayNumber === activeWorkout.dayNumber && day.dayName === activeWorkout.dayName
+              day.dayNumber === activeWorkout.dayNumber &&
+              day.dayName === activeWorkout.dayName
           );
 
           if (workoutIndex !== -1) {
             const existingExerciseIds = new Set(
               plan.workoutDays[workoutIndex].exercises.map((ex: any) => ex.id)
             );
-            const newExercisesToAdd = exercises.filter((ex) => !existingExerciseIds.has(ex.id));
+            const newExercisesToAdd = exercises.filter(
+              (ex) => !existingExerciseIds.has(ex.id)
+            );
 
             if (newExercisesToAdd.length > 0) {
-              plan.workoutDays[workoutIndex].exercises.push(...newExercisesToAdd);
+              plan.workoutDays[workoutIndex].exercises.push(
+                ...newExercisesToAdd
+              );
               localStorage.setItem("generatedPlan", JSON.stringify(plan));
             }
           }
@@ -235,7 +294,11 @@ function App() {
     resetWorkoutState();
     setIsCustomWorkoutMode(false);
     // replaceState makes workout the "floor" — back button won't go past it
-    window.history.replaceState({ page: "workout" }, "", PAGE_TO_PATH["workout"]);
+    window.history.replaceState(
+      { page: "workout" },
+      "",
+      PAGE_TO_PATH["workout"]
+    );
     startPageTransition(() => setCurrentPage("workout"));
   };
   const navigateToProgress = () => navigateToPage("progress");
@@ -246,7 +309,8 @@ function App() {
     navigateToPage("allExercise");
   };
   const navigateToMyPlan = () => navigateToPage("myPlan");
-  const navigateToAvailableEquipment = () => navigateToPage("availableEquipment");
+  const navigateToAvailableEquipment = () =>
+    navigateToPage("availableEquipment");
   const navigateToSettings = () => navigateToPage("settings");
   const navigateToExerciseProgress = (exerciseId: number) => {
     setSelectedExerciseProgressId(exerciseId);
@@ -261,6 +325,7 @@ function App() {
   };
 
   const handleSelectSavedProgram = (program: SavedProgram) => {
+    trackEvent("program_selected", { program_id: program.id });
     const plan = {
       id: program.id,
       name: program.name,
@@ -270,7 +335,9 @@ function App() {
       workoutDays: program.days.map((day, i) => ({
         dayNumber: i + 1,
         dayName: day.name,
-        muscleGroups: [...new Set(day.exercises.flatMap((ex) => ex.muscle_groups))],
+        muscleGroups: [
+          ...new Set(day.exercises.flatMap((ex) => ex.muscle_groups)),
+        ],
         exercises: day.exercises,
       })),
       missingMuscleGroups: [],
@@ -284,6 +351,7 @@ function App() {
   };
 
   const handleEditSavedProgram = (program: SavedProgram) => {
+    trackEvent("program_edit_started", { program_id: program.id });
     setCreateProgramDays(program.days);
     setCreateProgramName(program.name);
     setEditingProgramId(program.id);
@@ -292,6 +360,7 @@ function App() {
   };
 
   const navigateToActiveWorkout = (options?: { resetCompleted?: boolean }) => {
+    trackEvent("workout_started");
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
       setExerciseLogs({});
@@ -326,8 +395,15 @@ function App() {
     window.history.back();
   };
 
-  const markExerciseComplete = (exerciseId: number, sets: ExerciseSetRow[], painLevel: number | undefined) => {
-    const completedSets = sets.filter((s) => s.completed).map((s) => ({ ...s }));
+  const markExerciseComplete = (
+    exerciseId: number,
+    sets: ExerciseSetRow[],
+    painLevel: number | undefined
+  ) => {
+    trackEvent("exercise_completed", { exercise_id: exerciseId });
+    const completedSets = sets
+      .filter((s) => s.completed)
+      .map((s) => ({ ...s }));
     setExerciseLogs((prev) => ({ ...prev, [exerciseId]: completedSets }));
     if (painLevel !== undefined) {
       setExercisePainLevels((prev) => ({ ...prev, [exerciseId]: painLevel }));
@@ -343,6 +419,7 @@ function App() {
   };
 
   const skipExercise = (exerciseId: number) => {
+    trackEvent("exercise_skipped", { exercise_id: exerciseId });
     setCompletedExerciseIds((prev) =>
       prev.includes(exerciseId) ? prev : [...prev, exerciseId]
     );
@@ -354,6 +431,7 @@ function App() {
   };
 
   const handleFinishWorkout = (summary?: FinishedWorkoutSummary) => {
+    trackEvent("workout_finished", { has_summary: !!summary });
     if (summary) {
       setWorkoutHistory((prev) => [...prev, summary]);
       resetWorkoutState();
@@ -368,7 +446,10 @@ function App() {
     switch (currentPage) {
       case "home":
         return (
-          <HomePage onNavigateToLogin={navigateToLogin} onNavigateToWorkout={navigateToWorkout} />
+          <HomePage
+            onNavigateToLogin={navigateToLogin}
+            onNavigateToWorkout={navigateToWorkout}
+          />
         );
       case "login":
         return (
@@ -458,7 +539,9 @@ function App() {
         return (
           <ActiveWorkoutPage
             onNavigateBack={navigateToWorkout}
-            onOpenExerciseSets={(ex) => navigateToExerciseSets(ex, "activeWorkout")}
+            onOpenExerciseSets={(ex) =>
+              navigateToExerciseSets(ex, "activeWorkout")
+            }
             onFinishWorkout={handleFinishWorkout}
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
@@ -504,7 +587,9 @@ function App() {
                 setCreateProgramDays((prev) =>
                   prev.map((day) => {
                     if (day.id !== activeDayId) return day;
-                    const existingIds = new Set(day.exercises.map((ex) => ex.id));
+                    const existingIds = new Set(
+                      day.exercises.map((ex) => ex.id)
+                    );
                     return {
                       ...day,
                       exercises: [
@@ -562,7 +647,10 @@ function App() {
         return <SettingsPage onNavigateBack={navigateToProgress} />;
       default:
         return (
-          <HomePage onNavigateToLogin={navigateToLogin} onNavigateToWorkout={navigateToWorkout} />
+          <HomePage
+            onNavigateToLogin={navigateToLogin}
+            onNavigateToWorkout={navigateToWorkout}
+          />
         );
     }
   };
@@ -570,7 +658,9 @@ function App() {
   return (
     <>
       {isPagePending ? <PageLoader className="pointer-events-none" /> : null}
-      <Suspense fallback={<PageLoader className="pointer-events-none" />}>{renderPage()}</Suspense>
+      <Suspense fallback={<PageLoader className="pointer-events-none" />}>
+        {renderPage()}
+      </Suspense>
     </>
   );
 }

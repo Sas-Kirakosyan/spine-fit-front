@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DayPicker } from "react-day-picker";
 import { ru, enUS } from "date-fns/locale";
@@ -7,6 +7,7 @@ import { PageContainer } from "@/Layout/PageContainer";
 import type { HistoryPageProps } from "@/types/pages";
 import { WorkoutHistoryList } from "@/pages/HistoryPage/WorkoutHistoryList";
 import { Logo } from "@/components/Logo/Logo";
+import { trackEvent } from "@/utils/analytics";
 
 function HistoryPage({
   onNavigateToWorkout,
@@ -18,6 +19,13 @@ function HistoryPage({
 }: HistoryPageProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.language.startsWith("ru") ? ru : enUS;
+
+  useEffect(() => {
+    trackEvent("workout_history_viewed", {
+      history_entry_count: workouts.length,
+    });
+  }, []);
+
   const months = t("historyPage.navigation.months", {
     returnObjects: true,
   }) as string[];

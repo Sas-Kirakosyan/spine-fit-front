@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
@@ -22,6 +22,7 @@ import type { VolumePeriod } from "@/utils/progressStats";
 import { MuscleGroupChart } from "@/components/Progress/MuscleGroupChart";
 import { PainChart } from "@/components/Progress/PainChart";
 import { shouldShowPainTracking } from "@/utils/painStatus";
+import { trackEvent } from "@/utils/analytics";
 
 function ProgressPage({
   onNavigateToWorkout,
@@ -61,6 +62,13 @@ function ProgressPage({
 
   const hasWorkouts = workoutHistory.length > 0;
   const [activeTab, setActiveTab] = useState<"overview" | "exercise">("overview");
+
+  useEffect(() => {
+    trackEvent("progress_viewed", {
+      total_workouts_logged: workoutHistory.length,
+      total_volume_all_time: stats.totalVolume,
+    });
+  }, []);
 
   return (
     <PageContainer contentClassName="gap-5 pb-24 mx-2.5">
