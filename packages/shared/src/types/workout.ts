@@ -54,6 +54,7 @@ export interface WorkoutPageProps {
   onNavigateToWorkout: () => void;
   onNavigateToProgress: () => void;
   onNavigateToHistory: () => void;
+  onNavigateToProfile: () => void;
   onNavigateToAI?: () => void;
   activePage: "workout" | "progress" | "history" | "ai";
   onOpenExerciseDetails: (exercise: Exercise) => void;

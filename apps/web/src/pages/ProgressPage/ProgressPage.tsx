@@ -4,8 +4,6 @@ import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ProgressPageProps } from "@/types/pages";
-import { SettingsIcon } from "@/components/Icons/Icons";
-import { Button } from "@/components/Buttons/Button";
 import { StatsGrid } from "@/components/Progress/StatsGrid";
 import { WeeklyActivity } from "@/components/Progress/WeeklyActivity";
 import { ProgressChart } from "@/components/Progress/ProgressChart";
@@ -28,8 +26,8 @@ function ProgressPage({
   onNavigateToWorkout,
   onNavigateToProgress,
   onNavigateToHistory,
+  onNavigateToProfile,
   onNavigateToAI,
-  onNavigateToSettings,
   onExerciseClick,
   activePage,
   workoutHistory,
@@ -77,12 +75,6 @@ function ProgressPage({
           <Logo />
           <h1 className="mx-2.5 text-3xl font-semibold text-white">{t("progressPage.title")}</h1>
         </div>
-        <Button
-          onClick={onNavigateToSettings}
-          className="flex items-center gap-2 rounded-[14px] bg-white/10 mx-4 my-5"
-        >
-          <SettingsIcon />
-        </Button>
       </header>
 
       {/* Tabs: Overview | Exercise */}
@@ -212,6 +204,7 @@ function ProgressPage({
           onWorkoutClick={onNavigateToWorkout}
           onProgressClick={onNavigateToProgress}
           onHistoryClick={onNavigateToHistory}
+          onProfileClick={onNavigateToProfile}
           onAIClick={onNavigateToAI || (() => {})}
         />
       </div>

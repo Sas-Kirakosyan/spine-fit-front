@@ -17,6 +17,7 @@ function AIPage({
   onNavigateToWorkout,
   onNavigateToProgress,
   onNavigateToHistory,
+  onNavigateToProfile,
   onNavigateToAI,
   activePage,
 }: AIPageProps) {
@@ -189,6 +190,7 @@ function AIPage({
           onWorkoutClick={onNavigateToWorkout}
           onProgressClick={onNavigateToProgress}
           onHistoryClick={onNavigateToHistory}
+          onProfileClick={onNavigateToProfile}
           onAIClick={onNavigateToAI}
         />
       </div>

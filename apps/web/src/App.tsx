@@ -1,5 +1,7 @@
 import { useState, useEffect, Suspense, lazy, useTransition } from "react";
 
+// --- LAZY LOADED COMPONENTS ---
+// Note: Using .then() to handle named exports from your files
 import type { Exercise } from "@/types/exercise";
 import type { Page } from "@/types/navigation";
 import type {
@@ -39,6 +41,7 @@ const MyPlanPage = lazy(() => import("@/pages/MyPlanPage/MyPlanPage"));
 const AvailableEquipmentPage = lazy(
   () => import("@/pages/MyPlanPage/AvailableEquipmentPage")
 );
+const ProfilePage = lazy(() => import("@/pages/ProfilePage/ProfilePage"));
 const AIPage = lazy(() => import("@/pages/AIPage/AIPage"));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage/SettingsPage"));
 const CreateProgramPage = lazy(
@@ -55,6 +58,7 @@ const PAGE_TO_PATH: Record<Page, string> = {
   workout: "/workout",
   progress: "/progress",
   history: "/history",
+  profile: "/profile",
   ai: "/ai",
   exerciseSets: "/workout/exercise-sets",
   exerciseDetails: "/workout/exercise-details",
@@ -84,6 +88,7 @@ function App() {
       "exerciseDetails",
       "activeWorkout",
       "history",
+      "profile",
       "ai",
       "allExercise",
       "myPlan",
@@ -303,6 +308,7 @@ function App() {
   };
   const navigateToProgress = () => navigateToPage("progress");
   const navigateToHistory = () => navigateToPage("history");
+  const navigateToProfile = () => navigateToPage("profile");
   const navigateToAI = () => navigateToPage("ai");
   const navigateToAllExercise = () => {
     setAllExerciseReturnPage("workout");
@@ -474,6 +480,7 @@ function App() {
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProgress={navigateToProgress}
             onNavigateToHistory={navigateToHistory}
+            onNavigateToProfile={navigateToProfile}
             onNavigateToAI={navigateToAI}
             activePage="workout"
             onOpenExerciseDetails={navigateToExerciseDetails}
@@ -499,8 +506,8 @@ function App() {
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProgress={navigateToProgress}
             onNavigateToHistory={navigateToHistory}
+            onNavigateToProfile={navigateToProfile}
             onNavigateToAI={navigateToAI}
-            onNavigateToSettings={navigateToSettings}
             onExerciseClick={navigateToExerciseProgress}
             activePage="progress"
             workoutHistory={workoutHistory}
@@ -559,17 +566,31 @@ function App() {
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProgress={navigateToProgress}
             onNavigateToHistory={navigateToHistory}
+            onNavigateToProfile={navigateToProfile}
             onNavigateToAI={navigateToAI}
             activePage="history"
             workouts={workoutHistory}
           />
         );
+      case "profile":
+        return (
+          <ProfilePage
+            onNavigateToWorkout={navigateToWorkout}
+            onNavigateToProgress={navigateToProgress}
+            onNavigateToHistory={navigateToHistory}
+            onNavigateToProfile={navigateToProfile}
+            onNavigateToAI={navigateToAI}
+            onNavigateToSettings={navigateToSettings}
+            activePage="profile"
+          />
+      );
       case "ai":
         return (
           <AIPage
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToProgress={navigateToProgress}
             onNavigateToHistory={navigateToHistory}
+            onNavigateToProfile={navigateToProfile}
             onNavigateToAI={navigateToAI}
             activePage="ai"
           />
@@ -644,7 +665,7 @@ function App() {
           />
         );
       case "settings":
-        return <SettingsPage onNavigateBack={navigateToProgress} />;
+        return <SettingsPage onNavigateBack={navigateToProfile} />;
       default:
         return (
           <HomePage

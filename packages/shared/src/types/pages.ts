@@ -10,10 +10,10 @@ export interface ProgressPageProps {
   onNavigateToWorkout: () => void;
   onNavigateToProgress: () => void;
   onNavigateToHistory: () => void;
-  onNavigateToSettings: () => void;
+  onNavigateToProfile: () => void;
   onNavigateToAI: () => void;
   onExerciseClick?: (exerciseId: number) => void;
-  activePage: "workout" | "progress" | "history" | "ai";
+  activePage: "workout" | "progress" | "history" | "profile" | "ai";
   workoutHistory: FinishedWorkoutSummary[];
 }
 
@@ -21,8 +21,9 @@ export interface HistoryPageProps {
   onNavigateToWorkout: () => void;
   onNavigateToProgress: () => void;
   onNavigateToHistory: () => void;
+  onNavigateToProfile: () => void;
   onNavigateToAI?: () => void;
-  activePage: "workout" | "progress" | "history" | "ai";
+  activePage: "workout" | "progress" | "history" | "profile" | "ai";
   workouts: FinishedWorkoutSummary[];
 }
 
@@ -39,9 +40,21 @@ export interface AIPageProps {
   onNavigateToWorkout: () => void;
   onNavigateToProgress: () => void;
   onNavigateToHistory: () => void;
+  onNavigateToProfile: () => void;
   onNavigateToAI: () => void;
-  activePage: "workout" | "progress" | "history" | "ai";
+  activePage: "workout" | "progress" | "history" | "profile" | "ai";
 }
+
+export interface IProfilePageProps {
+    onNavigateToWorkout: () => void;
+    onNavigateToProgress: () => void;
+    onNavigateToHistory: () => void;
+    onNavigateToProfile: () => void;
+    onNavigateToAI: () => void;
+    onNavigateToSettings: () => void;
+    activePage: "workout" | "progress" | "history" | "profile" | "ai";
+}
+
 export interface SettingsPageProps {
   onNavigateBack: () => void;
 }
