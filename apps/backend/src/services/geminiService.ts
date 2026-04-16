@@ -10,6 +10,9 @@ import { SPLIT_TARGET_MUSCLES, mapSplitType } from "../utils/splitUtils.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 
+const PRIMARY_MODEL = "gemini-2.5-flash";
+const FALLBACK_MODEL = "gemini-3.1-flash-lite-preview";
+
 // Shape compatible with the frontend's GeneratedPlan type from @spinefit/shared
 export interface GeneratedPlanResult {
   id: string;
@@ -59,31 +62,45 @@ export async function generatePlan(
   exercises: PromptExercise[],
   allExercisesRaw: Record<string, unknown>[],
 ): Promise<GeneratedPlanResult> {
-  const model = genAI.getGenerativeModel({
-    model: "gemini-3.1-flash-lite-preview", //gemini-2.5-flash
-    systemInstruction: buildSystemInstruction(
-      parsedQuiz.duration,
-      parsedQuiz.painLevel,
-    ),
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: PLAN_SCHEMA,
-    },
-  });
-
   const prompt = buildUserPrompt(parsedQuiz, exercises);
-  const result = await model.generateContent(prompt);
 
-  const usage = result.response.usageMetadata;
-  if (usage) {
-    const thinking =
-      (usage as unknown as Record<string, unknown>).thoughtsTokenCount ?? 0;
-    console.log(
-      `[Gemini ${model.model}] Tokens \n prompt: ${usage.promptTokenCount}\n thinking: ${thinking}\n response: ${usage.candidatesTokenCount}\n total: ${usage.totalTokenCount}\n`,
+  const callGemini = async (modelName: string): Promise<string> => {
+    const model = genAI.getGenerativeModel({
+      model: modelName,
+      systemInstruction: buildSystemInstruction(
+        parsedQuiz.duration,
+        parsedQuiz.painLevel,
+      ),
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: PLAN_SCHEMA,
+      },
+    });
+
+    const result = await model.generateContent(prompt);
+
+    const usage = result.response.usageMetadata;
+    if (usage) {
+      const thinking =
+        (usage as unknown as Record<string, unknown>).thoughtsTokenCount ?? 0;
+      console.log(
+        `[Gemini ${model.model}] Tokens \n prompt: ${usage.promptTokenCount}\n thinking: ${thinking}\n response: ${usage.candidatesTokenCount}\n total: ${usage.totalTokenCount}\n`,
+      );
+    }
+
+    return result.response.text();
+  };
+
+  let text: string;
+  try {
+    text = await callGemini(PRIMARY_MODEL);
+  } catch (err) {
+    console.warn(
+      `[Gemini] ⚠ Primary model "${PRIMARY_MODEL}" failed, falling back to "${FALLBACK_MODEL}":`,
+      err instanceof Error ? err.message : err,
     );
+    text = await callGemini(FALLBACK_MODEL);
   }
-
-  const text = result.response.text();
   const geminiPlan = JSON.parse(text) as GeminiPlanResponse;
   console.log("geminiPlan", JSON.stringify(geminiPlan));
 
