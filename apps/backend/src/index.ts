@@ -7,11 +7,25 @@ import chatRouter from "./routes/chat.js";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const allowedOrigins = ["http://localhost:3000", process.env.CLIENT_URL].filter(
-  Boolean,
-) as string[];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://spinefit.app",
+  "https://www.spinefit.app",
+  ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(",") : []),
+].filter(Boolean) as string[];
 
-app.use(cors({ origin: allowedOrigins }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.use("/api/quiz", quizRouter);
