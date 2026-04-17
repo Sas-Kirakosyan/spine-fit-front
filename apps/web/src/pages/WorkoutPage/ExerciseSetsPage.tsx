@@ -7,6 +7,7 @@ import {
   getBaseExerciseById,
   isTimeBasedExercise,
   formatDurationSeconds,
+  getLastPerformedData,
 } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import type {
@@ -130,6 +131,7 @@ function ExerciseSetsPage({
   onSkipExercise,
   isDuringActiveWorkout = false,
   exerciseLogs = {},
+  workoutHistory = [],
 }: ExerciseSetsPageProps) {
   const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
@@ -158,6 +160,7 @@ function ExerciseSetsPage({
     reps: defaultReps,
     weight:
       isTimeBased ? "0" :
+      isBodyweight ? "" :
       exercise.weight !== undefined && exercise.weight !== null
         ? String(exercise.weight)
         : "",
@@ -635,7 +638,40 @@ function ExerciseSetsPage({
     return incompleteSets.every((setEntry) => isSetValid(setEntry));
   }, [sets, isDuringActiveWorkout]);
 
+  const lastPerformed = useMemo(
+    () =>
+      getLastPerformedData(
+        exercise.id,
+        workoutHistory,
+        Number(exercise.weight) || 0
+      ),
+    [exercise.id, exercise.weight, workoutHistory]
+  );
+
   const getPreviousValue = (index: number) => {
+    const previousSet = lastPerformed?.sets[index];
+    if (previousSet) {
+      const prevReps = previousSet.reps;
+      const prevWeight = previousSet.weight;
+
+      if (isTimeBased) {
+        const seconds = Number(prevReps);
+        if (Number.isFinite(seconds) && seconds > 0) {
+          return formatDurationSeconds(seconds);
+        }
+      } else if (isBodyweight) {
+        if (prevReps && Number(prevReps) > 0) {
+          return `${t("exerciseSetsPage.table.bw")} x ${prevReps}`;
+        }
+      } else if (prevReps && Number(prevReps) > 0) {
+        if (prevWeight && Number(prevWeight) > 0) {
+          const unit = exercise.weight_unit?.trim() || "kg";
+          return `${prevWeight}${unit} x ${prevReps}`;
+        }
+        return `x ${prevReps}`;
+      }
+    }
+
     const hasTemplateRow = index < Math.max(exercise.sets || 1, 1);
     if (!hasTemplateRow) {
       return "\u2014";
@@ -662,8 +698,8 @@ function ExerciseSetsPage({
       exercise.weight !== undefined && exercise.weight !== null
         ? String(exercise.weight)
         : "";
-    if (!weightValue) {
-      return "\u2014";
+    if (!weightValue || Number(weightValue) <= 0) {
+      return `x ${repsValue}`;
     }
 
     const unit = exercise.weight_unit?.trim() || "kg";
