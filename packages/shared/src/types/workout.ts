@@ -47,6 +47,7 @@ export interface ExerciseSetsPageProps {
   onSkipExercise?: (exerciseId: number) => void;
   isDuringActiveWorkout?: boolean;
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
+  workoutHistory?: FinishedWorkoutSummary[];
 }
 
 export interface WorkoutPageProps {

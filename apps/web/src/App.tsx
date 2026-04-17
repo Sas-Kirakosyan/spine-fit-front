@@ -521,6 +521,7 @@ function App() {
             onSkipExercise={skipExercise}
             isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
             exerciseLogs={exerciseLogs}
+            workoutHistory={workoutHistory}
           />
         );
       case "exerciseDetails":
