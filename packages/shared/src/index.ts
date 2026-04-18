@@ -37,7 +37,7 @@ export { calculateExerciseVolume, calculateWorkoutVolume } from "./utils/workout
 export { formatDateTime, isSameDay, formatTime, months } from "./utils/date";
 
 // Utils - exercise
-export { getExerciseImageUrl, getBaseExerciseById, getAllBaseExercises, isTimeBasedExercise, getExerciseTimeSeconds, formatDurationSeconds } from "./utils/exercise";
+export { getExerciseImageUrl, getBaseExerciseById, getAllBaseExercises, getExerciseYoutubeId, isTimeBasedExercise, getExerciseTimeSeconds, formatDurationSeconds } from "./utils/exercise";
 
 // Utils - oneRepMax
 export { epley1RM, brzycki1RM, calculate1RM, getExerciseEstimated1RM, getPercentOf1RM } from "./utils/oneRepMax";

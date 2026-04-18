@@ -4,10 +4,12 @@ import {
   useExerciseName,
   getAllBaseExercises,
   getBaseExerciseById,
+  getExerciseYoutubeId,
   isTimeBasedExercise,
   formatDurationSeconds,
   getLastPerformedData,
 } from "@spinefit/shared";
+import YouTube, { type YouTubeProps } from "react-youtube";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import type {
   ExerciseSetsPageProps,
@@ -25,17 +27,25 @@ import {
 } from "@/utils/replacementExercises";
 import {
   iconButtonClass,
-  primaryButtonClass,
   secondaryButtonClass,
 } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
-import { LazyImage } from "@/components/ui/LazyImage";
 import { QuizSlider } from "@/components/Quiz/QuizSlider";
 import {
   shouldShowPainTracking,
   getStoredPainStatus,
 } from "@/utils/painStatus";
 import { trackEvent } from "@/utils/analytics";
+
+const playerOpts: YouTubeProps["opts"] = {
+  width: "100%",
+  height: "100%",
+  playerVars: {
+    autoplay: 0,
+    modestbranding: 1,
+    rel: 0,
+  },
+};
 
 const toolbarButtons = [
   {
@@ -141,6 +151,7 @@ function ExerciseSetsPage({
   const baseExercise = getBaseExerciseById(exercise.id);
   const isBodyweight = exercise.equipment === "bodyweight";
   const isTimeBased = isTimeBasedExercise(exercise);
+  const youtubeId = exercise.youtube_id ?? getExerciseYoutubeId(exercise.id);
 
   // Generate unique ID for each set
   const generateSetId = () =>
@@ -159,12 +170,13 @@ function ExerciseSetsPage({
   ): ExerciseSetRow => ({
     id: generateSetId(),
     reps: defaultReps,
-    weight:
-      isTimeBased ? "0" :
-      isBodyweight ? "" :
-      exercise.weight !== undefined && exercise.weight !== null
-        ? String(exercise.weight)
-        : "",
+    weight: isTimeBased
+      ? "0"
+      : isBodyweight
+        ? ""
+        : exercise.weight !== undefined && exercise.weight !== null
+          ? String(exercise.weight)
+          : "",
     completed: false,
     ...template,
   });
@@ -295,7 +307,8 @@ function ExerciseSetsPage({
 
   const generateWarmupSets = (): ExerciseSetRow[] => {
     const workingWeight = Number(exercise.weight);
-    if (!workingWeight || workingWeight <= 0 || isBodyweight || isTimeBased) return [];
+    if (!workingWeight || workingWeight <= 0 || isBodyweight || isTimeBased)
+      return [];
 
     const percents = [0.2, 0.4, 0.6];
     const repsPerSet = [12, 8, 6];
@@ -564,11 +577,7 @@ function ExerciseSetsPage({
     });
     setExerciseTimer(null);
 
-    if (
-      restTimerEnabled &&
-      isDuringActiveWorkout &&
-      index < sets.length - 1
-    ) {
+    if (restTimerEnabled && isDuringActiveWorkout && index < sets.length - 1) {
       const totalSeconds = restDurationMinutes * 60 + restDurationSeconds;
       if (totalSeconds > 0) {
         setRestCountdownSeconds(totalSeconds);
@@ -735,61 +744,45 @@ function ExerciseSetsPage({
       fallbackBackgroundClassName="bg-[#0E1224]"
     >
       <div className="flex flex-1 flex-col gap-6">
-        <header className="relative overflow-hidden rounded-[26px] border border-white/12 bg-[#191E31] shadow-xl">
-          <LazyImage
-            src={getExerciseImageUrl(exercise)}
-            alt={exerciseDisplayName}
-            className="h-56 w-full object-cover brightness-[0.88]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0E1122] via-transparent to-black/40" />
-          <div className="absolute inset-x-0 top-0 flex items-start justify-between p-6">
-            <button
-              type="button"
-              onClick={onNavigateBack}
-              className={iconButtonClass}
-              aria-label="back to workout"
-            >
-              <svg
-                aria-hidden="true"
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (exercise.video_url) {
-                  window.open(exercise.video_url, "_blank", "noopener");
-                }
-              }}
-              className={`${primaryButtonClass} bg-main text-white shadow-lg`}
-            >
-              <svg
-                aria-hidden="true"
-                className="h-3.5 w-3.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M15 10l4.553-3.165A1 1 0 0 1 21 7.656v8.688a1 1 0 0 1-1.447.821L15 14z" />
-                <rect x="3" y="6" width="12" height="12" rx="2" />
-              </svg>
-              {t("exerciseSetsPage.howTo")}
-            </button>
+        <header className="relative overflow-hidden rounded-[26px] border border-white/12 bg-black shadow-xl">
+          <div className="relative aspect-video w-full bg-black">
+            {youtubeId ? (
+              <YouTube
+                videoId={youtubeId}
+                opts={playerOpts}
+                className="absolute inset-0 h-full w-full"
+                iframeClassName="h-full w-full"
+              />
+            ) : (
+              <video
+                src={exercise.video_url}
+                controls
+                className="h-full w-full object-cover"
+              />
+            )}
           </div>
-          <div className="absolute bottom-6 left-6 right-6 space-y-3">
-            <h1 className="text-[28px] font-semibold text-white">
+          <button
+            type="button"
+            onClick={onNavigateBack}
+            className={`${iconButtonClass} absolute left-4 top-4 z-10`}
+            aria-label="back to workout"
+          >
+            <svg
+              aria-hidden="true"
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+          <div className="px-5 py-4">
+            <h1 className="text-[22px] font-semibold text-white">
               {exerciseDisplayName}
             </h1>
           </div>
