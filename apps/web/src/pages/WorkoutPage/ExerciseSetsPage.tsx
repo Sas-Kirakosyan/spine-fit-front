@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { type Exercise } from "@/types/exercise";
 import {
   useExerciseName,
   getAllBaseExercises,
@@ -19,6 +18,11 @@ import { PageContainer } from "@/Layout/PageContainer";
 import { ExerciseSet } from "@/pages/WorkoutPage/ExerciseSet";
 import { RestTimerModal } from "@/pages/WorkoutPage/RestTimerModal";
 import { SetTimeModal } from "@/pages/WorkoutPage/SetTimeModal";
+import { ReplaceExerciseModal } from "@/pages/WorkoutPage/ReplaceExerciseModal";
+import {
+  getAllReplacementExercises,
+  getSuggestedReplacementExercises,
+} from "@/utils/replacementExercises";
 import {
   iconButtonClass,
   primaryButtonClass,
@@ -27,10 +31,6 @@ import {
 import { Button } from "@/components/Buttons/Button";
 import { LazyImage } from "@/components/ui/LazyImage";
 import { QuizSlider } from "@/components/Quiz/QuizSlider";
-import {
-  loadPlanFromLocalStorage,
-  savePlanToLocalStorage,
-} from "@/storage/planStorage";
 import {
   shouldShowPainTracking,
   getStoredPainStatus,
@@ -132,6 +132,7 @@ function ExerciseSetsPage({
   isDuringActiveWorkout = false,
   exerciseLogs = {},
   workoutHistory = [],
+  onReplaceExercise,
 }: ExerciseSetsPageProps) {
   const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
@@ -706,58 +707,25 @@ function ExerciseSetsPage({
     return `${weightValue}${unit} x ${repsValue}`;
   };
 
-  const filteredReplacementExercises = allExercises
-    .filter((item) => {
-      const query = replaceQuery.trim().toLowerCase();
-      const matchesQuery =
-        query.length === 0 || item.name.toLowerCase().includes(query);
-      return item.id !== exercise.id && matchesQuery;
-    })
-    .slice(0, 80);
+  const allReplacementExercises = useMemo(
+    () =>
+      getAllReplacementExercises({
+        allExercises,
+        replaceExercise: exercise,
+        replaceQuery,
+        currentExercises: [exercise],
+      }),
+    [allExercises, exercise, replaceQuery]
+  );
 
-  const handleReplaceCurrentExercise = (selectedReplacement: Exercise) => {
-    try {
-      const plan = loadPlanFromLocalStorage();
-      if (!plan) return;
-
-      const workoutIndex = plan.workoutDays.findIndex((day) =>
-        day.exercises.some((item) => item.id === exercise.id)
-      );
-
-      if (workoutIndex === -1) return;
-
-      const hasDuplicateInWorkout = plan.workoutDays[
-        workoutIndex
-      ].exercises.some((item) => item.id === selectedReplacement.id);
-      if (hasDuplicateInWorkout) {
-        setReplaceModalOpen(false);
-        setReplaceQuery("");
-        onNavigateBack();
-        return;
-      }
-
-      const replacementWithCurrentSets: Exercise = {
-        ...selectedReplacement,
-        sets: exercise.sets,
-        reps: exercise.reps,
-        weight: exercise.weight,
-        weight_unit: exercise.weight_unit,
-      };
-
-      plan.workoutDays[workoutIndex].exercises = plan.workoutDays[
-        workoutIndex
-      ].exercises.map((item) =>
-        item.id === exercise.id ? replacementWithCurrentSets : item
-      );
-
-      savePlanToLocalStorage(plan);
-      setReplaceModalOpen(false);
-      setReplaceQuery("");
-      onNavigateBack();
-    } catch (error) {
-      console.error("Error replacing exercise from sets page:", error);
-    }
-  };
+  const suggestedReplacementExercises = useMemo(
+    () =>
+      getSuggestedReplacementExercises({
+        allReplacementExercises,
+        replaceExercise: exercise,
+      }),
+    [allReplacementExercises, exercise]
+  );
 
   return (
     <PageContainer
@@ -968,72 +936,22 @@ function ExerciseSetsPage({
           )}
 
         {replaceModalOpen && (
-          <div className="fixed inset-0 z-[60] flex items-end bg-black/70">
-            <div className="mx-auto w-full max-w-[440px] rounded-t-[24px] border-t border-white/10 bg-[#161827] px-4 pb-5 pt-4">
-              <div className="mb-3 text-center">
-                <h3 className="text-lg font-semibold text-white">
-                  {t("exerciseSetsPage.replaceModal.title")}
-                </h3>
-                <p className="mt-1 text-sm text-slate-400">
-                  {t("exerciseSetsPage.replaceModal.subtitle")}
-                </p>
-              </div>
-
-              <input
-                value={replaceQuery}
-                onChange={(event) => setReplaceQuery(event.target.value)}
-                placeholder={t(
-                  "exerciseSetsPage.replaceModal.searchPlaceholder"
-                )}
-                className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
-              />
-
-              <div
-                className="max-h-[52vh] space-y-2 overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              >
-                {filteredReplacementExercises.length > 0 ? (
-                  filteredReplacementExercises.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => handleReplaceCurrentExercise(item)}
-                      className="flex w-full items-center gap-3 rounded-[12px] bg-[#1F2232] p-2 text-left text-white ring-1 ring-white/5"
-                    >
-                      <LazyImage
-                        src={getExerciseImageUrl(item)}
-                        alt={item.name}
-                        className="h-12 w-12 rounded-[8px] object-cover"
-                      />
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold">
-                          {item.name}
-                        </p>
-                        <p className="truncate text-xs text-slate-400">
-                          {item.muscle_groups.join(", ")}
-                        </p>
-                      </div>
-                    </button>
-                  ))
-                ) : (
-                  <div className="py-6 text-center text-sm text-slate-400">
-                    {t("exerciseSetsPage.replaceModal.noExercises")}
-                  </div>
-                )}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setReplaceModalOpen(false);
-                  setReplaceQuery("");
-                }}
-                className="mt-3 h-11 w-full rounded-[10px] bg-[#232639] text-sm font-semibold text-white"
-              >
-                {t("exerciseSetsPage.replaceModal.cancel")}
-              </button>
-            </div>
-          </div>
+          <ReplaceExerciseModal
+            replaceExercise={exercise}
+            searchQuery={replaceQuery}
+            onSearchChange={setReplaceQuery}
+            suggestedExercises={suggestedReplacementExercises}
+            allExercises={allReplacementExercises}
+            onConfirmSwap={(replacement, duration) => {
+              onReplaceExercise?.(exercise, replacement, duration);
+              setReplaceModalOpen(false);
+              setReplaceQuery("");
+            }}
+            onClose={() => {
+              setReplaceModalOpen(false);
+              setReplaceQuery("");
+            }}
+          />
         )}
 
         {isDuringActiveWorkout && (

@@ -1,7 +1,7 @@
 // Types
 export type { GeneratedPlan, WorkoutDay } from "./types/plan";
 export type { ExerciseRestriction, ExerciseMedia, Exercise } from "./types/exercise";
-export type { SetField, SetType, ExerciseSetRow, ExerciseSetProps, ExerciseSetsPageProps, WorkoutPageProps, SavedWorkout, TrainingDay, SavedProgram, ExerciseDetailsProps, ExerciseActionSheetProps, FinishedWorkoutSummary, ActiveWorkoutPageProps, ExerciseTimerStatus } from "./types/workout";
+export type { SetField, SetType, SwapDurationOption, ExerciseSetRow, ExerciseSetProps, ExerciseSetsPageProps, WorkoutPageProps, SavedWorkout, TrainingDay, SavedProgram, ExerciseDetailsProps, ExerciseActionSheetProps, FinishedWorkoutSummary, ActiveWorkoutPageProps, ExerciseTimerStatus } from "./types/workout";
 export type { PlanFieldId, FieldConfig, PlanSettings } from "./types/planSettings";
 export { planFieldsConfig } from "./types/planSettings";
 export type { QuizQuestion, QuizModalProps, QuizAnswers } from "./types/quiz";
