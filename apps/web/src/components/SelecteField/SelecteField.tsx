@@ -2,7 +2,7 @@ import {useState} from "react";
 import {ChevronDownIcon} from "@/components/Icons/Icons.tsx";
 
 interface SelectFieldProps {
-    label: string;
+    label?: string;
     value: string;
     options: string[];
     onChange: (value: string) => void;
@@ -16,7 +16,7 @@ function SelectField({ label, value, options, onChange, placeholder }: SelectFie
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-white/20 bg-transparent text-left"
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-gray-700 bg-transparent text-left"
             >
         <span className="text-white">
           {value || placeholder || label}
