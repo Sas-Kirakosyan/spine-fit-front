@@ -4,8 +4,8 @@ import CalendarIcon from "@/assets/CalendarIcon/CalendarIcon.tsx";
 import QuizEmblaCarousel from "@/components/Quiz/QuizEmblaCarousel.tsx";
 
 interface IQuizScrollCalendarProps {
-    value: string
-    onChange: (value: string) => void
+    value?: string
+    onChange?: (value: string) => void
 }
 
 function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
@@ -82,7 +82,9 @@ function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const formatted = formatDateInput(value);
-        onChange(formatted);
+        if (onChange) {
+            onChange(formatted);
+        }
     };
 
     const handleConfirm = () => {
@@ -95,7 +97,9 @@ function QuizScrollCalendar({ value, onChange }: IQuizScrollCalendarProps) {
         const monthNum = months[tempDate.month];
         const yearNum = tempDate.year.toString();
 
-        onChange(`${dayNum}/${monthNum}/${yearNum}`);
+        if (onChange) {
+            onChange(`${dayNum}/${monthNum}/${yearNum}`);
+        }
         setIsDialogOpen(false);
     };
 

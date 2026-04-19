@@ -593,6 +593,30 @@
       "maxReps": "Max Reps"
     }
   },
+  "profilePage": {
+    "title": "Profile",
+    "saveButton": "Save Changes",
+    "genders": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "placeholders": {
+      "gender": "Select gender",
+      "height": "Enter your height",
+      "weight": "Enter your weight"
+    },
+    "errors": {
+      "height": {
+        "rangeCm": "Height must be between 50 and 272 cm",
+        "rangeFt": "Height must be between 1.65 and 9.8 ft"
+      },
+      "weight": {
+        "rangeKg": "Weight must be between 40 and 300 kg",
+        "rangeLbs": "Weight must be between 85 and 661 lbs"
+      }
+    }
+  },
   "progressPage": {
     "title": "Progress",
     "tabs": {

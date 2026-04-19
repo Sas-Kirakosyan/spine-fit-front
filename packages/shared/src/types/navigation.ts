@@ -5,6 +5,7 @@ export type Page =
   | "workout"
   | "progress"
   | "history"
+  | "profile"
   | "ai"
   | "exerciseSets"
   | "exerciseDetails"

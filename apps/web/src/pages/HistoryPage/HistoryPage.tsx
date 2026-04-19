@@ -13,6 +13,7 @@ function HistoryPage({
   onNavigateToWorkout,
   onNavigateToProgress,
   onNavigateToHistory,
+  onNavigateToProfile,
   onNavigateToAI,
   activePage,
   workouts,
@@ -183,6 +184,7 @@ function HistoryPage({
           onWorkoutClick={onNavigateToWorkout}
           onProgressClick={onNavigateToProgress}
           onHistoryClick={onNavigateToHistory}
+          onProfileClick={onNavigateToProfile}
           onAIClick={onNavigateToAI || (() => {})}
         />
       </div>

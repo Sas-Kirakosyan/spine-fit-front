@@ -2,7 +2,7 @@ import {useRef, useState} from "react";
 import {ChevronDownIcon} from "@/components/Icons/Icons.tsx";
 
 interface InputFieldProps {
-    label: string;
+    label?: string;
     value: string;
     onChange: (value: string) => void;
     placeholder?: string;

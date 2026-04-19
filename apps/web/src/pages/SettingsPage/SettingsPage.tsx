@@ -5,7 +5,6 @@ import { PageContainer } from "@/Layout/PageContainer";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
-import { BodyProfileModal } from "@/components/BodyProfileModal/BodyProfileModal";
 import type { SettingsPageProps } from "@/types/pages";
 
 interface ModalConfig {
@@ -77,36 +76,10 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "Dark"
   );
-  const [isBodyProfileOpen, setIsBodyProfileOpen] = useState(false);
-  const [bodyProfileSummary, setBodyProfileSummary] = useState<string>(
-    t("settingsPage.values.notSet")
-  );
   const [language, setLanguage] = useState(() => {
     const currentLang = i18n.language;
     return currentLang === "ru" ? "Russian" : "English";
   });
-  const loadBodyProfileSummary = () => {
-    const stored = localStorage.getItem("bodyProfile");
-    if (stored) {
-      try {
-        const profile = JSON.parse(stored);
-        const parts: string[] = [];
-        if (profile.gender) parts.push(profile.gender);
-        if (profile.height)
-          parts.push(`${profile.height} ${profile.heightUnit || "cm"}`);
-        if (profile.weight)
-          parts.push(`${profile.weight} ${profile.weightUnit || "kg"}`);
-        if (parts.length > 0) {
-          setBodyProfileSummary(parts.join(" • "));
-          return;
-        }
-      } catch (e) {
-        console.error("Error loading body profile:", e);
-      }
-    }
-    setBodyProfileSummary(t("settingsPage.values.notSet"));
-  };
-
   // Sync language state with i18next language
   useEffect(() => {
     const handleLanguageChanged = () => {
@@ -182,14 +155,6 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     });
   };
 
-  const handleBodyProfile = () => {
-    setIsBodyProfileOpen(true);
-  };
-
-  const handleBodyProfileSave = () => {
-    loadBodyProfileSummary();
-  };
-
   const handleContactSupport = () => {
     openModal({
       title: t("settingsPage.modals.contactSupport"),
@@ -261,17 +226,6 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
       <Divider />
 
-      {/* About You Section */}
-      <SettingsSection title={t("settingsPage.sections.aboutYou")}>
-        <SettingsItem
-          label={t("settingsPage.items.bodyProfile")}
-          value={bodyProfileSummary}
-          onClick={handleBodyProfile}
-        />
-      </SettingsSection>
-
-      <Divider />
-
       {/* Help Section */}
       <SettingsSection title={t("settingsPage.sections.help")}>
         <SettingsItem
@@ -317,12 +271,6 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         />
       )}
 
-      {/* Body Profile Modal */}
-      <BodyProfileModal
-        isOpen={isBodyProfileOpen}
-        onClose={() => setIsBodyProfileOpen(false)}
-        onSave={handleBodyProfileSave}
-      />
     </PageContainer>
   );
 }

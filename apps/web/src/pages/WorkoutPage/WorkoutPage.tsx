@@ -207,6 +207,7 @@ function WorkoutPage({
   onNavigateToWorkout,
   onNavigateToProgress,
   onNavigateToHistory,
+  onNavigateToProfile,
   onNavigateToAI,
   activePage,
   onNavigateToMyPlan,
@@ -799,6 +800,7 @@ function WorkoutPage({
           onWorkoutClick={onNavigateToWorkout}
           onProgressClick={onNavigateToProgress}
           onHistoryClick={onNavigateToHistory}
+          onProfileClick={onNavigateToProfile}
           onAIClick={onNavigateToAI || (() => {})}
         />
       </div>
