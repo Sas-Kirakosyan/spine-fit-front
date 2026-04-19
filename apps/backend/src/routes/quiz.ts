@@ -53,23 +53,24 @@ function parseDuration(durationRange: string): string {
     "20–30 min": "25 min",
     "30–45 min": "35 min",
     "45–60 min": "50 min",
+    "60–90 min": "75 min",
   };
   return midpoints[durationRange] ?? "35 min";
 }
 
 const QUESTIONS = {
   GOAL: 2,
-  STATS: 3,
-  BODY_TYPE: 7,
-  EXPERIENCE: 8,
-  PAIN_STATUS: 9,
-  TRAINING_FREQUENCY: 10,
-  PAIN_LOCATION: 11,
-  PAIN_LEVEL: 12,
-  PAIN_TRIGGERS: 13,
-  SQUAT_CONFIDENCE: 14,
-  WORKOUT_DURATION: 15,
-  ADDITIONAL_NOTES: 16,
+  PAIN_STATUS: 3,
+  PAIN_LOCATION: 4,
+  PAIN_LEVEL: 5,
+  PAIN_TRIGGERS: 6,
+  SQUAT_CONFIDENCE: 7,
+  STATS: 8,
+  BODY_TYPE: 9,
+  EXPERIENCE: 10,
+  TRAINING_FREQUENCY: 11,
+  WORKOUT_DURATION: 12,
+  ADDITIONAL_NOTES: 13,
 } as const;
 
 function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
@@ -140,13 +141,13 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
 
   // Pain triggers (checkbox → array of indices)
   const painTriggersOptions = [
-    "Walking long distances",
-    "Bending forward (Flexion)",
-    "Lifting objects from the floor",
-    "Sitting for long durations",
-    "High-impact movement (Running/Jumping)",
-    "Weighted Squats or Deadlifts",
-    "Other functional movements",
+    "Bending forward (e.g., reaching for the floor)",
+    "Arching backward (e.g., reaching overhead)",
+    "Lifting or carrying heavy objects",
+    "Sitting for longer than 20–30 minutes",
+    "Impact movements (Running, Jumping)",
+    "Rotating or twisting the torso",
+    "Straining (Heavy bracing/holding breath)",
   ];
   const painTriggers = Array.isArray(answers[QUESTIONS.PAIN_TRIGGERS])
     ? (answers[QUESTIONS.PAIN_TRIGGERS] as number[]).map((i) => painTriggersOptions[i])
@@ -163,7 +164,7 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   const canSquat = typeof answers[QUESTIONS.SQUAT_CONFIDENCE] === "number" ? canSquatOptions[answers[QUESTIONS.SQUAT_CONFIDENCE] as number] : undefined;
 
   // Workout duration
-  const durationOptions = ["10–20 min", "20–30 min", "30–45 min", "45–60 min"];
+  const durationOptions = ["10–20 min", "20–30 min", "30–45 min", "45–60 min", "60–90 min"];
   const durationRange = typeof answers[QUESTIONS.WORKOUT_DURATION] === "number" ? durationOptions[answers[QUESTIONS.WORKOUT_DURATION] as number] : "30–45 min";
   const duration = parseDuration(durationRange);
 
