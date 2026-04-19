@@ -22,10 +22,11 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
 
     const [heightError, setHeightError] = useState("")
     const [weightError, setWeightError] = useState("")
+    const [showResetConfirm, setShowResetConfirm] = useState(false);
+    const [savedToast, setSavedToast] = useState(false);
+    const [userEmail, setUserEmail] = useState("");
 
-    const handleSave = () => {
-        if (heightError || weightError) return;
-
+    const doSave = () => {
         const stored = localStorage.getItem("quizAnswers");
         const quizData = stored ? JSON.parse(stored) : { answers: {}, units: {}, workoutType: "gym" };
 
@@ -58,8 +59,20 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
 
         quizData.timestamp = new Date().toISOString();
         localStorage.setItem("quizAnswers", JSON.stringify(quizData));
-
         localStorage.removeItem("generatedPlan");
+
+        setSavedToast(true);
+        setTimeout(() => setSavedToast(false), 2500);
+    };
+
+    const handleSave = () => {
+        if (heightError || weightError) return;
+        const hasPlan = !!localStorage.getItem("generatedPlan");
+        if (hasPlan) {
+            setShowResetConfirm(true);
+        } else {
+            doSave();
+        }
     };
 
     const validateHeight = useCallback((height: number, unit: "cm" | "ft") => {
@@ -119,6 +132,10 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
         }
     }, []);
 
+    useEffect(() => {
+        const stored = localStorage.getItem("userEmail");
+        if (stored) setUserEmail(stored);
+    }, []);
 
     return (
         <div className="bg-background h-screen flex flex-col overflow-hidden">
@@ -135,8 +152,19 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
                 </Button>
             </header>
 
-            <div className="flex flex-col flex-1 justify-evenly">
-                <div className="flex flex-col px-4 space-y-4 gap-2">
+            {userEmail && (
+                <div className="mx-4 mb-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10">
+                    <p className="text-white/50 text-xs mb-0.5">Account</p>
+                    <p className="text-white text-sm font-medium truncate">{userEmail}</p>
+                </div>
+            )}
+
+            <div className="flex flex-col flex-1 overflow-y-auto pb-20">
+                <div className="flex flex-col px-4 pt-4 gap-4">
+                    <p className="text-white/50 text-xs font-semibold uppercase tracking-wider px-1">
+                        {t("profilePage.bodyMeasurements")}
+                    </p>
+
                     <SelectField
                         value={gender}
                         options={[t("profilePage.genders.male"), t("profilePage.genders.female"), t("profilePage.genders.other")]}
@@ -167,7 +195,7 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
                         )}
                     </div>
 
-                    <div>
+                    <div className="flex flex-col gap-0.5">
                         <InputField
                             value={weight}
                             onChange={setWeight}
@@ -185,17 +213,14 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
                         )}
                     </div>
 
-                </div>
-
-                <div className="p-4">
                     <Button
                         disabled={!!(heightError || weightError)}
                         onClick={handleSave}
                         className={
-                            `w-full py-4 rounded-xl text-white font-semibold transition
+                            `w-full py-4 rounded-xl text-white font-semibold transition mt-2
                             ${heightError || weightError
                                 ? "bg-[#b85c00] cursor-not-allowed opacity-70"
-                                : "bg-main "
+                                : "bg-main"
                             }`
                         }
                     >
@@ -203,6 +228,37 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
                     </Button>
                 </div>
             </div>
+
+            {savedToast && (
+                <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-green-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg">
+                    {t("profilePage.savedSuccess")}
+                </div>
+            )}
+
+            {showResetConfirm && (
+                <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 pb-6 px-4">
+                    <div className="w-full max-w-[440px] bg-[#132f54] border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
+                        <div>
+                            <h2 className="text-white font-semibold text-lg mb-1">{t("profilePage.resetPlanTitle")}</h2>
+                            <p className="text-white/60 text-sm">{t("profilePage.resetPlanMessage")}</p>
+                        </div>
+                        <div className="flex gap-3">
+                            <Button
+                                onClick={() => setShowResetConfirm(false)}
+                                className="flex-1 py-3 rounded-xl border border-white/20 text-white font-semibold"
+                            >
+                                {t("profilePage.resetPlanCancel")}
+                            </Button>
+                            <Button
+                                onClick={() => { setShowResetConfirm(false); doSave(); }}
+                                className="flex-1 py-3 rounded-xl bg-main text-white font-semibold"
+                            >
+                                {t("profilePage.resetPlanConfirm")}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
                 <BottomNav

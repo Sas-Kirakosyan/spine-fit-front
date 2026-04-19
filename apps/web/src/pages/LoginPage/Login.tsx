@@ -63,7 +63,7 @@ function Login({
     e.preventDefault();
 
     if (validateForm()) {
-      console.log("Login data:", formData);
+      localStorage.setItem("userEmail", formData.email);
       if (onNavigateToWorkout) {
         onNavigateToWorkout();
       }
