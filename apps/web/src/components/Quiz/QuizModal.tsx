@@ -109,14 +109,13 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   }, [answers]);
 
   const actualQuestionsCount = useMemo(() => {
-    return filteredQuestions.filter((q) => q.type !== "info").length;
-  }, [filteredQuestions]);
+    return questions.filter((q) => q.type !== "info").length;
+  }, []);
 
   const currentQuestionNumber = useMemo(() => {
-    const nonInfoQuestions = filteredQuestions
-      .slice(0, currentQuestion + 1)
-      .filter((q) => q.type !== "info").length;
-    return nonInfoQuestions;
+    const question = filteredQuestions[currentQuestion];
+    if (!question || question.type === "info") return 0;
+    return (question.id as number) - 1;
   }, [filteredQuestions, currentQuestion]);
 
   const handleAnswerSelect = (answerIndex: number) => {
@@ -737,26 +736,55 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
                   </div>
 
                   {filteredQuestions[currentQuestion].type === "checkbox" && (
-                    <div className={optionListClass}>
-                      {filteredQuestions[currentQuestion].options?.map(
-                        (option, index) => (
-                          <QuizCheckboxOption
-                            key={index}
-                            option={t(
-                              `quiz.questions.${question.id}.options.${index}`,
-                              {
+                    <div>
+                      <div className={optionListClass}>
+                        {filteredQuestions[currentQuestion].options?.map(
+                          (option, index) => (
+                            <QuizCheckboxOption
+                              key={index}
+                              option={t(
+                                `quiz.questions.${question.id}.options.${index}`,
+                                {
+                                  defaultValue:
+                                    typeof option === "string"
+                                      ? option
+                                      : (option as any).label,
+                                }
+                              )}
+                              index={index}
+                              isSelected={selectedCheckboxes.includes(index)}
+                              onToggle={handleCheckboxToggle}
+                            />
+                          )
+                        )}
+                      </div>
+                      {question.fieldName === "painLocation" &&
+                        selectedCheckboxes.includes(3) && (
+                          <div
+                            className="mt-3 flex items-start gap-2 rounded-md border-l-4 border-red-500 bg-red-50 px-3 py-2 text-sm text-red-900"
+                            role="alert"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              className="mt-0.5 h-4 w-4 shrink-0"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 6Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            <span>
+                              {t(`quiz.questions.${question.id}.calfFootWarning`, {
                                 defaultValue:
-                                  typeof option === "string"
-                                    ? option
-                                    : (option as any).label,
-                              }
-                            )}
-                            index={index}
-                            isSelected={selectedCheckboxes.includes(index)}
-                            onToggle={handleCheckboxToggle}
-                          />
-                        )
-                      )}
+                                  "Numbness or tingling in the calf or foot may indicate nerve compression. Please consult a doctor before starting any training program.",
+                              })}
+                            </span>
+                          </div>
+                        )}
                     </div>
                   )}
 

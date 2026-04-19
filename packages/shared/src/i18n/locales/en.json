@@ -341,20 +341,65 @@
     },
     "questions": {
       "1": {
-        "title": "Build Muscle, Protect Your Spine",
-        "description": "We combine professional coaching logic with spine-safe protocols to help you train hard without the fear of a flare-up. Let's customize your journey.",
+        "title": "Build Muscle. Protect Your Spine.",
+        "description": "Whether your goal is to build muscle or recover from back pain — this assessment builds a plan tailored to your health history, body, and schedule.",
         "buttonText": "Start My Assessment"
       },
       "2": {
-        "question": "What is your main goal?",
+        "question": "What is your main training goal?",
         "options": [
           "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
           "Structural Recovery (Reduce pain and restore movement capacity)"
         ]
       },
       "3": {
-        "question": "Standard Metrics",
-        "description": "These stats allow us to calibrate your volume and intensity.",
+        "question": "How would you describe your current back health?",
+        "options": [
+          "Healthy (I am pain-free, but cautious)",
+          "Recovered (Past history of pain/injury)",
+          "Active Symptoms (Currently experiencing discomfort)"
+        ],
+        "disabledNoteHypertrophy": "\"Active Symptoms\" is unavailable: muscle hypertrophy training is not recommended while you are currently experiencing pain.",
+        "disabledNoteRecovery": "\"Healthy\" and \"Recovered\" are unavailable: structural recovery is designed for users who currently have pain to reduce."
+      },
+      "4": {
+        "question": "Where is — or was — your pain located?",
+        "options": [
+          "Lower Back (L4-L5/S1 area)",
+          "Sciatica (Pain radiating down leg)",
+          "Glute / Deep Hip discomfort",
+          "Calf or Foot (Numbness/Tingling)"
+        ],
+        "calfFootWarning": "Numbness or tingling in the calf or foot may indicate nerve compression. Please consult a doctor before starting any training program."
+      },
+      "5": {
+        "question": "Rate your current pain level (0 = none, 10 = severe)"
+      },
+      "6": {
+        "question": "Which movements trigger your pain or discomfort?",
+        "options": [
+          "Bending forward (e.g., reaching for the floor)",
+          "Arching backward (e.g., reaching overhead)",
+          "Lifting or carrying heavy objects",
+          "Sitting for longer than 20–30 minutes",
+          "Impact movements (Running, Jumping)",
+          "Rotating or twisting the torso",
+          "Straining (Heavy bracing/holding breath)"
+        ]
+      },
+      "7": {
+        "question": "How comfortable are you squatting with added weight?",
+        "options": [
+          "Confident (I squat with weights regularly)",
+          "Cautious (I only squat with light weights)",
+          "Technical (I can squat bodyweight, but weights trigger pain)",
+          "Avoidant (I strictly avoid all squatting movements)",
+          "Untested (I haven't tried squatting recently)"
+        ]
+      },
+      "8": {
+        "question": "Your Body Stats",
+        "description": "Helps us calibrate your training volume and intensity.",
         "fields": {
           "gender": {
             "label": "Gender",
@@ -373,8 +418,8 @@
           }
         }
       },
-      "7": {
-        "question": "Which physique profile best matches yours?",
+      "9": {
+        "question": "Which physique best matches yours?",
         "options": [
           { "label": "8–15% (Lean / Athletic)", "description": "Visible muscle definition" },
           { "label": "16–22% (Average)", "description": "Some definition, slight fat around waist" },
@@ -388,67 +433,23 @@
           { "label": "38%+ (High body fat)", "description": "Higher fat storage around waist and hips" }
         ]
       },
-      "8": {
-        "question": "What is your resistance training experience?",
+      "10": {
+        "question": "How long have you been training with weights?",
         "options": [
           "Beginner — new to training",
           "Intermediate — 1 to 3 years",
           "Advanced — 3+ years"
         ]
       },
-      "9": {
-        "question": "What is your current spinal health status?",
-        "options": [
-          "Healthy (I am pain-free, but cautious)",
-          "Recovered (Past history of pain/injury)",
-          "Active Symptoms (Currently experiencing discomfort)"
-        ],
-        "disabledNoteHypertrophy": "\"Active Symptoms\" is unavailable: muscle hypertrophy training is not recommended while you are currently experiencing pain.",
-        "disabledNoteRecovery": "\"Healthy\" and \"Recovered\" are unavailable: structural recovery is designed for users who currently have pain to reduce."
-      },
-      "10": {
-        "question": "How many times per week can you train?",
+      "11": {
+        "question": "How many days per week can you train?",
         "options": ["2 Days", "3 Days", "4 Days", "5+ Days"]
       },
-      "11": {
-        "question": "Where do you feel or did you feel pain?",
-        "options": [
-          "Lower Back (L4-L5/S1 area)",
-          "Sciatica (Pain radiating down leg)",
-          "Glute / Deep Hip discomfort",
-          "Calf or Foot (Numbness/Tingling)"
-        ]
-      },
       "12": {
-        "question": "How intense is the pain currently?"
-      },
-      "13": {
-        "question": "Which movements trigger or provoke your symptoms?",
-        "options": [
-          "Bending forward (e.g., reaching for the floor)",
-          "Arching backward (e.g., reaching overhead)",
-          "Lifting or carrying heavy objects",
-          "Sitting for longer than 20–30 minutes",
-          "Impact movements (Running, Jumping)",
-          "Rotating or twisting the torso",
-          "Straining (Heavy bracing/holding breath)"
-        ]
-      },
-      "14": {
-        "question": "How do you feel about squatting with extra weight?",
-        "options": [
-          "Confident (I squat with weights regularly)",
-          "Cautious (I only squat with light weights)",
-          "Technical (I can squat bodyweight, but weights trigger pain)",
-          "Avoidant (I strictly avoid all squatting movements)",
-          "Untested (I haven't tried squatting recently)"
-        ]
-      },
-      "15": {
-        "question": "How long should your workouts be?",
+        "question": "How long can each workout be?",
         "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min"]
       },
-      "16": {
+      "13": {
         "question": "Anything else we should know?",
         "placeholder": "E.g., specific injuries, preferences, equipment limitations...",
         "templates": [
@@ -456,7 +457,11 @@
           "I prefer dumbbells over barbells",
           "I want more core work",
           "I want to avoid heavy lifting",
-          "I want to focus on posture correction"
+          "I want to focus on posture correction",
+          "I prefer lightweight training",
+          "I want more cardio",
+          "I only have home equipment",
+          "I prefer machines over free weights"
         ]
       }
     }
