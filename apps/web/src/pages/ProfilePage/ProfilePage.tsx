@@ -24,6 +24,8 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
     const [weightError, setWeightError] = useState("")
 
     const handleSave = () => {
+        if (heightError || weightError) return;
+
         const stored = localStorage.getItem("quizAnswers");
         const quizData = stored ? JSON.parse(stored) : { answers: {}, units: {}, workoutType: "gym" };
 
@@ -41,6 +43,7 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
         localStorage.setItem("bodyProfile", JSON.stringify(bodyProfileData));
 
         if (!quizData.answers[3]) quizData.answers[3] = {};
+        if (!quizData.units[3]) quizData.units[3] = {};
 
         const answer = quizData.answers[3];
         const units = quizData.units[3];
@@ -150,7 +153,7 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
                         <InputField
                             value={height}
                             onChange={setHeight}
-                            placeholder={t("profilePage.placeholders.gender")}
+                            placeholder={t("profilePage.placeholders.height")}
                             type="number"
                             unit={heightUnit}
                             unitOptions={["cm", "ft"]}
@@ -168,7 +171,7 @@ function ProfilePage({onNavigateToWorkout, onNavigateToProgress, onNavigateToHis
                         <InputField
                             value={weight}
                             onChange={setWeight}
-                            placeholder={t("profilePage.placeholders.gender")}
+                            placeholder={t("profilePage.placeholders.weight")}
                             type="number"
                             unit={weightUnit}
                             unitOptions={["kg", "lbs"]}
