@@ -19,17 +19,16 @@
 #### A. Complete the Quiz
 
 1. Navigate to the Quiz (usually on first launch or in settings)
-2. Answer these test questions:
-   - **Goal**: "Muscle Hypertrophy (Build mass safely with back/sciatica history)"
-   - **Gender**: Male
-   - **Age**: 30-39
-   - **Height**: 180 cm
-   - **Weight**: 80 kg
-   - **Experience**: Intermediate
-   - **Training Frequency**: 3
-   - **Pain Status**: "Recovered" (or "Healthy" for easier testing)
-   - **Training Location**: Gym
-   - **Workout Duration**: "30-45 min"
+2. Answer these test questions (in quiz order):
+   - **Goal** (Q2): "Muscle Hypertrophy (Build mass safely with back/sciatica history)"
+   - **Back Health** (Q3): "Recovered" (or "Healthy" for easier testing)
+   - **Pain Location** (Q4, if shown): "Lower Back (L4-L5/S1 area)"
+   - **Pain Triggers** (Q6, if shown): select relevant options
+   - **Squat Confidence** (Q7, if shown): "Cautious"
+   - **Body Stats** (Q8): Gender — Male, Height — 180 cm, Weight — 80 kg
+   - **Experience** (Q10): Intermediate
+   - **Training Frequency** (Q11): 3 Days
+   - **Workout Duration** (Q12): "30–45 min" (or "60–90 min" for longer sessions)
 
 #### B. Configure Equipment
 
@@ -225,7 +224,7 @@ localStorage.setItem(
   "quizAnswers",
   JSON.stringify({
     workoutType: "gym",
-    answers: { 10: "Healthy" },
+    answers: { 3: "Healthy (I am pain-free, but cautious)" },
   })
 );
 

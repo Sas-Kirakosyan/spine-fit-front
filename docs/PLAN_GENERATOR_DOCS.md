@@ -58,15 +58,16 @@ Returns `undefined` if no quiz answers (settings-only flow).
 | Answer ID | Field |
 |-----------|-------|
 | 2 | goal |
-| 3 | gender, dateOfBirth, height, weight (multi_field) |
-| 7 | bodyType |
-| 8 | experience |
-| 9 | trainingFrequency |
-| 10 | painStatus |
-| 11 | painLocation |
-| 13 | painTriggers |
-| 14 | canSquat |
-| 15 | workoutDuration |
+| 3 | painStatus |
+| 4 | painLocation |
+| 5 | painLevel |
+| 6 | painTriggers |
+| 7 | squatConfidence (canSquat) |
+| 8 | gender, dateOfBirth, height, weight (multi_field) |
+| 9 | bodyType |
+| 10 | experience |
+| 11 | trainingFrequency |
+| 12 | workoutDuration |
 
 ---
 
@@ -208,16 +209,16 @@ Full quiz answer ID → `PlanSettings` field mapping:
 | Answer ID | Maps to |
 |-----------|--------|
 | 2 | `goal` |
-| 3 | `gender`, `height`, `weight`, `dateOfBirth` |
-| 7 | `bodyType` |
-| 8 | `experience` |
-| 9 | `workoutsPerWeek` + auto-selects `trainingSplit` |
-| 10 | `painStatus` |
-| 11 | `painLocation` |
-| 12 | `painLevel` |
-| 13 | `painTriggers` |
-| 14 | `canSquat` |
-| 15 | `duration` |
+| 3 | `painStatus` |
+| 4 | `painLocation` |
+| 5 | `painLevel` |
+| 6 | `painTriggers` |
+| 7 | `canSquat` |
+| 8 | `gender`, `height`, `weight`, `dateOfBirth` |
+| 9 | `bodyType` |
+| 10 | `experience` |
+| 11 | `workoutsPerWeek` + auto-selects `trainingSplit` |
+| 12 | `duration` |
 
 Also auto-derives `trainingSplit` from frequency: ≤2→Full Body, 3→Full Body, 4→Upper/Lower, 5+→Push/Pull/Legs.
 
