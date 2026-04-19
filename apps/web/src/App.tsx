@@ -10,6 +10,11 @@ import type {
   SavedProgram,
   TrainingDay,
 } from "@/types/workout";
+import type { SwapDurationOption } from "@spinefit/shared";
+import {
+  loadPlanFromLocalStorage,
+  savePlanToLocalStorage,
+} from "@/storage/planStorage";
 import { loadPlanSettings } from "@/types/planSettings";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
@@ -401,6 +406,82 @@ function App() {
     window.history.back();
   };
 
+  const handleReplaceSelectedExercise = (
+    oldExercise: Exercise,
+    selectedReplacement: Exercise,
+    duration: SwapDurationOption
+  ) => {
+    const replacement: Exercise = {
+      ...selectedReplacement,
+      sets: oldExercise.sets,
+      reps: oldExercise.reps,
+      weight: oldExercise.weight,
+      weight_unit: oldExercise.weight_unit,
+    };
+    const replaceInList = (list: Exercise[]) => {
+      if (
+        list.some(
+          (ex) => ex.id === replacement.id && ex.id !== oldExercise.id
+        )
+      ) {
+        return list;
+      }
+      return list.map((ex) =>
+        ex.id === oldExercise.id ? replacement : ex
+      );
+    };
+
+    try {
+      const plan = loadPlanFromLocalStorage();
+      if (plan) {
+        if (duration === "plan") {
+          plan.workoutDays = plan.workoutDays.map((day) => ({
+            ...day,
+            exercises: replaceInList(day.exercises as Exercise[]),
+          }));
+        } else {
+          const manualIndex = localStorage.getItem("selectedWorkoutDayIndex");
+          let workoutIndex = -1;
+          if (manualIndex !== null) {
+            const idx = parseInt(manualIndex, 10);
+            if (!isNaN(idx) && idx < plan.workoutDays.length) {
+              workoutIndex = idx;
+            }
+          }
+          if (workoutIndex === -1) {
+            const currentWorkout = getNextAvailableWorkout(
+              plan,
+              completedWorkoutIds
+            );
+            if (currentWorkout) {
+              workoutIndex = plan.workoutDays.findIndex(
+                (day) =>
+                  day.dayNumber === currentWorkout.dayNumber &&
+                  day.dayName === currentWorkout.dayName
+              );
+            }
+          }
+          if (workoutIndex !== -1) {
+            plan.workoutDays[workoutIndex].exercises = replaceInList(
+              plan.workoutDays[workoutIndex].exercises as Exercise[]
+            );
+          }
+        }
+        savePlanToLocalStorage(plan);
+      }
+    } catch (error) {
+      console.error("Error replacing exercise from sets page:", error);
+    }
+
+    setWorkoutExercises((prev) => replaceInList(prev));
+    setSelectedExercise(replacement);
+    trackEvent("exercise_replaced", {
+      old_id: oldExercise.id,
+      new_id: replacement.id,
+      duration,
+    });
+  };
+
   const markExerciseComplete = (
     exerciseId: number,
     sets: ExerciseSetRow[],
@@ -528,6 +609,8 @@ function App() {
             onSkipExercise={skipExercise}
             isDuringActiveWorkout={exerciseSetsMode === "activeWorkout"}
             exerciseLogs={exerciseLogs}
+            workoutHistory={workoutHistory}
+            onReplaceExercise={handleReplaceSelectedExercise}
           />
         );
       case "exerciseDetails":

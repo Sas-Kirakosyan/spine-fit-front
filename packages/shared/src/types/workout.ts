@@ -3,6 +3,7 @@ import type { Exercise } from "./exercise";
 
 export type SetField = "reps" | "weight";
 export type SetType = "working" | "warmup";
+export type SwapDurationOption = "workout" | "plan";
 
 export interface ExerciseSetRow {
   id: string;
@@ -47,6 +48,12 @@ export interface ExerciseSetsPageProps {
   onSkipExercise?: (exerciseId: number) => void;
   isDuringActiveWorkout?: boolean;
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
+  workoutHistory?: FinishedWorkoutSummary[];
+  onReplaceExercise?: (
+    oldExercise: Exercise,
+    replacement: Exercise,
+    duration: SwapDurationOption
+  ) => void;
 }
 
 export interface WorkoutPageProps {

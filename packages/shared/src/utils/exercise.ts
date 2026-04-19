@@ -13,6 +13,10 @@ export function getAllBaseExercises(): Exercise[] {
   return allExercisesData as Exercise[];
 }
 
+export function getExerciseYoutubeId(id: number): string | undefined {
+  return baseExercisesById.get(id)?.youtube_id;
+}
+
 export function isTimeBasedExercise(exercise: Pick<Exercise, "id" | "weight_unit">): boolean {
   if (exercise.weight_unit === "time") return true;
   const base = baseExercisesById.get(exercise.id);
