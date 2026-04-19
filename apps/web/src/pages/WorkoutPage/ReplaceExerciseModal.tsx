@@ -4,8 +4,9 @@ import { type Exercise } from "@/types/exercise";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import { Button } from "@/components/Buttons/Button";
 import { LazyImage } from "@/components/ui/LazyImage";
+import type { SwapDurationOption } from "@spinefit/shared";
 
-export type SwapDurationOption = "workout" | "plan";
+export type { SwapDurationOption };
 
 interface ReplaceExerciseModalProps {
   replaceExercise: Exercise;
