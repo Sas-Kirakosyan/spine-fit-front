@@ -236,7 +236,7 @@ export const questions: QuizQuestion[] = [
     fieldName: "workoutDuration",
     question: "How long should your workouts be?",
     type: "radio",
-    options: ["10–20 min", "20–30 min", "30–45 min", "45–60 min"],
+    options: ["10–20 min", "20–30 min", "30–45 min", "45–60 min", "60–90 min"],
   },
   {
     id: 13,

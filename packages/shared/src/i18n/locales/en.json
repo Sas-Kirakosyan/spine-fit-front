@@ -447,7 +447,7 @@
       },
       "12": {
         "question": "How long can each workout be?",
-        "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min"]
+        "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min", "60–90 min"]
       },
       "13": {
         "question": "Anything else we should know?",
