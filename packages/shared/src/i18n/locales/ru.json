@@ -604,6 +604,7 @@
     "resetPlanConfirm": "Продолжить",
     "resetPlanCancel": "Отмена",
     "savedSuccess": "Профиль сохранён!",
+    "regenerating": "Генерируем новый план...",
     "genders": {
       "male": "Мужской",
       "female": "Женский",

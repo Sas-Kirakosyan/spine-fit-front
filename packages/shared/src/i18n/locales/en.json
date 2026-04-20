@@ -602,6 +602,7 @@
     "resetPlanConfirm": "Continue",
     "resetPlanCancel": "Cancel",
     "savedSuccess": "Profile saved!",
+    "regenerating": "Generating your new plan...",
     "genders": {
       "male": "Male",
       "female": "Female",
