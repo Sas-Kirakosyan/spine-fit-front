@@ -2,17 +2,21 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import { useTranslation } from "react-i18next";
 import type { QuizModalProps } from "@/types/quiz";
+import type { RegistrationFormData } from "@/types/auth";
 import {
-  type GeneratedPlan,
   GOAL_HYPERTROPHY,
   GOAL_RECOVERY,
   PAIN_STATUS_HEALTHY,
   PAIN_STATUS_RECOVERED,
   PAIN_STATUS_ACTIVE,
 } from "@spinefit/shared";
-import { savePlanToLocalStorage } from "@/storage/planStorage";
-import { savePlanSettings } from "@/storage/planSettingsStorage";
-import type { PlanSettings } from "@/types/planSettings";
+import {
+  generatePlanFromQuiz,
+  type StoredQuizData,
+} from "@/lib/planGeneration";
+import { saveQuizToSupabase } from "@/lib/quizStorage";
+import { supabase } from "@/lib/supabase";
+import { RegistrationForm } from "@/components/Form/RegistrationForm/RegistrationForm";
 import { questions } from "./questions";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -28,7 +32,12 @@ import { trackEvent } from "@/utils/analytics";
 const goalQuestion = questions.find((q) => q.fieldName === "goal");
 const painStatusQuestion = questions.find((q) => q.fieldName === "painStatus");
 
-export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
+export function QuizModal({
+  isOpen,
+  onClose,
+  onQuizComplete,
+  onSwitchToLogin,
+}: QuizModalProps) {
   const { t } = useTranslation();
   const [workoutType] = useState<"home" | "gym">("gym");
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -50,6 +59,8 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
   >({});
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [mode, setMode] = useState<"quiz" | "registration">("quiz");
+  const [hasRegistered, setHasRegistered] = useState(false);
 
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
@@ -318,148 +329,114 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
     }
   };
 
-  const handleSubmitWithAnswer = async (
-    answerValue: number | number[] | string
-  ) => {
+  const buildQuizData = (): StoredQuizData => {
     const question = filteredQuestions[currentQuestion];
+    let currentAnswerValue: number | number[] | string | Record<string, string | number> = "";
     const finalUnits = { ...units };
 
-    if (question.fieldName === "height") {
-      finalUnits[question.id] = heightUnit;
-    } else if (question.fieldName === "weight") {
-      finalUnits[question.id] = weightUnit;
+    if (question.type === "radio" || question.type === "image_radio") {
+      currentAnswerValue = answers[question.id] as number;
+    } else if (question.type === "checkbox") {
+      currentAnswerValue = selectedCheckboxes;
+    } else if (question.type === "textarea") {
+      currentAnswerValue = inputValue;
+    } else if (question.type === "multi_field") {
+      currentAnswerValue = multiFieldValues;
+      if (Object.keys(multiFieldUnits).length > 0) {
+        finalUnits[question.id] = multiFieldUnits as Record<string, string>;
+      }
+    } else if (question.type === "input" || question.type === "slider") {
+      currentAnswerValue = inputValue;
+      if (question.fieldName === "height") {
+        finalUnits[question.id] = heightUnit;
+      } else if (question.fieldName === "weight") {
+        finalUnits[question.id] = weightUnit;
+      }
     }
 
-    const allAnswers = {
-      ...answers,
-      [question.id]: answerValue,
-    };
-
-    const quizData = {
+    return {
       workoutType,
-      answers: allAnswers,
+      answers: { ...answers, [question.id]: currentAnswerValue },
       units: finalUnits,
       timestamp: new Date().toISOString(),
     };
+  };
 
-    localStorage.setItem("quizAnswers", JSON.stringify(quizData));
-    localStorage.removeItem("generatedPlan");
-
+  const runPlanGeneration = async (quizData: StoredQuizData) => {
     setIsGeneratingPlan(true);
     setApiError(null);
+    const result = await generatePlanFromQuiz(quizData);
+    setIsGeneratingPlan(false);
 
-    const generationStartedAt = Date.now();
-    trackEvent("plan_generation_started", {
-      workout_type: workoutType,
-      answer_count: Object.keys(allAnswers).length,
-    });
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(quizData),
-        }
-      );
-
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
-
-      const result = (await response.json()) as {
-        success: boolean;
-        plan: GeneratedPlan;
-        planSettings: PlanSettings;
-      };
-      if (result.success && result.plan) {
-        savePlanToLocalStorage(result.plan);
-        if (result.planSettings) {
-          savePlanSettings(result.planSettings);
-        }
-
-        const workoutDaysCount = Array.isArray(result.plan.workoutDays)
-          ? result.plan.workoutDays.length
-          : 0;
-        const totalExercises = Array.isArray(result.plan.workoutDays)
-          ? result.plan.workoutDays.reduce(
-              (total, day) =>
-                total +
-                (Array.isArray(day.exercises) ? day.exercises.length : 0),
-              0
-            )
-          : 0;
-
-        trackEvent("plan_generation_completed", {
-          workout_days_count: workoutDaysCount,
-          total_exercises: totalExercises,
-          generation_duration_ms: Date.now() - generationStartedAt,
-        });
-
-        trackEvent("onboarding_completed", {
-          workout_type: workoutType,
-          answer_count: Object.keys(allAnswers).length,
-        });
-      } else {
-        throw new Error("invalid_plan_payload");
-      }
-
-      setCurrentQuestion(0);
-      setSelectedCheckboxes([]);
-      setInputValue("");
-      setAnswers({});
-      setUnits({});
-      setHeightUnit("cm");
-      setWeightUnit("kg");
-      setMultiFieldValues({});
-      setMultiFieldUnits({});
+    if (result.ok) {
+      trackEvent("onboarding_completed", {
+        workout_type: quizData.workoutType,
+        answer_count: Object.keys(quizData.answers).length,
+      });
       onClose();
-      if (onQuizComplete) {
-        onQuizComplete();
-      }
-    } catch (err) {
-      console.error("Failed to send quiz to API:", err);
-      const errorMessage = err instanceof Error ? err.message : "unknown";
-
-      trackEvent("plan_generation_failed", {
-        error_type: errorMessage.includes("Server error") ? "server" : "client",
-      });
-
+      if (onQuizComplete) onQuizComplete();
+    } else {
       trackEvent("onboarding_failed", {
-        error_type: errorMessage.includes("Server error") ? "server" : "client",
+        error_type: result.error.includes("Server error")
+          ? "server"
+          : "client",
       });
-
       setApiError(
         "Failed to generate your plan. Please check your connection and try again."
       );
-    } finally {
-      setIsGeneratingPlan(false);
     }
   };
 
   const handleSubmit = () => {
-    if (isAnswered()) {
-      const question = filteredQuestions[currentQuestion];
-      let currentAnswerValue: number | number[] | string = "";
-      const finalUnits = { ...units };
+    if (!isAnswered()) return;
+    const quizData = buildQuizData();
+    localStorage.setItem("quizAnswers", JSON.stringify(quizData));
+    localStorage.removeItem("generatedPlan");
+    setMode("registration");
+  };
 
-      if (question.type === "radio" || question.type === "image_radio") {
-        currentAnswerValue = answers[question.id] as number;
-      } else if (question.type === "checkbox") {
-        currentAnswerValue = selectedCheckboxes;
-      } else if (question.type === "textarea") {
-        currentAnswerValue = inputValue;
-      } else if (question.type === "input" || question.type === "slider") {
-        currentAnswerValue = inputValue;
-
-        if (question.fieldName === "height") {
-          finalUnits[question.id] = heightUnit;
-        } else if (question.fieldName === "weight") {
-          finalUnits[question.id] = weightUnit;
-        }
-      }
-
-      handleSubmitWithAnswer(currentAnswerValue);
+  const handleRegistrationSuccess = async () => {
+    setHasRegistered(true);
+    const stored = localStorage.getItem("quizAnswers");
+    if (!stored) {
+      setApiError("Quiz data missing. Please restart the quiz.");
+      return;
     }
+    const quizData = JSON.parse(stored) as StoredQuizData;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      try {
+        await saveQuizToSupabase(user.id, quizData);
+      } catch (err) {
+        console.error("Failed to persist quiz to Supabase:", err);
+      }
+    }
+
+    await runPlanGeneration(quizData);
+  };
+
+  const handleUserExists = (formData: RegistrationFormData) => {
+    localStorage.setItem("loginPrefillEmail", formData.email);
+    onClose();
+    if (onSwitchToLogin) onSwitchToLogin();
+  };
+
+  const handleRetryFromError = async () => {
+    setApiError(null);
+    if (!hasRegistered) {
+      setMode("registration");
+      return;
+    }
+    const stored = localStorage.getItem("quizAnswers");
+    if (!stored) {
+      setApiError("Quiz data missing. Please restart the quiz.");
+      return;
+    }
+    const quizData = JSON.parse(stored) as StoredQuizData;
+    await runPlanGeneration(quizData);
   };
 
   useEffect(() => {
@@ -496,6 +473,10 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       setWeightUnit("kg");
       setMultiFieldValues({});
       setMultiFieldUnits({});
+      setMode("quiz");
+      setHasRegistered(false);
+      setApiError(null);
+      setIsGeneratingPlan(false);
     }
   }, [isOpen]);
 
@@ -586,11 +567,54 @@ export function QuizModal({ isOpen, onClose, onQuizComplete }: QuizModalProps) {
       <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6 px-6 text-center">
         <p className="text-lg font-medium text-red-500">{apiError}</p>
         <button
-          onClick={() => setApiError(null)}
+          onClick={handleRetryFromError}
           className="rounded-lg bg-primary px-6 py-3 text-white font-medium hover:opacity-90 transition"
         >
           Try again
         </button>
+      </div>
+    );
+  }
+
+  if (mode === "registration") {
+    return (
+      <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
+        <div className="relative w-full h-full max-w-full md:max-w-[400px] md:h-auto md:max-h-[90vh]">
+          <div className="absolute inset-0 bg-background" />
+          <div className="relative z-10 flex flex-col h-full md:min-h-[700px] md:max-h-[90vh]">
+            <QuizHeader
+              currentQuestionNumber={actualQuestionsCount}
+              totalQuestions={actualQuestionsCount}
+              isInfoScreen={false}
+              onClose={onClose}
+            />
+            <div className="mt-6 px-2.5 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
+              <div className="rounded-2xl bg-white/95 p-4 md:p-6 text-gray-800 shadow-lg backdrop-blur">
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold">
+                    {t("quiz.nav.registerStepTitle")}
+                  </h3>
+                  <p className="whitespace-pre-line text-sm text-gray-600">
+                    {t("quiz.nav.registerStepSubtitle")}
+                  </p>
+                </div>
+                <RegistrationForm
+                  submitLabel={t("quiz.nav.registerAndGenerate")}
+                  onSuccess={handleRegistrationSuccess}
+                  onUserExists={handleUserExists}
+                />
+              </div>
+            </div>
+            <div className="mt-6 mx-4 mb-5">
+              <button
+                onClick={() => setMode("quiz")}
+                className="w-full rounded-full bg-white/10 px-8 py-4 text-base font-medium text-white transition hover:bg-white/20"
+              >
+                {t("quiz.nav.backToQuiz")}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

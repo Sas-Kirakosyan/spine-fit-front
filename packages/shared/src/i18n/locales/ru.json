@@ -270,38 +270,31 @@
       "emailRequired": "Email обязателен",
       "emailInvalid": "Пожалуйста, введите корректный email",
       "passwordRequired": "Пароль обязателен",
-      "passwordMinLength": "Пароль должен содержать минимум 6 символов"
+      "passwordMinLength": "Пароль должен содержать минимум 6 символов",
+      "invalidCredentials": "Неверный email или пароль",
+      "network": "Ошибка сети. Повторите попытку.",
+      "unknown": "Что-то пошло не так",
+      "planGenerationFailed": "Вход выполнен, но не удалось сгенерировать план. Пожалуйста, повторите попытку позже."
     }
   },
   "registrationPage": {
     "title": "Регистрация",
     "subtitle": "Создайте свой аккаунт",
-    "firstName": "Имя",
-    "firstNamePlaceholder": "Введите имя",
-    "lastName": "Фамилия",
-    "lastNamePlaceholder": "Введите фамилию",
-    "username": "Имя пользователя",
-    "usernamePlaceholder": "Введите имя пользователя",
     "email": "Электронная почта",
     "emailPlaceholder": "Введите email",
     "password": "Пароль",
     "passwordPlaceholder": "Введите пароль",
-    "confirmPassword": "Подтвердите пароль",
-    "confirmPasswordPlaceholder": "Подтвердите пароль",
     "register": "Зарегистрироваться",
     "haveAccount": "Уже есть аккаунт?",
     "login": "Войти",
     "errors": {
-      "firstNameRequired": "Имя обязательно",
-      "lastNameRequired": "Фамилия обязательна",
-      "usernameRequired": "Имя пользователя обязательно",
-      "usernameMinLength": "Имя пользователя должно содержать минимум 3 символа",
       "emailRequired": "Email обязателен",
       "emailInvalid": "Пожалуйста, введите корректный email",
       "passwordRequired": "Пароль обязателен",
       "passwordMinLength": "Пароль должен содержать минимум 6 символов",
-      "confirmPasswordRequired": "Подтверждение пароля обязательно",
-      "passwordsMismatch": "Пароли не совпадают"
+      "userExists": "Пользователь с таким email уже существует",
+      "network": "Ошибка сети. Повторите попытку.",
+      "unknown": "Что-то пошло не так"
     }
   },
   "quiz": {
@@ -318,7 +311,11 @@
       "finish": "Завершить",
       "generate": "Сгенерировать",
       "generatingTitle": "Генерируем ваш персональный план…",
-      "generatingSubtitle": "Это может занять до 15 секунд"
+      "generatingSubtitle": "Это может занять до 15 секунд",
+      "registerAndGenerate": "Получить мой план",
+      "registerStepTitle": "Создайте аккаунт",
+      "registerStepSubtitle": "Ваш персональный план готов\nСоздайте аккаунт, чтобы получить его",
+      "backToQuiz": "Назад к вопросам"
     },
     "slider": {
       "noPain": "Нет боли",

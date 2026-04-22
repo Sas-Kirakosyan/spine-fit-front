@@ -20,6 +20,10 @@ import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
+import { useAuth } from "@/hooks/useAuth";
+import { retryPendingQuizSync } from "@/lib/quizStorage";
+
+const PUBLIC_PAGES: Page[] = ["home", "login", "register"];
 
 // --- LAZY LOADED COMPONENTS ---
 // Note: Using .then() to handle named exports from your files
@@ -81,6 +85,7 @@ const PATH_TO_PAGE = Object.fromEntries(
 ) as Record<string, Page>;
 
 function App() {
+  const auth = useAuth();
   const [isPagePending, startPageTransition] = useTransition();
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const validPages: Page[] = [
@@ -215,6 +220,21 @@ function App() {
     localStorage.setItem("currentPage", currentPage);
   }, [currentPage]);
 
+  // Auth gating: redirect unauthenticated users away from protected pages
+  useEffect(() => {
+    if (auth.status !== "unauthenticated") return;
+    if (PUBLIC_PAGES.includes(currentPage)) return;
+    window.history.replaceState({ page: "login" }, "", PAGE_TO_PATH["login"]);
+    startPageTransition(() => setCurrentPage("login"));
+  }, [auth.status, currentPage, startPageTransition]);
+
+  // Retry any pending quiz sync whenever the user becomes authenticated
+  const authUserId = auth.status === "authenticated" ? auth.user.id : null;
+  useEffect(() => {
+    if (!authUserId) return;
+    retryPendingQuizSync(authUserId);
+  }, [authUserId]);
+
   useEffect(() => {
     trackPageView(currentPage);
   }, [currentPage]);
@@ -244,7 +264,6 @@ function App() {
 
   const navigateToHome = () => navigateToPage("home");
   const navigateToLogin = () => navigateToPage("login");
-  const navigateToRegister = () => navigateToPage("register");
   const resetWorkoutState = () => {
     setCompletedExerciseIds([]);
     setExerciseLogs({});
@@ -541,7 +560,6 @@ function App() {
       case "login":
         return (
           <Login
-            onSwitchToRegister={navigateToRegister}
             onNavigateToHome={navigateToHome}
             onNavigateToWorkout={navigateToWorkout}
           />
@@ -758,6 +776,10 @@ function App() {
         );
     }
   };
+
+  if (auth.status === "loading") {
+    return <PageLoader />;
+  }
 
   return (
     <>

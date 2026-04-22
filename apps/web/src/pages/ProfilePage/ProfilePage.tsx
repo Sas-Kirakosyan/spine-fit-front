@@ -11,6 +11,7 @@ import QuizScrollCalendar from "@/components/Quiz/QuizScrollCalendar.tsx";
 import ErrorIcon from "@/assets/ErrorIcon/ErrorIncon.tsx";
 import { savePlanToLocalStorage } from "@/storage/planStorage.ts";
 import { savePlanSettings } from "@/storage/planSettingsStorage.ts";
+import { useAuth } from "@/hooks/useAuth.ts";
 
 function ProfilePage({
   onNavigateToWorkout,
@@ -34,8 +35,11 @@ function ProfilePage({
   const [weightError, setWeightError] = useState("");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [savedToast, setSavedToast] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
   const [isRegenerating, setIsRegenerating] = useState(false);
+
+  const auth = useAuth();
+  const userEmail =
+    auth.status === "authenticated" ? auth.user.email ?? "" : "";
 
   const persistProfile = () => {
     const stored = localStorage.getItem("quizAnswers");
@@ -184,11 +188,6 @@ function ProfilePage({
     } catch (error) {
       console.error("Error loading profile data:", error);
     }
-  }, []);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("userEmail");
-    if (stored) setUserEmail(stored);
   }, []);
 
   return (

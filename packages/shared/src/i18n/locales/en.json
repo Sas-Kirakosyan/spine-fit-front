@@ -268,38 +268,31 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email",
       "passwordRequired": "Password is required",
-      "passwordMinLength": "Password must contain at least 6 characters"
+      "passwordMinLength": "Password must contain at least 6 characters",
+      "invalidCredentials": "Invalid email or password",
+      "network": "Network error. Please try again.",
+      "unknown": "Something went wrong",
+      "planGenerationFailed": "Logged in, but we couldn't generate your plan. Please try again later."
     }
   },
   "registrationPage": {
     "title": "Registration",
     "subtitle": "Create your account",
-    "firstName": "First Name",
-    "firstNamePlaceholder": "Enter first name",
-    "lastName": "Last Name",
-    "lastNamePlaceholder": "Enter last name",
-    "username": "Username",
-    "usernamePlaceholder": "Enter username",
     "email": "Email",
     "emailPlaceholder": "Enter email",
     "password": "Password",
     "passwordPlaceholder": "Enter password",
-    "confirmPassword": "Confirm Password",
-    "confirmPasswordPlaceholder": "Confirm password",
     "register": "Register",
     "haveAccount": "Already have an account?",
     "login": "Login",
     "errors": {
-      "firstNameRequired": "First name is required",
-      "lastNameRequired": "Last name is required",
-      "usernameRequired": "Username is required",
-      "usernameMinLength": "Username must contain at least 3 characters",
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email",
       "passwordRequired": "Password is required",
       "passwordMinLength": "Password must contain at least 6 characters",
-      "confirmPasswordRequired": "Password confirmation is required",
-      "passwordsMismatch": "Passwords do not match"
+      "userExists": "User with this email already exists",
+      "network": "Network error. Please try again.",
+      "unknown": "Something went wrong"
     }
   },
   "quiz": {
@@ -316,7 +309,11 @@
       "finish": "Finish",
       "generate": "Generate",
       "generatingTitle": "Generating your personalized plan…",
-      "generatingSubtitle": "This may take up to 15 seconds"
+      "generatingSubtitle": "This may take up to 15 seconds",
+      "registerAndGenerate": "Get my plan",
+      "registerStepTitle": "Create your account",
+      "registerStepSubtitle": "Your personalized plan is ready\nCreate your account to unlock it",
+      "backToQuiz": "Back to questions"
     },
     "slider": {
       "noPain": "No pain",
