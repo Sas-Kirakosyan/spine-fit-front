@@ -4,16 +4,15 @@ export interface LoginFormData {
 }
 
 export interface RegistrationFormData {
-  username: string;
   email: string;
   password: string;
-  confirmPassword: string;
-  firstName: string;
-  lastName: string;
+  username?: string;
+  confirmPassword?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface LoginProps {
-  onSwitchToRegister?: () => void;
   onNavigateToHome?: () => void;
   onNavigateToWorkout?: () => void;
 }

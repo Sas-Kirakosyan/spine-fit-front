@@ -70,7 +70,7 @@ export function QuizNavigationButtons({
             disabled={!isAnswered}
             className={`rounded-full px-8 py-4 text-base font-semibold transition ${
               isAnswered
-                ? "bg-green-500 text-white hover:bg-green-600"
+                ? "bg-main text-white hover:bg-main/90"
                 : "bg-white/10 text-white/60 cursor-not-allowed"
             }`}
           >

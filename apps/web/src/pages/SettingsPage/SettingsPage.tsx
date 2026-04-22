@@ -6,6 +6,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
 import type { SettingsPageProps } from "@/types/pages";
+import { supabase } from "@/lib/supabase";
 
 interface ModalConfig {
   title: string;
@@ -93,10 +94,26 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("currentPage");
-    window.location.reload();
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    const userKeys = [
+      "currentPage",
+      "workoutHistory",
+      "workoutExercises",
+      "generatedPlan",
+      "activePlanId",
+      "completedWorkoutIds",
+      "savedPrograms",
+      "bodyProfile",
+      "quizAnswers",
+      "selectedWorkoutDayIndex",
+      "equipmentData",
+      "equipmentActiveTab",
+      "loginPrefillEmail",
+      "userEmail",
+    ];
+    userKeys.forEach((key) => localStorage.removeItem(key));
+    window.location.assign("/");
   };
 
   const openModal = (config: ModalConfig) => {

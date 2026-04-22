@@ -64,6 +64,7 @@ function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
         isOpen={isQuizOpen}
         onClose={handleCloseQuiz}
         onQuizComplete={onNavigateToWorkout}
+        onSwitchToLogin={onNavigateToLogin}
       />
     </>
   );

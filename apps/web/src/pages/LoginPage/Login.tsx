@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import { FormCard } from "@/components/Form/FormCard/FormCard";
@@ -7,16 +7,27 @@ import { FormField } from "@/components/Form/FormField/FormField";
 import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
 import { Divider } from "@/components/Form/Divider/Divider";
-import { AuthSwitchLink } from "@/components/Form/AuthSwitchLink/AuthSwitchLink";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
+import { supabase } from "@/lib/supabase";
+import {
+  generatePlanFromQuiz,
+  type StoredQuizData,
+} from "@/lib/planGeneration";
 
 import type { LoginFormData, LoginProps } from "@/types/auth";
 
-function Login({
-  onSwitchToRegister,
-  onNavigateToHome,
-  onNavigateToWorkout,
-}: LoginProps) {
+function mapLoginError(message: string, t: (key: string) => string): string {
+  const lower = message.toLowerCase();
+  if (lower.includes("invalid login credentials")) {
+    return t("loginPage.errors.invalidCredentials");
+  }
+  if (lower.includes("failed to fetch") || lower.includes("network")) {
+    return t("loginPage.errors.network");
+  }
+  return message || t("loginPage.errors.unknown");
+}
+
+function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -24,6 +35,15 @@ function Login({
   });
 
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
+  const [authError, setAuthError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const prefillEmail = localStorage.getItem("loginPrefillEmail");
+    if (!prefillEmail) return;
+    setFormData((prev) => ({ ...prev, email: prefillEmail }));
+    localStorage.removeItem("loginPrefillEmail");
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,6 +58,7 @@ function Login({
         [name]: "",
       }));
     }
+    if (authError) setAuthError("");
   };
 
   const validateForm = (): boolean => {
@@ -59,14 +80,46 @@ function Login({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+    if (!validateForm()) return;
 
-    if (validateForm()) {
-      localStorage.setItem("userEmail", formData.email);
-      if (onNavigateToWorkout) {
-        onNavigateToWorkout();
+    setLoading(true);
+    setAuthError("");
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (error) {
+        setAuthError(mapLoginError(error.message, t));
+        return;
       }
+
+      const pendingQuiz = localStorage.getItem("quizAnswers");
+      const hasPlan = localStorage.getItem("generatedPlan");
+      if (pendingQuiz && !hasPlan) {
+        try {
+          const quizData = JSON.parse(pendingQuiz) as StoredQuizData;
+          const result = await generatePlanFromQuiz(quizData);
+          if (!result.ok) {
+            setAuthError(t("loginPage.errors.planGenerationFailed"));
+            return;
+          }
+        } catch {
+          setAuthError(t("loginPage.errors.planGenerationFailed"));
+          return;
+        }
+      }
+
+      if (onNavigateToWorkout) onNavigateToWorkout();
+    } catch (err) {
+      setAuthError(
+        mapLoginError(err instanceof Error ? err.message : "", t)
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,6 +153,15 @@ function Login({
               placeholder={t("loginPage.passwordPlaceholder")}
             />
 
+            {authError && (
+              <p
+                role="alert"
+                className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600"
+              >
+                {authError}
+              </p>
+            )}
+
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-sm text-gray-900">
                 <input
@@ -119,18 +181,12 @@ function Login({
               </a>
             </div>
 
-            <SubmitButton text={t("loginPage.signIn")} />
+            <SubmitButton text={t("loginPage.signIn")} loading={loading} />
 
             <Divider />
           </form>
         </FormCard>
       </div>
-
-      <AuthSwitchLink
-        question={t("loginPage.noAccount")}
-        linkText={t("loginPage.register")}
-        onClick={onSwitchToRegister || (() => {})}
-      />
     </PageContainer>
   );
 }
