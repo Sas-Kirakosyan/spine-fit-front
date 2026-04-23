@@ -3,6 +3,7 @@ import type { FinishedWorkoutSummary } from "./workout";
 export interface HomePageProps {
   onNavigateToLogin: () => void;
   onNavigateToWorkout: () => void;
+  onNavigateToGeneratingPlan: () => void;
 }
 
 export interface ProgressPageProps {

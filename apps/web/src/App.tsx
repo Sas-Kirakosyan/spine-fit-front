@@ -69,6 +69,9 @@ const CreateProgramPage = lazy(
 const ExerciseProgressPage = lazy(
   () => import("@/pages/ProgressPage/ExerciseProgressPage")
 );
+const GeneratingPlanPage = lazy(
+  () => import("@/pages/GeneratingPlanPage/GeneratingPlanPage")
+);
 
 const PAGE_TO_PATH: Record<Page, string> = {
   home: "/",
@@ -88,6 +91,7 @@ const PAGE_TO_PATH: Record<Page, string> = {
   settings: "/settings",
   createProgram: "/create-program",
   exerciseProgress: "/progress/exercise",
+  generatingPlan: "/generating-plan",
 };
 
 const PATH_TO_PAGE = Object.fromEntries(
@@ -116,6 +120,7 @@ function App() {
       "settings",
       "createProgram",
       "exerciseProgress",
+      "generatingPlan",
     ];
     const pageFromPath = PATH_TO_PAGE[window.location.pathname] as
       | Page
@@ -381,6 +386,14 @@ function App() {
     );
     startPageTransition(() => setCurrentPage("workout"));
   };
+  const navigateToGeneratingPlan = () => {
+    window.history.replaceState(
+      { page: "generatingPlan" },
+      "",
+      PAGE_TO_PATH["generatingPlan"]
+    );
+    startPageTransition(() => setCurrentPage("generatingPlan"));
+  };
   const navigateToProgress = () => navigateToPage("progress");
   const navigateToHistory = () => navigateToPage("history");
   const navigateToProfile = () => navigateToPage("profile");
@@ -606,6 +619,14 @@ function App() {
           <HomePage
             onNavigateToLogin={navigateToLogin}
             onNavigateToWorkout={navigateToWorkout}
+            onNavigateToGeneratingPlan={navigateToGeneratingPlan}
+          />
+        );
+      case "generatingPlan":
+        return (
+          <GeneratingPlanPage
+            onSuccess={navigateToWorkout}
+            onCancel={navigateToHome}
           />
         );
       case "login":

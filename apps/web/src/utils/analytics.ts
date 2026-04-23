@@ -20,6 +20,7 @@ const pagePathMap: Record<Page, string> = {
   settings: "/settings",
   createProgram: "/create-program",
   exerciseProgress: "/exercise-progress",
+  generatingPlan: "/generating-plan",
 };
 
 let initialized = false;

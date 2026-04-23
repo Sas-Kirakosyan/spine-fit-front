@@ -17,7 +17,6 @@ interface RegistrationFormProps {
     formData: RegistrationFormData,
     info: RegistrationSuccessInfo
   ) => Promise<void> | void;
-  onUserExists?: (formData: RegistrationFormData) => void;
 }
 
 function mapRegisterError(message: string, t: (key: string) => string): string {
@@ -34,7 +33,6 @@ function mapRegisterError(message: string, t: (key: string) => string): string {
 export function RegistrationForm({
   submitLabel,
   onSuccess,
-  onUserExists,
 }: RegistrationFormProps) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -83,10 +81,6 @@ export function RegistrationForm({
       const result = await signUpWithEmail(formData.email, formData.password);
 
       if (!result.ok) {
-        if (result.userExists && onUserExists) {
-          onUserExists(formData);
-          return;
-        }
         setAuthError(mapRegisterError(result.error.message, t));
         return;
       }
