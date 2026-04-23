@@ -15,5 +15,6 @@ export type Page =
   | "availableEquipment"
   | "settings"
   | "createProgram"
-  | "exerciseProgress";
+  | "exerciseProgress"
+  | "generatingPlan";
 

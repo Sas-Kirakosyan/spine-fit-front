@@ -7,6 +7,7 @@ import { Button } from "@/components/Buttons/Button";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
 import type { SettingsPageProps } from "@/types/pages";
 import { supabase } from "@/lib/supabase";
+import { resetLocalCache } from "@/lib/planService";
 
 interface ModalConfig {
   title: string;
@@ -96,12 +97,11 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    resetLocalCache();
     const userKeys = [
       "currentPage",
       "workoutHistory",
       "workoutExercises",
-      "generatedPlan",
-      "activePlanId",
       "completedWorkoutIds",
       "savedPrograms",
       "bodyProfile",

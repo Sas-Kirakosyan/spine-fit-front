@@ -13,6 +13,7 @@ import {
   generatePlanFromQuiz,
   type StoredQuizData,
 } from "@/lib/planGeneration";
+import { fetchPlan, hasPlan } from "@/lib/planService";
 
 import type { LoginFormData, LoginProps } from "@/types/auth";
 
@@ -94,11 +95,12 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
         return;
       }
 
+      // Pull the user's plan from Supabase into the in-memory cache.
+      await fetchPlan();
       const pendingQuiz = localStorage.getItem("quizAnswers");
-      const hasPlan = localStorage.getItem("generatedPlan");
-      let planReady = Boolean(hasPlan);
+      let planReady = hasPlan();
 
-      if (pendingQuiz && !hasPlan) {
+      if (pendingQuiz && !planReady) {
         try {
           const quizData = JSON.parse(pendingQuiz) as StoredQuizData;
           const planResult = await generatePlanFromQuiz(quizData);

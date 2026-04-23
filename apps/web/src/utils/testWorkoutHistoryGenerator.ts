@@ -3,7 +3,7 @@ import type { FinishedWorkoutSummary } from "@/types/workout";
 import type { ExerciseSetRow } from "@/types/workout";
 import type { Exercise } from "@/types/exercise";
 import { calculateWorkoutVolume } from "./workoutStats";
-import { loadPlanFromLocalStorage } from "@/storage/planStorage";
+import { getPlan } from "@/lib/planService";
 
 /**
  * Данные о прогрессии для упражнения
@@ -295,7 +295,7 @@ export function saveTestWorkoutHistory(
  * Можно вызвать из консоли браузера: generateAndSaveTestHistory(4)
  */
 export function generateAndSaveTestHistory(weeks: number = 4): void {
-  const plan = loadPlanFromLocalStorage();
+  const plan = getPlan();
   if (!plan) {
     console.error(
       "❌ План не найден. Сначала создайте план тренировок в разделе 'My Plan'"

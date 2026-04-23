@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import { useTranslation } from "react-i18next";
 import type { QuizModalProps } from "@/types/quiz";
 import type { RegistrationFormData } from "@/types/auth";
@@ -10,10 +9,7 @@ import {
   PAIN_STATUS_RECOVERED,
   PAIN_STATUS_ACTIVE,
 } from "@spinefit/shared";
-import {
-  generatePlanFromQuiz,
-  type StoredQuizData,
-} from "@/lib/planGeneration";
+import type { StoredQuizData } from "@/lib/planGeneration";
 import { saveQuizToSupabase } from "@/lib/quizStorage";
 import {
   RegistrationForm,
@@ -29,7 +25,6 @@ import { QuizInputWithUnit } from "./QuizInputWithUnit";
 import { QuizSlider } from "./QuizSlider";
 import { QuizNavigationButtons } from "./QuizNavigationButtons";
 import { QuizMultiField } from "./QuizMultiField";
-import { trackEvent } from "@/utils/analytics";
 
 const goalQuestion = questions.find((q) => q.fieldName === "goal");
 const painStatusQuestion = questions.find((q) => q.fieldName === "painStatus");
@@ -38,7 +33,6 @@ export function QuizModal({
   isOpen,
   onClose,
   onQuizComplete,
-  onSwitchToLogin,
 }: QuizModalProps) {
   const { t } = useTranslation();
   const [workoutType] = useState<"home" | "gym">("gym");
@@ -59,12 +53,9 @@ export function QuizModal({
   const [multiFieldUnits, setMultiFieldUnits] = useState<
     Record<string, string>
   >({});
-  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
   const [mode, setMode] = useState<
     "quiz" | "registration" | "confirmEmail"
   >("quiz");
-  const [hasRegistered, setHasRegistered] = useState(false);
 
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
@@ -366,36 +357,10 @@ export function QuizModal({
     };
   };
 
-  const runPlanGeneration = async (quizData: StoredQuizData) => {
-    setIsGeneratingPlan(true);
-    setApiError(null);
-    const result = await generatePlanFromQuiz(quizData);
-    setIsGeneratingPlan(false);
-
-    if (result.ok) {
-      trackEvent("onboarding_completed", {
-        workout_type: quizData.workoutType,
-        answer_count: Object.keys(quizData.answers).length,
-      });
-      onClose();
-      if (onQuizComplete) onQuizComplete();
-    } else {
-      trackEvent("onboarding_failed", {
-        error_type: result.error.includes("Server error")
-          ? "server"
-          : "client",
-      });
-      setApiError(
-        "Failed to generate your plan. Please check your connection and try again."
-      );
-    }
-  };
-
   const handleSubmit = () => {
     if (!isAnswered()) return;
     const quizData = buildQuizData();
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
-    localStorage.removeItem("generatedPlan");
     setMode("registration");
   };
 
@@ -403,10 +368,10 @@ export function QuizModal({
     _formData: RegistrationFormData,
     info: RegistrationSuccessInfo
   ) => {
-    setHasRegistered(true);
     const stored = localStorage.getItem("quizAnswers");
     if (!stored) {
-      setApiError("Quiz data missing. Please restart the quiz.");
+      console.error("Quiz data missing after registration");
+      onClose();
       return;
     }
     const quizData = JSON.parse(stored) as StoredQuizData;
@@ -429,28 +394,8 @@ export function QuizModal({
       }
     }
 
-    await runPlanGeneration(quizData);
-  };
-
-  const handleUserExists = (formData: RegistrationFormData) => {
-    localStorage.setItem("loginPrefillEmail", formData.email);
     onClose();
-    if (onSwitchToLogin) onSwitchToLogin();
-  };
-
-  const handleRetryFromError = async () => {
-    setApiError(null);
-    if (!hasRegistered) {
-      setMode("registration");
-      return;
-    }
-    const stored = localStorage.getItem("quizAnswers");
-    if (!stored) {
-      setApiError("Quiz data missing. Please restart the quiz.");
-      return;
-    }
-    const quizData = JSON.parse(stored) as StoredQuizData;
-    await runPlanGeneration(quizData);
+    if (onQuizComplete) onQuizComplete();
   };
 
   useEffect(() => {
@@ -488,9 +433,6 @@ export function QuizModal({
       setMultiFieldValues({});
       setMultiFieldUnits({});
       setMode("quiz");
-      setHasRegistered(false);
-      setApiError(null);
-      setIsGeneratingPlan(false);
     }
   }, [isOpen]);
 
@@ -572,24 +514,6 @@ export function QuizModal({
 
   const displayOptions = getDisplayOptions();
 
-  if (isGeneratingPlan) {
-    return <PlanGeneratingLoader />;
-  }
-
-  if (apiError) {
-    return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6 px-6 text-center">
-        <p className="text-lg font-medium text-red-500">{apiError}</p>
-        <button
-          onClick={handleRetryFromError}
-          className="rounded-lg bg-primary px-6 py-3 text-white font-medium hover:opacity-90 transition"
-        >
-          Try again
-        </button>
-      </div>
-    );
-  }
-
   if (mode === "confirmEmail") {
     return (
       <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
@@ -653,7 +577,6 @@ export function QuizModal({
                 <RegistrationForm
                   submitLabel={t("quiz.nav.registerAndGenerate")}
                   onSuccess={handleRegistrationSuccess}
-                  onUserExists={handleUserExists}
                 />
               </div>
             </div>

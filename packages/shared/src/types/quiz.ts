@@ -37,7 +37,6 @@ export interface QuizModalProps {
   isOpen: boolean;
   onClose: () => void;
   onQuizComplete?: () => void;
-  onSwitchToLogin?: () => void;
 }
 
 export interface QuizAnswers {

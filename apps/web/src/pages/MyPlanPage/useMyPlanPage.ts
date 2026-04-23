@@ -3,10 +3,10 @@ import { useTranslation } from "react-i18next";
 import type { EquipmentCategory } from "@/types/equipment";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
 import {
-  loadPlanSettings,
+  getPlanSettings,
   savePlanSettings,
-} from "@/types/planSettings";
-import { savePlanToLocalStorage } from "@/storage/planStorage";
+  savePlanAndSettings,
+} from "@/lib/planService";
 import type { GeneratedPlan } from "@spinefit/shared";
 
 interface UseMyPlanPageOptions {
@@ -20,14 +20,14 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   const [circuitsAndSupersets, setCircuitsAndSupersets] = useState(true);
   const [selectedCount, setSelectedCount] = useState(0);
   const [planSettings, setPlanSettings] =
-    useState<PlanSettings>(loadPlanSettings());
+    useState<PlanSettings>(getPlanSettings());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentField, setCurrentField] = useState<PlanFieldId | null>(null);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isRegenerateModalOpen, setIsRegenerateModalOpen] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [regenerateError, setRegenerateError] = useState<string | null>(null);
-  const initialSettingsRef = useRef<PlanSettings>(loadPlanSettings());
+  const initialSettingsRef = useRef<PlanSettings>(getPlanSettings());
 
   const hasChanges = useMemo(() => {
     const fields: PlanFieldId[] = [
@@ -137,9 +137,8 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
       };
 
       if (result.success && result.plan) {
-        savePlanToLocalStorage(result.plan);
+        savePlanAndSettings(result.plan, result.planSettings);
         if (result.planSettings) {
-          savePlanSettings(result.planSettings);
           setPlanSettings(result.planSettings);
           initialSettingsRef.current = result.planSettings;
         }

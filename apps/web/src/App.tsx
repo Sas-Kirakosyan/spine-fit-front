@@ -1,4 +1,11 @@
-import { useState, useEffect, Suspense, lazy, useTransition } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  Suspense,
+  lazy,
+  useTransition,
+} from "react";
 
 // --- LAZY LOADED COMPONENTS ---
 // Note: Using .then() to handle named exports from your files
@@ -12,10 +19,13 @@ import type {
 } from "@/types/workout";
 import type { SwapDurationOption } from "@spinefit/shared";
 import {
-  loadPlanFromLocalStorage,
-  savePlanToLocalStorage,
-} from "@/storage/planStorage";
-import { loadPlanSettings } from "@/types/planSettings";
+  getPlan,
+  getPlanSettings,
+  hasPlan,
+  savePlan,
+  fetchPlan,
+  resetLocalCache,
+} from "@/lib/planService";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
@@ -59,6 +69,9 @@ const CreateProgramPage = lazy(
 const ExerciseProgressPage = lazy(
   () => import("@/pages/ProgressPage/ExerciseProgressPage")
 );
+const GeneratingPlanPage = lazy(
+  () => import("@/pages/GeneratingPlanPage/GeneratingPlanPage")
+);
 
 const PAGE_TO_PATH: Record<Page, string> = {
   home: "/",
@@ -78,6 +91,7 @@ const PAGE_TO_PATH: Record<Page, string> = {
   settings: "/settings",
   createProgram: "/create-program",
   exerciseProgress: "/progress/exercise",
+  generatingPlan: "/generating-plan",
 };
 
 const PATH_TO_PAGE = Object.fromEntries(
@@ -106,6 +120,7 @@ function App() {
       "settings",
       "createProgram",
       "exerciseProgress",
+      "generatingPlan",
     ];
     const pageFromPath = PATH_TO_PAGE[window.location.pathname] as
       | Page
@@ -117,9 +132,6 @@ function App() {
     const validResolved = validPages.includes(resolvedPage)
       ? resolvedPage
       : "home";
-    // If the user has a generated plan, treat workout as home
-    if (validResolved === "home" && localStorage.getItem("generatedPlan"))
-      return "workout";
     return validResolved;
   });
 
@@ -235,6 +247,51 @@ function App() {
     retryPendingQuizSync(authUserId);
   }, [authUserId]);
 
+  // Fetch plan from Supabase when user becomes authenticated and on window focus.
+  // On logout, clear the in-memory cache so another user on the same device
+  // cannot see the previous user's plan.
+  const initialRedirectDoneRef = useRef(false);
+  useEffect(() => {
+    if (auth.status === "unauthenticated") {
+      resetLocalCache();
+      initialRedirectDoneRef.current = false;
+      return;
+    }
+    if (auth.status !== "authenticated") return;
+
+    let cancelled = false;
+    const refetch = async () => {
+      await fetchPlan();
+      if (cancelled) return;
+      // On first successful fetch after auth, if the user landed on "home"
+      // and has a plan, send them to workout (preserves pre-migration behavior).
+      if (!initialRedirectDoneRef.current) {
+        initialRedirectDoneRef.current = true;
+        if (hasPlan() && currentPage === "home") {
+          window.history.replaceState(
+            { page: "workout" },
+            "",
+            PAGE_TO_PATH["workout"]
+          );
+          startPageTransition(() => setCurrentPage("workout"));
+        }
+      }
+    };
+    void refetch();
+
+    const onFocus = () => {
+      void fetchPlan();
+    };
+    window.addEventListener("focus", onFocus);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("focus", onFocus);
+    };
+    // currentPage is intentionally omitted: we only want this to run on auth changes,
+    // not on every navigation. The ref guards the one-shot redirect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth.status]);
+
   useEffect(() => {
     trackPageView(currentPage);
   }, [currentPage]);
@@ -282,9 +339,8 @@ function App() {
     });
 
     try {
-      const planString = localStorage.getItem("generatedPlan");
-      if (planString) {
-        const plan = JSON.parse(planString);
+      const plan = getPlan();
+      if (plan) {
         const activeWorkout = getNextAvailableWorkout(
           plan,
           completedWorkoutIds
@@ -309,7 +365,7 @@ function App() {
               plan.workoutDays[workoutIndex].exercises.push(
                 ...newExercisesToAdd
               );
-              localStorage.setItem("generatedPlan", JSON.stringify(plan));
+              savePlan(plan);
             }
           }
         }
@@ -329,6 +385,14 @@ function App() {
       PAGE_TO_PATH["workout"]
     );
     startPageTransition(() => setCurrentPage("workout"));
+  };
+  const navigateToGeneratingPlan = () => {
+    window.history.replaceState(
+      { page: "generatingPlan" },
+      "",
+      PAGE_TO_PATH["generatingPlan"]
+    );
+    startPageTransition(() => setCurrentPage("generatingPlan"));
   };
   const navigateToProgress = () => navigateToPage("progress");
   const navigateToHistory = () => navigateToPage("history");
@@ -361,7 +425,7 @@ function App() {
       name: program.name,
       splitType: "CUSTOM",
       createdAt: program.createdAt,
-      settings: loadPlanSettings(),
+      settings: getPlanSettings(),
       workoutDays: program.days.map((day, i) => ({
         dayNumber: i + 1,
         dayName: day.name,
@@ -373,7 +437,7 @@ function App() {
       missingMuscleGroups: [],
       alternativeExercises: [],
     };
-    localStorage.setItem("generatedPlan", JSON.stringify(plan));
+    savePlan(plan);
     setCompletedWorkoutIds(new Set());
     setIsCustomWorkoutMode(false);
     resetWorkoutState();
@@ -451,7 +515,7 @@ function App() {
     };
 
     try {
-      const plan = loadPlanFromLocalStorage();
+      const plan = getPlan();
       if (plan) {
         if (duration === "plan") {
           plan.workoutDays = plan.workoutDays.map((day) => ({
@@ -486,7 +550,7 @@ function App() {
             );
           }
         }
-        savePlanToLocalStorage(plan);
+        savePlan(plan);
       }
     } catch (error) {
       console.error("Error replacing exercise from sets page:", error);
@@ -555,6 +619,14 @@ function App() {
           <HomePage
             onNavigateToLogin={navigateToLogin}
             onNavigateToWorkout={navigateToWorkout}
+            onNavigateToGeneratingPlan={navigateToGeneratingPlan}
+          />
+        );
+      case "generatingPlan":
+        return (
+          <GeneratingPlanPage
+            onSuccess={navigateToWorkout}
+            onCancel={navigateToHome}
           />
         );
       case "login":

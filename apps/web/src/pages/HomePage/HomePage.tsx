@@ -7,7 +7,10 @@ import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector
 import type { HomePageProps } from "@/types/pages";
 import { trackEvent } from "@/utils/analytics";
 
-function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
+function HomePage({
+  onNavigateToLogin,
+  onNavigateToGeneratingPlan,
+}: HomePageProps) {
   const { t, i18n } = useTranslation();
   const [isQuizOpen, setIsQuizOpen] = useState(false);
 
@@ -63,8 +66,7 @@ function HomePage({ onNavigateToLogin, onNavigateToWorkout }: HomePageProps) {
       <QuizModal
         isOpen={isQuizOpen}
         onClose={handleCloseQuiz}
-        onQuizComplete={onNavigateToWorkout}
-        onSwitchToLogin={onNavigateToLogin}
+        onQuizComplete={onNavigateToGeneratingPlan}
       />
     </>
   );

@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Exercise } from "@/types/exercise";
-import {
-  loadPlanFromLocalStorage,
-  savePlanToLocalStorage,
-} from "@/storage/planStorage";
+import { getPlan, savePlan, subscribe as subscribeToPlan } from "@/lib/planService";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 
 interface UseExerciseManagementReturn {
@@ -20,7 +17,7 @@ export function useExerciseManagement(
   const [todaysExercises, setTodaysExercises] = useState<Exercise[]>([]);
 
   const loadCurrentWorkoutExercises = useCallback((): Exercise[] => {
-    const generatedPlan = loadPlanFromLocalStorage();
+    const generatedPlan = getPlan();
 
     if (generatedPlan) {
       // Prefer manually selected day from swap sheet
@@ -55,14 +52,18 @@ export function useExerciseManagement(
     return [];
   }, [completedWorkoutIds]);
 
-  // Load current active workout from generated plan
+  // Load current active workout from generated plan; re-run when plan cache updates
   useEffect(() => {
     setTodaysExercises(loadCurrentWorkoutExercises());
+    const unsubscribe = subscribeToPlan(() => {
+      setTodaysExercises(loadCurrentWorkoutExercises());
+    });
+    return unsubscribe;
   }, [loadCurrentWorkoutExercises]);
 
   const updateCurrentWorkoutInPlan = useCallback(
     (updateExercises: (exercises: Exercise[]) => Exercise[]): boolean => {
-      const generatedPlan = loadPlanFromLocalStorage();
+      const generatedPlan = getPlan();
       if (!generatedPlan) return false;
 
       // Prefer manually selected day
@@ -93,7 +94,7 @@ export function useExerciseManagement(
       generatedPlan.workoutDays[workoutIndex].exercises = updateExercises(
         generatedPlan.workoutDays[workoutIndex].exercises as Exercise[]
       );
-      savePlanToLocalStorage(generatedPlan);
+      savePlan(generatedPlan);
       return true;
     },
     [completedWorkoutIds]

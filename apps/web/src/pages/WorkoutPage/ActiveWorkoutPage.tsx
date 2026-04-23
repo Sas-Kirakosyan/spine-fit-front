@@ -18,10 +18,7 @@ import {
   ReplaceExerciseModal,
   type SwapDurationOption,
 } from "@/pages/WorkoutPage/ReplaceExerciseModal";
-import {
-  loadPlanFromLocalStorage,
-  savePlanToLocalStorage,
-} from "@/storage/planStorage";
+import { getPlan, savePlan } from "@/lib/planService";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import {
   getAllReplacementExercises,
@@ -130,7 +127,7 @@ function ActiveWorkoutPage({
 
       try {
         if (duration === "plan") {
-          const generatedPlan = loadPlanFromLocalStorage();
+          const generatedPlan = getPlan();
 
           if (generatedPlan) {
             generatedPlan.workoutDays = generatedPlan.workoutDays.map(
@@ -139,7 +136,7 @@ function ActiveWorkoutPage({
                 exercises: replaceInWorkout(day.exercises as Exercise[]),
               })
             );
-            savePlanToLocalStorage(generatedPlan);
+            savePlan(generatedPlan);
 
             setTodaysExercises((prev: Exercise[]) => replaceInWorkout(prev));
           }
@@ -242,7 +239,7 @@ function ActiveWorkoutPage({
     setShowFinishModal(false);
 
     // Mark current workout as completed
-    const generatedPlan = loadPlanFromLocalStorage();
+    const generatedPlan = getPlan();
     if (generatedPlan && todaysExercises.length > 0) {
       // Prefer the manually selected day (from swap sheet), fallback to rotation
       let currentWorkout = null;
