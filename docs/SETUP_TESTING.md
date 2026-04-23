@@ -1,5 +1,17 @@
 # Setup Testing for Spine-Fit
 
+## Environment Variables (Required)
+
+Create `apps/web/.env` with the following before running the dev server:
+
+```
+VITE_SUPABASE_URL=<your-supabase-project-url>
+VITE_SUPABASE_PUBLISHABLE_KEY=<your-supabase-anon-key>
+VITE_GENARATE_PLAN_API=http://localhost:4000
+```
+
+For production the plan API points to `https://spine-fit-front-81nc.onrender.com`. The Supabase credentials are found in your Supabase dashboard under **Project Settings → API**.
+
 ## Quick Setup
 
 Run these commands in your **Git Bash** terminal (not PowerShell):
