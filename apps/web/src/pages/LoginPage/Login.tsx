@@ -111,9 +111,12 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
           setAuthError(t("loginPage.errors.planGenerationFailed"));
           return;
         }
+        if (onNavigateToWorkout) onNavigateToWorkout();
+      } else if (hasPlan) {
+        if (onNavigateToWorkout) onNavigateToWorkout();
+      } else if (onNavigateToHome) {
+        onNavigateToHome();
       }
-
-      if (onNavigateToWorkout) onNavigateToWorkout();
     } catch (err) {
       setAuthError(
         mapLoginError(err instanceof Error ? err.message : "", t)

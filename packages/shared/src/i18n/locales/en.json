@@ -313,7 +313,9 @@
       "registerAndGenerate": "Get my plan",
       "registerStepTitle": "Create your account",
       "registerStepSubtitle": "Your personalized plan is ready\nCreate your account to unlock it",
-      "backToQuiz": "Back to questions"
+      "backToQuiz": "Back to questions",
+      "emailConfirmationNotice": "We sent a confirmation link to your email. Please confirm it to finish syncing your plan to your account.",
+      "gotIt": "Got it"
     },
     "slider": {
       "noPain": "No pain",

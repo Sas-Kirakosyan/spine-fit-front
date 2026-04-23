@@ -15,8 +15,10 @@ import {
   type StoredQuizData,
 } from "@/lib/planGeneration";
 import { saveQuizToSupabase } from "@/lib/quizStorage";
-import { supabase } from "@/lib/supabase";
-import { RegistrationForm } from "@/components/Form/RegistrationForm/RegistrationForm";
+import {
+  RegistrationForm,
+  type RegistrationSuccess,
+} from "@/components/Form/RegistrationForm/RegistrationForm";
 import { questions } from "./questions";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -61,6 +63,9 @@ export function QuizModal({
   const [apiError, setApiError] = useState<string | null>(null);
   const [mode, setMode] = useState<"quiz" | "registration">("quiz");
   const [hasRegistered, setHasRegistered] = useState(false);
+  const [emailConfirmationNotice, setEmailConfirmationNotice] = useState<
+    string | null
+  >(null);
 
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
@@ -362,7 +367,10 @@ export function QuizModal({
     };
   };
 
-  const runPlanGeneration = async (quizData: StoredQuizData) => {
+  const runPlanGeneration = async (
+    quizData: StoredQuizData,
+    options: { autoClose?: boolean } = { autoClose: true }
+  ) => {
     setIsGeneratingPlan(true);
     setApiError(null);
     const result = await generatePlanFromQuiz(quizData);
@@ -373,8 +381,10 @@ export function QuizModal({
         workout_type: quizData.workoutType,
         answer_count: Object.keys(quizData.answers).length,
       });
-      onClose();
-      if (onQuizComplete) onQuizComplete();
+      if (options.autoClose) {
+        onClose();
+        if (onQuizComplete) onQuizComplete();
+      }
     } else {
       trackEvent("onboarding_failed", {
         error_type: result.error.includes("Server error")
@@ -395,7 +405,10 @@ export function QuizModal({
     setMode("registration");
   };
 
-  const handleRegistrationSuccess = async () => {
+  const handleRegistrationSuccess = async (
+    _formData: RegistrationFormData,
+    result: RegistrationSuccess
+  ) => {
     setHasRegistered(true);
     const stored = localStorage.getItem("quizAnswers");
     if (!stored) {
@@ -404,12 +417,21 @@ export function QuizModal({
     }
     const quizData = JSON.parse(stored) as StoredQuizData;
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
+    if (result.needsEmailConfirmation) {
+      localStorage.setItem("pendingQuizSync", JSON.stringify(quizData));
+      setEmailConfirmationNotice(
+        t("quiz.nav.emailConfirmationNotice", {
+          defaultValue:
+            "We sent a confirmation link to your email. Please confirm to finish syncing your plan.",
+        })
+      );
+      await runPlanGeneration(quizData, { autoClose: false });
+      return;
+    }
+
+    if (result.user) {
       try {
-        await saveQuizToSupabase(user.id, quizData);
+        await saveQuizToSupabase(result.user.id, quizData);
       } catch (err) {
         console.error("Failed to persist quiz to Supabase:", err);
       }
@@ -477,6 +499,7 @@ export function QuizModal({
       setHasRegistered(false);
       setApiError(null);
       setIsGeneratingPlan(false);
+      setEmailConfirmationNotice(null);
     }
   }, [isOpen]);
 
@@ -560,6 +583,26 @@ export function QuizModal({
 
   if (isGeneratingPlan) {
     return <PlanGeneratingLoader />;
+  }
+
+  if (emailConfirmationNotice) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6 px-6 text-center">
+        <p className="text-lg font-medium text-white">
+          {emailConfirmationNotice}
+        </p>
+        <button
+          onClick={() => {
+            setEmailConfirmationNotice(null);
+            onClose();
+            if (onQuizComplete) onQuizComplete();
+          }}
+          className="rounded-lg bg-primary px-6 py-3 text-white font-medium hover:opacity-90 transition"
+        >
+          {t("quiz.nav.gotIt", { defaultValue: "Got it" })}
+        </button>
+      </div>
+    );
   }
 
   if (apiError) {

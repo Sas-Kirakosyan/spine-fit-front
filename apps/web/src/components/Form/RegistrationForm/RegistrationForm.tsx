@@ -4,26 +4,26 @@ import type { RegistrationFormData } from "@/types/auth";
 import { FormField } from "@/components/Form/FormField/FormField";
 import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
-import { supabase } from "@/lib/supabase";
+import { signUpWithEmail, type SignUpResult } from "@/lib/authService";
+
+export type RegistrationSuccess = Extract<SignUpResult, { ok: true }>;
 
 interface RegistrationFormProps {
   submitLabel: string;
-  onSuccess: (formData: RegistrationFormData) => Promise<void> | void;
+  onSuccess: (
+    formData: RegistrationFormData,
+    result: RegistrationSuccess
+  ) => Promise<void> | void;
   onUserExists?: (formData: RegistrationFormData) => void;
 }
 
-function isUserExistsError(message: string): boolean {
+function mapRegisterError(
+  message: string,
+  isUserExists: boolean,
+  t: (key: string) => string
+): string {
   const lower = message.toLowerCase();
-  return (
-    lower.includes("already registered") ||
-    lower.includes("user already") ||
-    lower.includes("already exists")
-  );
-}
-
-function mapRegisterError(message: string, t: (key: string) => string): string {
-  const lower = message.toLowerCase();
-  if (isUserExistsError(message)) {
+  if (isUserExists) {
     return t("registrationPage.errors.userExists");
   }
   if (lower.includes("failed to fetch") || lower.includes("network")) {
@@ -81,22 +81,19 @@ export function RegistrationForm({
     setLoading(true);
     setAuthError("");
     try {
-      const { error } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-      });
+      const result = await signUpWithEmail(formData.email, formData.password);
 
-      if (error) {
-        if (isUserExistsError(error.message) && onUserExists) {
+      if (!result.ok) {
+        if (result.isUserExists && onUserExists) {
           onUserExists(formData);
           return;
         }
-        setAuthError(mapRegisterError(error.message, t));
+        setAuthError(mapRegisterError(result.error, result.isUserExists, t));
         return;
       }
 
       try {
-        await onSuccess(formData);
+        await onSuccess(formData, result);
       } catch (successErr) {
         setAuthError(
           successErr instanceof Error
@@ -106,7 +103,7 @@ export function RegistrationForm({
       }
     } catch (err) {
       setAuthError(
-        mapRegisterError(err instanceof Error ? err.message : "", t)
+        mapRegisterError(err instanceof Error ? err.message : "", false, t)
       );
     } finally {
       setLoading(false);
