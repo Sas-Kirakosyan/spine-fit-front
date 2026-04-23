@@ -8,7 +8,7 @@ import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
 import { Divider } from "@/components/Form/Divider/Divider";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
-import { supabase } from "@/lib/supabase";
+import { signInWithEmail } from "@/lib/authService";
 import {
   generatePlanFromQuiz,
   type StoredQuizData,
@@ -88,32 +88,36 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
     setLoading(true);
     setAuthError("");
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-      if (error) {
-        setAuthError(mapLoginError(error.message, t));
+      const result = await signInWithEmail(formData.email, formData.password);
+      if (!result.ok) {
+        setAuthError(mapLoginError(result.error.message, t));
         return;
       }
 
       const pendingQuiz = localStorage.getItem("quizAnswers");
       const hasPlan = localStorage.getItem("generatedPlan");
+      let planReady = Boolean(hasPlan);
+
       if (pendingQuiz && !hasPlan) {
         try {
           const quizData = JSON.parse(pendingQuiz) as StoredQuizData;
-          const result = await generatePlanFromQuiz(quizData);
-          if (!result.ok) {
+          const planResult = await generatePlanFromQuiz(quizData);
+          if (!planResult.ok) {
             setAuthError(t("loginPage.errors.planGenerationFailed"));
             return;
           }
+          planReady = true;
         } catch {
           setAuthError(t("loginPage.errors.planGenerationFailed"));
           return;
         }
       }
 
-      if (onNavigateToWorkout) onNavigateToWorkout();
+      if (planReady) {
+        if (onNavigateToWorkout) onNavigateToWorkout();
+      } else if (onNavigateToHome) {
+        onNavigateToHome();
+      }
     } catch (err) {
       setAuthError(
         mapLoginError(err instanceof Error ? err.message : "", t)

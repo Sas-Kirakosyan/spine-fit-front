@@ -120,7 +120,7 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     setRegenerateError(null);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz/regenerate`,
+        `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz/regenerate`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
