@@ -1,4 +1,4 @@
-const API_URL = `${import.meta.env.VITE_GENARATE_PLAN_API}/api/chat`;
+const API_URL = `${import.meta.env.VITE_GENERATE_PLAN_API}/api/chat`;
 
 /**
  * Sends chat messages to the backend and streams the response via SSE.

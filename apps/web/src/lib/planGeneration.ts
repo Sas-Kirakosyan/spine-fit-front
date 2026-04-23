@@ -32,7 +32,7 @@ export async function generatePlanFromQuiz(
 
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_GENARATE_PLAN_API}/api/quiz`,
+      `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

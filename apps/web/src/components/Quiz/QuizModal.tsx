@@ -15,8 +15,10 @@ import {
   type StoredQuizData,
 } from "@/lib/planGeneration";
 import { saveQuizToSupabase } from "@/lib/quizStorage";
-import { supabase } from "@/lib/supabase";
-import { RegistrationForm } from "@/components/Form/RegistrationForm/RegistrationForm";
+import {
+  RegistrationForm,
+  type RegistrationSuccessInfo,
+} from "@/components/Form/RegistrationForm/RegistrationForm";
 import { questions } from "./questions";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -59,7 +61,9 @@ export function QuizModal({
   >({});
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [mode, setMode] = useState<"quiz" | "registration">("quiz");
+  const [mode, setMode] = useState<
+    "quiz" | "registration" | "confirmEmail"
+  >("quiz");
   const [hasRegistered, setHasRegistered] = useState(false);
 
   const filteredQuestions = useMemo(() => {
@@ -395,7 +399,10 @@ export function QuizModal({
     setMode("registration");
   };
 
-  const handleRegistrationSuccess = async () => {
+  const handleRegistrationSuccess = async (
+    _formData: RegistrationFormData,
+    info: RegistrationSuccessInfo
+  ) => {
     setHasRegistered(true);
     const stored = localStorage.getItem("quizAnswers");
     if (!stored) {
@@ -404,12 +411,19 @@ export function QuizModal({
     }
     const quizData = JSON.parse(stored) as StoredQuizData;
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
+    if (info.requiresEmailConfirmation) {
+      // Session is not established yet — stash quiz for the post-confirmation
+      // auth listener (see App.tsx retryPendingQuizSync) to upload once the
+      // user confirms their email, and surface a "check your inbox" screen
+      // instead of silently skipping the sync.
+      localStorage.setItem("pendingQuizSync", JSON.stringify(quizData));
+      setMode("confirmEmail");
+      return;
+    }
+
+    if (info.userId) {
       try {
-        await saveQuizToSupabase(user.id, quizData);
+        await saveQuizToSupabase(info.userId, quizData);
       } catch (err) {
         console.error("Failed to persist quiz to Supabase:", err);
       }
@@ -572,6 +586,44 @@ export function QuizModal({
         >
           Try again
         </button>
+      </div>
+    );
+  }
+
+  if (mode === "confirmEmail") {
+    return (
+      <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
+        <div className="relative w-full h-full max-w-full md:max-w-[400px] md:h-auto md:max-h-[90vh]">
+          <div className="absolute inset-0 bg-background" />
+          <div className="relative z-10 flex flex-col h-full md:min-h-[400px] md:max-h-[90vh]">
+            <QuizHeader
+              currentQuestionNumber={actualQuestionsCount}
+              totalQuestions={actualQuestionsCount}
+              isInfoScreen={false}
+              onClose={onClose}
+            />
+            <div className="mt-6 px-2.5 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
+              <div className="rounded-2xl bg-white/95 p-6 text-gray-800 shadow-lg backdrop-blur">
+                <div className="space-y-3">
+                  <h3 className="text-xl font-semibold">
+                    {t("quiz.nav.confirmEmailTitle")}
+                  </h3>
+                  <p className="whitespace-pre-line text-sm text-gray-600">
+                    {t("quiz.nav.confirmEmailMessage")}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 mx-4 mb-5">
+              <button
+                onClick={onClose}
+                className="w-full rounded-full bg-white/10 px-8 py-4 text-base font-medium text-white transition hover:bg-white/20"
+              >
+                {t("quiz.nav.confirmEmailDone")}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
