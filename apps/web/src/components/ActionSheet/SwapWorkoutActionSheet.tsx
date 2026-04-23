@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import type { GeneratedPlan } from "@spinefit/shared";
-import { loadPlanFromLocalStorage } from "@/storage/planStorage";
+import { getPlan, subscribe as subscribeToPlan } from "@/lib/planService";
 import type { SavedProgram } from "@/types/workout";
 
 interface SwapWorkoutActionSheetProps {
@@ -133,12 +133,15 @@ export function SwapWorkoutActionSheet({
     }
   }, []);
 
-  // Load plan on mount
+  // Load plan on mount + re-sync whenever the plan cache updates
   useEffect(() => {
-    const loadedPlan = loadPlanFromLocalStorage();
-    if (loadedPlan) {
+    const syncFromCache = () => {
+      const loadedPlan = getPlan();
       setPlan(loadedPlan);
-    }
+    };
+    syncFromCache();
+    const unsubscribe = subscribeToPlan(syncFromCache);
+    return unsubscribe;
   }, []);
 
   const openSavedPrograms = useCallback(() => {

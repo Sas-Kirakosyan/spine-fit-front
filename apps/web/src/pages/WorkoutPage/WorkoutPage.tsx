@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useMemo, useSyncExternalStore } from "react";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
@@ -16,10 +16,12 @@ import {
   type SwapDurationOption,
 } from "@/pages/WorkoutPage/ReplaceExerciseModal";
 import {
-  savePlanToLocalStorage,
-  loadPlanFromLocalStorage,
-} from "@/storage/planStorage";
-import { loadPlanSettings } from "@/storage/planSettingsStorage";
+  getPlan,
+  getPlanSettings,
+  hasPlan,
+  savePlan,
+  subscribe as subscribeToPlan,
+} from "@/lib/planService";
 import type { GeneratedPlan } from "@spinefit/shared";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { ReplaceIcon, TrashIcon } from "@/components/Icons/Icons";
@@ -278,7 +280,7 @@ function WorkoutPage({
         workoutDays: syncedWorkoutDays,
       };
 
-      savePlanToLocalStorage(syncedPlan);
+      savePlan(syncedPlan);
       return syncedPlan;
     } catch (error) {
       console.error("Error syncing generated plan with saved program:", error);
@@ -301,10 +303,8 @@ function WorkoutPage({
     const initializePlan = () => {
       try {
         // Check if plan already exists
-        const existingPlan = localStorage.getItem("generatedPlan");
-        if (existingPlan) {
-          // Load existing plan
-          let plan = JSON.parse(existingPlan) as GeneratedPlan;
+        let plan = getPlan();
+        if (plan) {
           plan = syncGeneratedPlanWithSavedProgram(plan);
 
           // Prefer manually selected day from swap sheet
@@ -349,85 +349,49 @@ function WorkoutPage({
     initializePlan();
   }, [completedWorkoutIds, c, isCustomWorkout]);
 
-  // Listen for plan changes via storage events (when exercises are added from AllExercisePage)
-  useEffect(() => {
-    if (isCustomWorkout) return;
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "generatedPlan" && e.newValue) {
-        try {
-          const plan = JSON.parse(e.newValue);
-          // Respect manually selected day
-          const targetWorkout =
-            selectedDayIndexRef.current !== null && selectedDayIndexRef.current < plan.workoutDays.length
-              ? plan.workoutDays[selectedDayIndexRef.current]
-              : getNextAvailableWorkout(plan, completedWorkoutIds);
-          if (targetWorkout && targetWorkout.exercises.length > 0) {
-            setWorkoutExercises(targetWorkout.exercises);
-            console.log(
-              `Updated to ${targetWorkout.dayName} workout from storage event:`,
-              targetWorkout.exercises.map((e: any) => e.name)
-            );
-          }
-        } catch (error) {
-          console.error("Error updating exercises from storage event:", error);
-        }
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, [completedWorkoutIds, isCustomWorkout]);
-
-  // Reload exercises when plan changes (e.g., when exercises are added)
+  // Subscribe to plan cache changes (replaces old cross-tab storage-event listener
+  // and the 500ms polling hack that existed when plan lived in localStorage).
   useEffect(() => {
     if (isCustomWorkout) return;
     const reloadExercisesFromPlan = () => {
       try {
-        const planString = localStorage.getItem("generatedPlan");
-        if (planString) {
-          const plan = JSON.parse(planString);
-          // If user manually selected a day, respect that selection
-          const targetWorkout =
-            selectedDayIndexRef.current !== null
-              ? plan.workoutDays[selectedDayIndexRef.current]
-              : getNextAvailableWorkout(plan, completedWorkoutIds);
-          if (targetWorkout && targetWorkout.exercises.length > 0) {
-            // Only update if exercises have actually changed (compare IDs)
-            setWorkoutExercises((prev) => {
-              const prevIds = prev
-                .map((e) => e.id)
-                .sort()
-                .join(",");
-              const nextIds = targetWorkout.exercises
-                .map((e: any) => e.id)
-                .sort()
-                .join(",");
-              if (prevIds !== nextIds) {
-                console.log(
-                  `Reloaded ${targetWorkout.dayName} workout:`,
-                  targetWorkout.exercises.map((e: any) => e.name)
-                );
-                return targetWorkout.exercises;
-              }
-              return prev;
-            });
-          }
+        const plan = getPlan();
+        if (!plan) return;
+        const targetWorkout =
+          selectedDayIndexRef.current !== null
+            ? plan.workoutDays[selectedDayIndexRef.current]
+            : getNextAvailableWorkout(plan, completedWorkoutIds);
+        if (targetWorkout && targetWorkout.exercises.length > 0) {
+          setWorkoutExercises((prev) => {
+            const prevIds = prev
+              .map((e) => e.id)
+              .sort()
+              .join(",");
+            const nextIds = targetWorkout.exercises
+              .map((e) => e.id)
+              .sort()
+              .join(",");
+            if (prevIds !== nextIds) {
+              return targetWorkout.exercises;
+            }
+            return prev;
+          });
         }
       } catch (error) {
         console.error("Error reloading exercises from plan:", error);
       }
     };
 
-    // Check for plan changes periodically (every 500ms)
-    const interval = setInterval(reloadExercisesFromPlan, 500);
-
-    // Also reload immediately
     reloadExercisesFromPlan();
-
-    return () => clearInterval(interval);
+    const unsubscribe = subscribeToPlan(reloadExercisesFromPlan);
+    return unsubscribe;
   }, [completedWorkoutIds, isCustomWorkout]);
 
-  const hasGeneratedPlan = localStorage.getItem("generatedPlan") !== null;
+  const hasGeneratedPlan = useSyncExternalStore(
+    subscribeToPlan,
+    hasPlan,
+    () => false
+  );
   const displayExercises = useMemo(
     () => (hasGeneratedPlan || isCustomWorkout ? workoutExercises : []),
     [hasGeneratedPlan, isCustomWorkout, workoutExercises]
@@ -435,7 +399,7 @@ function WorkoutPage({
 
   // Calculate current workout day name based on manual selection or rotation index
   const getCurrentDayName = (): string => {
-    const plan = loadPlanFromLocalStorage();
+    const plan = getPlan();
     if (!plan || plan.workoutDays.length === 0) return t("workoutPage.messages.noWorkout");
 
     // Prefer manually selected day
@@ -457,7 +421,7 @@ function WorkoutPage({
 
   const currentDayName = displayExercises.length > 0 ? getCurrentDayName() : t("workoutPage.messages.noWorkout");
 
-  console.log("plan", JSON.parse(localStorage.getItem("generatedPlan") || "{}")); // dont remove this log
+  console.log("plan", getPlan()); // dont remove this log
 
   // Handler for when user switches to a different training split
   const handlePlanSwitched = (updatedPlan: GeneratedPlan) => {
@@ -491,7 +455,7 @@ function WorkoutPage({
           localStorage.removeItem("completedWorkoutIds");
           localStorage.removeItem("selectedWorkoutDayIndex");
           selectedDayIndexRef.current = null;
-          savePlanToLocalStorage(result.plan);
+          savePlan(result.plan);
           setC((prev) => prev + 1);
         }
       } else {
@@ -508,7 +472,7 @@ function WorkoutPage({
   const updateCurrentWorkoutInPlan = (
     updateExercises: (exercises: Exercise[]) => Exercise[]
   ): boolean => {
-    const plan = loadPlanFromLocalStorage();
+    const plan = getPlan();
     if (!plan) return false;
 
     const currentWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
@@ -522,7 +486,7 @@ function WorkoutPage({
     plan.workoutDays[workoutIndex].exercises = updateExercises(
       plan.workoutDays[workoutIndex].exercises as Exercise[]
     );
-    savePlanToLocalStorage(plan);
+    savePlan(plan);
     return true;
   };
 
@@ -533,7 +497,7 @@ function WorkoutPage({
       );
 
       if (!removedFromCurrentWorkout) {
-        const plan = loadPlanFromLocalStorage();
+        const plan = getPlan();
         if (plan) {
           let removed = false;
           for (const workoutDay of plan.workoutDays) {
@@ -546,7 +510,7 @@ function WorkoutPage({
             }
           }
           if (removed) {
-            savePlanToLocalStorage(plan);
+            savePlan(plan);
           }
         }
       }
@@ -585,13 +549,13 @@ function WorkoutPage({
 
     try {
       if (duration === "plan") {
-        const plan = loadPlanFromLocalStorage();
+        const plan = getPlan();
         if (plan) {
           plan.workoutDays = plan.workoutDays.map((day) => ({
             ...day,
             exercises: replaceInWorkout(day.exercises as Exercise[]),
           }));
-          savePlanToLocalStorage(plan);
+          savePlan(plan);
 
           setWorkoutExercises((prev) => replaceInWorkout(prev));
         }
@@ -672,14 +636,14 @@ function WorkoutPage({
         <WorkoutPlanCard
           containerRef={cardRef}
           onPlanSwitched={handlePlanSwitched}
-          planName={loadPlanFromLocalStorage()?.name || t("workoutPage.labels.myWorkoutPlan")}
+          planName={getPlan()?.name || t("workoutPage.labels.myWorkoutPlan")}
           dayName={currentDayName}
           exerciseCount={displayExercises.length}
           muscleCount={new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size}
-          duration={loadPlanSettings().duration}
+          duration={getPlanSettings().duration}
           location={t("workoutPage.labels.myGym")}
           onWorkoutSwap={(workoutId) => {
-            const plan = loadPlanFromLocalStorage();
+            const plan = getPlan();
             if (plan) {
               const selectedWorkout = plan.workoutDays.find((day) =>
                 day.dayName.toLowerCase().includes(workoutId)
@@ -696,7 +660,7 @@ function WorkoutPage({
           onSelectSavedProgram={onSelectSavedProgram}
           onEditSavedProgram={onEditSavedProgram}
           onSelectPlanDay={(dayIndex) => {
-            const p = loadPlanFromLocalStorage();
+            const p = getPlan();
             if (p?.workoutDays[dayIndex]) {
               selectedDayIndexRef.current = dayIndex;
               localStorage.setItem("selectedWorkoutDayIndex", String(dayIndex));

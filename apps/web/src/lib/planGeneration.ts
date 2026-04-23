@@ -1,6 +1,5 @@
 import type { GeneratedPlan } from "@spinefit/shared";
-import { savePlanToLocalStorage } from "@/storage/planStorage";
-import { savePlanSettings } from "@/storage/planSettingsStorage";
+import { savePlanAndSettings } from "@/lib/planService";
 import type { PlanSettings } from "@/types/planSettings";
 import { trackEvent } from "@/utils/analytics";
 
@@ -54,10 +53,7 @@ export async function generatePlanFromQuiz(
       throw new Error("invalid_plan_payload");
     }
 
-    savePlanToLocalStorage(result.plan);
-    if (result.planSettings) {
-      savePlanSettings(result.planSettings);
-    }
+    savePlanAndSettings(result.plan, result.planSettings);
 
     const workoutDaysCount = Array.isArray(result.plan.workoutDays)
       ? result.plan.workoutDays.length

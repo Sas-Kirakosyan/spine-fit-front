@@ -9,8 +9,12 @@ import SelectField from "@/components/SelecteField/SelecteField.tsx";
 import InputField from "@/components/InputField/InputField.tsx";
 import QuizScrollCalendar from "@/components/Quiz/QuizScrollCalendar.tsx";
 import ErrorIcon from "@/assets/ErrorIcon/ErrorIncon.tsx";
-import { savePlanToLocalStorage } from "@/storage/planStorage.ts";
-import { savePlanSettings } from "@/storage/planSettingsStorage.ts";
+import {
+  clearPlan,
+  hasPlan,
+  savePlanAndSettings,
+} from "@/lib/planService";
+import type { GeneratedPlan, PlanSettings } from "@spinefit/shared";
 import { useAuth } from "@/hooks/useAuth.ts";
 
 function ProfilePage({
@@ -74,7 +78,7 @@ function ProfilePage({
 
   const doSave = () => {
     persistProfile();
-    localStorage.removeItem("generatedPlan");
+    void clearPlan();
     setSavedToast(true);
     setTimeout(() => setSavedToast(false), 2500);
   };
@@ -95,12 +99,11 @@ function ProfilePage({
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
       const result = (await response.json()) as {
         success: boolean;
-        plan: Parameters<typeof savePlanToLocalStorage>[0];
-        planSettings?: Parameters<typeof savePlanSettings>[0];
+        plan: GeneratedPlan;
+        planSettings?: PlanSettings;
       };
       if (result.success && result.plan) {
-        savePlanToLocalStorage(result.plan);
-        if (result.planSettings) savePlanSettings(result.planSettings);
+        savePlanAndSettings(result.plan, result.planSettings);
         onNavigateToWorkout();
         return;
       }
@@ -114,8 +117,7 @@ function ProfilePage({
 
   const handleSave = () => {
     if (heightError || weightError) return;
-    const hasPlan = !!localStorage.getItem("generatedPlan");
-    if (hasPlan) {
+    if (hasPlan()) {
       setShowResetConfirm(true);
     } else {
       doSave();

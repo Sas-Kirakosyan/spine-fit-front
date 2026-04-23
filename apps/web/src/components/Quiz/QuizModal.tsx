@@ -395,7 +395,6 @@ export function QuizModal({
     if (!isAnswered()) return;
     const quizData = buildQuizData();
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
-    localStorage.removeItem("generatedPlan");
     setMode("registration");
   };
 
