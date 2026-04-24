@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import cors from "cors";
+import cors, { type CorsOptions } from "cors";
 import quizRouter from "./routes/quiz.js";
 import chatRouter from "./routes/chat.js";
 
@@ -13,7 +13,7 @@ const allowedOrigins = [
   "https://www.spinefit.app",
 ];
 
-const corsOptions: cors.CorsOptions = {
+const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
