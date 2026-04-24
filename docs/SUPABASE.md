@@ -55,11 +55,38 @@ type AuthState =
 
 ---
 
+## Row Level Security (RLS)
+
+Both tables have RLS enabled. All policies use `auth.uid() = user_id`, meaning Supabase enforces ownership at the database level regardless of what the client sends in query parameters. A user can only read, write, or delete their own row.
+
+Migration: `supabase/migrations/20260424000000_enable_rls.sql`
+
+To apply manually (Supabase SQL editor):
+```sql
+-- user_plans
+alter table user_plans enable row level security;
+create policy "user_plans: select own row"  on user_plans for select  using (auth.uid() = user_id);
+create policy "user_plans: insert own row"  on user_plans for insert  with check (auth.uid() = user_id);
+create policy "user_plans: update own row"  on user_plans for update  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "user_plans: delete own row"  on user_plans for delete  using (auth.uid() = user_id);
+
+-- quiz_answers
+alter table quiz_answers enable row level security;
+create policy "quiz_answers: select own row"  on quiz_answers for select  using (auth.uid() = user_id);
+create policy "quiz_answers: insert own row"  on quiz_answers for insert  with check (auth.uid() = user_id);
+create policy "quiz_answers: update own row"  on quiz_answers for update  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "quiz_answers: delete own row"  on quiz_answers for delete  using (auth.uid() = user_id);
+```
+
+> **Note:** The client still passes `.eq("user_id", userId)` in queries — this is a performance filter only (avoids a full table scan). The RLS policy is the actual security boundary.
+
+---
+
 ## Database Tables
 
 ### `user_plans`
 
-Stores each user's generated training plan and plan settings.
+Stores each user's generated training plan and plan settings. Protected by RLS — each user can only access their own row.
 
 | Column | Type | Notes |
 |--------|------|-------|
