@@ -4,14 +4,16 @@ import type { Exercise } from "@/types/exercise";
 export function useExerciseGrouping(
   exercises: Exercise[],
   searchQuery: string,
-  getExerciseName: (exercise: { id: number; name: string }) => string
+  getExerciseName: (exercise: { id: number; name: string }) => string,
+  filterByMuscle?: string | null,
+  filterByCategory?: string | null
 ) {
   const groupedExercises = useMemo(() => {
     const filtered = exercises.filter((exercise) => {
-      if (searchQuery.trim() === "") return true;
-      return getExerciseName(exercise)
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase().trim());
+      if (searchQuery.trim() !== "" && !getExerciseName(exercise).toLowerCase().includes(searchQuery.toLowerCase().trim())) return false;
+      if (filterByMuscle && !(exercise.muscle_groups ?? []).includes(filterByMuscle)) return false;
+      if (filterByCategory && exercise.category !== filterByCategory) return false;
+      return true;
     });
 
     const grouped: Record<string, Exercise[]> = {};
@@ -42,7 +44,7 @@ export function useExerciseGrouping(
       });
 
     return sortedGroups;
-  }, [exercises, searchQuery, getExerciseName]);
+  }, [exercises, searchQuery, getExerciseName, filterByMuscle, filterByCategory]);
 
   return groupedExercises;
 }

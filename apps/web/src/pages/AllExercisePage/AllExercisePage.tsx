@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useExerciseName } from "@spinefit/shared";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
@@ -14,6 +14,7 @@ import {
 } from "@/components/AllExercise/ExerciseTabs";
 import { ExerciseGroup } from "@/components/AllExercise/ExerciseGroup";
 import ExerciseActionBar from "@/components/AllExercise/ExerciseActionBar";
+import { FilterChips } from "@/components/AllExercise/FilterChips";
 
 interface AllExercisePageProps {
   onClose: () => void;
@@ -25,11 +26,37 @@ function AllExercisePage({ onClose, onAddExercises }: AllExercisePageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [selectedMuscle, setSelectedMuscle] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const { getExerciseName } = useExerciseName();
   const exercises: Exercise[] = allExercisesData as Exercise[];
 
-  const groupedExercises = useExerciseGrouping(exercises, searchQuery, getExerciseName);
+  const allMuscles = useMemo(() => {
+    const set = new Set<string>();
+    exercises.forEach((e) => (e.muscle_groups ?? []).forEach((m) => set.add(m)));
+    return [...set].sort();
+  }, [exercises]);
+
+  const allCategories = useMemo(() => {
+    const set = new Set<string>();
+    exercises.forEach((e) => { if (e.category) set.add(e.category); });
+    return [...set].sort();
+  }, [exercises]);
+
+  const handleTabChange = useCallback((tab: TabType) => {
+    setActiveTab(tab);
+    setSelectedMuscle(null);
+    setSelectedCategory(null);
+  }, []);
+
+  const groupedExercises = useExerciseGrouping(
+    exercises,
+    searchQuery,
+    getExerciseName,
+    activeTab === "muscle" ? selectedMuscle : null,
+    activeTab === "categories" ? selectedCategory : null,
+  );
 
   const {
     selectedExercises,
@@ -76,7 +103,23 @@ function AllExercisePage({ onClose, onAddExercises }: AllExercisePageProps) {
           />
         )}
 
-        <ExerciseTabs activeTab={activeTab} onTabChange={setActiveTab} />
+        <ExerciseTabs activeTab={activeTab} onTabChange={handleTabChange} />
+
+        {activeTab === "muscle" && (
+          <FilterChips
+            options={allMuscles}
+            selected={selectedMuscle}
+            onSelect={setSelectedMuscle}
+          />
+        )}
+
+        {activeTab === "categories" && (
+          <FilterChips
+            options={allCategories}
+            selected={selectedCategory}
+            onSelect={setSelectedCategory}
+          />
+        )}
 
         <div
           className={`flex-1 overflow-y-auto ${
