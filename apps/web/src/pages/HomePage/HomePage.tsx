@@ -29,7 +29,7 @@ function HomePage({
   return (
     <>
       <PageContainer
-        backgroundImage="url('https://aestheticxfitness.com/wp-content/uploads/slider/cache/b0321dd7df42008a1983d29db8732f10/WEQD.jpg')"
+        backgroundImage="url('/exercises/cable-knee-drive.png')"
         overlayClassName="bg-black/30"
       >
         <div className="flex items-center justify-between">
@@ -44,6 +44,9 @@ function HomePage({
             <br />
             {t("homePage.heading2")}
           </h2>
+          <p className="text-white/70 text-sm mt-2">
+            {t("homePage.subheading")}
+          </p>
         </div>
 
         <div className="flex flex-col items-center justify-center mt-10 space-y-6 px-4">

@@ -35,7 +35,7 @@ export default function HomeScreen() {
             <View className="mt-10 gap-6 px-4">
               <View className="px-4">
                 <Text className="text-white mb-10 text-4xl font-semibold leading-tight">
-                  Strength instead{"\n"}Of pain
+                  Strength instead{"\n"}of pain
                 </Text>
               </View>
               <Pressable
