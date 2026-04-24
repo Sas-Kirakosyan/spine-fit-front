@@ -53,6 +53,7 @@
   "exerciseCard": {
     "sets": "Sets",
     "reps": "Reps",
+    "bodyweight": "Bodyweight",
     "done": "Done",
     "logged": "Logged"
   },

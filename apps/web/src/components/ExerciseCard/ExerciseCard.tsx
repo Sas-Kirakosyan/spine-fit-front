@@ -63,7 +63,9 @@ export function ExerciseCard({
 
       <div className="flex flex-1 flex-col justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-lg font-semibold text-white sm:text-xl">{name}</span>
+          <span className="text-lg font-semibold text-white sm:text-xl">
+            {name}
+          </span>
         </div>
 
         <div className="flex flex-wrap items-center gap-1 text-sm font-medium text-slate-200">
@@ -80,7 +82,9 @@ export function ExerciseCard({
               </span>
               <span className="text-slate-500">•</span>
               <span>
-                {exercise.weight} {exercise.weight_unit}
+                {exercise.equipment === "bodyweight"
+                  ? t("exerciseCard.bodyweight")
+                  : `${exercise.weight} ${exercise.weight_unit}`}
               </span>
             </>
           )}
@@ -93,7 +97,10 @@ export function ExerciseCard({
           </span>
         )}
       </div>
-      <TreeDotButton ariaLabel="open exercise actions" onClick={() => onActionClick()} />
+      <TreeDotButton
+        ariaLabel="open exercise actions"
+        onClick={() => onActionClick()}
+      />
     </div>
   );
 }

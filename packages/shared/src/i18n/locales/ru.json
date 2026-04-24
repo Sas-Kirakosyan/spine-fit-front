@@ -53,6 +53,7 @@
   "exerciseCard": {
     "sets": "Подходы",
     "reps": "Повторения",
+    "bodyweight": "Вес тела",
     "done": "Готово",
     "logged": "Записано"
   },
