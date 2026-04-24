@@ -190,6 +190,19 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
             <SubmitButton text={t("loginPage.signIn")} loading={loading} />
 
             <Divider />
+
+            {onNavigateToHome && (
+              <p className="text-center text-sm text-gray-500">
+                {t("loginPage.noAccount")}{" "}
+                <button
+                  type="button"
+                  onClick={onNavigateToHome}
+                  className="font-medium text-main transition hover:text-main/80"
+                >
+                  {t("loginPage.startProgram")}
+                </button>
+              </p>
+            )}
           </form>
         </FormCard>
       </div>

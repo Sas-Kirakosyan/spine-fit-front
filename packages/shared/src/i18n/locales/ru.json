@@ -266,7 +266,7 @@
     "forgotPassword": "Забыли пароль?",
     "signIn": "Войти",
     "noAccount": "Нет аккаунта?",
-    "register": "Зарегистрироваться",
+    "startProgram": "Начать программу",
     "errors": {
       "emailRequired": "Email обязателен",
       "emailInvalid": "Пожалуйста, введите корректный email",

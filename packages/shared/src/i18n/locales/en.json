@@ -264,7 +264,7 @@
     "forgotPassword": "Forgot your password?",
     "signIn": "Sign In",
     "noAccount": "Don't have an account?",
-    "register": "Register",
+    "startProgram": "Start program",
     "errors": {
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email",
