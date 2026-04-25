@@ -276,7 +276,39 @@
       "invalidCredentials": "Неверный email или пароль",
       "network": "Ошибка сети. Повторите попытку.",
       "unknown": "Что-то пошло не так",
-      "planGenerationFailed": "Вход выполнен, но не удалось сгенерировать план. Пожалуйста, повторите попытку позже."
+      "planGenerationFailed": "Вход выполнен, но не удалось сгенерировать план. Пожалуйста, повторите попытку позже.",
+      "resetSendFailed": "Не удалось отправить письмо для сброса. Попробуйте ещё раз."
+    }
+  },
+  "forgotPasswordModal": {
+    "title": "Сброс пароля",
+    "subtitle": "Введите email и мы отправим ссылку для сброса.",
+    "email": "Электронная почта",
+    "emailPlaceholder": "Введите email",
+    "send": "Отправить ссылку",
+    "close": "Закрыть",
+    "successMessage": "Проверьте почту — мы отправили ссылку для сброса пароля.",
+    "errors": {
+      "emailRequired": "Email обязателен",
+      "emailInvalid": "Пожалуйста, введите корректный email"
+    }
+  },
+  "resetPasswordPage": {
+    "title": "Новый пароль",
+    "subtitle": "Задайте новый пароль для своего аккаунта.",
+    "newPassword": "Новый пароль",
+    "newPasswordPlaceholder": "Введите новый пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "confirmPasswordPlaceholder": "Повторите новый пароль",
+    "submit": "Обновить пароль",
+    "checking": "Проверяем ссылку сброса...",
+    "backToLogin": "Вернуться ко входу",
+    "errors": {
+      "invalidLink": "Ссылка для сброса недействительна или устарела.",
+      "passwordRequired": "Пароль обязателен",
+      "passwordMinLength": "Пароль должен содержать минимум 6 символов",
+      "passwordsMismatch": "Пароли не совпадают",
+      "updateFailed": "Не удалось обновить пароль. Попробуйте ещё раз."
     }
   },
   "registrationPage": {

@@ -274,7 +274,39 @@
       "invalidCredentials": "Invalid email or password",
       "network": "Network error. Please try again.",
       "unknown": "Something went wrong",
-      "planGenerationFailed": "Logged in, but we couldn't generate your plan. Please try again later."
+      "planGenerationFailed": "Logged in, but we couldn't generate your plan. Please try again later.",
+      "resetSendFailed": "Could not send reset email. Please try again."
+    }
+  },
+  "forgotPasswordModal": {
+    "title": "Reset your password",
+    "subtitle": "Enter your email and we'll send you a reset link.",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "send": "Send reset link",
+    "close": "Close",
+    "successMessage": "Check your inbox for a password reset link.",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email"
+    }
+  },
+  "resetPasswordPage": {
+    "title": "Set a new password",
+    "subtitle": "Choose a new password for your account.",
+    "newPassword": "New password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm password",
+    "confirmPasswordPlaceholder": "Repeat new password",
+    "submit": "Update password",
+    "checking": "Verifying your reset link...",
+    "backToLogin": "Back to login",
+    "errors": {
+      "invalidLink": "This reset link is invalid or has expired.",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must contain at least 6 characters",
+      "passwordsMismatch": "Passwords do not match",
+      "updateFailed": "Could not update password. Please try again."
     }
   },
   "registrationPage": {

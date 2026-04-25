@@ -65,3 +65,26 @@ export async function getCurrentUser(): Promise<User | null> {
   } = await supabase.auth.getUser();
   return user;
 }
+
+export type PasswordResetResult =
+  | { ok: true }
+  | { ok: false; error: AuthError };
+
+export async function sendPasswordResetEmail(
+  email: string,
+  redirectTo: string
+): Promise<PasswordResetResult> {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo,
+  });
+  if (error) return { ok: false, error };
+  return { ok: true };
+}
+
+export async function updateUserPassword(
+  password: string
+): Promise<PasswordResetResult> {
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { ok: false, error };
+  return { ok: true };
+}

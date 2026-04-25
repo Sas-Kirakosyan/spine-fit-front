@@ -16,5 +16,6 @@ export type Page =
   | "settings"
   | "createProgram"
   | "exerciseProgress"
-  | "generatingPlan";
+  | "generatingPlan"
+  | "resetPassword";
 
