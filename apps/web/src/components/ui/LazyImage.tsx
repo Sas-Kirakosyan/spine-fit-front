@@ -50,7 +50,7 @@ export function LazyImage({
     if (img.complete && img.naturalWidth > 0) {
       setLoaded(true);
     }
-  });
+  }, [loaded, error]);
 
   return (
     <div className={`relative overflow-hidden ${containerClassName}`}>

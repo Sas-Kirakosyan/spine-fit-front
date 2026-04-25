@@ -60,10 +60,25 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
   const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const v = videoRef.current;
     if (!v) return;
-    const t = Number(e.target.value);
-    v.currentTime = t;
-    setCurrentTime(t);
+    const seekTime = Number(e.target.value);
+    v.currentTime = seekTime;
+    setCurrentTime(seekTime);
   }, []);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLVideoElement>) => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      togglePlay();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      v.currentTime = Math.min(v.duration, v.currentTime + 5);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      v.currentTime = Math.max(0, v.currentTime - 5);
+    }
+  }, [togglePlay]);
 
   const showControls = useCallback(() => {
     setControlsVisible(true);
@@ -122,6 +137,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
       ref={containerRef}
       className={`group relative bg-black ${className}`}
       onMouseMove={showControls}
+      onTouchStart={showControls}
       onMouseLeave={() => {
         if (videoRef.current && !videoRef.current.paused) setControlsVisible(false);
       }}
@@ -132,8 +148,10 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
         poster={poster}
         playsInline
         preload="metadata"
+        tabIndex={0}
         className="h-full w-full object-cover"
         onClick={togglePlay}
+        onKeyDown={handleKeyDown}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onLoadedMetadata={(e) => {

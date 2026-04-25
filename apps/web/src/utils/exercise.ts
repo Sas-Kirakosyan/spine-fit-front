@@ -2,6 +2,7 @@ import { getExerciseImageUrl as getExerciseImageUrlShared } from "@spinefit/shar
 import { assetUrl } from "@/lib/assets";
 import type { Exercise } from "@/types/exercise";
 
+// exercisesSm must precede exercises — the shorter pattern would match both.
 const LEGACY_PREFIXES: Array<[RegExp, string]> = [
   [/^\/?exercisesSm\//, "Photo/Exercises/"],
   [/^\/?exercises\//, "Photo/Exercises/"],

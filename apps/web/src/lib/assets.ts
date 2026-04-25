@@ -1,6 +1,7 @@
 import type { Exercise } from "@/types/exercise";
 
-const BASE = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/SpineFit%20Media`;
+const STORAGE_BUCKET = import.meta.env.VITE_SUPABASE_BUCKET ?? "SpineFit Media";
+const BASE = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${encodeURIComponent(STORAGE_BUCKET)}`;
 
 export const assetUrl = (path: string): string => {
   if (!path) return "";
