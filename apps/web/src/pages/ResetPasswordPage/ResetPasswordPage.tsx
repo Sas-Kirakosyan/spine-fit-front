@@ -219,7 +219,7 @@ function ResetPasswordPage({ onNavigateToLogin }: ResetPasswordPageProps) {
                 {recovery.message ||
                   t("resetPasswordPage.errors.invalidLink")}
               </p>
-              {recovery.debugUrl && (
+              {import.meta.env.DEV && recovery.debugUrl && (
                 <p className="break-all rounded-lg bg-gray-100 px-3 py-2 text-[11px] text-gray-600">
                   URL: {recovery.debugUrl}
                 </p>
