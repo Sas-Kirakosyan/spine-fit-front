@@ -33,7 +33,7 @@ import { PageLoader } from "@/components/ui/PageLoader";
 import { useAuth } from "@/hooks/useAuth";
 import { retryPendingQuizSync } from "@/lib/quizStorage";
 
-const PUBLIC_PAGES: Page[] = ["home", "login", "register"];
+const PUBLIC_PAGES: Page[] = ["home", "login", "register", "resetPassword"];
 
 // --- LAZY LOADED COMPONENTS ---
 // Note: Using .then() to handle named exports from your files
@@ -43,6 +43,9 @@ const Registration = lazy(
   () => import("@/pages/RegistrationPage/Registration")
 );
 const Login = lazy(() => import("@/pages/LoginPage/Login"));
+const ResetPasswordPage = lazy(
+  () => import("@/pages/ResetPasswordPage/ResetPasswordPage")
+);
 const WorkoutPage = lazy(() => import("@/pages/WorkoutPage/WorkoutPage"));
 const ProgressPage = lazy(() => import("@/pages/ProgressPage/ProgressPage"));
 const ExerciseSetsPage = lazy(
@@ -92,6 +95,7 @@ const PAGE_TO_PATH: Record<Page, string> = {
   createProgram: "/create-program",
   exerciseProgress: "/progress/exercise",
   generatingPlan: "/generating-plan",
+  resetPassword: "/reset-password",
 };
 
 const PATH_TO_PAGE = Object.fromEntries(
@@ -121,6 +125,7 @@ function App() {
       "createProgram",
       "exerciseProgress",
       "generatingPlan",
+      "resetPassword",
     ];
     const pageFromPath = PATH_TO_PAGE[window.location.pathname] as
       | Page
@@ -644,6 +649,8 @@ function App() {
             onNavigateToWorkout={navigateToWorkout}
           />
         );
+      case "resetPassword":
+        return <ResetPasswordPage onNavigateToLogin={navigateToLogin} />;
       case "workout":
         return (
           <WorkoutPage

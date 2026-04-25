@@ -7,6 +7,7 @@ import { FormField } from "@/components/Form/FormField/FormField";
 import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
 import { Divider } from "@/components/Form/Divider/Divider";
+import { ForgotPasswordModal } from "@/components/Form/ForgotPasswordModal/ForgotPasswordModal";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { signInWithEmail } from "@/lib/authService";
 import {
@@ -38,6 +39,7 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
   const [authError, setAuthError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
 
   useEffect(() => {
     const prefillEmail = localStorage.getItem("loginPrefillEmail");
@@ -179,12 +181,13 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
                 {t("loginPage.rememberMe")}
               </label>
 
-              <a
-                href="#"
+              <button
+                type="button"
+                onClick={() => setForgotOpen(true)}
                 className="text-sm font-medium text-main transition hover:text-main/80"
               >
                 {t("loginPage.forgotPassword")}
-              </a>
+              </button>
             </div>
 
             <SubmitButton text={t("loginPage.signIn")} loading={loading} />
@@ -193,6 +196,12 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
           </form>
         </FormCard>
       </div>
+
+      <ForgotPasswordModal
+        open={forgotOpen}
+        initialEmail={formData.email}
+        onClose={() => setForgotOpen(false)}
+      />
     </PageContainer>
   );
 }
