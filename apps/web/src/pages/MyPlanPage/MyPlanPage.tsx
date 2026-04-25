@@ -58,9 +58,7 @@ function MyPlanPage({
       </div>
 
       {import.meta.env.DEV && plan.hasChanges && (
-        <RegenerateButton
-          onClick={() => plan.setIsRegenerateModalOpen(true)}
-        />
+        <RegenerateButton onClick={() => plan.setIsRegenerateModalOpen(true)} />
       )}
 
       <ResetModal

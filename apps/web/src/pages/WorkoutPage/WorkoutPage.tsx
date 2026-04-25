@@ -1,4 +1,10 @@
-import { useRef, useState, useEffect, useMemo, useSyncExternalStore } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
@@ -123,7 +129,9 @@ function SwipeableExerciseCard({
           aria-label="Replace exercise"
         >
           <ReplaceIcon className="h-6 w-6" />
-          <span className="text-xs font-semibold">{t("workoutPage.swipeCard.replace")}</span>
+          <span className="text-xs font-semibold">
+            {t("workoutPage.swipeCard.replace")}
+          </span>
         </button>
         <button
           type="button"
@@ -140,7 +148,9 @@ function SwipeableExerciseCard({
           aria-label="Delete exercise"
         >
           <TrashIcon className="h-6 w-6" />
-          <span className="text-xs font-semibold">{t("workoutPage.swipeCard.delete")}</span>
+          <span className="text-xs font-semibold">
+            {t("workoutPage.swipeCard.delete")}
+          </span>
         </button>
       </div>
 
@@ -250,7 +260,9 @@ function WorkoutPage({
   const [isRegenerating, setIsRegenerating] = useState(false);
   const allExercises = allExercisesData as Exercise[];
 
-  const syncGeneratedPlanWithSavedProgram = (plan: GeneratedPlan): GeneratedPlan => {
+  const syncGeneratedPlanWithSavedProgram = (
+    plan: GeneratedPlan
+  ): GeneratedPlan => {
     try {
       const savedProgramsString = localStorage.getItem("savedPrograms");
       if (!savedProgramsString) return plan;
@@ -264,7 +276,9 @@ function WorkoutPage({
       const syncedWorkoutDays = matchingProgram.days.map((day, index) => ({
         dayNumber: index + 1,
         dayName: day.name,
-        muscleGroups: [...new Set(day.exercises.flatMap((ex) => ex.muscle_groups))],
+        muscleGroups: [
+          ...new Set(day.exercises.flatMap((ex) => ex.muscle_groups)),
+        ],
         exercises: day.exercises,
       }));
 
@@ -310,7 +324,10 @@ function WorkoutPage({
           // Prefer manually selected day from swap sheet
           if (selectedDayIndexRef.current !== null) {
             const idx = selectedDayIndexRef.current;
-            if (idx < plan.workoutDays.length && plan.workoutDays[idx].exercises.length > 0) {
+            if (
+              idx < plan.workoutDays.length &&
+              plan.workoutDays[idx].exercises.length > 0
+            ) {
               setWorkoutExercises(plan.workoutDays[idx].exercises);
               console.log(
                 `📋 Loaded manually selected ${plan.workoutDays[idx].dayName} workout (${plan.workoutDays[idx].exercises.length} exercises)`
@@ -321,7 +338,10 @@ function WorkoutPage({
           }
 
           // Get next uncompleted workout based on completion status
-          const nextWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
+          const nextWorkout = getNextAvailableWorkout(
+            plan,
+            completedWorkoutIds
+          );
           console.log("nextWorkout:", nextWorkout);
           if (nextWorkout && nextWorkout.exercises.length > 0) {
             setWorkoutExercises(nextWorkout.exercises);
@@ -330,7 +350,10 @@ function WorkoutPage({
             );
           } else {
             // Fallback to first workout day
-            if (plan.workoutDays.length > 0 && plan.workoutDays[0].exercises.length > 0) {
+            if (
+              plan.workoutDays.length > 0 &&
+              plan.workoutDays[0].exercises.length > 0
+            ) {
               setWorkoutExercises(plan.workoutDays[0].exercises);
             }
           }
@@ -400,7 +423,8 @@ function WorkoutPage({
   // Calculate current workout day name based on manual selection or rotation index
   const getCurrentDayName = (): string => {
     const plan = getPlan();
-    if (!plan || plan.workoutDays.length === 0) return t("workoutPage.messages.noWorkout");
+    if (!plan || plan.workoutDays.length === 0)
+      return t("workoutPage.messages.noWorkout");
 
     // Prefer manually selected day
     const manual = localStorage.getItem("selectedWorkoutDayIndex");
@@ -416,16 +440,26 @@ function WorkoutPage({
       id.startsWith(plan.id)
     ).length;
     const rotationIndex = planCompletedCount % plan.workoutDays.length;
-    return plan.workoutDays[rotationIndex]?.dayName || t("workoutPage.labels.todayWorkout");
+    return (
+      plan.workoutDays[rotationIndex]?.dayName ||
+      t("workoutPage.labels.todayWorkout")
+    );
   };
 
-  const currentDayName = displayExercises.length > 0 ? getCurrentDayName() : t("workoutPage.messages.noWorkout");
+  const currentDayName =
+    displayExercises.length > 0
+      ? getCurrentDayName()
+      : t("workoutPage.messages.noWorkout");
 
   console.log("plan", getPlan()); // dont remove this log
 
   // Handler for when user switches to a different training split
   const handlePlanSwitched = (updatedPlan: GeneratedPlan) => {
-    console.log("[WorkoutPage] Plan switched to:", updatedPlan.splitType, updatedPlan.name);
+    console.log(
+      "[WorkoutPage] Plan switched to:",
+      updatedPlan.splitType,
+      updatedPlan.name
+    );
 
     // Update displayed exercises to first day of new split
     const firstWorkout = updatedPlan.workoutDays[0];
@@ -444,13 +478,19 @@ function WorkoutPage({
       const quizDataString = localStorage.getItem("quizAnswers");
       if (!quizDataString) return;
       const quizData = JSON.parse(quizDataString);
-      const response = await fetch(`${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(quizData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(quizData),
+        }
+      );
       if (response.ok) {
-        const result = await response.json() as { success: boolean; plan: GeneratedPlan };
+        const result = (await response.json()) as {
+          success: boolean;
+          plan: GeneratedPlan;
+        };
         if (result.success && result.plan) {
           localStorage.removeItem("completedWorkoutIds");
           localStorage.removeItem("selectedWorkoutDayIndex");
@@ -468,7 +508,6 @@ function WorkoutPage({
     }
   };
 
-
   const updateCurrentWorkoutInPlan = (
     updateExercises: (exercises: Exercise[]) => Exercise[]
   ): boolean => {
@@ -479,7 +518,9 @@ function WorkoutPage({
     if (!currentWorkout) return false;
 
     const workoutIndex = plan.workoutDays.findIndex(
-      (day) => day.dayNumber === currentWorkout.dayNumber && day.dayName === currentWorkout.dayName
+      (day) =>
+        day.dayNumber === currentWorkout.dayNumber &&
+        day.dayName === currentWorkout.dayName
     );
     if (workoutIndex === -1) return false;
 
@@ -492,8 +533,8 @@ function WorkoutPage({
 
   const handleDeleteExercise = (exerciseToDelete: Exercise) => {
     try {
-      const removedFromCurrentWorkout = updateCurrentWorkoutInPlan((exercises) =>
-        exercises.filter((ex) => ex.id !== exerciseToDelete.id)
+      const removedFromCurrentWorkout = updateCurrentWorkoutInPlan(
+        (exercises) => exercises.filter((ex) => ex.id !== exerciseToDelete.id)
       );
 
       if (!removedFromCurrentWorkout) {
@@ -515,8 +556,12 @@ function WorkoutPage({
         }
       }
 
-      setWorkoutExercises((prev) => prev.filter((ex) => ex.id !== exerciseToDelete.id));
-      setSwipedExerciseId((prev) => (prev === exerciseToDelete.id ? null : prev));
+      setWorkoutExercises((prev) =>
+        prev.filter((ex) => ex.id !== exerciseToDelete.id)
+      );
+      setSwipedExerciseId((prev) =>
+        prev === exerciseToDelete.id ? null : prev
+      );
 
       if (onRemoveExercise) {
         onRemoveExercise(exerciseToDelete.id);
@@ -544,7 +589,9 @@ function WorkoutPage({
         (ex) => ex.id === replacement.id && ex.id !== oldExercise.id
       );
       if (hasDuplicate) return exercises;
-      return exercises.map((ex) => (ex.id === oldExercise.id ? replacement : ex));
+      return exercises.map((ex) =>
+        ex.id === oldExercise.id ? replacement : ex
+      );
     };
 
     try {
@@ -560,7 +607,9 @@ function WorkoutPage({
           setWorkoutExercises((prev) => replaceInWorkout(prev));
         }
       } else {
-        const replaced = updateCurrentWorkoutInPlan((exercises) => replaceInWorkout(exercises));
+        const replaced = updateCurrentWorkoutInPlan((exercises) =>
+          replaceInWorkout(exercises)
+        );
 
         if (replaced) {
           setWorkoutExercises((prev) => replaceInWorkout(prev));
@@ -597,7 +646,10 @@ function WorkoutPage({
     setReplaceQuery("");
   };
 
-  const handleConfirmSwap = (replacement: Exercise, duration: SwapDurationOption) => {
+  const handleConfirmSwap = (
+    replacement: Exercise,
+    duration: SwapDurationOption
+  ) => {
     if (replaceExercise) {
       handleReplaceExercise(replaceExercise, replacement, duration);
     }
@@ -608,12 +660,14 @@ function WorkoutPage({
       <div className="flex items-center justify-between pr-2.5">
         <Logo />
         <div className="text-[12px] font-semibold text-white">
-          <div
-            onClick={handleRegeneratePlan}
-            className="border border-2 border-white/50 rounded-full p-1 cursor-pointer"
-          >
-            {t("workoutPage.buttons.regeneratePlan")}
-          </div>
+          {import.meta.env.DEV && (
+            <div
+              onClick={handleRegeneratePlan}
+              className="border border-2 border-white/50 rounded-full p-1 cursor-pointer"
+            >
+              {t("workoutPage.buttons.regeneratePlan")}
+            </div>
+          )}
           {onNavigateToHome && (
             <Button
               onClick={onNavigateToHome}
@@ -639,7 +693,9 @@ function WorkoutPage({
           planName={getPlan()?.name || t("workoutPage.labels.myWorkoutPlan")}
           dayName={currentDayName}
           exerciseCount={displayExercises.length}
-          muscleCount={new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size}
+          muscleCount={
+            new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size
+          }
           duration={getPlanSettings().duration}
           location={t("workoutPage.labels.myGym")}
           onWorkoutSwap={(workoutId) => {
@@ -672,7 +728,9 @@ function WorkoutPage({
         <section className="flex-1 space-y-3 mx-2.5">
           {isLoadingPlan ? (
             <div className="flex items-center justify-center py-10">
-              <span className="text-white/60">{t("workoutPage.messages.loading")}</span>
+              <span className="text-white/60">
+                {t("workoutPage.messages.loading")}
+              </span>
             </div>
           ) : displayExercises.length > 0 ? (
             displayExercises.map((exercise, index) => (
@@ -811,9 +869,7 @@ function WorkoutPage({
           onClose={handleCloseReplaceModal}
         />
       )}
-      {isRegenerating && (
-        <PlanGeneratingLoader />
-      )}
+      {isRegenerating && <PlanGeneratingLoader />}
     </PageContainer>
   );
 }
