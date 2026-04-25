@@ -4,11 +4,15 @@
     "name": "Back Hyperextension",
     "description": "A controlled spinal extension exercise performed on a hyperextension bench. Primarily targets the lower back (erector spinae), glutes, and hamstrings.",
     "category": "strength",
-    "muscle_groups": ["erector_spinae", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "erector_spinae",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "hyperextension_bench",
     "difficulty": "beginner",
     "instructions": "Position your hips on the pad with feet secured. Lower your torso under control while keeping a neutral spine. Raise your upper body until aligned with your legs. Avoid overextending your lower back.",
-    "video_url": "https://cdn.spinefit.app/videos/hyperextension.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -31,7 +35,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/back-hyperextension.webp",
+        "url": "Photo/Exercises/back-hyperextension.webp",
         "primary": true
       },
       {
@@ -52,19 +56,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 2,
     "name": "Single-Leg Glute Bridge",
     "description": "A unilateral glute activation exercise performed on the floor. It strengthens the glutes, stabilizers, hamstrings, and improves lumbopelvic control.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your back with one knee bent and the other leg extended. Press through your heel and lift your hips while keeping your core engaged. Avoid arching your lower back. Lower slowly with control.",
-    "video_url": "https://cdn.spinefit.app/videos/single_leg_glute_bridge.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -87,7 +94,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/single-leg-glute-bridge.webp",
+        "url": "Photo/Exercises/single-leg-glute-bridge.webp",
         "primary": true
       },
       {
@@ -108,19 +115,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "RnKlv6FofRw"
+    ]
   },
   {
     "id": 3,
     "name": "Hanging Leg Raises (Bent-Knee or Single-Leg)",
     "description": "A core exercise performed while hanging from a bar. The bent-knee or single-leg variation targets the abdominals and hip flexors while reducing lumbar strain.",
     "category": "strength",
-    "muscle_groups": ["abdominals", "hip_flexors", "obliques"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "obliques"
+    ],
     "equipment": "pull_up_bar",
     "difficulty": "intermediate",
     "instructions": "Hang from a bar with shoulders active. Bend your knees and lift them toward your chest while keeping your core braced. Avoid swinging and keep your spine neutral. Lower slowly with control.",
-    "video_url": "https://cdn.spinefit.app/videos/hanging_leg_raise_bent_knee.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -143,7 +153,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/hanging-leg-raises-bent-knee-or-single-leg.webp",
+        "url": "Photo/Exercises/hanging-leg-raises-bent-knee-or-single-leg.webp",
         "primary": true
       },
       {
@@ -164,19 +174,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 4,
     "name": "One-Arm Crossover Cable Pull",
     "description": "A unilateral cable pulling exercise that targets the lats, upper back, and deep stabilizers. This movement also improves core control and supports a healthy spine.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "rear_delts", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "rear_delts",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Stand sideways to the cable machine with the handle set slightly above shoulder level. Grab the handle with the outside arm. Pull the cable across your body while keeping your torso stable and ribs down. Focus on driving the elbow toward the hip. Avoid rotating the spine.",
-    "video_url": "https://www.garagegymreviews.com/wp-content/uploads/2023/06/single-arm-cable-row.gif",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -199,7 +213,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/one-arm-crossover-cable-pull.png",
+        "url": "Photo/Exercises/one-arm-crossover-cable-pull.png",
         "primary": true
       },
       {
@@ -220,19 +234,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 5,
     "name": "Cable Kickbacks",
     "description": "A controlled cable kickback exercise focusing on glutes, hamstrings, spinal stabilizers, and leg biceps. Great for strength without loading the lumbar spine.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "erector_spinae", "leg_biceps"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "erector_spinae",
+      "leg_biceps"
+    ],
     "equipment": "cable_machine_ankle_attachment",
     "instructions": "Attach the ankle strap to the cable. Stand tall, brace your core, keep ribs down. Kick the leg backward slowly, avoid leaning forward or arching the back. Return with control.",
     "difficulty": "beginner",
-    "video_url": "/videos/cable_kickbacks.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -255,7 +273,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/cable-kickbacks.webp",
+        "url": "Photo/Exercises/cable-kickbacks.webp",
         "primary": true
       },
       {
@@ -276,8 +294,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 6,
@@ -294,7 +311,7 @@
     "equipment": "bodyweight",
     "instructions": "On a bench or stability ball, keep pelvis neutral. Extend opposite arm and leg slowly. Avoid shifting hips or arching lower back. Hold 2 seconds, switch sides.",
     "difficulty": "beginner",
-    "video_url": "/videos/bird_dog_variation.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -317,7 +334,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/bird-dog-bench-or-stability-ball.webp",
+        "url": "Photo/Exercises/bird-dog-bench-or-stability-ball.webp",
         "primary": true
       },
       {
@@ -338,19 +355,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 7,
     "name": "Cable Knee Drive",
     "description": "The Cable Knee Drive is a dynamic lower-body exercise that strengthens the hip flexors, challenges the core, and enhances overall stability. With the cable strap secured around the ankle, you lift the knee toward the chest while resisting the pull of the machine. This movement closely resembles sprinting mechanics, making it especially valuable for improving acceleration, jump performance, and explosive leg power. The constant tension also forces the core to stay active, promoting better balance, coordination, and upright posture throughout the exercise.",
     "category": "strength",
-    "muscle_groups": ["hip_flexors", "quads", "core_stabilizers"],
+    "muscle_groups": [
+      "hip_flexors",
+      "quads",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine_low_pull_handle",
     "instructions": "Lie on your back, attach foot/handle to cable set at low pull. Brace core, drive one knee toward chest without lumbar rounding. Extend back slowly. Do not swing.",
     "difficulty": "intermediate",
-    "video_url": "https://app-media-r2.fitbod.me/v2/3108/videos/full_720p.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -373,7 +393,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/cable-knee-drive.webp",
+        "url": "Photo/Exercises/cable-knee-drive.webp",
         "primary": true
       },
       {
@@ -394,19 +414,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 406,
     "name": "Bodyweight/Light Dumbbell Bulgarian Split Squats",
     "description": "A back-friendly unilateral leg builder that avoids axial spinal loading while still building muscle effectively.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "bench_bodyweight_or_light_dumbbell",
     "difficulty": "beginner",
     "instructions": "Place rear foot on bench, step forward, brace core. Lower under control without leaning torso forward aggressively.",
-    "video_url": "https://cdn.spinefit.app/videos/bulgarian_split.mp4",
+    "video_url": "",
     "sets": 3,
     "reps": 10,
     "weight": 0,
@@ -425,7 +448,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/bodyweightlight-dumbbell-bulgarian-split-squats.webp",
+        "url": "Photo/Exercises/bodyweightlight-dumbbell-bulgarian-split-squats.webp",
         "primary": true
       },
       {
@@ -446,19 +469,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 407,
     "name": "Leg Extension",
     "description": "Quads isolation using a machine with zero compression through the lumbar spine.",
     "category": "strength",
-    "muscle_groups": ["quads"],
+    "muscle_groups": [
+      "quads"
+    ],
     "equipment": "leg_extension_machine",
     "difficulty": "beginner",
     "instructions": "Sit tall, hold handles, extend knees under control. Avoid leaning back aggressively.",
-    "video_url": "https://cdn.spinefit.app/videos/leg_extension.mp4",
+    "video_url": "",
     "sets": 4,
     "reps": 12,
     "weight": 25,
@@ -477,7 +501,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/leg-extension.webp",
+        "url": "Photo/Exercises/leg-extension.webp",
         "primary": true
       },
       {
@@ -498,19 +522,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "6F5rTyrf5tM"
+    ]
   },
   {
     "id": 408,
     "name": "Seated Hip Abduction",
     "description": "Glute medius and outer-leg isolation improving hip stability and pelvis control, which supports spine health.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hip_abductors"],
+    "muscle_groups": [
+      "glutes",
+      "hip_abductors"
+    ],
     "equipment": "hip_abductor_machine",
     "difficulty": "beginner",
     "instructions": "Sit tall, press knees outward slowly, avoid lumbar movement while spreading.",
-    "video_url": "https://cdn.spinefit.app/videos/hip_abduction.mp4",
+    "video_url": "",
     "sets": 3,
     "reps": 15,
     "weight": 30,
@@ -529,7 +555,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-hip-abduction.png",
+        "url": "Photo/Exercises/seated-hip-abduction.png",
         "primary": true
       },
       {
@@ -550,19 +576,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 409,
     "name": "Bench or Machine Hip Thrust",
     "description": "A glute and hamstring builder with external support that avoids spinal compression and trains hip hinge strength safely.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "bench_or_smith_machine",
     "difficulty": "intermediate",
     "instructions": "Upper back on bench or supported pad, drive hips up without lumbar arch. Ribs down, chin tucked slightly.",
-    "video_url": "https://cdn.spinefit.app/videos/hip_thrust.mp4",
+    "video_url": "",
     "sets": 3,
     "reps": 12,
     "weight": 40,
@@ -581,7 +609,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/bench-or-machine-hip-thrust.webp",
+        "url": "Photo/Exercises/bench-or-machine-hip-thrust.webp",
         "primary": true
       },
       {
@@ -602,19 +630,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 11,
     "name": "Belt Squats",
     "description": "A squat variation using a dip belt or dedicated belt-squat machine where weight hangs from the hips instead of resting on the shoulders. Removes spinal compression and is ideal for people with lower back concerns, herniated disc history, or shoulder injuries who want to load legs without compressing the spine.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings", "calves"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings",
+      "calves"
+    ],
     "equipment": "belt_squat_machine",
     "difficulty": "beginner",
     "instructions": "Stand on the platform with the belt secured around your hips and weight attached. Keep your torso upright and core engaged. Lower into a squat by bending your knees and hips, keeping your chest up. Push through your feet to return to the starting position. The load stays on your pelvis/hips with minimal pressure on the lower back.",
-    "video_url": "https://cdn.spinefit.app/videos/belt_squat.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -655,7 +687,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/belt-squats.webp",
+        "url": "Photo/Exercises/belt-squats.webp",
         "primary": true
       },
       {
@@ -676,8 +708,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 12,
@@ -694,7 +725,7 @@
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Stand with feet hip-width apart, barbell over mid-foot. Hinge at hips, grip bar just outside legs. Brace core, keep spine neutral, chest up. Drive through heels, extend hips and knees simultaneously. Keep bar close to body. Lower with control by hinging hips first.",
-    "video_url": "https://cdn.spinefit.app/videos/deadlift.mp4",
+    "video_url": "",
     "is_back_friendly": false,
     "back_issue_restrictions": [
       {
@@ -735,7 +766,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/deadlift.webp",
+        "url": "Photo/Exercises/deadlift.webp",
         "primary": true
       },
       {
@@ -756,19 +787,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 13,
     "name": "Glute Bridge Machine",
     "description": "A machine-based or dumbbell-loaded glute bridge exercise that targets glutes and hamstrings with back support. Safer alternative to barbell hip thrusts for those with back concerns.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "glute_bridge_machine",
     "difficulty": "beginner",
     "instructions": "Position yourself on the machine or lie on your back with a dumbbell on your hips. Drive through heels to lift hips up, squeezing glutes at the top. Keep ribs down, avoid arching lower back. Lower with control.",
-    "video_url": "https://cdn.spinefit.app/videos/glute_bridge_machine.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -791,7 +825,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/glute-bridge-machine.webp",
+        "url": "Photo/Exercises/glute-bridge-machine.webp",
         "primary": true
       },
       {
@@ -812,19 +846,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 14,
     "name": "Seated Cable Row",
     "description": "A horizontal pulling exercise using a cable machine that targets the mid-back, lats, and rear delts. Excellent for building back thickness and improving posture while maintaining a stable, supported position.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "rear_delts", "biceps"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "rear_delts",
+      "biceps"
+    ],
     "equipment": "seated_cable_row",
     "difficulty": "beginner",
     "instructions": "Sit with feet on footrests, knees slightly bent. Grip handle with arms extended. Pull handle to lower abdomen, driving elbows back. Squeeze shoulder blades together. Keep torso upright, avoid rounding or overextending spine. Return with control.",
-    "video_url": "https://cdn.spinefit.app/videos/seated_cable_row.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -847,7 +885,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-cable-row.webp",
+        "url": "Photo/Exercises/seated-cable-row.webp",
         "primary": true
       },
       {
@@ -868,19 +906,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "4N2iMDJVV5I"
+    ]
   },
   {
     "id": 15,
     "name": "Chest Fly",
     "description": "An isolation exercise for the chest using a fly machine or lying with dumbbells. Targets pectorals with minimal shoulder stress when performed correctly.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts"],
+    "muscle_groups": [
+      "chest",
+      "front_delts"
+    ],
     "equipment": "chest_fly_machine",
     "difficulty": "beginner",
     "instructions": "Sit with back against pad, grip handles at chest level. Keep slight bend in elbows. Bring handles together in front of chest using a hugging motion. Control the return. Avoid excessive arching of lower back.",
-    "video_url": "https://cdn.spinefit.app/videos/chest_fly.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -903,7 +943,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/chest-fly.webp",
+        "url": "Photo/Exercises/chest-fly.webp",
         "primary": true
       },
       {
@@ -924,19 +964,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "1Aiauie2lyM"
+    ]
   },
   {
     "id": 16,
     "name": "Incline Leg Raises",
     "description": "A core exercise performed on an incline bench targeting the lower abdominals and hip flexors. The incline adds difficulty compared to flat leg raises.",
     "category": "strength",
-    "muscle_groups": ["abdominals", "hip_flexors", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "core_stabilizers"
+    ],
     "equipment": "incline_bench or_decline_bench",
     "difficulty": "intermediate",
     "instructions": "Lie on incline bench, grip handles behind head. Keep lower back pressed to bench. Raise legs up toward chest with controlled movement. Lower slowly without letting lower back arch. Keep knees slightly bent if needed.",
-    "video_url": "https://www.youtube.com/shorts/wJbX3erkOxA",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -959,7 +1002,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/incline-leg-raises.webp",
+        "url": "Photo/Exercises/incline-leg-raises.webp",
         "primary": true
       },
       {
@@ -980,19 +1023,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "yRj5oSt9q9g"
+    ]
   },
   {
     "id": 17,
     "name": "Seated Dumbbell Shoulder Press",
     "description": "An overhead pressing exercise performed seated with dumbbells. Targets shoulders (deltoids) and triceps while the seated position provides back support.",
     "category": "strength",
-    "muscle_groups": ["front_delts", "side_delts", "triceps", "upper_chest"],
+    "muscle_groups": [
+      "front_delts",
+      "side_delts",
+      "triceps",
+      "upper_chest"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Sit on bench with back support, hold dumbbells at shoulder height with palms forward. Press dumbbells overhead until arms are extended but not locked. Lower with control to shoulder level. Keep core engaged, avoid excessive arching of lower back.",
-    "video_url": "https://cdn.spinefit.app/videos/seated_db_press.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1015,7 +1062,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-dumbbell-shoulder-press.webp",
+        "url": "Photo/Exercises/seated-dumbbell-shoulder-press.webp",
         "primary": true
       },
       {
@@ -1036,19 +1083,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "YXJWRV7o__4"
+    ]
   },
   {
     "id": 18,
     "name": "Dumbbell Lateral Raises",
     "description": "An isolation exercise for the side deltoids (shoulders) that creates shoulder width and definition. Minimal back involvement when performed correctly.",
     "category": "strength",
-    "muscle_groups": ["side_delts", "front_delts"],
+    "muscle_groups": [
+      "side_delts",
+      "front_delts"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand with feet hip-width apart, dumbbells at sides. Keep slight bend in elbows. Raise arms out to sides until parallel with floor, leading with elbows. Lower with control. Avoid swinging or using momentum. Keep torso stable.",
-    "video_url": "https://cdn.spinefit.app/videos/lateral_raise.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1071,7 +1120,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/dumbbell-lateral-raises.webp",
+        "url": "Photo/Exercises/dumbbell-lateral-raises.webp",
         "primary": true
       },
       {
@@ -1092,19 +1141,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "HdkhI1NpdVo"
+    ]
   },
   {
     "id": 19,
     "name": "Dumbbell Bicep Curls",
     "description": "A fundamental arm exercise targeting the biceps. Can be performed standing or seated with various grips (supinated, hammer, or alternating).",
     "category": "strength",
-    "muscle_groups": ["biceps", "forearms"],
+    "muscle_groups": [
+      "biceps",
+      "forearms"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand with feet hip-width apart or sit on bench. Hold dumbbells with arms extended, palms forward. Curl weights up by bending elbows, keeping upper arms stationary. Squeeze biceps at top. Lower with control. Avoid swinging or using back momentum.",
-    "video_url": "https://cdn.spinefit.app/videos/bicep_curl.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1127,7 +1178,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/dumbbell-bicep-curls.webp",
+        "url": "Photo/Exercises/dumbbell-bicep-curls.webp",
         "primary": true
       },
       {
@@ -1148,19 +1199,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "aUoFXUdcuO8"
+    ]
   },
   {
     "id": 20,
     "name": "Dumbbell Tricep Kickbacks",
     "description": "An isolation exercise for the triceps performed in a hinged position. Targets the back of the arms with minimal shoulder involvement.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Hinge forward at hips with neutral spine, one hand on bench for support. Hold dumbbell with elbow bent at 90 degrees, upper arm parallel to torso. Extend arm back until fully straightened. Squeeze tricep. Return with control. Avoid swinging or moving upper arm.",
-    "video_url": "https://cdn.spinefit.app/videos/tricep_kickback.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1183,7 +1235,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/dumbbell-tricep-kickbacks.webp",
+        "url": "Photo/Exercises/dumbbell-tricep-kickbacks.webp",
         "primary": true
       },
       {
@@ -1204,19 +1256,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 21,
     "name": "Cable Tricep Pushdown",
     "description": "A cable exercise targeting the triceps using a high pulley and straight bar, V-bar, or rope attachment. Excellent for building arm strength and definition.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Stand facing cable machine with high pulley. Grip bar with hands shoulder-width apart, elbows at sides. Push bar down by extending elbows until arms are straight. Keep elbows stationary. Return with control, stopping at 90 degrees. Maintain upright posture.",
-    "video_url": "https://cdn.spinefit.app/videos/tricep_pushdown.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1239,7 +1292,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/cable-tricep-pushdown.webp",
+        "url": "Photo/Exercises/cable-tricep-pushdown.webp",
         "primary": true
       },
       {
@@ -1260,19 +1313,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 32,
     "name": "French Bench Press (EZ-Bar Skullcrusher)",
     "description": "A lying triceps extension using an EZ-bar on a flat bench. Emphasizes long-head triceps with stable torso support, reducing lower-back demand.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Lie on a flat bench, feet planted. Grip an EZ-bar with a narrow, comfortable angle. Start with arms extended above shoulders. Bend elbows to lower the bar toward the forehead, keeping upper arms mostly vertical. Stop just before the bar reaches your forehead, then extend elbows to return. Keep elbows tucked and wrists neutral. Avoid arching the lower back.",
-    "video_url": "https://cdn.spinefit.app/videos/ez_bar_skullcrusher.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1295,7 +1349,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/french-bench-press-ez-bar-skullcrusher.webp",
+        "url": "Photo/Exercises/french-bench-press-ez-bar-skullcrusher.webp",
         "primary": true
       },
       {
@@ -1316,19 +1370,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 22,
     "name": "Floor Crunches",
     "description": "A basic core exercise targeting the abdominals while lying on the floor or mat. Safer for the spine than sit-ups due to limited range of motion.",
     "category": "core",
-    "muscle_groups": ["abdominals", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on back with knees bent, feet flat on floor. Place hands behind head or across chest. Engage core and lift shoulder blades off floor by curling torso toward knees. Keep lower back on floor. Lower with control. Avoid pulling on neck.",
-    "video_url": "https://cdn.spinefit.app/videos/floor_crunch.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1351,7 +1407,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/floor-crunches.webp",
+        "url": "Photo/Exercises/floor-crunches.webp",
         "primary": true
       },
       {
@@ -1372,19 +1428,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "qOnt7qAsJSU"
+    ]
   },
   {
     "id": 23,
     "name": "Bicycle Crunches",
     "description": "A dynamic core exercise that targets the abdominals and obliques through a rotating movement pattern. Excellent for overall core strength and coordination.",
     "category": "core",
-    "muscle_groups": ["abdominals", "obliques", "hip_flexors"],
+    "muscle_groups": [
+      "abdominals",
+      "obliques",
+      "hip_flexors"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on back, hands behind head, legs lifted with knees bent. Bring right elbow toward left knee while extending right leg. Alternate sides in a pedaling motion. Keep lower back pressed to floor. Move with control, not speed. Focus on rotation from torso, not just arms.",
-    "video_url": "https://cdn.spinefit.app/videos/bicycle_crunch.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1407,7 +1466,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/bicycle-crunches.webp",
+        "url": "Photo/Exercises/bicycle-crunches.webp",
         "primary": true
       },
       {
@@ -1428,19 +1487,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 24,
     "name": "Leg Press",
     "description": "A machine-based compound leg exercise that targets quads, glutes, and hamstrings with no spinal compression. Excellent alternative to squats for those with back issues.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "leg_press",
     "difficulty": "beginner",
     "instructions": "Sit in leg press machine with back and head against pad. Place feet shoulder-width apart on platform. Push platform away by extending knees and hips. Lower with control, keeping knees aligned with toes. Avoid locking knees at top or rounding lower back at bottom.",
-    "video_url": "https://cdn.spinefit.app/videos/leg_press.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1472,7 +1534,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/leg-press.webp",
+        "url": "Photo/Exercises/leg-press.webp",
         "primary": true
       },
       {
@@ -1493,19 +1555,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "rcbcrIeWjLk"
+    ]
   },
   {
     "id": 25,
     "name": "Lying Leg Curl",
     "description": "An isolation exercise for the hamstrings performed on a leg curl machine while lying face down. Targets hamstrings with zero spinal loading.",
     "category": "strength",
-    "muscle_groups": ["hamstrings"],
+    "muscle_groups": [
+      "hamstrings"
+    ],
     "equipment": "leg_curl_machine",
     "difficulty": "beginner",
     "instructions": "Lie face down on leg curl machine with pad behind ankles. Keep hips pressed to pad. Curl legs up toward glutes by bending knees. Squeeze hamstrings at top. Lower with control. Avoid lifting hips or arching back.",
-    "video_url": "https://cdn.spinefit.app/videos/leg_curl.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1528,7 +1591,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/lying-leg-curl.webp",
+        "url": "Photo/Exercises/lying-leg-curl.webp",
         "primary": true
       },
       {
@@ -1549,19 +1612,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "Br1Ayhkkfvw"
+    ]
   },
   {
     "id": 26,
     "name": "Single-Leg Romanian Deadlift",
     "description": "A unilateral hip hinge movement with light dumbbells that targets hamstrings, glutes, and balance. Reduces spinal load compared to barbell variations.",
     "category": "strength",
-    "muscle_groups": ["hamstrings", "glutes", "erector_spinae"],
+    "muscle_groups": [
+      "hamstrings",
+      "glutes",
+      "erector_spinae"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Stand on one leg holding light dumbbell in opposite hand. Hinge at hip, lowering dumbbell toward floor while extending free leg behind for balance. Keep back neutral, core braced. Return to standing by driving through heel. Use light weight and focus on form.",
-    "video_url": "https://cdn.spinefit.app/videos/single_leg_rdl.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1584,7 +1650,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/single-leg-romanian-deadlift.webp",
+        "url": "Photo/Exercises/single-leg-romanian-deadlift.webp",
         "primary": true
       },
       {
@@ -1605,19 +1671,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 27,
     "name": "Goblet Squat",
     "description": "A front-loaded squat holding a dumbbell or kettlebell at chest level. The front load promotes upright torso positioning and reduces lower back stress compared to back squats.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Hold dumbbell vertically at chest level with both hands. Stand with feet shoulder-width apart. Squat down by bending knees and hips, keeping chest up and elbows inside knees. Lower to comfortable depth. Drive through heels to stand. Keep torso upright throughout.",
-    "video_url": "https://cdn.spinefit.app/videos/goblet_squat.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1640,7 +1709,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/goblet-squat.webp",
+        "url": "Photo/Exercises/goblet-squat.webp",
         "primary": true
       },
       {
@@ -1661,19 +1730,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "KTCeeLXwhiQ"
+    ]
   },
   {
     "id": 28,
     "name": "Machine Chest Press",
     "description": "A machine-based horizontal pushing exercise targeting the chest, front delts, and triceps. Provides back support and stable movement path, safer than free weight bench press for those with back issues.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "chest_press_machine",
     "difficulty": "beginner",
     "instructions": "Sit in machine with back pressed firmly against pad. Grip handles at chest level. Push handles forward by extending arms until nearly straight. Return with control. Keep lower back pressed to pad throughout. Avoid arching back or driving through lower back.",
-    "video_url": "https://cdn.spinefit.app/videos/machine_chest_press.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1696,7 +1768,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/machine-chest-press.webp",
+        "url": "Photo/Exercises/machine-chest-press.webp",
         "primary": true
       },
       {
@@ -1717,19 +1789,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "trSN-ekcjnY"
+    ]
   },
   {
     "id": 29,
     "name": "Push-ups",
     "description": "A fundamental bodyweight exercise targeting chest, shoulders, and triceps while engaging the core. Can be modified with incline or knee variations for different difficulty levels.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps", "core_stabilizers"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Start in plank position with hands slightly wider than shoulders. Keep body in straight line from head to heels, core engaged. Lower chest toward floor by bending elbows. Push back up to starting position. Maintain neutral spine throughout - avoid sagging hips or piking up.",
-    "video_url": "https://cdn.spinefit.app/videos/pushups.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1752,7 +1828,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/push-ups.webp",
+        "url": "Photo/Exercises/push-ups.webp",
         "primary": true
       },
       {
@@ -1773,19 +1849,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "QMancF85t34"
+    ]
   },
   {
     "id": 30,
     "name": "Assisted Dips",
     "description": "A compound upper body exercise targeting chest, triceps, and front delts using an assisted dip machine or resistance bands. The assistance reduces load on the lower back.",
     "category": "strength",
-    "muscle_groups": ["chest", "triceps", "front_delts"],
+    "muscle_groups": [
+      "chest",
+      "triceps",
+      "front_delts"
+    ],
     "equipment": "assisted_dip_machine",
     "difficulty": "intermediate",
     "instructions": "Position yourself on assisted dip machine with hands on handles, arms straight. Lean slightly forward for chest emphasis. Lower body by bending elbows until upper arms are parallel to floor. Push back up to starting position. Keep core engaged and avoid excessive swinging.",
-    "video_url": "https://cdn.spinefit.app/videos/assisted_dips.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1808,7 +1887,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/assisted-dips.webp",
+        "url": "Photo/Exercises/assisted-dips.webp",
         "primary": true
       },
       {
@@ -1829,19 +1908,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 31,
     "name": "Incline Dumbbell Press",
     "description": "An upper chest pressing exercise performed on an incline bench with dumbbells. The incline angle reduces lower back stress compared to flat pressing.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Set bench to 30-45 degree incline. Sit with back against pad, dumbbells at shoulder level. Press dumbbells up and slightly inward until arms are extended. Lower with control to shoulder level. Keep lower back pressed to pad, avoid excessive arching.",
-    "video_url": "https://cdn.spinefit.app/videos/incline_db_press.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1864,7 +1946,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/incline-dumbbell-press.webp",
+        "url": "Photo/Exercises/incline-dumbbell-press.webp",
         "primary": true
       },
       {
@@ -1885,19 +1967,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "28x0JJJ4_Oc"
+    ]
   },
   {
     "id": 33,
     "name": "Lat Pulldown (Neutral Grip)",
     "description": "A vertical pulling exercise using a lat pulldown machine with a neutral (palms facing) grip attachment. Targets the lats, upper back, and biceps while maintaining a stable seated position. Excellent for building back width and shoulder health with zero spinal compression.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "rear_delts"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "lat_pulldown",
     "difficulty": "beginner",
     "instructions": "Sit at lat pulldown machine with thighs secured under pad. Grip neutral handles with palms facing each other. Pull handles down toward upper chest by driving elbows down and back. Squeeze shoulder blades together at bottom. Return with control. Keep torso upright, avoid leaning back excessively.",
-    "video_url": "https://cdn.spinefit.app/videos/lat_pulldown_neutral.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1929,7 +2015,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/lat-pulldown-neutral-grip.webp",
+        "url": "Photo/Exercises/lat-pulldown-neutral-grip.webp",
         "primary": true
       },
       {
@@ -1950,19 +2036,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "0RpQDBbk-g8"
+    ]
   },
   {
     "id": 34,
     "name": "Lat Pulldown (Wide Grip)",
     "description": "A vertical pulling exercise using a lat pulldown machine with a wide overhand grip. Emphasizes lat width and upper back development. The wide grip increases lat activation while the seated position provides stability.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "rear_delts"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "rear_delts"
+    ],
     "equipment": "lat_pulldown",
     "difficulty": "beginner",
     "instructions": "Sit at lat pulldown machine with thighs secured. Grip wide bar with hands wider than shoulder-width, palms facing away. Pull bar down toward upper chest, focusing on driving elbows down. Squeeze lats at bottom. Return with control. Avoid pulling behind neck.",
-    "video_url": "https://cdn.spinefit.app/videos/lat_pulldown_wide.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -1985,7 +2075,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/lat-pulldown-wide-grip.webp",
+        "url": "Photo/Exercises/lat-pulldown-wide-grip.webp",
         "primary": true
       },
       {
@@ -2006,8 +2096,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "IseVDoef0gk"
+    ]
   },
   {
     "id": 35,
@@ -2024,7 +2113,7 @@
     "equipment": "pull_up_bar",
     "difficulty": "advanced",
     "instructions": "Hang from pull-up bar with overhand grip slightly wider than shoulders. Engage core and pull body up by driving elbows down until chin clears bar. Lower with control to full arm extension. Keep shoulders active at bottom, avoid dead hang. Use assistance or negative reps if needed.",
-    "video_url": "https://cdn.spinefit.app/videos/pull_up.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2047,7 +2136,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/pull-up.webp",
+        "url": "Photo/Exercises/pull-up.webp",
         "primary": true
       },
       {
@@ -2068,19 +2157,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "gRc7hH5QKMw"
+    ]
   },
   {
     "id": 36,
     "name": "Chin-Up",
     "description": "A bodyweight vertical pulling exercise performed with an underhand (supinated) grip. Similar to pull-ups but with increased bicep activation. The underhand grip often makes this slightly easier than standard pull-ups.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "forearms"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "forearms"
+    ],
     "equipment": "pull_up_bar",
     "difficulty": "intermediate",
     "instructions": "Hang from bar with underhand grip, hands shoulder-width apart, palms facing you. Pull body up until chin clears bar, focusing on driving elbows down. Lower with control to full extension. Keep core engaged and avoid excessive swinging.",
-    "video_url": "https://cdn.spinefit.app/videos/chin_up.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2103,7 +2196,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/chin-up.webp",
+        "url": "Photo/Exercises/chin-up.webp",
         "primary": true
       },
       {
@@ -2124,19 +2217,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "N6f6gg4wxJE"
+    ]
   },
   {
     "id": 37,
     "name": "Straight-Arm Pulldown",
     "description": "A lat isolation exercise using a cable machine with straight arms throughout the movement. Emphasizes lat engagement with minimal bicep involvement. Excellent for improving mind-muscle connection with the lats.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Stand facing high cable with rope or straight bar attachment. Grip handle with arms extended overhead, slight elbow bend. Keeping arms nearly straight, pull handle down toward thighs by contracting lats. Focus on driving elbows down. Return with control. Keep torso stable and core braced.",
-    "video_url": "https://cdn.spinefit.app/videos/straight_arm_pulldown.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2159,7 +2255,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/straight-arm-pulldown.webp",
+        "url": "Photo/Exercises/straight-arm-pulldown.webp",
         "primary": true
       },
       {
@@ -2180,19 +2276,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 38,
     "name": "Assisted Pull-Up",
     "description": "A machine-assisted version of pull-ups that reduces the amount of bodyweight lifted. Allows beginners or those with back concerns to build pulling strength safely while working toward unassisted pull-ups.",
     "category": "strength",
-    "muscle_groups": ["lats", "upper_back", "biceps", "core_stabilizers"],
+    "muscle_groups": [
+      "lats",
+      "upper_back",
+      "biceps",
+      "core_stabilizers"
+    ],
     "equipment": "assisted_pull_up_machine",
     "difficulty": "beginner",
     "instructions": "Set assistance weight on machine. Kneel or stand on platform, grip handles with overhand grip. Pull body up until chin clears handles, focusing on driving elbows down. Lower with control. Gradually reduce assistance over time as strength improves.",
-    "video_url": "https://cdn.spinefit.app/videos/assisted_pull_up.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2215,7 +2315,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/assisted-pull-up.webp",
+        "url": "Photo/Exercises/assisted-pull-up.webp",
         "primary": true
       },
       {
@@ -2236,19 +2336,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 39,
     "name": "Cable Face Pull (Rope Face Pull)",
     "description": "A cable rear-delt and upper back exercise that improves shoulder health, posture, and external rotation strength. Essential for shoulder balance and injury prevention, especially for desk workers and those with forward shoulder posture.",
     "category": "strength",
-    "muscle_groups": ["rear_delts", "upper_back", "rotator_cuff"],
+    "muscle_groups": [
+      "rear_delts",
+      "upper_back",
+      "rotator_cuff"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set cable at upper chest height. Attach rope. Grip ends with palms facing each other. Pull rope toward face, separating hands as they pass face level. Focus on squeezing shoulder blades together. Keep elbows high and pull rope to eye level. Return with control. Use light weight and high reps for best results.",
-    "video_url": "https://www.youtube.com/watch?v=0Po47vvj9g4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2280,7 +2383,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/cable-face-pull-rope-face-pull.webp",
+        "url": "Photo/Exercises/cable-face-pull-rope-face-pull.webp",
         "primary": true
       },
       {
@@ -2301,19 +2404,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 40,
     "name": "Reverse Pec Deck (Rear-Delt Fly)",
     "description": "A machine-based rear-delt isolation exercise that targets the posterior deltoids while providing stable, supported positioning. Excellent for shoulder balance and preventing rounded shoulders.",
     "category": "strength",
-    "muscle_groups": ["rear_delts", "upper_back"],
+    "muscle_groups": [
+      "rear_delts",
+      "upper_back"
+    ],
     "equipment": "pec_deck_machine",
     "difficulty": "beginner",
     "instructions": "Sit facing the pec deck machine with chest against pad. Grip handles with palms facing each other. Pull handles back by squeezing shoulder blades together. Keep slight bend in elbows. Control the return. Avoid using momentum.",
-    "video_url": "https://www.youtube.com/watch?v=5YK4bgzXDp0&pp=ygURUmV2ZXJzZSBQZWMgRGVjayA%3D",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2345,7 +2450,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/reverse-pec-deck-rear-delt-fly.webp",
+        "url": "Photo/Exercises/reverse-pec-deck-rear-delt-fly.webp",
         "primary": true
       },
       {
@@ -2366,19 +2471,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "0PbyeaHWbrs"
+    ]
   },
   {
     "id": 41,
     "name": "One-Arm Cable Bicep Curl (Facing Away)",
     "description": "A unilateral cable curl performed facing away from the stack. The arm starts slightly behind the body, providing a deep stretch on the biceps which is excellent for muscle growth while allowing the spine to remain upright and supported.",
     "category": "strength",
-    "muscle_groups": ["biceps", "forearms"],
+    "muscle_groups": [
+      "biceps",
+      "forearms"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Set a single handle on a low pulley. Stand facing away from the cable in a split stance with the working arm slightly behind your body. Brace your core and keep your torso tall. Curl the handle toward your shoulder without swinging or leaning back, focusing on the deep stretch at the bottom. Control the descent and keep your elbow close to your side throughout.",
-    "video_url": "/videos/one_arm_cable_bicep_curl_facing_away.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2401,7 +2508,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/one-arm-cable-bicep-curl-facing-away.webp",
+        "url": "Photo/Exercises/one-arm-cable-bicep-curl-facing-away.webp",
         "primary": true
       },
       {
@@ -2422,19 +2529,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 42,
     "name": "One-Arm Cable Tricep Pushdown",
     "description": "A unilateral cable tricep pushdown that allows the user to hold the machine with the non-working hand for extra spinal stability. Ideal for isolating the triceps while keeping the lower back supported.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Attach a single handle to a high pulley. Stand close to the machine with one hand lightly holding the frame for support. With the working arm at your side and elbow bent to 90 degrees, push the handle down by straightening the elbow until the arm is almost fully extended. Keep your torso upright, core braced, and upper arm pinned to your side. Control the return and avoid shrugging the shoulder.",
-    "video_url": "/videos/one_arm_cable_tricep_pushdown.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2457,7 +2565,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/one-arm-cable-tricep-pushdown.webp",
+        "url": "Photo/Exercises/one-arm-cable-tricep-pushdown.webp",
         "primary": true
       },
       {
@@ -2478,19 +2586,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "QUNxuE3GgEc"
+    ]
   },
   {
     "id": 43,
     "name": "Cable Lateral Raise (Behind the Back)",
     "description": "A cable lateral raise variation where the cable runs behind the body, creating constant tension through the entire range of motion. Excellent for shoulder growth with a smooth resistance curve and minimal spinal loading.",
     "category": "strength",
-    "muscle_groups": ["side_delts", "front_delts"],
+    "muscle_groups": [
+      "side_delts",
+      "front_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Set a single handle on a low pulley. Stand sideways to the stack with the working arm furthest from the cable so the cable passes behind your hips. With a slight bend in your elbow, raise the handle out to the side until your hand reaches shoulder height. Pause, then lower slowly under control. Keep your torso upright and avoid leaning or swinging.",
-    "video_url": "/videos/cable_lateral_raise_behind_back.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2513,7 +2623,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/cable-lateral-raise-behind-the-back.webp",
+        "url": "Photo/Exercises/cable-lateral-raise-behind-the-back.webp",
         "primary": true
       },
       {
@@ -2534,19 +2644,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 44,
     "name": "Bodyweight Box Squat",
     "description": "A controlled squat variation where you sit back to a box or bench. The fixed depth prevents going too low and avoids the \"butt wink\" (pelvic tuck) that can irritate the L5-S1 segment, making it very back-friendly.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "box_or_bench",
     "difficulty": "beginner",
     "instructions": "Stand in front of a box or bench set to a height that allows you to sit with hips just above parallel. Stand with feet shoulder-width apart and brace your core. Sit back under control until you lightly touch the box, keeping your shins relatively vertical and spine neutral. Pause briefly, then drive through your heels to stand back up without rocking or collapsing onto the box.",
-    "video_url": "/videos/bodyweight_box_squat.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2569,7 +2682,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/bodyweight-box-squat.webp",
+        "url": "Photo/Exercises/bodyweight-box-squat.webp",
         "primary": true
       },
       {
@@ -2590,19 +2703,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 45,
     "name": "Goblet Squat (Heels Elevated)",
     "description": "A goblet squat performed with the heels elevated on small plates or a wedge. Holding the dumbbell at the chest shifts the center of gravity forward and the heel elevation allows for a more vertical spine, making it very friendly for sensitive lower backs.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Place your heels on small plates or a wedge and stand shoulder-width apart. Hold a dumbbell vertically at your chest in a goblet position. Brace your core and sit straight down between your heels, keeping your torso as upright as possible. Lower to a comfortable depth without losing spinal neutrality, then drive through mid-foot and heel to stand back up.",
-    "video_url": "/videos/goblet_squat_heels_elevated.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2625,7 +2741,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/goblet-squat-heels-elevated.webp",
+        "url": "Photo/Exercises/goblet-squat-heels-elevated.webp",
         "primary": true
       },
       {
@@ -2646,19 +2762,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 46,
     "name": "Landmine Goblet Squat",
     "description": "A squat performed holding the end of a landmine bar in a goblet position. The fixed arc of the bar naturally guides you into an upright squat pattern, making it one of the safest squat options for disc issues and lower back sensitivity.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "landmine_barbell",
     "difficulty": "beginner",
     "instructions": "Secure one end of a barbell in a landmine attachment or corner. Stand close and hold the free end at chest level with both hands like a goblet. Brace your core and sit straight down between your feet as the bar moves in its fixed arc. Keep your torso tall and let the bar guide your path. Drive through your feet to stand back up without leaning forward.",
-    "video_url": "/videos/landmine_goblet_squat.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2681,7 +2800,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/landmine-goblet-squat.webp",
+        "url": "Photo/Exercises/landmine-goblet-squat.webp",
         "primary": true
       },
       {
@@ -2702,19 +2821,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 47,
     "name": "Single-Leg Box Step-Up",
     "description": "A unilateral lower-body exercise where you step onto a box or bench with one leg at a time. One of the best glute builders with almost zero spinal compression, making it ideal for people with lower back or disc issues.",
     "category": "strength",
-    "muscle_groups": ["glutes", "quads", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "quads",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "box_or_bench",
     "difficulty": "beginner",
     "instructions": "Stand facing a box or bench roughly knee height. Place one foot fully on the box, brace your core, and drive through the front heel to stand tall on the box without pushing off the back leg. Control the descent back down on the same leg. Keep your torso upright and knee tracking over the middle of the foot. Perform all reps on one side before switching.",
-    "video_url": "/videos/single_leg_box_step_up.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2737,7 +2860,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/single-leg-box-step-up.webp",
+        "url": "Photo/Exercises/single-leg-box-step-up.webp",
         "primary": true
       },
       {
@@ -2758,19 +2881,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 48,
     "name": "Dead Bug",
     "description": "A core-stability exercise that trains anti-extension control by moving opposite arm and leg while maintaining a neutral lumbar spine. Excellent for back-safe core strength and motor control.",
     "category": "core",
-    "muscle_groups": ["core_stabilizers", "abdominals", "obliques"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "abdominals",
+      "obliques"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your back with hips and knees at 90 degrees and arms pointing toward the ceiling. Brace your core and keep your lower back gently pressed to the floor. Slowly extend one leg and the opposite arm without letting your back arch. Return to start and alternate sides. Move slowly with full control.",
-    "video_url": "https://www.youtube.com/watch?v=4XLEnwUr8hw",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2793,7 +2919,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/dead-bug.webp",
+        "url": "Photo/Exercises/dead-bug.webp",
         "primary": true
       },
       {
@@ -2814,19 +2940,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 49,
     "name": "Side Plank",
     "description": "An anti-lateral-flexion core exercise that strengthens the obliques, deep trunk stabilizers, and glute medius while placing minimal stress on the lumbar spine.",
     "category": "core",
-    "muscle_groups": ["obliques", "core_stabilizers", "glutes"],
+    "muscle_groups": [
+      "obliques",
+      "core_stabilizers",
+      "glutes"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your side with elbow directly under shoulder and legs stacked or bottom knee bent for an easier version. Lift hips to create a straight line from shoulders to ankles or knees. Keep ribs down and pelvis neutral. Hold for time while breathing normally. Repeat on the other side.",
-    "video_url": "https://www.youtube.com/watch?v=K2VljzCC16g",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2849,7 +2978,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/side-plank.webp",
+        "url": "Photo/Exercises/side-plank.webp",
         "primary": true
       },
       {
@@ -2870,19 +2999,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 50,
     "name": "Cable Pallof Press",
     "description": "A cable anti-rotation exercise where you press the handle away from the body while resisting torso rotation. Excellent for trunk stability and reducing unwanted lumbar compensation.",
     "category": "core",
-    "muscle_groups": ["core_stabilizers", "obliques", "abdominals"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "obliques",
+      "abdominals"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set cable at chest height and stand sideways to the machine. Hold the handle at your sternum with both hands and step away to create tension. Brace your core and press the handle straight out in front without letting your torso rotate. Pause briefly, then bring it back to chest under control. Perform both sides.",
-    "video_url": "https://www.youtube.com/watch?v=5_8dM0m7fX8",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -2905,7 +3037,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/cable-pallof-press.webp",
+        "url": "Photo/Exercises/cable-pallof-press.webp",
         "primary": true
       },
       {
@@ -2926,19 +3058,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 51,
     "name": "Farmer Carry",
     "description": "A loaded carry performed while walking with dumbbells or kettlebells in both hands. Builds total-body strength, grip, and core bracing with a highly functional and spine-friendly pattern when loads are controlled.",
     "category": "strength",
-    "muscle_groups": ["core_stabilizers", "forearms", "traps", "glutes"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "forearms",
+      "traps",
+      "glutes"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Pick up two weights and stand tall with shoulders down and back. Brace your core and walk with short controlled steps while maintaining upright posture. Keep ribs stacked over pelvis and avoid leaning to either side. Turn under control and set weights down safely.",
-    "video_url": "https://www.youtube.com/watch?v=Fkzk_RqlYig",
+    "video_url": "",
     "is_back_friendly": false,
     "back_issue_restrictions": [
       {
@@ -2961,7 +3097,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/farmer-carry.webp",
+        "url": "Photo/Exercises/farmer-carry.webp",
         "primary": true
       },
       {
@@ -2982,19 +3118,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 52,
     "name": "Suitcase Carry",
     "description": "A unilateral loaded carry with weight in one hand only. Trains anti-lateral-flexion core strength and gait stability, making it highly useful for spinal control and back resilience.",
     "category": "strength",
-    "muscle_groups": ["obliques", "core_stabilizers", "forearms", "glutes"],
+    "muscle_groups": [
+      "obliques",
+      "core_stabilizers",
+      "forearms",
+      "glutes"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Hold one dumbbell at your side and stand tall. Brace your core and walk forward without leaning toward or away from the load. Keep your shoulders level and hips stable. Walk for distance or time, then switch hands and repeat.",
-    "video_url": "https://www.youtube.com/watch?v=VxM_0te4Xq8",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3017,7 +3157,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/suitcase-carry.webp",
+        "url": "Photo/Exercises/suitcase-carry.webp",
         "primary": true
       },
       {
@@ -3038,19 +3178,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 53,
     "name": "Standing Calf Raise",
     "description": "A lower-leg exercise targeting the gastrocnemius by raising the heels while standing. Improves ankle strength, lower-leg hypertrophy, and gait efficiency with minimal spinal loading.",
     "category": "strength",
-    "muscle_groups": ["calves"],
+    "muscle_groups": [
+      "calves"
+    ],
     "equipment": "calf_raise_machine_or_bodyweight",
     "difficulty": "beginner",
     "instructions": "Stand on a step or machine platform with the balls of your feet supported and heels free. Hold support lightly and brace your core. Rise onto your toes as high as possible, squeezing calves at the top. Lower slowly into a stretch without bouncing. Keep knees slightly soft and movement controlled.",
-    "video_url": "https://www.youtube.com/watch?v=YMmgqO8Jo-k",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3073,7 +3214,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/standing-calf-raise.webp",
+        "url": "Photo/Exercises/standing-calf-raise.webp",
         "primary": true
       },
       {
@@ -3094,19 +3235,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 54,
     "name": "Seated Calf Raise",
     "description": "A calf exercise performed seated with knees bent, emphasizing the soleus muscle. Useful for ankle strength, hypertrophy, and lower-leg endurance with very low spinal demand.",
     "category": "strength",
-    "muscle_groups": ["calves", "soleus"],
+    "muscle_groups": [
+      "calves",
+      "soleus"
+    ],
     "equipment": "seated_calf_raise_machine",
     "difficulty": "beginner",
     "instructions": "Sit on the machine with pads on your thighs and feet on the platform. Release safety handles, raise your heels as high as possible, and squeeze calves at the top. Lower slowly into a full stretch. Keep the movement smooth and avoid bouncing.",
-    "video_url": "https://www.youtube.com/watch?v=JbyjNymZOt0",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3129,7 +3272,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-calf-raise.webp",
+        "url": "Photo/Exercises/seated-calf-raise.webp",
         "primary": true
       },
       {
@@ -3150,19 +3293,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 55,
     "name": "Tibialis Raise",
     "description": "A lower-leg exercise targeting the tibialis anterior (front of shin). Helps improve ankle balance, deceleration control, and can reduce overuse stress on knees and calves.",
     "category": "strength",
-    "muscle_groups": ["tibialis_anterior"],
+    "muscle_groups": [
+      "tibialis_anterior"
+    ],
     "equipment": "bodyweight_or_tib_bar",
     "difficulty": "beginner",
     "instructions": "Stand with your back against a wall and feet slightly in front, or use a tib bar. Keep heels on the floor and lift your toes toward your shins as high as possible. Pause briefly at the top, then lower under control. Keep movement slow and avoid rocking through the hips.",
-    "video_url": "https://www.youtube.com/watch?v=gNS_QjGAs_k",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3185,7 +3329,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/tibialis-raise.webp",
+        "url": "Photo/Exercises/tibialis-raise.webp",
         "primary": true
       },
       {
@@ -3206,19 +3350,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 56,
     "name": "Chest-Supported Row",
     "description": "A machine-based horizontal pulling exercise where the chest rests against a pad, eliminating all spinal loading. The most back-friendly row variation — ideal for L5-S1 and disc issues because the thorax is fully supported and there is zero lumbar compression or shear.",
     "category": "strength",
-    "muscle_groups": ["upper_back", "lats", "rear_delts", "biceps"],
+    "muscle_groups": [
+      "upper_back",
+      "lats",
+      "rear_delts",
+      "biceps"
+    ],
     "equipment": "chest_supported_row_machine",
     "difficulty": "beginner",
     "instructions": "Set the chest pad height so your chest rests flat against it with arms hanging freely. Grip the handles with palms facing each other or down. Pull the handles toward your torso by driving your elbows back, squeezing your shoulder blades together at the top. Lower with control to a full stretch. Keep chest against the pad throughout — do not lift off at the top.",
-    "video_url": "https://www.youtube.com/watch?v=T3N-TO4reLQ",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3259,7 +3407,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/chest-supported-row.webp",
+        "url": "Photo/Exercises/chest-supported-row.webp",
         "primary": true
       },
       {
@@ -3280,19 +3428,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 57,
     "name": "Seated Leg Curl",
     "description": "A hamstring isolation exercise performed on a seated leg curl machine. Training the hamstrings with the hip in a flexed position emphasizes the long head and produces more complete hamstring development compared to the lying variation. Zero spinal compression.",
     "category": "strength",
-    "muscle_groups": ["hamstrings"],
+    "muscle_groups": [
+      "hamstrings"
+    ],
     "equipment": "seated_leg_curl_machine",
     "difficulty": "beginner",
     "instructions": "Sit on the machine with the back of your lower legs on the pad. Adjust so your knees align with the machine's axis. Hold the handles, brace your core, and curl your legs down as far as possible without lifting your hips. Squeeze at the bottom, then return slowly to the start. Avoid bouncing or swinging.",
-    "video_url": "https://www.youtube.com/watch?v=1Tq3QdYUuHs",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3315,7 +3464,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-leg-curl.webp",
+        "url": "Photo/Exercises/seated-leg-curl.webp",
         "primary": true
       },
       {
@@ -3336,19 +3485,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 58,
     "name": "Seated Hip Adduction (Outer Side)",
     "description": "A machine-based inner-thigh isolation exercise that strengthens the hip adductors. Complements hip abduction work to build balanced pelvic stability, which supports proper spinal alignment and reduces compensatory lower back strain.",
     "category": "strength",
-    "muscle_groups": ["hip_adductors"],
+    "muscle_groups": [
+      "hip_adductors"
+    ],
     "equipment": "hip_adductor_machine",
     "difficulty": "beginner",
     "instructions": "Sit tall in the machine with the pads against the inner sides of your knees and feet on the footrests. Keep your back against the support pad. Squeeze your legs together in a slow, controlled motion. Pause briefly at the fully closed position, then open back to the start under control. Avoid using momentum or arching your lower back.",
-    "video_url": "https://www.youtube.com/watch?v=u-4PYRuKBuw",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3371,7 +3521,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-hip-adduction-outer-side.webp",
+        "url": "Photo/Exercises/seated-hip-adduction-outer-side.webp",
         "primary": true
       },
       {
@@ -3392,19 +3542,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 59,
     "name": "Standing Cable Hip Adduction (Inner Side)",
     "description": "A standing cable exercise that trains the hip adductors (inner thigh) through a full range of motion with constant cable tension. Strengthening the adductors improves pelvic stability and reduces compensatory lower back strain.",
     "category": "strength",
-    "muscle_groups": ["hip_adductors"],
+    "muscle_groups": [
+      "hip_adductors"
+    ],
     "equipment": "cable_machine_ankle_attachment",
     "difficulty": "beginner",
     "instructions": "Attach an ankle strap to a low pulley and fasten it to the ankle of your working leg. Stand sideways to the machine with the working leg furthest from the stack. Hold the machine lightly for balance. Keeping your leg straight and torso upright, sweep the working leg across the body in front of the standing leg. Control the return to the start. Keep your hips level and core braced throughout.",
-    "video_url": "https://www.youtube.com/watch?v=wqp1I9HbhT4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3427,7 +3578,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/standing-cable-hip-adduction-inner-side.webp",
+        "url": "Photo/Exercises/standing-cable-hip-adduction-inner-side.webp",
         "primary": true
       },
       {
@@ -3448,19 +3599,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 60,
     "name": "Standing Cable Hip Abduction (Outer Side)",
     "description": "A standing cable exercise that trains the hip abductors (outer glute / glute medius) through a full range of motion with constant tension. Strengthening the glute medius improves single-leg stability, walking mechanics, and reduces lateral pelvic drop that stresses the lower back.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hip_abductors"],
+    "muscle_groups": [
+      "glutes",
+      "hip_abductors"
+    ],
     "equipment": "cable_machine_ankle_attachment",
     "difficulty": "beginner",
     "instructions": "Attach an ankle strap to a low pulley and fasten it to the working leg. Stand sideways to the machine with the working leg closest to the stack. Hold the machine lightly for balance. Keeping your leg straight and torso upright, sweep the working leg away from the body out to the side. Pause at the top, then lower with control. Keep hips level and avoid leaning away from the machine.",
-    "video_url": "https://www.youtube.com/watch?v=mBJOQFXZ3AY",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3483,7 +3636,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/standing-cable-hip-abduction-outer-side.webp",
+        "url": "Photo/Exercises/standing-cable-hip-abduction-outer-side.webp",
         "primary": true
       },
       {
@@ -3504,15 +3657,16 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 160,
     "name": "Seated Hip Adduction (Inner Side)",
     "description": "A machine-based inner-thigh isolation exercise that targets the hip adductors from a seated position with back support. Pulling the legs inward against resistance strengthens the adductor group, improving pelvic stability and reducing compensatory lower back strain during walking and standing.",
     "category": "strength",
-    "muscle_groups": ["hip_adductors"],
+    "muscle_groups": [
+      "hip_adductors"
+    ],
     "equipment": "hip_adductor_machine",
     "difficulty": "beginner",
     "instructions": "Sit tall in the adductor machine with your back firmly against the pad and the leg pads positioned against the inner sides of your knees. Start with your legs open at a comfortable width. Squeeze your legs together in a slow, controlled motion, focusing on contracting the inner thigh muscles. Pause briefly at the fully closed position, then slowly open your legs back to the starting position under control. Keep your back flat against the pad and avoid using momentum or arching your lower back.",
@@ -3539,7 +3693,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/seated-hip-adduction-inner-side.webp",
+        "url": "Photo/Exercises/seated-hip-adduction-inner-side.webp",
         "primary": true
       },
       {
@@ -3560,15 +3714,16 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 161,
     "name": "Standing Cable Hip Adduction (Outer Side)",
     "description": "A standing cable exercise that trains the hip adductors through a cross-body pulling motion from the outer side. The constant cable tension throughout the full range of motion strengthens the inner thigh muscles, improving pelvic control, gait stability, and reducing compensatory lower back strain.",
     "category": "strength",
-    "muscle_groups": ["hip_adductors"],
+    "muscle_groups": [
+      "hip_adductors"
+    ],
     "equipment": "cable_machine_ankle_attachment",
     "difficulty": "beginner",
     "instructions": "Attach an ankle strap to a low pulley and fasten it to the ankle of your working leg. Stand sideways to the machine with the working leg closest to the stack. Hold the machine lightly for balance. Keeping your leg straight and torso upright, sweep the working leg across the body past the standing leg. Control the return to the start position. Keep your hips level, core braced, and avoid leaning or rotating your torso throughout the movement.",
@@ -3595,7 +3750,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/standing-cable-hip-adduction-outer-side.webp",
+        "url": "Photo/Exercises/standing-cable-hip-adduction-outer-side.webp",
         "primary": true
       },
       {
@@ -3616,19 +3771,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 61,
     "name": "Standing Cable External Rotation",
     "description": "A shoulder stabilization exercise that targets the rotator cuff — specifically the infraspinatus and teres minor — to restore the shoulder's natural dynamic stability. The rotator cuff is responsible for centering the humeral head in the shoulder socket during all pressing and pulling movements. Weakness here leads to shoulder impingement, poor posture, and compensatory upper-back tension that often contributes to neck and lower back pain. This exercise directly retrains the stabilizers that protect the joint, making it essential for anyone with rounded shoulders, chronic upper-back tightness, or a history of shoulder or spine issues.",
     "category": "rehab",
-    "muscle_groups": ["rotator_cuff", "rear_delts"],
+    "muscle_groups": [
+      "rotator_cuff",
+      "rear_delts"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set a cable pulley at elbow height. Stand sideways to the machine and grip the handle with the hand furthest from the stack. Tuck your elbow firmly against your side at 90 degrees and place a small rolled towel between your elbow and ribs to keep the upper arm locked in place. Slowly rotate your forearm away from your body as far as comfortable without shrugging or letting the elbow drift. Pause at end range, then return with full control. Only the forearm moves — the shoulder, torso and hips stay completely still. Use a very light load (2–4 kg). This is a stabilization drill, not a strength exercise.",
-    "video_url": "https://www.youtube.com/watch?v=ml6pserey5u",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3651,7 +3808,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/standing-cable-external-rotation.webp",
+        "url": "Photo/Exercises/standing-cable-external-rotation.webp",
         "primary": true
       },
       {
@@ -3672,19 +3829,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 62,
     "name": "Front Plank",
     "description": "A foundational anti-extension core exercise that builds deep trunk stability by teaching you to resist lumbar arching under bodyweight load. Essential for spinal endurance, posture control, and reducing compensations that can aggravate low back pain.",
     "category": "core",
-    "muscle_groups": ["core_stabilizers", "abdominals", "obliques"],
+    "muscle_groups": [
+      "core_stabilizers",
+      "abdominals",
+      "obliques"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Set up on forearms and toes with elbows under shoulders. Brace your core, squeeze glutes, and keep a straight line from head to heels. Maintain neutral ribs and pelvis, avoiding hip sag or piking. Hold steady while breathing slowly through the nose. Stop when form breaks.",
-    "video_url": "https://www.youtube.com/watch?v=pSHjTRCQxIw",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3707,7 +3867,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/front-plank.webp",
+        "url": "Photo/Exercises/front-plank.webp",
         "primary": true
       },
       {
@@ -3728,19 +3888,21 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 63,
     "name": "Dumbbell Shrug",
     "description": "An upper-trapezius isolation exercise that improves shoulder girdle strength, posture support, and neck-shoulder resilience. Useful for balancing scapular musculature alongside rear-delt and mid-back work.",
     "category": "strength",
-    "muscle_groups": ["traps", "upper_back"],
+    "muscle_groups": [
+      "traps",
+      "upper_back"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand tall holding dumbbells at your sides with arms straight. Keep chest up and core braced. Elevate shoulders straight up toward your ears without rolling them. Pause briefly at the top, then lower under control to full stretch. Avoid swinging, leaning, or neck jutting.",
-    "video_url": "https://www.youtube.com/watch?v=cJRVVxmytaM",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3763,7 +3925,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/dumbbell-shrug.webp",
+        "url": "Photo/Exercises/dumbbell-shrug.webp",
         "primary": true
       },
       {
@@ -3784,19 +3946,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 64,
     "name": "Hammer Curl",
     "description": "A neutral-grip biceps variation that emphasizes the brachialis and brachioradialis, improving arm thickness, elbow resilience, and forearm strength. Complements standard supinated curls for more complete arm development.",
     "category": "strength",
-    "muscle_groups": ["biceps", "forearms", "brachialis"],
+    "muscle_groups": [
+      "biceps",
+      "forearms",
+      "brachialis"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand or sit tall with dumbbells at your sides, palms facing each other. Keep elbows close to your torso and curl both dumbbells upward without rotating the wrists. Squeeze at the top, then lower slowly to full extension. Keep shoulders down and avoid swinging the torso.",
-    "video_url": "https://www.youtube.com/watch?v=zC3nLlEvin4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3819,7 +3984,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/hammer-curl.webp",
+        "url": "Photo/Exercises/hammer-curl.webp",
         "primary": true
       },
       {
@@ -3840,19 +4005,23 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 106,
     "name": "Barbell Squat",
     "description": "A compound lower-body exercise performed with a barbell on the upper back. Targets the quads, glutes, and hamstrings while requiring significant core and spinal stabilization.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Position the barbell on your upper traps (high bar) or rear delts (low bar). Stand with feet shoulder-width apart and toes slightly out. Brace your core, take a deep breath, and descend by pushing your knees out and hinging at the hips simultaneously. Keep your chest up and spine neutral throughout. Descend until thighs are parallel to the floor or as depth allows. Drive through your heels to return to standing.",
-    "video_url": "https://cdn.spinefit.app/videos/barbell-squat.mp4",
+    "video_url": "",
     "is_back_friendly": false,
     "back_issue_restrictions": [
       {
@@ -3875,7 +4044,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/barbell-squat.webp",
+        "url": "Photo/Exercises/barbell-squat.webp",
         "primary": true
       },
       {
@@ -3896,19 +4065,22 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "1hw_qdAhr7E"
+    ]
   },
   {
     "id": 107,
     "name": "Barbell Bicep Curl",
     "description": "A classic isolation exercise for the biceps brachii performed standing with a barbell. Also engages the brachialis and brachioradialis with minimal spinal loading when performed with strict form.",
     "category": "strength",
-    "muscle_groups": ["biceps", "brachialis", "forearms"],
+    "muscle_groups": [
+      "biceps",
+      "brachialis",
+      "forearms"
+    ],
     "equipment": "barbell",
     "difficulty": "beginner",
     "instructions": "Stand with feet shoulder-width apart holding a barbell with an underhand (supinated) grip. Keep your elbows pinned close to your torso and your upper arms stationary. Curl the bar toward your shoulders by contracting the biceps. Pause briefly at the top, then lower the bar with full control. Avoid swinging the torso or using momentum.",
-    "video_url": "https://cdn.spinefit.app/videos/barbell-bicep-curl.mp4",
+    "video_url": "",
     "is_back_friendly": true,
     "back_issue_restrictions": [
       {
@@ -3931,7 +4103,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/barbell-bicep-curl.webp",
+        "url": "Photo/Exercises/barbell-bicep-curl.webp",
         "primary": true
       },
       {
@@ -3952,8 +4124,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "TlT5mt3TnVg"
+    ]
   },
   {
     "id": 108,
@@ -3970,7 +4141,7 @@
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Sit on an upright bench or stand with feet shoulder-width apart. Grip the barbell just outside shoulder width with an overhand grip. Unrack and hold at upper-chest level with elbows slightly in front of the bar. Brace your core and press the bar straight overhead until your arms are fully extended. Lower under control back to the starting position. Avoid arching the lower back — keep your ribcage down throughout.",
-    "video_url": "https://cdn.spinefit.app/videos/barbell-shoulder-press.mp4",
+    "video_url": "",
     "is_back_friendly": false,
     "back_issue_restrictions": [
       {
@@ -3993,7 +4164,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Barbell Shoulder Press.webp",
+        "url": "Photo/Exercises/barbell-shoulder-press.webp",
         "primary": true
       },
       {
@@ -4014,15 +4185,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": "pdBvfBMm-Y4"
+    ]
   },
   {
     "id": 109,
     "name": "Lever Total Abdominal Crunch",
     "description": "A machine-based crunch performed on a lever abdominal machine. Targets the rectus abdominis through controlled spinal flexion against resistance, with seated back support and a fixed movement path.",
     "category": "core",
-    "muscle_groups": ["abdominals", "obliques", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "obliques",
+      "core_stabilizers"
+    ],
     "equipment": "ab_crunch_machine",
     "difficulty": "beginner",
     "instructions": "Sit on the machine with your back against the pad and feet secured under the rollers. Grip the handles near your shoulders. Brace your core and crunch forward by contracting your abs, bringing your chest toward your hips. Pause briefly, then return slowly under control. Avoid pulling with the arms or jerking the weight.",
@@ -4056,7 +4230,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Lever Total Abdominal Crunch.webp",
+        "url": "Photo/Exercises/lever-total-abdominal-crunch.webp",
         "primary": true
       },
       {
@@ -4077,15 +4251,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 110,
     "name": "Cable Kneeling Crunch",
     "description": "A kneeling cable crunch performed with a rope attachment on a high pulley. Targets the rectus abdominis through resisted spinal flexion, allowing progressive overload of the abs.",
     "category": "core",
-    "muscle_groups": ["abdominals", "obliques", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "obliques",
+      "core_stabilizers"
+    ],
     "equipment": "cable_machine",
     "difficulty": "intermediate",
     "instructions": "Attach a rope to a high pulley. Kneel facing the machine and hold the rope at the sides of your head. Hinge slightly at the hips, then crunch down by curling your torso toward your thighs using your abs. Keep hips stationary throughout. Pause at the bottom, then return slowly under control.",
@@ -4119,7 +4296,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Cable Kneeling Crunch.webp",
+        "url": "Photo/Exercises/cable-kneeling-crunch.webp",
         "primary": true
       },
       {
@@ -4140,15 +4317,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 111,
     "name": "Vertical Leg Raise (Captain's Chair, Bent Knee)",
     "description": "A core exercise performed on a captain's chair with forearms supported on pads. The bent-knee variation targets the lower abs and hip flexors while reducing lumbar strain compared to the straight-leg version.",
     "category": "core",
-    "muscle_groups": ["abdominals", "hip_flexors", "obliques"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "obliques"
+    ],
     "equipment": "captains_chair",
     "difficulty": "intermediate",
     "instructions": "Position yourself in the captain's chair with forearms on the pads and back against the backrest. Brace your core. Bend your knees and lift them toward your chest in a controlled motion. Avoid swinging. Lower with control and keep the lower back pressed against the pad.",
@@ -4175,7 +4355,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Vertical Leg Raise (Captain s Chair, Bent Knee).webp",
+        "url": "Photo/Exercises/vertical-leg-raise-captains-chair-bent-knee.webp",
         "primary": true
       },
       {
@@ -4196,15 +4376,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 112,
     "name": "Captains Chair Straight Leg Raise",
     "description": "An advanced core exercise performed on a captain's chair with straight legs. Strongly targets the lower abs and hip flexors but places significant demand on the lumbar spine.",
     "category": "core",
-    "muscle_groups": ["abdominals", "hip_flexors", "quads", "obliques"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "quads",
+      "obliques"
+    ],
     "equipment": "captains_chair",
     "difficulty": "advanced",
     "instructions": "Position yourself in the captain's chair with forearms on the pads and back firmly against the backrest. Brace your core hard. Keeping legs straight, raise them in front of you until parallel to the floor or higher. Avoid swinging. Lower slowly under control while keeping the lower back pressed against the pad.",
@@ -4238,7 +4422,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Captains Chair Straight Leg Raise.webp",
+        "url": "Photo/Exercises/captains-chair-straight-leg-raise.webp",
         "primary": true
       },
       {
@@ -4259,15 +4443,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 113,
     "name": "Lever Seated Crunch",
     "description": "A seated machine crunch that isolates the rectus abdominis through resisted spinal flexion. The seated, supported position provides a stable movement path with adjustable resistance.",
     "category": "core",
-    "muscle_groups": ["abdominals", "obliques", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "obliques",
+      "core_stabilizers"
+    ],
     "equipment": "ab_crunch_machine",
     "difficulty": "beginner",
     "instructions": "Sit on the machine with your back against the pad and grip the handles over your shoulders. Brace your core and crunch forward by contracting your abs, curling your chest toward your hips. Pause at the bottom of the contraction, then return slowly under control. Avoid pulling with the arms.",
@@ -4301,7 +4488,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Lever Seated Crunch.webp",
+        "url": "Photo/Exercises/lever-seated-crunch.webp",
         "primary": true
       },
       {
@@ -4322,15 +4509,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 114,
     "name": "Single-Arm Supported Dumbbell Curl",
     "description": "A unilateral biceps curl performed while the non-working arm braces against a bench, rack, or incline pad for torso support. By offloading the spine onto the supporting arm, this variation removes nearly all axial compression from the lumbar region, making it an excellent biceps builder for individuals with L5-S1 disc issues or sciatic nerve pain. The supported position also eliminates body sway and forces strict form, increasing biceps tension.",
     "category": "strength",
-    "muscle_groups": ["biceps", "forearms", "brachialis"],
+    "muscle_groups": [
+      "biceps",
+      "forearms",
+      "brachialis"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand next to a sturdy bench, incline pad, or squat rack. Place your non-working hand flat on the support and hinge slightly forward at the hips so your torso weight is transferred onto that supporting arm. Hold a dumbbell in the working hand with arm hanging straight down and palm facing forward. Brace your core lightly and curl the dumbbell toward your shoulder by contracting the biceps, keeping the upper arm stationary. Pause briefly at the top, then lower slowly under full control to a complete stretch. Keep the supporting arm locked throughout to maintain spinal offloading. Complete all reps on one side before switching.",
@@ -4373,7 +4563,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Single-Arm Supported Dumbbell Curl.webp",
+        "url": "Photo/Exercises/single-arm-supported-dumbbell-curl.webp",
         "primary": true
       },
       {
@@ -4394,15 +4584,17 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 115,
     "name": "Single-Arm Supported Dumbbell Lateral Raise",
     "description": "A unilateral lateral raise performed while the non-working arm grips a sturdy upright (squat rack, pole, or machine frame) for support. Leaning slightly away from the support transfers torso weight onto the bracing arm, removing axial compression from the lumbar spine. This makes it a highly back-friendly side delt builder for individuals with L5-S1 disc issues or sciatic pain. The leaning angle also lengthens the side delt at the bottom, increasing range of motion and tension compared to standard standing raises.",
     "category": "strength",
-    "muscle_groups": ["side_delts", "front_delts"],
+    "muscle_groups": [
+      "side_delts",
+      "front_delts"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Stand next to a sturdy upright such as a squat rack post, cable column, or machine frame. Grip the upright firmly with your non-working hand at about shoulder height. Lean your body away from the support so your weight is suspended on the bracing arm and your working side is fully extended. Hold a dumbbell in the working hand with arm hanging across the front of your body and a slight bend in the elbow. Raise the dumbbell out to the side in a controlled arc until your hand reaches shoulder height, leading with the elbow. Pause briefly at the top, then lower slowly under full control to a complete stretch. Keep the supporting arm locked throughout. Complete all reps on one side before switching.",
@@ -4445,7 +4637,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Single-Arm Supported Dumbbell Lateral Raise.webp",
+        "url": "Photo/Exercises/single-arm-supported-dumbbell-lateral-raise.webp",
         "primary": true
       },
       {
@@ -4466,15 +4658,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 116,
     "name": "Romanian Deadlift (RDL)",
     "description": "A hip-hinge exercise that targets the hamstrings and glutes through a controlled eccentric stretch. Performed with a barbell or dumbbells, it is a cornerstone movement for posterior chain development.",
     "category": "strength",
-    "muscle_groups": ["hamstrings", "glutes", "erector_spinae"],
+    "muscle_groups": [
+      "hamstrings",
+      "glutes",
+      "erector_spinae"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Stand with feet hip-width apart, holding a barbell or dumbbells in front of your thighs. Hinge at the hips while keeping your back flat and knees slightly bent. Lower the weight along your legs until you feel a strong hamstring stretch, then drive your hips forward to return to standing. Keep the bar close to your body throughout.",
@@ -4519,7 +4714,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Romanian Deadlift (RDL).webp",
+        "url": "Photo/Exercises/romanian-deadlift-rdl.webp",
         "primary": true
       },
       {
@@ -4540,15 +4735,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 117,
     "name": "Front Squat",
     "description": "A barbell squat variation with the bar racked on the front deltoids. The upright torso position reduces shear forces on the lumbar spine compared to the back squat, making it a more back-friendly quad-dominant compound lift.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "core_stabilizers", "upper_back"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "core_stabilizers",
+      "upper_back"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Rack the barbell across your front deltoids with elbows high and parallel to the floor. Stand with feet shoulder-width apart, toes turned slightly out. Brace your core and descend by sitting the hips down and back while keeping the torso upright and elbows high. Drive through the floor to return to standing.",
@@ -4593,7 +4792,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Front Squat.webp",
+        "url": "Photo/Exercises/front-squat.webp",
         "primary": true
       },
       {
@@ -4614,8 +4813,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 118,
@@ -4673,7 +4871,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Trap Bar Deadlift.webp",
+        "url": "Photo/Exercises/trap-bar-deadlift.webp",
         "primary": true
       },
       {
@@ -4694,15 +4892,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 119,
     "name": "Flat Barbell Bench Press",
     "description": "The foundational horizontal pressing movement. Performed lying flat on a bench, it is the most widely programmed chest exercise in strength training. Targets the pectorals, anterior deltoids, and triceps.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Lie flat on a bench with eyes under the bar. Grip the bar slightly wider than shoulder-width. Unrack with arms extended, lower the bar to mid-chest under control, then press back to full arm extension. Keep feet flat, shoulder blades retracted and depressed, and maintain a natural arch in the lower back.",
@@ -4747,7 +4948,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Flat Barbell Bench Press.webp",
+        "url": "Photo/Exercises/flat-barbell-bench-press.webp",
         "primary": true
       },
       {
@@ -4768,8 +4969,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 120,
@@ -4828,7 +5028,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Bent-Over Barbell Row.webp",
+        "url": "Photo/Exercises/bent-over-barbell-row.webp",
         "primary": true
       },
       {
@@ -4849,15 +5049,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 121,
     "name": "Single-Arm Dumbbell Row",
     "description": "A unilateral horizontal pulling exercise performed with one hand and knee braced on a bench. Targets the lats, rhomboids, and traps while the bench support removes much of the lumbar load, making it one of the most back-friendly rowing variations.",
     "category": "strength",
-    "muscle_groups": ["lats", "rhomboids", "traps", "rear_delts", "biceps"],
+    "muscle_groups": [
+      "lats",
+      "rhomboids",
+      "traps",
+      "rear_delts",
+      "biceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Place your right knee and right hand on a flat bench for support. Hold a dumbbell in your left hand with arm hanging straight down. Pull the dumbbell toward your hip by driving your elbow back and up, keeping your torso parallel to the floor. Lower slowly to full arm extension. Complete all reps then switch sides.",
@@ -4902,7 +5107,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Single-Arm Dumbbell Row.webp",
+        "url": "Photo/Exercises/single-arm-dumbbell-row.webp",
         "primary": true
       },
       {
@@ -4923,15 +5128,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 122,
     "name": "Reverse Lunge",
     "description": "A unilateral lower-body exercise where you step backward into the lunge rather than forward. The reverse mechanics place less stress on the knee and reduce lumbar shear, making it more back- and knee-friendly than the forward lunge.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Stand tall with feet hip-width apart. Step one foot directly backward and lower your rear knee toward the floor, keeping your front shin vertical. Your front knee should stay above your ankle. Push through your front heel to return to standing. Alternate legs or complete all reps on one side. Can be loaded with dumbbells or a barbell.",
@@ -4976,7 +5185,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Reverse Lunge.webp",
+        "url": "Photo/Exercises/reverse-lunge.webp",
         "primary": true
       },
       {
@@ -4997,15 +5206,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 123,
     "name": "Walking Lunge",
     "description": "A dynamic unilateral lower-body exercise where each step becomes a lunge, propelling you forward. Develops quads, glutes, and single-leg stability with a cardiovascular conditioning component.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "intermediate",
     "instructions": "Stand tall. Step forward with one foot and lower your rear knee toward the floor, keeping your front shin vertical. Drive through the front heel and step forward with the opposite foot into the next lunge. Continue alternating legs across the floor. Can be loaded with dumbbells at your sides.",
@@ -5050,7 +5263,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Walking Lunge.webp",
+        "url": "Photo/Exercises/walking-lunge.webp",
         "primary": true
       },
       {
@@ -5071,15 +5284,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 124,
     "name": "Hack Squat",
     "description": "A machine-based squat variation where the back is supported against a padded sled at an angle. Delivers high quad stimulus with significantly reduced spinal loading, making it one of the most back-friendly heavy leg exercises available.",
     "category": "strength",
-    "muscle_groups": ["quads", "glutes", "hamstrings"],
+    "muscle_groups": [
+      "quads",
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "machine",
     "difficulty": "beginner",
     "instructions": "Load the machine and place your shoulders under the pads with your back flat against the sled. Feet are shoulder-width apart on the platform. Release the safety handles and descend by bending your knees until your thighs are parallel to the platform or below. Push through your heels to return to the start and re-engage the safeties.",
@@ -5124,7 +5340,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Hack Squat.webp",
+        "url": "Photo/Exercises/hack-squat.webp",
         "primary": true
       },
       {
@@ -5145,15 +5361,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 125,
     "name": "Nordic Hamstring Curl",
     "description": "A bodyweight eccentric hamstring exercise where you lower your torso toward the floor by resisting the pull of gravity on your hamstrings. Gold standard for hamstring eccentric strength and injury prevention.",
     "category": "strength",
-    "muscle_groups": ["hamstrings", "glutes", "core_stabilizers"],
+    "muscle_groups": [
+      "hamstrings",
+      "glutes",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "advanced",
     "instructions": "Kneel on a mat with ankles secured under a pad, barbell, or held by a partner. Keeping your hips fully extended and body in a straight line from knees to head, lower your torso toward the floor as slowly as possible by resisting with your hamstrings. Use your hands to catch yourself at the bottom, then push back up and use hamstring strength to return as far as possible. Do not allow hips to flex during the movement.",
@@ -5198,7 +5417,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Nordic Hamstring Curl.webp",
+        "url": "Photo/Exercises/nordic-hamstring-curl.webp",
         "primary": true
       },
       {
@@ -5219,15 +5438,17 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 126,
     "name": "Machine Glute Kickback",
     "description": "A machine-based glute isolation exercise where one leg pushes a padded lever backward against resistance. Provides direct glute loading in a braced, supported position that keeps the lumbar spine unloaded.",
     "category": "strength",
-    "muscle_groups": ["glutes", "hamstrings"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings"
+    ],
     "equipment": "machine",
     "difficulty": "beginner",
     "instructions": "Stand facing the machine and place your working leg's thigh pad behind your knee or lower thigh. Hold the support handles. Brace your core and push your leg backward and upward in a controlled arc, squeezing the glute at the top. Avoid hyperextending the lower back. Return slowly to the start. Complete all reps then switch legs.",
@@ -5272,7 +5493,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Machine Glute Kickback.webp",
+        "url": "Photo/Exercises/machine-glute-kickback.webp",
         "primary": true
       },
       {
@@ -5293,15 +5514,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 127,
     "name": "Flat Dumbbell Bench Press",
     "description": "A horizontal chest press performed with dumbbells on a flat bench. Allows a greater range of motion and more independent arm movement than the barbell version, with each side working unilaterally.",
     "category": "strength",
-    "muscle_groups": ["chest", "front_delts", "triceps"],
+    "muscle_groups": [
+      "chest",
+      "front_delts",
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Lie flat on a bench holding a dumbbell in each hand at chest height, palms facing forward. Press both dumbbells upward to full arm extension above your chest, then lower slowly to the starting position with elbows at roughly 45–75 degrees from your torso. Maintain shoulder blade retraction throughout.",
@@ -5346,7 +5570,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Flat Dumbbell Bench Press.webp",
+        "url": "Photo/Exercises/flat-dumbbell-bench-press.webp",
         "primary": true
       },
       {
@@ -5367,15 +5591,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 128,
     "name": "Arnold Press",
     "description": "A seated dumbbell shoulder press variation developed by Arnold Schwarzenegger. It begins with the palms facing you and rotates to a pronated position during the press, engaging all three deltoid heads through a fuller range of motion.",
     "category": "strength",
-    "muscle_groups": ["front_delts", "side_delts", "rear_delts", "triceps"],
+    "muscle_groups": [
+      "front_delts",
+      "side_delts",
+      "rear_delts",
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
     "instructions": "Sit on a bench with back support, holding dumbbells in front of your shoulders with palms facing your face and elbows forward. As you press upward, rotate your wrists outward so palms face forward at the top. Lower by reversing the rotation. Keep your lower back against the pad and avoid arching.",
@@ -5420,7 +5648,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Arnold Press.webp",
+        "url": "Photo/Exercises/arnold-press.webp",
         "primary": true
       },
       {
@@ -5441,15 +5669,17 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 129,
     "name": "Preacher Curl",
     "description": "A biceps curl performed with the upper arms braced against a preacher bench pad. The arm support eliminates cheating and shoulder involvement, isolating the biceps in a fully supported, back-friendly position.",
     "category": "strength",
-    "muscle_groups": ["biceps", "brachialis"],
+    "muscle_groups": [
+      "biceps",
+      "brachialis"
+    ],
     "equipment": "barbell",
     "difficulty": "beginner",
     "instructions": "Sit at a preacher bench and drape your upper arms over the angled pad. Grip a barbell or EZ-curl bar with an underhand grip. Curl the weight up toward your shoulders by flexing the elbows, keeping the upper arms on the pad. Lower slowly to near-full extension. Avoid slamming the weight down at the bottom.",
@@ -5494,7 +5724,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Preacher Curl.webp",
+        "url": "Photo/Exercises/preacher-curl.webp",
         "primary": true
       },
       {
@@ -5515,15 +5745,17 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 130,
     "name": "Concentration Curl",
     "description": "A seated, single-arm biceps curl where the elbow is braced against the inner thigh. Removes all momentum and trunk sway, providing strict biceps isolation in a back-friendly seated position.",
     "category": "strength",
-    "muscle_groups": ["biceps", "brachialis"],
+    "muscle_groups": [
+      "biceps",
+      "brachialis"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Sit on a bench with legs spread. Hold a dumbbell in one hand and brace the back of that upper arm against your inner thigh. Curl the dumbbell up toward your shoulder with a full range of motion. Squeeze at the top, then lower slowly. Keep your torso stable and avoid leaning back.",
@@ -5568,7 +5800,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Concentration Curl.webp",
+        "url": "Photo/Exercises/concentration-curl.webp",
         "primary": true
       },
       {
@@ -5589,15 +5821,16 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 131,
     "name": "Overhead Tricep Extension",
     "description": "A triceps isolation exercise performed with a dumbbell or cable with arms raised overhead. Targets the long head of the triceps through its fullest range of motion, which pushdowns and kickbacks cannot replicate.",
     "category": "strength",
-    "muscle_groups": ["triceps"],
+    "muscle_groups": [
+      "triceps"
+    ],
     "equipment": "dumbbells",
     "difficulty": "beginner",
     "instructions": "Sit on a bench with back support and hold one dumbbell with both hands overhead, arms extended. Brace your core and keep your upper arms stationary next to your head. Lower the dumbbell behind your head by bending the elbows, then press back to full extension. Can also be performed with a cable and rope attachment.",
@@ -5642,7 +5875,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Overhead Tricep Extension.webp",
+        "url": "Photo/Exercises/overhead-tricep-extension.webp",
         "primary": true
       },
       {
@@ -5663,15 +5896,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 132,
     "name": "Close-Grip Bench Press",
     "description": "A barbell bench press performed with a narrow grip (hands inside shoulder width). Shifts emphasis from the chest onto the triceps while still being a compound movement, performed in the same back-friendly supine position as the flat bench press.",
     "category": "strength",
-    "muscle_groups": ["triceps", "chest", "front_delts"],
+    "muscle_groups": [
+      "triceps",
+      "chest",
+      "front_delts"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Lie flat on a bench and grip the barbell with hands approximately shoulder-width apart or slightly narrower. Unrack with arms extended. Lower the bar to your lower chest / upper abdomen, keeping your elbows tucked at roughly 45 degrees. Press back to full extension. Avoid letting the elbows flare excessively.",
@@ -5716,7 +5952,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Close-Grip Bench Press.webp",
+        "url": "Photo/Exercises/close-grip-bench-press.webp",
         "primary": true
       },
       {
@@ -5737,15 +5973,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 133,
     "name": "Upright Row",
     "description": "A vertical pulling movement performed with a barbell or dumbbells where the elbows rise above the hands to target the traps and lateral deltoids. A common trap and shoulder builder — note that shoulder internal rotation at the top may be contraindicated for those with impingement issues.",
     "category": "strength",
-    "muscle_groups": ["traps", "side_delts", "front_delts", "biceps"],
+    "muscle_groups": [
+      "traps",
+      "side_delts",
+      "front_delts",
+      "biceps"
+    ],
     "equipment": "barbell",
     "difficulty": "intermediate",
     "instructions": "Stand with feet hip-width apart, holding a barbell with an overhand grip slightly narrower than shoulder-width. Pull the bar straight up along your body, leading with the elbows until the bar reaches upper chest or chin level. Lower with control. Keep the torso upright and avoid swinging.",
@@ -5790,7 +6030,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Upright Row.webp",
+        "url": "Photo/Exercises/upright-row.webp",
         "primary": true
       },
       {
@@ -5811,15 +6051,20 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 134,
     "name": "T-Bar Row",
     "description": "A compound rowing movement performed on a T-bar machine or with a barbell in a landmine setup. A popular back thickness builder that allows heavier loading than dumbbell rows with a moderate lumbar demand.",
     "category": "strength",
-    "muscle_groups": ["lats", "rhomboids", "traps", "rear_delts", "biceps"],
+    "muscle_groups": [
+      "lats",
+      "rhomboids",
+      "traps",
+      "rear_delts",
+      "biceps"
+    ],
     "equipment": "machine",
     "difficulty": "intermediate",
     "instructions": "Stand on the T-bar platform with feet shoulder-width apart and straddle the bar. Hinge forward to roughly 45 degrees, keeping your back flat. Grip the handles and pull the weight into your chest by driving your elbows back. Squeeze your shoulder blades together at the top. Lower with control. Keep the core braced and spine neutral throughout.",
@@ -5864,7 +6109,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/T-Bar Row.webp",
+        "url": "Photo/Exercises/t-bar-row.webp",
         "primary": true
       },
       {
@@ -5885,8 +6130,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 135,
@@ -5945,7 +6189,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Inverted Row.webp",
+        "url": "Photo/Exercises/inverted-row.webp",
         "primary": true
       },
       {
@@ -5966,15 +6210,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 136,
     "name": "Hollow Body Hold",
     "description": "A gymnastics-derived anti-extension core exercise. Lying on your back with arms overhead and legs extended, you maintain a dish-like body position that deeply activates the entire anterior core while keeping the lumbar spine pressed flat.",
     "category": "core",
-    "muscle_groups": ["abdominals", "hip_flexors", "core_stabilizers"],
+    "muscle_groups": [
+      "abdominals",
+      "hip_flexors",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "intermediate",
     "instructions": "Lie on your back with arms extended overhead. Simultaneously lift your shoulders, arms, and legs off the floor, pressing your lower back firmly into the ground. Hold the 'dish' position with everything off the floor and your body forming a shallow curve. Breathe steadily. Modify by bending the knees or keeping arms by your sides to reduce lever arm.",
@@ -6019,7 +6266,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Hollow Body Hold.webp",
+        "url": "Photo/Exercises/hollow-body-hold.webp",
         "primary": true
       },
       {
@@ -6040,15 +6287,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 137,
     "name": "Ab Wheel Rollout",
     "description": "A highly effective anti-extension core exercise performed by rolling a small wheel forward from a kneeling position. Demands peak anterior core strength and stability to prevent lumbar hyperextension.",
     "category": "core",
-    "muscle_groups": ["abdominals", "core_stabilizers", "lats"],
+    "muscle_groups": [
+      "abdominals",
+      "core_stabilizers",
+      "lats"
+    ],
     "equipment": "ab_wheel",
     "difficulty": "advanced",
     "instructions": "Kneel on a mat and grip the ab wheel handles with both hands in front of you on the floor. Brace your core hard and roll forward slowly, extending your hips and keeping your lower back from sagging. Extend as far as you can maintain a neutral spine, then pull back to the start using your abs. Do not allow the lower back to arch at the end of the range.",
@@ -6093,7 +6343,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Ab Wheel Rollout.webp",
+        "url": "Photo/Exercises/ab-wheel-rollout.webp",
         "primary": true
       },
       {
@@ -6114,15 +6364,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 138,
     "name": "Russian Twist",
     "description": "A seated rotational core exercise where the torso rotates side to side while the feet are elevated. Targets the obliques and rotational core. Typically contraindicated for L5-S1 disc issues due to combined flexion and rotation — use restrictions carefully.",
     "category": "core",
-    "muscle_groups": ["obliques", "abdominals", "hip_flexors"],
+    "muscle_groups": [
+      "obliques",
+      "abdominals",
+      "hip_flexors"
+    ],
     "equipment": "bodyweight",
     "difficulty": "intermediate",
     "instructions": "Sit on a mat with knees bent and feet elevated off the floor, leaning back to about 45 degrees. Clasp your hands together or hold a weight. Rotate your torso to one side until your hands nearly touch the floor beside your hip, then rotate to the opposite side. Keep the movement controlled and initiated from the obliques, not momentum.",
@@ -6167,7 +6420,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Russian Twist.webp",
+        "url": "Photo/Exercises/russian-twist.webp",
         "primary": true
       },
       {
@@ -6188,15 +6441,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 139,
     "name": "Cable Woodchopper",
     "description": "A rotational core exercise performed on a cable machine, pulling the handle diagonally from high to low (or low to high). Trains anti-rotation and transverse plane core strength in a controlled, spine-friendly manner.",
     "category": "core",
-    "muscle_groups": ["obliques", "abdominals", "core_stabilizers", "glutes"],
+    "muscle_groups": [
+      "obliques",
+      "abdominals",
+      "core_stabilizers",
+      "glutes"
+    ],
     "equipment": "cable_machine",
     "difficulty": "beginner",
     "instructions": "Set the cable at shoulder height (for high-to-low chop) or hip height (for low-to-high chop). Stand sideways to the machine with feet shoulder-width apart. Grip the handle with both hands and pull it diagonally across your body in a chopping motion, rotating your torso. Keep your arms relatively straight and initiate from the core. Return with control. Complete all reps then switch sides.",
@@ -6241,7 +6498,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Cable Woodchopper.webp",
+        "url": "Photo/Exercises/cable-woodchopper.webp",
         "primary": true
       },
       {
@@ -6262,15 +6519,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 140,
     "name": "Stationary Bike",
     "description": "Low-impact aerobic exercise performed on a stationary cycle. The seated, supported position makes it one of the most recommended cardio modalities for people with back issues — no spinal impact, no axial loading.",
     "category": "cardio",
-    "muscle_groups": ["quads", "hamstrings", "glutes", "calves"],
+    "muscle_groups": [
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves"
+    ],
     "equipment": "stationary_bike",
     "difficulty": "beginner",
     "instructions": "Adjust the seat so your knee has a slight bend at the bottom of the pedal stroke. Sit upright or in a slight forward lean with hands on the handlebars. Pedal at a comfortable cadence, maintaining consistent resistance. Start with 15–20 minutes and progress duration and intensity over time.",
@@ -6315,7 +6576,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Stationary Bike.webp",
+        "url": "Photo/Exercises/stationary-bike.webp",
         "primary": true
       },
       {
@@ -6336,8 +6597,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 141,
@@ -6397,7 +6657,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Rowing Machine.webp",
+        "url": "Photo/Exercises/rowing-machine.webp",
         "primary": true
       },
       {
@@ -6418,8 +6678,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 142,
@@ -6477,7 +6736,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Elliptical.webp",
+        "url": "Photo/Exercises/elliptical.webp",
         "primary": true
       },
       {
@@ -6498,8 +6757,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 143,
@@ -6557,7 +6815,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Treadmill Walk.webp",
+        "url": "Photo/Exercises/treadmill-walk.webp",
         "primary": true
       },
       {
@@ -6578,15 +6836,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 144,
     "name": "Stairmaster",
     "description": "A stepping machine that simulates continuous stair climbing. Provides high-calorie cardiovascular conditioning with significant glute, quad, and calf activation in an upright posture.",
     "category": "cardio",
-    "muscle_groups": ["glutes", "quads", "hamstrings", "calves"],
+    "muscle_groups": [
+      "glutes",
+      "quads",
+      "hamstrings",
+      "calves"
+    ],
     "equipment": "stairmaster",
     "difficulty": "intermediate",
     "instructions": "Step onto the machine and set a comfortable step rate (60–80 steps per minute for beginners). Maintain an upright posture — avoid leaning on the handrails, which reduces glute activation and distorts posture. Step through the full range of each stride. Increase speed and duration progressively.",
@@ -6631,7 +6893,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Stairmaster.webp",
+        "url": "Photo/Exercises/stairmaster.webp",
         "primary": true
       },
       {
@@ -6652,15 +6914,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 145,
     "name": "Jump Rope",
     "description": "High-intensity cardiovascular conditioning using a jump rope. Develops coordination, footwork, and aerobic capacity. The repetitive impact makes it contraindicated for active spinal conditions but suitable for those in maintenance phase.",
     "category": "cardio",
-    "muscle_groups": ["calves", "core_stabilizers", "front_delts", "quads"],
+    "muscle_groups": [
+      "calves",
+      "core_stabilizers",
+      "front_delts",
+      "quads"
+    ],
     "equipment": "jump_rope",
     "difficulty": "intermediate",
     "instructions": "Hold one handle in each hand with the rope behind your feet. Swing the rope over your head and jump with both feet simultaneously, keeping jumps low and landing softly on the balls of your feet with knees slightly bent. Maintain an upright torso. Begin with intervals of 30 seconds on / 30 seconds off.",
@@ -6705,7 +6971,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Jump Rope.webp",
+        "url": "Photo/Exercises/jump-rope.webp",
         "primary": true
       },
       {
@@ -6726,8 +6992,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 146,
@@ -6785,7 +7050,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Battle Ropes.webp",
+        "url": "Photo/Exercises/battle-ropes.webp",
         "primary": true
       },
       {
@@ -6806,8 +7071,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 147,
@@ -6865,7 +7129,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Kettlebell Swing.webp",
+        "url": "Photo/Exercises/kettlebell-swing.webp",
         "primary": true
       },
       {
@@ -6886,15 +7150,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 148,
     "name": "Cat-Cow Stretch",
     "description": "A fundamental spinal mobility exercise alternating between lumbar flexion (cat) and lumbar extension (cow) on hands and knees. One of the most universally prescribed exercises in spinal rehabilitation for restoring segmental mobility and reducing stiffness.",
     "category": "rehab",
-    "muscle_groups": ["erector_spinae", "abdominals", "core_stabilizers"],
+    "muscle_groups": [
+      "erector_spinae",
+      "abdominals",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Start on hands and knees with wrists under shoulders and knees under hips. For Cat: exhale and round your back toward the ceiling, tucking your pelvis and chin. For Cow: inhale and let your belly drop toward the floor, lifting your head and tailbone. Move slowly between positions, matching the breath to the movement. Perform 10–15 repetitions.",
@@ -6939,7 +7206,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Cat-Cow Stretch.webp",
+        "url": "Photo/Exercises/cat-cow-stretch.webp",
         "primary": true
       },
       {
@@ -6960,15 +7227,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 149,
     "name": "Child's Pose",
     "description": "A restorative yoga-derived stretch where you sit back onto your heels and extend your arms forward on the floor. Gently decompresses the lumbar spine, stretches the lats and thoracic extensors, and provides a calming hip flexor and lower back release.",
     "category": "rehab",
-    "muscle_groups": ["erector_spinae", "lats", "glutes", "hip_flexors"],
+    "muscle_groups": [
+      "erector_spinae",
+      "lats",
+      "glutes",
+      "hip_flexors"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Kneel on a mat with big toes touching and knees spread wide (or together for a more narrow variation). Sit your hips back toward your heels and walk your hands forward on the floor, lowering your chest between or above your thighs. Rest your forehead on the mat and breathe deeply. Hold for 30–60 seconds.",
@@ -7013,7 +7284,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Child s Pose.webp",
+        "url": "Photo/Exercises/childs-pose.webp",
         "primary": true
       },
       {
@@ -7034,15 +7305,17 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 150,
     "name": "Cobra Stretch (McKenzie Press-Up)",
     "description": "A prone lumbar extension exercise where you press your upper body up with your arms while keeping your hips on the floor. The most evidence-backed exercise for posterior disc herniations, derived from the McKenzie Method. Produces centralization of discogenic pain.",
     "category": "rehab",
-    "muscle_groups": ["erector_spinae", "abdominals"],
+    "muscle_groups": [
+      "erector_spinae",
+      "abdominals"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie face down on a mat with hands placed under your shoulders. Keeping your hips and pelvis on the floor, press your upper body upward by straightening your arms, allowing your lower back to arch. Hold the top position for 1–2 seconds or sustain a gentle hold for 30 seconds. Lower slowly. Repeat 10 times. Hips must remain in contact with the floor throughout.",
@@ -7087,7 +7360,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Cobra Stretch (McKenzie Press-Up).webp",
+        "url": "Photo/Exercises/cobra-stretch-mckenzie-press-up.webp",
         "primary": true
       },
       {
@@ -7108,15 +7381,17 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 151,
     "name": "Hip Flexor Stretch (Kneeling Lunge)",
     "description": "A kneeling stretch targeting the hip flexors (iliopsoas and rectus femoris). Tight hip flexors anteriorly tilt the pelvis and increase lumbar lordosis, making this stretch particularly important for people with back pain.",
     "category": "rehab",
-    "muscle_groups": ["hip_flexors", "quads"],
+    "muscle_groups": [
+      "hip_flexors",
+      "quads"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Kneel on your right knee on a mat with your left foot forward. Shift your hips forward gently until you feel a stretch in the front of your right hip. Keep your torso upright and squeeze your right glute lightly to deepen the stretch. Hold for 30–45 seconds. You can raise your right arm overhead for an added lateral stretch. Switch sides.",
@@ -7161,7 +7436,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Hip Flexor Stretch (Kneeling Lunge).webp",
+        "url": "Photo/Exercises/hip-flexor-stretch-kneeling-lunge.webp",
         "primary": true
       },
       {
@@ -7182,15 +7457,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 152,
     "name": "Pigeon Pose",
     "description": "A yoga-derived deep hip external rotation and glute stretch. Targets the piriformis and deep hip rotators, which when tight can compress the sciatic nerve — making this a primary stretch for piriformis-related sciatica.",
     "category": "rehab",
-    "muscle_groups": ["glutes", "hip_rotators", "hip_flexors"],
+    "muscle_groups": [
+      "glutes",
+      "hip_rotators",
+      "hip_flexors"
+    ],
     "equipment": "bodyweight",
     "difficulty": "intermediate",
     "instructions": "From a tabletop position, bring your right shin forward at roughly 45–90 degrees and extend your left leg straight behind you. Lower your hips toward the floor, keeping your pelvis as square as possible. Walk your hands forward and lower your chest over your front shin for a deeper stretch. Hold for 45–60 seconds. Switch sides.",
@@ -7235,7 +7513,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Pigeon Pose.webp",
+        "url": "Photo/Exercises/pigeon-pose.webp",
         "primary": true
       },
       {
@@ -7256,15 +7534,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 153,
     "name": "90/90 Hip Stretch",
     "description": "A seated hip mobility exercise with both legs bent at 90 degrees — one in internal rotation and one in external rotation. Simultaneously addresses both hip internal and external rotation restrictions that contribute to lumbar compensations.",
     "category": "rehab",
-    "muscle_groups": ["glutes", "hip_rotators", "hip_flexors", "hip_adductors"],
+    "muscle_groups": [
+      "glutes",
+      "hip_rotators",
+      "hip_flexors",
+      "hip_adductors"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Sit on the floor with your front leg bent at 90 degrees with the shin parallel to the front, and your rear leg bent at 90 degrees out to your side. Keep your back tall and sit directly on your sit bones. Hinge forward over the front shin to stretch the external hip rotators. Then rotate your torso toward the rear leg to address the internal rotators. Hold each position for 30–45 seconds.",
@@ -7309,7 +7591,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/9090 Hip Stretch.webp",
+        "url": "Photo/Exercises/9090-hip-stretch.webp",
         "primary": true
       },
       {
@@ -7330,15 +7612,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 154,
     "name": "Thoracic Spine Rotation",
     "description": "A mobility exercise targeting rotation of the mid-back (thoracic spine). Stiff thoracic rotation forces the lumbar spine to compensate during everyday movements — restoring it directly reduces lumbar pain and injury risk.",
     "category": "rehab",
-    "muscle_groups": ["thoracic_extensors", "obliques", "core_stabilizers"],
+    "muscle_groups": [
+      "thoracic_extensors",
+      "obliques",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Sit in a 90/90 position or lie on your side with knees stacked at 90 degrees. Place one hand behind your head and rotate your upper back and elbow toward the ceiling, following with your eyes. Keep your knees stacked (do not let the hips rotate). Return slowly and repeat. Perform 10 reps per side. Can also be performed seated in a chair.",
@@ -7383,7 +7668,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Thoracic Spine Rotation.webp",
+        "url": "Photo/Exercises/thoracic-spine-rotation.webp",
         "primary": true
       },
       {
@@ -7404,15 +7689,17 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 155,
     "name": "Hamstring Stretch (Supine)",
     "description": "A lying hamstring stretch where the leg is elevated with a strap or towel. Tight hamstrings posteriorly tilt the pelvis during bending, increasing lumbar rounding and disc stress — making hamstring flexibility a priority for spinal health.",
     "category": "rehab",
-    "muscle_groups": ["hamstrings", "calves"],
+    "muscle_groups": [
+      "hamstrings",
+      "calves"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your back on a mat. Loop a towel, strap, or resistance band around one foot. Keeping the other leg flat on the floor, gently pull the elevated leg toward you with the knee as straight as possible. Hold when you feel a moderate stretch in the back of the thigh. Hold for 30–45 seconds. Do not force the stretch. Switch sides.",
@@ -7457,7 +7744,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Hamstring Stretch (Supine).webp",
+        "url": "Photo/Exercises/hamstring-stretch-supine.webp",
         "primary": true
       },
       {
@@ -7478,15 +7765,18 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 156,
     "name": "Glute Bridge (Two-Leg)",
     "description": "The foundational bilateral glute activation exercise performed on the floor. A supine hip extension movement that strengthens the glutes and hamstrings while keeping the lumbar spine in a flat, protected position.",
     "category": "rehab",
-    "muscle_groups": ["glutes", "hamstrings", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "hamstrings",
+      "core_stabilizers"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your back with knees bent and feet flat on the floor, hip-width apart. Press both heels into the floor and lift your hips until your body forms a straight line from knees to shoulders. Squeeze your glutes at the top. Avoid arching the lower back — keep your ribs down. Lower slowly under control. Can be progressed with a barbell across the hips.",
@@ -7531,7 +7821,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Glute Bridge (Two-Leg).webp",
+        "url": "Photo/Exercises/glute-bridge-two-leg.webp",
         "primary": true
       },
       {
@@ -7552,15 +7842,17 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 157,
     "name": "Clamshells",
     "description": "A side-lying glute medius activation exercise using hip external rotation against resistance. Targets the often-neglected glute medius, which is critical for hip and pelvic stability — weakness here forces the lumbar spine to compensate laterally.",
     "category": "rehab",
-    "muscle_groups": ["glutes", "hip_rotators"],
+    "muscle_groups": [
+      "glutes",
+      "hip_rotators"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "instructions": "Lie on your side with hips stacked and knees bent to about 45 degrees. Keep your feet together and your core gently engaged. Rotate your top knee upward toward the ceiling like a clamshell opening, stopping before your pelvis rocks backward. Lower with control. A resistance band around the thighs increases the challenge. Complete all reps and switch sides.",
@@ -7605,7 +7897,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Clamshells.webp",
+        "url": "Photo/Exercises/clamshells.webp",
         "primary": true
       },
       {
@@ -7626,15 +7918,19 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 158,
     "name": "Banded Lateral Walk",
     "description": "A hip abductor activation exercise using a resistance band around the ankles or thighs, stepping laterally while maintaining a quarter-squat stance. Develops glute medius and hip stability that directly reduces lumbar compensatory movement.",
     "category": "rehab",
-    "muscle_groups": ["glutes", "hip_abductors", "quads", "core_stabilizers"],
+    "muscle_groups": [
+      "glutes",
+      "hip_abductors",
+      "quads",
+      "core_stabilizers"
+    ],
     "equipment": "resistance_band",
     "difficulty": "beginner",
     "instructions": "Place a resistance band around both ankles or just above the knees. Stand with feet shoulder-width apart and assume a slight quarter-squat position. Keeping tension on the band, step sideways with your outside foot and follow with the inside foot — maintaining consistent band tension throughout. Keep the torso upright, hips level, and core lightly braced. Take 10–15 steps in each direction.",
@@ -7679,7 +7975,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Banded Lateral Walk.webp",
+        "url": "Photo/Exercises/banded-lateral-walk.webp",
         "primary": true
       },
       {
@@ -7700,8 +7996,7 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   },
   {
     "id": 159,
@@ -7759,7 +8054,7 @@
       {
         "type": "exercise",
         "source": "local",
-        "url": "/exercisesSm/Wall Angels.webp",
+        "url": "Photo/Exercises/wall-angels.webp",
         "primary": true
       },
       {
@@ -7780,7 +8075,6 @@
         "url": "",
         "primary": false
       }
-    ],
-    "youtube_id": ""
+    ]
   }
 ]

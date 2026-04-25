@@ -25,7 +25,6 @@ export interface Exercise {
   difficulty: string;
   instructions: string;
   video_url: string;
-  youtube_id?: string;
   media: ExerciseMedia[];
   is_back_friendly: boolean;
   back_issue_restrictions: ExerciseRestriction[];

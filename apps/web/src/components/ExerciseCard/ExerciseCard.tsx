@@ -51,6 +51,10 @@ export function ExerciseCard({
           src={getExerciseImageUrl(exercise)}
           alt={name}
           className="h-full w-full object-cover"
+          fallback={
+            exercise.media?.find((m) => m.source === "remote" && m.url)?.url ||
+            undefined
+          }
         />
         <div className="pointer-events-none absolute inset-0 rounded-3xl border border-white/10" />
         {isCompleted && (

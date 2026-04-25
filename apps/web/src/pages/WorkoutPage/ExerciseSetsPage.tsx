@@ -4,13 +4,13 @@ import {
   useExerciseName,
   getAllBaseExercises,
   getBaseExerciseById,
-  getExerciseYoutubeId,
   isTimeBasedExercise,
   formatDurationSeconds,
   getLastPerformedData,
 } from "@spinefit/shared";
-import YouTube, { type YouTubeProps } from "react-youtube";
 import { getExerciseImageUrl } from "@/utils/exercise";
+import { getExerciseVideoUrl } from "@/lib/assets";
+import { VideoPlayer } from "@/components/VideoPlayer/VideoPlayer";
 import type {
   ExerciseSetsPageProps,
   SetField,
@@ -36,16 +36,6 @@ import {
   getStoredPainStatus,
 } from "@/utils/painStatus";
 import { trackEvent } from "@/utils/analytics";
-
-const playerOpts: YouTubeProps["opts"] = {
-  width: "100%",
-  height: "100%",
-  playerVars: {
-    autoplay: 0,
-    modestbranding: 1,
-    rel: 0,
-  },
-};
 
 const toolbarButtons = [
   {
@@ -151,7 +141,6 @@ function ExerciseSetsPage({
   const baseExercise = getBaseExerciseById(exercise.id);
   const isBodyweight = exercise.equipment === "bodyweight";
   const isTimeBased = isTimeBasedExercise(exercise);
-  const youtubeId = exercise.youtube_id ?? getExerciseYoutubeId(exercise.id);
 
   // Generate unique ID for each set
   const generateSetId = () =>
@@ -746,20 +735,11 @@ function ExerciseSetsPage({
       <div className="flex flex-1 flex-col gap-6">
         <header className="relative overflow-hidden rounded-[26px] border border-white/12 bg-black shadow-xl">
           <div className="relative aspect-video w-full bg-black">
-            {youtubeId ? (
-              <YouTube
-                videoId={youtubeId}
-                opts={playerOpts}
-                className="absolute inset-0 h-full w-full"
-                iframeClassName="h-full w-full"
-              />
-            ) : (
-              <video
-                src={exercise.video_url}
-                controls
-                className="h-full w-full object-cover"
-              />
-            )}
+            <VideoPlayer
+              src={getExerciseVideoUrl(exercise)}
+              poster={getExerciseImageUrl(exercise)}
+              className="absolute inset-0 h-full w-full"
+            />
           </div>
           <button
             type="button"

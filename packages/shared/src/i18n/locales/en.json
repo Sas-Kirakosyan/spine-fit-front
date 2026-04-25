@@ -25,7 +25,8 @@
       "planGenerated": "Plan generated after onboarding:",
       "loadedWorkout": "Loaded",
       "swappedToWorkout": "Swapped to",
-      "updatedToWorkout": "Updated to"
+      "updatedToWorkout": "Updated to",
+      "videoUnavailable": "Video unavailable"
     },
     "labels": {
       "todayWorkout": "Today's Workout",
