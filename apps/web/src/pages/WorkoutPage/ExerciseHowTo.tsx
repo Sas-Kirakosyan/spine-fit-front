@@ -1,16 +1,9 @@
-import { useTranslation } from "react-i18next";
 import { useExerciseName } from "@spinefit/shared";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseDetailsProps } from "@/types/workout";
-import type { Exercise } from "@/types/exercise";
-import YouTube, { type YouTubeProps } from "react-youtube";
-import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
-
-const exerciseYoutubeMap = new Map(
-  (allExercisesData as Exercise[])
-    .filter((ex) => ex.youtube_id)
-    .map((ex) => [ex.id, ex.youtube_id!])
-);
+import { getExerciseImageUrl } from "@/utils/exercise";
+import { getExerciseVideoUrl } from "@/lib/assets";
+import { VideoPlayer } from "@/components/VideoPlayer/VideoPlayer";
 
 const formatLabel = (value: string) =>
   value
@@ -18,19 +11,7 @@ const formatLabel = (value: string) =>
     .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
     .join(" ");
 
-const playerOpts: YouTubeProps["opts"] = {
-  width: "100%",
-  height: "100%",
-  playerVars: {
-    autoplay: 0,
-    modestbranding: 1,
-    rel: 0,
-  },
-};
-
 function ExerciseDetails({ exercise, onNavigateBack }: ExerciseDetailsProps) {
-  const { t } = useTranslation();
-
   const { getExerciseName } = useExerciseName();
   const name = getExerciseName(exercise);
   const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,22 +27,11 @@ function ExerciseDetails({ exercise, onNavigateBack }: ExerciseDetailsProps) {
       <div className="flex h-full flex-col">
         {/* ── Video Section ── */}
         <div className="relative w-full bg-black aspect-video">
-          {exercise.youtube_id || exerciseYoutubeMap.get(exercise.id) ? (
-            <YouTube
-              videoId={
-                exercise.youtube_id || exerciseYoutubeMap.get(exercise.id)
-              }
-              opts={playerOpts}
-              className="absolute inset-0 h-full w-full"
-              iframeClassName="h-full w-full"
-            />
-          ) : (
-            <video
-              src={exercise.video_url}
-              controls
-              className="h-full w-full object-cover"
-            />
-          )}
+          <VideoPlayer
+            src={getExerciseVideoUrl(exercise)}
+            poster={getExerciseImageUrl(exercise)}
+            className="absolute inset-0 h-full w-full"
+          />
 
           <button
             type="button"

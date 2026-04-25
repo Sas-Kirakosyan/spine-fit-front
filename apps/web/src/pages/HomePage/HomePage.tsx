@@ -6,6 +6,7 @@ import { PageContainer } from "@/Layout/PageContainer";
 import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import type { HomePageProps } from "@/types/pages";
 import { trackEvent } from "@/utils/analytics";
+import { assetUrl } from "@/lib/assets";
 
 function HomePage({
   onNavigateToLogin,
@@ -29,7 +30,7 @@ function HomePage({
   return (
     <>
       <PageContainer
-        backgroundImage="url('/exercises/cable-knee-drive.png')"
+        backgroundImage={`url('${assetUrl("Photo/Exercises/cable-knee-drive.webp")}')`}
         overlayClassName="bg-black/30"
       >
         <div className="flex items-center justify-between">
