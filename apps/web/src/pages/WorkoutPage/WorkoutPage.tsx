@@ -668,7 +668,7 @@ function WorkoutPage({
               {t("workoutPage.buttons.regeneratePlan")}
             </div>
           )}
-          {onNavigateToHome && (
+          {import.meta.env.DEV && onNavigateToHome && (
             <Button
               onClick={onNavigateToHome}
               className="border border-2 border-white/50 rounded-full p-1"
