@@ -67,10 +67,7 @@ export async function generatePlan(
   const callGemini = async (modelName: string): Promise<string> => {
     const model = genAI.getGenerativeModel({
       model: modelName,
-      systemInstruction: buildSystemInstruction(
-        parsedQuiz.duration,
-        parsedQuiz.painLevel,
-      ),
+      systemInstruction: buildSystemInstruction(parsedQuiz),
       generationConfig: {
         responseMimeType: "application/json",
         responseSchema: PLAN_SCHEMA,
