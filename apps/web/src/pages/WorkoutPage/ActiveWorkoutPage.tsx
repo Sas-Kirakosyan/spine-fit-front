@@ -11,6 +11,7 @@ import { iconButtonClass } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
 import { ExerciseActionSheet } from "@/components/ActionSheet/ExerciseActionSheet";
 import { FinishWorkoutModal } from "@/pages/WorkoutPage/FinishWorkoutModal";
+import { ExitWorkoutModal } from "@/pages/WorkoutPage/ExitWorkoutModal";
 import { calculateWorkoutVolume } from "@/utils/workoutStats";
 import { ActiveWorkoutHeader } from "@/pages/WorkoutPage/ActiveWorkoutHeader";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
@@ -47,6 +48,7 @@ function ActiveWorkoutPage({
   const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
   const [replaceQuery, setReplaceQuery] = useState("");
   const [showFinishModal, setShowFinishModal] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
   const [fixedDuration, setFixedDuration] = useState<string>("00:00:00");
   const cardRef = useRef<HTMLDivElement | null>(null);
   const allExercises = allExercisesData as Exercise[];
@@ -213,9 +215,12 @@ function ActiveWorkoutPage({
       exerciseLogs
     );
     const painValues = Object.values(exercisePainLevels);
-    const averagePainLevel = painValues.length > 0
-      ? Math.round((painValues.reduce((a, b) => a + b, 0) / painValues.length) * 10) / 10
-      : undefined;
+    const averagePainLevel =
+      painValues.length > 0
+        ? Math.round(
+            (painValues.reduce((a, b) => a + b, 0) / painValues.length) * 10
+          ) / 10
+        : undefined;
     const summary: FinishedWorkoutSummary = {
       id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
       finishedAt: new Date().toISOString(),
@@ -305,6 +310,10 @@ function ActiveWorkoutPage({
     onFinishWorkout,
   ]);
 
+  const handleNavigateBack = useCallback(() => {
+    setShowExitModal(true);
+  }, []);
+
   const handleCloseReplaceModal = useCallback(() => {
     setReplaceExercise(null);
     setReplaceQuery("");
@@ -331,7 +340,7 @@ function ActiveWorkoutPage({
     >
       <div ref={cardRef} className="flex flex-1 flex-col gap-6">
         <ActiveWorkoutHeader
-          onNavigateBack={onNavigateBack}
+          onNavigateBack={handleNavigateBack}
           buttonClass={iconButtonClass}
         />
         <section className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center shadow-xl">
@@ -415,6 +424,19 @@ function ActiveWorkoutPage({
           completedExercises={completedExercises}
           completedExerciseLogs={exerciseLogs}
           duration={fixedDuration}
+          containerRef={cardRef}
+        />
+        <ExitWorkoutModal
+          isOpen={showExitModal}
+          onClose={() => setShowExitModal(false)}
+          onDiscard={() => {
+            setShowExitModal(false);
+            onNavigateBack();
+          }}
+          onFinish={() => {
+            setShowExitModal(false);
+            handleFinishWorkout();
+          }}
           containerRef={cardRef}
         />
       </div>

@@ -850,7 +850,8 @@ function App() {
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
-            onNavigateToWorkout={navigateToWorkout}
+            onNavigateToWorkout={navigateToWorkout} 
+            onNavigateToGeneratingPlan={() =>{} }          
           />
         );
     }
