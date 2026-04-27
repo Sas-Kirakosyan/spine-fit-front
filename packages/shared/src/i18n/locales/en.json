@@ -80,6 +80,13 @@
     "noExercises": "No exercises for today's workout.",
     "generatePlanHint": "Generate a plan in My Plan page to get started."
   },
+  "exitWorkoutModal": {
+    "title": "Leave workout?",
+    "subtitle": "Your progress will not be saved.",
+    "finish": "Finish & Log",
+    "discard": "Discard Workout",
+    "cancel": "Cancel"
+  },
   "finishWorkoutModal": {
     "title": "Finish and log your workout?",
     "volume": "VOLUME",
