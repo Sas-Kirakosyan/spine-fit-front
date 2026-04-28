@@ -373,7 +373,12 @@ function ActiveWorkoutPage({
         })}
         <Button
           onClick={handleFinishWorkout}
-          className="mx-5 h-[55px] rounded-[10px] bg-[#228B22] text-white uppercase"
+          disabled={completedExercises.length === 0}
+          className={`mx-5 h-[55px] rounded-[10px] text-white uppercase transition-colors ${
+            completedExercises.length === 0
+              ? "bg-[#228B22]/30 cursor-not-allowed"
+              : "bg-[#228B22]"
+          }`}
         >
           {t("workoutPage.buttons.finishWorkout")}
         </Button>
