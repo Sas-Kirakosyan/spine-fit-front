@@ -87,7 +87,7 @@ function HomePage({
           {!isAuthenticated && (
             <button
               onClick={onNavigateToLogin}
-              className="w-full py-2 text-center text-md font-medium text-white hover:text-white/50"
+              className="w-full py-2 pb-15 text-center text-lg font-medium text-white hover:text-white/50"
             >
               {t("homePage.logIn")}
             </button>
