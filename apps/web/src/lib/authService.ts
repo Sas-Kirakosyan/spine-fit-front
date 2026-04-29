@@ -88,3 +88,44 @@ export async function updateUserPassword(
   if (error) return { ok: false, error };
   return { ok: true };
 }
+
+export type OAuthResult = { ok: true } | { ok: false; error: AuthError };
+
+export const OAUTH_IN_PROGRESS_KEY = "oauthInProgress";
+
+export async function signInWithGoogle(): Promise<OAuthResult> {
+  // Marker read by App.tsx after the OAuth redirect lands the user back on "/".
+  // Without it the post-auth handler can't tell an OAuth completion apart from
+  // a normal app load with an existing session.
+  localStorage.setItem(OAUTH_IN_PROGRESS_KEY, "google");
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin,
+      skipBrowserRedirect: true,
+      queryParams: {
+        access_type: "offline",
+        prompt: "select_account",
+      },
+    },
+  });
+
+  if (error) {
+    localStorage.removeItem(OAUTH_IN_PROGRESS_KEY);
+    return { ok: false, error };
+  }
+  if (!data?.url) {
+    localStorage.removeItem(OAUTH_IN_PROGRESS_KEY);
+    return {
+      ok: false,
+      error: {
+        message: "Supabase did not return an OAuth URL",
+        name: "OAuthError",
+      } as AuthError,
+    };
+  }
+
+  window.location.assign(data.url);
+  return { ok: true };
+}

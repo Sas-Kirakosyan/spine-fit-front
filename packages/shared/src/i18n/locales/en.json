@@ -272,6 +272,7 @@
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot your password?",
     "signIn": "Sign In",
+    "continueWithGoogle": "Continue with Google",
     "noAccount": "Don't have an account?",
     "startProgram": "Start program",
     "errors": {
@@ -325,6 +326,7 @@
     "password": "Password",
     "passwordPlaceholder": "Enter password",
     "register": "Register",
+    "continueWithGoogle": "Sign up with Google",
     "haveAccount": "Already have an account?",
     "login": "Login",
     "errors": {

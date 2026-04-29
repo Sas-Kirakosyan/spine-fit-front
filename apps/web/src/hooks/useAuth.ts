@@ -13,7 +13,13 @@ export function useAuth(): AuthState {
   useEffect(() => {
     let mounted = true;
 
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(async ({ data, error }) => {
+      if (error?.message?.toLowerCase().includes("refresh token")) {
+        await supabase.auth.signOut().catch(() => {});
+        if (!mounted) return;
+        setState({ status: "unauthenticated" });
+        return;
+      }
       if (!mounted) return;
       setState(
         data.session

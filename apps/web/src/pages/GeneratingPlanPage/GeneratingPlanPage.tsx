@@ -19,7 +19,7 @@ function GeneratingPlanPage({ onSuccess, onCancel }: GeneratingPlanPageProps) {
   const runGeneration = useCallback(async () => {
     const stored = localStorage.getItem("quizAnswers");
     if (!stored) {
-      onCancel();
+      setStatus("error");
       return;
     }
 
@@ -27,7 +27,7 @@ function GeneratingPlanPage({ onSuccess, onCancel }: GeneratingPlanPageProps) {
     try {
       quizData = JSON.parse(stored) as StoredQuizData;
     } catch {
-      onCancel();
+      setStatus("error");
       return;
     }
 
