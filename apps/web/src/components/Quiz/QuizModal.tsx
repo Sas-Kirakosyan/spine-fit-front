@@ -15,6 +15,7 @@ import {
   RegistrationForm,
   type RegistrationSuccessInfo,
 } from "@/components/Form/RegistrationForm/RegistrationForm";
+import { GoogleSignInButton } from "@/components/Form/GoogleSignInButton/GoogleSignInButton";
 import { questions } from "./questions";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -36,6 +37,7 @@ export function QuizModal({
 }: QuizModalProps) {
   const { t } = useTranslation();
   const [workoutType] = useState<"home" | "gym">("gym");
+  const [oauthError, setOauthError] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<number[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
@@ -578,6 +580,20 @@ export function QuizModal({
                   submitLabel={t("quiz.nav.registerAndGenerate")}
                   onSuccess={handleRegistrationSuccess}
                 />
+                <div className="mt-5 space-y-3">
+                  {oauthError && (
+                    <p
+                      role="alert"
+                      className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600"
+                    >
+                      {oauthError}
+                    </p>
+                  )}
+                  <GoogleSignInButton
+                    label={t("registrationPage.continueWithGoogle")}
+                    onError={setOauthError}
+                  />
+                </div>
               </div>
             </div>
             <div className="mt-6 mx-4 mb-5">

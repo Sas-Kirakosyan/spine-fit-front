@@ -6,6 +6,7 @@ import { FormHeader } from "@/components/Form/FormHeader/FormHeader";
 import { FormField } from "@/components/Form/FormField/FormField";
 import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
+import { GoogleSignInButton } from "@/components/Form/GoogleSignInButton/GoogleSignInButton";
 import { Divider } from "@/components/Form/Divider/Divider";
 import { ForgotPasswordModal } from "@/components/Form/ForgotPasswordModal/ForgotPasswordModal";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
@@ -191,6 +192,11 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
             </div>
 
             <SubmitButton text={t("loginPage.signIn")} loading={loading} />
+
+            <GoogleSignInButton
+              label={t("loginPage.continueWithGoogle")}
+              onError={setAuthError}
+            />
 
             <Divider />
 

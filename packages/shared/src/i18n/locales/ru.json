@@ -274,6 +274,7 @@
     "rememberMe": "Запомнить меня",
     "forgotPassword": "Забыли пароль?",
     "signIn": "Войти",
+    "continueWithGoogle": "Войти через Google",
     "noAccount": "Нет аккаунта?",
     "startProgram": "Начать программу",
     "errors": {
@@ -327,6 +328,7 @@
     "password": "Пароль",
     "passwordPlaceholder": "Введите пароль",
     "register": "Зарегистрироваться",
+    "continueWithGoogle": "Зарегистрироваться через Google",
     "haveAccount": "Уже есть аккаунт?",
     "login": "Войти",
     "errors": {

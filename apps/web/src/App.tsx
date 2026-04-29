@@ -32,6 +32,7 @@ import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { useAuth } from "@/hooks/useAuth";
 import { retryPendingQuizSync } from "@/lib/quizStorage";
+import { OAUTH_IN_PROGRESS_KEY } from "@/lib/authService";
 
 const PUBLIC_PAGES: Page[] = ["home", "login", "register", "resetPassword"];
 
@@ -105,6 +106,34 @@ const PATH_TO_PAGE = Object.fromEntries(
 function App() {
   const auth = useAuth();
   const [isPagePending, startPageTransition] = useTransition();
+  const [autoOpenQuiz, setAutoOpenQuiz] = useState(false);
+  const [oauthError, setOauthError] = useState<string | null>(() => {
+    // Surface ?error=... or #error=... that Supabase / Google may bounce back
+    // with after a failed OAuth, otherwise the user just lands silently on
+    // home and thinks the click did nothing.
+    if (typeof window === "undefined") return null;
+    const search = new URLSearchParams(window.location.search);
+    const hash = new URLSearchParams(
+      window.location.hash.startsWith("#")
+        ? window.location.hash.slice(1)
+        : window.location.hash
+    );
+    const err =
+      search.get("error_description") ??
+      search.get("error") ??
+      hash.get("error_description") ??
+      hash.get("error");
+    if (err) {
+      const cleaned = new URL(window.location.href);
+      cleaned.searchParams.delete("error");
+      cleaned.searchParams.delete("error_description");
+      cleaned.searchParams.delete("error_code");
+      cleaned.hash = "";
+      window.history.replaceState({}, "", cleaned.toString());
+      return decodeURIComponent(err.replace(/\+/g, " "));
+    }
+    return null;
+  });
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const validPages: Page[] = [
       "home",
@@ -202,13 +231,12 @@ function App() {
     number | null
   >(null);
 
-  // Sync URL to initial page on first mount (no history entry added)
+  // Sync history.state with the resolved page so popstate handlers work.
+  // Do NOT pass a URL: that would strip OAuth callback query params
+  // (?code=...) before Supabase's detectSessionInUrl can exchange them for a
+  // session. Supabase cleans up the URL itself after a successful exchange.
   useEffect(() => {
-    window.history.replaceState(
-      { page: currentPage },
-      "",
-      PAGE_TO_PATH[currentPage]
-    );
+    window.history.replaceState({ page: currentPage }, "");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle browser back/forward
@@ -268,17 +296,67 @@ function App() {
     const refetch = async () => {
       await fetchPlan();
       if (cancelled) return;
-      // On first successful fetch after auth, if the user landed on "home"
-      // and has a plan, send them to workout (preserves pre-migration behavior).
+
       if (!initialRedirectDoneRef.current) {
         initialRedirectDoneRef.current = true;
-        if (hasPlan() && currentPage === "home") {
-          window.history.replaceState(
-            { page: "workout" },
-            "",
-            PAGE_TO_PATH["workout"]
-          );
-          startPageTransition(() => setCurrentPage("workout"));
+
+        const oauthInProgress = localStorage.getItem(OAUTH_IN_PROGRESS_KEY);
+        if (oauthInProgress) {
+          // The user just returned from a Google OAuth round-trip. Always lands
+          // on "/" because redirectTo == window.location.origin.
+          localStorage.removeItem(OAUTH_IN_PROGRESS_KEY);
+
+          // If the user took the quiz before signing up with Google, hand off
+          // to GeneratingPlanPage so they see the loader + retry UI instead of
+          // sitting on HomePage during a silent fetch.
+          const pendingQuiz = localStorage.getItem("quizAnswers");
+          if (pendingQuiz && !hasPlan()) {
+            window.history.replaceState(
+              { page: "generatingPlan" },
+              "",
+              PAGE_TO_PATH["generatingPlan"]
+            );
+            // Direct setState (not transition) so the navigation can't be
+            // interrupted by a higher-priority update before commit.
+            setCurrentPage("generatingPlan");
+            return;
+          }
+
+          // No plan yet -> tell HomePage to open the onboarding quiz, so a
+          // freshly-signed-up Google user isn't stranded on a screen that
+          // looks identical to the unauthenticated home page.
+          if (!hasPlan()) {
+            setAutoOpenQuiz(true);
+          }
+
+          const target: Page = hasPlan() ? "workout" : "home";
+          if (target !== currentPage) {
+            window.history.replaceState(
+              { page: target },
+              "",
+              PAGE_TO_PATH[target]
+            );
+            setCurrentPage(target);
+          }
+          return;
+        }
+
+        // Already-authenticated user (existing session) landing on a public
+        // auth page. Send them to workout if they have a plan, otherwise home.
+        const isAuthLandingPage =
+          currentPage === "home" ||
+          currentPage === "login" ||
+          currentPage === "register";
+        if (isAuthLandingPage) {
+          const target: Page = hasPlan() ? "workout" : "home";
+          if (target !== currentPage) {
+            window.history.replaceState(
+              { page: target },
+              "",
+              PAGE_TO_PATH[target]
+            );
+            startPageTransition(() => setCurrentPage(target));
+          }
         }
       }
     };
@@ -625,6 +703,8 @@ function App() {
             onNavigateToLogin={navigateToLogin}
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToGeneratingPlan={navigateToGeneratingPlan}
+            autoOpenQuiz={autoOpenQuiz}
+            oauthError={oauthError}
           />
         );
       case "generatingPlan":
