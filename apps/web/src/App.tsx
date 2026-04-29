@@ -27,6 +27,7 @@ import {
   resetLocalCache,
 } from "@/lib/planService";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
+import { getSelectedDayIndex } from "@/storage/selectedDayStorage";
 import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
@@ -431,14 +432,14 @@ function App() {
 
         if (activeWorkout) {
           const workoutIndex = plan.workoutDays.findIndex(
-            (day: any) =>
+            (day) =>
               day.dayNumber === activeWorkout.dayNumber &&
               day.dayName === activeWorkout.dayName
           );
 
           if (workoutIndex !== -1) {
             const existingExerciseIds = new Set(
-              plan.workoutDays[workoutIndex].exercises.map((ex: any) => ex.id)
+              plan.workoutDays[workoutIndex].exercises.map((ex) => ex.id)
             );
             const newExercisesToAdd = exercises.filter(
               (ex) => !existingExerciseIds.has(ex.id)
@@ -606,13 +607,14 @@ function App() {
             exercises: replaceInList(day.exercises as Exercise[]),
           }));
         } else {
-          const manualIndex = localStorage.getItem("selectedWorkoutDayIndex");
+          const manualIndex = getSelectedDayIndex();
           let workoutIndex = -1;
-          if (manualIndex !== null) {
-            const idx = parseInt(manualIndex, 10);
-            if (!isNaN(idx) && idx < plan.workoutDays.length) {
-              workoutIndex = idx;
-            }
+          if (
+            manualIndex !== null &&
+            manualIndex >= 0 &&
+            manualIndex < plan.workoutDays.length
+          ) {
+            workoutIndex = manualIndex;
           }
           if (workoutIndex === -1) {
             const currentWorkout = getNextAvailableWorkout(
@@ -880,6 +882,7 @@ function App() {
                     };
                   })
                 );
+                setActiveDayId(null);
               } else {
                 handleAddExercises(exercises);
               }

@@ -1,12 +1,14 @@
 import {
-  useRef,
-  useState,
+  useCallback,
   useEffect,
   useMemo,
+  useRef,
+  useState,
   useSyncExternalStore,
 } from "react";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
+import { useExerciseName } from "@spinefit/shared";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { SavedProgram, WorkoutPageProps } from "@/types/workout";
@@ -17,10 +19,9 @@ import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
 import { WorkoutPageHeader } from "./WorkoutPageHeader";
 import { WorkoutPlanCard } from "@/pages/WorkoutPage/WorkoutPlanCard";
-import {
-  ReplaceExerciseModal,
-  type SwapDurationOption,
-} from "@/pages/WorkoutPage/ReplaceExerciseModal";
+import { ReplaceExerciseModal } from "@/pages/WorkoutPage/ReplaceExerciseModal";
+import { useExerciseManagement } from "@/pages/WorkoutPage/useExerciseManagement";
+import { useReplaceExerciseModal } from "@/pages/WorkoutPage/useReplaceExerciseModal";
 import {
   getPlan,
   getPlanSettings,
@@ -28,13 +29,14 @@ import {
   savePlan,
   subscribe as subscribeToPlan,
 } from "@/lib/planService";
-import type { GeneratedPlan } from "@spinefit/shared";
-import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
-import { ReplaceIcon, TrashIcon } from "@/components/Icons/Icons";
+import type { GeneratedPlan, SwapDurationOption } from "@spinefit/shared";
 import {
-  getAllReplacementExercises,
-  getSuggestedReplacementExercises,
-} from "@/utils/replacementExercises";
+  clearSelectedDayIndex,
+  getSelectedDayIndex,
+  setSelectedDayIndex,
+  subscribeSelectedDay,
+} from "@/storage/selectedDayStorage";
+import { ReplaceIcon, TrashIcon } from "@/components/Icons/Icons";
 import { useTranslation } from "react-i18next";
 
 const SWIPE_ACTION_WIDTH = 88;
@@ -67,7 +69,6 @@ function SwipeableExerciseCard({
   const draggingRef = useRef(false);
   const isHorizontalSwipeRef = useRef(false);
   const movedRef = useRef(false);
-  const actionPressHandledRef = useRef(false);
 
   useEffect(() => {
     if (!draggingRef.current) {
@@ -94,21 +95,18 @@ function SwipeableExerciseCard({
     const shouldOpen = offsetRef.current <= -SWIPE_MAX_OFFSET / 2;
     setOffsetX(shouldOpen ? -SWIPE_MAX_OFFSET : 0);
     onOpenChange(shouldOpen ? exerciseId : null);
+    movedRef.current = false;
   };
 
-  const handleActionPress = (event: React.PointerEvent | React.MouseEvent) => {
-    event.preventDefault();
+  // Stops swipe-detection on the parent so a tap on the action button isn't
+  // treated as the start of a drag and the subsequent click is delivered.
+  const stopSwipe = (event: React.PointerEvent) => {
     event.stopPropagation();
   };
 
-  const runActionOnce = (action: () => void) => {
-    if (actionPressHandledRef.current) return;
-    actionPressHandledRef.current = true;
+  const handleAction = (action: () => void) => {
     action();
     onOpenChange(null);
-    window.setTimeout(() => {
-      actionPressHandledRef.current = false;
-    }, 0);
   };
 
   return (
@@ -116,17 +114,13 @@ function SwipeableExerciseCard({
       <div className="absolute inset-y-0 right-0 flex">
         <button
           type="button"
-          onPointerDown={handleActionPress}
-          onPointerUp={(event) => {
-            handleActionPress(event);
-            runActionOnce(onReplace);
-          }}
+          onPointerDown={stopSwipe}
           onClick={(event) => {
-            handleActionPress(event);
-            runActionOnce(onReplace);
+            event.stopPropagation();
+            handleAction(onReplace);
           }}
           className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#21243A] text-white"
-          aria-label="Replace exercise"
+          aria-label={t("workoutPage.swipeCard.replace")}
         >
           <ReplaceIcon className="h-6 w-6" />
           <span className="text-xs font-semibold">
@@ -135,17 +129,13 @@ function SwipeableExerciseCard({
         </button>
         <button
           type="button"
-          onPointerDown={handleActionPress}
-          onPointerUp={(event) => {
-            handleActionPress(event);
-            runActionOnce(onDelete);
-          }}
+          onPointerDown={stopSwipe}
           onClick={(event) => {
-            handleActionPress(event);
-            runActionOnce(onDelete);
+            event.stopPropagation();
+            handleAction(onDelete);
           }}
           className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#D04A40] text-white"
-          aria-label="Delete exercise"
+          aria-label={t("workoutPage.swipeCard.delete")}
         >
           <TrashIcon className="h-6 w-6" />
           <span className="text-xs font-semibold">
@@ -236,42 +226,41 @@ function WorkoutPage({
   completedWorkoutIds = new Set(),
 }: WorkoutPageProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
 
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const [swipedExerciseId, setSwipedExerciseId] = useState<number | null>(null);
-  const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
-  const [replaceQuery, setReplaceQuery] = useState("");
-  const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>(
-    isCustomWorkout && externalExercises?.length ? externalExercises : []
-  );
-  const [isLoadingPlan, setIsLoadingPlan] = useState(!isCustomWorkout);
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const selectedDayIndexRef = useRef<number | null>(
-    (() => {
-      const stored = localStorage.getItem("selectedWorkoutDayIndex");
-      if (stored !== null) {
-        const idx = parseInt(stored, 10);
-        return isNaN(idx) ? null : idx;
-      }
-      return null;
-    })()
-  );
-  const [c, setC] = useState(0); // counter to trigger re-generation
   const [isRegenerating, setIsRegenerating] = useState(false);
   const allExercises = allExercisesData as Exercise[];
 
-  const syncGeneratedPlanWithSavedProgram = (
-    plan: GeneratedPlan
-  ): GeneratedPlan => {
+  const {
+    todaysExercises: workoutExercises,
+    setTodaysExercises: setWorkoutExercises,
+    isLoading: isLoadingPlan,
+    deleteExercise,
+    replaceExercise,
+  } = useExerciseManagement({
+    completedWorkoutIds,
+    isCustomWorkout,
+    externalExercises,
+  });
+
+  // Sync the in-memory plan with any locally-saved program that shares its id,
+  // so manual edits made in CreateProgramPage are reflected here on next load.
+  useEffect(() => {
+    if (isCustomWorkout) return;
     try {
+      const plan = getPlan();
+      if (!plan) return;
       const savedProgramsString = localStorage.getItem("savedPrograms");
-      if (!savedProgramsString) return plan;
+      if (!savedProgramsString) return;
 
       const savedPrograms: SavedProgram[] = JSON.parse(savedProgramsString);
-      if (!Array.isArray(savedPrograms)) return plan;
+      if (!Array.isArray(savedPrograms)) return;
 
       const matchingProgram = savedPrograms.find((p) => p.id === plan.id);
-      if (!matchingProgram) return plan;
+      if (!matchingProgram) return;
 
       const syncedWorkoutDays = matchingProgram.days.map((day, index) => ({
         dayNumber: index + 1,
@@ -286,129 +275,17 @@ function WorkoutPage({
       const workoutDaysChanged =
         JSON.stringify(plan.workoutDays) !== JSON.stringify(syncedWorkoutDays);
 
-      if (!nameChanged && !workoutDaysChanged) return plan;
+      if (!nameChanged && !workoutDaysChanged) return;
 
-      const syncedPlan: GeneratedPlan = {
+      savePlan({
         ...plan,
         name: matchingProgram.name,
         workoutDays: syncedWorkoutDays,
-      };
-
-      savePlan(syncedPlan);
-      return syncedPlan;
+      });
     } catch (error) {
       console.error("Error syncing generated plan with saved program:", error);
-      return plan;
     }
-  };
-
-  // Sync from external exercises when switching to custom workout mode (e.g. saved workout selected)
-  useEffect(() => {
-    if (isCustomWorkout && externalExercises && externalExercises.length > 0) {
-      setWorkoutExercises(externalExercises);
-      setIsLoadingPlan(false);
-    }
-  }, [isCustomWorkout, externalExercises]);
-
-  // Load or generate plan when component mounts
-  useEffect(() => {
-    if (isCustomWorkout) return;
-    console.log("Initializing workout plan...");
-    const initializePlan = () => {
-      try {
-        // Check if plan already exists
-        let plan = getPlan();
-        if (plan) {
-          plan = syncGeneratedPlanWithSavedProgram(plan);
-
-          // Prefer manually selected day from swap sheet
-          if (selectedDayIndexRef.current !== null) {
-            const idx = selectedDayIndexRef.current;
-            if (
-              idx < plan.workoutDays.length &&
-              plan.workoutDays[idx].exercises.length > 0
-            ) {
-              setWorkoutExercises(plan.workoutDays[idx].exercises);
-              console.log(
-                `📋 Loaded manually selected ${plan.workoutDays[idx].dayName} workout (${plan.workoutDays[idx].exercises.length} exercises)`
-              );
-              setIsLoadingPlan(false);
-              return;
-            }
-          }
-
-          // Get next uncompleted workout based on completion status
-          const nextWorkout = getNextAvailableWorkout(
-            plan,
-            completedWorkoutIds
-          );
-          console.log("nextWorkout:", nextWorkout);
-          if (nextWorkout && nextWorkout.exercises.length > 0) {
-            setWorkoutExercises(nextWorkout.exercises);
-            console.log(
-              `📋 Loaded ${nextWorkout.dayName} workout (${nextWorkout.exercises.length} exercises)`
-            );
-          } else {
-            // Fallback to first workout day
-            if (
-              plan.workoutDays.length > 0 &&
-              plan.workoutDays[0].exercises.length > 0
-            ) {
-              setWorkoutExercises(plan.workoutDays[0].exercises);
-            }
-          }
-          setIsLoadingPlan(false);
-          return;
-        }
-
-        // No existing plan — user needs to generate one via the AI page
-      } catch (error) {
-        console.error("Error initializing workout plan:", error);
-      } finally {
-        setIsLoadingPlan(false);
-      }
-    };
-
-    initializePlan();
-  }, [completedWorkoutIds, c, isCustomWorkout]);
-
-  // Subscribe to plan cache changes (replaces old cross-tab storage-event listener
-  // and the 500ms polling hack that existed when plan lived in localStorage).
-  useEffect(() => {
-    if (isCustomWorkout) return;
-    const reloadExercisesFromPlan = () => {
-      try {
-        const plan = getPlan();
-        if (!plan) return;
-        const targetWorkout =
-          selectedDayIndexRef.current !== null
-            ? plan.workoutDays[selectedDayIndexRef.current]
-            : getNextAvailableWorkout(plan, completedWorkoutIds);
-        if (targetWorkout && targetWorkout.exercises.length > 0) {
-          setWorkoutExercises((prev) => {
-            const prevIds = prev
-              .map((e) => e.id)
-              .sort()
-              .join(",");
-            const nextIds = targetWorkout.exercises
-              .map((e) => e.id)
-              .sort()
-              .join(",");
-            if (prevIds !== nextIds) {
-              return targetWorkout.exercises;
-            }
-            return prev;
-          });
-        }
-      } catch (error) {
-        console.error("Error reloading exercises from plan:", error);
-      }
-    };
-
-    reloadExercisesFromPlan();
-    const unsubscribe = subscribeToPlan(reloadExercisesFromPlan);
-    return unsubscribe;
-  }, [completedWorkoutIds, isCustomWorkout]);
+  }, [isCustomWorkout]);
 
   const hasGeneratedPlan = useSyncExternalStore(
     subscribeToPlan,
@@ -420,22 +297,25 @@ function WorkoutPage({
     [hasGeneratedPlan, isCustomWorkout, workoutExercises]
   );
 
-  // Calculate current workout day name based on manual selection or rotation index
-  const getCurrentDayName = (): string => {
-    const plan = getPlan();
-    if (!plan || plan.workoutDays.length === 0)
-      return t("workoutPage.messages.noWorkout");
+  const selectedDayIndex = useSyncExternalStore(
+    subscribeSelectedDay,
+    getSelectedDayIndex,
+    () => null
+  );
 
-    // Prefer manually selected day
-    const manual = localStorage.getItem("selectedWorkoutDayIndex");
-    if (manual !== null) {
-      const idx = parseInt(manual, 10);
-      if (!isNaN(idx) && plan.workoutDays[idx]) {
-        return plan.workoutDays[idx].dayName;
-      }
+  const currentDayName = useMemo(() => {
+    if (displayExercises.length === 0) {
+      return t("workoutPage.messages.noWorkout");
+    }
+    const plan = getPlan();
+    if (!plan || plan.workoutDays.length === 0) {
+      return t("workoutPage.messages.noWorkout");
     }
 
-    // Fallback to rotation index
+    if (selectedDayIndex !== null && plan.workoutDays[selectedDayIndex]) {
+      return plan.workoutDays[selectedDayIndex].dayName;
+    }
+
     const planCompletedCount = Array.from(completedWorkoutIds).filter((id) =>
       id.startsWith(plan.id)
     ).length;
@@ -444,30 +324,12 @@ function WorkoutPage({
       plan.workoutDays[rotationIndex]?.dayName ||
       t("workoutPage.labels.todayWorkout")
     );
-  };
+  }, [displayExercises.length, selectedDayIndex, completedWorkoutIds, t]);
 
-  const currentDayName =
-    displayExercises.length > 0
-      ? getCurrentDayName()
-      : t("workoutPage.messages.noWorkout");
-
-  console.log("plan", getPlan()); // dont remove this log
-
-  // Handler for when user switches to a different training split
   const handlePlanSwitched = (updatedPlan: GeneratedPlan) => {
-    console.log(
-      "[WorkoutPage] Plan switched to:",
-      updatedPlan.splitType,
-      updatedPlan.name
-    );
-
-    // Update displayed exercises to first day of new split
     const firstWorkout = updatedPlan.workoutDays[0];
     if (firstWorkout && firstWorkout.exercises.length > 0) {
       setWorkoutExercises(firstWorkout.exercises);
-      console.log(
-        `📋 Switched to ${firstWorkout.dayName} (${firstWorkout.exercises.length} exercises)`
-      );
     }
   };
 
@@ -493,10 +355,8 @@ function WorkoutPage({
         };
         if (result.success && result.plan) {
           localStorage.removeItem("completedWorkoutIds");
-          localStorage.removeItem("selectedWorkoutDayIndex");
-          selectedDayIndexRef.current = null;
+          clearSelectedDayIndex();
           savePlan(result.plan);
-          setC((prev) => prev + 1);
         }
       } else {
         console.error("Regenerate plan API error:", response.status);
@@ -508,151 +368,46 @@ function WorkoutPage({
     }
   };
 
-  const updateCurrentWorkoutInPlan = (
-    updateExercises: (exercises: Exercise[]) => Exercise[]
-  ): boolean => {
-    const plan = getPlan();
-    if (!plan) return false;
-
-    const currentWorkout = getNextAvailableWorkout(plan, completedWorkoutIds);
-    if (!currentWorkout) return false;
-
-    const workoutIndex = plan.workoutDays.findIndex(
-      (day) =>
-        day.dayNumber === currentWorkout.dayNumber &&
-        day.dayName === currentWorkout.dayName
-    );
-    if (workoutIndex === -1) return false;
-
-    plan.workoutDays[workoutIndex].exercises = updateExercises(
-      plan.workoutDays[workoutIndex].exercises as Exercise[]
-    );
-    savePlan(plan);
-    return true;
-  };
-
-  const handleDeleteExercise = (exerciseToDelete: Exercise) => {
-    try {
-      const removedFromCurrentWorkout = updateCurrentWorkoutInPlan(
-        (exercises) => exercises.filter((ex) => ex.id !== exerciseToDelete.id)
-      );
-
-      if (!removedFromCurrentWorkout) {
-        const plan = getPlan();
-        if (plan) {
-          let removed = false;
-          for (const workoutDay of plan.workoutDays) {
-            const beforeCount = workoutDay.exercises.length;
-            workoutDay.exercises = workoutDay.exercises.filter(
-              (ex: Exercise) => ex.id !== exerciseToDelete.id
-            );
-            if (workoutDay.exercises.length < beforeCount) {
-              removed = true;
-            }
-          }
-          if (removed) {
-            savePlan(plan);
-          }
-        }
-      }
-
-      setWorkoutExercises((prev) =>
-        prev.filter((ex) => ex.id !== exerciseToDelete.id)
-      );
+  const handleDeleteExercise = useCallback(
+    (exerciseToDelete: Exercise) => {
+      deleteExercise(exerciseToDelete);
       setSwipedExerciseId((prev) =>
         prev === exerciseToDelete.id ? null : prev
       );
-
-      if (onRemoveExercise) {
+      // Only propagate to the parent's custom-workout list. For plan workouts
+      // the plan is the source of truth and the parent's state must not be
+      // mutated, otherwise unrelated localStorage state ("workoutExercises")
+      // gets polluted.
+      if (isCustomWorkout && onRemoveExercise) {
         onRemoveExercise(exerciseToDelete.id);
       }
-    } catch (error) {
-      console.error("Error removing exercise:", error);
-    }
-  };
+    },
+    [deleteExercise, isCustomWorkout, onRemoveExercise]
+  );
 
-  const handleReplaceExercise = (
-    oldExercise: Exercise,
-    selectedReplacement: Exercise,
-    duration: SwapDurationOption
-  ) => {
-    const replacement: Exercise = {
-      ...selectedReplacement,
-      sets: oldExercise.sets,
-      reps: oldExercise.reps,
-      weight: oldExercise.weight,
-      weight_unit: oldExercise.weight_unit,
-    };
-
-    const replaceInWorkout = (exercises: Exercise[]) => {
-      const hasDuplicate = exercises.some(
-        (ex) => ex.id === replacement.id && ex.id !== oldExercise.id
-      );
-      if (hasDuplicate) return exercises;
-      return exercises.map((ex) =>
-        ex.id === oldExercise.id ? replacement : ex
-      );
-    };
-
-    try {
-      if (duration === "plan") {
-        const plan = getPlan();
-        if (plan) {
-          plan.workoutDays = plan.workoutDays.map((day) => ({
-            ...day,
-            exercises: replaceInWorkout(day.exercises as Exercise[]),
-          }));
-          savePlan(plan);
-
-          setWorkoutExercises((prev) => replaceInWorkout(prev));
-        }
-      } else {
-        const replaced = updateCurrentWorkoutInPlan((exercises) =>
-          replaceInWorkout(exercises)
-        );
-
-        if (replaced) {
-          setWorkoutExercises((prev) => replaceInWorkout(prev));
-        }
-      }
-    } catch (error) {
-      console.error("Error replacing exercise:", error);
-    } finally {
-      setSwipedExerciseId(null);
-      setReplaceExercise(null);
-      setReplaceQuery("");
-      setActionExercise(null);
-    }
-  };
-
-  const allReplacementExercises = useMemo(() => {
-    return getAllReplacementExercises({
-      allExercises,
-      replaceExercise,
-      replaceQuery,
-      currentExercises: displayExercises,
-    });
-  }, [allExercises, replaceExercise, replaceQuery, displayExercises]);
-
-  const suggestedReplacementExercises = useMemo(() => {
-    return getSuggestedReplacementExercises({
-      allReplacementExercises,
-      replaceExercise,
-    });
-  }, [allReplacementExercises, replaceExercise]);
-
-  const handleCloseReplaceModal = () => {
-    setReplaceExercise(null);
-    setReplaceQuery("");
-  };
+  const {
+    replaceExercise: replaceExerciseTarget,
+    setReplaceExercise: setReplaceExerciseTarget,
+    replaceQuery,
+    setReplaceQuery,
+    allReplacementExercises,
+    suggestedReplacementExercises,
+    closeReplaceModal,
+  } = useReplaceExerciseModal({
+    allExercises,
+    currentExercises: displayExercises,
+    getSearchableName: getExerciseName,
+  });
 
   const handleConfirmSwap = (
     replacement: Exercise,
     duration: SwapDurationOption
   ) => {
-    if (replaceExercise) {
-      handleReplaceExercise(replaceExercise, replacement, duration);
-    }
+    if (!replaceExerciseTarget) return;
+    replaceExercise(replaceExerciseTarget, replacement, duration);
+    setSwipedExerciseId(null);
+    closeReplaceModal();
+    setActionExercise(null);
   };
 
   return (
@@ -706,9 +461,6 @@ function WorkoutPage({
               );
               if (selectedWorkout && selectedWorkout.exercises.length > 0) {
                 setWorkoutExercises(selectedWorkout.exercises);
-                console.log(
-                  `📋 Swapped to ${selectedWorkout.dayName} (${selectedWorkout.exercises.length} exercises)`
-                );
               }
             }
           }}
@@ -718,8 +470,7 @@ function WorkoutPage({
           onSelectPlanDay={(dayIndex) => {
             const p = getPlan();
             if (p?.workoutDays[dayIndex]) {
-              selectedDayIndexRef.current = dayIndex;
-              localStorage.setItem("selectedWorkoutDayIndex", String(dayIndex));
+              setSelectedDayIndex(dayIndex);
               setWorkoutExercises(p.workoutDays[dayIndex].exercises);
             }
           }}
@@ -739,7 +490,7 @@ function WorkoutPage({
                 exerciseId={exercise.id}
                 isOpen={swipedExerciseId === exercise.id}
                 onOpenChange={(exerciseId) => setSwipedExerciseId(exerciseId)}
-                onReplace={() => setReplaceExercise(exercise)}
+                onReplace={() => setReplaceExerciseTarget(exercise)}
                 onDelete={() => handleDeleteExercise(exercise)}
               >
                 <ExerciseCard
@@ -772,15 +523,14 @@ function WorkoutPage({
             </div>
           )}
 
-          <div
-            className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B]/90 p-3 text-left shadow-xl ring-1 ring-white/5"
-            role="button"
-            tabIndex={0}
+          <button
+            type="button"
             onClick={() => {
               if (onNavigateToAllExercise) {
                 onNavigateToAllExercise();
               }
             }}
+            className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B]/90 p-3 text-left shadow-xl ring-1 ring-white/5"
           >
             <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[10px] border-2 border-stone-500 bg-transparent">
               <svg
@@ -804,7 +554,7 @@ function WorkoutPage({
                 {t("workoutPage.buttons.addExercise")}
               </span>
             </div>
-          </div>
+          </button>
         </section>
       </div>
 
@@ -845,7 +595,7 @@ function WorkoutPage({
           }}
           onReplace={() => {
             if (actionExercise) {
-              setReplaceExercise(actionExercise);
+              setReplaceExerciseTarget(actionExercise);
             }
           }}
           onDelete={() => {
@@ -858,15 +608,15 @@ function WorkoutPage({
         />
       )}
 
-      {replaceExercise && (
+      {replaceExerciseTarget && (
         <ReplaceExerciseModal
-          replaceExercise={replaceExercise}
+          replaceExercise={replaceExerciseTarget}
           searchQuery={replaceQuery}
           onSearchChange={setReplaceQuery}
           suggestedExercises={suggestedReplacementExercises}
           allExercises={allReplacementExercises}
           onConfirmSwap={handleConfirmSwap}
-          onClose={handleCloseReplaceModal}
+          onClose={closeReplaceModal}
         />
       )}
       {isRegenerating && <PlanGeneratingLoader />}

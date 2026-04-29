@@ -111,7 +111,8 @@
     "onlyForWorkout": "Только для этой тренировки",
     "permanentReplacement": "Постоянная замена в плане",
     "cancel": "Отмена",
-    "confirmSwap": "Подтвердить замену"
+    "confirmSwap": "Подтвердить замену",
+    "clearSearch": "Очистить поиск"
   },
   "swapWorkoutActionSheet": {
     "title": "Заменить тренировку",

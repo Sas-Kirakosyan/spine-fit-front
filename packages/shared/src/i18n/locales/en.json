@@ -111,7 +111,8 @@
     "onlyForWorkout": "Only for this workout",
     "permanentReplacement": "Permanent replacement in plan",
     "cancel": "Cancel",
-    "confirmSwap": "Confirm Swap"
+    "confirmSwap": "Confirm Swap",
+    "clearSearch": "Clear search"
   },
   "swapWorkoutActionSheet": {
     "title": "Swap Workout",

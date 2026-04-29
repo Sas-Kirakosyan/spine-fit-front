@@ -3,35 +3,47 @@ import type { Exercise } from "../types/exercise";
 const ALL_REPLACEMENTS_LIMIT = 60;
 const SUGGESTED_REPLACEMENTS_LIMIT = 20;
 
+function defaultSearchableName(exercise: Exercise): string {
+  return exercise.name;
+}
+
 export function getAllReplacementExercises({
   allExercises,
   replaceExercise,
   replaceQuery,
   currentExercises,
+  getSearchableName = defaultSearchableName,
 }: {
   allExercises: Exercise[];
   replaceExercise: Exercise | null;
   replaceQuery: string;
   currentExercises: Exercise[];
+  getSearchableName?: (exercise: Exercise) => string;
 }): Exercise[] {
   if (!replaceExercise) return [];
 
   const query = replaceQuery.trim().toLowerCase();
+  const occupiedIds = new Set(
+    currentExercises
+      .filter((ex) => ex.id !== replaceExercise.id)
+      .map((ex) => ex.id),
+  );
 
-  return allExercises
-    .filter((exercise) => {
-      const matchesQuery =
-        query.length === 0 || exercise.name.toLowerCase().includes(query);
-      const isSameExercise = exercise.id === replaceExercise.id;
-      const alreadyExistsInWorkout = currentExercises.some(
-        (workoutExercise) =>
-          workoutExercise.id === exercise.id &&
-          workoutExercise.id !== replaceExercise.id,
-      );
+  const matched: Exercise[] = [];
+  for (const exercise of allExercises) {
+    if (exercise.id === replaceExercise.id) continue;
+    if (occupiedIds.has(exercise.id)) continue;
 
-      return matchesQuery && !isSameExercise && !alreadyExistsInWorkout;
-    })
-    .slice(0, ALL_REPLACEMENTS_LIMIT);
+    if (query.length > 0) {
+      const searchable =
+        `${getSearchableName(exercise)} ${exercise.muscle_groups.join(" ")}`.toLowerCase();
+      if (!searchable.includes(query)) continue;
+    }
+
+    matched.push(exercise);
+    if (matched.length >= ALL_REPLACEMENTS_LIMIT) break;
+  }
+  return matched;
 }
 
 export function getSuggestedReplacementExercises({

@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { Exercise } from "@/types/exercise";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
+import { useExerciseName } from "@spinefit/shared";
 import type {
   ActiveWorkoutPageProps,
   FinishedWorkoutSummary,
@@ -19,14 +20,15 @@ import {
   ReplaceExerciseModal,
   type SwapDurationOption,
 } from "@/pages/WorkoutPage/ReplaceExerciseModal";
-import { getPlan, savePlan } from "@/lib/planService";
+import { getPlan } from "@/lib/planService";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import {
-  getAllReplacementExercises,
-  getSuggestedReplacementExercises,
-} from "@/utils/replacementExercises";
+  clearSelectedDayIndex,
+  getSelectedDayIndex,
+} from "@/storage/selectedDayStorage";
 import { useWorkoutTimer } from "./useWorkoutTimer";
 import { useExerciseManagement } from "./useExerciseManagement";
+import { useReplaceExerciseModal } from "./useReplaceExerciseModal";
 import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/utils/analytics";
 
@@ -44,9 +46,8 @@ function ActiveWorkoutPage({
   isCustomWorkout = false,
 }: ActiveWorkoutPageProps) {
   const { t } = useTranslation();
+  const { getExerciseName } = useExerciseName();
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
-  const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
-  const [replaceQuery, setReplaceQuery] = useState("");
   const [showFinishModal, setShowFinishModal] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
   const [fixedDuration, setFixedDuration] = useState<string>("00:00:00");
@@ -61,21 +62,20 @@ function ActiveWorkoutPage({
     return parts[0] * 3600 + parts[1] * 60 + parts[2];
   };
 
-  // Custom hooks
   const { elapsedSeconds, formattedTime, resetToElapsed } = useWorkoutTimer({
     initialStartTime: workoutStartTime,
     isPaused: showFinishModal,
   });
 
-  const { todaysExercises, setTodaysExercises, updateCurrentWorkoutInPlan } =
-    useExerciseManagement(completedWorkoutIds);
-
-  // Override with custom exercises when in custom workout mode
-  useEffect(() => {
-    if (isCustomWorkout && customExercises && customExercises.length > 0) {
-      setTodaysExercises(customExercises);
-    }
-  }, [isCustomWorkout, customExercises, setTodaysExercises]);
+  const {
+    todaysExercises,
+    deleteExercise,
+    replaceExercise,
+  } = useExerciseManagement({
+    completedWorkoutIds,
+    isCustomWorkout,
+    externalExercises: customExercises,
+  });
 
   const completedExerciseIdsSet = useMemo(
     () => new Set(completedExerciseIds.map((id) => String(id))),
@@ -84,99 +84,25 @@ function ActiveWorkoutPage({
 
   const handleDeleteExercise = useCallback(
     (exerciseToDelete: Exercise) => {
-      try {
-        const removed = updateCurrentWorkoutInPlan((exercises: Exercise[]) =>
-          exercises.filter((item: Exercise) => item.id !== exerciseToDelete.id)
-        );
-        if (removed) {
-          setTodaysExercises((prev: Exercise[]) =>
-            prev.filter((item: Exercise) => item.id !== exerciseToDelete.id)
-          );
-        }
-      } catch (error) {
-        console.error("Error deleting exercise in active workout:", error);
-      } finally {
-        setActionExercise(null);
-      }
+      deleteExercise(exerciseToDelete);
+      setActionExercise(null);
     },
-    [updateCurrentWorkoutInPlan, setTodaysExercises]
+    [deleteExercise]
   );
 
-  const handleReplaceExercise = useCallback(
-    (
-      oldExercise: Exercise,
-      selectedReplacement: Exercise,
-      duration: SwapDurationOption
-    ) => {
-      const replacement: Exercise = {
-        ...selectedReplacement,
-        sets: oldExercise.sets,
-        reps: oldExercise.reps,
-        weight: oldExercise.weight,
-        weight_unit: oldExercise.weight_unit,
-      };
-
-      const replaceInWorkout = (exercises: Exercise[]) => {
-        const hasDuplicate = exercises.some(
-          (item: Exercise) =>
-            item.id === replacement.id && item.id !== oldExercise.id
-        );
-        if (hasDuplicate) return exercises;
-        return exercises.map((item: Exercise) =>
-          item.id === oldExercise.id ? replacement : item
-        );
-      };
-
-      try {
-        if (duration === "plan") {
-          const generatedPlan = getPlan();
-
-          if (generatedPlan) {
-            generatedPlan.workoutDays = generatedPlan.workoutDays.map(
-              (day) => ({
-                ...day,
-                exercises: replaceInWorkout(day.exercises as Exercise[]),
-              })
-            );
-            savePlan(generatedPlan);
-
-            setTodaysExercises((prev: Exercise[]) => replaceInWorkout(prev));
-          }
-        } else {
-          const replaced = updateCurrentWorkoutInPlan((exercises: Exercise[]) =>
-            replaceInWorkout(exercises)
-          );
-
-          if (replaced) {
-            setTodaysExercises((prev: Exercise[]) => replaceInWorkout(prev));
-          }
-        }
-      } catch (error) {
-        console.error("Error replacing exercise in active workout:", error);
-      } finally {
-        setReplaceExercise(null);
-        setReplaceQuery("");
-        setActionExercise(null);
-      }
-    },
-    [updateCurrentWorkoutInPlan, setTodaysExercises]
-  );
-
-  const allReplacementExercises = useMemo(() => {
-    return getAllReplacementExercises({
-      allExercises,
-      replaceExercise,
-      replaceQuery,
-      currentExercises: todaysExercises,
-    });
-  }, [allExercises, replaceExercise, replaceQuery, todaysExercises]);
-
-  const suggestedReplacementExercises = useMemo(() => {
-    return getSuggestedReplacementExercises({
-      allReplacementExercises,
-      replaceExercise,
-    });
-  }, [allReplacementExercises, replaceExercise]);
+  const {
+    replaceExercise: replaceExerciseTarget,
+    setReplaceExercise: setReplaceExerciseTarget,
+    replaceQuery,
+    setReplaceQuery,
+    allReplacementExercises,
+    suggestedReplacementExercises,
+    closeReplaceModal,
+  } = useReplaceExerciseModal({
+    allExercises,
+    currentExercises: todaysExercises,
+    getSearchableName: getExerciseName,
+  });
 
   const allExercisesCompleted = useMemo(() => {
     return (
@@ -243,17 +169,12 @@ function ActiveWorkoutPage({
 
     setShowFinishModal(false);
 
-    // Mark current workout as completed
     const generatedPlan = getPlan();
     if (generatedPlan && todaysExercises.length > 0) {
-      // Prefer the manually selected day (from swap sheet), fallback to rotation
       let currentWorkout = null;
-      const manualIndex = localStorage.getItem("selectedWorkoutDayIndex");
-      if (manualIndex !== null) {
-        const idx = parseInt(manualIndex, 10);
-        if (!isNaN(idx) && idx < generatedPlan.workoutDays.length) {
-          currentWorkout = generatedPlan.workoutDays[idx];
-        }
+      const manualIndex = getSelectedDayIndex();
+      if (manualIndex !== null && manualIndex < generatedPlan.workoutDays.length) {
+        currentWorkout = generatedPlan.workoutDays[manualIndex];
       }
       if (!currentWorkout) {
         currentWorkout = getNextAvailableWorkout(
@@ -272,18 +193,10 @@ function ActiveWorkoutPage({
         }
 
         // Clear manual selection so WorkoutPage advances to the next day
-        localStorage.removeItem("selectedWorkoutDayIndex");
+        clearSelectedDayIndex();
 
-        console.log(
-          `✅ Marked workout complete: ${currentWorkout.dayName} (${workoutId})`
-        );
-
-        // Check if there's another workout available
         const nextWorkout = getNextAvailableWorkout(generatedPlan, updatedIds);
-
-        if (nextWorkout) {
-          console.log("Next workout available:", nextWorkout.dayName);
-        } else {
+        if (!nextWorkout) {
           // Full cycle completed — reset completed IDs for this plan so rotation restarts
           const resetIds = new Set(
             Array.from(updatedIds).filter(
@@ -293,7 +206,6 @@ function ActiveWorkoutPage({
           if (setCompletedWorkoutIds) {
             setCompletedWorkoutIds(resetIds);
           }
-          console.log("🎉 Full cycle completed! Resetting for next cycle.");
         }
       }
     }
@@ -314,23 +226,19 @@ function ActiveWorkoutPage({
     setShowExitModal(true);
   }, []);
 
-  const handleCloseReplaceModal = useCallback(() => {
-    setReplaceExercise(null);
-    setReplaceQuery("");
-  }, []);
-
   const handleConfirmSwap = useCallback(
     (replacement: Exercise, duration: SwapDurationOption) => {
-      if (replaceExercise) {
-        trackEvent("exercise_replaced", {
-          exercise_id_original: replaceExercise.id,
-          exercise_id_new: replacement.id,
-          replacement_duration: duration,
-        });
-        handleReplaceExercise(replaceExercise, replacement, duration);
-      }
+      if (!replaceExerciseTarget) return;
+      trackEvent("exercise_replaced", {
+        exercise_id_original: replaceExerciseTarget.id,
+        exercise_id_new: replacement.id,
+        replacement_duration: duration,
+      });
+      replaceExercise(replaceExerciseTarget, replacement, duration);
+      closeReplaceModal();
+      setActionExercise(null);
     },
-    [replaceExercise, handleReplaceExercise]
+    [replaceExerciseTarget, replaceExercise, closeReplaceModal]
   );
 
   return (
@@ -400,7 +308,7 @@ function ActiveWorkoutPage({
             }}
             onReplace={() => {
               if (actionExercise) {
-                setReplaceExercise(actionExercise);
+                setReplaceExerciseTarget(actionExercise);
               }
             }}
             onDelete={() => {
@@ -411,15 +319,15 @@ function ActiveWorkoutPage({
             containerRef={cardRef}
           />
         )}
-        {replaceExercise && (
+        {replaceExerciseTarget && (
           <ReplaceExerciseModal
-            replaceExercise={replaceExercise}
+            replaceExercise={replaceExerciseTarget}
             searchQuery={replaceQuery}
             onSearchChange={setReplaceQuery}
             suggestedExercises={suggestedReplacementExercises}
             allExercises={allReplacementExercises}
             onConfirmSwap={handleConfirmSwap}
-            onClose={handleCloseReplaceModal}
+            onClose={closeReplaceModal}
           />
         )}
         <FinishWorkoutModal

@@ -45,6 +45,7 @@ export function ReplaceExerciseModal({
     setSwapDuration("workout");
   }, [replaceExercise.id]);
 
+  const hasQuery = searchQuery.trim().length > 0;
   const emptyStateText =
     activeTab === "suggested"
       ? t("replaceExerciseModal.noSuggested", { name: replaceExercise.name })
@@ -82,12 +83,14 @@ export function ReplaceExerciseModal({
           </button>
         </div>
 
-        <input
-          value={searchQuery}
-          onChange={(event) => onSearchChange(event.target.value)}
-          placeholder={t("replaceExerciseModal.searchPlaceholder")}
-          className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
-        />
+        {activeTab === "all" && (
+          <input
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
+            placeholder={t("replaceExerciseModal.searchPlaceholder")}
+            className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
+          />
+        )}
 
         <div
           className="max-h-[44vh] space-y-2 overflow-y-auto pr-1 [&::-webkit-scrollbar]:hidden"
@@ -119,8 +122,17 @@ export function ReplaceExerciseModal({
               </button>
             ))
           ) : (
-            <div className="py-6 text-center text-sm text-slate-400">
-              {emptyStateText}
+            <div className="flex flex-col items-center gap-2 py-6 text-center text-sm text-slate-400">
+              <span>{emptyStateText}</span>
+              {activeTab === "all" && hasQuery && (
+                <button
+                  type="button"
+                  onClick={() => onSearchChange("")}
+                  className="text-xs font-semibold text-main underline-offset-2 hover:underline"
+                >
+                  {t("replaceExerciseModal.clearSearch")}
+                </button>
+              )}
             </div>
           )}
         </div>
