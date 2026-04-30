@@ -13,8 +13,7 @@ export const assetUrl = (path: string): string => {
 const nameToKebab = (name: string): string =>
   name
     .toLowerCase()
-    .replace(/[()]/g, "")
-    .replace(/\//g, "")
+    .replace(/[^\p{Letter}\p{Number}\s-]/gu, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
@@ -30,11 +29,22 @@ const SUPABASE_HOST = (() => {
   }
 })();
 
+// Override map for cases where the storage filename doesn't match nameToKebab(exercise.name).
+// Key is the kebab-cased exercise name; value is the actual file stem in storage.
+const VIDEO_NAME_OVERRIDES: Record<string, string> = {
+  "bodyweight-box-squat": "bodyweight-box-squat-2",
+  "cable-face-pull-rope-face-pull": "cable-face-pull",
+  "cable-tricep-pushdown": "cable-tricep-pushdown-machine",
+  "goblet-squat-heels-elevated": "goblet-squat-heels-elevated-2",
+  "incline-dumbbell-press": "incline-dumbbell-press-form",
+  "vertical-leg-raise-captains-chair-bent-knee":
+    "vertical-leg-raise-captain-s-chair-bent-knee",
+};
+
 export const getExerciseVideoUrl = (
   exercise: Pick<Exercise, "id" | "name" | "video_url">
 ): string => {
-  if (!exercise.video_url) return "";
-  if (/^https?:\/\//.test(exercise.video_url)) {
+  if (exercise.video_url && /^https?:\/\//.test(exercise.video_url)) {
     try {
       const host = new URL(exercise.video_url).host;
       if (SUPABASE_HOST && host === SUPABASE_HOST) return exercise.video_url;
@@ -42,5 +52,8 @@ export const getExerciseVideoUrl = (
       // fall through
     }
   }
-  return assetUrl(`Video/Exercises/${nameToKebab(exercise.name)}.mp4`);
+  if (!exercise.name) return "";
+  const stem = nameToKebab(exercise.name);
+  const fileName = VIDEO_NAME_OVERRIDES[stem] ?? stem;
+  return assetUrl(`Video/Exercises/${fileName}.mp4`);
 };

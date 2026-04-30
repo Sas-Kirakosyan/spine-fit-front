@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { formatDurationSeconds } from "@spinefit/shared";
 
-const SPEEDS = [0.5, 1, 1.5, 2] as const;
+const SPEEDS = [1, 0.75, 0.5] as const;
 
 type Props = {
   src: string;
@@ -20,7 +20,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
-  const [speedIndex, setSpeedIndex] = useState(1); // 1x default
+  const [speedIndex, setSpeedIndex] = useState(0); // 1x default
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -149,7 +149,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
         playsInline
         preload="metadata"
         tabIndex={0}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-contain"
         onClick={togglePlay}
         onKeyDown={handleKeyDown}
         onPlay={() => setIsPlaying(true)}
