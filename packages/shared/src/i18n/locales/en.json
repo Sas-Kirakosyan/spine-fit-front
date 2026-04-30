@@ -355,6 +355,13 @@
       "generate": "Generate",
       "generatingTitle": "Generating your personalized plan…",
       "generatingSubtitle": "This may take up to 15 seconds",
+      "generating": {
+        "step1": "Creating your workout profile",
+        "step2": "Selecting safe exercises",
+        "step3": "Building your weekly plan",
+        "step4": "Adjusting intensity",
+        "step5": "Finalizing your plan"
+      },
       "registerAndGenerate": "Get my plan",
       "registerStepTitle": "Create your account",
       "registerStepSubtitle": "Your personalized plan is ready\nCreate your account to unlock it",

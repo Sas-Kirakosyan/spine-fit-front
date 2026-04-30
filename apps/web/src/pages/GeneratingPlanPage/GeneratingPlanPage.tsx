@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import {
   generatePlanFromQuiz,
@@ -6,79 +6,91 @@ import {
 } from "@/lib/planGeneration";
 import { trackEvent } from "@/utils/analytics";
 
-type Status = "generating" | "error";
+type ApiPhase = "pending" | "success";
 
 export interface GeneratingPlanPageProps {
   onSuccess: () => void;
-  onCancel: () => void;
 }
 
-function GeneratingPlanPage({ onSuccess, onCancel }: GeneratingPlanPageProps) {
-  const [status, setStatus] = useState<Status>("generating");
+const INITIAL_RETRY_DELAY_MS = 1000;
+const MAX_RETRY_DELAY_MS = 10_000;
 
-  const runGeneration = useCallback(async () => {
-    const stored = localStorage.getItem("quizAnswers");
-    if (!stored) {
-      setStatus("error");
-      return;
-    }
-
-    let quizData: StoredQuizData;
-    try {
-      quizData = JSON.parse(stored) as StoredQuizData;
-    } catch {
-      setStatus("error");
-      return;
-    }
-
-    setStatus("generating");
-    const result = await generatePlanFromQuiz(quizData);
-
-    if (result.ok) {
-      trackEvent("onboarding_completed", {
-        workout_type: quizData.workoutType,
-        answer_count: Object.keys(quizData.answers).length,
-      });
-      onSuccess();
-    } else {
-      trackEvent("onboarding_failed", {
-        error_type: result.error.includes("Server error")
-          ? "server"
-          : "client",
-      });
-      setStatus("error");
-    }
-  }, [onSuccess, onCancel]);
+function GeneratingPlanPage({ onSuccess }: GeneratingPlanPageProps) {
+  const [apiPhase, setApiPhase] = useState<ApiPhase>("pending");
 
   useEffect(() => {
-    runGeneration();
-  }, [runGeneration]);
+    const state = {
+      mounted: true,
+      timerId: null as number | null,
+    };
 
-  if (status === "generating") {
-    return <PlanGeneratingLoader />;
-  }
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => {
+        state.timerId = window.setTimeout(() => {
+          state.timerId = null;
+          resolve();
+        }, ms);
+      });
+
+    const attemptOnce = async (): Promise<boolean> => {
+      const stored = localStorage.getItem("quizAnswers");
+      if (!stored) return false;
+
+      let quizData: StoredQuizData;
+      try {
+        quizData = JSON.parse(stored) as StoredQuizData;
+      } catch {
+        return false;
+      }
+
+      const result = await generatePlanFromQuiz(quizData);
+      if (!state.mounted) return false;
+
+      if (result.ok) {
+        trackEvent("onboarding_completed", {
+          workout_type: quizData.workoutType,
+          answer_count: Object.keys(quizData.answers).length,
+        });
+        return true;
+      }
+      return false;
+    };
+
+    const run = async () => {
+      let attempt = 0;
+      while (state.mounted) {
+        const ok = await attemptOnce();
+        if (!state.mounted) return;
+        if (ok) {
+          setApiPhase("success");
+          return;
+        }
+        attempt++;
+        const delay = Math.min(
+          INITIAL_RETRY_DELAY_MS * 2 ** (attempt - 1),
+          MAX_RETRY_DELAY_MS
+        );
+        await wait(delay);
+        if (!state.mounted) return;
+      }
+    };
+
+    run();
+
+    return () => {
+      state.mounted = false;
+      if (state.timerId !== null) {
+        window.clearTimeout(state.timerId);
+        state.timerId = null;
+      }
+    };
+  }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background gap-6 px-6 text-center">
-      <p className="text-lg font-medium text-red-500">
-        Failed to generate your plan. Please check your connection and try
-        again.
-      </p>
-      <div className="flex flex-col gap-3 w-full max-w-[280px]">
-        <button
-          onClick={runGeneration}
-          className="rounded-lg bg-primary px-6 py-3 text-white font-medium hover:opacity-90 transition"
-        >
-          Try again
-        </button>
-        <button
-          onClick={onCancel}
-          className="rounded-lg border border-white/20 px-6 py-3 text-white font-medium hover:bg-white/5 transition"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
+    <PlanGeneratingLoader
+      apiPhase={apiPhase}
+      onAllStepsComplete={onSuccess}
+    />
   );
 }
 

@@ -108,7 +108,7 @@ function App() {
   const auth = useAuth();
   const [isPagePending, startPageTransition] = useTransition();
   const [autoOpenQuiz, setAutoOpenQuiz] = useState(false);
-  const [oauthError, setOauthError] = useState<string | null>(() => {
+  const [oauthError] = useState<string | null>(() => {
     // Surface ?error=... or #error=... that Supabase / Google may bounce back
     // with after a failed OAuth, otherwise the user just lands silently on
     // home and thinks the click did nothing.
@@ -508,6 +508,7 @@ function App() {
       id: program.id,
       name: program.name,
       splitType: "CUSTOM",
+      weeks: 4,
       createdAt: program.createdAt,
       settings: getPlanSettings(),
       workoutDays: program.days.map((day, i) => ({
@@ -711,10 +712,7 @@ function App() {
         );
       case "generatingPlan":
         return (
-          <GeneratingPlanPage
-            onSuccess={navigateToWorkout}
-            onCancel={navigateToHome}
-          />
+          <GeneratingPlanPage onSuccess={navigateToWorkout} />
         );
       case "login":
         return (
