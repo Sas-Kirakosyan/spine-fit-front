@@ -3,6 +3,10 @@ import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import type { GeneratedPlan } from "@spinefit/shared";
 import { getPlan, subscribe as subscribeToPlan } from "@/lib/planService";
+import {
+  getSelectedDayIndex,
+  subscribeSelectedDay,
+} from "@/storage/selectedDayStorage";
 import type { SavedProgram } from "@/types/workout";
 
 interface SwapWorkoutActionSheetProps {
@@ -86,6 +90,16 @@ export function SwapWorkoutActionSheet({
   const [savedPrograms, setSavedPrograms] = useState<SavedProgram[]>([]);
   const [actionMenuId, setActionMenuId] = useState<string | null>(null);
 
+  const [selectedDayIndex, setSelectedDayIndexState] = useState<number | null>(
+    () => getSelectedDayIndex()
+  );
+
+  useEffect(() => {
+    return subscribeSelectedDay(() => {
+      setSelectedDayIndexState(getSelectedDayIndex());
+    });
+  }, []);
+
   // Current day index — prefer manually selected day (if not completed), fallback to rotation
   const currentDayIndex = useMemo(() => {
     if (!plan) return 0;
@@ -95,14 +109,10 @@ export function SwapWorkoutActionSheet({
       );
       const completedSet = new Set(completedIds);
 
-      const manual = localStorage.getItem("selectedWorkoutDayIndex");
-      if (manual !== null) {
-        const idx = parseInt(manual, 10);
-        if (!isNaN(idx) && idx < plan.workoutDays.length) {
-          const day = plan.workoutDays[idx];
-          const workoutId = `${plan.id}_${day.dayNumber}_${day.dayName}`;
-          if (!completedSet.has(workoutId)) return idx;
-        }
+      if (selectedDayIndex !== null && selectedDayIndex < plan.workoutDays.length) {
+        const day = plan.workoutDays[selectedDayIndex];
+        const workoutId = `${plan.id}_${day.dayNumber}_${day.dayName}`;
+        if (!completedSet.has(workoutId)) return selectedDayIndex;
       }
 
       const count = completedIds.filter((id) => id.startsWith(plan.id)).length;
@@ -119,7 +129,7 @@ export function SwapWorkoutActionSheet({
     } catch {
       return 0;
     }
-  }, [plan]);
+  }, [plan, selectedDayIndex]);
 
   // Set of completed workout IDs for visual marking
   const completedWorkoutIds = useMemo<Set<string>>(() => {
