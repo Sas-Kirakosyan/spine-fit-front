@@ -149,4 +149,5 @@ export interface PlanSettings {
   painLevel?: number;
   painTriggers?: string[];
   canSquat?: string;
+  additionalNotes?: string;
 }

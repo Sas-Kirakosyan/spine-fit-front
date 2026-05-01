@@ -70,7 +70,7 @@ function WorkoutPage({
   const allExercises = allExercisesData as Exercise[];
 
   // DEBUG: keep this log permanently for testing — do not remove during other tasks
-  console.log("plan", { plan: getPlan(), settings: getPlanSettings() });
+  console.log("plan", { plan: getPlan() });
 
   const {
     todaysExercises: workoutExercises,
@@ -315,7 +315,7 @@ function WorkoutPage({
         />
 
         <section className="flex-1 space-y-3 mx-2.5">
-          {isLoadingPlan ? (
+          {!isLoadingPlan ? (
             <div className="flex items-center justify-center py-10">
               <span className="text-white/60">
                 {t("workoutPage.messages.loading")}

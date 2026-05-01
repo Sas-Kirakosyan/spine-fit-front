@@ -15,7 +15,6 @@ const defaultPlanSettings: PlanSettings = {
 };
 
 let cachedPlan: GeneratedPlan | null = null;
-let cachedSettings: PlanSettings | null = null;
 
 const listeners = new Set<() => void>();
 
@@ -28,14 +27,11 @@ async function getUserId(): Promise<string | null> {
   return data.session?.user.id ?? null;
 }
 
-async function upsertToSupabase(
-  plan: GeneratedPlan,
-  settings: PlanSettings | null
-): Promise<void> {
+async function upsertToSupabase(plan: GeneratedPlan): Promise<void> {
   const userId = await getUserId();
   if (!userId) return;
   const { error } = await supabase.from("user_plans").upsert(
-    { user_id: userId, plan, settings },
+    { user_id: userId, plan },
     { onConflict: "user_id" }
   );
   if (error) {
@@ -52,13 +48,10 @@ let upsertQueue: Promise<void> = Promise.resolve();
 // server copy is stale and must not overwrite the local cache with it.
 let hasUnsyncedLocalChanges = false;
 
-function enqueueUpsert(
-  plan: GeneratedPlan,
-  settings: PlanSettings | null
-): void {
+function enqueueUpsert(plan: GeneratedPlan): void {
   hasUnsyncedLocalChanges = true;
   upsertQueue = upsertQueue
-    .then(() => upsertToSupabase(plan, settings))
+    .then(() => upsertToSupabase(plan))
     .then(() => {
       hasUnsyncedLocalChanges = false;
     })
@@ -75,7 +68,7 @@ export function getPlan(): GeneratedPlan | null {
 }
 
 export function getPlanSettings(): PlanSettings {
-  return cachedSettings ?? defaultPlanSettings;
+  return cachedPlan?.settings ?? defaultPlanSettings;
 }
 
 export function hasPlan(): boolean {
@@ -92,15 +85,16 @@ export function subscribe(listener: () => void): () => void {
 export function savePlan(plan: GeneratedPlan): void {
   cachedPlan = plan;
   notify();
-  enqueueUpsert(plan, cachedSettings);
+  enqueueUpsert(plan);
 }
 
 export function savePlanSettings(settings: PlanSettings): void {
-  cachedSettings = settings;
-  notify();
   if (cachedPlan) {
-    enqueueUpsert(cachedPlan, settings);
+    cachedPlan = { ...cachedPlan, settings };
+    notify();
+    enqueueUpsert(cachedPlan);
   } else {
+    notify();
     // Settings are kept in memory and will be persisted on the next savePlan
     // call. Warn so the caller knows they will not reach Supabase until then.
     console.warn(
@@ -115,17 +109,20 @@ export function savePlanAndSettings(
   plan: GeneratedPlan,
   settings?: PlanSettings | null
 ): void {
-  cachedPlan = plan;
-  if (settings !== undefined) {
-    cachedSettings = settings;
+  if (settings !== undefined && settings !== null) {
+    cachedPlan = { ...plan, settings };
+  } else if (settings === null) {
+    cachedPlan = { ...plan, settings: defaultPlanSettings };
+  } else {
+    // settings === undefined: keep plan.settings as-is
+    cachedPlan = plan;
   }
   notify();
-  enqueueUpsert(plan, cachedSettings);
+  enqueueUpsert(cachedPlan);
 }
 
 export async function clearPlan(): Promise<void> {
   cachedPlan = null;
-  cachedSettings = null;
   notify();
   const userId = await getUserId();
   if (!userId) return;
@@ -156,13 +153,12 @@ export async function fetchPlan(): Promise<void> {
   const userId = await getUserId();
   if (!userId) {
     cachedPlan = null;
-    cachedSettings = null;
     notify();
     return;
   }
   const { data, error } = await supabase
     .from("user_plans")
-    .select("plan, settings")
+    .select("plan")
     .eq("user_id", userId)
     .maybeSingle();
   if (error) {
@@ -171,16 +167,13 @@ export async function fetchPlan(): Promise<void> {
   }
   if (data) {
     cachedPlan = (data.plan as GeneratedPlan) ?? null;
-    cachedSettings = (data.settings as PlanSettings | null) ?? null;
   } else {
     cachedPlan = null;
-    cachedSettings = null;
   }
   notify();
 }
 
 export function resetLocalCache(): void {
   cachedPlan = null;
-  cachedSettings = null;
   notify();
 }
