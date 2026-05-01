@@ -101,80 +101,56 @@
 
 ## How It Works: Behind the Scenes
 
-### 1. Split Scheduler (`splitScheduler.ts`)
+> **Plan generation is now AI-driven.** The backend builds a filtered exercise list and a system + user prompt, then asks Google Gemini to assemble the plan. There is no local rule-based generator. See [`PLAN_GENERATION_FIXES.md`](./PLAN_GENERATION_FIXES.md) for the full picture.
+
+### 1. Split mapping (`splitUtils.ts`)
 
 ```
-Input: "Push/Pull/Legs" + 3 days/week
+Input: "Push/Pull/Legs"
 ↓
-Output:
-- Day 1 (Monday): ["chest", "front_delts", "triceps"]
-- Day 2 (Wednesday): ["lats", "upper_back", "rear_delts", "biceps"]
-- Day 3 (Friday): ["quads", "glutes", "hamstrings"]
-```
-
-### 2. Exercise Filter (`exerciseFilter.ts`)
-
-```
-Available exercises: 10 (from allExercise.json)
+mapSplitType() → "PUSH_PULL_LEGS"
 ↓
-Filter by:
-  ✓ Equipment available
-  ✓ Pain profile (if L5-S1 pain, avoid high-restriction exercises)
-  ✓ Experience level (Intermediate → allow intermediate exercises)
-  ✓ Back safety (only back-friendly exercises)
-↓
-Safe exercises: ~7-8 exercises
+SPLIT_TARGET_MUSCLES["PUSH_PULL_LEGS"] =
+  ["chest", "front_delts", "triceps",
+   "lats", "upper_back", "rear_delts", "biceps",
+   "quads", "glutes", "hamstrings"]
 ```
 
-### 3. Volume Calculator (`volumeCalculator.ts`)
+The split-type key is also used by the user prompt — `buildSplitDayGuidance` injects a `SPLIT DAY STRUCTURE` section telling Gemini that Push = chest/front_delts/triceps, Pull = lats/upper_back/rear_delts/biceps (with vertical + horizontal pull required), Legs = quads/hamstrings/glutes.
 
-```
-Duration: 45 min
-Experience: Intermediate
-↓
-Calculate:
-- Total sets per workout: ~12 sets
-- Sets per exercise: 3 sets
-- Reps per set: 10-12 reps
-- Exercises per workout: 12 ÷ 3 = 4 exercises
-↓
-Result: 4 exercises × 3 sets = 12 total sets per workout
-```
+### 2. Exercise filter (`exerciseFilter.ts`)
 
-### 4. Exercise Assignment
+`prepareExercisesForPrompt()` strips exercises before Gemini ever sees them:
 
-```
-For PUSH day:
-- Need exercises that target: chest, front_delts, triceps
-- Filter available exercises by muscle groups
-- Select best 4 compound + isolation exercises
-- Assign 3 sets × 10 reps to each
+- **Active Symptoms** → drop non-back-friendly exercises and any with `medium`/`high` restriction levels.
+- **Experience filter** → Beginner and Intermediate users never see `advanced` exercises.
+- **Pain trigger filter** → if the user flagged "Weighted Squats or Deadlifts" or "Lifting objects from the floor", drop any exercise with a `high` restriction level.
 
-For PULL day:
-- Need exercises that target: lats, upper_back, rear_delts, biceps
-- Repeat process
+The remaining exercises are projected to a lean `PromptExercise` shape and rendered as a pipe-delimited table inside the user prompt.
 
-For LEGS day:
-- Need exercises that target: quads, glutes, hamstrings
-- Repeat process
-```
+### 3. System prompt selection (`promptBuilder.ts`)
 
-### 5. Progressive Overload (`progressiveOverload.ts`)
+`buildSystemInstruction(quiz)` dispatches on `painStatus`:
 
-```
-IF user has workout history:
-  - Load last performed weights for each exercise
-  - Check consistency (gap between workouts)
+- `Active Symptoms` → `buildActivePrompt` (RPE 5–6, conservative load, lumbar/sciatic protocol always on, hip-adduction mandate).
+- `Recovered` → `buildRecoveredPrompt` (RPE 6–7, lumbar/sciatic block enabled only when pain locations include lower back / L4 / L5 / S1 / lumbar / sciatic).
+- anything else → `buildHealthyPrompt` (RPE 7–8, performance-focused with spine-safe defaults).
 
-  IF consistent (< 7 days gap):
-    ✓ Increase weight by 2.5kg OR add 1-2 reps
+All three prompts share the same scaffolding: `exerciseId`-only references, `exerciseCountForDuration()` range, vertical + horizontal pull requirement, push requirement, lower-body compound + squat-confidence substitution, volume control, no-repeat-within-day, NOTES field format, plan name, `weeks=4`, never hallucinate IDs.
 
-  IF missed > 7 days:
-    ⚠️ Decrease weight by 5-10% for safety
+### 4. Gemini call (`geminiService.ts`)
 
-ELSE (first time):
-  - Use default weights from exercise database
-```
+The backend calls `gemini-2.5-flash` with `responseSchema: PLAN_SCHEMA`. On failure it falls back to `gemini-3.1-flash-lite-preview`.
+
+### 5. Post-generation validation (`geminiService.ts`)
+
+- Drop any returned `exerciseId` not present in the local exercise map (logs a warning).
+- Throw if any day has 0 valid exercises after ID resolution.
+- Compute `missingMuscleGroups` = `SPLIT_TARGET_MUSCLES[splitType]` minus muscles actually covered, then suggest back-friendly alternatives.
+
+### Progressive overload — handled inside the plan, not as a separate step
+
+Each exercise's `notes` field carries a 4-week progression block (e.g. `W1: 3×10 | W2: 3×12 | W3: 4×10 | W4: 4×12`) plus a load rule (`Increase weight by 2.5 kg when all reps completed with good form`). Pain-history users also receive a pain rule (`If pain increases → reduce load or ROM. Sharp/nerve pain → stop immediately`). Session-by-session weight tracking still uses `progressiveOverload.ts` on the web app side, but it is not part of plan generation.
 
 ---
 
