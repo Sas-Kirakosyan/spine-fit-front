@@ -9,11 +9,7 @@ import SelectField from "@/components/SelecteField/SelecteField.tsx";
 import InputField from "@/components/InputField/InputField.tsx";
 import QuizScrollCalendar from "@/components/Quiz/QuizScrollCalendar.tsx";
 import ErrorIcon from "@/assets/ErrorIcon/ErrorIncon.tsx";
-import {
-  clearPlan,
-  hasPlan,
-  savePlanAndSettings,
-} from "@/lib/planService";
+import { clearPlan, getPlanSettings, hasPlan, savePlanAndSettings } from "@/lib/planService";
 import type { GeneratedPlan, PlanSettings } from "@spinefit/shared";
 import { useAuth } from "@/hooks/useAuth.ts";
 
@@ -43,7 +39,7 @@ function ProfilePage({
 
   const auth = useAuth();
   const userEmail =
-    auth.status === "authenticated" ? auth.user.email ?? "" : "";
+    auth.status === "authenticated" ? (auth.user.email ?? "") : "";
 
   const persistProfile = () => {
     const stored = localStorage.getItem("quizAnswers");
@@ -59,17 +55,23 @@ function ProfilePage({
       units: { height: heightUnit, weight: weightUnit },
     };
     localStorage.setItem("bodyProfile", JSON.stringify(bodyProfileData));
-    if (typeof quizData.answers[3] !== "object" || quizData.answers[3] === null)
-      quizData.answers[3] = {};
-    if (typeof quizData.units[3] !== "object" || quizData.units[3] === null)
-      quizData.units[3] = {};
+    // Clean up corrupted answers[3]: old ProfilePage bug wrote profile data (object)
+    // to answers[3] instead of answers[8]. answers[3] must be a number (pain status).
+    if (typeof quizData.answers[3] === "object" && quizData.answers[3] !== null) {
+      delete quizData.answers[3];
+      delete quizData.units[3];
+    }
+    if (typeof quizData.answers[8] !== "object" || quizData.answers[8] === null)
+      quizData.answers[8] = {};
+    if (typeof quizData.units[8] !== "object" || quizData.units[8] === null)
+      quizData.units[8] = {};
 
-    if (gender) quizData.answers[3].gender = gender;
-    if (dateOfBirth) quizData.answers[3].dateOfBirth = dateOfBirth;
-    if (height) quizData.answers[3].height = height;
-    if (weight) quizData.answers[3].weight = weight;
-    quizData.units[3].height = heightUnit;
-    quizData.units[3].weight = weightUnit;
+    if (gender) quizData.answers[8].gender = gender;
+    if (dateOfBirth) quizData.answers[8].dateOfBirth = dateOfBirth;
+    if (height) quizData.answers[8].height = height;
+    if (weight) quizData.answers[8].weight = weight;
+    quizData.units[8].height = heightUnit;
+    quizData.units[8].weight = weightUnit;
     quizData.timestamp = new Date().toISOString();
 
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
@@ -84,26 +86,39 @@ function ProfilePage({
   };
 
   const doSaveAndRegenerate = async () => {
-    const quizData = persistProfile();
+    persistProfile();
     setShowResetConfirm(false);
     setIsRegenerating(true);
     try {
+      // Use the existing plan's settings (which has all quiz answers) as the
+      // base and override only the profile fields edited on this page. This
+      // ensures a full payload even when localStorage quiz answers are gone.
+      const currentSettings = getPlanSettings();
+      const mergedSettings: PlanSettings = {
+        ...currentSettings,
+        ...(gender ? { gender } : {}),
+        ...(dateOfBirth ? { dateOfBirth } : {}),
+        ...(height ? { height } : {}),
+        ...(weight ? { weight } : {}),
+        heightUnit,
+        weightUnit,
+      };
       const response = await fetch(
-        `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz`,
+        `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz/regenerate`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(quizData),
+          body: JSON.stringify(mergedSettings),
         }
       );
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
       const result = (await response.json()) as {
         success: boolean;
         plan: GeneratedPlan;
-        planSettings?: PlanSettings;
       };
+
       if (result.success && result.plan) {
-        savePlanAndSettings(result.plan, result.planSettings);
+        savePlanAndSettings(result.plan);
         onNavigateToWorkout();
         return;
       }
@@ -172,10 +187,23 @@ function ProfilePage({
 
     try {
       const parsed = JSON.parse(stored);
-      const raw3 = parsed.answers?.[3];
-      const answers = (typeof raw3 === "object" && raw3 !== null) ? raw3 : {};
-      const rawUnits3 = parsed.units?.[3];
-      const units = (typeof rawUnits3 === "object" && rawUnits3 !== null) ? rawUnits3 : {};
+      // Stats live at question 8; fall back to 3 for old localStorage data written by a previous bug.
+      const raw8 = parsed.answers?.[8];
+      const raw3Fallback = parsed.answers?.[3];
+      const answers =
+        typeof raw8 === "object" && raw8 !== null && Object.keys(raw8).length > 0
+          ? raw8
+          : typeof raw3Fallback === "object" && raw3Fallback !== null
+            ? raw3Fallback
+            : {};
+      const rawUnits8 = parsed.units?.[8];
+      const rawUnits3Fallback = parsed.units?.[3];
+      const units =
+        typeof rawUnits8 === "object" && rawUnits8 !== null
+          ? rawUnits8
+          : typeof rawUnits3Fallback === "object" && rawUnits3Fallback !== null
+            ? rawUnits3Fallback
+            : {};
 
       if (answers.gender) setGender(answers.gender);
       if (answers.dateOfBirth) setDateOfBirth(answers.dateOfBirth);
@@ -184,6 +212,14 @@ function ProfilePage({
 
       if (units.height) setHeightUnit(units.height);
       if (units.weight) setWeightUnit(units.weight);
+
+      // Purge the corrupted answers[3] object left by the old bug on load too,
+      // so the stale data disappears from localStorage even without a save.
+      if (typeof parsed.answers?.[3] === "object" && parsed.answers[3] !== null) {
+        delete parsed.answers[3];
+        delete parsed.units?.[3];
+        localStorage.setItem("quizAnswers", JSON.stringify(parsed));
+      }
 
       const bodyProfileData = { ...answers, units };
       localStorage.setItem("bodyProfile", JSON.stringify(bodyProfileData));

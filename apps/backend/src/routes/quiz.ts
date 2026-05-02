@@ -242,7 +242,7 @@ router.post("/", async (req: Request, res: Response) => {
       console.log(`    Muscle groups: [${day.muscleGroups.join(", ")}]`);
     }
 
-    const responsePayload = { success: true, planSettings: parsed, plan };
+    const responsePayload = { success: true, plan };
     console.log(`\n[RES] Sending 200 — payload size: ${JSON.stringify(responsePayload).length} bytes`);
     console.log("========== END /api/quiz ==========\n");
 
@@ -290,7 +290,7 @@ router.post("/regenerate", async (req: Request, res: Response) => {
       console.log(`    Muscle groups: [${day.muscleGroups.join(", ")}]`);
     }
 
-    const responsePayload = { success: true, planSettings: parsed, plan };
+    const responsePayload = { success: true, plan };
     console.log(`\n[RES] Sending 200 — payload size: ${JSON.stringify(responsePayload).length} bytes`);
     console.log("========== END /api/quiz/regenerate ==========\n");
 

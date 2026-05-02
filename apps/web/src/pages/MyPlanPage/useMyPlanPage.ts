@@ -133,14 +133,13 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
       const result = (await response.json()) as {
         success: boolean;
         plan: GeneratedPlan;
-        planSettings: PlanSettings;
       };
 
       if (result.success && result.plan) {
-        savePlanAndSettings(result.plan, result.planSettings);
-        if (result.planSettings) {
-          setPlanSettings(result.planSettings);
-          initialSettingsRef.current = result.planSettings;
+        savePlanAndSettings(result.plan);
+        if (result.plan.settings) {
+          setPlanSettings(result.plan.settings);
+          initialSettingsRef.current = result.plan.settings;
         }
         setIsRegenerating(false);
         setIsRegenerateModalOpen(false);
