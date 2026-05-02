@@ -105,6 +105,34 @@ export const questions: QuizQuestion[] = [
 
   {
     id: 8,
+    fieldName: "experience",
+    question: "What is your resistance training experience?",
+    type: "radio",
+    options: [
+      "Beginner — new to training",
+      "Intermediate — 1 to 3 years",
+      "Advanced — 3+ years",
+    ],
+  },
+
+  {
+    id: 9,
+    fieldName: "trainingFrequency",
+    question: "How many times per week can you train?",
+    type: "radio",
+    options: ["2 Days", "3 Days", "4 Days", "5+ Days"],
+  },
+
+  {
+    id: 10,
+    fieldName: "workoutDuration",
+    question: "How long should your workouts be?",
+    type: "radio",
+    options: ["10–20 min", "20–30 min", "30–45 min", "45–60 min", "60–90 min"],
+  },
+
+  {
+    id: 11,
     fieldName: "baselineStats",
     question: "Standard Metrics",
     type: "multi_field",
@@ -112,7 +140,7 @@ export const questions: QuizQuestion[] = [
     optional: true,
     fields: [
       {
-        id: 8.1,
+        id: 11.1,
         fieldName: "gender",
         label: "Gender",
         type: "radio",
@@ -120,14 +148,14 @@ export const questions: QuizQuestion[] = [
         optional: true,
       },
       {
-        id: 8.2,
+        id: 11.2,
         fieldName: "dateOfBirth",
         label: "Date of Birth",
         type: "date",
         optional: true,
       },
       {
-        id: 8.3,
+        id: 11.3,
         fieldName: "height",
         label: "Height",
         type: "input",
@@ -137,7 +165,7 @@ export const questions: QuizQuestion[] = [
         unitOptions: ["cm", "ft"],
       },
       {
-        id: 8.4,
+        id: 11.4,
         fieldName: "weight",
         label: "Weight",
         type: "input",
@@ -150,7 +178,7 @@ export const questions: QuizQuestion[] = [
   },
 
   {
-    id: 9,
+    id: 12,
     fieldName: "bodyType",
     question: "Which physique profile best matches yours?",
     type: "image_radio",
@@ -212,32 +240,6 @@ export const questions: QuizQuestion[] = [
     },
   },
 
-  {
-    id: 10,
-    fieldName: "experience",
-    question: "What is your resistance training experience?",
-    type: "radio",
-    options: [
-      "Beginner — new to training",
-      "Intermediate — 1 to 3 years",
-      "Advanced — 3+ years",
-    ],
-  },
-
-  {
-    id: 11,
-    fieldName: "trainingFrequency",
-    question: "How many times per week can you train?",
-    type: "radio",
-    options: ["2 Days", "3 Days", "4 Days", "5+ Days"],
-  },
-  {
-    id: 12,
-    fieldName: "workoutDuration",
-    question: "How long should your workouts be?",
-    type: "radio",
-    options: ["10–20 min", "20–30 min", "30–45 min", "45–60 min", "60–90 min"],
-  },
   {
     id: 13,
     fieldName: "additionalNotes",
