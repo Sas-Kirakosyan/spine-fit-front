@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import {
   generatePlanFromQuiz,
@@ -17,8 +17,12 @@ const MAX_RETRY_DELAY_MS = 10_000;
 
 function GeneratingPlanPage({ onSuccess }: GeneratingPlanPageProps) {
   const [apiPhase, setApiPhase] = useState<ApiPhase>("pending");
+  const hasStartedRef = useRef(false);
 
   useEffect(() => {
+    if (hasStartedRef.current) return;
+    hasStartedRef.current = true;
+
     const state = {
       mounted: true,
       timerId: null as number | null,
