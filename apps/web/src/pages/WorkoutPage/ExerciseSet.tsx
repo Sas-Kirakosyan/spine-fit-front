@@ -202,6 +202,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
   onResumeTimer,
   onConfirmTimer,
   onOpenTimeModal,
+  minWeight,
 }) => {
   const { t } = useTranslation();
   const isBodyweight =
@@ -456,13 +457,21 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
             <input
               value={setEntry.weight}
               type="number"
-              min={0}
+              min={minWeight !== undefined ? minWeight + 2.5 : 0}
               disabled={isCompleted || isBodyweight}
               placeholder={isBodyweight ? "-" : "0"}
               onFocus={() => onActivate(index)}
               onChange={(event) =>
                 onValueChange(index, "weight", event.target.value)
               }
+              onBlur={(event) => {
+                if (minWeight !== undefined && event.target.value !== "") {
+                  const val = Number(event.target.value);
+                  if (!isNaN(val) && val <= minWeight) {
+                    onValueChange(index, "weight", String(minWeight + 2.5));
+                  }
+                }
+              }}
               className="h-9 w-full [appearance:textfield] rounded-[8px] border border-transparent bg-transparent px-1 text-center text-[26px] font-semibold leading-none text-white tabular-nums outline-none transition-colors placeholder:text-white/25 focus:border-white/20 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
             <input
