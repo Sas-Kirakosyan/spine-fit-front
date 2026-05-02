@@ -229,6 +229,16 @@ function buildSplitDayGuidance(trainingSplit: string): string {
   return "";
 }
 
+function calculateAge(dateOfBirth: string): number | null {
+  const dob = new Date(dateOfBirth);
+  if (isNaN(dob.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) age--;
+  return age > 0 ? age : null;
+}
+
 export function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[]): string {
   const daysCount = quiz.workoutsPerWeek.replace(/\D+/g, "").trim() || "3";
   const splitGuidance = buildSplitDayGuidance(quiz.trainingSplit);
@@ -237,8 +247,17 @@ export function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[
     ? `- Exercise variability: ${quiz.exerciseVariability} (${quiz.exerciseVariability.toLowerCase().includes("high") ? "rotate exercises across days, avoid repeating the same exercise on consecutive days" : "keep movements consistent across weeks for skill development"})`
     : "";
 
-  return `Create a structured ${quiz.workoutsPerWeek} training plan.
+  const age = quiz.dateOfBirth ? calculateAge(quiz.dateOfBirth) : null;
+  const physicalProfileLines = [
+    quiz.gender ? `- Gender: ${quiz.gender}` : null,
+    age !== null ? `- Age: ${age}` : null,
+    quiz.height ? `- Height: ${quiz.height} ${quiz.heightUnit}` : null,
+    quiz.weight ? `- Weight: ${quiz.weight} ${quiz.weightUnit}` : null,
+    quiz.bodyType ? `- Body fat estimate: ${quiz.bodyType}%` : null,
+  ].filter(Boolean).join("\n");
 
+  return `Create a structured ${quiz.workoutsPerWeek} training plan.
+console.log("physicalProfileLines", physicalProfileLines)
 USER PROFILE:
 - Goal: ${quiz.goal}
 - Experience: ${quiz.experience}
@@ -249,7 +268,7 @@ USER PROFILE:
 - Pain level (0-10): ${quiz.painLevel ?? 0}
 - Pain triggers: ${quiz.painTriggers?.join(", ") ?? "None"}
 - Squat confidence: ${quiz.canSquat ?? "Confident"}
-- Preferred units: ${quiz.units}${quiz.additionalNotes ? `\n- Additional user notes: ${quiz.additionalNotes}` : ""}
+- Preferred units: ${quiz.units}${physicalProfileLines ? `\n${physicalProfileLines}` : ""}${quiz.additionalNotes ? `\n- Additional user notes: ${quiz.additionalNotes}` : ""}
 ${variabilityLine}
 ${splitGuidance ? `\n${splitGuidance}\n` : ""}
 AVAILABLE EXERCISES (use only IDs from this list):
