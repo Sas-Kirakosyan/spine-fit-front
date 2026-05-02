@@ -385,9 +385,14 @@ function ExerciseSetsPage({
 
     setActiveSetIndex(index);
     setSets((prev) =>
-      prev.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [field]: value } : item
-      )
+      prev.map((item, itemIndex) => {
+        if (itemIndex === index) return { ...item, [field]: value };
+        // Fill-down: propagate weight change to all subsequent uncompleted sets of the same type
+        if (field === "weight" && itemIndex > index && !item.completed && item.type === prev[index]?.type) {
+          return { ...item, weight: value };
+        }
+        return item;
+      })
     );
   };
 
@@ -633,6 +638,19 @@ function ExerciseSetsPage({
   const allWarmupCompleted =
     warmupSets.length === 0 ||
     warmupSets.every((setEntry) => setEntry.completed);
+
+  const setMinWeights = useMemo<(number | undefined)[]>(() => {
+    if (isBodyweight || isTimeBased) return sets.map(() => undefined);
+    return sets.map((setEntry, index) => {
+      if (setEntry.type === "warmup") return undefined;
+      const weights = sets
+        .slice(0, index)
+        .filter((s) => s.completed && s.type !== "warmup" && s.weight !== "")
+        .map((s) => Number(s.weight))
+        .filter((w) => !isNaN(w) && w > 0);
+      return weights.length > 0 ? Math.max(...weights) : undefined;
+    });
+  }, [sets, isBodyweight, isTimeBased]);
 
   const canLogAllSets = useMemo(() => {
     if (!isDuringActiveWorkout) {
@@ -1020,15 +1038,7 @@ function ExerciseSetsPage({
                     }
                     isActive={index === activeSetIndex}
                     isCompleted={setEntry.completed}
-                    minWeight={(() => {
-                      if (isBodyweight || isTimeBased || setEntry.type === "warmup") return undefined;
-                      const weights = sets
-                        .slice(0, index)
-                        .filter((s) => s.completed && s.type !== "warmup" && s.weight !== "")
-                        .map((s) => Number(s.weight))
-                        .filter((w) => !isNaN(w) && w > 0);
-                      return weights.length > 0 ? Math.max(...weights) : undefined;
-                    })()}
+                    minWeight={setMinWeights[index]}
                     canDelete={
                       setEntry.type === "warmup"
                         ? warmupSets.length > 1
