@@ -37,6 +37,7 @@ export interface ExerciseSetProps {
   onResumeTimer?: () => void;
   onConfirmTimer?: (index: number) => void;
   onOpenTimeModal?: (index: number) => void;
+  minWeight?: number;
 }
 
 export interface ExerciseSetsPageProps {

@@ -25,10 +25,7 @@ import {
   getAllReplacementExercises,
   getSuggestedReplacementExercises,
 } from "@/utils/replacementExercises";
-import {
-  iconButtonClass,
-  secondaryButtonClass,
-} from "@/constants/workout";
+import { iconButtonClass, secondaryButtonClass } from "@/constants/workout";
 import { Button } from "@/components/Buttons/Button";
 import { QuizSlider } from "@/components/Quiz/QuizSlider";
 import {
@@ -396,7 +393,18 @@ function ExerciseSetsPage({
 
   const handleAddSet = () => {
     setSets((prev) => {
-      const next = [...prev, createNewSet()];
+      const completedWeights = prev
+        .filter((s) => s.completed && s.type !== "warmup" && s.weight !== "")
+        .map((s) => Number(s.weight))
+        .filter((w) => !isNaN(w) && w > 0);
+      const lastWeight =
+        completedWeights.length > 0 ? Math.max(...completedWeights) : null;
+      const newSet = createNewSet(
+        lastWeight !== null && !isBodyweight && !isTimeBased
+          ? { weight: String(lastWeight + 2.5) }
+          : undefined
+      );
+      const next = [...prev, newSet];
       trackEvent("set_added", {
         exercise_id: exercise.id,
         set_number: next.length,
@@ -1012,6 +1020,15 @@ function ExerciseSetsPage({
                     }
                     isActive={index === activeSetIndex}
                     isCompleted={setEntry.completed}
+                    minWeight={(() => {
+                      if (isBodyweight || isTimeBased || setEntry.type === "warmup") return undefined;
+                      const weights = sets
+                        .slice(0, index)
+                        .filter((s) => s.completed && s.type !== "warmup" && s.weight !== "")
+                        .map((s) => Number(s.weight))
+                        .filter((w) => !isNaN(w) && w > 0);
+                      return weights.length > 0 ? Math.max(...weights) : undefined;
+                    })()}
                     canDelete={
                       setEntry.type === "warmup"
                         ? warmupSets.length > 1
