@@ -42,11 +42,6 @@ function ProfilePage({
     auth.status === "authenticated" ? (auth.user.email ?? "") : "";
 
   const persistProfile = () => {
-    const stored = localStorage.getItem("quizAnswers");
-    const quizData = stored
-      ? JSON.parse(stored)
-      : { answers: {}, units: {}, workoutType: "gym" };
-
     const bodyProfileData = {
       dateOfBirth,
       gender,
@@ -55,27 +50,6 @@ function ProfilePage({
       units: { height: heightUnit, weight: weightUnit },
     };
     localStorage.setItem("bodyProfile", JSON.stringify(bodyProfileData));
-    // Clean up corrupted answers[3]: old ProfilePage bug wrote profile data (object)
-    // to answers[3] instead of answers[8]. answers[3] must be a number (pain status).
-    if (typeof quizData.answers[3] === "object" && quizData.answers[3] !== null) {
-      delete quizData.answers[3];
-      delete quizData.units[3];
-    }
-    if (typeof quizData.answers[8] !== "object" || quizData.answers[8] === null)
-      quizData.answers[8] = {};
-    if (typeof quizData.units[8] !== "object" || quizData.units[8] === null)
-      quizData.units[8] = {};
-
-    if (gender) quizData.answers[8].gender = gender;
-    if (dateOfBirth) quizData.answers[8].dateOfBirth = dateOfBirth;
-    if (height) quizData.answers[8].height = height;
-    if (weight) quizData.answers[8].weight = weight;
-    quizData.units[8].height = heightUnit;
-    quizData.units[8].weight = weightUnit;
-    quizData.timestamp = new Date().toISOString();
-
-    localStorage.setItem("quizAnswers", JSON.stringify(quizData));
-    return quizData;
   };
 
   const doSave = () => {
@@ -182,47 +156,16 @@ function ProfilePage({
   }, [validateWeight, weight, weightUnit]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("quizAnswers");
+    const stored = localStorage.getItem("bodyProfile");
     if (!stored) return;
-
     try {
-      const parsed = JSON.parse(stored);
-      // Stats live at question 8; fall back to 3 for old localStorage data written by a previous bug.
-      const raw8 = parsed.answers?.[8];
-      const raw3Fallback = parsed.answers?.[3];
-      const answers =
-        typeof raw8 === "object" && raw8 !== null && Object.keys(raw8).length > 0
-          ? raw8
-          : typeof raw3Fallback === "object" && raw3Fallback !== null
-            ? raw3Fallback
-            : {};
-      const rawUnits8 = parsed.units?.[8];
-      const rawUnits3Fallback = parsed.units?.[3];
-      const units =
-        typeof rawUnits8 === "object" && rawUnits8 !== null
-          ? rawUnits8
-          : typeof rawUnits3Fallback === "object" && rawUnits3Fallback !== null
-            ? rawUnits3Fallback
-            : {};
-
-      if (answers.gender) setGender(answers.gender);
-      if (answers.dateOfBirth) setDateOfBirth(answers.dateOfBirth);
-      if (answers.height) setHeight(answers.height);
-      if (answers.weight) setWeight(answers.weight);
-
-      if (units.height) setHeightUnit(units.height);
-      if (units.weight) setWeightUnit(units.weight);
-
-      // Purge the corrupted answers[3] object left by the old bug on load too,
-      // so the stale data disappears from localStorage even without a save.
-      if (typeof parsed.answers?.[3] === "object" && parsed.answers[3] !== null) {
-        delete parsed.answers[3];
-        delete parsed.units?.[3];
-        localStorage.setItem("quizAnswers", JSON.stringify(parsed));
-      }
-
-      const bodyProfileData = { ...answers, units };
-      localStorage.setItem("bodyProfile", JSON.stringify(bodyProfileData));
+      const profile = JSON.parse(stored);
+      if (profile.gender) setGender(profile.gender);
+      if (profile.dateOfBirth) setDateOfBirth(profile.dateOfBirth);
+      if (profile.height) setHeight(profile.height);
+      if (profile.weight) setWeight(profile.weight);
+      if (profile.units?.height) setHeightUnit(profile.units.height);
+      if (profile.units?.weight) setWeightUnit(profile.units.weight);
     } catch (error) {
       console.error("Error loading profile data:", error);
     }
