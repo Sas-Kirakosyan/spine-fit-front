@@ -577,7 +577,12 @@
       "units": "Units",
       "cardio": "Cardio",
       "stretching": "Stretching",
-      "manageExercises": "Manage Exercises"
+      "backProfile": "Back Profile",
+      "painStatus": {
+        "Healthy": "Healthy",
+        "Recovered": "Recovered",
+        "Active Symptoms": "Active Symptoms"
+      }
     },
     "generatePlan": "Generate Plan",
     "generating": "Generating...",

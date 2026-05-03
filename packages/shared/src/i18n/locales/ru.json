@@ -579,7 +579,12 @@
       "units": "Единицы",
       "cardio": "Кардио",
       "stretching": "Растяжка",
-      "manageExercises": "Управление упражнениями"
+      "backProfile": "Профиль спины",
+      "painStatus": {
+        "Healthy": "Здоров",
+        "Recovered": "Восстановился",
+        "Active Symptoms": "Есть симптомы"
+      }
     },
     "generatePlan": "Создать план",
     "generating": "Создаём...",

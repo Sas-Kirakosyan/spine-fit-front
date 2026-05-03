@@ -1,19 +1,22 @@
 import { useTranslation } from "react-i18next";
 import { SettingsRow } from "@/components/SettingsRow/SettingsRow";
-import { ChevronRightIcon } from "@/components/Icons/Icons";
-import { Button } from "@/components/Buttons/Button";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
+import { getStoredPainStatus } from "@/utils/painStatus";
 
 interface PreferencesSectionProps {
   planSettings: PlanSettings;
   onFieldClick: (fieldId: PlanFieldId) => void;
+  onNavigateToProfile?: () => void;
 }
 
 export function PreferencesSection({
   planSettings,
   onFieldClick,
+  onNavigateToProfile,
 }: PreferencesSectionProps) {
   const { t } = useTranslation();
+  const painStatus = getStoredPainStatus();
+  const painStatusLabel = t(`myPlanPage.preferences.painStatus.${painStatus}`);
 
   return (
     <div className="flex flex-col gap-3">
@@ -37,13 +40,11 @@ export function PreferencesSection({
             value={planSettings.stretching}
             onClick={() => onFieldClick("stretching")}
           />
-
-          <Button className="w-full flex items-center justify-between text-left">
-            <span className="text-base font-medium text-white">
-              {t("myPlanPage.preferences.manageExercises")}
-            </span>
-            <ChevronRightIcon className="h-5 w-5" />
-          </Button>
+          <SettingsRow
+            label={t("myPlanPage.preferences.backProfile")}
+            value={painStatusLabel}
+            onClick={onNavigateToProfile}
+          />
         </div>
       </div>
     </div>

@@ -30,7 +30,7 @@ export interface HistoryPageProps {
 
 export interface MyPlanPageProps {
   onNavigateBack: () => void;
-  onNavigateToAvailableEquipment?: () => void;
+  onNavigateToProfile?: () => void;
 }
 
 export interface AvailableEquipmentPageProps {

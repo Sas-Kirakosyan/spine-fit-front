@@ -34,12 +34,6 @@ export function TrainingFormatSection({
             value={planSettings.trainingSplit}
             onClick={() => onFieldClick("trainingSplit")}
           />
-          <SettingsRow
-            label={t("myPlanPage.trainingFormat.exerciseVariability")}
-            value={planSettings.exerciseVariability}
-            onClick={() => onFieldClick("exerciseVariability")}
-          />
-
           <div className="flex items-center justify-between">
             <span className="text-base font-medium text-white">
               {t("myPlanPage.trainingFormat.warmUpSets")}

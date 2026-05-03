@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import type { EquipmentCategory } from "@/types/equipment";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
 import {
   getPlanSettings,
@@ -15,10 +14,8 @@ interface UseMyPlanPageOptions {
 
 export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   const { t } = useTranslation();
-  const [bodyweightOnly, setBodyweightOnly] = useState(false);
   const [warmUpSets, setWarmUpSets] = useState(true);
   const [circuitsAndSupersets, setCircuitsAndSupersets] = useState(true);
-  const [selectedCount, setSelectedCount] = useState(0);
   const [planSettings, setPlanSettings] =
     useState<PlanSettings>(getPlanSettings());
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,50 +29,10 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   const hasChanges = useMemo(() => {
     const fields: PlanFieldId[] = [
       "goal", "workoutsPerWeek", "duration", "experience",
-      "trainingSplit", "exerciseVariability", "units", "cardio", "stretching",
+      "trainingSplit", "units", "cardio", "stretching",
     ];
     return fields.some((f) => planSettings[f] !== initialSettingsRef.current[f]);
   }, [planSettings]);
-
-  useEffect(() => {
-    const calculateSelectedCount = () => {
-      try {
-        const saved = localStorage.getItem("equipmentData");
-        if (saved) {
-          const equipmentData: EquipmentCategory[] = JSON.parse(saved);
-          const count = equipmentData.reduce(
-            (total, category) =>
-              total + category.items.filter((item) => item.selected).length,
-            0,
-          );
-          setSelectedCount(count);
-        } else {
-          setSelectedCount(0);
-        }
-      } catch (error) {
-        console.error("Error calculating selected count:", error);
-        setSelectedCount(0);
-      }
-    };
-
-    calculateSelectedCount();
-
-    const handleFocus = () => {
-      calculateSelectedCount();
-    };
-
-    const handleEquipmentUpdate = () => {
-      calculateSelectedCount();
-    };
-
-    addEventListener("focus", handleFocus);
-    addEventListener("equipmentDataUpdated", handleEquipmentUpdate);
-
-    return () => {
-      removeEventListener("focus", handleFocus);
-      removeEventListener("equipmentDataUpdated", handleEquipmentUpdate);
-    };
-  }, []);
 
   const handleFieldClick = (fieldId: PlanFieldId) => {
     setCurrentField(fieldId);
@@ -159,10 +116,8 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   return {
     // State
     planSettings,
-    bodyweightOnly,
     warmUpSets,
     circuitsAndSupersets,
-    selectedCount,
     hasChanges,
     isModalOpen,
     currentField,
@@ -173,7 +128,6 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     setRegenerateError,
 
     // Toggles
-    setBodyweightOnly,
     setWarmUpSets,
     setCircuitsAndSupersets,
 

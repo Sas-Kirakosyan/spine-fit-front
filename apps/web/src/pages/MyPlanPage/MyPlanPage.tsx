@@ -5,7 +5,6 @@ import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import { MyPlanPageHeader } from "./MyPlanPageHeader";
 import { GoalSection } from "./GoalSection";
-import { LocationSection } from "./LocationSection";
 import { TrainingProfileSection } from "./TrainingProfileSection";
 import { TrainingFormatSection } from "./TrainingFormatSection";
 import { PreferencesSection } from "./PreferencesSection";
@@ -16,7 +15,7 @@ import { useMyPlanPage } from "./useMyPlanPage";
 
 function MyPlanPage({
   onNavigateBack,
-  onNavigateToAvailableEquipment,
+  onNavigateToProfile,
 }: MyPlanPageProps) {
   const plan = useMyPlanPage({ onNavigateBack });
 
@@ -28,13 +27,6 @@ function MyPlanPage({
         <GoalSection
           goal={plan.planSettings.goal}
           onFieldClick={plan.handleFieldClick}
-        />
-
-        <LocationSection
-          selectedCount={plan.selectedCount}
-          bodyweightOnly={plan.bodyweightOnly}
-          onBodyweightToggle={plan.setBodyweightOnly}
-          onNavigateToEquipment={onNavigateToAvailableEquipment}
         />
 
         <TrainingProfileSection
@@ -54,6 +46,7 @@ function MyPlanPage({
         <PreferencesSection
           planSettings={plan.planSettings}
           onFieldClick={plan.handleFieldClick}
+          onNavigateToProfile={onNavigateToProfile}
         />
       </div>
 

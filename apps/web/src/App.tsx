@@ -487,8 +487,7 @@ function App() {
     navigateToPage("allExercise");
   };
   const navigateToMyPlan = () => navigateToPage("myPlan");
-  const navigateToAvailableEquipment = () =>
-    navigateToPage("availableEquipment");
+
   const navigateToSettings = () => navigateToPage("settings");
   const navigateToExerciseProgress = (exerciseId: number) => {
     setSelectedExerciseProgressId(exerciseId);
@@ -908,7 +907,7 @@ function App() {
         return (
           <MyPlanPage
             onNavigateBack={navigateToWorkout}
-            onNavigateToAvailableEquipment={navigateToAvailableEquipment}
+            onNavigateToProfile={navigateToProfile}
           />
         );
       case "availableEquipment":
