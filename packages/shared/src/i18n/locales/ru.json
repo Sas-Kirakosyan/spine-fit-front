@@ -636,21 +636,11 @@
   },
   "profilePage": {
     "title": "Профиль",
+    "account": "Аккаунт",
     "saveButton": "Сохранить профиль",
     "bodyMeasurements": "Параметры тела",
-    "resetPlanTitle": "Сбросить план тренировок?",
-    "resetPlanMessage": "Обновление профиля сбросит ваш текущий план тренировок. Его нужно будет перегенерировать.",
-    "resetPlanConfirm": "Продолжить",
-    "resetPlanCancel": "Отмена",
     "savedSuccess": "Профиль сохранён!",
-    "regenerating": "Генерируем новый план...",
-    "genders": {
-      "male": "Мужской",
-      "female": "Женский",
-      "other": "Другой"
-    },
     "placeholders": {
-      "gender": "Выберите пол",
       "height": "Введите рост",
       "weight": "Введите вес"
     },

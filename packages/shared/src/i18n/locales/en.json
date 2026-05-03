@@ -634,21 +634,11 @@
   },
   "profilePage": {
     "title": "Profile",
+    "account": "Account",
     "saveButton": "Save Profile",
     "bodyMeasurements": "Body Measurements",
-    "resetPlanTitle": "Reset workout plan?",
-    "resetPlanMessage": "Updating your profile will reset your current workout plan. You'll need to regenerate it.",
-    "resetPlanConfirm": "Continue",
-    "resetPlanCancel": "Cancel",
     "savedSuccess": "Profile saved!",
-    "regenerating": "Generating your new plan...",
-    "genders": {
-      "male": "Male",
-      "female": "Female",
-      "other": "Other"
-    },
     "placeholders": {
-      "gender": "Select gender",
       "height": "Enter your height",
       "weight": "Enter your weight"
     },

@@ -139,7 +139,7 @@ Stores the user's onboarding quiz answers so plans can be regenerated without re
 
 | Data | Where stored | Notes |
 |------|-------------|-------|
-| Body profile (gender, DOB, height, weight) | `localStorage` (`bodyProfile`) | Read from quiz answers question #3 |
+| Body profile (height, weight) | `localStorage` (`bodyProfile`) | Gender and birth year are collected in the quiz only and not stored here |
 | Language / theme preferences | `localStorage` | Settings page only |
 | Saved custom programs | `localStorage` (`savedPrograms`) | No DB table yet |
 | Workout history | `localStorage` (`workoutHistory`) | No DB table yet |
