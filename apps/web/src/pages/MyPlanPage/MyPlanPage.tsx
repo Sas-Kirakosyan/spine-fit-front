@@ -13,10 +13,7 @@ import { ResetModal } from "./ResetModal";
 import { RegenerateModal } from "./RegenerateModal";
 import { useMyPlanPage } from "./useMyPlanPage";
 
-function MyPlanPage({
-  onNavigateBack,
-  onNavigateToProfile,
-}: MyPlanPageProps) {
+function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
   const plan = useMyPlanPage({ onNavigateBack });
 
   return (
@@ -71,7 +68,12 @@ function MyPlanPage({
         onConfirm={plan.handleRegeneratePlan}
       />
 
-      {plan.isRegenerating && <PlanGeneratingLoader />}
+      {plan.isRegenerating && (
+        <PlanGeneratingLoader
+          apiPhase={plan.apiPhase}
+          onAllStepsComplete={plan.handleLoaderComplete}
+        />
+      )}
 
       {plan.currentField && (
         <SelectionModal
