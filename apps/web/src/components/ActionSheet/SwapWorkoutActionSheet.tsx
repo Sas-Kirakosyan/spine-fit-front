@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { createPortal } from "react-dom";
 import type { GeneratedPlan } from "@spinefit/shared";
 import { getPlan, subscribe as subscribeToPlan } from "@/lib/planService";
+import { Sheet } from "@/components/ui/Modal";
 import {
   getSelectedDayIndex,
   subscribeSelectedDay,
@@ -12,7 +12,6 @@ import type { SavedProgram } from "@/types/workout";
 interface SwapWorkoutActionSheetProps {
   onClose: () => void;
   currentWorkout?: string;
-  containerRef?: React.RefObject<HTMLDivElement | null>;
   onSelectWorkout?: (workout: string) => void;
   onSwitchSplit?: (plan: GeneratedPlan) => void;
   onCreateFromScratch?: () => void;
@@ -189,178 +188,164 @@ export function SwapWorkoutActionSheet({
     setActionMenuId(null);
   }, [t]);
 
-  const sheetContent = (
-    <div className="fixed inset-0 z-40 flex flex-col justify-end">
-      <div
-        role="button"
-        tabIndex={-1}
-        aria-label={t("swapWorkoutActionSheet.closeActionSheet")}
-        onClick={onClose}
-        className="absolute inset-0 cursor-default bg-black/50"
-      />
+  return (
+    <Sheet
+      isOpen
+      onClose={onClose}
+      size="lg"
+      ariaLabel={t("swapWorkoutActionSheet.title")}
+      bodyClassName="px-5 pb-8 pt-4 sm:px-6"
+    >
+      {view === "savedPrograms" ? (
+        <SavedProgramsView
+          programs={savedPrograms}
+          actionMenuId={actionMenuId}
+          onBack={() => {
+            setView("main");
+            setActionMenuId(null);
+          }}
+          onSelect={(p) => {
+            onSelectSavedProgram?.(p);
+            onClose();
+          }}
+          onEdit={(p) => {
+            onEditSavedProgram?.(p);
+            onClose();
+          }}
+          onDelete={handleDeleteSaved}
+          onDuplicate={handleDuplicateSaved}
+          onToggleMenu={(id) => setActionMenuId(actionMenuId === id ? null : id)}
+        />
+      ) : (
+        <>
+          <h2 className="text-2xl md:text-3xl text-center font-bold text-white mb-6">
+            {t("swapWorkoutActionSheet.title")}
+          </h2>
 
-      <div className="relative z-50 w-full max-w-[440px] mx-auto">
-        <div className="bg-[#161827] min-h-[300px] max-h-[85vh] border-t rounded-t-[30px] flex flex-col">
-          <div className="flex justify-center pt-4">
-            <span className="h-1 w-10 rounded-full bg-slate-700" />
-          </div>
-
-          <div className="px-5 pb-8 pt-4 sm:px-6 flex-1 overflow-y-auto">
-            {view === "savedPrograms" ? (
-              <SavedProgramsView
-                programs={savedPrograms}
-                actionMenuId={actionMenuId}
-                onBack={() => {
-                  setView("main");
-                  setActionMenuId(null);
-                }}
-                onSelect={(p) => {
-                  onSelectSavedProgram?.(p);
-                  onClose();
-                }}
-                onEdit={(p) => {
-                  onEditSavedProgram?.(p);
-                  onClose();
-                }}
-                onDelete={handleDeleteSaved}
-                onDuplicate={handleDuplicateSaved}
-                onToggleMenu={(id) => setActionMenuId(actionMenuId === id ? null : id)}
-              />
-            ) : (
+          {/* Weekly Training Plan Section */}
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold text-white/80 mb-4 uppercase tracking-wider">
+              {t("swapWorkoutActionSheet.weeklyPlan")}
+            </h3>
+            {plan && (
               <>
-                <h2 className="text-2xl text-center font-bold text-white mb-6">
-                  {t("swapWorkoutActionSheet.title")}
-                </h2>
-
-                {/* Weekly Training Plan Section */}
-                <div className="mb-8">
-                  <h3 className="text-sm font-semibold text-white/80 mb-4 uppercase tracking-wider">
-                    {t("swapWorkoutActionSheet.weeklyPlan")}
-                  </h3>
-                  {plan && (
-                    <>
-                      <p className="text-xs text-white/50 mb-3">{plan.name}</p>
-                      <div className="space-y-2">
-                        {plan.workoutDays.map((day, index) => {
-                          const workoutId = `${plan.id}_${day.dayNumber}_${day.dayName}`;
-                          const isCompleted = completedWorkoutIds.has(workoutId);
-                          return (
-                          <button
-                            key={index}
-                            disabled={isCompleted}
-                            onClick={() => {
-                              onSelectPlanDay?.(index);
-                              onClose();
-                            }}
-                            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors text-left ${
-                              isCompleted
-                                ? "bg-green-900/20 border border-green-500/60 opacity-60 cursor-not-allowed"
-                                : "bg-gray-800/50 hover:bg-gray-800/70"
-                            }`}
-                          >
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                              isCompleted ? "bg-green-500/20" : "bg-main/10"
-                            }`}>
-                              {isCompleted ? (
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-green-400">
-                                  <path d="M20 6L9 17l-5-5" />
-                                </svg>
-                              ) : (
-                                <span className="text-main text-xs font-bold">{index + 1}</span>
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className={`text-sm font-medium ${isCompleted ? "text-green-300/80" : "text-white"}`}>{day.dayName}</p>
-                              {day.muscleGroups.length > 0 && (
-                                <p className={`text-xs truncate ${isCompleted ? "text-green-400/40" : "text-white/40"}`}>
-                                  {day.muscleGroups.slice(0, 3).join(" · ")}
-                                </p>
-                              )}
-                            </div>
-                            {isCompleted ? (
-                              <span className="text-[10px] font-semibold text-green-400 bg-green-500/15 px-2 py-0.5 rounded-full flex-shrink-0">
-                                {t("swapWorkoutActionSheet.completed")}
-                              </span>
-                            ) : currentDayIndex === index ? (
-                              <span className="text-[10px] font-semibold text-main bg-main/10 px-2 py-0.5 rounded-full flex-shrink-0">
-                                {t("swapWorkoutActionSheet.current")}
-                              </span>
-                            ) : null}
-                            <svg
-                              className={`h-4 w-4 flex-shrink-0 ${isCompleted ? "text-green-500/30" : "text-white/30"}`}
-                              viewBox="0 0 16 16"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M6 4l4 4-4 4" />
-                            </svg>
-                          </button>
-                          );
-                        })}
+                <p className="text-xs text-white/50 mb-3">{plan.name}</p>
+                <div className="space-y-2 md:grid md:grid-cols-2 md:gap-2 md:space-y-0">
+                  {plan.workoutDays.map((day, index) => {
+                    const workoutId = `${plan.id}_${day.dayNumber}_${day.dayName}`;
+                    const isCompleted = completedWorkoutIds.has(workoutId);
+                    return (
+                    <button
+                      key={index}
+                      disabled={isCompleted}
+                      onClick={() => {
+                        onSelectPlanDay?.(index);
+                        onClose();
+                      }}
+                      className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors text-left min-h-[56px] ${
+                        isCompleted
+                          ? "bg-green-900/20 border border-green-500/60 opacity-60 cursor-not-allowed"
+                          : "bg-gray-800/50 hover:bg-gray-800/70"
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                        isCompleted ? "bg-green-500/20" : "bg-main/10"
+                      }`}>
+                        {isCompleted ? (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-green-400">
+                            <path d="M20 6L9 17l-5-5" />
+                          </svg>
+                        ) : (
+                          <span className="text-main text-xs font-bold">{index + 1}</span>
+                        )}
                       </div>
-                    </>
-                  )}
-                </div>
-
-                {/* Custom Workout Section */}
-                <div>
-                  <h3 className="text-sm font-semibold text-white/80 mb-4 uppercase tracking-wider">
-                    {t("swapWorkoutActionSheet.customWorkout")}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    {customWorkoutOptions.map((option) => (
-                      <button
-                        key={option.id}
-                        onClick={() => {
-                          if (option.id === "create-scratch" && onCreateFromScratch) {
-                            onCreateFromScratch();
-                            onClose();
-                            return;
-                          }
-                          if (option.id === "saved-programs") {
-                            openSavedPrograms();
-                            return;
-                          }
-                          if (onSelectWorkout) {
-                            onSelectWorkout(option.id);
-                          }
-                          onClose();
-                        }}
-                        className="flex flex-col items-start gap-1 p-1 rounded-xl bg-gray-800/50 hover:bg-gray-800/70 transition-colors"
-                      >
-                        <div className="w-10 h-10 flex items-center justify-center">
-                          {option.icon}
-                        </div>
-                        <span className="text-white text-sm font-medium text-left">
-                          {t(option.nameKey)}
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm font-medium ${isCompleted ? "text-green-300/80" : "text-white"}`}>{day.dayName}</p>
+                        {day.muscleGroups.length > 0 && (
+                          <p className={`text-xs truncate ${isCompleted ? "text-green-400/40" : "text-white/40"}`}>
+                            {day.muscleGroups.slice(0, 3).join(" · ")}
+                          </p>
+                        )}
+                      </div>
+                      {isCompleted ? (
+                        <span className="text-[10px] font-semibold text-green-400 bg-green-500/15 px-2 py-0.5 rounded-full flex-shrink-0">
+                          {t("swapWorkoutActionSheet.completed")}
                         </span>
-                        <svg
-                          className="ml-auto h-4 w-4 text-white/60"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M6 4l4 4-4 4" />
-                        </svg>
-                      </button>
-                    ))}
-                  </div>
+                      ) : currentDayIndex === index ? (
+                        <span className="text-[10px] font-semibold text-main bg-main/10 px-2 py-0.5 rounded-full flex-shrink-0">
+                          {t("swapWorkoutActionSheet.current")}
+                        </span>
+                      ) : null}
+                      <svg
+                        className={`h-4 w-4 flex-shrink-0 ${isCompleted ? "text-green-500/30" : "text-white/30"}`}
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M6 4l4 4-4 4" />
+                      </svg>
+                    </button>
+                    );
+                  })}
                 </div>
               </>
             )}
           </div>
-        </div>
-      </div>
-    </div>
-  );
 
-  return createPortal(sheetContent, document.body);
+          {/* Custom Workout Section */}
+          <div>
+            <h3 className="text-sm font-semibold text-white/80 mb-4 uppercase tracking-wider">
+              {t("swapWorkoutActionSheet.customWorkout")}
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {customWorkoutOptions.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => {
+                    if (option.id === "create-scratch" && onCreateFromScratch) {
+                      onCreateFromScratch();
+                      onClose();
+                      return;
+                    }
+                    if (option.id === "saved-programs") {
+                      openSavedPrograms();
+                      return;
+                    }
+                    if (onSelectWorkout) {
+                      onSelectWorkout(option.id);
+                    }
+                    onClose();
+                  }}
+                  className="flex flex-col items-start gap-1 p-3 rounded-xl bg-gray-800/50 hover:bg-gray-800/70 transition-colors min-h-[56px]"
+                >
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    {option.icon}
+                  </div>
+                  <span className="text-white text-sm font-medium text-left">
+                    {t(option.nameKey)}
+                  </span>
+                  <svg
+                    className="ml-auto h-4 w-4 text-white/60"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M6 4l4 4-4 4" />
+                  </svg>
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </Sheet>
+  );
 }
 
 /* ------------------------------------------------------------------ */

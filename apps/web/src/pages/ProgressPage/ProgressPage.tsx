@@ -73,7 +73,7 @@ function ProgressPage({
       <header className="flex items-start justify-between">
         <div>
           <Logo />
-          <h1 className="mx-2.5 text-3xl font-semibold text-white">{t("progressPage.title")}</h1>
+          <h1 className="mx-2.5 text-3xl md:text-4xl lg:text-5xl font-semibold text-white">{t("progressPage.title")}</h1>
         </div>
       </header>
 
@@ -106,8 +106,10 @@ function ProgressPage({
       {activeTab === "overview" && (
         <>
           {hasWorkouts ? (
-            <>
-              <StatsGrid stats={stats} />
+            <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-6">
+              <div className="lg:col-span-2">
+                <StatsGrid stats={stats} />
+              </div>
               <WeeklyActivity days={weeklyActivity} />
               <ProgressChart
                 data={progressData}
@@ -124,7 +126,7 @@ function ProgressPage({
                 />
               )}
               <MuscleGroupChart data={muscleGroupData} />
-            </>
+            </div>
           ) : (
             <section className="flex flex-1 flex-col items-center justify-center gap-5 rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center text-slate-100 shadow-xl ring-1 ring-white/5">
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-main/20">
@@ -198,7 +200,7 @@ function ProgressPage({
         </>
       )}
 
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px] md:max-w-none">
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}

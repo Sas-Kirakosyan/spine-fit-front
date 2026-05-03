@@ -280,8 +280,9 @@ function WorkoutPage({
           }}
         />
 
+        <div className="flex flex-col gap-3 lg:grid lg:grid-cols-[40%_60%] lg:gap-6 lg:items-start">
+        <div className="lg:sticky lg:top-4">
         <WorkoutPlanCard
-          containerRef={cardRef}
           onPlanSwitched={handlePlanSwitched}
           planName={getPlan()?.name || t("workoutPage.labels.myWorkoutPlan")}
           dayName={currentDayName}
@@ -313,6 +314,7 @@ function WorkoutPage({
             }
           }}
         />
+        </div>
 
         <section className="flex-1 space-y-3 mx-2.5">
           {isLoadingPlan ? (
@@ -414,10 +416,11 @@ function WorkoutPage({
             </div>
           </button>
         </section>
+        </div>
       </div>
 
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
-        <div className="flex justify-center items-center">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px] md:max-w-none">
+        <div className="flex justify-center items-center md:max-w-[640px] md:mx-auto">
           <Button
             onClick={onStartWorkoutSession}
             className="w-full mx-2.5 flex justify-center items-center mb-[30px] h-[46px] rounded-[10px] bg-main text-white uppercase"
@@ -462,7 +465,6 @@ function WorkoutPage({
             }
             setActionExercise(null);
           }}
-          containerRef={cardRef}
         />
       )}
 

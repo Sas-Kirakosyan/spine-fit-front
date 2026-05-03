@@ -72,7 +72,7 @@ function QuizEmblaCarousel(props: IQuizEmblaCarouselProps) {
   }, [selectedMonth, selectedDay, selectedYear, onChange]);
 
   return (
-    <div className="relative flex w-full h-[96px] max-w-[320px] mx-auto overflow-hidden bg-background">
+    <div className="relative flex w-full h-[96px] max-w-[320px] md:max-w-[480px] mx-auto overflow-hidden bg-background">
       <div className="absolute inset-0 z-50 pointer-events-none bg-gradient-to-b from-background via-transparent to-background" />
       <div className="absolute inset-x-0 h-[35px] border-t-2 border-b-2 border-white pointer-events-none top-1/2 -translate-y-1/2 z-60" />
 

@@ -194,7 +194,7 @@ function ResetPasswordPage({ onNavigateToLogin }: ResetPasswordPageProps) {
   };
 
   return (
-    <PageContainer contentClassName="justify-between">
+    <PageContainer widthMode="phone" contentClassName="justify-between">
       <PageHeader onNavigateToHome={onNavigateToLogin} />
 
       <div className="mt-10 flex-1 overflow-y-auto">

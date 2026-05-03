@@ -197,15 +197,15 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   };
 
   return (
-    <PageContainer contentClassName="gap-6">
+    <PageContainer contentClassName="gap-6 md:max-w-[640px] md:mx-auto md:w-full">
       <header className="flex items-center gap-4 px-4 py-4">
         <Button
           onClick={onNavigateBack}
-          className="flex items-center justify-center rounded-lg p-1 transition hover:bg-white/10"
+          className="flex items-center justify-center rounded-lg p-1 min-h-[44px] min-w-[44px] transition hover:bg-white/10"
         >
           <ChevronLeftIcon className="h-6 w-6 text-main" />
         </Button>
-        <h1 className="text-xl font-semibold text-white">
+        <h1 className="text-xl md:text-2xl font-semibold text-white">
           {t("settingsPage.title")}
         </h1>
       </header>

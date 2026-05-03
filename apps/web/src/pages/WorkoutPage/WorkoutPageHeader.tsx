@@ -11,7 +11,7 @@ export function WorkoutPageHeader({ onNavigateToMyPlan }: WorkoutPageHeaderProps
     <button onClick={onNavigateToMyPlan}>
       <header className="flex mt-2 ml-2.5">
         <div className="w-8 h-8 border-3 border-main rounded-full mr-1"></div>
-        <div className="text-2xl font-semibold text-white">{t("workoutPage.buttons.myPlan")}</div>
+        <div className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white">{t("workoutPage.buttons.myPlan")}</div>
 
         <svg
           className="text-main"

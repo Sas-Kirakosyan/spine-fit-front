@@ -394,7 +394,7 @@ export const ExerciseSet: React.FC<ExerciseSetProps> = ({
 
       {/* Swipeable content */}
       <div
-        className={`relative z-10 grid select-none grid-cols-[44px_minmax(0,1fr)_68px_68px_52px] items-center gap-2 rounded-[14px] px-2.5 py-2 transition-colors ${
+        className={`relative z-10 grid select-none grid-cols-[44px_minmax(0,1fr)_68px_68px_52px] md:grid-cols-[60px_minmax(0,1fr)_88px_88px_64px] items-center gap-2 rounded-[14px] px-2.5 py-2 transition-colors ${
           isCompleted
             ? isWarmup
               ? "bg-[#3A3A05]"

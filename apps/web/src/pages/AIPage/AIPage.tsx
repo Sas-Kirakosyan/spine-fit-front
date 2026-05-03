@@ -154,14 +154,14 @@ function AIPage({
   };
 
   return (
-    <PageContainer contentClassName="gap-6 pb-24">
+    <PageContainer contentClassName="gap-6 pb-24 md:max-w-[760px] md:mx-auto md:w-full">
       <header className="flex items-start justify-between">
         <div>
           <Logo />
-          <h1 className="mt-3 text-3xl mx-2.5 font-semibold text-white">
+          <h1 className="mt-3 text-3xl md:text-4xl lg:text-5xl mx-2.5 font-semibold text-white">
             {t("aiPage.title")}
           </h1>
-          <p className="mt-1 text-sm text-slate-300 mx-2.5">
+          <p className="mt-1 text-sm md:text-base text-slate-300 mx-2.5">
             {t("aiPage.subtitle")}
           </p>
         </div>
@@ -184,7 +184,7 @@ function AIPage({
         </div>
       </section>
 
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px] md:max-w-none">
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}

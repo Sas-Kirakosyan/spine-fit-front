@@ -112,7 +112,6 @@ export interface ExerciseActionSheetProps {
   onStartWorkout?: () => void;
   onReplace?: () => void;
   onDelete?: () => void;
-  containerRef: RefObject<HTMLDivElement | null>;
 }
 
 export interface FinishedWorkoutSummary {

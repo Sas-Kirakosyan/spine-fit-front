@@ -48,6 +48,7 @@ function HomePage({
     <>
       <PageContainer
         backgroundImage={`url('${assetUrl("Photo/Exercises/cable-knee-drive.webp")}')`}
+        backgroundPositionClassName="bg-center md:bg-right"
         overlayClassName="bg-black/30"
       >
         <div className="flex items-center justify-between">
@@ -56,42 +57,47 @@ function HomePage({
             <LanguageSelector />
           </div>
         </div>
-        <div className="mt-auto px-4 py-4">
-          <h2 className="text-white text-4xl font-semibold leading-tight">
-            {t("homePage.heading1")}
-            <br />
-            {t("homePage.heading2")}
-          </h2>
-          <p className="text-white/70 text-sm mt-2">
-            {t("homePage.subheading")}
-          </p>
-        </div>
 
-        <div className="flex flex-col items-center justify-center mt-10 space-y-6 px-4">
-          {oauthError && (
-            <p
-              role="alert"
-              className="w-full max-w-[370px] rounded-lg border border-red-400/40 bg-red-500/20 px-3 py-2 text-center text-sm text-white"
-            >
-              {oauthError}
-            </p>
-          )}
+        <div className="mt-auto md:mt-0 md:flex md:flex-1 md:items-center">
+          <div className="w-full md:max-w-[600px] lg:max-w-[640px] md:px-12 md:py-16 lg:px-20">
+            <div className="px-4 py-4 md:px-0 md:py-0">
+              <h2 className="text-white text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight tracking-tight">
+                {t("homePage.heading1")}
+                <br />
+                {t("homePage.heading2")}
+              </h2>
+              <p className="text-white/80 text-sm md:text-lg lg:text-xl mt-2 md:mt-5 max-w-[480px]">
+                {t("homePage.subheading")}
+              </p>
+            </div>
 
-          <button
-            onClick={handleStartQuiz}
-            className="w-full max-w-[370px] rounded-[18px] bg-main py-4 text-lg font-semibold text-white"
-          >
-            {t("homePage.startProgram")}
-          </button>
+            <div className="flex flex-col items-stretch md:items-start mt-10 md:mt-10 space-y-4 md:space-y-5 px-4 md:px-0">
+              {oauthError && (
+                <p
+                  role="alert"
+                  className="w-full max-w-[370px] md:max-w-[360px] rounded-lg border border-red-400/40 bg-red-500/20 px-3 py-2 text-center text-sm text-white"
+                >
+                  {oauthError}
+                </p>
+              )}
 
-          {!isAuthenticated && (
-            <button
-              onClick={onNavigateToLogin}
-              className="w-full py-2 pb-15 text-center text-lg font-medium text-white hover:text-white/50"
-            >
-              {t("homePage.logIn")}
-            </button>
-          )}
+              <button
+                onClick={handleStartQuiz}
+                className="w-full max-w-[370px] md:max-w-[280px] rounded-[18px] bg-main py-4 md:py-5 text-lg md:text-base font-semibold uppercase tracking-[0.08em] text-white min-h-[56px] shadow-lg shadow-main/30 transition hover:brightness-110"
+              >
+                {t("homePage.startProgram")}
+              </button>
+
+              {!isAuthenticated && (
+                <button
+                  onClick={onNavigateToLogin}
+                  className="w-full md:w-auto py-2 pb-15 md:pb-2 text-center md:text-left text-lg font-medium text-white/90 hover:text-white transition"
+                >
+                  {t("homePage.logIn")}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </PageContainer>
 
