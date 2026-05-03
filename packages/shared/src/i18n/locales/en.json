@@ -466,28 +466,15 @@
         "options": ["10–20 min", "20–30 min", "30–45 min", "45–60 min", "60–90 min"]
       },
       "11": {
-        "question": "Your Body Stats",
-        "description": "Helps us calibrate your training volume and intensity.",
-        "fields": {
-          "gender": {
-            "label": "Gender",
-            "options": ["Male", "Female", "Other"]
-          },
-          "dateOfBirth": {
-            "label": "Date of Birth"
-          },
-          "height": {
-            "label": "Height",
-            "placeholder": "Enter height"
-          },
-          "weight": {
-            "label": "Weight",
-            "placeholder": "Enter weight"
-          }
-        }
+        "question": "What is your biological sex?",
+        "options": ["Male", "Female", "Other"]
       },
       "12": {
-        "question": "Which physique best matches yours?",
+        "question": "What year were you born?",
+        "placeholder": "e.g. 1990"
+      },
+      "13": {
+        "question": "Which physique profile best matches yours?",
         "options": [
           { "label": "8–15% (Lean / Athletic)", "description": "Visible muscle definition" },
           { "label": "16–22% (Average)", "description": "Some definition, slight fat around waist" },
@@ -501,7 +488,7 @@
           { "label": "38%+ (High body fat)", "description": "Higher fat storage around waist and hips" }
         ]
       },
-      "13": {
+      "14": {
         "question": "Anything else we should know?",
         "placeholder": "E.g., specific injuries, preferences, equipment limitations...",
         "templates": [

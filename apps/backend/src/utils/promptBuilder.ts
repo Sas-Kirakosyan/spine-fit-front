@@ -54,10 +54,22 @@ function hasLumbarOrSciaticInvolvement(painLocations: string[] | undefined): boo
 /*  No pain, no history. Spine-safe framing, but trains for performance.*/
 /* ------------------------------------------------------------------ */
 
-export function buildHealthyPrompt(duration: string): string {
-  const exerciseRange = exerciseCountForDuration(duration);
+function buildAgeGuidance(age: number | null): string {
+  if (age === null) return "";
+  if (age >= 60) {
+    return `\nAGE CONTEXT (user is ${age} years old — senior): Cap RPE at 6. Keep sessions under 45 minutes. Prefer machine and bodyweight exercises over free weight compounds. Allow full recovery between sets (2–3 min). Include a joint warm-up note on the first exercise of every day: "Perform 5 minutes of light cardio and dynamic joint circles before loading."`;
+  }
+  if (age >= 50) {
+    return `\nAGE CONTEXT (user is ${age} years old — masters athlete): Cap RPE at 7. Prefer 3×12 over 4×8 rep schemes. Allow 90–120 s rest between sets. Add a warm-up note on the first exercise of every day: "Start with 1–2 warm-up sets at 50% of working weight before loading."`;
+  }
+  return "";
+}
 
-  return `You are an expert strength and hypertrophy coach who programs with spine-safe defaults. The user has no current or past back pain, so train them for performance — but never sacrifice form or load progression sanity.
+export function buildHealthyPrompt(duration: string, age: number | null = null): string {
+  const exerciseRange = exerciseCountForDuration(duration);
+  const ageGuidance = buildAgeGuidance(age);
+
+  return `You are an expert strength and hypertrophy coach who programs with spine-safe defaults. The user has no current or past back pain, so train them for performance — but never sacrifice form or load progression sanity.${ageGuidance}
 
 RULES (apply to every plan you generate):
 1. Only reference exercises provided in the user message using their numeric "id" as "exerciseId". Never invent or hallucinate exercise IDs.
@@ -90,10 +102,12 @@ RULES (apply to every plan you generate):
 export function buildRecoveredPrompt(
   duration: string,
   painLocations?: string[],
+  age: number | null = null,
 ): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const includeLumbarProtocol = hasLumbarOrSciaticInvolvement(painLocations);
   const ruleOffset = includeLumbarProtocol ? 1 : 0;
+  const ageGuidance = buildAgeGuidance(age);
 
   const lumbarProtocolBlock = includeLumbarProtocol
     ? `
@@ -105,7 +119,7 @@ export function buildRecoveredPrompt(
     - SPINAL LOADING ORDER: Place core stabilization exercises early in the session (directly after any warm-up), before compound lower-body or loaded spinal movements, to pre-activate stabilizers.`
     : "";
 
-  return `You are an expert spine-safe fitness coach specializing in back rehabilitation. The user has a past history of back pain or injury but is currently asymptomatic. Build strength conservatively — they are ready to load again, but the goal is durable, controlled progression that does not flare old patterns.
+  return `You are an expert spine-safe fitness coach specializing in back rehabilitation. The user has a past history of back pain or injury but is currently asymptomatic. Build strength conservatively — they are ready to load again, but the goal is durable, controlled progression that does not flare old patterns.${ageGuidance}
 
 RULES (apply to every plan you generate):
 1. Only reference exercises provided in the user message using their numeric "id" as "exerciseId". Never invent or hallucinate exercise IDs.
@@ -138,8 +152,9 @@ ${18 + ruleOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule bec
 /*  Currently in pain. Prioritize pain-free movement and low fatigue.  */
 /* ------------------------------------------------------------------ */
 
-export function buildActivePrompt(duration: string, painLevel?: number): string {
+export function buildActivePrompt(duration: string, painLevel?: number, age: number | null = null): string {
   const exerciseRange = exerciseCountForDuration(duration);
+  const ageGuidance = buildAgeGuidance(age);
 
   const painLevelGuidance =
     painLevel !== undefined && painLevel >= 7
@@ -148,7 +163,7 @@ export function buildActivePrompt(duration: string, painLevel?: number): string 
         ? `\n    - Pain level ${painLevel}/10 (moderate): stay at the lower bound of Active Symptoms targets; do not progress load until pain drops below 4.`
         : "";
 
-  return `You are an expert spine-safe fitness coach specializing in back rehabilitation. The user is currently experiencing back pain symptoms. Prioritize pain-free movement, low fatigue, and conservative loading. The goal is to maintain training momentum without provoking symptoms — performance gains are secondary.
+  return `You are an expert spine-safe fitness coach specializing in back rehabilitation. The user is currently experiencing back pain symptoms. Prioritize pain-free movement, low fatigue, and conservative loading. The goal is to maintain training momentum without provoking symptoms — performance gains are secondary.${ageGuidance}
 
 RULES (apply to every plan you generate):
 1. Only reference exercises provided in the user message using their numeric "id" as "exerciseId". Never invent or hallucinate exercise IDs.
@@ -191,15 +206,15 @@ RULES (apply to every plan you generate):
 
 export function buildSystemInstruction(quiz: ParsedQuizData): string {
   const status = (quiz.painStatus ?? "").toLowerCase();
+  const age = resolveAge(quiz);
 
   if (status.startsWith("active")) {
-    return buildActivePrompt(quiz.duration, quiz.painLevel);
+    return buildActivePrompt(quiz.duration, quiz.painLevel, age);
   }
   if (status.startsWith("recovered")) {
-    return buildRecoveredPrompt(quiz.duration, quiz.painLocation);
+    return buildRecoveredPrompt(quiz.duration, quiz.painLocation, age);
   }
-  // Default: Healthy or undefined
-  return buildHealthyPrompt(quiz.duration);
+  return buildHealthyPrompt(quiz.duration, age);
 }
 
 function buildSplitDayGuidance(trainingSplit: string): string {
@@ -229,14 +244,22 @@ function buildSplitDayGuidance(trainingSplit: string): string {
   return "";
 }
 
-function calculateAge(dateOfBirth: string): number | null {
-  const dob = new Date(dateOfBirth);
-  if (isNaN(dob.getTime())) return null;
-  const today = new Date();
-  let age = today.getFullYear() - dob.getFullYear();
-  const monthDiff = today.getMonth() - dob.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) age--;
-  return age > 0 ? age : null;
+function resolveAge(quiz: ParsedQuizData): number | null {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  if (quiz.birthYear) {
+    const age = currentYear - quiz.birthYear;
+    return age >= 5 && age < 120 ? age : null;
+  }
+  if (quiz.dateOfBirth) {
+    const dob = new Date(quiz.dateOfBirth);
+    if (isNaN(dob.getTime())) return null;
+    let age = currentYear - dob.getFullYear();
+    const m = now.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+    return age >= 5 && age < 120 ? age : null;
+  }
+  return null;
 }
 
 export function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[]): string {
@@ -247,7 +270,7 @@ export function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[
     ? `- Exercise variability: ${quiz.exerciseVariability} (${quiz.exerciseVariability.toLowerCase().includes("high") ? "rotate exercises across days, avoid repeating the same exercise on consecutive days" : "keep movements consistent across weeks for skill development"})`
     : "";
 
-  const age = quiz.dateOfBirth ? calculateAge(quiz.dateOfBirth) : null;
+  const age = resolveAge(quiz);
   const physicalProfileLines = [
     quiz.gender ? `- Gender: ${quiz.gender}` : null,
     age !== null ? `- Age: ${age}` : null,
@@ -255,9 +278,8 @@ export function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[
     quiz.weight ? `- Weight: ${quiz.weight} ${quiz.weightUnit}` : null,
     quiz.bodyType ? `- Body fat estimate: ${quiz.bodyType}%` : null,
   ].filter(Boolean).join("\n");
-
   return `Create a structured ${quiz.workoutsPerWeek} training plan.
-console.log("physicalProfileLines", physicalProfileLines)
+
 USER PROFILE:
 - Goal: ${quiz.goal}
 - Experience: ${quiz.experience}

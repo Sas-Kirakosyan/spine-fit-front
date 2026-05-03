@@ -133,55 +133,30 @@ export const questions: QuizQuestion[] = [
 
   {
     id: 11,
-    fieldName: "baselineStats",
-    question: "Standard Metrics",
-    type: "multi_field",
-    description: "These stats allow us to calibrate your volume and intensity.",
-    optional: true,
-    fields: [
-      {
-        id: 11.1,
-        fieldName: "gender",
-        label: "Gender",
-        type: "radio",
-        options: ["Male", "Female", "Other"],
-        optional: true,
-      },
-      {
-        id: 11.2,
-        fieldName: "dateOfBirth",
-        label: "Date of Birth",
-        type: "date",
-        optional: true,
-      },
-      {
-        id: 11.3,
-        fieldName: "height",
-        label: "Height",
-        type: "input",
-        inputType: "number",
-        placeholder: "Enter height",
-        optional: true,
-        unitOptions: ["cm", "ft"],
-      },
-      {
-        id: 11.4,
-        fieldName: "weight",
-        label: "Weight",
-        type: "input",
-        inputType: "number",
-        placeholder: "Enter weight",
-        optional: true,
-        unitOptions: ["kg", "lbs"],
-      },
-    ],
+    fieldName: "gender",
+    question: "What is your biological sex?",
+    type: "radio",
+    options: ["Male", "Female", "Other"],
   },
 
   {
     id: 12,
+    fieldName: "birthYear",
+    question: "What year were you born?",
+    type: "input",
+    inputType: "number",
+    placeholder: "e.g. 1990",
+    min: 1900,
+    max: new Date().getFullYear() - 5,
+  },
+
+  {
+    id: 13,
     fieldName: "bodyType",
     question: "Which physique profile best matches yours?",
     type: "image_radio",
+    // showIf intentionally omitted: gender (Q11) is now always answered, so this
+    // question is always reachable and optionsFemale selection is handled in QuizModal.
     options: [
       {
         value: "8-15",
@@ -234,14 +209,10 @@ export const questions: QuizQuestion[] = [
         description: "Higher fat storage around waist and hips",
       },
     ],
-    showIf: {
-      fieldName: "baselineStats",
-      showOptionsBasedOn: true,
-    },
   },
 
   {
-    id: 13,
+    id: 14,
     fieldName: "additionalNotes",
     question: "Anything else we should know?",
     type: "textarea",

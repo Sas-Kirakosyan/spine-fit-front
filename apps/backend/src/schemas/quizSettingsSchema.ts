@@ -17,6 +17,7 @@ export const quizSettingsSchema = z.looseObject({
   heightUnit: optionalStr.pipe(z.string().default("cm")),
   weightUnit: optionalStr.pipe(z.string().default("kg")),
   gender: z.string().optional(),
+  birthYear: z.number().optional(),
   height: z.string().optional(),
   weight: z.string().optional(),
   dateOfBirth: z.string().optional(),

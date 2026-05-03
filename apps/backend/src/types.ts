@@ -10,6 +10,7 @@ export interface ParsedQuizData {
   cardio: string;
   stretching: string;
   gender?: string;
+  birthYear?: number;
   height?: string;
   heightUnit: string;
   weight?: string;
