@@ -136,6 +136,7 @@ export interface PlanSettings {
   stretching: string;
   // User profile data from quiz
   gender?: string;
+  birthYear?: number;
   height?: string;
   heightUnit?: string;
   weight?: string;

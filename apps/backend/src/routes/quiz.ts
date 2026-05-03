@@ -68,41 +68,31 @@ const QUESTIONS = {
   EXPERIENCE: 8,
   TRAINING_FREQUENCY: 9,
   WORKOUT_DURATION: 10,
-  STATS: 11,
-  BODY_TYPE: 12,
-  ADDITIONAL_NOTES: 13,
+  GENDER: 11,
+  BIRTH_YEAR: 12,
+  BODY_TYPE: 13,
+  ADDITIONAL_NOTES: 14,
 } as const;
 
 function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
-  const { answers, units: rawUnits } = data;
+  const { answers } = data;
 
   // Goal
   const goal = typeof answers[QUESTIONS.GOAL] === "number" ? GOAL_OPTIONS[answers[QUESTIONS.GOAL] as number] : GOAL_OPTIONS[0];
 
-  // Baseline stats (multi_field)
-  let gender: string | undefined;
-  let height: string | undefined;
-  let weight: string | undefined;
-  let dateOfBirth: string | undefined;
+  // Gender (standalone radio: 0=Male, 1=Female, 2=Other)
+  const genderOptions = ["Male", "Female", "Other"];
+  const gender = typeof answers[QUESTIONS.GENDER] === "number"
+    ? genderOptions[answers[QUESTIONS.GENDER] as number]
+    : undefined;
 
-  const stats = answers[QUESTIONS.STATS];
-  if (stats && typeof stats === "object" && !Array.isArray(stats)) {
-    const s = stats as Record<string, string | number>;
-    gender = typeof s.gender === "string" ? s.gender : undefined;
-    height = s.height !== undefined ? String(s.height) : undefined;
-    weight = s.weight !== undefined ? String(s.weight) : undefined;
-    dateOfBirth = typeof s.dateOfBirth === "string" ? s.dateOfBirth : undefined;
-  }
+  // Birth year (number input)
+  const birthYearRaw = answers[QUESTIONS.BIRTH_YEAR];
+  const birthYear = birthYearRaw !== undefined ? parseInt(String(birthYearRaw), 10) || undefined : undefined;
 
-  // Units for stats question
-  let heightUnit = "cm";
-  let weightUnit = "kg";
-  const unitsQ3 = rawUnits?.[QUESTIONS.STATS];
-  if (unitsQ3 && typeof unitsQ3 === "object" && !Array.isArray(unitsQ3)) {
-    const u = unitsQ3 as Record<string, string>;
-    heightUnit = u.height ?? "cm";
-    weightUnit = u.weight ?? "kg";
-  }
+  // height/weight come from Profile (regenerate endpoint only); defaults kept for schema compat
+  const heightUnit = "cm";
+  const weightUnit = "kg";
 
   // Body type (gender-dependent)
   let bodyType: string | undefined;
@@ -188,11 +178,9 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
     cardio: "Off",
     stretching: "Off",
     gender,
-    height,
+    birthYear,
     heightUnit,
-    weight,
     weightUnit,
-    dateOfBirth,
     bodyType,
     painStatus,
     painLocation,
