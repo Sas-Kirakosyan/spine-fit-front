@@ -9,6 +9,7 @@ import SelectField from "@/components/SelecteField/SelecteField.tsx";
 import InputField from "@/components/InputField/InputField.tsx";
 import QuizScrollCalendar from "@/components/Quiz/QuizScrollCalendar.tsx";
 import ErrorIcon from "@/assets/ErrorIcon/ErrorIncon.tsx";
+import { ConfirmDialog } from "@/components/ui/Modal";
 import { clearPlan, getPlanSettings, hasPlan, savePlanAndSettings } from "@/lib/planService";
 import type { GeneratedPlan, PlanSettings } from "@spinefit/shared";
 import { useAuth } from "@/hooks/useAuth.ts";
@@ -176,7 +177,7 @@ function ProfilePage({
       <header className="flex items-start justify-between">
         <div>
           <Logo />
-          <h1 className="mx-2.5 text-3xl font-semibold text-white">
+          <h1 className="mx-2.5 text-3xl md:text-4xl lg:text-5xl font-semibold text-white">
             {t("profilePage.title")}
           </h1>
         </div>
@@ -196,71 +197,73 @@ function ProfilePage({
       )}
 
       <div className="flex flex-col flex-1 overflow-y-auto pb-20">
-        <div className="flex flex-col px-4 pt-4 gap-4">
+        <div className="flex flex-col px-4 pt-4 gap-4 md:max-w-[800px] md:mx-auto md:w-full">
           <p className="text-white/50 text-xs font-semibold uppercase tracking-wider px-1">
             {t("profilePage.bodyMeasurements")}
           </p>
 
-          <SelectField
-            value={gender}
-            options={[
-              t("profilePage.genders.male"),
-              t("profilePage.genders.female"),
-              t("profilePage.genders.other"),
-            ]}
-            onChange={setGender}
-            placeholder={t("profilePage.placeholders.gender")}
-          />
-
-          <QuizScrollCalendar
-            value={dateOfBirth}
-            onChange={(newVal: string) => setDateOfBirth(newVal)}
-          />
-
-          <div className="flex flex-col gap-0.5">
-            <InputField
-              value={height}
-              onChange={setHeight}
-              placeholder={t("profilePage.placeholders.height")}
-              type="number"
-              unit={heightUnit}
-              unitOptions={["cm", "ft"]}
-              onUnitChange={(u) => setHeightUnit(u as "cm" | "ft")}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SelectField
+              value={gender}
+              options={[
+                t("profilePage.genders.male"),
+                t("profilePage.genders.female"),
+                t("profilePage.genders.other"),
+              ]}
+              onChange={setGender}
+              placeholder={t("profilePage.placeholders.gender")}
             />
-            {!!heightError && (
-              <p className="flex items-center gap-1 text-red-500 text-sm mt-1">
-                <span>
-                  <ErrorIcon />
-                </span>
-                {heightError}
-              </p>
-            )}
-          </div>
 
-          <div className="flex flex-col gap-0.5">
-            <InputField
-              value={weight}
-              onChange={setWeight}
-              placeholder={t("profilePage.placeholders.weight")}
-              type="number"
-              unit={weightUnit}
-              unitOptions={["kg", "lbs"]}
-              onUnitChange={(u) => setWeightUnit(u as "kg" | "lbs")}
+            <QuizScrollCalendar
+              value={dateOfBirth}
+              onChange={(newVal: string) => setDateOfBirth(newVal)}
             />
-            {!!weightError && (
-              <p className="flex items-center gap-1 text-red-500 text-sm mt-1">
-                <span>
-                  <ErrorIcon />
-                </span>
-                {weightError}
-              </p>
-            )}
+
+            <div className="flex flex-col gap-0.5">
+              <InputField
+                value={height}
+                onChange={setHeight}
+                placeholder={t("profilePage.placeholders.height")}
+                type="number"
+                unit={heightUnit}
+                unitOptions={["cm", "ft"]}
+                onUnitChange={(u) => setHeightUnit(u as "cm" | "ft")}
+              />
+              {!!heightError && (
+                <p className="flex items-center gap-1 text-red-500 text-sm mt-1">
+                  <span>
+                    <ErrorIcon />
+                  </span>
+                  {heightError}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <InputField
+                value={weight}
+                onChange={setWeight}
+                placeholder={t("profilePage.placeholders.weight")}
+                type="number"
+                unit={weightUnit}
+                unitOptions={["kg", "lbs"]}
+                onUnitChange={(u) => setWeightUnit(u as "kg" | "lbs")}
+              />
+              {!!weightError && (
+                <p className="flex items-center gap-1 text-red-500 text-sm mt-1">
+                  <span>
+                    <ErrorIcon />
+                  </span>
+                  {weightError}
+                </p>
+              )}
+            </div>
           </div>
 
           <Button
             disabled={!!(heightError || weightError)}
             onClick={handleSave}
-            className={`w-full py-4 rounded-xl text-white font-semibold transition mt-2
+            className={`w-full md:w-auto md:self-end md:px-8 py-4 rounded-xl text-white font-semibold transition mt-2 min-h-[48px]
                             ${
                               heightError || weightError
                                 ? "bg-[#b85c00] cursor-not-allowed opacity-70"
@@ -278,34 +281,37 @@ function ProfilePage({
         </div>
       )}
 
-      {showResetConfirm && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 pb-6 px-4">
-          <div className="w-full max-w-[440px] bg-[#132f54] border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
-            <div>
-              <h2 className="text-white font-semibold text-lg mb-1">
-                {t("profilePage.resetPlanTitle")}
-              </h2>
-              <p className="text-white/60 text-sm">
-                {t("profilePage.resetPlanMessage")}
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Button
-                onClick={() => setShowResetConfirm(false)}
-                className="flex-1 py-3 rounded-xl border border-white/20 text-white font-semibold"
-              >
-                {t("profilePage.resetPlanCancel")}
-              </Button>
-              <Button
-                onClick={doSaveAndRegenerate}
-                className="flex-1 py-3 rounded-xl bg-main text-white font-semibold"
-              >
-                {t("profilePage.resetPlanConfirm")}
-              </Button>
-            </div>
+      <ConfirmDialog
+        isOpen={showResetConfirm}
+        onClose={() => setShowResetConfirm(false)}
+        ariaLabel={t("profilePage.resetPlanTitle")}
+        className="bg-[#132f54] border border-white/10"
+      >
+        <div className="flex flex-col gap-4">
+          <div>
+            <h2 className="text-white font-semibold text-lg md:text-xl mb-1">
+              {t("profilePage.resetPlanTitle")}
+            </h2>
+            <p className="text-white/60 text-sm">
+              {t("profilePage.resetPlanMessage")}
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button
+              onClick={() => setShowResetConfirm(false)}
+              className="flex-1 py-3 rounded-xl border border-white/20 text-white font-semibold min-h-[48px]"
+            >
+              {t("profilePage.resetPlanCancel")}
+            </Button>
+            <Button
+              onClick={doSaveAndRegenerate}
+              className="flex-1 py-3 rounded-xl bg-main text-white font-semibold min-h-[48px]"
+            >
+              {t("profilePage.resetPlanConfirm")}
+            </Button>
           </div>
         </div>
-      )}
+      </ConfirmDialog>
 
       {isRegenerating && (
         <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black/75">
@@ -316,7 +322,7 @@ function ProfilePage({
         </div>
       )}
 
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px] md:max-w-none">
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}

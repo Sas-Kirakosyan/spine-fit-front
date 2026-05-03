@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormField } from "@/components/Form/FormField/FormField";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
+import { ConfirmDialog } from "@/components/ui/Modal";
 import { sendPasswordResetEmail } from "@/lib/authService";
 
 interface ForgotPasswordModalProps {
@@ -85,83 +86,79 @@ export function ForgotPasswordModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-      role="dialog"
-      aria-modal="true"
-      onClick={onClose}
+    <ConfirmDialog
+      isOpen={open}
+      onClose={onClose}
+      ariaLabel={t("forgotPasswordModal.title")}
+      className="bg-white text-gray-900"
+      bodyClassName="relative p-5"
     >
-      <div
-        className="relative w-full max-w-sm rounded-[14px] bg-white p-5 shadow-lg"
-        onClick={(e) => e.stopPropagation()}
+      <button
+        type="button"
+        aria-label={t("forgotPasswordModal.close")}
+        onClick={onClose}
+        className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-800"
       >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        >
+          <path d="M3 3 L13 13 M13 3 L3 13" />
+        </svg>
+      </button>
+
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-main">
+          {t("forgotPasswordModal.title")}
+        </h2>
+        <p className="mt-1 text-sm text-gray-900">
+          {sent
+            ? t("forgotPasswordModal.successMessage")
+            : t("forgotPasswordModal.subtitle")}
+        </p>
+      </div>
+
+      {sent ? (
         <button
           type="button"
-          aria-label={t("forgotPasswordModal.close")}
           onClick={onClose}
-          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-800"
+          className="mt-6 w-full rounded-[14px] bg-main py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-main/90 min-h-[48px]"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          >
-            <path d="M3 3 L13 13 M13 3 L3 13" />
-          </svg>
+          {t("forgotPasswordModal.close")}
         </button>
+      ) : (
+        <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
+          <FormField
+            label={t("forgotPasswordModal.email")}
+            id="forgot-password-email"
+            name="email"
+            type="email"
+            value={email}
+            onChange={handleChange}
+            error={fieldError}
+            placeholder={t("forgotPasswordModal.emailPlaceholder")}
+          />
 
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-main">
-            {t("forgotPasswordModal.title")}
-          </h2>
-          <p className="mt-1 text-sm text-gray-900">
-            {sent
-              ? t("forgotPasswordModal.successMessage")
-              : t("forgotPasswordModal.subtitle")}
-          </p>
-        </div>
+          {apiError && (
+            <p
+              role="alert"
+              className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600"
+            >
+              {apiError}
+            </p>
+          )}
 
-        {sent ? (
-          <button
-            type="button"
-            onClick={onClose}
-            className="mt-6 w-full rounded-[14px] bg-main py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-main/90"
-          >
-            {t("forgotPasswordModal.close")}
-          </button>
-        ) : (
-          <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
-            <FormField
-              label={t("forgotPasswordModal.email")}
-              id="forgot-password-email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={handleChange}
-              error={fieldError}
-              placeholder={t("forgotPasswordModal.emailPlaceholder")}
-            />
-
-            {apiError && (
-              <p
-                role="alert"
-                className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600"
-              >
-                {apiError}
-              </p>
-            )}
-
-            <SubmitButton
-              text={t("forgotPasswordModal.send")}
-              loading={loading}
-            />
-          </form>
-        )}
-      </div>
-    </div>
+          <SubmitButton
+            text={t("forgotPasswordModal.send")}
+            loading={loading}
+          />
+        </form>
+      )}
+    </ConfirmDialog>
   );
 }

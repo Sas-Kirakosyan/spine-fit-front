@@ -251,38 +251,55 @@ function ActiveWorkoutPage({
           onNavigateBack={handleNavigateBack}
           buttonClass={iconButtonClass}
         />
-        <section className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center shadow-xl">
-          <p className="mt-4 text-6xl font-semibold tabular-nums">
-            {formattedTime}
-          </p>
-        </section>
-        {todaysExercises.length === 0 && (
-          <div className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center">
-            <p className="text-white/60">
-              {t("activeWorkoutPage.noExercises")}
-            </p>
-            <p className="text-sm text-white/40 mt-2">
-              {t("activeWorkoutPage.generatePlanHint")}
-            </p>
+        <div className="flex flex-col gap-6 md:grid md:grid-cols-[35%_65%] md:items-start">
+          <div className="flex flex-col gap-6 md:sticky md:top-4">
+            <section className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center shadow-xl">
+              <p className="mt-4 text-6xl md:text-7xl lg:text-8xl font-semibold tabular-nums">
+                {formattedTime}
+              </p>
+            </section>
+            <Button
+              onClick={handleFinishWorkout}
+              disabled={completedExercises.length === 0}
+              className={`hidden md:block h-[55px] rounded-[10px] text-white uppercase transition-colors ${
+                completedExercises.length === 0
+                  ? "bg-[#228B22]/30 cursor-not-allowed"
+                  : "bg-[#228B22]"
+              }`}
+            >
+              {t("workoutPage.buttons.finishWorkout")}
+            </Button>
           </div>
-        )}
-        {todaysExercises.map((exercise: Exercise, index: number) => {
-          const isCompleted = completedExerciseIdsSet.has(String(exercise.id));
-          return (
-            <ExerciseCard
-              key={`${exercise.id}-${index}`}
-              exercise={exercise}
-              isCompleted={isCompleted}
-              onCardClick={() => onOpenExerciseSets(exercise)}
-              onDetailsClick={() => onOpenExerciseSets(exercise)}
-              onActionClick={() => setActionExercise(exercise)}
-            />
-          );
-        })}
+          <div className="flex flex-col gap-6">
+            {todaysExercises.length === 0 && (
+              <div className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center">
+                <p className="text-white/60">
+                  {t("activeWorkoutPage.noExercises")}
+                </p>
+                <p className="text-sm text-white/40 mt-2">
+                  {t("activeWorkoutPage.generatePlanHint")}
+                </p>
+              </div>
+            )}
+            {todaysExercises.map((exercise: Exercise, index: number) => {
+              const isCompleted = completedExerciseIdsSet.has(String(exercise.id));
+              return (
+                <ExerciseCard
+                  key={`${exercise.id}-${index}`}
+                  exercise={exercise}
+                  isCompleted={isCompleted}
+                  onCardClick={() => onOpenExerciseSets(exercise)}
+                  onDetailsClick={() => onOpenExerciseSets(exercise)}
+                  onActionClick={() => setActionExercise(exercise)}
+                />
+              );
+            })}
+          </div>
+        </div>
         <Button
           onClick={handleFinishWorkout}
           disabled={completedExercises.length === 0}
-          className={`mx-5 h-[55px] rounded-[10px] text-white uppercase transition-colors ${
+          className={`mx-5 md:hidden h-[55px] rounded-[10px] text-white uppercase transition-colors ${
             completedExercises.length === 0
               ? "bg-[#228B22]/30 cursor-not-allowed"
               : "bg-[#228B22]"
@@ -316,7 +333,6 @@ function ActiveWorkoutPage({
                 handleDeleteExercise(actionExercise);
               }
             }}
-            containerRef={cardRef}
           />
         )}
         {replaceExerciseTarget && (
@@ -337,7 +353,6 @@ function ActiveWorkoutPage({
           completedExercises={completedExercises}
           completedExerciseLogs={exerciseLogs}
           duration={fixedDuration}
-          containerRef={cardRef}
         />
         <ExitWorkoutModal
           isOpen={showExitModal}
@@ -350,7 +365,6 @@ function ActiveWorkoutPage({
             setShowExitModal(false);
             handleFinishWorkout();
           }}
-          containerRef={cardRef}
         />
       </div>
     </PageContainer>

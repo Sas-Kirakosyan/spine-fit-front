@@ -70,8 +70,8 @@ function HistoryPage({
   return (
     <PageContainer contentClassName="gap-8">
       <Logo />
-      <section className="flex flex-1 flex-col gap-5 rounded-[14px] bg-[#1B1E2B]/80 p-5 text-slate-100 shadow-xl ring-1 ring-white/5">
-        <div className="rounded-[12px] border border-white/10 bg-[#111427]/80 p-4">
+      <section className="flex flex-1 flex-col gap-5 rounded-[14px] bg-[#1B1E2B]/80 p-5 text-slate-100 shadow-xl ring-1 ring-white/5 md:grid md:grid-cols-[40%_60%] md:gap-6 md:items-start">
+        <div className="rounded-[12px] border border-white/10 bg-[#111427]/80 p-4 md:sticky md:top-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <select
@@ -158,8 +158,8 @@ function HistoryPage({
               head_cell:
                 "text-slate-400 rounded-md w-9 font-normal text-[0.8rem]",
               row: "flex w-full mt-2",
-              cell: "h-9 w-9 text-center text-sm relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-slate-800/50 [&:has([aria-selected])]:bg-slate-800 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-              day: "h-9 w-12 font-normal text-center aria-selected:opacity-100 text-white hover:bg-main rounded-md",
+              cell: "h-11 w-11 md:h-12 md:w-12 text-center text-sm relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-slate-800/50 [&:has([aria-selected])]:bg-slate-800 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+              day: "h-11 w-11 md:h-12 md:w-12 font-normal text-center aria-selected:opacity-100 text-white hover:bg-main rounded-md",
               day_selected:
                 "bg-main text-white hover:bg-main hover:text-white focus:bg-main focus:text-white",
               day_outside:
@@ -178,7 +178,7 @@ function HistoryPage({
         <WorkoutHistoryList workouts={workouts} selectedDate={selectedDate} />
       </section>
 
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px]">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px] md:max-w-none">
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}

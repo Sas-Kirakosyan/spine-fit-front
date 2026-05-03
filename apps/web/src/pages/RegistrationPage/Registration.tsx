@@ -19,7 +19,7 @@ function Registration({
   const [oauthError, setOauthError] = useState("");
 
   return (
-    <PageContainer contentClassName="justify-between">
+    <PageContainer widthMode="phone" contentClassName="justify-between">
       <PageHeader onNavigateToHome={onNavigateToHome} />
 
       <div className="mt-8 flex-1 overflow-y-auto">

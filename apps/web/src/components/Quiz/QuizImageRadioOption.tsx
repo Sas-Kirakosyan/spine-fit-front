@@ -17,7 +17,7 @@ export function QuizImageRadioOption({
   return (
     <button
       onClick={() => onSelect(index)}
-      className={`w-full rounded-lg border-2 p-4 text-left transition ${
+      className={`w-full rounded-lg border-2 p-4 md:p-5 text-left transition min-h-[88px] ${
         isSelected
           ? "border-main bg-main/10"
           : "border-gray-200 hover:border-main/50 hover:bg-gray-50"

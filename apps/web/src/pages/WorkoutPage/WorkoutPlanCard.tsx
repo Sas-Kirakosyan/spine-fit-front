@@ -11,7 +11,6 @@ interface WorkoutPlanCardProps {
   muscleCount?: number;
   duration?: string;
   location?: string;
-  containerRef: React.RefObject<HTMLDivElement | null>;
   onWorkoutSwap?: (workoutId: string) => void;
   onPlanSwitched?: (plan: GeneratedPlan) => void;
   onCreateProgramFromScratch?: () => void;
@@ -27,7 +26,6 @@ export function WorkoutPlanCard({
   muscleCount = 3,
   duration,
   location,
-  containerRef,
   onWorkoutSwap,
   onPlanSwitched,
   onCreateProgramFromScratch,
@@ -150,7 +148,6 @@ export function WorkoutPlanCard({
         <SwapWorkoutActionSheet
           onClose={() => setShowSwapSheet(false)}
           currentWorkout={getCurrentWorkoutId()}
-          containerRef={containerRef}
           onSelectWorkout={(workoutId) => {
             if (onWorkoutSwap) {
               onWorkoutSwap(workoutId);

@@ -56,7 +56,7 @@ function VolumeIcon() {
 export function StatsGrid({ stats }: StatsGridProps) {
   const { t } = useTranslation();
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
       <StatCard
         icon={<WorkoutIcon />}
         label={t("progressPage.statsGrid.workouts")}

@@ -1,32 +1,44 @@
 import type { ReactNode } from "react";
 
+export type PageContainerWidthMode = "phone" | "wide";
+
 interface PageContainerProps {
   children: ReactNode;
   backgroundImage?: string;
+  backgroundPositionClassName?: string;
   overlayClassName?: string;
   contentClassName?: string;
   minHeightClassName?: string;
   isStandalone?: boolean;
   fallbackBackgroundClassName?: string;
+  widthMode?: PageContainerWidthMode;
 }
+
+const widthClasses: Record<PageContainerWidthMode, string> = {
+  phone: "max-w-[440px]",
+  wide: "max-w-[440px] md:max-w-screen-xl",
+};
 
 export function PageContainer({
   children,
   backgroundImage,
+  backgroundPositionClassName = "bg-center",
   overlayClassName = "bg-black/40",
   contentClassName = "",
   minHeightClassName = "min-h-[690px]",
   isStandalone = true,
   fallbackBackgroundClassName = "bg-background",
+  widthMode = "wide",
 }: PageContainerProps) {
   const hasBackgroundImage = Boolean(backgroundImage);
+  const widthClass = widthClasses[widthMode];
 
   const card = (
-    <div className="relative w-full max-w-[440px] min-h-screen">
+    <div className={`relative w-full ${widthClass} min-h-screen`}>
       <div
         className={`absolute inset-0 ${
           hasBackgroundImage
-            ? "bg-cover bg-center"
+            ? `bg-cover ${backgroundPositionClassName}`
             : fallbackBackgroundClassName
         }`}
         style={hasBackgroundImage ? { backgroundImage } : undefined}
@@ -48,8 +60,15 @@ export function PageContainer({
     return card;
   }
 
+  const outerBgClass =
+    widthMode === "phone"
+      ? "bg-white md:bg-background"
+      : "bg-background";
+
   return (
-    <div className="bg-white flex items-center justify-center min-h-screen">
+    <div
+      className={`${outerBgClass} flex items-center justify-center min-h-screen`}
+    >
       {card}
     </div>
   );

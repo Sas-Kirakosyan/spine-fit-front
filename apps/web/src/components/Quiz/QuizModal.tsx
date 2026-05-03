@@ -489,7 +489,7 @@ export function QuizModal({
   if (!isOpen) return null;
 
   const optionListClass =
-    "space-y-3 max-h-[50vh] md:max-h-[360px] overflow-y-auto pr-1 -mr-1";
+    "space-y-3 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-3 max-h-[50vh] md:max-h-[440px] lg:max-h-[540px] overflow-y-auto pr-1 -mr-1";
   const question = filteredQuestions[currentQuestion];
   const painStatusDisabledNote = painStatusDisabledNoteKey
     ? t(painStatusDisabledNoteKey, { defaultValue: "" })
@@ -527,9 +527,9 @@ export function QuizModal({
   if (mode === "confirmEmail") {
     return (
       <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
-        <div className="relative w-full h-full max-w-full md:max-w-[400px] md:h-auto md:max-h-[90vh]">
-          <div className="absolute inset-0 bg-background" />
-          <div className="relative z-10 flex flex-col h-full md:min-h-[400px] md:max-h-[90vh]">
+        <div className="relative w-full h-full max-w-full md:max-w-[560px] md:h-auto md:max-h-[90vh]">
+          <div className="absolute inset-0 bg-background md:rounded-2xl" />
+          <div className="relative z-10 flex flex-col h-full md:max-h-[90vh]">
             <QuizHeader
               currentQuestionNumber={actualQuestionsCount}
               totalQuestions={actualQuestionsCount}
@@ -565,9 +565,9 @@ export function QuizModal({
   if (mode === "registration") {
     return (
       <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
-        <div className="relative w-full h-full max-w-full md:max-w-[400px] md:h-auto md:max-h-[90vh]">
-          <div className="absolute inset-0 bg-background" />
-          <div className="relative z-10 flex flex-col h-full md:min-h-[700px] md:max-h-[90vh]">
+        <div className="relative w-full h-full max-w-full md:max-w-[560px] md:h-auto md:max-h-[90vh]">
+          <div className="absolute inset-0 bg-background md:rounded-2xl" />
+          <div className="relative z-10 flex flex-col h-full md:max-h-[90vh]">
             <QuizHeader
               currentQuestionNumber={actualQuestionsCount}
               totalQuestions={actualQuestionsCount}
@@ -620,9 +620,9 @@ export function QuizModal({
 
   return (
     <div className="fixed inset-0 z-50 flex h-full w-full md:items-center md:justify-center md:p-4">
-      <div className="relative w-full h-full max-w-full md:max-w-[400px] md:h-auto md:max-h-[90vh]">
-        <div className="absolute inset-0 bg-background" />
-        <div className="relative z-10 flex flex-col h-full md:min-h-[700px] md:max-h-[90vh]">
+      <div className="relative w-full h-full max-w-full md:max-w-[560px] lg:max-w-[880px] md:h-auto md:max-h-[92vh]">
+        <div className="absolute inset-0 bg-background md:rounded-2xl md:shadow-2xl md:shadow-black/40" />
+        <div className="relative z-10 flex flex-col h-full md:max-h-[92vh]">
           <div className="flex flex-col flex-1 justify-beetwen min-h-0">
             <QuizHeader
               currentQuestionNumber={currentQuestionNumber}

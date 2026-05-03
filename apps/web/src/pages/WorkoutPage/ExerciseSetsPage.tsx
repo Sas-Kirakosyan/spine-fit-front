@@ -758,8 +758,8 @@ function ExerciseSetsPage({
       contentClassName="gap-6 rounded-[28px] bg-[#0E1224]/95 px-6 pb-10 pt-6 text-white"
       fallbackBackgroundClassName="bg-[#0E1224]"
     >
-      <div className="flex flex-1 flex-col gap-6">
-        <header className="relative overflow-hidden rounded-[26px] border border-white/12 bg-black shadow-xl">
+      <div className="flex flex-1 flex-col gap-6 lg:grid lg:grid-cols-[45%_55%] lg:gap-6 lg:items-start">
+        <header className="relative overflow-hidden rounded-[26px] border border-white/12 bg-black shadow-xl lg:sticky lg:top-4">
           <div className="relative aspect-video w-full bg-black">
             <VideoPlayer
               src={getExerciseVideoUrl(exercise)}
@@ -978,7 +978,7 @@ function ExerciseSetsPage({
 
         <section className="flex-1 rounded-[26px] border border-white/12 bg-[#13172A] p-3 shadow-xl ring-1 ring-white/5">
           <div className="space-y-3">
-            <div className="grid grid-cols-[44px_minmax(0,1fr)_68px_68px_52px] items-center gap-2 px-2.5 pb-1 text-[14px] font-medium text-white/80">
+            <div className="grid grid-cols-[44px_minmax(0,1fr)_68px_68px_52px] md:grid-cols-[60px_minmax(0,1fr)_88px_88px_64px] items-center gap-2 px-2.5 pb-1 text-[14px] font-medium text-white/80">
               <span className="text-center">
                 {t("exerciseSetsPage.table.set")}
               </span>

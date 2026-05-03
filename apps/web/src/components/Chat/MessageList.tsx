@@ -36,7 +36,7 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
           }`}
         >
           <div
-            className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+            className={`max-w-[80%] md:max-w-[68%] rounded-2xl px-4 py-3 ${
               message.role === "user"
                 ? "bg-main text-white"
                 : "bg-[#1B1E2B]/80 text-slate-100"

@@ -15,7 +15,7 @@ export function QuizRadioOption({ option, index, isSelected, onSelect, disabled 
       onClick={() => onSelect(index)}
       disabled={disabled}
       aria-disabled={disabled}
-      className={`w-full rounded-lg border-2 p-4 text-left transition ${
+      className={`w-full rounded-lg border-2 p-4 md:p-5 text-left transition min-h-[56px] md:min-h-[64px] ${
         disabled
           ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
           : isSelected
