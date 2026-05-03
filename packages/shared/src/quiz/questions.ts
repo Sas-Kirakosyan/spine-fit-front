@@ -146,6 +146,8 @@ export const questions: QuizQuestion[] = [
     type: "input",
     inputType: "number",
     placeholder: "e.g. 1990",
+    min: 1900,
+    max: new Date().getFullYear() - 5,
   },
 
   {
@@ -153,6 +155,8 @@ export const questions: QuizQuestion[] = [
     fieldName: "bodyType",
     question: "Which physique profile best matches yours?",
     type: "image_radio",
+    // showIf intentionally omitted: gender (Q11) is now always answered, so this
+    // question is always reachable and optionsFemale selection is handled in QuizModal.
     options: [
       {
         value: "8-15",

@@ -86,9 +86,13 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
     ? genderOptions[answers[QUESTIONS.GENDER] as number]
     : undefined;
 
-  // Birth year (number input)
+  // Birth year (number input) — validate range: 1900 to (currentYear - 5)
   const birthYearRaw = answers[QUESTIONS.BIRTH_YEAR];
-  const birthYear = birthYearRaw !== undefined ? parseInt(String(birthYearRaw), 10) || undefined : undefined;
+  const birthYearParsed = birthYearRaw !== undefined ? parseInt(String(birthYearRaw), 10) : NaN;
+  const currentYear = new Date().getFullYear();
+  const birthYear = !isNaN(birthYearParsed) && birthYearParsed >= 1900 && birthYearParsed <= currentYear - 5
+    ? birthYearParsed
+    : undefined;
 
   // height/weight come from Profile (regenerate endpoint only); defaults kept for schema compat
   const heightUnit = "cm";

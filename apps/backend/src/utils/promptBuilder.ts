@@ -245,17 +245,19 @@ function buildSplitDayGuidance(trainingSplit: string): string {
 }
 
 function resolveAge(quiz: ParsedQuizData): number | null {
+  const now = new Date();
+  const currentYear = now.getFullYear();
   if (quiz.birthYear) {
-    const age = new Date().getFullYear() - quiz.birthYear;
-    return age > 0 && age < 120 ? age : null;
+    const age = currentYear - quiz.birthYear;
+    return age >= 5 && age < 120 ? age : null;
   }
   if (quiz.dateOfBirth) {
     const dob = new Date(quiz.dateOfBirth);
     if (isNaN(dob.getTime())) return null;
-    let age = new Date().getFullYear() - dob.getFullYear();
-    const m = new Date().getMonth() - dob.getMonth();
-    if (m < 0 || (m === 0 && new Date().getDate() < dob.getDate())) age--;
-    return age > 0 ? age : null;
+    let age = currentYear - dob.getFullYear();
+    const m = now.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+    return age >= 5 && age < 120 ? age : null;
   }
   return null;
 }

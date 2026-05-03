@@ -406,9 +406,17 @@ export function QuizModal({
       if (stored) {
         try {
           const parsed = JSON.parse(stored);
+          // Normalise legacy array format
+          const quizData = Array.isArray(parsed) ? parsed[parsed.length - 1] : parsed;
           if (Array.isArray(parsed) && parsed.length > 0) {
-            const latestQuiz = parsed[parsed.length - 1];
-            localStorage.setItem("quizAnswers", JSON.stringify(latestQuiz));
+            localStorage.setItem("quizAnswers", JSON.stringify(quizData));
+          }
+          // Schema v1 guard: Q11 used to be a multi_field object (baselineStats).
+          // If the saved answer for id=11 is a plain object, the data is stale —
+          // clear it so the user starts fresh with the new question order.
+          const q11 = quizData?.answers?.[11];
+          if (q11 !== null && typeof q11 === "object" && !Array.isArray(q11)) {
+            localStorage.removeItem("quizAnswers");
           }
         } catch (error) {
           console.error("Error migrating quiz data:", error);
