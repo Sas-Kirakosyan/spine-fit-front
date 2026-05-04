@@ -5,6 +5,7 @@ import { prepareExercisesForPrompt } from "../utils/exerciseFilter.js";
 import { generatePlan } from "../services/geminiService.js";
 import type { ParsedQuizData } from "../types.js";
 import { quizSettingsSchema } from "../schemas/quizSettingsSchema.js";
+import { resolveEffectiveSplit } from "../utils/promptBuilder.js";
 
 // Keep in sync with packages/shared/src/quiz/constants.ts (GOAL_OPTIONS).
 // Backend does not depend on @spinefit/shared at build time.
@@ -25,26 +26,14 @@ interface QuizAnswers {
 
 
 function determineSplitName(experience: string, frequency: string, painStatus?: string): string {
-  const freq = parseInt(frequency, 10) || 3;
-
-  if (freq === 2) return "Full Body ×2";
-
-  if (freq === 3) {
-    if (experience === "Beginner") return "Full Body A / B / C";
-    if (experience === "Intermediate") return "Upper / Lower / Upper";
-    // Advanced
-    const isPainMinimal = !painStatus || painStatus === "Healthy" || painStatus === "Recovered";
-    return isPainMinimal ? "Push / Pull / Legs" : "Upper / Lower / Upper";
-  }
-
-  if (freq === 4) {
-    if (experience === "Beginner") return "Full Body ×4";
-    return "Upper / Lower ×4";
-  }
-
-  // 5+
-  if (experience === "Beginner" || experience === "Intermediate") return "Upper / Lower ×5";
-  return "Bro Split (Back-Safe)";
+  // Delegate to the matrix-based recommender so quiz-time selection and
+  // runtime reconciliation share one source of truth.
+  return resolveEffectiveSplit(
+    "",
+    `${frequency} days per week`,
+    experience,
+    painStatus,
+  ).effectiveSplit;
 }
 
 function parseDuration(durationRange: string): string {

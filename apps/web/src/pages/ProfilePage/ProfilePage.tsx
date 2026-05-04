@@ -339,8 +339,7 @@ function ProfilePage({
   const handleLoaderComplete = () => {
     setIsRegenerating(false);
     setApiPhase("pending");
-    setSavedToast(true);
-    setTimeout(() => setSavedToast(false), 2500);
+    onNavigateToWorkout();
   };
 
   const handleRegenDialogLater = () => {

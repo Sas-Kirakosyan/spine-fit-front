@@ -5,6 +5,9 @@ import { PLAN_SCHEMA, type GeminiPlanResponse } from "../schemas/planSchema.js";
 import {
   buildSystemInstruction,
   buildUserPrompt,
+  reconcileSplitWithLLMOutput,
+  resolveEffectiveGoal,
+  resolveEffectiveSplit,
 } from "../utils/promptBuilder.js";
 import { SPLIT_TARGET_MUSCLES, mapSplitType } from "../utils/splitUtils.js";
 
@@ -157,8 +160,25 @@ export async function generatePlan(
     );
   }
 
-  // Compute missing muscle groups
-  const splitType = mapSplitType(parsedQuiz.trainingSplit);
+  // Resolve the recommended split (experience × days × painStatus matrix), then
+  // honor the LLM's choice if it picked one of the listed alternates based on
+  // user notes — otherwise fall back to the algorithmic primary.
+  const recommendation = resolveEffectiveSplit(
+    parsedQuiz.trainingSplit,
+    parsedQuiz.workoutsPerWeek,
+    parsedQuiz.experience,
+    parsedQuiz.painStatus,
+  );
+  const finalSplitLabel = reconcileSplitWithLLMOutput(
+    recommendation,
+    workoutDays.map((d) => d.dayName),
+  );
+  if (finalSplitLabel !== recommendation.effectiveSplit) {
+    console.log(
+      `[Gemini] Split honored from LLM choice: "${finalSplitLabel}" (algorithm primary was "${recommendation.effectiveSplit}", alternates: [${recommendation.alternates.join(", ")}])`,
+    );
+  }
+  const splitType = mapSplitType(finalSplitLabel);
   const targetMuscles = SPLIT_TARGET_MUSCLES[splitType] ?? [];
   const coveredMuscles = new Set(
     workoutDays.flatMap((d) =>
@@ -200,12 +220,12 @@ export async function generatePlan(
     weeks: geminiPlan.weeks,
     createdAt: new Date().toISOString(),
     settings: {
-      goal: parsedQuiz.goal,
+      goal: resolveEffectiveGoal(parsedQuiz.goal, parsedQuiz.painStatus),
       workoutsPerWeek: parsedQuiz.workoutsPerWeek,
       duration: parsedQuiz.duration,
       durationRange: parsedQuiz.durationRange,
       experience: parsedQuiz.experience,
-      trainingSplit: parsedQuiz.trainingSplit,
+      trainingSplit: finalSplitLabel,
       exerciseVariability: parsedQuiz.exerciseVariability,
       units: parsedQuiz.units,
       cardio: parsedQuiz.cardio,
