@@ -518,6 +518,10 @@
     "navigation": {
       "previousMonth": "Previous month",
       "nextMonth": "Next month",
+      "previousWeek": "Previous week",
+      "nextWeek": "Next week",
+      "expand": "Show full month",
+      "collapse": "Show only week",
       "months": [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
