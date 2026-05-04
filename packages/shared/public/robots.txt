@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /workout
+Disallow: /progress
+Disallow: /history
+Disallow: /profile
+Disallow: /ai
+Disallow: /settings
+Disallow: /myPlan
+Disallow: /availableEquipment
+Disallow: /createProgram
+Disallow: /generatingPlan
+Disallow: /exerciseSets
+Disallow: /exerciseDetails
+Disallow: /allExercise
+Disallow: /activeWorkout
+Disallow: /exerciseProgress
+
+Sitemap: https://spinefit.app/sitemap.xml
