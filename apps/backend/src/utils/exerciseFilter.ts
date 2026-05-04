@@ -37,6 +37,20 @@ const HIGH_LOAD_TRIGGERS = [
   "Lifting objects from the floor",
 ];
 
+// Trigger that excludes exercises requiring loaded lumbar extension
+const EXTENSION_LOAD_TRIGGER = "Arching backward";
+
+// Patterns to drop when the user reports the Arching backward trigger.
+// Loaded barbell bench encourages thoracic arch; loaded overhead press
+// requires lumbar extension; back-extension/good-morning are direct.
+const EXTENSION_NAME_PATTERNS = [
+  /flat barbell bench/i,
+  /incline barbell bench/i,
+  /decline barbell bench/i,
+  /overhead press|military press|push press/i,
+  /back extension|hyperextension|good morning/i,
+];
+
 export function prepareExercisesForPrompt(
   exercises: RawExercise[],
   painStatus?: string,
@@ -50,6 +64,9 @@ export function prepareExercisesForPrompt(
     HIGH_LOAD_TRIGGERS.some((kw) => t.includes(kw)),
   ) ?? false;
 
+  const filterExtensionLoad =
+    context?.painTriggers?.some((t) => t.includes(EXTENSION_LOAD_TRIGGER)) ?? false;
+
   return exercises
     .filter((ex) => {
       // Active symptoms: only back-friendly, and only low restriction level
@@ -62,6 +79,11 @@ export function prepareExercisesForPrompt(
       if (excludedDifficulties.includes(ex.difficulty)) return false;
       // Pain trigger: drop exercises with any "high" restriction
       if (filterHighLoad && ex.back_issue_restrictions.some((r) => r.restriction_level === "high")) return false;
+      // Arching backward trigger: drop loaded-extension movements (BB bench, OHP, back ext, good morning)
+      if (
+        filterExtensionLoad &&
+        EXTENSION_NAME_PATTERNS.some((re) => re.test(ex.name))
+      ) return false;
       return true;
     })
     .map((ex) => ({

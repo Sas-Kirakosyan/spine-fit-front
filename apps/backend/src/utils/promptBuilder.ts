@@ -79,7 +79,7 @@ RULES (apply to every plan you generate):
 5. Set weight to 0 for bodyweight exercises; suggest a starter weight for weighted ones.
 6. MOVEMENT PATTERN BALANCE: Every Upper Body or Full Body day MUST include both a vertical pull (lat pulldown, pull-up, cable pulldown) AND a horizontal pull (seated row, cable row, machine row). Never program only one pull plane per session.
 7. PUSH REQUIREMENT: Every Full Body or Upper Body day MUST include at least 1 push movement (chest press, overhead press, push-up, or dip variation).
-8. LOWER BODY & SQUAT CONFIDENCE: Every Full Body day MUST include at least 1 lower body compound exercise. If squat confidence starts with "Avoidant" or "Technical", substitute squat patterns with hip hinge (Romanian deadlift, good morning) or leg press — never program barbell/goblet squats for these users.
+8. LOWER BODY COMPOUNDS: Every Lower Body or Legs day MUST include at least 2 lower-body compound exercises drawn from these patterns: squat (belt squat, leg press, hack squat, goblet squat), hinge (Romanian deadlift, hip thrust, glute bridge — only if available and not contraindicated by triggers), or lunge. Every Full Body day MUST include at least 1 lower-body compound. If squat confidence is "Avoidant" or "Technical", substitute squat patterns with leg press, hack squat, or hip hinge — never program barbell/goblet squats for these users. Single-joint lower-body work (leg curl, leg extension, adduction, calf raises) does NOT count as a compound.
 9. VOLUME CONTROL: Do not include more than 2 exercises targeting the same movement pattern in a single session (e.g., no 3 row variations in one day, no 3 chest press variants).
 10. EXERCISE DIVERSITY: Never repeat the same exercise (same exerciseId) more than once within a single training day.
 11. INTENSITY: RPE 7-8 in W1, standard progressive overload (5 kg increments for compounds, 2.5 kg for isolation).
@@ -88,7 +88,9 @@ RULES (apply to every plan you generate):
     - [progression]: "W1: {sets}×{reps} | W2: {sets}×{reps+2} | W3: {sets+1}×{reps} | W4: {sets+1}×{reps+2}"
     - [load rule]: "Increase weight by 2.5 kg (or 5 lb) when all reps completed with good form."
     Set the sets/reps fields to Week 1 values.
-13. ADDITIONAL USER NOTES: If "Additional user notes" are present in the user profile, treat them as high-priority personal constraints or preferences. They override default choices (e.g. a user saying "I hate machines, prefer free weights" should shift equipment selection accordingly).
+13. ADDITIONAL USER NOTES: If "Additional user notes" are present in the user profile, treat them as high-priority personal constraints or preferences. They override default choices.
+    - BODY PART FOCUS: If notes mention focusing on specific muscle groups or regions (e.g., "focus on legs", "more back work", "want bigger arms"), allocate at least 50% of total weekly working sets to those regions. On split routines, prioritize adding exercises to the days that train those regions rather than crowding non-focus days.
+    - EQUIPMENT PREFERENCE: If notes specify equipment preference (e.g., "I hate machines, prefer free weights"), shift selection toward the preferred equipment when comparable options exist.
 14. PLAN NAME: Set planName to a concise descriptive name, e.g. "Strength Upper/Lower 4W" or "Hypertrophy PPL 4W".
 15. WEEKS: Always set weeks to 4.
 16. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 6, 7, 8) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
@@ -131,7 +133,7 @@ RULES (apply to every plan you generate):
 7. Set weight to 0 for bodyweight exercises; suggest a starter weight for weighted ones.
 8. MOVEMENT PATTERN BALANCE: Every Upper Body or Full Body day MUST include both a vertical pull (lat pulldown, pull-up, cable pulldown) AND a horizontal pull (seated row, cable row, machine row). Never program only one pull plane per session.
 9. PUSH REQUIREMENT: Every Full Body or Upper Body day MUST include at least 1 push movement (chest press, overhead press, push-up, or dip variation).
-10. LOWER BODY & SQUAT CONFIDENCE: Every Full Body day MUST include at least 1 lower body compound exercise. If squat confidence starts with "Avoidant" or "Technical", substitute squat patterns with hip hinge (Romanian deadlift, good morning) or leg press — never program barbell/goblet squats for these users.
+10. LOWER BODY COMPOUNDS: Every Lower Body or Legs day MUST include at least 2 lower-body compound exercises drawn from these patterns: squat (belt squat, leg press, hack squat, goblet squat), hinge (Romanian deadlift, hip thrust, glute bridge — only if available and not contraindicated by triggers), or lunge. Every Full Body day MUST include at least 1 lower-body compound. If squat confidence is "Avoidant" or "Technical", substitute squat patterns with leg press, hack squat, or hip hinge — never program barbell/goblet squats for these users. Single-joint lower-body work (leg curl, leg extension, adduction, calf raises) does NOT count as a compound.
 11. VOLUME CONTROL: Do not include more than 2 exercises targeting the same movement pattern in a single session (e.g., no 3 row variations in one day, no 3 chest press variants).
 12. EXERCISE DIVERSITY: Never repeat the same exercise (same exerciseId) more than once within a single training day.
 13. INTENSITY (Recovered): RPE 6-7 in W1, moderate load. Progress only when form is clean and no symptoms return.
@@ -142,6 +144,8 @@ RULES (apply to every plan you generate):
     - [pain rule]: "If pain increases → reduce load or ROM. Sharp/nerve pain → stop immediately."
     Set the sets/reps fields to Week 1 values.
 15. ADDITIONAL USER NOTES: If "Additional user notes" are present in the user profile, treat them as high-priority personal constraints or preferences. They override default choices.
+    - BODY PART FOCUS: If notes mention focusing on specific muscle groups or regions (e.g., "focus on legs", "more back work", "want bigger arms"), allocate at least 50% of total weekly working sets to those regions. On split routines, prioritize adding exercises to the days that train those regions rather than crowding non-focus days.
+    - EQUIPMENT PREFERENCE: If notes specify equipment preference (e.g., "I hate machines, prefer free weights"), shift selection toward the preferred equipment when comparable options exist.
 16. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".${lumbarProtocolBlock}
 ${17 + ruleOffset}. WEEKS: Always set weeks to 4.
 ${18 + ruleOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
@@ -175,7 +179,7 @@ RULES (apply to every plan you generate):
 7. Set weight to 0 for bodyweight exercises; suggest a conservative starter weight for weighted ones.
 8. MOVEMENT PATTERN BALANCE: Every Upper Body or Full Body day MUST include both a vertical pull (lat pulldown, pull-up, cable pulldown) AND a horizontal pull (seated row, cable row, machine row). Never program only one pull plane per session.
 9. PUSH REQUIREMENT: Every Full Body or Upper Body day MUST include at least 1 push movement (chest press, overhead press, push-up, or dip variation).
-10. LOWER BODY & SQUAT CONFIDENCE: Every Full Body day MUST include at least 1 lower body compound exercise. If squat confidence starts with "Avoidant" or "Technical", substitute squat patterns with hip hinge (Romanian deadlift, good morning) or leg press — never program barbell/goblet squats for these users.
+10. LOWER BODY COMPOUNDS: Every Lower Body or Legs day MUST include at least 2 lower-body compound exercises drawn from these patterns: squat (belt squat, leg press, hack squat, goblet squat), hinge (Romanian deadlift, hip thrust, glute bridge — only if available and not contraindicated by triggers), or lunge. Every Full Body day MUST include at least 1 lower-body compound. If squat confidence is "Avoidant" or "Technical", substitute squat patterns with leg press, hack squat, or hip hinge — never program barbell/goblet squats for these users. Single-joint lower-body work (leg curl, leg extension, adduction, calf raises) does NOT count as a compound.
 11. VOLUME CONTROL (Active Symptoms): Limit to 1 exercise per movement pattern per session. Do not stack multiple variants of the same pattern.
 12. EXERCISE DIVERSITY: Never repeat the same exercise (same exerciseId) more than once within a single training day.
 13. INTENSITY (Active Symptoms): RPE 5-6 in W1, conservative load, high rep range (12-15), short sets.${painLevelGuidance}
@@ -186,6 +190,8 @@ RULES (apply to every plan you generate):
     - [pain rule]: "If pain increases → reduce load or ROM. Sharp/nerve pain → stop immediately."
     Set the sets/reps fields to Week 1 values.
 15. ADDITIONAL USER NOTES: If "Additional user notes" are present in the user profile, treat them as high-priority personal constraints or preferences. They override default choices.
+    - BODY PART FOCUS: If notes mention focusing on specific muscle groups or regions (e.g., "focus on legs", "more back work", "want bigger arms"), allocate at least 50% of total weekly working sets to those regions. On split routines, prioritize adding exercises to the days that train those regions rather than crowding non-focus days.
+    - EQUIPMENT PREFERENCE: If notes specify equipment preference (e.g., "I hate machines, prefer free weights"), shift selection toward the preferred equipment when comparable options exist.
 16. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Active Recovery Upper/Lower 4W".
 17. WEEKS: Always set weeks to 4.
 18. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 3, 8, 9, 10) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.
@@ -195,8 +201,7 @@ RULES (apply to every plan you generate):
     - PREFERRED MOVEMENTS: When available in the provided list, prioritize these exercises as they decompress and stabilize the lumbar spine without axial load: cable knee drives, single-leg glute bridge, cable kickbacks.
     - UNILATERAL UPPER BODY: For bicep and shoulder exercises, prefer single-arm (unilateral) variations where the non-working arm braces against a bench, rack, or knee for lumbar offloading. Append "Brace free hand against a surface to keep spine neutral and reduce lumbar shear." to the notes of every such exercise.
     - SPINAL LOADING ORDER: Place core stabilization exercises early in the session (directly after any warm-up), before compound lower-body or loaded spinal movements, to pre-activate stabilizers.
-20. HIP ADDUCTION MANDATE: Every training plan MUST include both a seated hip adduction exercise AND a standing cable hip adduction exercise on at least one training day (spread them across days if the plan has multiple days). Look for exercises named "Seated Hip Adduction" and "Standing Cable Hip Adduction" in the provided list.
-    These exercises strengthen the hip adductors, improve pelvic stability, and directly reduce compensatory lower back strain. If both are present in the provided exercise list, you MUST include them. If only one is present, include that one. If neither is present in the list, skip this requirement silently rather than inventing exercises.`;
+20. HIP ADDUCTION PLACEMENT: Hip adduction exercises (e.g., "Seated Hip Adduction", "Standing Cable Hip Adduction") strengthen pelvic stability and reduce compensatory lower-back strain. When the plan has a Lower Body or Legs day, include at least one adduction exercise on that day. NEVER place hip adduction exercises on an Upper Body, Push, Pull, or Arms day. If the split has no lower-body day (e.g., Bro Split with no Legs day, or upper-only weeks), include one adduction exercise on any day. Including both seated and standing variants is encouraged but not required.`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -223,12 +228,12 @@ function buildSplitDayGuidance(trainingSplit: string): string {
     return `SPLIT DAY STRUCTURE (Push / Pull / Legs):
 - Push day  → chest, front_delts, triceps
 - Pull day  → lats, upper_back, rear_delts, biceps  (must include vertical pull + horizontal pull)
-- Legs day  → quads, hamstrings, glutes`;
+- Legs day  → quads, hamstrings, glutes, hip_adductors, calves`;
   }
   if (s.includes("upper") && s.includes("lower")) {
     return `SPLIT DAY STRUCTURE (Upper / Lower):
 - Upper day → chest, lats, upper_back, front_delts, rear_delts, triceps, biceps  (must include vertical pull + horizontal pull)
-- Lower day → quads, hamstrings, glutes`;
+- Lower day → quads, hamstrings, glutes, hip_adductors, calves`;
   }
   if (s.includes("full body")) {
     return `SPLIT DAY STRUCTURE (Full Body):
