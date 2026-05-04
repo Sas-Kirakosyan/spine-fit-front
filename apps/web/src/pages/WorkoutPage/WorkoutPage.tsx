@@ -25,7 +25,6 @@ import { useExerciseManagement } from "@/pages/WorkoutPage/useExerciseManagement
 import { useReplaceExerciseModal } from "@/pages/WorkoutPage/useReplaceExerciseModal";
 import {
   getPlan,
-  getPlanSettings,
   hasPlan,
   savePlan,
   subscribe as subscribeToPlan,
@@ -67,6 +66,7 @@ function WorkoutPage({
   const [swipedExerciseId, setSwipedExerciseId] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [apiPhase, setApiPhase] = useState<"pending" | "success">("pending");
   const allExercises = allExercisesData as Exercise[];
 
   // DEBUG: keep this log permanently for testing — do not remove during other tasks
@@ -174,9 +174,13 @@ function WorkoutPage({
   const handleRegeneratePlan = async () => {
     if (isRegenerating) return;
     setIsRegenerating(true);
+    setApiPhase("pending");
     try {
       const quizDataString = localStorage.getItem("quizAnswers");
-      if (!quizDataString) return;
+      if (!quizDataString) {
+        setIsRegenerating(false);
+        return;
+      }
       const quizData = JSON.parse(quizDataString);
       const response = await fetch(
         `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz`,
@@ -195,15 +199,24 @@ function WorkoutPage({
           localStorage.removeItem("completedWorkoutIds");
           clearSelectedDayIndex();
           savePlan(result.plan);
+          setApiPhase("success");
+        } else {
+          console.error("Regenerate plan returned invalid result:", result);
+          setIsRegenerating(false);
         }
       } else {
         console.error("Regenerate plan API error:", response.status);
+        setIsRegenerating(false);
       }
     } catch (err) {
       console.error("Failed to regenerate plan:", err);
-    } finally {
       setIsRegenerating(false);
     }
+  };
+
+  const handleLoaderComplete = () => {
+    setIsRegenerating(false);
+    setApiPhase("pending");
   };
 
   const handleDeleteExercise = useCallback(
@@ -290,8 +303,6 @@ function WorkoutPage({
           muscleCount={
             new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size
           }
-          duration={getPlanSettings().duration}
-          location={t("workoutPage.labels.myGym")}
           onWorkoutSwap={(workoutId) => {
             const plan = getPlan();
             if (plan) {
@@ -479,7 +490,12 @@ function WorkoutPage({
           onClose={closeReplaceModal}
         />
       )}
-      {isRegenerating && <PlanGeneratingLoader />}
+      {isRegenerating && (
+        <PlanGeneratingLoader
+          apiPhase={apiPhase}
+          onAllStepsComplete={handleLoaderComplete}
+        />
+      )}
     </PageContainer>
   );
 }

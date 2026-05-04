@@ -42,8 +42,6 @@
       "muscles": "Мышцы",
       "defaultPlanName": "День тяги",
       "defaultDayName": "День тяги",
-      "defaultDuration": "1ч 1м",
-      "defaultLocation": "Мой спортзал",
       "aiMode": "ИИ",
       "localMode": "Локально"
     }
