@@ -3,7 +3,7 @@
     "buttons": {
       "regeneratePlan": "Regenerate Plan",
       "backToHome": "Back to Home",
-      "myPlan": "My Plan",
+      "myPlan": "Plan Settings",
       "addExercise": "Add Exercise",
       "startWorkout": "START Workout",
       "finishWorkout": "FINISH Workout",
@@ -37,7 +37,7 @@
       "duration": "m"
     },
     "workoutPlanCard": {
-      "swap": "Swap",
+      "swap": "Swap Day",
       "exercises": "Exercises",
       "muscles": "Muscles",
       "defaultPlanName": "Pull Day",

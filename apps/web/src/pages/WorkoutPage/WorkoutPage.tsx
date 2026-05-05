@@ -17,7 +17,6 @@ import { Button } from "@/components/Buttons/Button";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
 import { BottomNav } from "@/components/BottomNav/BottomNav";
 import { Logo } from "@/components/Logo/Logo";
-import { WorkoutPageHeader } from "./WorkoutPageHeader";
 import { WorkoutPlanCard } from "@/pages/WorkoutPage/WorkoutPlanCard";
 import { ReplaceExerciseModal } from "@/pages/WorkoutPage/ReplaceExerciseModal";
 import { SwipeableExerciseCard } from "@/pages/WorkoutPage/SwipeableExerciseCard";
@@ -285,14 +284,6 @@ function WorkoutPage({
         </div>
       </div>
       <div ref={cardRef} className="flex flex-col gap-3 pb-[140px]">
-        <WorkoutPageHeader
-          onNavigateToMyPlan={() => {
-            if (onNavigateToMyPlan) {
-              onNavigateToMyPlan();
-            }
-          }}
-        />
-
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-[40%_60%] lg:gap-6 lg:items-start">
         <div className="lg:sticky lg:top-4">
         <WorkoutPlanCard
@@ -303,6 +294,7 @@ function WorkoutPage({
           muscleCount={
             new Set(displayExercises.map((ex) => ex.muscle_groups).flat()).size
           }
+          onNavigateToMyPlan={onNavigateToMyPlan}
           onWorkoutSwap={(workoutId) => {
             const plan = getPlan();
             if (plan) {

@@ -15,6 +15,7 @@ interface WorkoutPlanCardProps {
   onSelectSavedProgram?: (program: SavedProgram) => void;
   onEditSavedProgram?: (program: SavedProgram) => void;
   onSelectPlanDay?: (dayIndex: number) => void;
+  onNavigateToMyPlan?: () => void;
 }
 
 export function WorkoutPlanCard({
@@ -28,6 +29,7 @@ export function WorkoutPlanCard({
   onSelectSavedProgram,
   onEditSavedProgram,
   onSelectPlanDay,
+  onNavigateToMyPlan,
 }: WorkoutPlanCardProps) {
   const { t } = useTranslation();
   const [showSwapSheet, setShowSwapSheet] = useState(false);
@@ -48,8 +50,41 @@ export function WorkoutPlanCard({
   return (
     <>
       <div className="relative rounded-[14px] bg-[#1B1E2B]/90 p-4 mx-2.5 shadow-xl ring-1 ring-white/5">
-        {/* Top right buttons */}
+        {/* Top right button */}
         <div className="absolute top-4 right-2 flex flex-col items-end gap-2">
+          <button
+            onClick={onNavigateToMyPlan}
+            className="flex items-center gap-1.5 rounded-lg bg-main px-3 py-1.5 text-sm font-medium text-white hover:bg-main/80 transition-colors"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z" />
+            </svg>
+            {t("workoutPage.buttons.myPlan")}
+          </button>
+        </div>
+
+        {/* Main content */}
+        <div className="pr-32">
+          <h2 className="text-2xl font-bold text-white mb-1">{resolvedDayName}</h2>
+          <p className="text-xs text-white/60 mb-3">{resolvedPlanName}</p>
+          <p className="text-sm text-white/80">
+            {exerciseCount} {t("workoutPage.workoutPlanCard.exercises")} •{" "}
+            {muscleCount} {t("workoutPage.workoutPlanCard.muscles")}
+          </p>
+        </div>
+
+        {/* Swap button */}
+        <div className="-mt-7 flex justify-end">
           <button
             onClick={() => setShowSwapSheet(true)}
             className="flex items-center gap-1.5 rounded-lg bg-main px-3 py-1.5 text-sm font-medium text-white hover:bg-main/80 transition-colors"
@@ -71,16 +106,6 @@ export function WorkoutPlanCard({
             </svg>
             {t("workoutPage.workoutPlanCard.swap")}
           </button>
-        </div>
-
-        {/* Main content */}
-        <div className="pr-32">
-          <h2 className="text-2xl font-bold text-white mb-1">{resolvedDayName}</h2>
-          <p className="text-xs text-white/60 mb-3">{resolvedPlanName}</p>
-          <p className="text-sm text-white/80">
-            {exerciseCount} {t("workoutPage.workoutPlanCard.exercises")} •{" "}
-            {muscleCount} {t("workoutPage.workoutPlanCard.muscles")}
-          </p>
         </div>
       </div>
 
