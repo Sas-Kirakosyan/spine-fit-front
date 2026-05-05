@@ -57,14 +57,14 @@ function ProfileIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function AIIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...iconBaseProps} {...props}>
-      <path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z" />
-      <path d="M19 14l.7 1.8L21.5 17l-1.8.7L19 19.5l-.7-1.8L16.5 17l1.8-.7L19 14z" />
-    </svg>
-  );
-}
+// function AIIcon(props: SVGProps<SVGSVGElement>) {
+//   return (
+//     <svg {...iconBaseProps} {...props}>
+//       <path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z" />
+//       <path d="M19 14l.7 1.8L21.5 17l-1.8.7L19 19.5l-.7-1.8L16.5 17l1.8-.7L19 14z" />
+//     </svg>
+//   );
+// }
 
 const navButtonClass = (isActive: boolean) =>
   [
@@ -85,7 +85,7 @@ export function BottomNav({
   onProgressClick,
   onHistoryClick,
   onProfileClick,
-  onAIClick,
+  // onAIClick,
 }: BottomNavProps) {
   const { t } = useTranslation();
   return (
@@ -129,7 +129,7 @@ export function BottomNav({
         <ProfileIcon className={iconClass} />
         <span>{t("bottomNav.profile")}</span>
       </button>
-      <button
+      {/* <button                         // AI Assisstent zut anjataca navbaric
         type="button"
         aria-current={activePage === "ai" ? "page" : undefined}
         className={navButtonClass(activePage === "ai")}
@@ -137,7 +137,7 @@ export function BottomNav({
       >
         <AIIcon className={iconClass} />
         <span>{t("bottomNav.ai")}</span>
-      </button>
+      </button> */}
     </nav>
   );
 }

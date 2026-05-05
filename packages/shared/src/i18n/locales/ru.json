@@ -3,7 +3,7 @@
     "buttons": {
       "regeneratePlan": "Перестроить План",
       "backToHome": "Вернуться на Главную",
-      "myPlan": "Мой План",
+      "myPlan": "Настройки плана",
       "addExercise": "Добавить упражнение",
       "startWorkout": "НАЧАТЬ Тренировку",
       "finishWorkout": "ЗАВЕРШИТЬ Тренировку",
@@ -37,7 +37,7 @@
       "duration": "мин"
     },
     "workoutPlanCard": {
-      "swap": "Заменить",
+      "swap": "Сменить день",
       "exercises": "Упражнения",
       "muscles": "Мышцы",
       "defaultPlanName": "День тяги",
