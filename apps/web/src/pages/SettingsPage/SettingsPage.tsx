@@ -8,6 +8,7 @@ import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
 import type { SettingsPageProps } from "@/types/pages";
 import { supabase } from "@/lib/supabase";
 import { resetLocalCache } from "@/lib/planService";
+import {useAuth} from "@/hooks/useAuth.ts";
 
 interface ModalConfig {
   title: string;
@@ -24,6 +25,7 @@ interface SettingsItemProps {
   subValue?: string;
   onClick?: () => void;
   showArrow?: boolean;
+  className?: string;
 }
 
 function SettingsItem({
@@ -32,6 +34,7 @@ function SettingsItem({
   subValue,
   onClick,
   showArrow = true,
+  className
 }: SettingsItemProps) {
   return (
     <button
@@ -39,7 +42,7 @@ function SettingsItem({
       onClick={onClick}
       className="flex w-full items-center justify-between py-4 text-left transition hover:opacity-80"
     >
-      <span className="text-base font-medium text-white">{label}</span>
+      <span className={`text-base font-medium ${className ? className : "text-white"}`}>{label}</span>
       <div className="flex items-center gap-2">
         {value && (
           <div className="text-right">
@@ -196,6 +199,9 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     });
   };
 
+  const auth = useAuth();
+  const userEmail = auth.status === "authenticated" ? auth.user.email ?? "" : "";
+
   return (
     <PageContainer contentClassName="gap-6">
       <header className="flex items-center gap-4 px-4 py-4">
@@ -210,20 +216,27 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         </h1>
       </header>
 
-      {/* Account Section */}
+      <SettingsSection title={t("settingsPage.sections.premium")}>
+          <SettingsItem
+              label={t("settingsPage.items.subscribe")}
+              onClick={handleSubscription}
+              showArrow={false}
+              className="text-yellow-400 border-3 border-yellow-500 rounded-[6px] px-6 py-2"
+          />
+      </SettingsSection>
+
+      <Divider />
+
       <SettingsSection title={t("settingsPage.sections.account")}>
         <SettingsItem
           label={t("settingsPage.items.emailAddress")}
+          value={userEmail}
           showArrow={false}
         />
         <SettingsItem
           label={t("settingsPage.items.language")}
           value={language}
           onClick={handleLanguageChange}
-        />
-        <SettingsItem
-          label={t("settingsPage.items.subscribe")}
-          onClick={handleSubscription}
         />
         <SettingsItem
           label={t("settingsPage.items.changePassword")}
@@ -238,6 +251,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           label={t("settingsPage.items.logOut")}
           onClick={handleLogout}
           showArrow={false}
+          className="text-red-500"
         />
       </SettingsSection>
 
@@ -248,10 +262,6 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         <SettingsItem
           label={t("settingsPage.items.contactSupport")}
           onClick={handleContactSupport}
-        />
-        <SettingsItem
-          label={t("settingsPage.items.deleteAccount")}
-          onClick={() => {}}
         />
       </SettingsSection>
 
@@ -274,7 +284,17 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         />
       </SettingsSection>
 
-      {/* Selection Modal */}
+      <Divider />
+
+      <SettingsSection title={t("settingsPage.sections.dangerZone")}>
+          <SettingsItem
+              label={t("settingsPage.items.deleteAccount")}
+              onClick={() => {}}
+              showArrow={false}
+              className="text-red-500 border-2 border-red-500 rounded-[6px] px-6 py-2"
+          />
+      </SettingsSection>
+
       {modalConfig && (
         <SelectionModal
           isOpen={!!modalConfig}

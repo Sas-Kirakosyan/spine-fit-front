@@ -158,10 +158,12 @@
   "settingsPage": {
     "title": "Settings",
     "sections": {
+      "premium": "Premium",
       "account": "Account",
       "aboutYou": "About You",
       "help": "Help",
-      "legal": "Legal"
+      "legal": "Legal",
+      "dangerZone": "Danger Zone"
     },
     "items": {
       "emailAddress": "Email Address",
