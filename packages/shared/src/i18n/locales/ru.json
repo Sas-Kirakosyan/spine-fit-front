@@ -156,10 +156,12 @@
   "settingsPage": {
     "title": "Настройки",
     "sections": {
+      "premium": "Премиум",
       "account": "Аккаунт",
       "aboutYou": "О вас",
       "help": "Помощь",
-      "legal": "Правовая информация"
+      "legal": "Правовая информация",
+      "dangerZone": "Опасная зона"
     },
     "items": {
       "emailAddress": "Электронная почта",
