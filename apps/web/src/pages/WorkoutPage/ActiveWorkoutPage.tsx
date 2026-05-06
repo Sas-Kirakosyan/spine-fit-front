@@ -67,15 +67,12 @@ function ActiveWorkoutPage({
     isPaused: showFinishModal,
   });
 
-  const {
-    todaysExercises,
-    deleteExercise,
-    replaceExercise,
-  } = useExerciseManagement({
-    completedWorkoutIds,
-    isCustomWorkout,
-    externalExercises: customExercises,
-  });
+  const { todaysExercises, deleteExercise, replaceExercise } =
+    useExerciseManagement({
+      completedWorkoutIds,
+      isCustomWorkout,
+      externalExercises: customExercises,
+    });
 
   const completedExerciseIdsSet = useMemo(
     () => new Set(completedExerciseIds.map((id) => String(id))),
@@ -104,14 +101,14 @@ function ActiveWorkoutPage({
     getSearchableName: getExerciseName,
   });
 
-  const allExercisesCompleted = useMemo(() => {
-    return (
-      todaysExercises.length > 0 &&
-      todaysExercises.every((exercise: Exercise) =>
-        completedExerciseIdsSet.has(String(exercise.id))
-      )
-    );
-  }, [completedExerciseIdsSet, todaysExercises]);
+  // const allExercisesCompleted = useMemo(() => {
+  //   return (
+  //     todaysExercises.length > 0 &&
+  //     todaysExercises.every((exercise: Exercise) =>
+  //       completedExerciseIdsSet.has(String(exercise.id))
+  //     )
+  //   );
+  // }, [completedExerciseIdsSet, todaysExercises]);
 
   const completedExercises = useMemo(() => {
     return todaysExercises.filter((exercise: Exercise) =>
@@ -120,14 +117,14 @@ function ActiveWorkoutPage({
   }, [completedExerciseIdsSet, todaysExercises]);
 
   const handleFinishWorkout = useCallback(() => {
-    if (allExercisesCompleted) {
-      const currentDuration = formatTime(elapsedSeconds);
-      setFixedDuration(currentDuration);
+    const currentDuration = formatTime(elapsedSeconds);
+    setFixedDuration(currentDuration);
+    if (completedExercises.length > 0) {
       setShowFinishModal(true);
     } else {
       onFinishWorkout();
     }
-  }, [allExercisesCompleted, elapsedSeconds, onFinishWorkout]);
+  }, [elapsedSeconds, completedExercises.length, onFinishWorkout]);
 
   const handleResume = useCallback(() => {
     resetToElapsed(elapsedSeconds);
@@ -173,7 +170,10 @@ function ActiveWorkoutPage({
     if (generatedPlan && todaysExercises.length > 0) {
       let currentWorkout = null;
       const manualIndex = getSelectedDayIndex();
-      if (manualIndex !== null && manualIndex < generatedPlan.workoutDays.length) {
+      if (
+        manualIndex !== null &&
+        manualIndex < generatedPlan.workoutDays.length
+      ) {
         currentWorkout = generatedPlan.workoutDays[manualIndex];
       }
       if (!currentWorkout) {
@@ -282,7 +282,9 @@ function ActiveWorkoutPage({
               </div>
             )}
             {todaysExercises.map((exercise: Exercise, index: number) => {
-              const isCompleted = completedExerciseIdsSet.has(String(exercise.id));
+              const isCompleted = completedExerciseIdsSet.has(
+                String(exercise.id)
+              );
               return (
                 <ExerciseCard
                   key={`${exercise.id}-${index}`}
