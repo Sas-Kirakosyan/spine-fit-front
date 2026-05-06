@@ -388,7 +388,12 @@ function ExerciseSetsPage({
       prev.map((item, itemIndex) => {
         if (itemIndex === index) return { ...item, [field]: value };
         // Fill-down: propagate weight change to all subsequent uncompleted sets of the same type
-        if (field === "weight" && itemIndex > index && !item.completed && item.type === prev[index]?.type) {
+        if (
+          field === "weight" &&
+          itemIndex > index &&
+          !item.completed &&
+          item.type === prev[index]?.type
+        ) {
           return { ...item, weight: value };
         }
         return item;
@@ -774,8 +779,9 @@ function ExerciseSetsPage({
             aria-label="back to workout"
           >
             <svg
-              aria-hidden="true"
-              className="h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -783,8 +789,7 @@ function ExerciseSetsPage({
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
+              <path d="m15 18-6-6 6-6" />
             </svg>
           </button>
           <div className="px-5 py-4">
