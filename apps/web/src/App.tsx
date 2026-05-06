@@ -176,6 +176,9 @@ function App() {
   const [exerciseSetsMode, setExerciseSetsMode] = useState<
     "preWorkout" | "activeWorkout"
   >("preWorkout");
+  const [exerciseSetsOrigin, setExerciseSetsOrigin] = useState<
+    "workout" | "activeWorkout"
+  >("workout");
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
     []
   );
@@ -562,6 +565,9 @@ function App() {
   ) => {
     setSelectedExercise(exercise);
     setExerciseSetsMode(mode);
+    setExerciseSetsOrigin(
+      mode === "activeWorkout" ? "activeWorkout" : "workout"
+    );
     navigateToPage("exerciseSets", { exercise, mode });
   };
 
@@ -570,14 +576,7 @@ function App() {
   };
 
   const backFromExerciseSets = () => {
-    if (exerciseSetsMode === "activeWorkout") {
-      window.history.replaceState(
-        { page: "activeWorkout" },
-        "",
-        PAGE_TO_PATH["activeWorkout"]
-      );
-      startPageTransition(() => setCurrentPage("activeWorkout"));
-    } else if (workoutStartTime !== null) {
+    if (exerciseSetsOrigin === "activeWorkout") {
       window.history.replaceState(
         { page: "activeWorkout" },
         "",
