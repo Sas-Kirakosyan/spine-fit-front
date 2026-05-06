@@ -176,6 +176,9 @@ function App() {
   const [exerciseSetsMode, setExerciseSetsMode] = useState<
     "preWorkout" | "activeWorkout"
   >("preWorkout");
+  const [exerciseSetsOrigin, setExerciseSetsOrigin] = useState<
+    "workout" | "activeWorkout"
+  >("workout");
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
     []
   );
@@ -562,6 +565,9 @@ function App() {
   ) => {
     setSelectedExercise(exercise);
     setExerciseSetsMode(mode);
+    setExerciseSetsOrigin(
+      mode === "activeWorkout" ? "activeWorkout" : "workout"
+    );
     navigateToPage("exerciseSets", { exercise, mode });
   };
 
@@ -570,7 +576,16 @@ function App() {
   };
 
   const backFromExerciseSets = () => {
-    window.history.back();
+    if (exerciseSetsOrigin === "activeWorkout") {
+      window.history.replaceState(
+        { page: "activeWorkout" },
+        "",
+        PAGE_TO_PATH["activeWorkout"]
+      );
+      startPageTransition(() => setCurrentPage("activeWorkout"));
+    } else {
+      window.history.back();
+    }
   };
 
   const handleReplaceSelectedExercise = (
@@ -587,15 +602,11 @@ function App() {
     };
     const replaceInList = (list: Exercise[]) => {
       if (
-        list.some(
-          (ex) => ex.id === replacement.id && ex.id !== oldExercise.id
-        )
+        list.some((ex) => ex.id === replacement.id && ex.id !== oldExercise.id)
       ) {
         return list;
       }
-      return list.map((ex) =>
-        ex.id === oldExercise.id ? replacement : ex
-      );
+      return list.map((ex) => (ex.id === oldExercise.id ? replacement : ex));
     };
 
     try {
@@ -710,9 +721,7 @@ function App() {
           />
         );
       case "generatingPlan":
-        return (
-          <GeneratingPlanPage onSuccess={navigateToWorkout} />
-        );
+        return <GeneratingPlanPage onSuccess={navigateToWorkout} />;
       case "login":
         return (
           <Login
@@ -842,7 +851,7 @@ function App() {
             onNavigateToSettings={navigateToSettings}
             activePage="profile"
           />
-      );
+        );
       case "ai":
         return (
           <AIPage
@@ -930,8 +939,8 @@ function App() {
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
-            onNavigateToWorkout={navigateToWorkout} 
-            onNavigateToGeneratingPlan={() =>{} }          
+            onNavigateToWorkout={navigateToWorkout}
+            onNavigateToGeneratingPlan={() => {}}
           />
         );
     }
