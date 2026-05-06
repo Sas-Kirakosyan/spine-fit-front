@@ -570,7 +570,23 @@ function App() {
   };
 
   const backFromExerciseSets = () => {
-    window.history.back();
+    if (exerciseSetsMode === "activeWorkout") {
+      window.history.replaceState(
+        { page: "activeWorkout" },
+        "",
+        PAGE_TO_PATH["activeWorkout"]
+      );
+      startPageTransition(() => setCurrentPage("activeWorkout"));
+    } else if (workoutStartTime !== null) {
+      window.history.replaceState(
+        { page: "activeWorkout" },
+        "",
+        PAGE_TO_PATH["activeWorkout"]
+      );
+      startPageTransition(() => setCurrentPage("activeWorkout"));
+    } else {
+      window.history.back();
+    }
   };
 
   const handleReplaceSelectedExercise = (
@@ -587,15 +603,11 @@ function App() {
     };
     const replaceInList = (list: Exercise[]) => {
       if (
-        list.some(
-          (ex) => ex.id === replacement.id && ex.id !== oldExercise.id
-        )
+        list.some((ex) => ex.id === replacement.id && ex.id !== oldExercise.id)
       ) {
         return list;
       }
-      return list.map((ex) =>
-        ex.id === oldExercise.id ? replacement : ex
-      );
+      return list.map((ex) => (ex.id === oldExercise.id ? replacement : ex));
     };
 
     try {
@@ -710,9 +722,7 @@ function App() {
           />
         );
       case "generatingPlan":
-        return (
-          <GeneratingPlanPage onSuccess={navigateToWorkout} />
-        );
+        return <GeneratingPlanPage onSuccess={navigateToWorkout} />;
       case "login":
         return (
           <Login
@@ -842,7 +852,7 @@ function App() {
             onNavigateToSettings={navigateToSettings}
             activePage="profile"
           />
-      );
+        );
       case "ai":
         return (
           <AIPage
@@ -930,8 +940,8 @@ function App() {
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
-            onNavigateToWorkout={navigateToWorkout} 
-            onNavigateToGeneratingPlan={() =>{} }          
+            onNavigateToWorkout={navigateToWorkout}
+            onNavigateToGeneratingPlan={() => {}}
           />
         );
     }
