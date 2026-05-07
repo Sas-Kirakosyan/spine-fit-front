@@ -28,6 +28,12 @@ export interface PainDataPoint {
   label: string;
 }
 
+export interface CalorieDataPoint {
+  date: string;
+  calories: number;
+  label: string;
+}
+
 export interface PersonalRecord {
   exerciseName: string;
   exerciseId: number;
@@ -419,6 +425,37 @@ export function getAllExercisesWithProgress(
     (a, b) =>
       new Date(b.lastPerformed).getTime() - new Date(a.lastPerformed).getTime()
   );
+}
+
+export function getCalorieDataByPeriod(
+  workouts: FinishedWorkoutSummary[],
+  period: VolumePeriod
+): CalorieDataPoint[] {
+  const now = new Date();
+  const cutoff = new Date(
+    now.getTime() - PERIOD_DAYS[period] * 24 * 60 * 60 * 1000
+  );
+
+  const filtered = workouts.filter(
+    (w) =>
+      new Date(w.finishedAt).getTime() >= cutoff.getTime() &&
+      w.caloriesBurned > 0
+  );
+
+  const sorted = [...filtered].sort(
+    (a, b) =>
+      new Date(a.finishedAt).getTime() - new Date(b.finishedAt).getTime()
+  );
+
+  return sorted.map((w) => {
+    const date = new Date(w.finishedAt);
+    const label = `${date.getDate()}/${date.getMonth() + 1}`;
+    return {
+      date: w.finishedAt,
+      calories: w.caloriesBurned,
+      label,
+    };
+  });
 }
 
 export function getPainDataByPeriod(

@@ -744,6 +744,10 @@
         "year": "Г"
       }
     },
+    "calorieChart": {
+      "title": "Сожжённые калории",
+      "unit": "ккал"
+    },
     "statsGrid": {
       "workouts": "Тренировки",
       "volume": "Объём",

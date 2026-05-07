@@ -6,15 +6,17 @@ import { PageContainer } from "@/Layout/PageContainer";
 import type { ProgressPageProps } from "@/types/pages";
 import { StatsGrid } from "@/components/Progress/StatsGrid";
 import { WeeklyActivity } from "@/components/Progress/WeeklyActivity";
-import { ProgressChart } from "@/components/Progress/ProgressChart";
+import { MetricAreaChart } from "@/components/Progress/MetricAreaChart";
 import { ExerciseList } from "@/components/Progress/ExerciseList";
 import {
   calculateTotalStats,
   getWeeklyActivity,
   getProgressDataByPeriod,
   getPainDataByPeriod,
+  getCalorieDataByPeriod,
   getAllExercisesWithProgress,
   getMuscleGroupDistribution,
+  formatVolume,
 } from "@/utils/progressStats";
 import type { VolumePeriod } from "@/utils/progressStats";
 import { MuscleGroupChart } from "@/components/Progress/MuscleGroupChart";
@@ -42,6 +44,13 @@ function ProgressPage({
   const progressData = useMemo(
     () => getProgressDataByPeriod(workoutHistory, volumePeriod),
     [workoutHistory, volumePeriod]
+  );
+
+  const [caloriePeriod, setCaloriePeriod] = useState<VolumePeriod>("month");
+
+  const calorieData = useMemo(
+    () => getCalorieDataByPeriod(workoutHistory, caloriePeriod),
+    [workoutHistory, caloriePeriod]
   );
 
   const allExercises = useMemo(() => getAllExercisesWithProgress(workoutHistory), [workoutHistory]);
@@ -111,11 +120,24 @@ function ProgressPage({
                 <StatsGrid stats={stats} />
               </div>
               <WeeklyActivity days={weeklyActivity} />
-              <ProgressChart
+              <MetricAreaChart
                 data={progressData}
+                dataKey="volume"
                 title={t("progressPage.progressChart.volumeProgress")}
+                color="#e77d10"
+                unit={t("progressPage.progressChart.weight")}
+                formatValue={formatVolume}
                 activePeriod={volumePeriod}
                 onPeriodChange={setVolumePeriod}
+              />
+              <MetricAreaChart
+                data={calorieData}
+                dataKey="calories"
+                title={t("progressPage.calorieChart.title")}
+                color="#a855f7"
+                unit={t("progressPage.calorieChart.unit")}
+                activePeriod={caloriePeriod}
+                onPeriodChange={setCaloriePeriod}
               />
               {showPain && (
                 <PainChart
