@@ -19,9 +19,10 @@ import { FilterChips } from "@/components/AllExercise/FilterChips";
 interface AllExercisePageProps {
   onClose: () => void;
   onAddExercises?: (exercises: Exercise[]) => void;
+  onOpenExerciseDetails: (exercise: Exercise) => void
 }
 
-function AllExercisePage({ onClose, onAddExercises }: AllExercisePageProps) {
+function AllExercisePage({ onClose, onAddExercises, onOpenExerciseDetails }: AllExercisePageProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -139,6 +140,7 @@ function AllExercisePage({ onClose, onAddExercises }: AllExercisePageProps) {
                   exercises={groupExercises}
                   selectedExerciseIds={selectedExercises}
                   onExerciseSelect={handleExerciseClick}
+                  onOpenExerciseDetails={onOpenExerciseDetails}
                 />
               ),
             )
