@@ -5,7 +5,7 @@ const CACHE_KEY = "workoutHistoryCache";
 const PENDING_KEY = "pendingWorkoutHistorySync";
 const DUPLICATE_KEY_VIOLATION = "23505";
 
-let cachedHistory: FinishedWorkoutSummary[] = loadFromLocalStorage(CACHE_KEY);
+let cachedHistory: FinishedWorkoutSummary[] = [];
 
 const listeners = new Set<() => void>();
 
@@ -213,5 +213,7 @@ export async function fetchHistory(): Promise<void> {
 
 export function resetLocalCache(): void {
   cachedHistory = [];
+  localStorage.removeItem(CACHE_KEY);
+  localStorage.removeItem(PENDING_KEY);
   notify();
 }

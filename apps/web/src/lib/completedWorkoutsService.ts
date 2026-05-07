@@ -2,23 +2,12 @@ import { supabase } from "@/lib/supabase";
 
 const CACHE_KEY = "completedWorkoutIds";
 
-let cachedIds: string[] = loadFromLocalStorage();
+let cachedIds: string[] = [];
 
 const listeners = new Set<() => void>();
 
 function notify(): void {
   listeners.forEach((listener) => listener());
-}
-
-function loadFromLocalStorage(): string[] {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter((x) => typeof x === "string") : [];
-  } catch {
-    return [];
-  }
 }
 
 function writeCacheToLocalStorage(): void {
@@ -60,6 +49,7 @@ function enqueueUpsert(ids: string[]): void {
       hasUnsyncedLocalChanges = false;
     })
     .catch((err) => {
+      hasUnsyncedLocalChanges = false;
       console.error("Completed workouts sync to Supabase failed:", err);
     });
 }
@@ -121,5 +111,6 @@ export async function fetchIds(): Promise<void> {
 
 export function resetLocalCache(): void {
   cachedIds = [];
+  localStorage.removeItem(CACHE_KEY);
   notify();
 }

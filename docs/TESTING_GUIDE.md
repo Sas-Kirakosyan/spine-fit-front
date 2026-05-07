@@ -162,8 +162,8 @@ const adjustedDay = today === 0 ? 6 : today - 1;
 const workout = plan?.workoutDays.find((d) => d.dayNumber === adjustedDay);
 console.log("Today's workout:", workout);
 
-// 3. Check workout history
-const history = JSON.parse(localStorage.getItem("workoutHistory") || "[]");
+// 3. Check workout history (localStorage cache; authoritative data is in Supabase workout_history)
+const history = JSON.parse(localStorage.getItem("workoutHistoryCache") || "[]");
 console.log("Workout history:", history);
 
 // 4. Check quiz answers
@@ -203,7 +203,7 @@ console.log("Selected equipment:", selected);
 
 - **No exercises in plan**: Check equipment selection
 - **Plan not loading in workout**: Check localStorage has 'generatedPlan'
-- **No progression**: Check 'workoutHistory' exists in localStorage
+- **No progression**: Check 'workoutHistoryCache' in localStorage or query the `workout_history` Supabase table for the user
 - **Wrong exercises**: Check quiz pain profile answers
 
 ---

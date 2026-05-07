@@ -46,6 +46,7 @@ type AuthState =
 `App.tsx` uses this hook to:
 - Redirect unauthenticated users away from protected pages.
 - Call `fetchPlan()` when a user authenticates (loads their plan from Supabase).
+- Call `fetchHistory()` and `fetchIds()` on login to load workout history and completed workout IDs from Supabase.
 - Call `retryPendingQuizSync()` to flush any quiz answers that failed to save before login.
 - Call `resetLocalCache()` on logout to prevent data leakage between users on shared devices.
 
@@ -113,6 +114,66 @@ Key functions:
 - Serialized write queue (`pendingWrite` chain) prevents out-of-order upserts when saves are triggered in rapid succession.
 - `hasUnsyncedLocalChanges` flag prevents a stale server fetch from overwriting local changes that haven't finished syncing.
 
+### `workout_history`
+
+Stores each finished workout as an individual row. Protected by RLS — each user can only access their own rows.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | uuid (PK) | Stable ID generated client-side (`FinishedWorkoutSummary.id`) |
+| `user_id` | uuid | References `auth.users.id` |
+| `finished_at` | timestamptz | ISO timestamp when workout ended |
+| `duration` | text | Human-readable duration string |
+| `total_volume` | numeric | Total kg lifted |
+| `exercise_count` | int | Number of exercises completed |
+| `calories_burned` | numeric | Estimated kcal |
+| `completed_exercises` | jsonb | Array of exercise IDs completed |
+| `completed_exercise_logs` | jsonb | Per-exercise set/rep/weight logs |
+| `average_pain_level` | numeric (nullable) | Average pain score, null if not reported |
+
+**File:** `apps/web/src/lib/workoutHistoryService.ts`
+
+| Function | Description |
+|----------|-------------|
+| `addWorkout(summary)` | Appends to in-memory cache, writes to `pendingWorkoutHistorySync` localStorage key, and enqueues a Supabase insert. |
+| `fetchHistory()` | Retries any pending inserts, fetches all rows from Supabase, and merges still-pending local entries so nothing is lost during network failures. |
+| `getHistory()` | Returns the in-memory cache synchronously. |
+| `resetLocalCache()` | Clears in-memory cache and both localStorage keys (cache + pending queue). Called on logout. |
+
+**Offline pattern:** Failed inserts are persisted to `localStorage` under `pendingWorkoutHistorySync`. `fetchHistory()` and `retryPending()` re-attempt these on every fetch, focus, or login event.
+
+**Cache initialization:** The in-memory cache starts as `[]` at module load — it is never pre-filled from localStorage on startup to avoid showing a previous user's data before auth resolves.
+
+---
+
+### `user_completed_workouts`
+
+Stores the set of workout-day IDs the user has marked complete. One row per user; the full ID array is overwritten on every update (no per-row history).
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `user_id` | uuid (PK) | References `auth.users.id` |
+| `ids` | jsonb | JSON array of completed workout-day ID strings |
+| `updated_at` | timestamptz | Last write timestamp |
+
+**File:** `apps/web/src/lib/completedWorkoutsService.ts`
+
+| Function | Description |
+|----------|-------------|
+| `setIds(ids)` | Replaces the full set, writes to localStorage, and enqueues a Supabase upsert. |
+| `fetchIds()` | Awaits any in-flight upsert then loads the authoritative set from Supabase. |
+| `getIds()` | Returns the in-memory set synchronously. |
+| `resetLocalCache()` | Clears in-memory cache and localStorage key. Called on logout. |
+
+**Key patterns:**
+- Serialized write queue (`upsertQueue`) prevents out-of-order upserts on rapid successive `setIds` calls.
+- `hasUnsyncedLocalChanges` flag prevents `fetchIds()` from overwriting local changes that haven't finished syncing. The flag is reset on both success and failure so a network error never permanently blocks the remote refresh.
+- Cache starts as `[]` at module load — never pre-filled from localStorage — to avoid cross-user contamination before auth resolves.
+
+> **Design note:** The entire ID array is stored as a single jsonb blob. There is no per-ID history or per-plan scoping. A schema migration would be required to support individual ID queries or plan-scoped completion tracking.
+
+---
+
 ### `quiz_answers`
 
 Stores the user's onboarding quiz answers so plans can be regenerated without re-taking the quiz.
@@ -142,7 +203,6 @@ Stores the user's onboarding quiz answers so plans can be regenerated without re
 | Body profile (height, weight) | `localStorage` (`bodyProfile`) | Gender and birth year are collected in the quiz only and not stored here |
 | Language / theme preferences | `localStorage` | Settings page only |
 | Saved custom programs | `localStorage` (`savedPrograms`) | No DB table yet |
-| Workout history | `localStorage` (`workoutHistory`) | No DB table yet |
 | Mobile app auth | Not wired | `expo-auth-session` installed but unused |
 
 ---
