@@ -2,7 +2,8 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { Exercise } from "@/types/exercise";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
-import { useExerciseName } from "@spinefit/shared";
+import { useExerciseName, estimateCalories } from "@spinefit/shared";
+import { getBodyWeightKg, getStoredGender } from "@/storage/bodyProfileStorage";
 import type {
   ActiveWorkoutPageProps,
   FinishedWorkoutSummary,
@@ -132,11 +133,15 @@ function ActiveWorkoutPage({
   }, [elapsedSeconds, resetToElapsed]);
 
   const handleLogWorkout = useCallback(() => {
-    const caloriesBurned = 100;
     const totalVolume = calculateWorkoutVolume(
       completedExercises,
       exerciseLogs
     );
+    const caloriesBurned = estimateCalories({
+      durationSeconds: parseDurationToSeconds(fixedDuration),
+      bodyWeightKg: getBodyWeightKg(),
+      gender: getStoredGender(),
+    });
     const painValues = Object.values(exercisePainLevels);
     const averagePainLevel =
       painValues.length > 0

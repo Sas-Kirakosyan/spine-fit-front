@@ -4,6 +4,15 @@ import { Sheet } from "@/components/ui/Modal";
 import type { Exercise } from "@/types/exercise";
 import type { ExerciseSetRow } from "@/types/workout";
 import { calculateWorkoutVolume } from "@/utils/workoutStats";
+import { estimateCalories } from "@spinefit/shared";
+import { getBodyWeightKg, getStoredGender } from "@/storage/bodyProfileStorage";
+
+function durationToSeconds(duration: string): number {
+  const parts = duration.split(":").map((part) => Number(part));
+  if (parts.length !== 3 || parts.some((part) => Number.isNaN(part))) return 0;
+  const [h, m, s] = parts;
+  return h * 3600 + m * 60 + s;
+}
 
 interface FinishWorkoutModalProps {
   isOpen: boolean;
@@ -29,7 +38,11 @@ export function FinishWorkoutModal({
     completedExerciseLogs
   );
 
-  const calories = 100;
+  const calories = estimateCalories({
+    durationSeconds: durationToSeconds(duration),
+    bodyWeightKg: getBodyWeightKg(),
+    gender: getStoredGender(),
+  });
 
   const exerciseCount = completedExercises.length;
 
