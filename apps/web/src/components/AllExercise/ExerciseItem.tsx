@@ -1,22 +1,21 @@
-import { useTranslation } from "react-i18next";
 import { type Exercise } from "@/types/exercise";
 import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
-import { TreeDotButton } from "@/components/TreeDotButton/TreeDotButton";
 import { LazyImage } from "@/components/ui/LazyImage";
 
 interface ExerciseItemProps {
   exercise: Exercise;
   isSelected: boolean;
   onSelect: (exercise: Exercise) => void;
+  onDetailsClick: () => void;
 }
 
 export function ExerciseItem({
   exercise,
   isSelected,
   onSelect,
+  onDetailsClick
 }: ExerciseItemProps) {
-  const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
   const name = getExerciseName(exercise);
   return (
@@ -32,12 +31,23 @@ export function ExerciseItem({
       }}
     >
       <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-[10px]">
-        <LazyImage
-          src={getExerciseImageUrl(exercise)}
-          alt={name}
-          className="h-full w-full object-cover"
-          fallback={exercise.media?.find((m) => m.source === "remote")?.url}
-        />
+          <button
+              type="button"
+              onClick={(event) => {
+                  event.stopPropagation();
+                  onDetailsClick();
+              }}
+              className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
+              aria-label={`Открыть детали упражнения ${name}`}
+          >
+              <LazyImage
+                  src={getExerciseImageUrl(exercise)}
+                  alt={name}
+                  className="h-full w-full object-cover"
+                  fallback={exercise.media?.find((m) => m.source === "remote")?.url}
+              />
+          </button>
+
         <div className="pointer-events-none absolute inset-0 rounded-[10px] border border-white/10" />
         {isSelected && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-[10px]">
@@ -69,12 +79,6 @@ export function ExerciseItem({
           {name}
         </span>
       </div>
-
-      <TreeDotButton
-        onClick={() => {}}
-        ariaLabel={t("allExercisePage.exerciseItem.actionsFor", { name })}
-        className="ml-2 flex-shrink-0 rounded-full p-2 text-slate-400 transition hover:bg-slate-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-main/60"
-      />
     </div>
   );
 }

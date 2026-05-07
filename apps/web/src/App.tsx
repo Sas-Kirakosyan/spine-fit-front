@@ -862,6 +862,7 @@ function App() {
                 ? navigateToPage("createProgram")
                 : navigateToWorkout()
             }
+            onOpenExerciseDetails={navigateToExerciseDetails}
             onAddExercises={(exercises) => {
               if (allExerciseReturnPage === "createProgram" && activeDayId) {
                 setCreateProgramDays((prev) =>

@@ -7,6 +7,7 @@ interface ExerciseGroupProps {
   exercises: Exercise[];
   selectedExerciseIds: Set<number>;
   onExerciseSelect: (exercise: Exercise) => void;
+  onOpenExerciseDetails: (exercise: Exercise) => void;
 }
 
 export function ExerciseGroup({
@@ -14,6 +15,7 @@ export function ExerciseGroup({
   exercises,
   selectedExerciseIds,
   onExerciseSelect,
+  onOpenExerciseDetails
 }: ExerciseGroupProps) {
   return (
     <div className="mb-6">
@@ -28,6 +30,7 @@ export function ExerciseGroup({
             exercise={exercise}
             isSelected={selectedExerciseIds.has(exercise.id)}
             onSelect={onExerciseSelect}
+            onDetailsClick={() => onOpenExerciseDetails(exercise)}
           />
         ))}
       </div>
