@@ -33,6 +33,10 @@ export { getNextAvailableWorkout, getWorkoutsByDay, getTodaysUncompletedWorkouts
 // Utils - workoutStats
 export { calculateExerciseVolume, calculateWorkoutVolume } from "./utils/workoutStats";
 
+// Utils - calorieEstimator
+export type { EstimateCaloriesInput, CalorieGender } from "./utils/calorieEstimator";
+export { estimateCalories, parseBodyWeightToKg, lbsToKg, DEFAULT_STRENGTH_MET, DEFAULT_BODY_WEIGHT_KG, DEFAULT_BODY_WEIGHT_KG_MALE, DEFAULT_BODY_WEIGHT_KG_FEMALE } from "./utils/calorieEstimator";
+
 // Utils - date
 export { formatDateTime, isSameDay, formatTime, months } from "./utils/date";
 
