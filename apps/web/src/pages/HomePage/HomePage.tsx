@@ -6,7 +6,6 @@ import { PageContainer } from "@/Layout/PageContainer";
 import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import type { HomePageProps } from "@/types/pages";
 import { trackEvent } from "@/utils/analytics";
-import { assetUrl } from "@/lib/assets";
 import { useAuth } from "@/hooks/useAuth";
 
 interface HomePageExtraProps {
@@ -47,7 +46,7 @@ function HomePage({
   return (
     <>
       <PageContainer
-        backgroundImage={`url('${assetUrl("Photo/Exercises/cable-knee-drive.webp")}')`}
+        backgroundImage={`url('/exercisesSm/home-page.webp')`}
         backgroundPositionClassName="bg-center md:bg-right"
         overlayClassName="bg-black/30"
       >
