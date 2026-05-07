@@ -742,6 +742,10 @@
         "year": "Y"
       }
     },
+    "calorieChart": {
+      "title": "Calories burned",
+      "unit": "kcal"
+    },
     "statsGrid": {
       "workouts": "Workouts",
       "volume": "Volume",
