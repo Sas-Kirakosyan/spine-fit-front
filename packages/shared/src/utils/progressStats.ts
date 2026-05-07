@@ -447,15 +447,23 @@ export function getCalorieDataByPeriod(
       new Date(a.finishedAt).getTime() - new Date(b.finishedAt).getTime()
   );
 
-  return sorted.map((w) => {
+  const byDay = new Map<string, { date: string; calories: number }>();
+  sorted.forEach((w) => {
     const date = new Date(w.finishedAt);
     const label = `${date.getDate()}/${date.getMonth() + 1}`;
-    return {
-      date: w.finishedAt,
-      calories: w.caloriesBurned,
-      label,
-    };
+    const existing = byDay.get(label);
+    if (existing) {
+      existing.calories += w.caloriesBurned;
+    } else {
+      byDay.set(label, { date: w.finishedAt, calories: w.caloriesBurned });
+    }
   });
+
+  return Array.from(byDay.entries()).map(([label, { date, calories }]) => ({
+    date,
+    calories,
+    label,
+  }));
 }
 
 export function getPainDataByPeriod(

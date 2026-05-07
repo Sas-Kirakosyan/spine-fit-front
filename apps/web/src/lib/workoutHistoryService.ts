@@ -102,7 +102,7 @@ function fromRow(row: WorkoutHistoryRow): FinishedWorkoutSummary {
     duration: row.duration,
     totalVolume: Number(row.total_volume),
     exerciseCount: row.exercise_count,
-    caloriesBurned: Number(row.calories_burned),
+    caloriesBurned: row.calories_burned == null ? 0 : Number(row.calories_burned),
     completedExercises: row.completed_exercises,
     completedExerciseLogs: row.completed_exercise_logs,
     averagePainLevel:

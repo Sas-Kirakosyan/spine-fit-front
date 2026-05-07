@@ -136,6 +136,7 @@ function ProgressPage({
                 title={t("progressPage.calorieChart.title")}
                 color="#a855f7"
                 unit={t("progressPage.calorieChart.unit")}
+                formatValue={formatVolume}
                 activePeriod={caloriePeriod}
                 onPeriodChange={setCaloriePeriod}
               />
