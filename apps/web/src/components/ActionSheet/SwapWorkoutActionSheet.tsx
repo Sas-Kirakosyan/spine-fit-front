@@ -2,6 +2,10 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { GeneratedPlan } from "@spinefit/shared";
 import { getPlan, subscribe as subscribeToPlan } from "@/lib/planService";
+import {
+  getIds as getCompletedWorkoutIds,
+  subscribe as subscribeCompletedWorkouts,
+} from "@/lib/completedWorkoutsService";
 import { Sheet } from "@/components/ui/Modal";
 import {
   getSelectedDayIndex,
@@ -99,48 +103,39 @@ export function SwapWorkoutActionSheet({
     });
   }, []);
 
+  const [completedWorkoutIds, setCompletedWorkoutIds] = useState<Set<string>>(
+    () => getCompletedWorkoutIds()
+  );
+
+  useEffect(() => {
+    return subscribeCompletedWorkouts(() => {
+      setCompletedWorkoutIds(getCompletedWorkoutIds());
+    });
+  }, []);
+
   // Current day index — prefer manually selected day (if not completed), fallback to rotation
   const currentDayIndex = useMemo(() => {
     if (!plan) return 0;
-    try {
-      const completedIds: string[] = JSON.parse(
-        localStorage.getItem("completedWorkoutIds") || "[]"
-      );
-      const completedSet = new Set(completedIds);
-
-      if (selectedDayIndex !== null && selectedDayIndex < plan.workoutDays.length) {
-        const day = plan.workoutDays[selectedDayIndex];
-        const workoutId = `${plan.id}_${day.dayNumber}_${day.dayName}`;
-        if (!completedSet.has(workoutId)) return selectedDayIndex;
-      }
-
-      const count = completedIds.filter((id) => id.startsWith(plan.id)).length;
-      const baseIndex = count % plan.workoutDays.length;
-
-      // If the rotation index is completed, find the next uncompleted day
-      for (let i = 0; i < plan.workoutDays.length; i++) {
-        const idx = (baseIndex + i) % plan.workoutDays.length;
-        const d = plan.workoutDays[idx];
-        const wId = `${plan.id}_${d.dayNumber}_${d.dayName}`;
-        if (!completedSet.has(wId)) return idx;
-      }
-      return baseIndex;
-    } catch {
-      return 0;
+    if (selectedDayIndex !== null && selectedDayIndex < plan.workoutDays.length) {
+      const day = plan.workoutDays[selectedDayIndex];
+      const workoutId = `${plan.id}_${day.dayNumber}_${day.dayName}`;
+      if (!completedWorkoutIds.has(workoutId)) return selectedDayIndex;
     }
-  }, [plan, selectedDayIndex]);
 
-  // Set of completed workout IDs for visual marking
-  const completedWorkoutIds = useMemo<Set<string>>(() => {
-    try {
-      const ids: string[] = JSON.parse(
-        localStorage.getItem("completedWorkoutIds") || "[]"
-      );
-      return new Set(ids);
-    } catch {
-      return new Set();
+    const count = Array.from(completedWorkoutIds).filter((id) =>
+      id.startsWith(plan.id)
+    ).length;
+    const baseIndex = count % plan.workoutDays.length;
+
+    // If the rotation index is completed, find the next uncompleted day
+    for (let i = 0; i < plan.workoutDays.length; i++) {
+      const idx = (baseIndex + i) % plan.workoutDays.length;
+      const d = plan.workoutDays[idx];
+      const wId = `${plan.id}_${d.dayNumber}_${d.dayName}`;
+      if (!completedWorkoutIds.has(wId)) return idx;
     }
-  }, []);
+    return baseIndex;
+  }, [plan, selectedDayIndex, completedWorkoutIds]);
 
   // Load plan on mount + re-sync whenever the plan cache updates
   useEffect(() => {

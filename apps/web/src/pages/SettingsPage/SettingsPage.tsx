@@ -8,6 +8,8 @@ import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
 import type { SettingsPageProps } from "@/types/pages";
 import { supabase } from "@/lib/supabase";
 import { resetLocalCache } from "@/lib/planService";
+import { resetLocalCache as resetWorkoutHistoryCache } from "@/lib/workoutHistoryService";
+import { resetLocalCache as resetCompletedWorkoutsCache } from "@/lib/completedWorkoutsService";
 import {useAuth} from "@/hooks/useAuth.ts";
 
 interface ModalConfig {
@@ -101,9 +103,13 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     resetLocalCache();
+    resetWorkoutHistoryCache();
+    resetCompletedWorkoutsCache();
     const userKeys = [
       "currentPage",
       "workoutHistory",
+      "workoutHistoryCache",
+      "pendingWorkoutHistorySync",
       "workoutExercises",
       "completedWorkoutIds",
       "savedPrograms",

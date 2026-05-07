@@ -26,6 +26,8 @@ import {
   fetchPlan,
   resetLocalCache,
 } from "@/lib/planService";
+import * as workoutHistoryService from "@/lib/workoutHistoryService";
+import * as completedWorkoutsService from "@/lib/completedWorkoutsService";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { getSelectedDayIndex } from "@/storage/selectedDayStorage";
 import "@/utils/testWorkoutHistoryGenerator";
@@ -192,16 +194,13 @@ function App() {
 
   const [workoutHistory, setWorkoutHistory] = useState<
     FinishedWorkoutSummary[]
-  >(() => {
-    const savedHistory = localStorage.getItem("workoutHistory");
-    if (!savedHistory) return [];
-    try {
-      const parsed = JSON.parse(savedHistory);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  });
+  >(() => workoutHistoryService.getHistory());
+
+  useEffect(() => {
+    return workoutHistoryService.subscribe(() => {
+      setWorkoutHistory(workoutHistoryService.getHistory());
+    });
+  }, []);
 
   const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>(() => {
     const savedExercises = localStorage.getItem("workoutExercises");
@@ -214,12 +213,19 @@ function App() {
     }
   });
 
-  const [completedWorkoutIds, setCompletedWorkoutIds] = useState<Set<string>>(
-    () => {
-      const saved = localStorage.getItem("completedWorkoutIds");
-      return saved ? new Set(JSON.parse(saved)) : new Set();
-    }
-  );
+  const [completedWorkoutIds, setCompletedWorkoutIdsState] = useState<
+    Set<string>
+  >(() => completedWorkoutsService.getIds());
+
+  useEffect(() => {
+    return completedWorkoutsService.subscribe(() => {
+      setCompletedWorkoutIdsState(completedWorkoutsService.getIds());
+    });
+  }, []);
+
+  const setCompletedWorkoutIds = (ids: Set<string>) => {
+    completedWorkoutsService.setIds(ids);
+  };
 
   const [createProgramDays, setCreateProgramDays] = useState<TrainingDay[]>([]);
   const [createProgramName, setCreateProgramName] = useState("");
@@ -291,6 +297,8 @@ function App() {
   useEffect(() => {
     if (auth.status === "unauthenticated") {
       resetLocalCache();
+      workoutHistoryService.resetLocalCache();
+      completedWorkoutsService.resetLocalCache();
       initialRedirectDoneRef.current = false;
       return;
     }
@@ -298,7 +306,11 @@ function App() {
 
     let cancelled = false;
     const refetch = async () => {
-      await fetchPlan();
+      await Promise.all([
+        fetchPlan(),
+        workoutHistoryService.fetchHistory(),
+        completedWorkoutsService.fetchIds(),
+      ]);
       if (cancelled) return;
 
       if (!initialRedirectDoneRef.current) {
@@ -368,6 +380,8 @@ function App() {
 
     const onFocus = () => {
       void fetchPlan();
+      void workoutHistoryService.fetchHistory();
+      void completedWorkoutsService.fetchIds();
     };
     window.addEventListener("focus", onFocus);
     return () => {
@@ -384,19 +398,8 @@ function App() {
   }, [currentPage]);
 
   useEffect(() => {
-    localStorage.setItem("workoutHistory", JSON.stringify(workoutHistory));
-  }, [workoutHistory]);
-
-  useEffect(() => {
     localStorage.setItem("workoutExercises", JSON.stringify(workoutExercises));
   }, [workoutExercises]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      "completedWorkoutIds",
-      JSON.stringify([...completedWorkoutIds])
-    );
-  }, [completedWorkoutIds]);
 
   const navigateToPage = (
     page: Page,
@@ -699,7 +702,7 @@ function App() {
   const handleFinishWorkout = (summary?: FinishedWorkoutSummary) => {
     trackEvent("workout_finished", { has_summary: !!summary });
     if (summary) {
-      setWorkoutHistory((prev) => [...prev, summary]);
+      workoutHistoryService.addWorkout(summary);
       resetWorkoutState();
       navigateToPage("workout");
       return;
