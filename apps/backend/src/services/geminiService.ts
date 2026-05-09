@@ -39,6 +39,7 @@ export interface GeneratedPlanResult {
     heightUnit?: string;
     weight?: string;
     weightUnit?: string;
+    birthYear?: number;
     dateOfBirth?: string;
     bodyType?: string;
     painStatus?: string;
@@ -235,6 +236,7 @@ export async function generatePlan(
       heightUnit: parsedQuiz.heightUnit,
       weight: parsedQuiz.weight,
       weightUnit: parsedQuiz.weightUnit,
+      birthYear: parsedQuiz.birthYear,
       dateOfBirth: parsedQuiz.dateOfBirth,
       bodyType: parsedQuiz.bodyType,
       painStatus: parsedQuiz.painStatus,

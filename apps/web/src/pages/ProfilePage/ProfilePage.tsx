@@ -8,7 +8,13 @@ import { useTranslation } from "react-i18next";
 import InputField from "@/components/InputField/InputField.tsx";
 import ErrorIcon from "@/assets/ErrorIcon/ErrorIncon.tsx";
 import { useAuth } from "@/hooks/useAuth.ts";
-import { getPlanSettings, savePlanSettings, savePlanAndSettings } from "@/lib/planService.ts";
+import {
+  getPlanSettings,
+  hasPlan,
+  savePlanSettings,
+  savePlanAndSettings,
+  subscribe as subscribeToPlan,
+} from "@/lib/planService.ts";
 import type { GeneratedPlan } from "@spinefit/shared";
 import { ConfirmDialog } from "@/components/ui/Modal.tsx";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader.tsx";
@@ -17,20 +23,20 @@ const PAIN_STATUS_OPTIONS = ["Healthy", "Recovered", "Active Symptoms"] as const
 type PainStatus = (typeof PAIN_STATUS_OPTIONS)[number];
 
 const PAIN_LOCATION_OPTIONS = [
-  "Lower Back",
-  "Sciatica",
-  "Glute / Hip",
-  "Calf / Foot",
+  "Lower Back (L4-L5/S1 area)",
+  "Sciatica (Pain radiating down leg)",
+  "Glute / Deep Hip discomfort",
+  "Calf or Foot (Numbness/Tingling)",
 ] as const;
 
 const PAIN_TRIGGER_OPTIONS = [
-  "Bending forward",
-  "Arching backward",
-  "Lifting heavy",
-  "Long sitting",
-  "Impact movements",
-  "Rotating torso",
-  "Heavy bracing",
+  "Bending forward (e.g., reaching for the floor)",
+  "Arching backward (e.g., reaching overhead)",
+  "Lifting or carrying heavy objects",
+  "Sitting for longer than 20–30 minutes",
+  "Impact movements (Running, Jumping)",
+  "Rotating or twisting the torso",
+  "Straining (Heavy bracing/holding breath)",
 ] as const;
 
 function toggleItem<T>(arr: T[], item: T): T[] {
@@ -225,23 +231,38 @@ function ProfilePage({
       }
     }
 
-    // Spine health from planSettings
-    const settings = getPlanSettings();
-    const ps = (settings.painStatus ?? "") as PainStatus | "";
-    const pl = settings.painLocation ?? [];
-    const pt = settings.painTriggers ?? [];
-    const plv = settings.painLevel ?? 0;
+    const loadSpineFromSettings = () => {
+      const settings = getPlanSettings();
+      const ps = (settings.painStatus ?? "") as PainStatus | "";
+      const pl = settings.painLocation ?? [];
+      const pt = settings.painTriggers ?? [];
+      const plv = settings.painLevel ?? 0;
 
-    setPainStatus(ps);
-    setPainLocation(pl);
-    setPainLevel(plv);
-    setPainTriggers(pt);
+      setPainStatus(ps);
+      setPainLocation(pl);
+      setPainLevel(plv);
+      setPainTriggers(pt);
 
-    initialSpineRef.current = {
-      painStatus: ps,
-      painLocation: pl,
-      painTriggers: pt,
+      initialSpineRef.current = {
+        painStatus: ps,
+        painLocation: pl,
+        painTriggers: pt,
+      };
     };
+
+    // Initial sync — may read defaults if Supabase hasn't returned yet on a
+    // hard reload, in which case the subscriber below resyncs on first arrival.
+    loadSpineFromSettings();
+    let initialized = hasPlan();
+
+    const unsubscribe = subscribeToPlan(() => {
+      if (initialized) return;
+      if (!hasPlan()) return;
+      initialized = true;
+      loadSpineFromSettings();
+    });
+
+    return unsubscribe;
   }, []);
 
   // ── Save ─────────────────────────────────────────────────────────────────────
@@ -269,14 +290,18 @@ function ProfilePage({
       JSON.stringify([...painTriggers].sort()) !==
       JSON.stringify([...init.painTriggers].sort());
 
-    // Persist spine health into planSettings
+    // Persist spine health into planSettings. When the user commits to
+    // "Healthy", the pain arrays are nulled out in storage even if they are
+    // still populated in component state (we keep state around so toggling
+    // status doesn't lose user input until they actually save).
+    const isHealthy = painStatus === "Healthy";
     const currentSettings = getPlanSettings();
     savePlanSettings({
       ...currentSettings,
       painStatus: painStatus || undefined,
-      painLocation: painLocation.length ? painLocation : undefined,
+      painLocation: !isHealthy && painLocation.length ? painLocation : undefined,
       painLevel: painStatus === "Active Symptoms" ? painLevel : undefined,
-      painTriggers: painTriggers.length ? painTriggers : undefined,
+      painTriggers: !isHealthy && painTriggers.length ? painTriggers : undefined,
     });
 
     // Update snapshot so subsequent saves compare correctly
@@ -423,14 +448,7 @@ function ProfilePage({
                       <button
                         key={status}
                         type="button"
-                        onClick={() => {
-                          setPainStatus(status);
-                          if (status === "Healthy") {
-                            setPainLocation([]);
-                            setPainTriggers([]);
-                            setPainLevel(0);
-                          }
-                        }}
+                        onClick={() => setPainStatus(status)}
                         className={`flex-1 min-w-[90px] py-2 rounded-xl text-sm font-semibold transition-colors ${
                           active
                             ? "bg-main text-white"
@@ -456,10 +474,10 @@ function ProfilePage({
                     onToggle={(v) => setPainLocation((prev) => toggleItem(prev, v))}
                     getLabel={(v) => {
                       const map: Record<string, string> = {
-                        "Lower Back": t("profilePage.locationLowerBack"),
-                        "Sciatica": t("profilePage.locationSciatica"),
-                        "Glute / Hip": t("profilePage.locationGluteHip"),
-                        "Calf / Foot": t("profilePage.locationCalfFoot"),
+                        "Lower Back (L4-L5/S1 area)": t("profilePage.locationLowerBack"),
+                        "Sciatica (Pain radiating down leg)": t("profilePage.locationSciatica"),
+                        "Glute / Deep Hip discomfort": t("profilePage.locationGluteHip"),
+                        "Calf or Foot (Numbness/Tingling)": t("profilePage.locationCalfFoot"),
                       };
                       return map[v] ?? v;
                     }}
@@ -494,13 +512,13 @@ function ProfilePage({
                     onToggle={(v) => setPainTriggers((prev) => toggleItem(prev, v))}
                     getLabel={(v) => {
                       const map: Record<string, string> = {
-                        "Bending forward": t("profilePage.triggerBending"),
-                        "Arching backward": t("profilePage.triggerArching"),
-                        "Lifting heavy": t("profilePage.triggerLifting"),
-                        "Long sitting": t("profilePage.triggerSitting"),
-                        "Impact movements": t("profilePage.triggerImpact"),
-                        "Rotating torso": t("profilePage.triggerRotating"),
-                        "Heavy bracing": t("profilePage.triggerStraining"),
+                        "Bending forward (e.g., reaching for the floor)": t("profilePage.triggerBending"),
+                        "Arching backward (e.g., reaching overhead)": t("profilePage.triggerArching"),
+                        "Lifting or carrying heavy objects": t("profilePage.triggerLifting"),
+                        "Sitting for longer than 20–30 minutes": t("profilePage.triggerSitting"),
+                        "Impact movements (Running, Jumping)": t("profilePage.triggerImpact"),
+                        "Rotating or twisting the torso": t("profilePage.triggerRotating"),
+                        "Straining (Heavy bracing/holding breath)": t("profilePage.triggerStraining"),
                       };
                       return map[v] ?? v;
                     }}
