@@ -109,11 +109,8 @@ function PulsingDots() {
       {[0, 150, 300].map((delay) => (
         <span
           key={delay}
-          className="w-[5px] h-[5px] rounded-full bg-white"
-          style={{
-            animation: "plan-step-dot-pulse 1.2s ease-in-out infinite",
-            animationDelay: `${delay}ms`,
-          }}
+          className="plan-step-dot w-[5px] h-[5px] rounded-full bg-white"
+          style={{ animationDelay: `${delay}ms` }}
         />
       ))}
     </span>
@@ -132,14 +129,7 @@ function CheckMark() {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path
-        d="M5 12 L10 17 L19 7"
-        style={{
-          strokeDasharray: 30,
-          strokeDashoffset: 30,
-          animation: "plan-step-check-draw 320ms ease-out forwards",
-        }}
-      />
+      <path className="plan-step-check-path" d="M5 12 L10 17 L19 7" />
     </svg>
   );
 }
