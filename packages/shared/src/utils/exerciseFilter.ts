@@ -158,7 +158,7 @@ function isBackSafe(exercise: Exercise, painProfile: PainProfile): boolean {
     }
   }
 
-  return true;
+  return exercise.is_back_friendly === true;
 }
 
 /**

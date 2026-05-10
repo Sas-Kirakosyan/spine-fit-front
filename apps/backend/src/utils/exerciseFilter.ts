@@ -75,6 +75,8 @@ export function prepareExercisesForPrompt(
         painStatus === "Active Symptoms" &&
         ex.back_issue_restrictions.some((r) => r.restriction_level === "medium" || r.restriction_level === "high")
       ) return false;
+      // Recovered: skip exercises not marked as back-friendly
+      if (painStatus === "Recovered" && !ex.is_back_friendly) return false;
       // Experience-based difficulty filter
       if (excludedDifficulties.includes(ex.difficulty)) return false;
       // Pain trigger: drop exercises with any "high" restriction

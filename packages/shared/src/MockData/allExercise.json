@@ -3192,18 +3192,8 @@
     "difficulty": "beginner",
     "instructions": "Stand on a step or machine platform with the balls of your feet supported and heels free. Hold support lightly and brace your core. Rise onto your toes as high as possible, squeezing calves at the top. Lower slowly into a stretch without bouncing. Keep knees slightly soft and movement controlled.",
     "video_url": "",
-    "is_back_friendly": true,
-    "back_issue_restrictions": [
-      {
-        "id": 78,
-        "exercise_id": 53,
-        "issue_type": "l5_s1",
-        "restriction_level": "low",
-        "recommendation": "Use support for balance and avoid loading the spine with heavy barbells. Keep torso upright and movement smooth.",
-        "created_at": "2025-12-20T12:00:00Z",
-        "updated_at": "2025-12-20T12:00:00Z"
-      }
-    ],
+    "is_back_friendly": false,
+    "back_issue_restrictions": [],
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 4,
