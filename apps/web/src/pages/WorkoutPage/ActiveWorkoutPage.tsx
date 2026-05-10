@@ -22,7 +22,10 @@ import {
   type SwapDurationOption,
 } from "@/pages/WorkoutPage/ReplaceExerciseModal";
 import { getPlan } from "@/lib/planService";
-import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
+import {
+  getNextAvailableWorkout,
+  isWorkoutPlanComplete,
+} from "@/utils/workoutQueueManager";
 import {
   clearSelectedDayIndex,
   getSelectedDayIndex,
@@ -193,23 +196,22 @@ function ActiveWorkoutPage({
         const updatedIds = new Set(completedWorkoutIds);
         updatedIds.add(workoutId);
 
-        if (setCompletedWorkoutIds) {
-          setCompletedWorkoutIds(updatedIds);
-        }
-
         // Clear manual selection so WorkoutPage advances to the next day
         clearSelectedDayIndex();
 
-        const nextWorkout = getNextAvailableWorkout(generatedPlan, updatedIds);
-        if (!nextWorkout) {
-          // Full cycle completed — reset completed IDs for this plan so rotation restarts
-          const resetIds = new Set(
-            Array.from(updatedIds).filter(
-              (id) => !id.startsWith(generatedPlan.id)
-            )
-          );
-          if (setCompletedWorkoutIds) {
+        if (setCompletedWorkoutIds) {
+          if (isWorkoutPlanComplete(generatedPlan, updatedIds)) {
+            // Full cycle completed — reset IDs for this plan so rotation restarts.
+            // Sequential splits never produce a null next workout (modulo rotates),
+            // so we must detect completion via the Set, not via getNextAvailableWorkout.
+            const resetIds = new Set(
+              Array.from(updatedIds).filter(
+                (id) => !id.startsWith(generatedPlan.id)
+              )
+            );
             setCompletedWorkoutIds(resetIds);
+          } else {
+            setCompletedWorkoutIds(updatedIds);
           }
         }
       }
