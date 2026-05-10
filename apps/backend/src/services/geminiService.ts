@@ -3,10 +3,10 @@ import type { PromptExercise } from "../utils/exerciseFilter.js";
 import type { ParsedQuizData } from "../types.js";
 import { PLAN_SCHEMA, type GeminiPlanResponse } from "../schemas/planSchema.js";
 import {
+  ACTIVE_PAIN_GOAL,
   buildSystemInstruction,
   buildUserPrompt,
   reconcileSplitWithLLMOutput,
-  resolveEffectiveGoal,
   resolveEffectiveSplit,
 } from "../utils/promptBuilder.js";
 import { SPLIT_TARGET_MUSCLES, mapSplitType } from "../utils/splitUtils.js";
@@ -25,6 +25,7 @@ export interface GeneratedPlanResult {
   createdAt: string;
   settings: {
     goal: string;
+    originalGoal?: string;
     workoutsPerWeek: string;
     duration: string;
     durationRange?: string;
@@ -214,6 +215,14 @@ export async function generatePlan(
     }
   }
 
+  const isActive = (parsedQuiz.painStatus ?? "").toLowerCase().startsWith("active");
+  const storedGoal = isActive
+    ? ACTIVE_PAIN_GOAL
+    : (parsedQuiz.originalGoal ?? parsedQuiz.goal);
+  const storedOriginalGoal = isActive
+    ? (parsedQuiz.originalGoal ?? (parsedQuiz.goal !== ACTIVE_PAIN_GOAL ? parsedQuiz.goal : undefined))
+    : undefined;
+
   return {
     id: `ai-plan-${Date.now()}`,
     name: geminiPlan.planName,
@@ -221,7 +230,8 @@ export async function generatePlan(
     weeks: geminiPlan.weeks,
     createdAt: new Date().toISOString(),
     settings: {
-      goal: resolveEffectiveGoal(parsedQuiz.goal, parsedQuiz.painStatus),
+      goal: storedGoal,
+      originalGoal: storedOriginalGoal,
       workoutsPerWeek: parsedQuiz.workoutsPerWeek,
       duration: parsedQuiz.duration,
       durationRange: parsedQuiz.durationRange,

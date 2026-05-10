@@ -55,15 +55,15 @@ function hasLumbarOrSciaticInvolvement(painLocations: string[] | undefined): boo
  */
 export const ACTIVE_PAIN_GOAL = "Pain Recovery & Symptom Management";
 
-export function resolveEffectiveGoal(goal: string, painStatus?: string): string {
+export function resolveEffectiveGoal(goal: string, painStatus?: string, originalGoal?: string): string {
   const isActive = (painStatus ?? "").toLowerCase().startsWith("active");
   if (!isActive) return goal;
-  // Idempotent: if the goal already starts with the override prefix (e.g. on
-  // regeneration from already-overridden settings), return it unchanged so we
-  // don't nest the wrapper repeatedly.
-  if (goal && goal.startsWith(ACTIVE_PAIN_GOAL)) return goal;
-  return goal
-    ? `${ACTIVE_PAIN_GOAL} (auto-set due to active back symptoms — original goal: "${goal}")`
+  // contextGoal: the user's actual selection before any override.
+  // On first generation it's the goal string itself; on regeneration it comes
+  // from the dedicated originalGoal field so we don't re-parse the stored value.
+  const contextGoal = originalGoal ?? (goal.startsWith(ACTIVE_PAIN_GOAL) ? undefined : goal);
+  return contextGoal
+    ? `${ACTIVE_PAIN_GOAL} (auto-set due to active back symptoms — original goal: "${contextGoal}")`
     : ACTIVE_PAIN_GOAL;
 }
 
@@ -612,7 +612,7 @@ export function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[
     quiz.painStatus,
   );
   const splitGuidance = buildSplitDayGuidance(recommendation.effectiveSplit);
-  const effectiveGoal = resolveEffectiveGoal(quiz.goal, quiz.painStatus);
+  const effectiveGoal = resolveEffectiveGoal(quiz.goal, quiz.painStatus, quiz.originalGoal);
 
   const variabilityLine = quiz.exerciseVariability
     ? `- Exercise variability: ${quiz.exerciseVariability} (${quiz.exerciseVariability.toLowerCase().includes("high") ? "rotate exercises across days, avoid repeating the same exercise on consecutive days" : "keep movements consistent across weeks for skill development"})`

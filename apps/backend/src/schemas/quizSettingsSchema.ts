@@ -5,6 +5,7 @@ const optionalStr = z.string().optional().transform((v) => v || undefined);
 
 export const quizSettingsSchema = z.looseObject({
   goal: z.string(),
+  originalGoal: z.string().optional(),
   workoutsPerWeek: z.coerce.string(),
   duration: optionalStr,
   durationRange: optionalStr,
