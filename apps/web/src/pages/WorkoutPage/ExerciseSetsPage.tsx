@@ -1128,11 +1128,11 @@ function ExerciseSetsPage({
             )}
           </div>
         ) : isDuringActiveWorkout ? (
-          <div className="mx-5 flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <Button
               onClick={handleLogAllSets}
               disabled={!canLogAllSets}
-              className="h-[54px] flex-1 rounded-[10px] bg-main text-white uppercase disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[50px] w-full rounded-[12px] bg-main text-base font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-main/30 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {t("exerciseSetsPage.logAllSets")}
             </Button>
