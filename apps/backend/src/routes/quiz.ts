@@ -36,17 +36,6 @@ function determineSplitName(experience: string, frequency: string, painStatus?: 
   ).effectiveSplit;
 }
 
-function parseDuration(durationRange: string): string {
-  const midpoints: Record<string, string> = {
-    "10–20 min": "15 min",
-    "20–30 min": "25 min",
-    "30–45 min": "35 min",
-    "45–60 min": "50 min",
-    "60–90 min": "75 min",
-  };
-  return midpoints[durationRange] ?? "35 min";
-}
-
 const QUESTIONS = {
   GOAL: 2,
   PAIN_STATUS: 3,
@@ -148,8 +137,7 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
 
   // Workout duration
   const durationOptions = ["10–20 min", "20–30 min", "30–45 min", "45–60 min", "60–90 min"];
-  const durationRange = typeof answers[QUESTIONS.WORKOUT_DURATION] === "number" ? durationOptions[answers[QUESTIONS.WORKOUT_DURATION] as number] : "30–45 min";
-  const duration = parseDuration(durationRange);
+  const duration = typeof answers[QUESTIONS.WORKOUT_DURATION] === "number" ? durationOptions[answers[QUESTIONS.WORKOUT_DURATION] as number] : "30–45 min";
 
   // Additional notes (optional textarea)
   const additionalNotes = typeof answers[QUESTIONS.ADDITIONAL_NOTES] === "string"
@@ -163,7 +151,6 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
     goal,
     workoutsPerWeek,
     duration,
-    durationRange,
     experience,
     trainingSplit,
     exerciseVariability: "Balanced",

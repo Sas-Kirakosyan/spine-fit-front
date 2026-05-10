@@ -26,6 +26,17 @@ export function exerciseCountForDuration(duration: string): string {
   if (/60\s*[-–]\s*90/.test(lower)) return "7-9";
   if (/90/.test(lower)) return "8-12";
 
+  // Handle "1 hr", "1 hr 30 min", "2 hr" UI labels — convert to minutes before digit extraction
+  const hrMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:hr|hour)s?(?:\s*(\d+)\s*min)?/);
+  if (hrMatch) {
+    const totalMins = parseFloat(hrMatch[1]) * 60 + (hrMatch[2] ? parseInt(hrMatch[2], 10) : 0);
+    if (totalMins <= 30) return "2-3";
+    if (totalMins <= 45) return "4-5";
+    if (totalMins <= 60) return "5-7";
+    if (totalMins <= 90) return "7-9";
+    return "8-12";
+  }
+
   const match = lower.match(/\d+/);
   const mins = match ? parseInt(match[0], 10) : NaN;
 
@@ -50,20 +61,28 @@ function hasLumbarOrSciaticInvolvement(painLocations: string[] | undefined): boo
 }
 
 /**
+ * Returns true if "sitting" is one of the user's reported pain triggers.
+ */
+function hasSittingTrigger(painTriggers: string[] | undefined): boolean {
+  if (!painTriggers || painTriggers.length === 0) return false;
+  return painTriggers.some((t) => t.toLowerCase().includes("sitting"));
+}
+
+/**
  * When the user is currently symptomatic, the user-selected goal (e.g. hypertrophy,
  * fat loss) is overridden so the AI prioritizes recovery and symptom management.
  */
 export const ACTIVE_PAIN_GOAL = "Pain Recovery & Symptom Management";
 
-export function resolveEffectiveGoal(goal: string, painStatus?: string): string {
+export function resolveEffectiveGoal(goal: string, painStatus?: string, originalGoal?: string): string {
   const isActive = (painStatus ?? "").toLowerCase().startsWith("active");
   if (!isActive) return goal;
-  // Idempotent: if the goal already starts with the override prefix (e.g. on
-  // regeneration from already-overridden settings), return it unchanged so we
-  // don't nest the wrapper repeatedly.
-  if (goal && goal.startsWith(ACTIVE_PAIN_GOAL)) return goal;
-  return goal
-    ? `${ACTIVE_PAIN_GOAL} (auto-set due to active back symptoms — original goal: "${goal}")`
+  // contextGoal: the user's actual selection before any override.
+  // On first generation it's the goal string itself; on regeneration it comes
+  // from the dedicated originalGoal field so we don't re-parse the stored value.
+  const contextGoal = originalGoal ?? (goal.startsWith(ACTIVE_PAIN_GOAL) ? undefined : goal);
+  return contextGoal
+    ? `${ACTIVE_PAIN_GOAL} (auto-set due to active back symptoms — original goal: "${contextGoal}")`
     : ACTIVE_PAIN_GOAL;
 }
 
@@ -356,9 +375,12 @@ function buildAgeGuidance(age: number | null): string {
   return "";
 }
 
-export function buildHealthyPrompt(duration: string, age: number | null = null): string {
+export function buildHealthyPrompt(duration: string, age: number | null = null, cardio?: string): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const ageGuidance = buildAgeGuidance(age);
+  const cardioBlock = cardio === "On"
+    ? `\n\nCARDIO WARM-UP: The user opted in to cardio. Each training day must begin with 10–15 minutes of cardio (treadmill, stationary bike, elliptical, or rowing machine). Prepend "WARM-UP: 10–15 min cardio (treadmill / bike / elliptical / rowing). | " to the notes of the FIRST exercise in each day. Cardio occupies ~12 min of session time — target the lower bound of the ${exerciseRange} exercise range rather than the upper bound.`
+    : "";
 
   return `You are an expert strength and hypertrophy coach who programs with spine-safe defaults. The user has no current or past back pain, so train them for performance — but never sacrifice form or load progression sanity.${ageGuidance}
 
@@ -401,7 +423,7 @@ RULES (apply to every plan you generate):
     - EQUIPMENT PREFERENCE: If notes specify equipment preference (e.g., "I hate machines, prefer free weights"), shift selection toward the preferred equipment when comparable options exist.
 20. PLAN NAME: Set planName to a concise descriptive name, e.g. "Strength Upper/Lower 4W" or "Hypertrophy PPL 4W".
 21. WEEKS: Always set weeks to 4.
-22. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 6, 7, 8) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
+22. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 6, 7, 8) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.${cardioBlock}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -413,11 +435,18 @@ export function buildRecoveredPrompt(
   duration: string,
   painLocations?: string[],
   age: number | null = null,
+  painTriggers?: string[],
+  cardio?: string,
 ): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const includeLumbarProtocol = hasLumbarOrSciaticInvolvement(painLocations);
   const ruleOffset = includeLumbarProtocol ? 1 : 0;
   const ageGuidance = buildAgeGuidance(age);
+  const includeSittingBreak = hasSittingTrigger(painTriggers);
+  const sittingOffset = includeSittingBreak ? 1 : 0;
+  const cardioBlock = cardio === "On"
+    ? `\n\nCARDIO WARM-UP: The user opted in to cardio. Each training day must begin with 10–15 minutes of light-to-moderate cardio (stationary bike, treadmill, or elliptical). Prepend "WARM-UP: 10–15 min cardio (stationary bike / treadmill / elliptical). | " to the notes of the FIRST exercise in each day. Cardio occupies ~12 min of session time — target the lower bound of the ${exerciseRange} exercise range rather than the upper bound.`
+    : "";
 
   const lumbarProtocolBlock = includeLumbarProtocol
     ? `
@@ -427,6 +456,14 @@ export function buildRecoveredPrompt(
     - PREFERRED MOVEMENTS: When available in the provided list, prioritize these exercises as they decompress and stabilize the lumbar spine without axial load: cable knee drives, single-leg glute bridge, cable kickbacks.
     - UNILATERAL UPPER BODY: For bicep and shoulder exercises, prefer single-arm (unilateral) variations where the non-working arm braces against a bench, rack, or knee for lumbar offloading. Append "Brace free hand against a surface to keep spine neutral and reduce lumbar shear." to the notes of every such exercise.
     - SPINAL LOADING ORDER: Place core stabilization exercises early in the session (directly after any warm-up), before compound lower-body or loaded spinal movements, to pre-activate stabilizers.`
+    : "";
+
+  const sittingBreakBlock = includeSittingBreak
+    ? `
+${23 + ruleOffset}. SITTING BREAK PROTOCOL (active — "Sitting for longer than 20–30 minutes" is a pain trigger for this user):
+    Prolonged sitting triggers this user's symptoms. Build in a standing break after every 2 consecutive exercises to keep cumulative seated time well below their threshold.
+    - Append " | Standing break: stand and walk 60–90 s before starting this exercise." to the notes of exercises at positions 3, 5, 7, … (every 2nd exercise starting from the 3rd) in each day's ordered exercise list.
+    - For any seated exercise in the session (regardless of position), also append " | Re-stand between sets — do not remain seated during the full rest period." to its notes.`
     : "";
 
   return `You are an expert spine-safe fitness coach specializing in back rehabilitation. The user has a past history of back pain or injury but is currently asymptomatic. Build strength conservatively — they are ready to load again, but the goal is durable, controlled progression that does not flare old patterns.${ageGuidance}
@@ -471,9 +508,9 @@ RULES (apply to every plan you generate):
 21. ADDITIONAL USER NOTES: If "Additional user notes" are present in the user profile, treat them as high-priority personal constraints or preferences. They override default choices.
     - BODY PART FOCUS: If notes mention focusing on specific muscle groups or regions (e.g., "focus on legs", "more back work", "want bigger arms"), allocate at least 50% of total weekly working sets to those regions. On split routines, prioritize adding exercises to the days that train those regions rather than crowding non-focus days.
     - EQUIPMENT PREFERENCE: If notes specify equipment preference (e.g., "I hate machines, prefer free weights"), shift selection toward the preferred equipment when comparable options exist.
-22. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".${lumbarProtocolBlock}
-${23 + ruleOffset}. WEEKS: Always set weeks to 4.
-${24 + ruleOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
+22. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".${lumbarProtocolBlock}${sittingBreakBlock}
+${23 + ruleOffset + sittingOffset}. WEEKS: Always set weeks to 4.
+${24 + ruleOffset + sittingOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.${cardioBlock}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -481,9 +518,19 @@ ${24 + ruleOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule bec
 /*  Currently in pain. Prioritize pain-free movement and low fatigue.  */
 /* ------------------------------------------------------------------ */
 
-export function buildActivePrompt(duration: string, painLevel?: number, age: number | null = null): string {
+export function buildActivePrompt(
+  duration: string,
+  painLevel?: number,
+  age: number | null = null,
+  painTriggers?: string[],
+  cardio?: string,
+): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const ageGuidance = buildAgeGuidance(age);
+  const includeSittingBreak = hasSittingTrigger(painTriggers);
+  const cardioBlock = cardio === "On"
+    ? `\n\nCARDIO WARM-UP: The user opted in to cardio. Each training day must begin with 10–15 minutes of light, low-impact cardio (stationary bike at low resistance, treadmill walk at 4–5 km/h, or elliptical). Prepend "WARM-UP: 10–15 min light cardio (stationary bike / treadmill walk / elliptical). Stop if symptoms worsen. | " to the notes of the FIRST exercise in each day. Cardio occupies ~12 min of session time — target the lower bound of the ${exerciseRange} exercise range rather than the upper bound.`
+    : "";
 
   const painLevelGuidance =
     painLevel !== undefined && painLevel >= 7
@@ -537,7 +584,11 @@ RULES (apply to every plan you generate):
     - PREFERRED MOVEMENTS: When available in the provided list, prioritize these exercises as they decompress and stabilize the lumbar spine without axial load: cable knee drives, single-leg glute bridge, cable kickbacks.
     - UNILATERAL UPPER BODY: For bicep and shoulder exercises, prefer single-arm (unilateral) variations where the non-working arm braces against a bench, rack, or knee for lumbar offloading. Append "Brace free hand against a surface to keep spine neutral and reduce lumbar shear." to the notes of every such exercise.
     - SPINAL LOADING ORDER: Place core stabilization exercises early in the session (directly after any warm-up), before compound lower-body or loaded spinal movements, to pre-activate stabilizers.
-26. HIP ADDUCTION PLACEMENT: Hip adduction exercises (e.g., "Seated Hip Adduction", "Standing Cable Hip Adduction") strengthen pelvic stability and reduce compensatory lower-back strain. When the plan has a Lower Body or Legs day, include at least one adduction exercise on that day. NEVER place hip adduction exercises on an Upper Body, Push, Pull, or Arms day. If the split has no lower-body day (e.g., Bro Split with no Legs day, or upper-only weeks), include one adduction exercise on any day. Including both seated and standing variants is encouraged but not required.`;
+26. HIP ADDUCTION PLACEMENT: Hip adduction exercises (e.g., "Seated Hip Adduction", "Standing Cable Hip Adduction") strengthen pelvic stability and reduce compensatory lower-back strain. When the plan has a Lower Body or Legs day, include at least one adduction exercise on that day. NEVER place hip adduction exercises on an Upper Body, Push, Pull, or Arms day. If the split has no lower-body day (e.g., Bro Split with no Legs day, or upper-only weeks), include one adduction exercise on any day. Including both seated and standing variants is encouraged but not required.${includeSittingBreak ? `
+27. SITTING BREAK PROTOCOL (active — "Sitting for longer than 20–30 minutes" is a pain trigger for this user):
+    Prolonged sitting triggers this user's symptoms. Build in a standing break after every 2 consecutive exercises to keep cumulative seated time well below their threshold.
+    - Append " | Standing break: stand and walk 60–90 s before starting this exercise." to the notes of exercises at positions 3, 5, 7, … (every 2nd exercise starting from the 3rd) in each day's ordered exercise list.
+    - For any seated exercise in the session (regardless of position), also append " | Re-stand between sets — do not remain seated during the full rest period." to its notes.` : ""}${cardioBlock}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -550,12 +601,12 @@ export function buildSystemInstruction(quiz: ParsedQuizData): string {
   const age = resolveAge(quiz);
 
   if (status.startsWith("active")) {
-    return buildActivePrompt(quiz.duration, quiz.painLevel, age);
+    return buildActivePrompt(quiz.duration, quiz.painLevel, age, quiz.painTriggers, quiz.cardio);
   }
   if (status.startsWith("recovered")) {
-    return buildRecoveredPrompt(quiz.duration, quiz.painLocation, age);
+    return buildRecoveredPrompt(quiz.duration, quiz.painLocation, age, quiz.painTriggers, quiz.cardio);
   }
-  return buildHealthyPrompt(quiz.duration, age);
+  return buildHealthyPrompt(quiz.duration, age, quiz.cardio);
 }
 
 function buildSplitDayGuidance(trainingSplit: string): string {
@@ -612,7 +663,7 @@ export function buildUserPrompt(quiz: ParsedQuizData, exercises: PromptExercise[
     quiz.painStatus,
   );
   const splitGuidance = buildSplitDayGuidance(recommendation.effectiveSplit);
-  const effectiveGoal = resolveEffectiveGoal(quiz.goal, quiz.painStatus);
+  const effectiveGoal = resolveEffectiveGoal(quiz.goal, quiz.painStatus, quiz.originalGoal);
 
   const variabilityLine = quiz.exerciseVariability
     ? `- Exercise variability: ${quiz.exerciseVariability} (${quiz.exerciseVariability.toLowerCase().includes("high") ? "rotate exercises across days, avoid repeating the same exercise on consecutive days" : "keep movements consistent across weeks for skill development"})`

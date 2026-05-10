@@ -290,15 +290,30 @@ function ActiveWorkoutPage({
               const isCompleted = completedExerciseIdsSet.has(
                 String(exercise.id)
               );
+              const note = exercise.restriction_note ?? "";
+              const needsStandingBreak = note.includes("Standing break");
+              const isSeated = note.includes("Re-stand between sets");
               return (
-                <ExerciseCard
-                  key={`${exercise.id}-${index}`}
-                  exercise={exercise}
-                  isCompleted={isCompleted}
-                  onCardClick={() => onOpenExerciseSets(exercise)}
-                  onDetailsClick={() => onOpenExerciseSets(exercise)}
-                  onActionClick={() => setActionExercise(exercise)}
-                />
+                <div key={`${exercise.id}-${index}`}>
+                  {needsStandingBreak && (
+                    <div className="flex items-center gap-2 rounded-[10px] bg-amber-500/10 px-3 py-2 ring-1 ring-amber-500/25 mb-3">
+                      <svg className="h-4 w-4 shrink-0 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                      </svg>
+                      <span className="text-[12px] font-medium text-amber-300">
+                        {t("workoutPage.labels.standingBreak")}
+                      </span>
+                    </div>
+                  )}
+                  <ExerciseCard
+                    exercise={exercise}
+                    isCompleted={isCompleted}
+                    onCardClick={() => onOpenExerciseSets(exercise)}
+                    onDetailsClick={() => onOpenExerciseSets(exercise)}
+                    onActionClick={() => setActionExercise(exercise)}
+                    seatedWarning={isSeated && !isCompleted}
+                  />
+                </div>
               );
             })}
           </div>

@@ -85,13 +85,13 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   );
   const [language, setLanguage] = useState(() => {
     const currentLang = i18n.language;
-    return currentLang === "ru" ? "Russian" : "English";
+    return currentLang.startsWith("ru") ? "Russian" : "English";
   });
   // Sync language state with i18next language
   useEffect(() => {
     const handleLanguageChanged = () => {
       const currentLang = i18n.language;
-      setLanguage(currentLang === "ru" ? "Russian" : "English");
+      setLanguage(currentLang.startsWith("ru") ? "Russian" : "English");
     };
 
     i18n.on("languageChanged", handleLanguageChanged);

@@ -81,6 +81,7 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   };
 
   const handleRegeneratePlan = async () => {
+    setIsRegenerateModalOpen(false);
     setIsRegenerating(true);
     setApiPhase("pending");
     setRegenerateError(null);

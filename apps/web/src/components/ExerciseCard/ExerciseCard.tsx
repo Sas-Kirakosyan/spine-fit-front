@@ -17,6 +17,7 @@ interface ExerciseCardProps {
   onDetailsClick: () => void;
   onActionClick: () => void;
   isCompleted?: boolean;
+  seatedWarning?: boolean;
 }
 
 export function ExerciseCard({
@@ -25,6 +26,7 @@ export function ExerciseCard({
   onDetailsClick,
   onActionClick,
   isCompleted = false,
+  seatedWarning = false,
 }: ExerciseCardProps) {
   const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
@@ -93,6 +95,15 @@ export function ExerciseCard({
             </>
           )}
         </div>
+        {seatedWarning && !isCompleted && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-400 ring-1 ring-amber-500/30">
+            <svg className="h-3 w-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            {t("exerciseCard.seatedWarning")}
+          </span>
+        )}
         {isCompleted && (
           <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-300">
             {t("exerciseCard.done")}
