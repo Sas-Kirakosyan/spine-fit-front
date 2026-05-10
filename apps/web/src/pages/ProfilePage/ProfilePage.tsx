@@ -300,7 +300,7 @@ function ProfilePage({
       ...currentSettings,
       painStatus: painStatus || undefined,
       painLocation: !isHealthy && painLocation.length ? painLocation : undefined,
-      painLevel: painStatus === "Active Symptoms" ? painLevel : undefined,
+      painLevel: isHealthy ? undefined : painLevel,
       painTriggers: !isHealthy && painTriggers.length ? painTriggers : undefined,
     });
 
