@@ -141,7 +141,6 @@ export interface PlanSettings {
   weight?: string;
   weightUnit?: string;
   dateOfBirth?: string;
-  ageRange?: string;
   bodyType?: string;
   // Pain profile
   painStatus?: string;

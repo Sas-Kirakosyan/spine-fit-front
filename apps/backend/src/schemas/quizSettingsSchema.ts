@@ -28,7 +28,6 @@ export const quizSettingsSchema = z.looseObject({
   painTriggers: z.array(z.string()).optional(),
   canSquat: z.string().optional(),
   additionalNotes: z.string().optional(),
-  ageRange: z.string().optional(),
 }).transform((data) => ({
   ...data,
   duration: data.duration ?? "",
