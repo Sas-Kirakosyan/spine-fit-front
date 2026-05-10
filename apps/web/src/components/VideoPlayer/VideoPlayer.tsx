@@ -49,12 +49,45 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
 
   const toggleFullscreen = useCallback(() => {
     const el = containerRef.current;
+    const v = videoRef.current;
     if (!el) return;
-    if (document.fullscreenElement) {
-      void document.exitFullscreen();
-    } else {
-      void el.requestFullscreen?.();
+
+    const doc = document as Document & {
+      webkitFullscreenElement?: Element | null;
+      webkitExitFullscreen?: () => Promise<void> | void;
+    };
+    const elAny = el as HTMLDivElement & {
+      webkitRequestFullscreen?: () => Promise<void> | void;
+    };
+    const vAny = v as (HTMLVideoElement & {
+      webkitEnterFullscreen?: () => void;
+      webkitExitFullscreen?: () => void;
+    }) | null;
+
+    const inFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement);
+
+    if (inFs) {
+      const exit = doc.exitFullscreen?.bind(doc) ?? doc.webkitExitFullscreen?.bind(doc);
+      if (exit) {
+        Promise.resolve(exit()).catch((err) => console.warn("exitFullscreen failed", err));
+      } else {
+        vAny?.webkitExitFullscreen?.();
+      }
+      return;
     }
+
+    const request =
+      elAny.requestFullscreen?.bind(elAny) ?? elAny.webkitRequestFullscreen?.bind(elAny);
+    if (request) {
+      Promise.resolve(request()).catch((err) => {
+        console.warn("requestFullscreen failed, falling back to video element", err);
+        vAny?.webkitEnterFullscreen?.();
+      });
+      return;
+    }
+
+    // iOS Safari: container can't go fullscreen, only the <video> element can.
+    vAny?.webkitEnterFullscreen?.();
   }, []);
 
   const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,9 +132,22 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
   }, [speedIndex]);
 
   useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    const v = videoRef.current;
+    const doc = document as Document & { webkitFullscreenElement?: Element | null };
+    const onFsChange = () => setIsFullscreen(!!(doc.fullscreenElement || doc.webkitFullscreenElement));
+    const onIosBegin = () => setIsFullscreen(true);
+    const onIosEnd = () => setIsFullscreen(false);
+
     document.addEventListener("fullscreenchange", onFsChange);
-    return () => document.removeEventListener("fullscreenchange", onFsChange);
+    document.addEventListener("webkitfullscreenchange", onFsChange);
+    v?.addEventListener("webkitbeginfullscreen", onIosBegin);
+    v?.addEventListener("webkitendfullscreen", onIosEnd);
+    return () => {
+      document.removeEventListener("fullscreenchange", onFsChange);
+      document.removeEventListener("webkitfullscreenchange", onFsChange);
+      v?.removeEventListener("webkitbeginfullscreen", onIosBegin);
+      v?.removeEventListener("webkitendfullscreen", onIosEnd);
+    };
   }, []);
 
   useEffect(() => {
