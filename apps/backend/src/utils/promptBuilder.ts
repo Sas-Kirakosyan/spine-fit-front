@@ -26,6 +26,17 @@ export function exerciseCountForDuration(duration: string): string {
   if (/60\s*[-–]\s*90/.test(lower)) return "7-9";
   if (/90/.test(lower)) return "8-12";
 
+  // Handle "1 hr", "1 hr 30 min", "2 hr" UI labels — convert to minutes before digit extraction
+  const hrMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:hr|hour)s?(?:\s*(\d+)\s*min)?/);
+  if (hrMatch) {
+    const totalMins = parseFloat(hrMatch[1]) * 60 + (hrMatch[2] ? parseInt(hrMatch[2], 10) : 0);
+    if (totalMins <= 30) return "2-3";
+    if (totalMins <= 45) return "4-5";
+    if (totalMins <= 60) return "5-7";
+    if (totalMins <= 90) return "7-9";
+    return "8-12";
+  }
+
   const match = lower.match(/\d+/);
   const mins = match ? parseInt(match[0], 10) : NaN;
 
@@ -364,9 +375,12 @@ function buildAgeGuidance(age: number | null): string {
   return "";
 }
 
-export function buildHealthyPrompt(duration: string, age: number | null = null): string {
+export function buildHealthyPrompt(duration: string, age: number | null = null, cardio?: string): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const ageGuidance = buildAgeGuidance(age);
+  const cardioBlock = cardio === "On"
+    ? `\n\nCARDIO WARM-UP: The user opted in to cardio. Each training day must begin with 10–15 minutes of cardio (treadmill, stationary bike, elliptical, or rowing machine). Prepend "WARM-UP: 10–15 min cardio (treadmill / bike / elliptical / rowing). | " to the notes of the FIRST exercise in each day. Cardio occupies ~12 min of session time — target the lower bound of the ${exerciseRange} exercise range rather than the upper bound.`
+    : "";
 
   return `You are an expert strength and hypertrophy coach who programs with spine-safe defaults. The user has no current or past back pain, so train them for performance — but never sacrifice form or load progression sanity.${ageGuidance}
 
@@ -409,7 +423,7 @@ RULES (apply to every plan you generate):
     - EQUIPMENT PREFERENCE: If notes specify equipment preference (e.g., "I hate machines, prefer free weights"), shift selection toward the preferred equipment when comparable options exist.
 20. PLAN NAME: Set planName to a concise descriptive name, e.g. "Strength Upper/Lower 4W" or "Hypertrophy PPL 4W".
 21. WEEKS: Always set weeks to 4.
-22. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 6, 7, 8) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
+22. RULE VIOLATIONS: If you cannot satisfy a structural rule (rules 6, 7, 8) because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.${cardioBlock}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -422,6 +436,7 @@ export function buildRecoveredPrompt(
   painLocations?: string[],
   age: number | null = null,
   painTriggers?: string[],
+  cardio?: string,
 ): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const includeLumbarProtocol = hasLumbarOrSciaticInvolvement(painLocations);
@@ -429,6 +444,9 @@ export function buildRecoveredPrompt(
   const ageGuidance = buildAgeGuidance(age);
   const includeSittingBreak = hasSittingTrigger(painTriggers);
   const sittingOffset = includeSittingBreak ? 1 : 0;
+  const cardioBlock = cardio === "On"
+    ? `\n\nCARDIO WARM-UP: The user opted in to cardio. Each training day must begin with 10–15 minutes of light-to-moderate cardio (stationary bike, treadmill, or elliptical). Prepend "WARM-UP: 10–15 min cardio (stationary bike / treadmill / elliptical). | " to the notes of the FIRST exercise in each day. Cardio occupies ~12 min of session time — target the lower bound of the ${exerciseRange} exercise range rather than the upper bound.`
+    : "";
 
   const lumbarProtocolBlock = includeLumbarProtocol
     ? `
@@ -492,7 +510,7 @@ RULES (apply to every plan you generate):
     - EQUIPMENT PREFERENCE: If notes specify equipment preference (e.g., "I hate machines, prefer free weights"), shift selection toward the preferred equipment when comparable options exist.
 22. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".${lumbarProtocolBlock}${sittingBreakBlock}
 ${23 + ruleOffset + sittingOffset}. WEEKS: Always set weeks to 4.
-${24 + ruleOffset + sittingOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
+${24 + ruleOffset + sittingOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.${cardioBlock}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -505,10 +523,14 @@ export function buildActivePrompt(
   painLevel?: number,
   age: number | null = null,
   painTriggers?: string[],
+  cardio?: string,
 ): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const ageGuidance = buildAgeGuidance(age);
   const includeSittingBreak = hasSittingTrigger(painTriggers);
+  const cardioBlock = cardio === "On"
+    ? `\n\nCARDIO WARM-UP: The user opted in to cardio. Each training day must begin with 10–15 minutes of light, low-impact cardio (stationary bike at low resistance, treadmill walk at 4–5 km/h, or elliptical). Prepend "WARM-UP: 10–15 min light cardio (stationary bike / treadmill walk / elliptical). Stop if symptoms worsen. | " to the notes of the FIRST exercise in each day. Cardio occupies ~12 min of session time — target the lower bound of the ${exerciseRange} exercise range rather than the upper bound.`
+    : "";
 
   const painLevelGuidance =
     painLevel !== undefined && painLevel >= 7
@@ -566,7 +588,7 @@ RULES (apply to every plan you generate):
 27. SITTING BREAK PROTOCOL (active — "Sitting for longer than 20–30 minutes" is a pain trigger for this user):
     Prolonged sitting triggers this user's symptoms. Build in a standing break after every 2 consecutive exercises to keep cumulative seated time well below their threshold.
     - Append " | Standing break: stand and walk 60–90 s before starting this exercise." to the notes of exercises at positions 3, 5, 7, … (every 2nd exercise starting from the 3rd) in each day's ordered exercise list.
-    - For any seated exercise in the session (regardless of position), also append " | Re-stand between sets — do not remain seated during the full rest period." to its notes.` : ""}`;
+    - For any seated exercise in the session (regardless of position), also append " | Re-stand between sets — do not remain seated during the full rest period." to its notes.` : ""}${cardioBlock}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -579,12 +601,12 @@ export function buildSystemInstruction(quiz: ParsedQuizData): string {
   const age = resolveAge(quiz);
 
   if (status.startsWith("active")) {
-    return buildActivePrompt(quiz.duration, quiz.painLevel, age, quiz.painTriggers);
+    return buildActivePrompt(quiz.duration, quiz.painLevel, age, quiz.painTriggers, quiz.cardio);
   }
   if (status.startsWith("recovered")) {
-    return buildRecoveredPrompt(quiz.duration, quiz.painLocation, age, quiz.painTriggers);
+    return buildRecoveredPrompt(quiz.duration, quiz.painLocation, age, quiz.painTriggers, quiz.cardio);
   }
-  return buildHealthyPrompt(quiz.duration, age);
+  return buildHealthyPrompt(quiz.duration, age, quiz.cardio);
 }
 
 function buildSplitDayGuidance(trainingSplit: string): string {

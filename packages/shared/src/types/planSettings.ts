@@ -127,7 +127,6 @@ export interface PlanSettings {
   goal: string;
   workoutsPerWeek: string;
   duration: string;
-  durationRange?: string; // Store the original range (e.g., "30–45 min")
   experience: string;
   trainingSplit: string;
   exerciseVariability: string;

@@ -3,7 +3,6 @@ export interface ParsedQuizData {
   originalGoal?: string;
   workoutsPerWeek: string;
   duration: string;
-  durationRange: string;
   experience: string;
   trainingSplit: string;
   exerciseVariability: string;

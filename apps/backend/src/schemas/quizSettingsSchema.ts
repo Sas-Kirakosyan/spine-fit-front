@@ -8,7 +8,6 @@ export const quizSettingsSchema = z.looseObject({
   originalGoal: z.string().optional(),
   workoutsPerWeek: z.coerce.string(),
   duration: optionalStr,
-  durationRange: optionalStr,
   experience: z.string(),
   trainingSplit: optionalStr,
   exerciseVariability: optionalStr.pipe(z.string().default("Balanced")),
@@ -33,7 +32,6 @@ export const quizSettingsSchema = z.looseObject({
 }).transform((data) => ({
   ...data,
   duration: data.duration ?? "",
-  durationRange: data.durationRange ?? data.duration ?? "",
   trainingSplit: data.trainingSplit ?? "",
 }));
 
