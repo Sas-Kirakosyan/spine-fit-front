@@ -50,6 +50,14 @@ function hasLumbarOrSciaticInvolvement(painLocations: string[] | undefined): boo
 }
 
 /**
+ * Returns true if "sitting" is one of the user's reported pain triggers.
+ */
+function hasSittingTrigger(painTriggers: string[] | undefined): boolean {
+  if (!painTriggers || painTriggers.length === 0) return false;
+  return painTriggers.some((t) => t.toLowerCase().includes("sitting"));
+}
+
+/**
  * When the user is currently symptomatic, the user-selected goal (e.g. hypertrophy,
  * fat loss) is overridden so the AI prioritizes recovery and symptom management.
  */
@@ -413,11 +421,14 @@ export function buildRecoveredPrompt(
   duration: string,
   painLocations?: string[],
   age: number | null = null,
+  painTriggers?: string[],
 ): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const includeLumbarProtocol = hasLumbarOrSciaticInvolvement(painLocations);
   const ruleOffset = includeLumbarProtocol ? 1 : 0;
   const ageGuidance = buildAgeGuidance(age);
+  const includeSittingBreak = hasSittingTrigger(painTriggers);
+  const sittingOffset = includeSittingBreak ? 1 : 0;
 
   const lumbarProtocolBlock = includeLumbarProtocol
     ? `
@@ -427,6 +438,14 @@ export function buildRecoveredPrompt(
     - PREFERRED MOVEMENTS: When available in the provided list, prioritize these exercises as they decompress and stabilize the lumbar spine without axial load: cable knee drives, single-leg glute bridge, cable kickbacks.
     - UNILATERAL UPPER BODY: For bicep and shoulder exercises, prefer single-arm (unilateral) variations where the non-working arm braces against a bench, rack, or knee for lumbar offloading. Append "Brace free hand against a surface to keep spine neutral and reduce lumbar shear." to the notes of every such exercise.
     - SPINAL LOADING ORDER: Place core stabilization exercises early in the session (directly after any warm-up), before compound lower-body or loaded spinal movements, to pre-activate stabilizers.`
+    : "";
+
+  const sittingBreakBlock = includeSittingBreak
+    ? `
+${23 + ruleOffset}. SITTING BREAK PROTOCOL (active — "Sitting for longer than 20–30 minutes" is a pain trigger for this user):
+    Prolonged sitting triggers this user's symptoms. Build in a standing break after every 2 consecutive exercises to keep cumulative seated time well below their threshold.
+    - Append " | Standing break: stand and walk 60–90 s before starting this exercise." to the notes of exercises at positions 3, 5, 7, … (every 2nd exercise starting from the 3rd) in each day's ordered exercise list.
+    - For any seated exercise in the session (regardless of position), also append " | Re-stand between sets — do not remain seated during the full rest period." to its notes.`
     : "";
 
   return `You are an expert spine-safe fitness coach specializing in back rehabilitation. The user has a past history of back pain or injury but is currently asymptomatic. Build strength conservatively — they are ready to load again, but the goal is durable, controlled progression that does not flare old patterns.${ageGuidance}
@@ -471,9 +490,9 @@ RULES (apply to every plan you generate):
 21. ADDITIONAL USER NOTES: If "Additional user notes" are present in the user profile, treat them as high-priority personal constraints or preferences. They override default choices.
     - BODY PART FOCUS: If notes mention focusing on specific muscle groups or regions (e.g., "focus on legs", "more back work", "want bigger arms"), allocate at least 50% of total weekly working sets to those regions. On split routines, prioritize adding exercises to the days that train those regions rather than crowding non-focus days.
     - EQUIPMENT PREFERENCE: If notes specify equipment preference (e.g., "I hate machines, prefer free weights"), shift selection toward the preferred equipment when comparable options exist.
-22. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".${lumbarProtocolBlock}
-${23 + ruleOffset}. WEEKS: Always set weeks to 4.
-${24 + ruleOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
+22. PLAN NAME: Set planName to a concise descriptive name, e.g. "Back Rehab Full Body 4W" or "Strength Upper/Lower 4W".${lumbarProtocolBlock}${sittingBreakBlock}
+${23 + ruleOffset + sittingOffset}. WEEKS: Always set weeks to 4.
+${24 + ruleOffset + sittingOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule because the provided exercise list lacks the required movement type, omit that requirement silently rather than inventing an exercise ID. Never hallucinate an exercise to satisfy a rule.`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -481,9 +500,15 @@ ${24 + ruleOffset}. RULE VIOLATIONS: If you cannot satisfy a structural rule bec
 /*  Currently in pain. Prioritize pain-free movement and low fatigue.  */
 /* ------------------------------------------------------------------ */
 
-export function buildActivePrompt(duration: string, painLevel?: number, age: number | null = null): string {
+export function buildActivePrompt(
+  duration: string,
+  painLevel?: number,
+  age: number | null = null,
+  painTriggers?: string[],
+): string {
   const exerciseRange = exerciseCountForDuration(duration);
   const ageGuidance = buildAgeGuidance(age);
+  const includeSittingBreak = hasSittingTrigger(painTriggers);
 
   const painLevelGuidance =
     painLevel !== undefined && painLevel >= 7
@@ -537,7 +562,11 @@ RULES (apply to every plan you generate):
     - PREFERRED MOVEMENTS: When available in the provided list, prioritize these exercises as they decompress and stabilize the lumbar spine without axial load: cable knee drives, single-leg glute bridge, cable kickbacks.
     - UNILATERAL UPPER BODY: For bicep and shoulder exercises, prefer single-arm (unilateral) variations where the non-working arm braces against a bench, rack, or knee for lumbar offloading. Append "Brace free hand against a surface to keep spine neutral and reduce lumbar shear." to the notes of every such exercise.
     - SPINAL LOADING ORDER: Place core stabilization exercises early in the session (directly after any warm-up), before compound lower-body or loaded spinal movements, to pre-activate stabilizers.
-26. HIP ADDUCTION PLACEMENT: Hip adduction exercises (e.g., "Seated Hip Adduction", "Standing Cable Hip Adduction") strengthen pelvic stability and reduce compensatory lower-back strain. When the plan has a Lower Body or Legs day, include at least one adduction exercise on that day. NEVER place hip adduction exercises on an Upper Body, Push, Pull, or Arms day. If the split has no lower-body day (e.g., Bro Split with no Legs day, or upper-only weeks), include one adduction exercise on any day. Including both seated and standing variants is encouraged but not required.`;
+26. HIP ADDUCTION PLACEMENT: Hip adduction exercises (e.g., "Seated Hip Adduction", "Standing Cable Hip Adduction") strengthen pelvic stability and reduce compensatory lower-back strain. When the plan has a Lower Body or Legs day, include at least one adduction exercise on that day. NEVER place hip adduction exercises on an Upper Body, Push, Pull, or Arms day. If the split has no lower-body day (e.g., Bro Split with no Legs day, or upper-only weeks), include one adduction exercise on any day. Including both seated and standing variants is encouraged but not required.${includeSittingBreak ? `
+27. SITTING BREAK PROTOCOL (active — "Sitting for longer than 20–30 minutes" is a pain trigger for this user):
+    Prolonged sitting triggers this user's symptoms. Build in a standing break after every 2 consecutive exercises to keep cumulative seated time well below their threshold.
+    - Append " | Standing break: stand and walk 60–90 s before starting this exercise." to the notes of exercises at positions 3, 5, 7, … (every 2nd exercise starting from the 3rd) in each day's ordered exercise list.
+    - For any seated exercise in the session (regardless of position), also append " | Re-stand between sets — do not remain seated during the full rest period." to its notes.` : ""}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -550,10 +579,10 @@ export function buildSystemInstruction(quiz: ParsedQuizData): string {
   const age = resolveAge(quiz);
 
   if (status.startsWith("active")) {
-    return buildActivePrompt(quiz.duration, quiz.painLevel, age);
+    return buildActivePrompt(quiz.duration, quiz.painLevel, age, quiz.painTriggers);
   }
   if (status.startsWith("recovered")) {
-    return buildRecoveredPrompt(quiz.duration, quiz.painLocation, age);
+    return buildRecoveredPrompt(quiz.duration, quiz.painLocation, age, quiz.painTriggers);
   }
   return buildHealthyPrompt(quiz.duration, age);
 }
