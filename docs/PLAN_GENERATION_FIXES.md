@@ -1,6 +1,6 @@
 # Plan Generation — Architecture & Current State
 
-**Last Updated:** 2026-05-01
+**Last Updated:** 2026-05-10
 **Status:** ✅ LLM-based generation active
 
 ---
@@ -38,7 +38,8 @@ GeneratedPlanResult
 | `apps/backend/src/utils/promptBuilder.ts`    | Builds system instruction and user prompt                           |
 | `apps/backend/src/utils/splitUtils.ts`       | Maps training split → split type identifier and target muscles      |
 | `apps/backend/src/schemas/planSchema.ts`     | Gemini response schema (`PLAN_SCHEMA`)                              |
-| `apps/backend/src/types.ts`                  | `ParsedQuizData` shape consumed by the prompt builder               |
+| `apps/backend/src/types.ts`                  | `ParsedQuizData` shape — includes `goal` (effective) and `originalGoal?` (user selection before any override) |
+| `apps/backend/src/schemas/quizSettingsSchema.ts` | Zod schema for the `/regenerate` endpoint — validates `originalGoal` passthrough |
 
 ### Models
 
@@ -83,6 +84,16 @@ The original `back_issue_restrictions` array is flattened to a minimal `{ issue_
 | `active…`                        | `buildActivePrompt(duration, painLevel)` |
 | `recovered…`                     | `buildRecoveredPrompt(duration, painLocation)` |
 | anything else / undefined        | `buildHealthyPrompt(duration)` (default) |
+
+### Goal override — `resolveEffectiveGoal(goal, painStatus?, originalGoal?)`
+
+When `painStatus` starts with `"active"`, the user's goal is overridden to `ACTIVE_PAIN_GOAL = "Pain Recovery & Symptom Management"`. The original selection is passed as `originalGoal` so the AI prompt can display context (`"auto-set — original goal: \"...\""`) without embedding that string in stored settings.
+
+`GeneratedPlanResult.settings` stores:
+- `goal` — the effective goal label (clean, never contains embedded metadata)
+- `originalGoal` — the user's quiz selection, present only when an active-symptoms override occurred
+
+On regeneration the `originalGoal` field is carried through `quizSettingsSchema` and forwarded to `resolveEffectiveGoal` for the prompt. If `painStatus` is later changed away from Active Symptoms, `storedGoal` reverts to `originalGoal` automatically and `originalGoal` is cleared.
 
 ### Shared helpers
 
@@ -143,7 +154,7 @@ Adds on top of the Recovered protocol:
 Produces the user message. Sections, in order:
 
 1. Headline: `Create a structured ${quiz.workoutsPerWeek} training plan.`
-2. **USER PROFILE** — goal, experience, training split, session duration, pain status (default `Healthy`), pain locations, pain level (default `0`), pain triggers, squat confidence (default `Confident`), preferred units, and `additionalNotes` if present.
+2. **USER PROFILE** — effective goal (via `resolveEffectiveGoal(quiz.goal, quiz.painStatus, quiz.originalGoal)` — includes original-goal context when overridden by Active Symptoms), experience, training split, session duration, pain status (default `Healthy`), pain locations, pain level (default `0`), pain triggers, squat confidence (default `Confident`), preferred units, and `additionalNotes` if present.
 3. Exercise variability hint — if `exerciseVariability` includes "high", instructs the model to rotate exercises across days; otherwise to keep movements consistent across weeks.
 4. **SPLIT DAY STRUCTURE** — provided by `buildSplitDayGuidance` for Push/Pull/Legs, Upper/Lower, Full Body, or Bro Split. Empty for unrecognized splits.
 5. **AVAILABLE EXERCISES** — `EXERCISE FORMAT` legend followed by the table from `formatExercisesAsTable`.
@@ -190,7 +201,7 @@ After Gemini responds:
 2. **Empty-day guard** — throws if any workout day ends up with 0 valid exercises after ID resolution.
 3. **Missing muscle groups** — `targetMuscles` (from `SPLIT_TARGET_MUSCLES`) minus `coveredMuscles` (from the returned exercises). For each missing group, the service finds an unused exercise — preferring `is_back_friendly: true` — and adds it to `alternativeExercises`.
 
-The final `GeneratedPlanResult` carries the original quiz settings, the resolved `splitType`, the `workoutDays[]`, `missingMuscleGroups`, and `alternativeExercises`.
+The final `GeneratedPlanResult` carries the resolved quiz settings (with `goal` and `originalGoal?` stored as separate clean fields — see Goal override section above), the resolved `splitType`, the `workoutDays[]`, `missingMuscleGroups`, and `alternativeExercises`.
 
 ---
 
