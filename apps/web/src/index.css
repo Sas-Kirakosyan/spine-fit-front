@@ -53,14 +53,25 @@
   }
 
   /* Functional progress indicators must keep animating — otherwise iOS Low
-     Power Mode (which forces prefers-reduced-motion: reduce) makes them look
-     frozen and users assume the app hung. */
-  .page-loader-overlay,
-  .page-loader-spinner,
-  .plan-step-dot,
+     Power Mode and Android battery saver (both force prefers-reduced-motion:
+     reduce) make them look frozen and users assume the app hung.
+     Note: explicit values, not `revert` — `revert` rolls back to UA defaults
+     (animation-duration: 0s), not to the author rule on the class. */
+  .page-loader-overlay {
+    animation-duration: 0.2s !important;
+    animation-iteration-count: 1 !important;
+  }
+  .page-loader-spinner {
+    animation-duration: 0.8s !important;
+    animation-iteration-count: infinite !important;
+  }
+  .plan-step-dot {
+    animation-duration: 1.2s !important;
+    animation-iteration-count: infinite !important;
+  }
   .plan-step-check-path {
-    animation-duration: revert !important;
-    animation-iteration-count: revert !important;
+    animation-duration: 320ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
