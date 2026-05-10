@@ -409,9 +409,9 @@
       "3": {
         "question": "How would you describe your current back health?",
         "options": [
-          "Healthy (I am pain-free, but cautious)",
+          "Active Symptoms (Currently experiencing discomfort)",
           "Recovered (Past history of pain/injury)",
-          "Active Symptoms (Currently experiencing discomfort)"
+          "Healthy (I am pain-free, but cautious)"
         ],
         "disabledNoteHypertrophy": "\"Active Symptoms\" is unavailable: muscle hypertrophy training is not recommended while you are currently experiencing pain.",
         "disabledNoteRecovery": "\"Healthy\" and \"Recovered\" are unavailable: structural recovery is designed for users who currently have pain to reduce."
