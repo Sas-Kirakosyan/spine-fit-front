@@ -34,7 +34,8 @@
       "myWorkoutPlan": "Мой План Тренировок",
       "exercises": "упражнения",
       "muscleGroups": "группы мышц",
-      "duration": "мин"
+      "duration": "мин",
+      "standingBreak": "Встаньте и пройдитесь 60–90 сек. перед этим упражнением"
     },
     "workoutPlanCard": {
       "swap": "Сменить день",
@@ -54,7 +55,8 @@
     "reps": "Повторения",
     "bodyweight": "Вес тела",
     "done": "Готово",
-    "logged": "Записано"
+    "logged": "Записано",
+    "seatedWarning": "Встать и пройтись между подходами"
   },
   "bottomNav": {
     "workout": "Тренировка",

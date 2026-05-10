@@ -34,7 +34,8 @@
       "myWorkoutPlan": "My Workout Plan",
       "exercises": "exercises",
       "muscleGroups": "muscle groups",
-      "duration": "m"
+      "duration": "m",
+      "standingBreak": "Stand & walk 60–90s before this exercise"
     },
     "workoutPlanCard": {
       "swap": "Swap Day",
@@ -54,7 +55,8 @@
     "reps": "Reps",
     "bodyweight": "Bodyweight",
     "done": "Done",
-    "logged": "Logged"
+    "logged": "Logged",
+    "seatedWarning": "Stand & walk between sets"
   },
   "bottomNav": {
     "workout": "Workout",
