@@ -103,7 +103,7 @@ function StepRow({
   );
 }
 
-function PulsingDots() {
+export function PulsingDots() {
   return (
     <span className="inline-flex items-center gap-[3px]">
       {[0, 150, 300].map((delay) => (
