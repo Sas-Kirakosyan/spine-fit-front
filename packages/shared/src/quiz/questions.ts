@@ -146,8 +146,8 @@ export const questions: QuizQuestion[] = [
     type: "input",
     inputType: "number",
     placeholder: "e.g. 1990",
-    min: 1900,
-    max: new Date().getFullYear() - 5,
+    min: 1930,
+    max: new Date().getFullYear() - 18,
   },
 
   {

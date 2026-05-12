@@ -26,6 +26,7 @@ import { QuizInputWithUnit } from "./QuizInputWithUnit";
 import { QuizSlider } from "./QuizSlider";
 import { QuizNavigationButtons } from "./QuizNavigationButtons";
 import { QuizMultiField } from "./QuizMultiField";
+import { QuizYearSelect } from "./QuizYearSelect";
 
 const goalQuestion = questions.find((q) => q.fieldName === "goal");
 const painStatusQuestion = questions.find((q) => q.fieldName === "painStatus");
@@ -867,10 +868,22 @@ export function QuizModal({
                         />
                       )}
 
+                      {filteredQuestions[currentQuestion].fieldName ===
+                        "birthYear" && (
+                        <QuizYearSelect
+                          value={inputValue}
+                          min={filteredQuestions[currentQuestion].min}
+                          max={filteredQuestions[currentQuestion].max}
+                          onChange={handleInputChange}
+                        />
+                      )}
+
                       {filteredQuestions[currentQuestion].fieldName !==
                         "height" &&
                         filteredQuestions[currentQuestion].fieldName !==
-                          "weight" && (
+                          "weight" &&
+                        filteredQuestions[currentQuestion].fieldName !==
+                          "birthYear" && (
                           <input
                             type={
                               filteredQuestions[currentQuestion].inputType ||

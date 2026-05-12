@@ -391,7 +391,8 @@
       "enterHeightCm": "Enter height in cm",
       "enterHeightFt": "Enter height in ft",
       "enterWeightKg": "Enter weight in kg",
-      "enterWeightLbs": "Enter weight in lbs"
+      "enterWeightLbs": "Enter weight in lbs",
+      "selectYear": "Select year"
     },
     "questions": {
       "1": {

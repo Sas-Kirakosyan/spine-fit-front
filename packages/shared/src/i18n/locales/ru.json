@@ -393,7 +393,8 @@
       "enterHeightCm": "Введите рост в см",
       "enterHeightFt": "Введите рост в футах",
       "enterWeightKg": "Введите вес в кг",
-      "enterWeightLbs": "Введите вес в фунтах"
+      "enterWeightLbs": "Введите вес в фунтах",
+      "selectYear": "Выберите год"
     },
     "questions": {
       "1": {
