@@ -14,7 +14,7 @@ export function RegenerateButton({ onClick }: RegenerateButtonProps) {
         onClick={onClick}
         className="w-full max-w-md rounded-[14px] bg-main py-4 px-6 text-lg font-semibold text-white shadow-lg"
       >
-        {t("myPlanPage.regeneratePlan", "Regenerate Plan")}
+        {t("myPlanPage.regeneratePlan")}
       </Button>
     </div>
   );

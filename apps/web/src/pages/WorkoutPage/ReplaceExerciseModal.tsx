@@ -123,7 +123,9 @@ export function ReplaceExerciseModal({
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold">{item.name}</p>
                     <p className="truncate text-xs text-slate-400">
-                      {item.muscle_groups.join(", ")}
+                      {item.muscle_groups
+                        .map((m) => t(`muscleAnatomy.${m}`, m))
+                        .join(", ")}
                     </p>
                   </div>
                 </button>

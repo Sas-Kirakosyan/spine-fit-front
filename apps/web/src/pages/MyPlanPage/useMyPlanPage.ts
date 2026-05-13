@@ -115,9 +115,7 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
       onNavigateBack();
     } catch (error) {
       console.error("Failed to regenerate plan:", error);
-      setRegenerateError(
-        t("myPlanPage.regenerateError", "Failed to regenerate your plan. Please try again."),
-      );
+      setRegenerateError(t("myPlanPage.regenerateError"));
       setIsRegenerating(false);
     }
   };

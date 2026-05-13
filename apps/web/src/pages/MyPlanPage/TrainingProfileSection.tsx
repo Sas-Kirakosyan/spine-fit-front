@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { SettingsRow } from "@/components/SettingsRow/SettingsRow";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
+import { getFieldOptionLabel } from "./planFieldsI18n";
 
 interface TrainingProfileSectionProps {
   planSettings: PlanSettings;
@@ -22,17 +23,25 @@ export function TrainingProfileSection({
         <div className="space-y-4">
           <SettingsRow
             label={t("myPlanPage.trainingProfile.workoutsPerWeek")}
-            value={planSettings.workoutsPerWeek}
+            value={getFieldOptionLabel(
+              t,
+              "workoutsPerWeek",
+              planSettings.workoutsPerWeek,
+            )}
             onClick={() => onFieldClick("workoutsPerWeek")}
           />
           <SettingsRow
             label={t("myPlanPage.trainingProfile.duration")}
-            value={planSettings.duration}
+            value={getFieldOptionLabel(t, "duration", planSettings.duration)}
             onClick={() => onFieldClick("duration")}
           />
           <SettingsRow
             label={t("myPlanPage.trainingProfile.experience")}
-            value={planSettings.experience}
+            value={getFieldOptionLabel(
+              t,
+              "experience",
+              planSettings.experience,
+            )}
             onClick={() => onFieldClick("experience")}
           />
         </div>

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import type { MuscleGroupData } from "@/utils/progressStats";
+import { getMuscleGroupLabel } from "@/utils/muscleGroupI18n";
 
 const CATEGORY_COLORS: Record<string, string> = {
   Legs: "#e77d10",
@@ -27,7 +28,9 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
     const d = payload[0].payload;
     return (
       <div className="rounded-lg bg-[#1B1E2B] px-3 py-2 shadow-xl ring-1 ring-white/10">
-        <p className="text-sm font-semibold text-white">{d.name}</p>
+        <p className="text-sm font-semibold text-white">
+          {getMuscleGroupLabel(t, d.name)}
+        </p>
         <p className="text-xs text-slate-400">
           {d.percentage}% &middot; {d.value} {t("progressPage.muscleGroupChart.exercises")}
         </p>
@@ -96,7 +99,7 @@ export function MuscleGroupChart({ data }: MuscleGroupChartProps) {
                 }}
               />
               <span className="truncate text-xs text-slate-300">
-                {entry.name}
+                {getMuscleGroupLabel(t, entry.name)}
               </span>
               <span className="ml-auto text-xs font-medium text-white">
                 {entry.percentage}%

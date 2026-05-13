@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/Buttons/Button";
 import { ChevronRightIcon } from "@/components/Icons/Icons";
 import type { PlanFieldId } from "@/types/planSettings";
+import { getFieldOptionLabel } from "./planFieldsI18n";
 
 interface GoalSectionProps {
   goal: string;
@@ -18,7 +19,9 @@ export function GoalSection({ goal, onFieldClick }: GoalSectionProps) {
     >
       <span className="text-lg font-semibold">{t("myPlanPage.goal")}</span>
       <div className="flex items-center gap-2">
-        <span className="text-l ml-10 font-semibold">{goal}</span>
+        <span className="text-l ml-10 font-semibold">
+          {getFieldOptionLabel(t, "goal", goal)}
+        </span>
         <ChevronRightIcon className="h-5 w-5" />
       </div>
     </Button>
