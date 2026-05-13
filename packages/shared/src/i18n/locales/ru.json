@@ -606,10 +606,13 @@
       "planGenerated": "\u2705 План создан!\n\n{{name}}\n\n{{workouts}} тренировок в неделю с {{exercises}} упражнениями в день.",
       "generateFailed": "Не удалось создать план. Проверьте настройки и попробуйте снова."
     },
-    "regenerateError": "Не удалось перестроить план. Попробуйте ещё раз."
+    "regenerateError": "Не удалось перестроить план. Попробуйте ещё раз.",
+    "regeneratingTitle": "Перегенерируем ваш план"
   },
   "selectionModal": {
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "save": "Сохранить",
+    "back": "Назад"
   },
   "exerciseProgressPage": {
     "tabs": {

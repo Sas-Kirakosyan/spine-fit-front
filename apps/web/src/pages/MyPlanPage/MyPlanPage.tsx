@@ -2,7 +2,6 @@ import { PageContainer } from "@/Layout/PageContainer";
 import type { MyPlanPageProps } from "@/types/pages";
 import { planFieldsConfig } from "@/types/planSettings";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
-import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import { MyPlanPageHeader } from "./MyPlanPageHeader";
 import { GoalSection } from "./GoalSection";
 import { TrainingProfileSection } from "./TrainingProfileSection";
@@ -67,13 +66,6 @@ function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
         }}
         onConfirm={plan.handleRegeneratePlan}
       />
-
-      {plan.isRegenerating && (
-        <PlanGeneratingLoader
-          apiPhase={plan.apiPhase}
-          onAllStepsComplete={plan.handleLoaderComplete}
-        />
-      )}
 
       {plan.currentField && (
         <SelectionModal

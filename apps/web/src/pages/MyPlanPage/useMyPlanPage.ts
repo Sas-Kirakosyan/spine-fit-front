@@ -23,7 +23,6 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isRegenerateModalOpen, setIsRegenerateModalOpen] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
-  const [apiPhase, setApiPhase] = useState<"pending" | "success">("pending");
   const [regenerateError, setRegenerateError] = useState<string | null>(null);
   const initialSettingsRef = useRef<PlanSettings>(getPlanSettings());
 
@@ -73,18 +72,11 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     onNavigateBack();
   };
 
-  const handleLoaderComplete = () => {
-    setIsRegenerating(false);
-    setApiPhase("pending");
-    setIsRegenerateModalOpen(false);
-    onNavigateBack();
-  };
-
   const handleRegeneratePlan = async () => {
-    setIsRegenerateModalOpen(false);
+    const MIN_DWELL_MS = 1800;
     setIsRegenerating(true);
-    setApiPhase("pending");
     setRegenerateError(null);
+    const startedAt = Date.now();
     try {
       const response = await fetch(
         `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz/regenerate`,
@@ -102,15 +94,25 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
         plan: GeneratedPlan;
       };
 
-      if (result.success && result.plan) {
-        savePlanAndSettings(result.plan);
-        if (result.plan.settings) {
-          setPlanSettings(result.plan.settings);
-          initialSettingsRef.current = result.plan.settings;
-        }
-        setApiPhase("success");
-        return;
+      if (!result.success || !result.plan) {
+        throw new Error("Invalid regenerate response");
       }
+
+      const elapsed = Date.now() - startedAt;
+      if (elapsed < MIN_DWELL_MS) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, MIN_DWELL_MS - elapsed),
+        );
+      }
+
+      savePlanAndSettings(result.plan);
+      if (result.plan.settings) {
+        setPlanSettings(result.plan.settings);
+        initialSettingsRef.current = result.plan.settings;
+      }
+      setIsRegenerating(false);
+      setIsRegenerateModalOpen(false);
+      onNavigateBack();
     } catch (error) {
       console.error("Failed to regenerate plan:", error);
       setRegenerateError(
@@ -131,7 +133,6 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     isResetModalOpen,
     isRegenerateModalOpen,
     isRegenerating,
-    apiPhase,
     regenerateError,
     setRegenerateError,
 
@@ -150,6 +151,5 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     handleBack,
     handleResetAndGoBack,
     handleRegeneratePlan,
-    handleLoaderComplete,
   };
 }

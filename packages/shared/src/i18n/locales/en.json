@@ -604,10 +604,13 @@
       "planGenerated": "\u2705 Plan Generated!\n\n{{name}}\n\n{{workouts}} workouts per week with {{exercises}} exercises per day.",
       "generateFailed": "Failed to generate plan. Please check your settings and try again."
     },
-    "regenerateError": "Failed to regenerate your plan. Please try again."
+    "regenerateError": "Failed to regenerate your plan. Please try again.",
+    "regeneratingTitle": "Regenerating your plan"
   },
   "selectionModal": {
-    "close": "Close"
+    "close": "Close",
+    "save": "Save",
+    "back": "Back"
   },
   "exerciseProgressPage": {
     "tabs": {
