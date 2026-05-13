@@ -1,19 +1,24 @@
 import { useExerciseName } from "@spinefit/shared";
+import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { ExerciseDetailsProps } from "@/types/workout";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import { getExerciseVideoUrl } from "@/lib/assets";
 import { VideoPlayer } from "@/components/VideoPlayer/VideoPlayer";
 
-const formatLabel = (value: string) =>
+const formatMuscleFallback = (value: string) =>
   value
     .split(/[_\s]+/)
     .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
     .join(" ");
 
 function ExerciseDetails({ exercise, onNavigateBack }: ExerciseDetailsProps) {
+  const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
   const name = getExerciseName(exercise);
+  const description = t(`exerciseContent.${exercise.id}.description`, {
+    defaultValue: exercise.description,
+  });
   const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onNavigateBack();
@@ -61,12 +66,12 @@ function ExerciseDetails({ exercise, onNavigateBack }: ExerciseDetailsProps) {
           </h2>
 
           <p className="text-sm leading-relaxed text-slate-400">
-            {exercise.description}
+            {description}
           </p>
 
           <div className="space-y-3">
             <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-              Target Muscles
+              {t("exerciseHowTo.targetMuscles")}
             </span>
             <div className="flex flex-wrap gap-2">
               {exercise.muscle_groups.map((muscle) => (
@@ -74,7 +79,7 @@ function ExerciseDetails({ exercise, onNavigateBack }: ExerciseDetailsProps) {
                   key={muscle}
                   className="rounded-full bg-slate-800/80 px-3 py-1.5 text-xs font-medium text-slate-200 ring-1 ring-white/5"
                 >
-                  {formatLabel(muscle)}
+                  {t(`muscleAnatomy.${muscle}`, formatMuscleFallback(muscle))}
                 </span>
               ))}
             </div>

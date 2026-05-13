@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { SettingsRow } from "@/components/SettingsRow/SettingsRow";
 import { ToggleSwitch } from "@/components/ToggleSwitch/ToggleSwitch";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
+import { getFieldOptionLabel } from "./planFieldsI18n";
 
 interface TrainingFormatSectionProps {
   planSettings: PlanSettings;
@@ -31,7 +32,11 @@ export function TrainingFormatSection({
         <div className="space-y-4">
           <SettingsRow
             label={t("myPlanPage.trainingFormat.trainingSplit")}
-            value={planSettings.trainingSplit}
+            value={getFieldOptionLabel(
+              t,
+              "trainingSplit",
+              planSettings.trainingSplit,
+            )}
             onClick={() => onFieldClick("trainingSplit")}
           />
           <div className="flex items-center justify-between">

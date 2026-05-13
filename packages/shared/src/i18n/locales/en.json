@@ -48,8 +48,61 @@
     }
   },
   "common": {
-    "exercises": "exercises"
+    "exercises": "exercises",
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "yes": "Yes",
+    "no": "No"
   },
+  "muscleGroups": {
+    "chest": "Chest",
+    "back": "Back",
+    "shoulders": "Shoulders",
+    "arms": "Arms",
+    "core": "Core",
+    "legs": "Legs",
+    "rehab": "Rehab",
+    "other": "Other"
+  },
+  "muscleAnatomy": {
+    "abdominals": "Abdominals",
+    "anterior_deltoids": "Anterior Deltoids",
+    "biceps": "Biceps",
+    "brachialis": "Brachialis",
+    "calves": "Calves",
+    "chest": "Chest",
+    "core_stabilizers": "Core Stabilizers",
+    "erector_spinae": "Erector Spinae",
+    "forearms": "Forearms",
+    "front_delts": "Front Delts",
+    "glutes": "Glutes",
+    "hamstrings": "Hamstrings",
+    "hip_abductors": "Hip Abductors",
+    "hip_adductors": "Hip Adductors",
+    "hip_flexors": "Hip Flexors",
+    "hip_rotators": "Hip Rotators",
+    "lats": "Lats",
+    "leg_biceps": "Leg Biceps",
+    "medial_deltoids": "Medial Deltoids",
+    "obliques": "Obliques",
+    "quads": "Quads",
+    "rear_delts": "Rear Delts",
+    "rhomboids": "Rhomboids",
+    "rotator_cuff": "Rotator Cuff",
+    "side_delts": "Side Delts",
+    "soleus": "Soleus",
+    "thoracic_extensors": "Thoracic Extensors",
+    "tibialis_anterior": "Tibialis Anterior",
+    "traps": "Traps",
+    "triceps": "Triceps",
+    "upper_back": "Upper Back",
+    "upper_chest": "Upper Chest",
+    "upper_trapezius": "Upper Trapezius"
+  },
+  "exerciseHowTo": {
+    "targetMuscles": "Target Muscles"
+  },
+  "exerciseContent": {},
   "exerciseCard": {
     "sets": "Sets",
     "reps": "Reps",
@@ -605,7 +658,129 @@
       "generateFailed": "Failed to generate plan. Please check your settings and try again."
     },
     "regenerateError": "Failed to regenerate your plan. Please try again.",
-    "regeneratingTitle": "Regenerating your plan"
+    "regeneratingTitle": "Regenerating your plan",
+    "resetConfirm": "Are you sure you want to reset all changes?",
+    "regenerateConfirm": "Do you really want to regenerate your plan?",
+    "regeneratePlan": "Regenerate Plan",
+    "fields": {
+      "goal": {
+        "title": "Select Goal",
+        "headerDescription": "Your goal is key to how SpineFit selects exercises, rep & weight ranges, and workout intensity.",
+        "options": {
+          "hypertrophy": {
+            "label": "Muscle Hypertrophy (Build mass safely with back/sciatica history)"
+          },
+          "recovery": {
+            "label": "Structural Recovery (Reduce pain and restore movement capacity)"
+          }
+        }
+      },
+      "workoutsPerWeek": {
+        "title": "Workouts per Week",
+        "headerDescription": "Your workout count determines your Weekly Set Targets and recommended training split. SpineFit recommends a range based on your experience level.",
+        "options": {
+          "d1": { "label": "1 day per week" },
+          "d2": { "label": "2 days per week" },
+          "d3": { "label": "3 days per week" },
+          "d4": { "label": "4 days per week" },
+          "d5": { "label": "5 days per week" },
+          "d6": { "label": "6 days per week" },
+          "d7": { "label": "7 days per week" }
+        }
+      },
+      "duration": {
+        "title": "Workout Duration",
+        "headerDescription": "Duration determines how many exercises you'll get in a workout, and your Weekly Set Targets.",
+        "options": {
+          "min30": { "label": "30 min" },
+          "min45": { "label": "45 min" },
+          "h1": { "label": "1 hr" },
+          "h1m30": { "label": "1 hr 30 min" },
+          "h2": { "label": "2 hr" }
+        }
+      },
+      "experience": {
+        "title": "Training Experience",
+        "headerDescription": "Your experience level determines the types of exercises you'll get.",
+        "options": {
+          "advanced": {
+            "label": "Advanced",
+            "description": "You lift with intensity, have strong technique, and handle complex movements"
+          },
+          "intermediate": {
+            "label": "Intermediate",
+            "description": "You're solid on the basics and lift moderate weight with good form"
+          },
+          "beginner": {
+            "label": "Beginner",
+            "description": "You're new to lifting and building confidence with form and equipment"
+          }
+        }
+      },
+      "trainingSplit": {
+        "title": "Training Split",
+        "headerDescription": "Splits help structure when certain muscle groups are worked out. SpineFit recommends one based on the number of workouts you want to do each week.",
+        "options": {
+          "pushPullLegs": {
+            "label": "Push/Pull/Legs",
+            "description": "Target one of three key movement patterns each training day to maximize muscle engagement"
+          },
+          "upperLower": {
+            "label": "Upper/Lower",
+            "description": "Alternate upper body and lower body sessions to balance workload and recovery"
+          },
+          "fullBody": {
+            "label": "Full Body",
+            "description": "Train every major muscle group each workout to maximize frequency and efficiency"
+          },
+          "freshMuscleGroups": {
+            "label": "Fresh Muscle Groups",
+            "description": "Focus each workout on your two most recovered muscle groups for varied workouts"
+          }
+        }
+      },
+      "exerciseVariability": {
+        "title": "Exercise Variability",
+        "headerDescription": "Choose how consistent or varied you want recommended exercises in each workout to be.",
+        "options": {
+          "moreConsistent": {
+            "label": "More Consistent",
+            "description": "More consistency with exercises to maximize measurable progress"
+          },
+          "balanced": {
+            "label": "Balanced",
+            "description": "Balanced exercise variability for progress and variety"
+          },
+          "moreVariable": {
+            "label": "More Variable",
+            "description": "More variety of exercises workout to workout to keep things fresh"
+          }
+        }
+      },
+      "units": {
+        "title": "Units",
+        "options": {
+          "kg": { "label": "kg" },
+          "lb": { "label": "lb" }
+        }
+      },
+      "cardio": {
+        "title": "Cardio",
+        "headerDescription": "Pick your go-to cardio, and SpineFit will intelligently add them in across workouts.",
+        "options": {
+          "off": { "label": "Off" },
+          "on": { "label": "On" }
+        }
+      },
+      "stretching": {
+        "title": "Stretching",
+        "headerDescription": "Get your muscles ready, reduce injury risk, and improve flexibility by adding a warm-up or cool-down.",
+        "options": {
+          "off": { "label": "Off" },
+          "on": { "label": "On" }
+        }
+      }
+    }
   },
   "selectionModal": {
     "close": "Close",

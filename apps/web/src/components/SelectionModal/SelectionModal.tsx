@@ -10,6 +10,7 @@ interface SelectionModalProps {
   onClose: () => void;
   title: string;
   options: string[];
+  optionLabels?: string[];
   descriptions?: string[];
   headerDescription?: string;
   selectedValue: string;
@@ -21,6 +22,7 @@ export function SelectionModal({
   onClose,
   title,
   options,
+  optionLabels,
   descriptions,
   headerDescription,
   selectedValue,
@@ -83,7 +85,7 @@ export function SelectionModal({
               {options.map((option, index) => (
                 <SelectionRadioOption
                   key={index}
-                  option={option}
+                  option={optionLabels?.[index] ?? option}
                   description={descriptions?.[index]}
                   index={index}
                   isSelected={selectedIndex === index}

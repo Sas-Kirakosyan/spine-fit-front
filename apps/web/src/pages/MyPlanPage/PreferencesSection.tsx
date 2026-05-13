@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { SettingsRow } from "@/components/SettingsRow/SettingsRow";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
 import { getStoredPainStatus } from "@/utils/painStatus";
+import { getFieldOptionLabel } from "./planFieldsI18n";
 
 interface PreferencesSectionProps {
   planSettings: PlanSettings;
@@ -27,17 +28,21 @@ export function PreferencesSection({
         <div className="space-y-4">
           <SettingsRow
             label={t("myPlanPage.preferences.units")}
-            value={planSettings.units}
+            value={getFieldOptionLabel(t, "units", planSettings.units)}
             onClick={() => onFieldClick("units")}
           />
           <SettingsRow
             label={t("myPlanPage.preferences.cardio")}
-            value={planSettings.cardio}
+            value={getFieldOptionLabel(t, "cardio", planSettings.cardio)}
             onClick={() => onFieldClick("cardio")}
           />
           <SettingsRow
             label={t("myPlanPage.preferences.stretching")}
-            value={planSettings.stretching}
+            value={getFieldOptionLabel(
+              t,
+              "stretching",
+              planSettings.stretching,
+            )}
             onClick={() => onFieldClick("stretching")}
           />
           <SettingsRow

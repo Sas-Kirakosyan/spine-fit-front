@@ -1,6 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { MyPlanPageProps } from "@/types/pages";
-import { planFieldsConfig } from "@/types/planSettings";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
 import { MyPlanPageHeader } from "./MyPlanPageHeader";
 import { GoalSection } from "./GoalSection";
@@ -11,9 +11,14 @@ import { RegenerateButton } from "./RegenerateButton";
 import { ResetModal } from "./ResetModal";
 import { RegenerateModal } from "./RegenerateModal";
 import { useMyPlanPage } from "./useMyPlanPage";
+import { getTranslatedField } from "./planFieldsI18n";
 
 function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
+  const { t } = useTranslation();
   const plan = useMyPlanPage({ onNavigateBack });
+  const translatedField = plan.currentField
+    ? getTranslatedField(t, plan.currentField)
+    : null;
 
   return (
     <PageContainer contentClassName="gap-8">
@@ -67,16 +72,15 @@ function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
         onConfirm={plan.handleRegeneratePlan}
       />
 
-      {plan.currentField && (
+      {plan.currentField && translatedField && (
         <SelectionModal
           isOpen={plan.isModalOpen}
           onClose={plan.handleModalClose}
-          title={planFieldsConfig[plan.currentField].title}
-          options={planFieldsConfig[plan.currentField].options}
-          descriptions={planFieldsConfig[plan.currentField].description}
-          headerDescription={
-            planFieldsConfig[plan.currentField].headerDescription
-          }
+          title={translatedField.title}
+          options={translatedField.options}
+          optionLabels={translatedField.optionLabels}
+          descriptions={translatedField.descriptions}
+          headerDescription={translatedField.headerDescription}
           selectedValue={plan.planSettings[plan.currentField]}
           onSelect={plan.handleFieldSelect}
         />

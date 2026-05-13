@@ -18,6 +18,10 @@ import {
 import type { GeneratedPlan } from "@spinefit/shared";
 import { ConfirmDialog } from "@/components/ui/Modal.tsx";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader.tsx";
+import {
+  getPainLocationLabel,
+  getPainTriggerLabel,
+} from "./painProfileI18n.ts";
 
 const PAIN_STATUS_OPTIONS = ["Healthy", "Recovered", "Active Symptoms"] as const;
 type PainStatus = (typeof PAIN_STATUS_OPTIONS)[number];
@@ -472,15 +476,7 @@ function ProfilePage({
                     options={PAIN_LOCATION_OPTIONS}
                     selected={painLocation}
                     onToggle={(v) => setPainLocation((prev) => toggleItem(prev, v))}
-                    getLabel={(v) => {
-                      const map: Record<string, string> = {
-                        "Lower Back (L4-L5/S1 area)": t("profilePage.locationLowerBack"),
-                        "Sciatica (Pain radiating down leg)": t("profilePage.locationSciatica"),
-                        "Glute / Deep Hip discomfort": t("profilePage.locationGluteHip"),
-                        "Calf or Foot (Numbness/Tingling)": t("profilePage.locationCalfFoot"),
-                      };
-                      return map[v] ?? v;
-                    }}
+                    getLabel={(v) => getPainLocationLabel(t, v)}
                   />
                 </div>
               )}
@@ -510,18 +506,7 @@ function ProfilePage({
                     options={PAIN_TRIGGER_OPTIONS}
                     selected={painTriggers}
                     onToggle={(v) => setPainTriggers((prev) => toggleItem(prev, v))}
-                    getLabel={(v) => {
-                      const map: Record<string, string> = {
-                        "Bending forward (e.g., reaching for the floor)": t("profilePage.triggerBending"),
-                        "Arching backward (e.g., reaching overhead)": t("profilePage.triggerArching"),
-                        "Lifting or carrying heavy objects": t("profilePage.triggerLifting"),
-                        "Sitting for longer than 20–30 minutes": t("profilePage.triggerSitting"),
-                        "Impact movements (Running, Jumping)": t("profilePage.triggerImpact"),
-                        "Rotating or twisting the torso": t("profilePage.triggerRotating"),
-                        "Straining (Heavy bracing/holding breath)": t("profilePage.triggerStraining"),
-                      };
-                      return map[v] ?? v;
-                    }}
+                    getLabel={(v) => getPainTriggerLabel(t, v)}
                   />
                 </div>
               )}
