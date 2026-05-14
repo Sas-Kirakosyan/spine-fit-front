@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/Buttons/Button";
+import {HomeIcon} from "@/components/Icons/Icons.tsx";
 
 interface QuizHeaderProps {
   currentQuestionNumber: number;
@@ -17,7 +17,7 @@ export function QuizHeader({
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-start justify-between mt-5 text-white">
+    <div className="flex items-start justify-around mt-5 text-white">
       <div className="px-2.5">
         <h2 className="text-2xl font-semibold">{t("quiz.header.title")}</h2>
         {!isInfoScreen && (
@@ -26,12 +26,7 @@ export function QuizHeader({
           </p>
         )}
       </div>
-      <Button
-        onClick={onClose}
-        className="flex mx-2.5 items-center gap-2 rounded-[14px] bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur transition hover:bg-white/20"
-      >
-        {t("quiz.header.home")}
-      </Button>
+        <HomeIcon onClickHomeIcon={onClose}/>
     </div>
   );
 }
