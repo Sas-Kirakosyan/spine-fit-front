@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import type { QuizModalProps } from "@/types/quiz";
 import type { RegistrationFormData } from "@/types/auth";
@@ -28,6 +28,8 @@ import { QuizNavigationButtons } from "./QuizNavigationButtons";
 import { QuizMultiField } from "./QuizMultiField";
 import { QuizYearSelect } from "./QuizYearSelect";
 
+type QuizMode = "quiz" | "registration" | "confirmEmail";
+
 const goalQuestion = questions.find((q) => q.fieldName === "goal");
 const painStatusQuestion = questions.find((q) => q.fieldName === "painStatus");
 
@@ -56,9 +58,53 @@ export function QuizModal({
   const [multiFieldUnits, setMultiFieldUnits] = useState<
     Record<string, string>
   >({});
-  const [mode, setMode] = useState<
-    "quiz" | "registration" | "confirmEmail"
-  >("quiz");
+  const [mode, setMode] = useState<QuizMode>("quiz");
+
+  // Browser back-button support: each step / mode transition pushes a history
+  // entry tagged with the questionId, and `popstate` restores it. Entries are
+  // unwound via history.go(-n) on modal close — the parent's onClose runs only
+  // after the unwind completes, so back from generatingPlan lands on home.
+  const pushedCountRef = useRef(0);
+  const closingRef = useRef(false);
+  const finishCloseRef = useRef<(() => void) | null>(null);
+  // StrictMode mounts effects twice in dev; this guard keeps the seed push
+  // single so pushedCountRef stays accurate.
+  const seededRef = useRef(false);
+  // Latest saveCurrentAnswer for use inside the popstate listener (whose
+  // effect deps don't cover every form-field state). Mutated each render.
+  const saveCurrentAnswerRef = useRef<() => void>(() => {});
+
+  const pushQuizState = useCallback((questionId: number, quizMode: QuizMode) => {
+    const current = (window.history.state as { page?: string } | null) ?? null;
+    window.history.pushState(
+      {
+        ...(current ?? {}),
+        page: current?.page ?? "home",
+        quiz: { questionId, mode: quizMode },
+      },
+      ""
+    );
+    pushedCountRef.current += 1;
+  }, []);
+
+  const closeWithHistoryCleanup = useCallback(
+    (after?: () => void) => {
+      const n = pushedCountRef.current;
+      pushedCountRef.current = 0;
+      const finalize = () => {
+        onClose();
+        after?.();
+      };
+      if (n <= 0) {
+        finalize();
+        return;
+      }
+      closingRef.current = true;
+      finishCloseRef.current = finalize;
+      window.history.go(-n);
+    },
+    [onClose]
+  );
 
   const filteredQuestions = useMemo(() => {
     return questions.filter((question) => {
@@ -306,24 +352,25 @@ export function QuizModal({
     }));
   };
 
+  // Keep ref current so the popstate listener can save in-progress edits
+  // without stale closures.
+  saveCurrentAnswerRef.current = saveCurrentAnswer;
+
   const handleNext = () => {
     if (isAnswered()) {
       saveCurrentAnswer();
 
       if (currentQuestion < filteredQuestions.length - 1) {
         const nextQuestion = currentQuestion + 1;
+        pushQuizState(filteredQuestions[nextQuestion].id, "quiz");
         setCurrentQuestion(nextQuestion);
-        setTimeout(() => loadAnswerForQuestion(nextQuestion), 0);
       }
     }
   };
 
   const handleBack = () => {
     if (currentQuestion > 0) {
-      saveCurrentAnswer();
-      const prevQuestion = currentQuestion - 1;
-      setCurrentQuestion(prevQuestion);
-      setTimeout(() => loadAnswerForQuestion(prevQuestion), 0);
+      window.history.back();
     }
   };
 
@@ -364,6 +411,7 @@ export function QuizModal({
     if (!isAnswered()) return;
     const quizData = buildQuizData();
     localStorage.setItem("quizAnswers", JSON.stringify(quizData));
+    pushQuizState(filteredQuestions[currentQuestion].id, "registration");
     setMode("registration");
   };
 
@@ -374,7 +422,7 @@ export function QuizModal({
     const stored = localStorage.getItem("quizAnswers");
     if (!stored) {
       console.error("Quiz data missing after registration");
-      onClose();
+      closeWithHistoryCleanup();
       return;
     }
     const quizData = JSON.parse(stored) as StoredQuizData;
@@ -385,6 +433,7 @@ export function QuizModal({
       // user confirms their email, and surface a "check your inbox" screen
       // instead of silently skipping the sync.
       localStorage.setItem("pendingQuizSync", JSON.stringify(quizData));
+      pushQuizState(filteredQuestions[currentQuestion].id, "confirmEmail");
       setMode("confirmEmail");
       return;
     }
@@ -397,8 +446,9 @@ export function QuizModal({
       }
     }
 
-    onClose();
-    if (onQuizComplete) onQuizComplete();
+    closeWithHistoryCleanup(() => {
+      if (onQuizComplete) onQuizComplete();
+    });
   };
 
   useEffect(() => {
@@ -432,8 +482,73 @@ export function QuizModal({
     }
   }, [currentQuestion, isOpen, loadAnswerForQuestion]);
 
+  // Seed a history entry the first time the modal opens. Subsequent steps add
+  // their own entries via handleNext / handleSubmit / handleRegistrationSuccess.
+  // seededRef survives StrictMode's double mount in dev so we push exactly once.
+  useEffect(() => {
+    if (!isOpen) return;
+    if (seededRef.current) return;
+    seededRef.current = true;
+    const firstQuestion = filteredQuestions[0];
+    if (firstQuestion) pushQuizState(firstQuestion.id, "quiz");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onPop = (e: PopStateEvent) => {
+      const state = e.state as {
+        quiz?: { questionId: number; mode: QuizMode };
+      } | null;
+
+      if (closingRef.current) {
+        // Unwinding via history.go(-n). Wait until we land on the entry
+        // just before our quiz pushes (no quiz key) before finalizing.
+        if (!state?.quiz) {
+          const fn = finishCloseRef.current;
+          finishCloseRef.current = null;
+          closingRef.current = false;
+          if (fn) fn();
+        }
+        return;
+      }
+
+      if (!state?.quiz) {
+        // User popped past our initial entry — treat as a cancellation.
+        pushedCountRef.current = 0;
+        onClose();
+        return;
+      }
+
+      // Persist in-progress edits before the question switch so neither the
+      // in-app back button nor the browser back button drops typed input.
+      saveCurrentAnswerRef.current();
+
+      pushedCountRef.current = Math.max(0, pushedCountRef.current - 1);
+
+      const idx = filteredQuestions.findIndex(
+        (q) => q.id === state.quiz!.questionId
+      );
+      if (idx < 0) {
+        // The target question no longer exists (showIf branch changed under
+        // us). Bail out cleanly rather than dumping the user on a random step.
+        pushedCountRef.current = 0;
+        onClose();
+        return;
+      }
+      setCurrentQuestion(idx);
+      setMode(state.quiz.mode);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [isOpen, filteredQuestions, onClose]);
+
   useEffect(() => {
     if (!isOpen) {
+      // If the parent closed the modal without going through
+      // closeWithHistoryCleanup, unwind any orphan entries we pushed so the
+      // browser back button doesn't bounce through phantom states.
+      const orphans = pushedCountRef.current;
       setCurrentQuestion(0);
       setSelectedCheckboxes([]);
       setInputValue("");
@@ -444,6 +559,13 @@ export function QuizModal({
       setMultiFieldValues({});
       setMultiFieldUnits({});
       setMode("quiz");
+      pushedCountRef.current = 0;
+      closingRef.current = false;
+      finishCloseRef.current = null;
+      seededRef.current = false;
+      if (orphans > 0) {
+        window.history.go(-orphans);
+      }
     }
   }, [isOpen]);
 
@@ -535,7 +657,7 @@ export function QuizModal({
               currentQuestionNumber={actualQuestionsCount}
               totalQuestions={actualQuestionsCount}
               isInfoScreen={false}
-              onClose={onClose}
+              onClose={() => closeWithHistoryCleanup()}
             />
             <div className="mt-6 px-2.5 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
               <div className="rounded-2xl bg-white/95 p-6 text-gray-800 shadow-lg backdrop-blur">
@@ -551,7 +673,7 @@ export function QuizModal({
             </div>
             <div className="mt-6 mx-4 mb-5">
               <button
-                onClick={onClose}
+                onClick={() => closeWithHistoryCleanup()}
                 className="w-full rounded-full bg-white/10 px-8 py-4 text-base font-medium text-white transition hover:bg-white/20"
               >
                 {t("quiz.nav.confirmEmailDone")}
@@ -573,7 +695,7 @@ export function QuizModal({
               currentQuestionNumber={actualQuestionsCount}
               totalQuestions={actualQuestionsCount}
               isInfoScreen={false}
-              onClose={onClose}
+              onClose={() => closeWithHistoryCleanup()}
             />
             <div className="mt-6 px-2.5 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
               <div className="rounded-2xl bg-white/95 p-4 md:p-6 text-gray-800 shadow-lg backdrop-blur">
@@ -607,7 +729,7 @@ export function QuizModal({
             </div>
             <div className="mt-6 mx-4 mb-5">
               <button
-                onClick={() => setMode("quiz")}
+                onClick={() => window.history.back()}
                 className="w-full rounded-full bg-white/10 px-8 py-4 text-base font-medium text-white transition hover:bg-white/20"
               >
                 {t("quiz.nav.backToQuiz")}
@@ -629,7 +751,7 @@ export function QuizModal({
               currentQuestionNumber={currentQuestionNumber}
               totalQuestions={actualQuestionsCount}
               isInfoScreen={filteredQuestions[currentQuestion].type === "info"}
-              onClose={onClose}
+              onClose={() => closeWithHistoryCleanup()}
             />
 
             <div className="mt-6 px-2.5 md:ml-[10px] md:mr-[10px] flex-1 overflow-y-auto">
