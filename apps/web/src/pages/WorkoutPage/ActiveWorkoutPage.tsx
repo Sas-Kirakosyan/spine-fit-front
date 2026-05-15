@@ -48,6 +48,7 @@ function ActiveWorkoutPage({
   setCompletedWorkoutIds,
   customExercises,
   isCustomWorkout = false,
+  onNavigateToAllExercise,
 }: ActiveWorkoutPageProps) {
   const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
@@ -318,6 +319,35 @@ function ActiveWorkoutPage({
                 </div>
               );
             })}
+            <button
+              type="button"
+              onClick={onNavigateToAllExercise}
+              className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B] p-3 text-left shadow-xl ring-1 ring-white/5"
+            >
+              <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[10px] border-2 border-stone-500 bg-transparent">
+                <svg
+                  aria-hidden="true"
+                  className="h-10 w-10 text-main"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+              </div>
+
+              <div className="flex flex-1 flex-col justify-center">
+                <span className="text-lg font-semibold text-main sm:text-xl">
+                  {t("workoutPage.buttons.addExercise")}
+                </span>
+              </div>
+            </button>
           </div>
         </div>
         <Button
