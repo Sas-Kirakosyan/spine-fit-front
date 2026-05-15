@@ -1,4 +1,3 @@
-import type { RefObject } from "react";
 import type { Exercise } from "./exercise";
 
 export type SetField = "reps" | "weight";
@@ -138,4 +137,5 @@ export interface ActiveWorkoutPageProps {
   exercisePainLevels?: Record<number, number>;
   customExercises?: Exercise[];
   isCustomWorkout?: boolean;
+  onNavigateToAllExercise: () => void;
 }

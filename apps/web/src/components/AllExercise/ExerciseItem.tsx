@@ -37,7 +37,7 @@ export function ExerciseItem({
                   event.stopPropagation();
                   onDetailsClick();
               }}
-              className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
+              className="h-full w-full overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
               aria-label={`Открыть детали упражнения ${name}`}
           >
               <LazyImage

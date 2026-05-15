@@ -231,7 +231,7 @@ function App() {
   const [createProgramName, setCreateProgramName] = useState("");
   const [activeDayId, setActiveDayId] = useState<string | null>(null);
   const [allExerciseReturnPage, setAllExerciseReturnPage] = useState<
-    "workout" | "createProgram"
+    "workout" | "createProgram" | "activeWorkout"
   >("workout");
   const [isCustomWorkoutMode, setIsCustomWorkoutMode] = useState(false);
   const [editingProgramId, setEditingProgramId] = useState<
@@ -829,6 +829,10 @@ function App() {
             setCompletedWorkoutIds={setCompletedWorkoutIds}
             customExercises={isCustomWorkoutMode ? workoutExercises : undefined}
             isCustomWorkout={isCustomWorkoutMode}
+            onNavigateToAllExercise={() => {
+              setAllExerciseReturnPage("activeWorkout");
+              navigateToPage("allExercise");
+            }}
           />
         );
       case "history":
@@ -869,11 +873,15 @@ function App() {
       case "allExercise":
         return (
           <AllExercisePage
-            onClose={() =>
-              allExerciseReturnPage === "createProgram"
-                ? navigateToPage("createProgram")
-                : navigateToWorkout()
-            }
+            onClose={() => {
+              if (allExerciseReturnPage === "createProgram") {
+                navigateToPage("createProgram");
+              } else if (allExerciseReturnPage === "activeWorkout") {
+                navigateToPage("activeWorkout");
+              } else {
+                navigateToWorkout();
+              }
+            }}
             onOpenExerciseDetails={navigateToExerciseDetails}
             onAddExercises={(exercises) => {
               if (allExerciseReturnPage === "createProgram" && activeDayId) {
