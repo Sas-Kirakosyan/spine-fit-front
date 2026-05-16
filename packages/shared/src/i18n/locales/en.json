@@ -399,7 +399,7 @@
     "header": {
       "title": "Personalizing your plan",
       "questionCount": "Question {{current}} / {{total}}",
-      "home": "Home"
+      "homeAriaLabel": "Go Home"
     },
     "nav": {
       "startAssessment": "Start My Assessment",

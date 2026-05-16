@@ -523,7 +523,7 @@
     "header": {
       "title": "Персонализация вашего плана",
       "questionCount": "Вопрос {{current}} / {{total}}",
-      "home": "Главная"
+      "homeAriaLabel": "На главную"
     },
     "nav": {
       "startAssessment": "Начать оценку",

@@ -1,3 +1,5 @@
+import { logoUrl } from "@/lib/assets";
+
 export function EyeIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg
@@ -293,15 +295,25 @@ export function GoogleIcon({ className = "h-5 w-5" }: { className?: string }) {
   );
 }
 
-
-export function HomeIcon({ onClickHomeIcon }: { onClickHomeIcon: () => void }) {
-return (
-    <svg
-        onClick={onClickHomeIcon}
-        xmlns="http://www.w3.org/2000/svg"
-        height="40px" viewBox="0 -960 960 960"
-        width="40px" fill="#FFFFFF">
-            <path d="M226.67-186.67h140v-246.66h226.66v246.66h140v-380L480-756.67l-253.33 190v380ZM160-120v-480l320-240 320 240v480H526.67v-246.67h-93.34V-120H160Zm320-352Z"/>
-    </svg>
-)
+export function HomeIcon({
+  onClickHomeIcon,
+  ariaLabel = "Go Home",
+  className = "h-10 w-10 object-contain",
+}: {
+  onClickHomeIcon: () => void;
+  ariaLabel?: string;
+  className?: string;
+}) {
+  return (
+    <button
+      onClick={onClickHomeIcon}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onClickHomeIcon();
+      }}
+      aria-label={ariaLabel}
+      className="cursor-pointer rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+    >
+      <img src={logoUrl()} alt="" className={className} />
+    </button>
+  );
 }

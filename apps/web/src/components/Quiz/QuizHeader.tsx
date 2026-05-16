@@ -26,7 +26,7 @@ export function QuizHeader({
           </p>
         )}
       </div>
-        <HomeIcon onClickHomeIcon={onClose}/>
+        <HomeIcon onClickHomeIcon={onClose} ariaLabel={t("quiz.header.homeAriaLabel")} />
     </div>
   );
 }
