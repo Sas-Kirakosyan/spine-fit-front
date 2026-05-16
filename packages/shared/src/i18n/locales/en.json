@@ -402,7 +402,7 @@
       "homeAriaLabel": "Go Home"
     },
     "nav": {
-      "startAssessment": "Start My Assessment",
+      "startAssessment": "Build My Plan",
       "takesLessThan": "Takes less than 1 minute",
       "back": "Back",
       "next": "Next",
@@ -451,7 +451,7 @@
       "1": {
         "title": "Build Muscle. Protect Your Spine.",
         "description": "Whether your goal is to build muscle or recover from back pain — this assessment builds a plan tailored to your health history, body, and schedule.",
-        "buttonText": "Start My Assessment"
+        "buttonText": "Build My Plan"
       },
       "2": {
         "question": "How would you describe your current back health?",
