@@ -5,10 +5,8 @@ type SlugMap = Record<string, string>;
 
 const optionSlugs: Record<PlanFieldId, SlugMap> = {
   goal: {
-    "Muscle Hypertrophy (Build mass safely with back/sciatica history)":
-      "hypertrophy",
-    "Structural Recovery (Reduce pain and restore movement capacity)":
-      "recovery",
+    "Build Muscle & Strength": "hypertrophy",
+    "Continue Rehab & Recovery": "recovery",
   },
   workoutsPerWeek: {
     "1 day per week": "d1",

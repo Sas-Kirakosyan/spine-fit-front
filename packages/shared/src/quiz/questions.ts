@@ -22,17 +22,24 @@ export const questions: QuizQuestion[] = [
   },
   {
     id: 2,
-    fieldName: "goal",
-    question: "What is your main training goal?",
-    type: "radio",
-    options: [...GOAL_OPTIONS],
-  },
-  {
-    id: 3,
     fieldName: "painStatus",
     question: "How would you describe your current back health?",
     type: "radio",
     options: [...PAIN_STATUS_QUIZ_OPTIONS],
+  },
+  {
+    id: 3,
+    fieldName: "goal",
+    question: "What is your main training goal?",
+    type: "radio",
+    options: [...GOAL_OPTIONS],
+    showIf: {
+      fieldName: "painStatus",
+      in: [
+        "Recovered (Past history of pain/injury)",
+        "Healthy (I am pain-free, but cautious)",
+      ],
+    },
   },
 
   {

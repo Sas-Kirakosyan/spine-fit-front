@@ -10,8 +10,8 @@ import { resolveEffectiveSplit } from "../utils/promptBuilder.js";
 // Keep in sync with packages/shared/src/quiz/constants.ts (GOAL_OPTIONS).
 // Backend does not depend on @spinefit/shared at build time.
 const GOAL_OPTIONS = [
-  "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
-  "Structural Recovery (Reduce pain and restore movement capacity)",
+  "Build Muscle & Strength",
+  "Continue Rehab & Recovery",
 ] as const;
 
 const require = createRequire(import.meta.url);
@@ -37,8 +37,8 @@ function determineSplitName(experience: string, frequency: string, painStatus?: 
 }
 
 const QUESTIONS = {
-  GOAL: 2,
-  PAIN_STATUS: 3,
+  GOAL: 3,
+  PAIN_STATUS: 2,
   PAIN_LOCATION: 4,
   PAIN_LEVEL: 5,
   PAIN_TRIGGERS: 6,
@@ -55,8 +55,10 @@ const QUESTIONS = {
 function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   const { answers } = data;
 
-  // Goal
-  const goal = typeof answers[QUESTIONS.GOAL] === "number" ? GOAL_OPTIONS[answers[QUESTIONS.GOAL] as number] : GOAL_OPTIONS[0];
+  // Goal — Q3 is hidden when painStatus is Active Symptoms (index 0), so default
+  // to recovery rather than hypertrophy when no goal was answered.
+  const goalDefault = answers[QUESTIONS.PAIN_STATUS] === 0 ? GOAL_OPTIONS[1] : GOAL_OPTIONS[0];
+  const goal = typeof answers[QUESTIONS.GOAL] === "number" ? GOAL_OPTIONS[answers[QUESTIONS.GOAL] as number] : goalDefault;
 
   // Gender (standalone radio: 0=Male, 1=Female, 2=Other)
   const genderOptions = ["Male", "Female", "Other"];

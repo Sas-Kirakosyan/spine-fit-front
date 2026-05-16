@@ -66,11 +66,6 @@ export { appEmitter } from "./events/appEmitter";
 export { questions, allTriggers } from "./quiz/questions";
 export {
   GOAL_OPTIONS,
-  GOAL_HYPERTROPHY,
-  GOAL_RECOVERY,
   PAIN_STATUS_QUIZ_OPTIONS,
-  PAIN_STATUS_HEALTHY,
-  PAIN_STATUS_RECOVERED,
-  PAIN_STATUS_ACTIVE,
 } from "./quiz/constants";
 export type { GoalOption, PainStatusQuizOption } from "./quiz/constants";

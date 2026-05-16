@@ -454,21 +454,19 @@
         "buttonText": "Start My Assessment"
       },
       "2": {
-        "question": "What is your main training goal?",
-        "options": [
-          "Muscle Hypertrophy (Build mass safely with back/sciatica history)",
-          "Structural Recovery (Reduce pain and restore movement capacity)"
-        ]
-      },
-      "3": {
         "question": "How would you describe your current back health?",
         "options": [
           "Active Symptoms (Currently experiencing discomfort)",
           "Recovered (Past history of pain/injury)",
           "Healthy (I am pain-free, but cautious)"
-        ],
-        "disabledNoteHypertrophy": "\"Active Symptoms\" is unavailable: muscle hypertrophy training is not recommended while you are currently experiencing pain.",
-        "disabledNoteRecovery": "\"Healthy\" and \"Recovered\" are unavailable: structural recovery is designed for users who currently have pain to reduce."
+        ]
+      },
+      "3": {
+        "question": "What is your main training goal?",
+        "options": [
+          "Build Muscle & Strength",
+          "Continue Rehab & Recovery"
+        ]
       },
       "4": {
         "question": "Where is — or was — your pain located?",
@@ -668,10 +666,10 @@
         "headerDescription": "Your goal is key to how SpineFit selects exercises, rep & weight ranges, and workout intensity.",
         "options": {
           "hypertrophy": {
-            "label": "Muscle Hypertrophy (Build mass safely with back/sciatica history)"
+            "label": "Build Muscle & Strength"
           },
           "recovery": {
-            "label": "Structural Recovery (Reduce pain and restore movement capacity)"
+            "label": "Continue Rehab & Recovery"
           }
         }
       },
