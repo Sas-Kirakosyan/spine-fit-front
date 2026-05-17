@@ -131,6 +131,8 @@ export interface ActiveWorkoutPageProps {
   onFinishWorkout: (summary?: FinishedWorkoutSummary) => void;
   completedExerciseIds?: number[];
   workoutStartTime?: number;
+  /** Accumulated inactive break time, excluded from calories & duration. */
+  pausedSeconds?: number;
   exerciseLogs?: Record<number, ExerciseSetRow[]>;
   completedWorkoutIds?: Set<string>;
   setCompletedWorkoutIds?: (ids: Set<string>) => void;

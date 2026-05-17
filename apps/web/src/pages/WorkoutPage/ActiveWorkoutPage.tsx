@@ -42,6 +42,7 @@ function ActiveWorkoutPage({
   onFinishWorkout,
   completedExerciseIds = [],
   workoutStartTime,
+  pausedSeconds = 0,
   exerciseLogs = {},
   exercisePainLevels = {},
   completedWorkoutIds = new Set(),
@@ -120,14 +121,28 @@ function ActiveWorkoutPage({
   }, [completedExerciseIdsSet, todaysExercises]);
 
   const handleFinishWorkout = useCallback(() => {
-    const currentDuration = formatTime(elapsedSeconds);
-    setFixedDuration(currentDuration);
+    // Calories & the logged duration use *active* time: total wall-clock since
+    // start minus long inactive breaks. The on-screen timer stays wall-clock.
+    const activeSeconds =
+      workoutStartTime != null
+        ? Math.max(
+            0,
+            Math.floor((Date.now() - workoutStartTime) / 1000) - pausedSeconds
+          )
+        : elapsedSeconds;
+    setFixedDuration(formatTime(activeSeconds));
     if (completedExercises.length > 0) {
       setShowFinishModal(true);
     } else {
       onFinishWorkout();
     }
-  }, [elapsedSeconds, completedExercises.length, onFinishWorkout]);
+  }, [
+    workoutStartTime,
+    pausedSeconds,
+    elapsedSeconds,
+    completedExercises.length,
+    onFinishWorkout,
+  ]);
 
   const handleResume = useCallback(() => {
     resetToElapsed(elapsedSeconds);

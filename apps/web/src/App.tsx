@@ -30,6 +30,14 @@ import * as workoutHistoryService from "@/lib/workoutHistoryService";
 import * as completedWorkoutsService from "@/lib/completedWorkoutsService";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { getSelectedDayIndex } from "@/storage/selectedDayStorage";
+import {
+  loadActiveWorkout,
+  saveActiveWorkout,
+  clearActiveWorkout,
+  touchActiveWorkoutHeartbeat,
+  consumeIdleGapSeconds,
+  HEARTBEAT_MS,
+} from "@/storage/activeWorkoutStorage";
 import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
@@ -137,6 +145,10 @@ function App() {
     }
     return null;
   });
+  // Read any in-progress workout from localStorage exactly once, so a reload /
+  // tab close / device shutdown returns the user where they left off.
+  const [restoredWorkout] = useState(() => loadActiveWorkout());
+
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const validPages: Page[] = [
       "home",
@@ -159,6 +171,12 @@ function App() {
       "generatingPlan",
       "resetPassword",
     ];
+    // An in-progress workout always wins: navigateToActiveWorkout never
+    // syncs the URL, so a reload would otherwise resolve to /workout and
+    // strand the user. Resume exactly where they left off.
+    if (restoredWorkout) {
+      return "activeWorkout";
+    }
     const pageFromPath = PATH_TO_PAGE[window.location.pathname] as
       | Page
       | undefined;
@@ -169,6 +187,11 @@ function App() {
     const validResolved = validPages.includes(resolvedPage)
       ? resolvedPage
       : "home";
+    // Don't strand the user on an empty active workout if the session is gone
+    // (finished, discarded, or aged out as stale).
+    if (validResolved === "activeWorkout" && !restoredWorkout) {
+      return "workout";
+    }
     return validResolved;
   });
 
@@ -182,15 +205,23 @@ function App() {
     "workout" | "activeWorkout"
   >("workout");
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
-    []
+    () => restoredWorkout?.completedExerciseIds ?? []
   );
-  const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(null);
+  const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(
+    () => restoredWorkout?.workoutStartTime ?? null
+  );
   const [exerciseLogs, setExerciseLogs] = useState<
     Record<number, ExerciseSetRow[]>
-  >({});
+  >(() => restoredWorkout?.exerciseLogs ?? {});
   const [exercisePainLevels, setExercisePainLevels] = useState<
     Record<number, number>
-  >({});
+  >(() => restoredWorkout?.exercisePainLevels ?? {});
+  // Inactive break time excluded from calories / history duration. On a cold
+  // start, fold in the gap that elapsed while the app was fully closed.
+  const [pausedSeconds, setPausedSeconds] = useState<number>(() => {
+    if (!restoredWorkout) return 0;
+    return restoredWorkout.pausedSeconds + consumeIdleGapSeconds();
+  });
 
   const [workoutHistory, setWorkoutHistory] = useState<
     FinishedWorkoutSummary[]
@@ -233,7 +264,9 @@ function App() {
   const [allExerciseReturnPage, setAllExerciseReturnPage] = useState<
     "workout" | "createProgram" | "activeWorkout"
   >("workout");
-  const [isCustomWorkoutMode, setIsCustomWorkoutMode] = useState(false);
+  const [isCustomWorkoutMode, setIsCustomWorkoutMode] = useState(
+    () => restoredWorkout?.isCustomWorkout ?? false
+  );
   const [editingProgramId, setEditingProgramId] = useState<
     string | undefined
   >();
@@ -401,6 +434,53 @@ function App() {
     localStorage.setItem("workoutExercises", JSON.stringify(workoutExercises));
   }, [workoutExercises]);
 
+  // Persist the in-progress workout on every meaningful change so it survives
+  // reload / tab close / device shutdown. Cleared on finish/discard via
+  // resetWorkoutState(). lastActiveAt is intentionally left to the default
+  // (now) — any state change here is itself a sign of activity.
+  useEffect(() => {
+    if (workoutStartTime === null) return;
+    saveActiveWorkout({
+      workoutStartTime,
+      completedExerciseIds,
+      exerciseLogs,
+      exercisePainLevels,
+      isCustomWorkout: isCustomWorkoutMode,
+      pausedSeconds,
+    });
+  }, [
+    workoutStartTime,
+    completedExerciseIds,
+    exerciseLogs,
+    exercisePainLevels,
+    isCustomWorkoutMode,
+    pausedSeconds,
+  ]);
+
+  // Heartbeat: prove the session is alive every few seconds, and turn long
+  // hidden/closed gaps into excluded "paused" time. Robust against power-off /
+  // crash because nothing depends on a clean unload event firing.
+  useEffect(() => {
+    if (workoutStartTime === null) return;
+    const intervalId = window.setInterval(
+      touchActiveWorkoutHeartbeat,
+      HEARTBEAT_MS
+    );
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        touchActiveWorkoutHeartbeat();
+      } else {
+        const extra = consumeIdleGapSeconds();
+        if (extra > 0) setPausedSeconds((prev) => prev + extra);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [workoutStartTime]);
+
   const navigateToPage = (
     page: Page,
     historyState: Record<string, unknown> = {}
@@ -416,6 +496,8 @@ function App() {
     setExerciseLogs({});
     setExercisePainLevels({});
     setWorkoutStartTime(null);
+    setPausedSeconds(0);
+    clearActiveWorkout();
   };
 
   const handleAddExercises = (exercises: Exercise[]) => {
@@ -551,6 +633,13 @@ function App() {
     }
     setWorkoutStartTime((prevStartTime) => prevStartTime ?? Date.now());
     setExerciseSetsMode("preWorkout");
+    // Keep the URL in sync like every other navigate* helper so reload /
+    // back/forward resolve to the active workout, not the stale path.
+    window.history.pushState(
+      { page: "activeWorkout" },
+      "",
+      PAGE_TO_PATH["activeWorkout"]
+    );
     startPageTransition(() => {
       setSelectedExercise(null);
       setCurrentPage("activeWorkout");
@@ -823,6 +912,7 @@ function App() {
             onFinishWorkout={handleFinishWorkout}
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
+            pausedSeconds={pausedSeconds}
             exerciseLogs={exerciseLogs}
             exercisePainLevels={exercisePainLevels}
             completedWorkoutIds={completedWorkoutIds}
