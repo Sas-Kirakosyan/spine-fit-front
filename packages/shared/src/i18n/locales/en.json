@@ -54,6 +54,14 @@
     "yes": "Yes",
     "no": "No"
   },
+  "installPrompt": {
+    "title": "Install SpineFit",
+    "description": "Add SpineFit to your home screen for a faster, full-screen experience.",
+    "install": "Install",
+    "dismiss": "Not now",
+    "iosTitle": "Install SpineFit",
+    "iosInstructions": "Tap the Share button, then choose “Add to Home Screen”."
+  },
   "muscleGroups": {
     "chest": "Chest",
     "back": "Back",

@@ -54,6 +54,14 @@
     "yes": "Да",
     "no": "Нет"
   },
+  "installPrompt": {
+    "title": "Установить SpineFit",
+    "description": "Добавьте SpineFit на главный экран для быстрого полноэкранного доступа.",
+    "install": "Установить",
+    "dismiss": "Не сейчас",
+    "iosTitle": "Установить SpineFit",
+    "iosInstructions": "Нажмите кнопку «Поделиться», затем выберите «На экран „Домой“»."
+  },
   "muscleGroups": {
     "chest": "Грудь",
     "back": "Спина",

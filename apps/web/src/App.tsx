@@ -33,6 +33,7 @@ import { getSelectedDayIndex } from "@/storage/selectedDayStorage";
 import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
+import { InstallPrompt } from "@/components/InstallPrompt/InstallPrompt";
 import { useAuth } from "@/hooks/useAuth";
 import { retryPendingQuizSync } from "@/lib/quizStorage";
 import { OAUTH_IN_PROGRESS_KEY } from "@/lib/authService";
@@ -968,6 +969,7 @@ function App() {
       <Suspense fallback={<PageLoader className="pointer-events-none" />}>
         {renderPage()}
       </Suspense>
+      <InstallPrompt />
     </>
   );
 }
