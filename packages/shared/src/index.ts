@@ -58,6 +58,7 @@ export { getPainStatusFromQuizAnswers } from "./utils/painStatus";
 
 // Hooks
 export { useExerciseName } from "./hooks/useExerciseName";
+export { useExerciseSearchText } from "./hooks/useExerciseSearchText";
 
 // Events
 export { appEmitter } from "./events/appEmitter";

@@ -8,7 +8,6 @@ import {
 } from "react";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
-import { useExerciseName } from "@spinefit/shared";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { SavedProgram, WorkoutPageProps } from "@/types/workout";
@@ -59,7 +58,6 @@ function WorkoutPage({
   completedWorkoutIds = new Set(),
 }: WorkoutPageProps) {
   const { t } = useTranslation();
-  const { getExerciseName } = useExerciseName();
 
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const [swipedExerciseId, setSwipedExerciseId] = useState<number | null>(null);
@@ -246,7 +244,6 @@ function WorkoutPage({
   } = useReplaceExerciseModal({
     allExercises,
     currentExercises: displayExercises,
-    getSearchableName: getExerciseName,
   });
 
   const handleConfirmSwap = (
