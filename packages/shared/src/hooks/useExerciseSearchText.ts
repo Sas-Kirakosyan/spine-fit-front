@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 /**
  * Builds a multilingual searchable string for an exercise: its English name
@@ -9,6 +9,7 @@ import { useCallback } from "react";
  */
 export function useExerciseSearchText() {
   const { t, i18n } = useTranslation();
+  const tEn = useMemo(() => i18n.getFixedT("en"), [i18n]);
 
   const getSearchableText = useCallback(
     (exercise: {
@@ -16,7 +17,6 @@ export function useExerciseSearchText() {
       name: string;
       muscle_groups: string[];
     }): string => {
-      const tEn = i18n.getFixedT("en");
       const parts: string[] = [
         exercise.name,
         t(`exerciseNames.${exercise.id}`, { defaultValue: exercise.name }),
@@ -30,7 +30,7 @@ export function useExerciseSearchText() {
 
       return parts.join(" ");
     },
-    [t, i18n],
+    [t, tEn],
   );
 
   return { getSearchableText };
