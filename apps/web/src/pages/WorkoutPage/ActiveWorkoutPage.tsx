@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { Exercise } from "@/types/exercise";
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
-import { useExerciseName, estimateCalories } from "@spinefit/shared";
+import { estimateCalories } from "@spinefit/shared";
 import { getBodyWeightKg, getStoredGender } from "@/storage/bodyProfileStorage";
 import type {
   ActiveWorkoutPageProps,
@@ -51,7 +51,6 @@ function ActiveWorkoutPage({
   onNavigateToAllExercise,
 }: ActiveWorkoutPageProps) {
   const { t } = useTranslation();
-  const { getExerciseName } = useExerciseName();
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const [showFinishModal, setShowFinishModal] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
@@ -103,7 +102,6 @@ function ActiveWorkoutPage({
   } = useReplaceExerciseModal({
     allExercises,
     currentExercises: todaysExercises,
-    getSearchableName: getExerciseName,
   });
 
   // const allExercisesCompleted = useMemo(() => {

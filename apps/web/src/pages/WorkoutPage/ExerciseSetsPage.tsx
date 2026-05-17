@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   useExerciseName,
+  useExerciseSearchText,
   getAllBaseExercises,
   getBaseExerciseById,
   isTimeBasedExercise,
@@ -133,6 +134,7 @@ function ExerciseSetsPage({
 }: ExerciseSetsPageProps) {
   const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
+  const { getSearchableText } = useExerciseSearchText();
   const exerciseDisplayName = getExerciseName(exercise);
   const allExercises = getAllBaseExercises();
   const baseExercise = getBaseExerciseById(exercise.id);
@@ -743,8 +745,9 @@ function ExerciseSetsPage({
         replaceExercise: exercise,
         replaceQuery,
         currentExercises: [exercise],
+        getSearchableText,
       }),
-    [allExercises, exercise, replaceQuery]
+    [allExercises, exercise, replaceQuery, getSearchableText]
   );
 
   const suggestedReplacementExercises = useMemo(

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { useExerciseSearchText } from "@spinefit/shared";
 import {
   getAllReplacementExercises,
   getSuggestedReplacementExercises,
@@ -8,14 +9,13 @@ import type { Exercise } from "@/types/exercise";
 interface UseReplaceExerciseModalOptions {
   allExercises: Exercise[];
   currentExercises: Exercise[];
-  getSearchableName?: (exercise: Exercise) => string;
 }
 
 export function useReplaceExerciseModal({
   allExercises,
   currentExercises,
-  getSearchableName,
 }: UseReplaceExerciseModalOptions) {
+  const { getSearchableText } = useExerciseSearchText();
   const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
   const [replaceQuery, setReplaceQuery] = useState("");
 
@@ -26,14 +26,14 @@ export function useReplaceExerciseModal({
         replaceExercise,
         replaceQuery,
         currentExercises,
-        getSearchableName,
+        getSearchableText,
       }),
     [
       allExercises,
       replaceExercise,
       replaceQuery,
       currentExercises,
-      getSearchableName,
+      getSearchableText,
     ]
   );
 
@@ -46,9 +46,9 @@ export function useReplaceExerciseModal({
         replaceExercise,
         replaceQuery: "",
         currentExercises,
-        getSearchableName,
+        getSearchableText,
       }),
-    [allExercises, replaceExercise, currentExercises, getSearchableName]
+    [allExercises, replaceExercise, currentExercises, getSearchableText]
   );
 
   const suggestedReplacementExercises = useMemo(
