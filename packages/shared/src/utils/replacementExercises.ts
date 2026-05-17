@@ -3,8 +3,25 @@ import type { Exercise } from "../types/exercise";
 const ALL_REPLACEMENTS_LIMIT = 60;
 const SUGGESTED_REPLACEMENTS_LIMIT = 20;
 
-function defaultSearchableName(exercise: Exercise): string {
-  return exercise.name;
+function defaultSearchableText(exercise: Exercise): string {
+  return `${exercise.name} ${exercise.muscle_groups.join(" ")}`;
+}
+
+/**
+ * Normalizes text for tokenized search: case-insensitive, diacritic-insensitive,
+ * Russian "ё" treated as "е", underscores/hyphens treated as spaces, and
+ * collapsed whitespace. Lets "erector spinae" match the `erector_spinae` code
+ * and "Ёлочка" match "елочка".
+ */
+export function normalizeSearchText(input: string): string {
+  return input
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/ё/g, "е")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export function getAllReplacementExercises({
@@ -12,17 +29,19 @@ export function getAllReplacementExercises({
   replaceExercise,
   replaceQuery,
   currentExercises,
-  getSearchableName = defaultSearchableName,
+  getSearchableText = defaultSearchableText,
 }: {
   allExercises: Exercise[];
   replaceExercise: Exercise | null;
   replaceQuery: string;
   currentExercises: Exercise[];
-  getSearchableName?: (exercise: Exercise) => string;
+  getSearchableText?: (exercise: Exercise) => string;
 }): Exercise[] {
   if (!replaceExercise) return [];
 
-  const query = replaceQuery.trim().toLowerCase();
+  const tokens = normalizeSearchText(replaceQuery)
+    .split(" ")
+    .filter(Boolean);
   const occupiedIds = new Set(
     currentExercises
       .filter((ex) => ex.id !== replaceExercise.id)
@@ -34,10 +53,9 @@ export function getAllReplacementExercises({
     if (exercise.id === replaceExercise.id) continue;
     if (occupiedIds.has(exercise.id)) continue;
 
-    if (query.length > 0) {
-      const searchable =
-        `${getSearchableName(exercise)} ${exercise.muscle_groups.join(" ")}`.toLowerCase();
-      if (!searchable.includes(query)) continue;
+    if (tokens.length > 0) {
+      const haystack = normalizeSearchText(getSearchableText(exercise));
+      if (!tokens.every((token) => haystack.includes(token))) continue;
     }
 
     matched.push(exercise);
