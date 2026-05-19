@@ -128,6 +128,7 @@ export interface FinishedWorkoutSummary {
 export interface ActiveWorkoutPageProps {
   onNavigateBack: () => void;
   onOpenExerciseSets: (exercise: Exercise) => void;
+  onOpenExerciseDetails: (exercise: Exercise) => void;
   onFinishWorkout: (summary?: FinishedWorkoutSummary) => void;
   completedExerciseIds?: number[];
   workoutStartTime?: number;

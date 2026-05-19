@@ -39,6 +39,7 @@ import { trackEvent } from "@/utils/analytics";
 function ActiveWorkoutPage({
   onNavigateBack,
   onOpenExerciseSets,
+  onOpenExerciseDetails,
   onFinishWorkout,
   completedExerciseIds = [],
   workoutStartTime,
@@ -310,7 +311,7 @@ function ActiveWorkoutPage({
                     exercise={exercise}
                     isCompleted={isCompleted}
                     onCardClick={() => onOpenExerciseSets(exercise)}
-                    onDetailsClick={() => onOpenExerciseSets(exercise)}
+                    onDetailsClick={() => onOpenExerciseDetails(exercise)}
                     onActionClick={() => setActionExercise(exercise)}
                     seatedWarning={isSeated && !isCompleted}
                   />
@@ -365,7 +366,7 @@ function ActiveWorkoutPage({
             onClose={() => setActionExercise(null)}
             onShowDetails={() => {
               if (actionExercise) {
-                onOpenExerciseSets(actionExercise);
+                onOpenExerciseDetails(actionExercise);
               }
               setActionExercise(null);
             }}
