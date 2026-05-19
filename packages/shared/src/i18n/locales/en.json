@@ -348,7 +348,9 @@
       "network": "Network error. Please try again.",
       "unknown": "Something went wrong",
       "planGenerationFailed": "Logged in, but we couldn't generate your plan. Please try again later.",
-      "resetSendFailed": "Could not send reset email. Please try again."
+      "resetSendFailed": "Could not send reset email. Please try again.",
+      "googleNoAccount": "No account is registered with this Google account. Please sign up first.",
+      "googleAlreadyRegistered": "This Google account is already registered. Please log in instead."
     }
   },
   "forgotPasswordModal": {

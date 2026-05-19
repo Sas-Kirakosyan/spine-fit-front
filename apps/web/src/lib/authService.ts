@@ -91,13 +91,47 @@ export async function updateUserPassword(
 
 export type OAuthResult = { ok: true } | { ok: false; error: AuthError };
 
+export type OAuthIntent = "login" | "register";
+
 export const OAUTH_IN_PROGRESS_KEY = "oauthInProgress";
 
-export async function signInWithGoogle(): Promise<OAuthResult> {
+// Set by the post-OAuth handler in App.tsx when a "login" attempt turned out to
+// create a brand-new account (i.e. the user never registered). The Login page
+// reads it on mount to show the "no account" error.
+export const GOOGLE_LOGIN_NO_ACCOUNT_KEY = "googleLoginNoAccount";
+
+// Set by the post-OAuth handler in App.tsx when a "register" attempt picked a
+// Google account that was already registered. The Login page reads it on mount
+// to show the "already registered" error.
+export const GOOGLE_REGISTER_EXISTS_KEY = "googleRegisterExists";
+
+/**
+ * Supabase's OAuth sign-in silently creates an account when none exists, so we
+ * can't tell "signed in" apart from "just signed up" from the result alone.
+ * A brand-new OAuth user is created and signed in within the same round-trip,
+ * so `created_at` and `last_sign_in_at` are within a few seconds of each other.
+ * An existing user signing in again has `created_at` far in the past.
+ */
+export function isFreshlyCreatedUser(user: User): boolean {
+  const created = new Date(user.created_at).getTime();
+  const lastSignIn = user.last_sign_in_at
+    ? new Date(user.last_sign_in_at).getTime()
+    : created;
+  return Math.abs(lastSignIn - created) < 10_000;
+}
+
+export async function signOut(): Promise<void> {
+  await supabase.auth.signOut().catch(() => {});
+}
+
+export async function signInWithGoogle(
+  intent: OAuthIntent = "register"
+): Promise<OAuthResult> {
   // Marker read by App.tsx after the OAuth redirect lands the user back on "/".
   // Without it the post-auth handler can't tell an OAuth completion apart from
-  // a normal app load with an existing session.
-  localStorage.setItem(OAUTH_IN_PROGRESS_KEY, "google");
+  // a normal app load with an existing session. The value also carries the
+  // intent so a "login" that created a fresh account can be rejected.
+  localStorage.setItem(OAUTH_IN_PROGRESS_KEY, intent);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",

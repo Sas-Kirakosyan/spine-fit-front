@@ -48,6 +48,7 @@ function Registration({
             <GoogleSignInButton
               label={t("registrationPage.continueWithGoogle")}
               onError={setOauthError}
+              intent="register"
             />
           </div>
 
