@@ -133,13 +133,13 @@ export function Dialog({
         ref={cardRef}
         className={[
           "relative z-10 w-full bg-[#161827] text-white",
-          "min-h-[100dvh] md:min-h-0 md:max-h-[90vh] md:rounded-[20px]",
+          "h-[100svh] md:h-auto md:max-h-[90vh] md:rounded-[20px]",
           "flex flex-col",
           dialogSizeClass[size],
           className,
         ].join(" ")}
       >
-        <div className={`flex-1 overflow-y-auto ${bodyClassName}`}>
+        <div className={`flex-1 min-h-0 overflow-y-auto ${bodyClassName}`}>
           {children}
         </div>
       </div>
