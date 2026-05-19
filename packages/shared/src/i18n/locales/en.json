@@ -425,6 +425,13 @@
         "step4": "Adjusting intensity",
         "step5": "Finalizing your plan"
       },
+      "regenerating": {
+        "step1": "Reviewing your changes",
+        "step2": "Re-selecting safe exercises",
+        "step3": "Rebuilding your weekly plan",
+        "step4": "Re-adjusting intensity",
+        "step5": "Finalizing your updated plan"
+      },
       "registerAndGenerate": "Get my plan",
       "registerStepTitle": "Create your account",
       "registerStepSubtitle": "Your personalized plan is ready\nCreate your account to unlock it",

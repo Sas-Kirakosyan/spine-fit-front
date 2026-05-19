@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { PageContainer } from "@/Layout/PageContainer";
 import type { MyPlanPageProps } from "@/types/pages";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
+import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader";
 import { MyPlanPageHeader } from "./MyPlanPageHeader";
 import { GoalSection } from "./GoalSection";
 import { TrainingProfileSection } from "./TrainingProfileSection";
@@ -62,8 +63,7 @@ function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
       />
 
       <RegenerateModal
-        isOpen={plan.isRegenerateModalOpen}
-        isRegenerating={plan.isRegenerating}
+        isOpen={plan.isRegenerateModalOpen && !plan.isRegenerating}
         error={plan.regenerateError}
         onCancel={() => {
           plan.setIsRegenerateModalOpen(false);
@@ -71,6 +71,14 @@ function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
         }}
         onConfirm={plan.handleRegeneratePlan}
       />
+
+      {plan.isRegenerating && (
+        <PlanGeneratingLoader
+          apiPhase={plan.regenerateApiPhase}
+          onAllStepsComplete={plan.handleRegenerateComplete}
+          stepLabelPrefix="quiz.nav.regenerating"
+        />
+      )}
 
       {plan.currentField && translatedField && (
         <SelectionModal

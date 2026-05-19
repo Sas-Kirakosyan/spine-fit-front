@@ -10,11 +10,13 @@ type StepStatus = "pending" | "active" | "done";
 export type PlanGeneratingLoaderProps = {
   apiPhase: "pending" | "success";
   onAllStepsComplete: () => void;
+  stepLabelPrefix?: string;
 };
 
 export function PlanGeneratingLoader({
   apiPhase,
   onAllStepsComplete,
+  stepLabelPrefix = "quiz.nav.generating",
 }: PlanGeneratingLoaderProps) {
   const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState<StepId>(1);
@@ -61,7 +63,7 @@ export function PlanGeneratingLoader({
         {STEP_IDS.map((id) => (
           <StepRow
             key={id}
-            label={t(`quiz.nav.generating.step${id}`)}
+            label={t(`${stepLabelPrefix}.step${id}`)}
             status={statusOf(id)}
           />
         ))}
