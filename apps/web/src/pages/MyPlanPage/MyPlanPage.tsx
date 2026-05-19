@@ -51,7 +51,7 @@ function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
         />
       </div>
 
-      {import.meta.env.DEV && plan.hasChanges && (
+      {plan.hasChanges && (
         <RegenerateButton onClick={() => plan.setIsRegenerateModalOpen(true)} />
       )}
 
