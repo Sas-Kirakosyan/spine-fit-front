@@ -96,7 +96,7 @@ export function SelectionModal({
           </div>
         </div>
 
-        <div className="sticky bottom-0 px-4 pt-3 pb-6 bg-background">
+        <div className="sticky bottom-0 px-4 pt-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-background">
           <Button
             onClick={handleSave}
             disabled={!hasChanges}

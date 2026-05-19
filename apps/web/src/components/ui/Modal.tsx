@@ -133,7 +133,7 @@ export function Dialog({
         ref={cardRef}
         className={[
           "relative z-10 w-full bg-[#161827] text-white",
-          "min-h-screen md:min-h-0 md:max-h-[90vh] md:rounded-[20px]",
+          "min-h-[100dvh] md:min-h-0 md:max-h-[90vh] md:rounded-[20px]",
           "flex flex-col",
           dialogSizeClass[size],
           className,
