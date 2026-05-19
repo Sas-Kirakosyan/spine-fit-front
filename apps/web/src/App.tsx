@@ -188,6 +188,9 @@ function App() {
   const [exerciseSetsOrigin, setExerciseSetsOrigin] = useState<
     "workout" | "activeWorkout"
   >("workout");
+  const [exerciseDetailsOrigin, setExerciseDetailsOrigin] = useState<
+    "workout" | "activeWorkout"
+  >("workout");
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
     []
   );
@@ -605,8 +608,12 @@ function App() {
     });
   };
 
-  const navigateToExerciseDetails = (exercise: Exercise) => {
+  const navigateToExerciseDetails = (
+    exercise: Exercise,
+    origin: "workout" | "activeWorkout" = "workout"
+  ) => {
     setSelectedExercise(exercise);
+    setExerciseDetailsOrigin(origin);
     navigateToPage("exerciseDetails", { exercise });
   };
 
@@ -623,7 +630,16 @@ function App() {
   };
 
   const backFromExerciseDetails = () => {
-    window.history.back();
+    if (exerciseDetailsOrigin === "activeWorkout") {
+      window.history.replaceState(
+        { page: "activeWorkout" },
+        "",
+        PAGE_TO_PATH["activeWorkout"]
+      );
+      startPageTransition(() => setCurrentPage("activeWorkout"));
+    } else {
+      window.history.back();
+    }
   };
 
   const backFromExerciseSets = () => {
@@ -867,6 +883,9 @@ function App() {
             onNavigateBack={navigateToWorkout}
             onOpenExerciseSets={(ex) =>
               navigateToExerciseSets(ex, "activeWorkout")
+            }
+            onOpenExerciseDetails={(ex) =>
+              navigateToExerciseDetails(ex, "activeWorkout")
             }
             onFinishWorkout={handleFinishWorkout}
             completedExerciseIds={completedExerciseIds}
