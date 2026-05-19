@@ -23,8 +23,12 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isRegenerateModalOpen, setIsRegenerateModalOpen] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [regenerateApiPhase, setRegenerateApiPhase] = useState<
+    "pending" | "success"
+  >("pending");
   const [regenerateError, setRegenerateError] = useState<string | null>(null);
   const initialSettingsRef = useRef<PlanSettings>(getPlanSettings());
+  const pendingPlanRef = useRef<GeneratedPlan | null>(null);
 
   const hasChanges = useMemo(() => {
     const fields: PlanFieldId[] = [
@@ -73,10 +77,10 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   };
 
   const handleRegeneratePlan = async () => {
-    const MIN_DWELL_MS = 1800;
     setIsRegenerating(true);
+    setRegenerateApiPhase("pending");
     setRegenerateError(null);
-    const startedAt = Date.now();
+    pendingPlanRef.current = null;
     try {
       const response = await fetch(
         `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz/regenerate`,
@@ -98,26 +102,32 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
         throw new Error("Invalid regenerate response");
       }
 
-      const elapsed = Date.now() - startedAt;
-      if (elapsed < MIN_DWELL_MS) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, MIN_DWELL_MS - elapsed),
-        );
-      }
-
-      savePlanAndSettings(result.plan);
-      if (result.plan.settings) {
-        setPlanSettings(result.plan.settings);
-        initialSettingsRef.current = result.plan.settings;
-      }
-      setIsRegenerating(false);
-      setIsRegenerateModalOpen(false);
-      onNavigateBack();
+      // Hand the plan to the checklist loader; it paces the animation and
+      // calls handleRegenerateComplete once all steps finish.
+      pendingPlanRef.current = result.plan;
+      setRegenerateApiPhase("success");
     } catch (error) {
       console.error("Failed to regenerate plan:", error);
       setRegenerateError(t("myPlanPage.regenerateError"));
       setIsRegenerating(false);
+      setRegenerateApiPhase("pending");
     }
+  };
+
+  const handleRegenerateComplete = () => {
+    const plan = pendingPlanRef.current;
+    if (plan) {
+      savePlanAndSettings(plan);
+      if (plan.settings) {
+        setPlanSettings(plan.settings);
+        initialSettingsRef.current = plan.settings;
+      }
+    }
+    pendingPlanRef.current = null;
+    setIsRegenerating(false);
+    setRegenerateApiPhase("pending");
+    setIsRegenerateModalOpen(false);
+    onNavigateBack();
   };
 
   return {
@@ -131,6 +141,7 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     isResetModalOpen,
     isRegenerateModalOpen,
     isRegenerating,
+    regenerateApiPhase,
     regenerateError,
     setRegenerateError,
 
@@ -149,5 +160,6 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     handleBack,
     handleResetAndGoBack,
     handleRegeneratePlan,
+    handleRegenerateComplete,
   };
 }
