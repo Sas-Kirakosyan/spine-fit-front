@@ -54,6 +54,14 @@
     "yes": "Yes",
     "no": "No"
   },
+  "installPrompt": {
+    "title": "Install SpineFit",
+    "description": "Add SpineFit to your home screen for a faster, full-screen experience.",
+    "install": "Install",
+    "dismiss": "Not now",
+    "iosTitle": "Install SpineFit",
+    "iosInstructions": "Tap the Share button, then choose “Add to Home Screen”."
+  },
   "muscleGroups": {
     "chest": "Chest",
     "back": "Back",
@@ -340,7 +348,9 @@
       "network": "Network error. Please try again.",
       "unknown": "Something went wrong",
       "planGenerationFailed": "Logged in, but we couldn't generate your plan. Please try again later.",
-      "resetSendFailed": "Could not send reset email. Please try again."
+      "resetSendFailed": "Could not send reset email. Please try again.",
+      "googleNoAccount": "No account is registered with this Google account. Please sign up first.",
+      "googleAlreadyRegistered": "This Google account is already registered. Please log in instead."
     }
   },
   "forgotPasswordModal": {
@@ -416,6 +426,13 @@
         "step3": "Building your weekly plan",
         "step4": "Adjusting intensity",
         "step5": "Finalizing your plan"
+      },
+      "regenerating": {
+        "step1": "Reviewing your changes",
+        "step2": "Re-selecting safe exercises",
+        "step3": "Rebuilding your weekly plan",
+        "step4": "Re-adjusting intensity",
+        "step5": "Finalizing your updated plan"
       },
       "registerAndGenerate": "Get my plan",
       "registerStepTitle": "Create your account",

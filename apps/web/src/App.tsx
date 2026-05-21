@@ -41,9 +41,17 @@ import {
 import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
+import { InstallPrompt } from "@/components/InstallPrompt/InstallPrompt";
 import { useAuth } from "@/hooks/useAuth";
 import { retryPendingQuizSync } from "@/lib/quizStorage";
-import { OAUTH_IN_PROGRESS_KEY } from "@/lib/authService";
+import {
+  OAUTH_IN_PROGRESS_KEY,
+  GOOGLE_LOGIN_NO_ACCOUNT_KEY,
+  GOOGLE_REGISTER_EXISTS_KEY,
+  isFreshlyCreatedUser,
+  signOut,
+  deleteCurrentUserViaEdgeFunction,
+} from "@/lib/authService";
 
 const PUBLIC_PAGES: Page[] = ["home", "login", "register", "resetPassword"];
 
@@ -204,6 +212,9 @@ function App() {
   const [exerciseSetsOrigin, setExerciseSetsOrigin] = useState<
     "workout" | "activeWorkout"
   >("workout");
+  const [exerciseDetailsOrigin, setExerciseDetailsOrigin] = useState<
+    "workout" | "activeWorkout"
+  >("workout");
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
     () => restoredWorkout?.completedExerciseIds ?? []
   );
@@ -336,6 +347,7 @@ function App() {
       return;
     }
     if (auth.status !== "authenticated") return;
+    const oauthUser = auth.user;
 
     let cancelled = false;
     const refetch = async () => {
@@ -354,6 +366,50 @@ function App() {
           // The user just returned from a Google OAuth round-trip. Always lands
           // on "/" because redirectTo == window.location.origin.
           localStorage.removeItem(OAUTH_IN_PROGRESS_KEY);
+
+          // Supabase's OAuth sign-in silently creates an account when none
+          // exists. If this round-trip was started from the Login page and it
+          // ended up creating a brand-new account, the user never registered —
+          // reject it: delete the just-created auth.users row via the
+          // `delete-self` Edge Function, sign back out, flag the reason, and
+          // send them to login. Deletion runs BEFORE signOut() because the
+          // function needs the live session JWT to authenticate the caller.
+          if (
+            oauthInProgress === "login" &&
+            isFreshlyCreatedUser(oauthUser)
+          ) {
+            localStorage.setItem(GOOGLE_LOGIN_NO_ACCOUNT_KEY, "1");
+            await deleteCurrentUserViaEdgeFunction();
+            await signOut();
+            if (cancelled) return;
+            window.history.replaceState(
+              { page: "login" },
+              "",
+              PAGE_TO_PATH["login"]
+            );
+            setCurrentPage("login");
+            return;
+          }
+
+          // Mirror case: a "register" round-trip that signed into an account
+          // that already existed (Supabase silently logs in instead of
+          // creating one). The user picked an already-registered Google
+          // account — reject it and tell them to log in instead.
+          if (
+            oauthInProgress === "register" &&
+            !isFreshlyCreatedUser(oauthUser)
+          ) {
+            localStorage.setItem(GOOGLE_REGISTER_EXISTS_KEY, "1");
+            await signOut();
+            if (cancelled) return;
+            window.history.replaceState(
+              { page: "login" },
+              "",
+              PAGE_TO_PATH["login"]
+            );
+            setCurrentPage("login");
+            return;
+          }
 
           // If the user took the quiz before signing up with Google, hand off
           // to GeneratingPlanPage so they see the loader + retry UI instead of
@@ -646,8 +702,12 @@ function App() {
     });
   };
 
-  const navigateToExerciseDetails = (exercise: Exercise) => {
+  const navigateToExerciseDetails = (
+    exercise: Exercise,
+    origin: "workout" | "activeWorkout" = "workout"
+  ) => {
     setSelectedExercise(exercise);
+    setExerciseDetailsOrigin(origin);
     navigateToPage("exerciseDetails", { exercise });
   };
 
@@ -664,7 +724,16 @@ function App() {
   };
 
   const backFromExerciseDetails = () => {
-    window.history.back();
+    if (exerciseDetailsOrigin === "activeWorkout") {
+      window.history.replaceState(
+        { page: "activeWorkout" },
+        "",
+        PAGE_TO_PATH["activeWorkout"]
+      );
+      startPageTransition(() => setCurrentPage("activeWorkout"));
+    } else {
+      window.history.back();
+    }
   };
 
   const backFromExerciseSets = () => {
@@ -909,6 +978,9 @@ function App() {
             onOpenExerciseSets={(ex) =>
               navigateToExerciseSets(ex, "activeWorkout")
             }
+            onOpenExerciseDetails={(ex) =>
+              navigateToExerciseDetails(ex, "activeWorkout")
+            }
             onFinishWorkout={handleFinishWorkout}
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
@@ -1058,6 +1130,7 @@ function App() {
       <Suspense fallback={<PageLoader className="pointer-events-none" />}>
         {renderPage()}
       </Suspense>
+      <InstallPrompt />
     </>
   );
 }

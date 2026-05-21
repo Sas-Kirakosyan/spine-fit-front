@@ -10,7 +10,11 @@ import { GoogleSignInButton } from "@/components/Form/GoogleSignInButton/GoogleS
 import { Divider } from "@/components/Form/Divider/Divider";
 import { ForgotPasswordModal } from "@/components/Form/ForgotPasswordModal/ForgotPasswordModal";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
-import { signInWithEmail } from "@/lib/authService";
+import {
+  signInWithEmail,
+  GOOGLE_LOGIN_NO_ACCOUNT_KEY,
+  GOOGLE_REGISTER_EXISTS_KEY,
+} from "@/lib/authService";
 import {
   generatePlanFromQuiz,
   type StoredQuizData,
@@ -48,6 +52,22 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
     setFormData((prev) => ({ ...prev, email: prefillEmail }));
     localStorage.removeItem("loginPrefillEmail");
   }, []);
+
+  // Set by App.tsx after a rejected Google round-trip. App.tsx already signed
+  // the user back out; we just surface the reason here.
+  //  - NO_ACCOUNT: tried to log in with a Google account that never registered.
+  //  - REGISTER_EXISTS: tried to register with an already-registered account.
+  useEffect(() => {
+    if (localStorage.getItem(GOOGLE_LOGIN_NO_ACCOUNT_KEY)) {
+      localStorage.removeItem(GOOGLE_LOGIN_NO_ACCOUNT_KEY);
+      setAuthError(t("loginPage.errors.googleNoAccount"));
+      return;
+    }
+    if (localStorage.getItem(GOOGLE_REGISTER_EXISTS_KEY)) {
+      localStorage.removeItem(GOOGLE_REGISTER_EXISTS_KEY);
+      setAuthError(t("loginPage.errors.googleAlreadyRegistered"));
+    }
+  }, [t]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -196,6 +216,7 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
             <GoogleSignInButton
               label={t("loginPage.continueWithGoogle")}
               onError={setAuthError}
+              intent="login"
             />
 
             <Divider />
