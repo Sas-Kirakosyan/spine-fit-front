@@ -42,6 +42,7 @@ import {
   GOOGLE_REGISTER_EXISTS_KEY,
   isFreshlyCreatedUser,
   signOut,
+  deleteCurrentUserViaEdgeFunction,
 } from "@/lib/authService";
 
 const PUBLIC_PAGES: Page[] = ["home", "login", "register", "resetPassword"];
@@ -336,12 +337,16 @@ function App() {
           // Supabase's OAuth sign-in silently creates an account when none
           // exists. If this round-trip was started from the Login page and it
           // ended up creating a brand-new account, the user never registered —
-          // reject it: sign back out, flag the reason, and send them to login.
+          // reject it: delete the just-created auth.users row via the
+          // `delete-self` Edge Function, sign back out, flag the reason, and
+          // send them to login. Deletion runs BEFORE signOut() because the
+          // function needs the live session JWT to authenticate the caller.
           if (
             oauthInProgress === "login" &&
             isFreshlyCreatedUser(oauthUser)
           ) {
             localStorage.setItem(GOOGLE_LOGIN_NO_ACCOUNT_KEY, "1");
+            await deleteCurrentUserViaEdgeFunction();
             await signOut();
             if (cancelled) return;
             window.history.replaceState(
