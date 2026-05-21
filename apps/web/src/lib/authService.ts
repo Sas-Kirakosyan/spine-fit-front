@@ -124,6 +124,42 @@ export async function signOut(): Promise<void> {
   await supabase.auth.signOut().catch(() => {});
 }
 
+/**
+ * Deletes the currently-authenticated user from Supabase via the `delete-self`
+ * Edge Function. The function reads the caller's JWT, re-derives their uid
+ * server-side, and uses the service role to delete them — the client never
+ * sees the service role key, and the caller can only ever delete themselves.
+ *
+ * Used to reverse the silent account creation that Supabase performs during
+ * `signInWithOAuth` when no account exists for the Google identity. The Login
+ * page is supposed to reject these — without this call, the rejected user
+ * still ends up as a row in `auth.users`.
+ *
+ * Returns true on a 2xx response. Network or server errors are swallowed and
+ * return false — the caller decides whether to surface them (in our case we
+ * still want to show the "no account" error even if cleanup failed, so the
+ * user isn't left in a worse state than before).
+ */
+export async function deleteCurrentUserViaEdgeFunction(): Promise<boolean> {
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+    if (!token) return false;
+
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-self`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 export async function signInWithGoogle(
   intent: OAuthIntent = "register"
 ): Promise<OAuthResult> {

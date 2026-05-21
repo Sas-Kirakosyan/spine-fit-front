@@ -207,6 +207,29 @@ Stores the user's onboarding quiz answers so plans can be regenerated without re
 
 ---
 
+## Edge Functions
+
+### `delete-self`
+
+**File:** `supabase/functions/delete-self/index.ts`
+
+Deletes the calling authenticated user's own `auth.users` row using the project's service role key. Used to undo the silent account creation that Supabase performs during `signInWithOAuth` when no account exists yet for the OAuth identity — without this, a user who clicks "Continue with Google" on the **Login** page (instead of Register) is silently registered.
+
+**Security:** JWT verification is on (Supabase default). The function re-derives the uid from the access token via `getUser()` and passes that to `auth.admin.deleteUser()` — the caller cannot specify a different uid, so the only thing they can ever delete is themselves. The service role key is read from the auto-injected `SUPABASE_SERVICE_ROLE_KEY` env var and never leaves the function runtime.
+
+**Client call site:** `deleteCurrentUserViaEdgeFunction()` in `apps/web/src/lib/authService.ts`, invoked from the post-OAuth handler in `App.tsx` when `oauthInProgress === "login"` and `isFreshlyCreatedUser(oauthUser)` is true. Must run **before** `signOut()` because the function needs the live session JWT.
+
+**Deploy:**
+```bash
+supabase login
+supabase link --project-ref <your-project-ref>
+supabase functions deploy delete-self
+```
+
+`SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` are auto-injected into Edge Functions by Supabase — no manual env var setup needed.
+
+---
+
 ## Logout
 
 Logout is handled in `SettingsPage`:
