@@ -28,8 +28,18 @@ import {
 } from "@/lib/planService";
 import * as workoutHistoryService from "@/lib/workoutHistoryService";
 import * as completedWorkoutsService from "@/lib/completedWorkoutsService";
+import * as activeWorkoutService from "@/lib/activeWorkoutService";
+import type { PersistedActiveWorkout } from "@/storage/activeWorkoutStorage";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { getSelectedDayIndex } from "@/storage/selectedDayStorage";
+import {
+  loadActiveWorkout,
+  saveActiveWorkout,
+  clearActiveWorkout,
+  touchActiveWorkoutHeartbeat,
+  consumeIdleGapSeconds,
+  HEARTBEAT_MS,
+} from "@/storage/activeWorkoutStorage";
 import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
@@ -145,6 +155,21 @@ function App() {
     }
     return null;
   });
+  // Read any in-progress workout from localStorage exactly once, so a reload /
+  // tab close / device shutdown returns the user where they left off.
+  const [restoredWorkout] = useState(() => loadActiveWorkout());
+
+  // Cross-device sync gating: we don't push to Supabase until we've reconciled
+  // local against remote once for this session. Without that, a fresh login on
+  // device B would immediately overwrite remote with stale local from device A.
+  // The ref mirrors the state so async callbacks (onFocus) read the live value.
+  const [reconciledOnce, setReconciledOnce] = useState(false);
+  const reconciledOnceRef = useRef(false);
+  // Digest of the last content pushed to Supabase. Lets the save effect skip
+  // pure timestamp-bump re-pushes that would otherwise cycle on every focus
+  // after a hydrate-from-remote.
+  const lastSyncedDigestRef = useRef<string | null>(null);
+
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     const validPages: Page[] = [
       "home",
@@ -167,6 +192,12 @@ function App() {
       "generatingPlan",
       "resetPassword",
     ];
+    // An in-progress workout always wins: navigateToActiveWorkout never
+    // syncs the URL, so a reload would otherwise resolve to /workout and
+    // strand the user. Resume exactly where they left off.
+    if (restoredWorkout) {
+      return "activeWorkout";
+    }
     const pageFromPath = PATH_TO_PAGE[window.location.pathname] as
       | Page
       | undefined;
@@ -177,6 +208,11 @@ function App() {
     const validResolved = validPages.includes(resolvedPage)
       ? resolvedPage
       : "home";
+    // Don't strand the user on an empty active workout if the session is gone
+    // (finished, discarded, or aged out as stale).
+    if (validResolved === "activeWorkout" && !restoredWorkout) {
+      return "workout";
+    }
     return validResolved;
   });
 
@@ -193,15 +229,23 @@ function App() {
     "workout" | "activeWorkout"
   >("workout");
   const [completedExerciseIds, setCompletedExerciseIds] = useState<number[]>(
-    []
+    () => restoredWorkout?.completedExerciseIds ?? []
   );
-  const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(null);
+  const [workoutStartTime, setWorkoutStartTime] = useState<number | null>(
+    () => restoredWorkout?.workoutStartTime ?? null
+  );
   const [exerciseLogs, setExerciseLogs] = useState<
     Record<number, ExerciseSetRow[]>
-  >({});
+  >(() => restoredWorkout?.exerciseLogs ?? {});
   const [exercisePainLevels, setExercisePainLevels] = useState<
     Record<number, number>
-  >({});
+  >(() => restoredWorkout?.exercisePainLevels ?? {});
+  // Inactive break time excluded from calories / history duration. On a cold
+  // start, fold in the gap that elapsed while the app was fully closed.
+  const [pausedSeconds, setPausedSeconds] = useState<number>(() => {
+    if (!restoredWorkout) return 0;
+    return restoredWorkout.pausedSeconds + consumeIdleGapSeconds();
+  });
 
   const [workoutHistory, setWorkoutHistory] = useState<
     FinishedWorkoutSummary[]
@@ -244,7 +288,9 @@ function App() {
   const [allExerciseReturnPage, setAllExerciseReturnPage] = useState<
     "workout" | "createProgram" | "activeWorkout"
   >("workout");
-  const [isCustomWorkoutMode, setIsCustomWorkoutMode] = useState(false);
+  const [isCustomWorkoutMode, setIsCustomWorkoutMode] = useState(
+    () => restoredWorkout?.isCustomWorkout ?? false
+  );
   const [editingProgramId, setEditingProgramId] = useState<
     string | undefined
   >();
@@ -282,7 +328,11 @@ function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
+  // Mirrors `currentPage` into a ref so async callbacks (reconcile after
+  // fetchRemote) can branch on the live page without stale closure data.
+  const currentPageRef = useRef<Page>(currentPage);
   useEffect(() => {
+    currentPageRef.current = currentPage;
     localStorage.setItem("currentPage", currentPage);
   }, [currentPage]);
 
@@ -310,6 +360,13 @@ function App() {
       resetLocalCache();
       workoutHistoryService.resetLocalCache();
       completedWorkoutsService.resetLocalCache();
+      activeWorkoutService.resetLocalCache();
+      // Force next reconcile to run from scratch when a new user signs in on
+      // the same device — otherwise the gate would already be open and we'd
+      // push the previous user's local state.
+      reconciledOnceRef.current = false;
+      setReconciledOnce(false);
+      lastSyncedDigestRef.current = null;
       initialRedirectDoneRef.current = false;
       return;
     }
@@ -317,13 +374,116 @@ function App() {
     const oauthUser = auth.user;
 
     let cancelled = false;
+
+    const digestOfActiveWorkout = (state: PersistedActiveWorkout): string =>
+      JSON.stringify({
+        workoutStartTime: state.workoutStartTime,
+        workoutExercises: state.workoutExercises,
+        completedExerciseIds: state.completedExerciseIds,
+        exerciseLogs: state.exerciseLogs,
+        exercisePainLevels: state.exercisePainLevels,
+        isCustomWorkout: state.isCustomWorkout,
+        pausedSeconds: state.pausedSeconds,
+      });
+
+    const markReconciled = () => {
+      reconciledOnceRef.current = true;
+      setReconciledOnce(true);
+    };
+
+    const hydrateActiveWorkout = (remote: PersistedActiveWorkout): void => {
+      // Persist with remote's savedAt/lastActiveAt so future reconciles compare
+      // on equal footing (otherwise local would always look newer by ~ms).
+      saveActiveWorkout({
+        workoutStartTime: remote.workoutStartTime,
+        workoutExercises: remote.workoutExercises,
+        completedExerciseIds: remote.completedExerciseIds,
+        exerciseLogs: remote.exerciseLogs,
+        exercisePainLevels: remote.exercisePainLevels,
+        isCustomWorkout: remote.isCustomWorkout,
+        pausedSeconds: remote.pausedSeconds,
+        lastActiveAt: remote.lastActiveAt,
+        savedAt: remote.savedAt,
+      });
+      // Block the upcoming save effect from re-pushing this content back.
+      lastSyncedDigestRef.current = digestOfActiveWorkout(remote);
+      setWorkoutStartTime(remote.workoutStartTime);
+      setWorkoutExercises(remote.workoutExercises);
+      setCompletedExerciseIds(remote.completedExerciseIds);
+      setExerciseLogs(remote.exerciseLogs);
+      setExercisePainLevels(remote.exercisePainLevels);
+      setPausedSeconds(remote.pausedSeconds);
+      setIsCustomWorkoutMode(remote.isCustomWorkout);
+      if (currentPageRef.current !== "activeWorkout") {
+        window.history.pushState(
+          { page: "activeWorkout" },
+          "",
+          PAGE_TO_PATH["activeWorkout"]
+        );
+        startPageTransition(() => setCurrentPage("activeWorkout"));
+      }
+    };
+
+    const reconcileActiveWorkout = (
+      result: activeWorkoutService.FetchRemoteResult
+    ): void => {
+      if (result.kind !== "ok") return; // skip / error → next focus retries
+      const remote = result.remote;
+      const local = loadActiveWorkout();
+      const wasReconciled = reconciledOnceRef.current;
+
+      if (!local && !remote) {
+        markReconciled();
+        return;
+      }
+      if (!local && remote) {
+        hydrateActiveWorkout(remote);
+        markReconciled();
+        return;
+      }
+      if (local && !remote) {
+        // Heartbeat ticks every HEARTBEAT_MS while a workout is active. A
+        // recent lastActiveAt means the user is *still training on this
+        // device* — so a remote=null isn't "the other device finished us",
+        // it's a conflict. In that case re-push local instead of yanking
+        // the live session away from the user.
+        const localIsLive =
+          Date.now() - local.lastActiveAt < HEARTBEAT_MS * 3;
+        if (wasReconciled && !localIsLive) {
+          // Local is stale (no heartbeat) and remote is gone → another
+          // device finished/discarded the session. Mirror that locally.
+          resetWorkoutState({ skipRemoteDelete: true });
+        } else {
+          // Either the first reconcile of the session (no remote row yet),
+          // or local is actively training — push local up so the other
+          // device picks it up next focus.
+          activeWorkoutService.upsertRemote(local);
+          void activeWorkoutService.flushPendingUpsert();
+          lastSyncedDigestRef.current = digestOfActiveWorkout(local);
+        }
+        markReconciled();
+        return;
+      }
+      // Both exist — last-writer-wins by savedAt (which maps to remote.updated_at).
+      if (remote && local && remote.savedAt > local.savedAt) {
+        hydrateActiveWorkout(remote);
+      } else if (remote && local && local.savedAt > remote.savedAt) {
+        activeWorkoutService.upsertRemote(local);
+        void activeWorkoutService.flushPendingUpsert();
+        lastSyncedDigestRef.current = digestOfActiveWorkout(local);
+      }
+      markReconciled();
+    };
+
     const refetch = async () => {
-      await Promise.all([
+      const [, , , activeResult] = await Promise.all([
         fetchPlan(),
         workoutHistoryService.fetchHistory(),
         completedWorkoutsService.fetchIds(),
+        activeWorkoutService.fetchRemote(),
       ]);
       if (cancelled) return;
+      reconcileActiveWorkout(activeResult);
 
       if (!initialRedirectDoneRef.current) {
         initialRedirectDoneRef.current = true;
@@ -438,6 +598,10 @@ function App() {
       void fetchPlan();
       void workoutHistoryService.fetchHistory();
       void completedWorkoutsService.fetchIds();
+      void activeWorkoutService.fetchRemote().then((result) => {
+        if (cancelled) return;
+        reconcileActiveWorkout(result);
+      });
     };
     window.addEventListener("focus", onFocus);
     return () => {
@@ -457,6 +621,76 @@ function App() {
     localStorage.setItem("workoutExercises", JSON.stringify(workoutExercises));
   }, [workoutExercises]);
 
+  // Persist the in-progress workout on every meaningful change so it survives
+  // reload / tab close / device shutdown. Cleared on finish/discard via
+  // resetWorkoutState(). lastActiveAt is intentionally left to the default
+  // (now) — any state change here is itself a sign of activity. Also mirrors
+  // the state to Supabase (debounced) once we've reconciled with remote.
+  useEffect(() => {
+    if (workoutStartTime === null) return;
+    saveActiveWorkout({
+      workoutStartTime,
+      workoutExercises,
+      completedExerciseIds,
+      exerciseLogs,
+      exercisePainLevels,
+      isCustomWorkout: isCustomWorkoutMode,
+      pausedSeconds,
+    });
+    if (!reconciledOnce) return;
+    // Content-only digest: skips pure-timestamp re-pushes that would otherwise
+    // cycle after a hydrate-from-remote (each focus would advance updated_at).
+    const digest = JSON.stringify({
+      workoutStartTime,
+      workoutExercises,
+      completedExerciseIds,
+      exerciseLogs,
+      exercisePainLevels,
+      isCustomWorkout: isCustomWorkoutMode,
+      pausedSeconds,
+    });
+    if (digest === lastSyncedDigestRef.current) return;
+    lastSyncedDigestRef.current = digest;
+    const persisted = loadActiveWorkout();
+    if (persisted) activeWorkoutService.upsertRemote(persisted);
+  }, [
+    workoutStartTime,
+    workoutExercises,
+    completedExerciseIds,
+    exerciseLogs,
+    exercisePainLevels,
+    isCustomWorkoutMode,
+    pausedSeconds,
+    reconciledOnce,
+  ]);
+
+  // Heartbeat: prove the session is alive every few seconds, and turn long
+  // hidden/closed gaps into excluded "paused" time. Robust against power-off /
+  // crash because nothing depends on a clean unload event firing.
+  useEffect(() => {
+    if (workoutStartTime === null) return;
+    const intervalId = window.setInterval(
+      touchActiveWorkoutHeartbeat,
+      HEARTBEAT_MS
+    );
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        touchActiveWorkoutHeartbeat();
+        // Push any debounced state to Supabase right now — the tab may not
+        // come back. Fire-and-forget; the service's queue handles failures.
+        void activeWorkoutService.flushPendingUpsert();
+      } else {
+        const extra = consumeIdleGapSeconds();
+        if (extra > 0) setPausedSeconds((prev) => prev + extra);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [workoutStartTime]);
+
   const navigateToPage = (
     page: Page,
     historyState: Record<string, unknown> = {}
@@ -467,11 +701,19 @@ function App() {
 
   const navigateToHome = () => navigateToPage("home");
   const navigateToLogin = () => navigateToPage("login");
-  const resetWorkoutState = () => {
+  const resetWorkoutState = (options?: { skipRemoteDelete?: boolean }) => {
     setCompletedExerciseIds([]);
     setExerciseLogs({});
     setExercisePainLevels({});
     setWorkoutStartTime(null);
+    setPausedSeconds(0);
+    clearActiveWorkout();
+    lastSyncedDigestRef.current = null;
+    // Skip the remote delete when the reset itself was triggered by reconcile
+    // detecting that remote is already gone (another device finished/discarded).
+    if (!options?.skipRemoteDelete) {
+      activeWorkoutService.deleteRemote();
+    }
   };
 
   const handleAddExercises = (exercises: Exercise[]) => {
@@ -607,6 +849,13 @@ function App() {
     }
     setWorkoutStartTime((prevStartTime) => prevStartTime ?? Date.now());
     setExerciseSetsMode("preWorkout");
+    // Keep the URL in sync like every other navigate* helper so reload /
+    // back/forward resolve to the active workout, not the stale path.
+    window.history.pushState(
+      { page: "activeWorkout" },
+      "",
+      PAGE_TO_PATH["activeWorkout"]
+    );
     startPageTransition(() => {
       setSelectedExercise(null);
       setCurrentPage("activeWorkout");
@@ -895,6 +1144,7 @@ function App() {
             onFinishWorkout={handleFinishWorkout}
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
+            pausedSeconds={pausedSeconds}
             exerciseLogs={exerciseLogs}
             exercisePainLevels={exercisePainLevels}
             completedWorkoutIds={completedWorkoutIds}
