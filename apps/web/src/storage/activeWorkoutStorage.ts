@@ -1,3 +1,4 @@
+import type { Exercise } from "@/types/exercise";
 import type { ExerciseSetRow } from "@/types/workout";
 
 const KEY = "activeWorkout";
@@ -11,6 +12,7 @@ export const HEARTBEAT_MS = 5_000;
 
 export interface PersistedActiveWorkout {
   workoutStartTime: number; // epoch ms (absolute) — timer reconstructs from this
+  workoutExercises: Exercise[]; // the actual list of exercises in this session
   completedExerciseIds: number[];
   exerciseLogs: Record<number, ExerciseSetRow[]>;
   exercisePainLevels: Record<number, number>;
@@ -48,19 +50,22 @@ export function loadActiveWorkout(): PersistedActiveWorkout | null {
 }
 
 /**
- * Persist the in-progress workout. `savedAt` is always refreshed; `lastActiveAt`
- * defaults to now unless the caller provides one (the heartbeat owns it).
+ * Persist the in-progress workout. `savedAt` defaults to now; pass an explicit
+ * value when adopting a remote snapshot so future reconciles compare local and
+ * remote timestamps on equal footing. `lastActiveAt` likewise defaults to now
+ * (the heartbeat owns it).
  */
 export function saveActiveWorkout(
   data: Omit<PersistedActiveWorkout, "savedAt" | "lastActiveAt"> & {
     lastActiveAt?: number;
+    savedAt?: number;
   }
 ): void {
   const now = Date.now();
   const payload: PersistedActiveWorkout = {
     ...data,
     lastActiveAt: data.lastActiveAt ?? now,
-    savedAt: now,
+    savedAt: data.savedAt ?? now,
   };
   localStorage.setItem(KEY, JSON.stringify(payload));
 }
