@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpineFit — AI Workout Planner for Herniated Disc & Back Pain Recovery</title>
+    <meta
+      name="description"
+      content="SpineFit generates a personalized AI workout plan for people with herniated discs, L5-S1 compression, and sciatic nerve pain. Built by someone who recovered — now a free app."
+    />
+    <link rel="canonical" href="https://spinefit.app/about" />
+
+    <!-- Open Graph -->
+    <meta
+      property="og:title"
+      content="SpineFit — AI Workout Planner for Back Pain Recovery"
+    />
+    <meta
+      property="og:description"
+      content="Answer a short medical quiz and get a safe, personalized workout plan built for herniated disc and sciatica recovery. Track progress, monitor pain, and train smart."
+    />
+    <meta
+      property="og:image"
+      content="https://spinefit.app/images/og-cover.jpg"
+    />
+    <meta property="og:url" content="https://spinefit.app/about" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="SpineFit — Train Pain-Free with an AI Spine Rehab Plan"
+    />
+    <meta
+      name="twitter:description"
+      content="AI-generated workout plans designed around your specific back condition. Built from real recovery experience."
+    />
+    <meta
+      name="twitter:image"
+      content="https://spinefit.app/images/og-cover.jpg"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --brand: #e77d10;
+        --brand-dim: rgba(231, 125, 16, 0.15);
+        --bg: #080a14;
+        --bg-card: #132f54;
+        --bg-card-light: #1a3a64;
+        --text: #f0f4f8;
+        --text-muted: #94a3b8;
+        --border: rgba(255, 255, 255, 0.08);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.7;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      a { color: var(--brand); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      /* ── Nav ── */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.9rem 2rem;
+        background: rgba(8, 10, 20, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-logo {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--brand);
+        letter-spacing: -0.02em;
+        text-decoration: none;
+      }
+      .nav-cta {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        background: var(--brand);
+        color: #fff;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: filter 0.15s;
+      }
+      .nav-cta:hover { filter: brightness(1.1); text-decoration: none; }
+
+      /* ── Layout ── */
+      .container {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 4rem;
+      }
+
+      h1, h2, h3 { color: var(--text); line-height: 1.25; }
+      h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+      h2 { font-size: 1.6rem; margin-top: 2.5rem; }
+      h3 { font-size: 1.15rem; margin-top: 1.5rem; color: var(--brand); }
+      p  { margin: 1rem 0; color: var(--text-muted); }
+      ul { margin: 0.75rem 0 0.75rem 1.5rem; color: var(--text-muted); }
+      li { margin: 0.4rem 0; }
+
+      /* ── Hero image ── */
+      .img-wrapper {
+        margin: 2rem 0;
+        text-align: center;
+      }
+      .img-wrapper img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      }
+
+      /* ── Callout box ── */
+      .callout {
+        background: var(--brand-dim);
+        border-left: 4px solid var(--brand);
+        border-radius: 0 10px 10px 0;
+        padding: 1.1rem 1.4rem;
+        margin: 1.5rem 0;
+      }
+      .callout p { margin: 0; color: var(--text); }
+
+      /* ── Feature grid ── */
+      .features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+      @media (max-width: 580px) {
+        .features { grid-template-columns: 1fr; }
+        h1 { font-size: 1.9rem; }
+      }
+      .feature-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem;
+      }
+      .feature-card .icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+      .feature-card h3 { margin: 0 0 0.4rem; color: var(--text); font-size: 1rem; }
+      .feature-card p  { margin: 0; font-size: 0.9rem; }
+
+      /* ── Who it's for / not for ── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+      @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+
+      .check-list { list-style: none; padding: 0; margin: 0; }
+      .check-list li { padding: 0.35rem 0; }
+      .check-list li::before { margin-right: 0.5rem; }
+      .check-list.yes li::before { content: "✅"; }
+      .check-list.no  li::before { content: "❌"; }
+
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.4rem;
+      }
+      .card h3 { margin: 0 0 1rem; font-size: 1rem; color: var(--text); }
+
+      /* ── Author ── */
+      .author {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 2.5rem 0;
+        padding: 1.25rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+      .author img {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      .author-name { font-weight: 700; color: var(--text); }
+      .author-title { font-size: 0.85rem; color: var(--text-muted); }
+
+      /* ── Danger list ── */
+      .danger-list { list-style: none; padding: 0; }
+      .danger-list li {
+        padding: 0.45rem 0.75rem;
+        border-left: 3px solid #ef4444;
+        margin-bottom: 0.5rem;
+        color: #fca5a5;
+        background: rgba(239, 68, 68, 0.06);
+        border-radius: 0 6px 6px 0;
+      }
+
+      /* ── CTA section ── */
+      .cta-section {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        margin-top: 3rem;
+      }
+      .cta-section h2 { color: var(--text); margin: 0 0 0.75rem; }
+      .cta-section p { margin: 0 0 1.75rem; }
+      .cta-btn {
+        display: inline-block;
+        padding: 0.9rem 2.2rem;
+        background: var(--brand);
+        color: #fff;
+        font-size: 1.05rem;
+        font-weight: 700;
+        border-radius: 12px;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        box-shadow: 0 4px 24px rgba(231, 125, 16, 0.35);
+        transition: filter 0.15s;
+      }
+      .cta-btn:hover { filter: brightness(1.1); text-decoration: none; }
+
+      /* ── Divider ── */
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2.5rem 0;
+      }
+
+      /* ── Footer ── */
+      footer {
+        text-align: center;
+        padding: 2rem 1.5rem;
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      footer a { color: var(--text-muted); }
+      footer a:hover { color: var(--brand); }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <a class="nav-logo" href="/">SpineFit</a>
+      <a class="nav-cta" href="/">Start for Free</a>
+    </nav>
+
+    <div class="container">
+
+      <!-- ── Hero ── -->
+      <h1>From Pain to Power: The Story Behind SpineFit</h1>
+      <p>
+        A free AI workout app designed for people recovering from herniated discs,
+        L5-S1 compression, and sciatic nerve pain — built by someone who lived through it.
+      </p>
+
+      <div class="img-wrapper">
+        <img src="/assets/hiper.png" alt="Spine anatomy showing herniated disc at L5-S1" />
+      </div>
+
+      <!-- ── Personal story ── -->
+      <h2>My Story</h2>
+      <p>
+        Three years ago I was training regularly and living an active life. Then a
+        strange pain started running down my leg along the sciatic nerve. At first I
+        ignored it. Within weeks I couldn't stand for more than three minutes.
+        Sitting became impossible. I had to work from home because even commuting was
+        unbearable.
+      </p>
+      <p>
+        After months of suffering I finally got an MRI. The result: a 10&nbsp;mm
+        herniated disc at L5-S1. The pain was constant and sharp — and I was losing
+        my ability to live normally.
+      </p>
+      <p>
+        Like most people I turned to the internet. I watched YouTube videos, read
+        articles, listened to doctors and fitness coaches. The more I searched, the
+        more confused I became. Almost every source made the same mistake: recommending
+        stretching exercises during acute pain, without explaining whether they were safe
+        for an inflamed disc pressing on a nerve. Many of those stretches made my pain
+        worse.
+      </p>
+
+      <div class="callout">
+        <p>
+          <strong>The truth I discovered:</strong> You don't treat strong disc pain with
+          movement — you treat it with rest. Only after the inflammation calmed down
+          (with rest, acupuncture, and pharmacopuncture) could I begin rebuilding my
+          strength safely.
+        </p>
+      </div>
+
+      <p>
+        Today I train again — pain-free — with a system built specifically to protect
+        and support the spine. That system became <strong>SpineFit</strong>.
+      </p>
+
+      <!-- ── Why I built the app ── -->
+      <h2>Why I Built SpineFit</h2>
+      <p>
+        Every day in the gym I see people — even those with coaches — doing exercises
+        that make a herniated disc worse. I've seen doctors recommend stretches that
+        increase pain instead of reducing it. I decided to turn everything I learned
+        into an app that could help people train the right way.
+      </p>
+      <p>
+        SpineFit is not just a recovery guide. It's a full workout tracker with an
+        AI that builds a personalized plan around your specific condition, then adapts
+        as you progress.
+      </p>
+
+      <!-- ── What SpineFit does ── -->
+      <h2>What SpineFit Does</h2>
+
+      <div class="features">
+        <div class="feature-card">
+          <div class="icon">🧠</div>
+          <h3>AI-Generated Plan</h3>
+          <p>Answer a short medical quiz about your condition, pain status, equipment, and goals. The AI builds a personalized multi-week workout plan in seconds.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🏋️</div>
+          <h3>Active Workout Tracking</h3>
+          <p>Log every set and rep in real time. The app tracks your weight, rest timers, and session duration as you train.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📊</div>
+          <h3>Progress & History</h3>
+          <p>See your strength gains over time with per-exercise charts, weekly activity summaries, and full workout history.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🩺</div>
+          <h3>Pain Level Monitoring</h3>
+          <p>Rate your pain after each exercise. Over time SpineFit surfaces patterns so you can adjust your plan before an injury flares up.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">💬</div>
+          <h3>AI Coach Chat</h3>
+          <p>Ask anything about your back condition, form, or exercises and get answers from an AI trained on spine rehabilitation principles.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📱</div>
+          <h3>Web + Mobile</h3>
+          <p>Use SpineFit in any browser, install it as a PWA, or download the mobile app. Your data syncs across devices via Supabase.</p>
+        </div>
+      </div>
+
+      <!-- ── Who it's for / not ── -->
+      <h2>Is SpineFit Right for You?</h2>
+
+      <div class="two-col">
+        <div class="card">
+          <h3>SpineFit IS for you if…</h3>
+          <ul class="check-list yes">
+            <li>Your pain is stable or slowly improving</li>
+            <li>You want to rebuild strength safely</li>
+            <li>You have a diagnosed condition (L5-S1, sciatica, herniated disc)</li>
+            <li>You want AI-personalized, spine-safe workouts</li>
+            <li>You're tired of generic advice that ignores your back</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>SpineFit is NOT for you if…</h3>
+          <ul class="check-list no">
+            <li>You are in severe acute pain and can't sit or stand for more than a few minutes</li>
+            <li>You haven't been evaluated by a doctor yet</li>
+          </ul>
+          <p style="font-size:0.85rem; margin-top:0.75rem;">
+            If you're in the acute phase, your first priority is rest and reducing
+            inflammation. Return to SpineFit when the flare-up settles.
+          </p>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- ── Safety section ── -->
+      <h2>Spine Safety: What SpineFit Excludes — and Why</h2>
+      <p>
+        Every exercise in SpineFit has been selected with two priorities: spinal
+        safety and effective muscle-building. The AI plan never includes movements
+        that pose a high risk of disc aggravation or sciatic nerve irritation.
+      </p>
+
+      <h3>Seven exercises excluded from all plans</h3>
+      <ul class="danger-list">
+        <li>❌ Barbell Deadlifts</li>
+        <li>❌ Barbell Back Squats</li>
+        <li>❌ Heavy Barbell Bicep Curls (standing)</li>
+        <li>❌ Explosive Plyometrics (box jumps, jump squats)</li>
+        <li>❌ Weighted Dips with a loaded belt or barbell</li>
+        <li>❌ Bent-Over Rows with heavy load or rounded back</li>
+        <li>❌ Dropping down from Pull-Ups — always step down gently to avoid spinal shock</li>
+      </ul>
+
+      <h3>The 20 kg total-load rule</h3>
+      <p>
+        If you're dealing with L5-S1 compression, avoid exercises that place more
+        than <strong>20 kg of total load on your spine</strong> during standing or
+        unsupported movements. Holding 10 kg dumbbells in each hand equals 20 kg
+        pressing straight down — which can be dangerous even if your muscles can
+        handle it.
+      </p>
+      <p>
+        <strong>Safer alternative:</strong> Use single-arm versions with support —
+        for example, single-arm dumbbell curls or rows while leaning on a bench.
+        This stabilizes your body and removes axial pressure from the spine.
+      </p>
+
+      <div class="callout">
+        <p>
+          <em>Always ask: "How can I remove stress from my spine while still working the muscle?"</em>
+        </p>
+      </div>
+
+      <hr />
+
+      <!-- ── Author ── -->
+      <div class="author">
+        <img src="/assets/sas.png" alt="Sas Kirakosyan" />
+        <div>
+          <div class="author-name">Sas Kirakosyan</div>
+          <div class="author-title">Creator of SpineFit — recovered from 10mm L5-S1 herniation</div>
+        </div>
+      </div>
+
+      <!-- ── CTA ── -->
+      <div class="cta-section">
+        <h2>Start Your Recovery Today</h2>
+        <p>
+          Answer a short quiz, get your personalized AI plan, and start training safely.
+          SpineFit is free to use — no subscription required.
+        </p>
+        <a class="cta-btn" href="/">Get My Free Plan</a>
+      </div>
+
+    </div>
+
+    <footer>
+      <p>
+        &copy; 2025 SpineFit &nbsp;·&nbsp;
+        <a href="/">Open App</a>
+      </p>
+      <p style="margin-top:0.5rem; font-size:0.78rem;">
+        SpineFit is not a medical device and does not provide medical advice.
+        Always consult your physician before beginning any exercise program.
+      </p>
+    </footer>
+
+    <!-- Structured data: SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "SpineFit",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web, iOS, Android",
+      "description": "AI-powered workout planner for people recovering from herniated discs, L5-S1 compression, and sciatic nerve pain. Generates personalized plans based on a medical quiz and tracks workouts, progress, and pain levels.",
+      "url": "https://spinefit.app",
+      "author": {
+        "@type": "Person",
+        "name": "Sas Kirakosyan"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+  </body>
+</html>
