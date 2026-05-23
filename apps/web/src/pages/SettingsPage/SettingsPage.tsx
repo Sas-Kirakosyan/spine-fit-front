@@ -269,6 +269,10 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           label={t("settingsPage.items.contactSupport")}
           onClick={handleContactSupport}
         />
+        <SettingsItem
+          label={t("settingsPage.items.aboutUs")}
+          onClick={() => window.open("/about", "_blank")}
+        />
       </SettingsSection>
 
       <Divider />
