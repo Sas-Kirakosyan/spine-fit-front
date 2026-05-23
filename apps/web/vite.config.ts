@@ -42,6 +42,7 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html}", "logo/*.png", "favicon.ico"],
         globIgnores: ["**/exercisesSm/**", "**/exercises/**", "**/quiz/**"],
         navigateFallback: "index.html",
+        navigateFallbackDenylist: [/^\/about/],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         runtimeCaching: [
@@ -77,5 +78,13 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        about: path.resolve(__dirname, "about.html"),
+      },
+    },
   },
 });
