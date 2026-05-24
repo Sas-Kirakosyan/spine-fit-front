@@ -3,14 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SpineFit — AI Workout Planner for Herniated Disc & Back Pain Recovery</title>
+    <title>SpineFit — AI Workout Planner for Herniated Disc &amp; Back Pain Recovery</title>
     <meta
       name="description"
-      content="SpineFit generates a personalized AI workout plan for people with herniated discs, L5-S1 compression, and sciatic nerve pain. Built by someone who recovered — now a free app."
+      content="SpineFit generates a personalized AI workout plan for herniated discs, L5-S1, and sciatica. Built by someone who recovered — free app."
     />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#080A14" />
     <link rel="canonical" href="https://spinefit.app/about" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/logo/pwa-192x192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/logo/apple-touch-icon-180x180.png" />
 
     <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://spinefit.app/about" />
     <meta
       property="og:title"
       content="SpineFit — AI Workout Planner for Back Pain Recovery"
@@ -19,12 +26,10 @@
       property="og:description"
       content="Answer a short medical quiz and get a safe, personalized workout plan built for herniated disc and sciatica recovery. Track progress, monitor pain, and train smart."
     />
-    <meta
-      property="og:image"
-      content="https://spinefit.app/images/og-cover.jpg"
-    />
-    <meta property="og:url" content="https://spinefit.app/about" />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://spinefit.app/assets/hiper.png" />
+    <meta property="og:site_name" content="SpineFit" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ru_RU" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -36,11 +41,10 @@
       name="twitter:description"
       content="AI-generated workout plans designed around your specific back condition. Built from real recovery experience."
     />
-    <meta
-      name="twitter:image"
-      content="https://spinefit.app/images/og-cover.jpg"
-    />
+    <meta name="twitter:image" content="https://spinefit.app/assets/hiper.png" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -451,6 +455,16 @@
       </div>
 
       <!-- ── CTA ── -->
+      <!-- Related guides -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:2.5rem 0;">
+        <h3 style="margin:0 0 1rem;font-size:1rem;color:var(--text);">Training Guides</h3>
+        <ul style="list-style:none;padding:0;margin:0;">
+          <li style="margin:0.5rem 0;"><a href="/exercises-herniated-disc">Safe Gym Exercises for a Herniated Disc</a></li>
+          <li style="margin:0.5rem 0;"><a href="/sciatica-gym-guide">Gym Workout Guide for Sciatica Pain</a></li>
+          <li style="margin:0.5rem 0;"><a href="/l5-s1-workout-plan">L5-S1 Workout Plan: Safe Strength Training with Disc Compression</a></li>
+        </ul>
+      </div>
+
       <div class="cta-section">
         <h2>Start Your Recovery Today</h2>
         <p>
@@ -491,6 +505,33 @@
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- Structured data: Article (about page editorial content) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "From Pain to Power: The Story Behind SpineFit",
+      "description": "The personal recovery story behind SpineFit — an AI workout app built for people recovering from herniated discs, L5-S1 compression, and sciatic nerve pain.",
+      "image": "https://spinefit.app/assets/hiper.png",
+      "url": "https://spinefit.app/about",
+      "datePublished": "2025-01-01",
+      "dateModified": "2026-05-04",
+      "author": {
+        "@type": "Person",
+        "name": "Sas Kirakosyan"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SpineFit",
+        "url": "https://spinefit.app",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://spinefit.app/logo/logo.png"
+        }
       }
     }
     </script>

@@ -277,6 +277,24 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
       <Divider />
 
+      {/* Learn Section */}
+      <SettingsSection title={t("settingsPage.sections.learn")}>
+        <SettingsItem
+          label={t("settingsPage.items.exercisesHerniatedDisc")}
+          onClick={() => window.open("/exercises-herniated-disc", "_blank")}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.sciaticaGymGuide")}
+          onClick={() => window.open("/sciatica-gym-guide", "_blank")}
+        />
+        <SettingsItem
+          label={t("settingsPage.items.l5s1WorkoutPlan")}
+          onClick={() => window.open("/l5-s1-workout-plan", "_blank")}
+        />
+      </SettingsSection>
+
+      <Divider />
+
       {/* Legal Section */}
       <SettingsSection title={t("settingsPage.sections.legal")}>
         <SettingsItem

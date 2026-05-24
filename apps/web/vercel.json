@@ -1,6 +1,9 @@
 {
   "rewrites": [
     { "source": "/about", "destination": "/about.html" },
+    { "source": "/exercises-herniated-disc", "destination": "/exercises-herniated-disc.html" },
+    { "source": "/sciatica-gym-guide", "destination": "/sciatica-gym-guide.html" },
+    { "source": "/l5-s1-workout-plan", "destination": "/l5-s1-workout-plan.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

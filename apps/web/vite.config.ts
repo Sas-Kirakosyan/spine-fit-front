@@ -42,7 +42,12 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html}", "logo/*.png", "favicon.ico"],
         globIgnores: ["**/exercisesSm/**", "**/exercises/**", "**/quiz/**"],
         navigateFallback: "index.html",
-        navigateFallbackDenylist: [/^\/about/],
+        navigateFallbackDenylist: [
+          /^\/about/,
+          /^\/exercises-herniated-disc/,
+          /^\/sciatica-gym-guide/,
+          /^\/l5-s1-workout-plan/,
+        ],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         runtimeCaching: [
@@ -84,6 +89,9 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, "index.html"),
         about: path.resolve(__dirname, "about.html"),
+        exercisesHerniatedDisc: path.resolve(__dirname, "exercises-herniated-disc.html"),
+        sciaticaGymGuide: path.resolve(__dirname, "sciatica-gym-guide.html"),
+        l5s1WorkoutPlan: path.resolve(__dirname, "l5-s1-workout-plan.html"),
       },
     },
   },

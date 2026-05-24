@@ -18,7 +18,7 @@
     <!-- SEO -->
     <meta
       name="description"
-      content="Build muscle without hurting your back. SpineFit creates safe gym workout plans for people with back pain, sciatica, or L5–S1 issues using smart exercise selection and spine-safe progression."
+      content="SpineFit creates AI-powered gym plans for back pain, sciatica, and L5–S1. Build muscle without hurting your spine — personalized, spine-safe, and free."
     />
     <meta
       name="keywords"
@@ -54,6 +54,65 @@
       content="Build muscle while protecting your spine. AI-generated workout plans tailored for back pain and L5–S1 safety."
     />
     <meta name="twitter:image" content="https://spinefit.app/logo/logo.png" />
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "SpineFit",
+      "url": "https://spinefit.app",
+      "logo": "https://spinefit.app/logo/logo.png",
+      "description": "AI-powered workout planner for people recovering from herniated discs, sciatica, and L5-S1 compression.",
+      "founder": {
+        "@type": "Person",
+        "name": "Sas Kirakosyan"
+      },
+      "sameAs": []
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "SpineFit",
+      "url": "https://spinefit.app",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://spinefit.app/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "SpineFit",
+      "url": "https://spinefit.app",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web, iOS, Android",
+      "description": "AI-generated gym workout plans for people with back pain, sciatica, and L5-S1 herniation. Answer a short medical quiz and get a personalized spine-safe plan.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "AI-generated personalized workout plans",
+        "Spine-safe exercise selection",
+        "Pain level monitoring",
+        "Workout tracking and history",
+        "Progressive overload management"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Sas Kirakosyan"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

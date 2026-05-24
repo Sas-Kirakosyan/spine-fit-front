@@ -223,6 +223,7 @@
       "account": "Account",
       "aboutYou": "About You",
       "help": "Help",
+      "learn": "Learn",
       "legal": "Legal",
       "dangerZone": "Danger Zone"
     },
@@ -236,6 +237,9 @@
       "bodyProfile": "Body Profile",
       "contactSupport": "Contact Support",
       "aboutUs": "About Us",
+      "exercisesHerniatedDisc": "Safe Exercises for Herniated Disc",
+      "sciaticaGymGuide": "Gym Guide for Sciatica",
+      "l5s1WorkoutPlan": "L5-S1 Workout Plan",
       "deleteAccount": "Permanently Delete Account",
       "termsAndConditions": "Terms & Conditions",
       "privacyPolicy": "Privacy Policy",

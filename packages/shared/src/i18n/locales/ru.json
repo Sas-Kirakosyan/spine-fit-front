@@ -345,6 +345,7 @@
       "account": "Аккаунт",
       "aboutYou": "О вас",
       "help": "Помощь",
+      "learn": "Статьи",
       "legal": "Правовая информация",
       "dangerZone": "Опасная зона"
     },
@@ -358,6 +359,9 @@
       "bodyProfile": "Профиль тела",
       "contactSupport": "Связаться с поддержкой",
       "aboutUs": "О нас",
+      "exercisesHerniatedDisc": "Упражнения при грыже диска",
+      "sciaticaGymGuide": "Тренировки при ишиасе",
+      "l5s1WorkoutPlan": "План тренировок L5-S1",
       "deleteAccount": "Удалить аккаунт навсегда",
       "termsAndConditions": "Условия использования",
       "privacyPolicy": "Политика конфиденциальности",
