@@ -273,24 +273,13 @@ function ActiveWorkoutPage({
           onNavigateBack={handleNavigateBack}
           buttonClass={iconButtonClass}
         />
-        <div className="flex flex-col gap-6 md:grid md:grid-cols-[35%_65%] md:items-start">
-          <div className="flex flex-col gap-6 md:sticky md:top-4">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6">
             <section className="rounded-[10px] border border-white/10 bg-[#13172A] p-6 text-center shadow-xl">
               <p className="mt-4 text-6xl md:text-7xl lg:text-8xl font-semibold tabular-nums">
                 {formattedTime}
               </p>
             </section>
-            <Button
-              onClick={handleFinishWorkout}
-              disabled={completedExercises.length === 0}
-              className={`hidden md:block h-[55px] rounded-[10px] text-white uppercase transition-colors ${
-                completedExercises.length === 0
-                  ? "bg-[#228B22]/30 cursor-not-allowed"
-                  : "bg-[#228B22]"
-              }`}
-            >
-              {t("workoutPage.buttons.finishWorkout")}
-            </Button>
           </div>
           <div className="flex flex-col gap-6">
             {todaysExercises.length === 0 && (
@@ -367,7 +356,7 @@ function ActiveWorkoutPage({
         <Button
           onClick={handleFinishWorkout}
           disabled={completedExercises.length === 0}
-          className={`mx-5 md:hidden h-[55px] rounded-[10px] text-white uppercase transition-colors ${
+          className={`mx-5 h-[55px] rounded-[10px] text-white uppercase transition-colors ${
             completedExercises.length === 0
               ? "bg-[#228B22]/30 cursor-not-allowed"
               : "bg-[#228B22]"

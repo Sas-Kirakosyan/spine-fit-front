@@ -281,8 +281,8 @@ function WorkoutPage({
         </div>
       </div>
       <div ref={cardRef} className="flex flex-col gap-3 pb-[140px]">
-        <div className="flex flex-col gap-3 lg:grid lg:grid-cols-[40%_60%] lg:gap-6 lg:items-start">
-        <div className="lg:sticky lg:top-4">
+        <div className="flex flex-col gap-3">
+        <div>
         <WorkoutPlanCard
           onPlanSwitched={handlePlanSwitched}
           planName={getPlan()?.name || t("workoutPage.labels.myWorkoutPlan")}
