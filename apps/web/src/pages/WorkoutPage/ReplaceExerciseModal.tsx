@@ -6,6 +6,7 @@ import { Button } from "@/components/Buttons/Button";
 import { LazyImage } from "@/components/ui/LazyImage";
 import { Sheet } from "@/components/ui/Modal";
 import type { SwapDurationOption } from "@spinefit/shared";
+import {ClearIcon} from "@/components/Icons/Icons.tsx";
 
 export type { SwapDurationOption };
 
@@ -91,14 +92,22 @@ export function ReplaceExerciseModal({
             </button>
           </div>
 
-          {activeTab === "all" && (
-            <input
-              value={searchQuery}
-              onChange={(event) => onSearchChange(event.target.value)}
-              placeholder={t("replaceExerciseModal.searchPlaceholder")}
-              className="mb-3 h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] px-3 text-white outline-none focus:border-main"
-            />
-          )}
+            {activeTab === "all" && (
+                <div className="relative mb-3 w-full">
+                    <input
+                        value={searchQuery}
+                        onChange={(event) => onSearchChange(event.target.value)}
+                        placeholder={t("replaceExerciseModal.searchPlaceholder")}
+                        className="h-11 w-full rounded-[10px] border border-white/10 bg-[#1D2030] pl-3 pr-10 text-white outline-none focus:border-main"
+                    />
+                    {searchQuery ?
+                        <div className="absolute inset-y-0 right-3 flex items-center text-gray-400">
+                            <ClearIcon onClickClearIcon={() => onSearchChange("")} />
+                        </div>
+                    : null}
+
+                </div>
+            )}
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto">
