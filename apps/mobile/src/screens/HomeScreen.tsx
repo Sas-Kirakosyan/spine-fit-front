@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, Text, Pressable, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { AuthStackParamList } from "../navigation/types";
 import { QuizModal } from "../components/quiz/QuizModal";
@@ -11,6 +12,7 @@ type Nav = NativeStackNavigationProp<AuthStackParamList, "Home">;
 
 export default function HomeScreen() {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   const handleQuizComplete = () => {
@@ -35,7 +37,7 @@ export default function HomeScreen() {
             <View className="mt-10 gap-6 px-4">
               <View className="px-4">
                 <Text className="text-white mb-10 text-4xl font-semibold leading-tight">
-                  Strength instead{"\n"}of pain
+                  {t("homePage.heading1")}{"\n"}{t("homePage.heading2")}
                 </Text>
               </View>
               <Pressable
@@ -43,7 +45,7 @@ export default function HomeScreen() {
                 className="w-full max-w-[370px] rounded-[18px] bg-main py-4 items-center"
               >
                 <Text className="text-lg font-semibold text-white">
-                  START PROGRAM
+                  {t("homePage.startProgram")}
                 </Text>
               </Pressable>
 
@@ -51,7 +53,7 @@ export default function HomeScreen() {
                 onPress={() => navigation.navigate("Login")}
                 className="w-full py-2 items-center"
               >
-                <Text className="text-base font-medium text-white">Log In</Text>
+                <Text className="text-base font-medium text-white">{t("homePage.logIn")}</Text>
               </Pressable>
             </View>
           </SafeAreaView>

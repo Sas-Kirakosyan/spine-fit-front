@@ -42,7 +42,7 @@ function ExerciseDetails({ exercise, onNavigateBack }: ExerciseDetailsProps) {
             type="button"
             onClick={handleBackClick}
             className="absolute left-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-slate-200 backdrop-blur-sm transition hover:bg-black/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
-            aria-label="back"
+            aria-label={t("common.aria.back")}
           >
             <svg
               aria-hidden="true"

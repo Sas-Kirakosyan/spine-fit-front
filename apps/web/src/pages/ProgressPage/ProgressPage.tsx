@@ -87,7 +87,7 @@ function ProgressPage({
       </header>
 
       {/* Tabs: Overview | Exercise */}
-      <nav className="flex border-b border-white/10" aria-label="Progress sections">
+      <nav className="flex border-b border-white/10" aria-label={t("progressPage.tabsAriaLabel")}>
         <button
           type="button"
           onClick={() => setActiveTab("overview")}

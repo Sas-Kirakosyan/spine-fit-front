@@ -779,7 +779,7 @@ function ExerciseSetsPage({
             type="button"
             onClick={onNavigateBack}
             className={`${iconButtonClass} absolute left-4 top-4 z-10`}
-            aria-label="back to workout"
+            aria-label={t("exerciseSetsPage.backToWorkoutAriaLabel")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -892,7 +892,7 @@ function ExerciseSetsPage({
                       ? () => setRestPaused(false)
                       : () => setRestPaused(true)
                   }
-                  aria-label={restPaused ? "Продолжить" : "Пауза"}
+                  aria-label={restPaused ? t("exerciseSetsPage.restTimerResumeAriaLabel") : t("exerciseSetsPage.restTimerPauseAriaLabel")}
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
                 >
                   {restPaused ? (
@@ -921,7 +921,7 @@ function ExerciseSetsPage({
                     setRestCountdownSeconds(null);
                     setRestPaused(false);
                   }}
-                  aria-label="Выключить таймер"
+                  aria-label={t("exerciseSetsPage.restTimerStopAriaLabel")}
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
                 >
                   <svg

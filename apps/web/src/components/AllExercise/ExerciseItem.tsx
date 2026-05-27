@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { type Exercise } from "@/types/exercise";
 import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
@@ -16,6 +17,7 @@ export function ExerciseItem({
   onSelect,
   onDetailsClick
 }: ExerciseItemProps) {
+  const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
   const name = getExerciseName(exercise);
   return (
@@ -38,7 +40,7 @@ export function ExerciseItem({
                   onDetailsClick();
               }}
               className="h-full w-full overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
-              aria-label={`Открыть детали упражнения ${name}`}
+              aria-label={t("exerciseCard.openDetailsAriaLabel", { name })}
           >
               <LazyImage
                   src={getExerciseImageUrl(exercise)}

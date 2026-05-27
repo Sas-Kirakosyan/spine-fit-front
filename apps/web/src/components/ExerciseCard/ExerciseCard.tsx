@@ -47,7 +47,7 @@ export function ExerciseCard({
           onDetailsClick();
         }}
         className="relative h-20 w-20 overflow-hidden rounded-[10px] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/70"
-        aria-label={`Открыть детали упражнения ${name}`}
+        aria-label={t("exerciseCard.openDetailsAriaLabel", { name })}
       >
         <LazyImage
           src={getExerciseImageUrl(exercise)}
@@ -113,7 +113,7 @@ export function ExerciseCard({
         )}
       </div>
       <TreeDotButton
-        ariaLabel="open exercise actions"
+        ariaLabel={t("exerciseCard.openActionsAriaLabel")}
         onClick={() => onActionClick()}
       />
     </div>

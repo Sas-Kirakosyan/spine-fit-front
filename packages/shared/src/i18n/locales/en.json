@@ -52,7 +52,13 @@
     "cancel": "Cancel",
     "reset": "Reset",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "aria": {
+      "loading": "Loading",
+      "actions": "Actions",
+      "back": "Back",
+      "close": "Close"
+    }
   },
   "installPrompt": {
     "title": "Install SpineFit",
@@ -117,7 +123,19 @@
     "bodyweight": "Bodyweight",
     "done": "Done",
     "logged": "Logged",
-    "seatedWarning": "Stand & walk between sets"
+    "seatedWarning": "Stand & walk between sets",
+    "openDetailsAriaLabel": "Open exercise details: {{name}}",
+    "openActionsAriaLabel": "Open exercise actions"
+  },
+  "videoPlayer": {
+    "play": "Play",
+    "pause": "Pause",
+    "seek": "Seek",
+    "playbackSpeed": "Playback speed",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen"
   },
   "bottomNav": {
     "workout": "Workout",
@@ -139,7 +157,8 @@
   "activeWorkoutPage": {
     "title": "Active workout",
     "noExercises": "No exercises for today's workout.",
-    "generatePlanHint": "Generate a plan in My Plan page to get started."
+    "generatePlanHint": "Generate a plan in My Plan page to get started.",
+    "backToWorkoutListAriaLabel": "Back to workout list"
   },
   "exitWorkoutModal": {
     "title": "Leave workout?",
@@ -396,6 +415,14 @@
     "emailPlaceholder": "Enter email",
     "password": "Password",
     "passwordPlaceholder": "Enter password",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "First name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Last name",
+    "username": "Username",
+    "usernamePlaceholder": "Enter username",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm password",
     "register": "Register",
     "continueWithGoogle": "Sign up with Google",
     "haveAccount": "Already have an account?",
@@ -405,6 +432,12 @@
       "emailInvalid": "Please enter a valid email",
       "passwordRequired": "Password is required",
       "passwordMinLength": "Password must contain at least 6 characters",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "usernameRequired": "Username is required",
+      "usernameMinLength": "Username must contain at least 3 characters",
+      "confirmPasswordRequired": "Password confirmation is required",
+      "passwordsMismatch": "Passwords do not match",
       "userExists": "User with this email already exists",
       "network": "Network error. Please try again.",
       "unknown": "Something went wrong"
@@ -808,6 +841,7 @@
     "back": "Back"
   },
   "exerciseProgressPage": {
+    "tabsAriaLabel": "Exercise sections",
     "tabs": {
       "history": "History",
       "progress": "Progress",
@@ -893,6 +927,7 @@
   },
   "progressPage": {
     "title": "Progress",
+    "tabsAriaLabel": "Progress sections",
     "tabs": {
       "overview": "Overview",
       "exercise": "Exercises"
@@ -974,6 +1009,12 @@
     }
   },
   "exerciseSetsPage": {
+    "backToWorkoutAriaLabel": "Back to workout",
+    "restTimerResumeAriaLabel": "Resume",
+    "restTimerPauseAriaLabel": "Pause",
+    "restTimerStopAriaLabel": "Stop timer",
+    "setTimeModalCloseAriaLabel": "Close set time modal",
+    "restTimerModalCloseAriaLabel": "Close rest timer modal",
     "toolbar": {
       "timer": "Rest timer",
       "replace": "Replace",

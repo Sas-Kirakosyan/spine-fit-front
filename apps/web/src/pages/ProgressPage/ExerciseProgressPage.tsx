@@ -1013,7 +1013,7 @@ function ExerciseProgressPage({
       {/* Tabs */}
       <nav
         className="flex border-b border-white/10 px-4"
-        aria-label="Exercise sections"
+        aria-label={t("exerciseProgressPage.tabsAriaLabel")}
       >
         <button
           type="button"

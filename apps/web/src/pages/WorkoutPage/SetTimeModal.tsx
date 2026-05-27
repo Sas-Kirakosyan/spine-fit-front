@@ -145,7 +145,7 @@ export function SetTimeModal({
       <div
         role="button"
         tabIndex={-1}
-        aria-label="close set time modal"
+        aria-label={t("exerciseSetsPage.setTimeModalCloseAriaLabel")}
         onClick={onClose}
         className="absolute inset-0 cursor-default bg-black/60"
       />

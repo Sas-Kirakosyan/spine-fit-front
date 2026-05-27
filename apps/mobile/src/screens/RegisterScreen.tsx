@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { AuthStackParamList } from "../navigation/types";
 import type { RegistrationFormData } from "@spinefit/shared";
@@ -18,6 +19,7 @@ type Nav = NativeStackNavigationProp<AuthStackParamList, "Register">;
 
 export default function RegisterScreen() {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState<RegistrationFormData>({
     username: "",
@@ -36,16 +38,16 @@ export default function RegisterScreen() {
 
   const validateForm = (): boolean => {
     const newErrors: Partial<RegistrationFormData> = {};
-    if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
-    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
-    if (!formData.username.trim()) newErrors.username = "Username is required";
-    else if (formData.username.length < 3) newErrors.username = "Username must contain at least 3 characters";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Please enter a valid email";
-    if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 6) newErrors.password = "Password must contain at least 6 characters";
-    if (!formData.confirmPassword) newErrors.confirmPassword = "Password confirmation is required";
-    else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+    if (!formData.firstName.trim()) newErrors.firstName = t("registrationPage.errors.firstNameRequired");
+    if (!formData.lastName.trim()) newErrors.lastName = t("registrationPage.errors.lastNameRequired");
+    if (!formData.username.trim()) newErrors.username = t("registrationPage.errors.usernameRequired");
+    else if (formData.username.length < 3) newErrors.username = t("registrationPage.errors.usernameMinLength");
+    if (!formData.email.trim()) newErrors.email = t("registrationPage.errors.emailRequired");
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = t("registrationPage.errors.emailInvalid");
+    if (!formData.password) newErrors.password = t("registrationPage.errors.passwordRequired");
+    else if (formData.password.length < 6) newErrors.password = t("registrationPage.errors.passwordMinLength");
+    if (!formData.confirmPassword) newErrors.confirmPassword = t("registrationPage.errors.confirmPasswordRequired");
+    else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = t("registrationPage.errors.passwordsMismatch");
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -68,74 +70,74 @@ export default function RegisterScreen() {
 
         <ScrollView className="flex-1 mt-6" contentContainerStyle={{ paddingBottom: 20 }}>
           <FormCard>
-            <FormHeader title="Registration" subtitle="Create your account" />
+            <FormHeader title={t("registrationPage.title")} subtitle={t("registrationPage.subtitle")} />
 
             <View className="mt-7 gap-5">
               <View className="flex-row gap-4">
                 <View className="flex-1">
                   <FormField
-                    label="First Name"
+                    label={t("registrationPage.firstName")}
                     value={formData.firstName}
                     onChangeText={(v) => handleChange("firstName", v)}
                     error={errors.firstName}
-                    placeholder="First name"
+                    placeholder={t("registrationPage.firstNamePlaceholder")}
                     autoCapitalize="words"
                   />
                 </View>
                 <View className="flex-1">
                   <FormField
-                    label="Last Name"
+                    label={t("registrationPage.lastName")}
                     value={formData.lastName}
                     onChangeText={(v) => handleChange("lastName", v)}
                     error={errors.lastName}
-                    placeholder="Last name"
+                    placeholder={t("registrationPage.lastNamePlaceholder")}
                     autoCapitalize="words"
                   />
                 </View>
               </View>
 
               <FormField
-                label="Username"
+                label={t("registrationPage.username")}
                 value={formData.username}
                 onChangeText={(v) => handleChange("username", v)}
                 error={errors.username}
-                placeholder="Enter username"
+                placeholder={t("registrationPage.usernamePlaceholder")}
               />
 
               <FormField
-                label="Email"
+                label={t("registrationPage.email")}
                 value={formData.email}
                 onChangeText={(v) => handleChange("email", v)}
                 error={errors.email}
-                placeholder="Enter email"
+                placeholder={t("registrationPage.emailPlaceholder")}
                 keyboardType="email-address"
               />
 
               <PasswordInput
-                label="Password"
+                label={t("registrationPage.password")}
                 value={formData.password}
                 onChangeText={(v) => handleChange("password", v)}
                 error={errors.password}
-                placeholder="Enter password"
+                placeholder={t("registrationPage.passwordPlaceholder")}
               />
 
               <PasswordInput
-                label="Confirm Password"
+                label={t("registrationPage.confirmPassword")}
                 value={formData.confirmPassword}
                 onChangeText={(v) => handleChange("confirmPassword", v)}
                 error={errors.confirmPassword}
-                placeholder="Confirm password"
+                placeholder={t("registrationPage.confirmPasswordPlaceholder")}
               />
 
-              <SubmitButton text="Register" onPress={handleSubmit} />
+              <SubmitButton text={t("registrationPage.register")} onPress={handleSubmit} />
               <Divider />
             </View>
           </FormCard>
         </ScrollView>
 
         <AuthSwitchLink
-          question="Already have an account?"
-          linkText="Login"
+          question={t("registrationPage.haveAccount")}
+          linkText={t("registrationPage.login")}
           onPress={() => navigation.navigate("Login")}
         />
       </KeyboardAvoidingView>

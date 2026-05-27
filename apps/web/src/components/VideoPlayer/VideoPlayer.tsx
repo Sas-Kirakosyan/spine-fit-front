@@ -223,7 +223,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
         <button
           type="button"
           onClick={togglePlay}
-          aria-label="play"
+          aria-label={t("videoPlayer.play")}
           className="absolute inset-0 m-auto flex h-16 w-16 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:bg-black/80"
         >
           <svg viewBox="0 0 24 24" className="h-7 w-7 translate-x-[2px]" fill="currentColor">
@@ -251,7 +251,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
               step={0.01}
               value={currentTime}
               onChange={handleSeek}
-              aria-label="seek"
+              aria-label={t("videoPlayer.seek")}
               className="relative z-10 w-full appearance-none bg-transparent h-3 cursor-pointer
                 [&::-webkit-slider-thumb]:appearance-none
                 [&::-webkit-slider-thumb]:w-3
@@ -273,7 +273,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
             <button
               type="button"
               onClick={togglePlay}
-              aria-label={isPlaying ? "pause" : "play"}
+              aria-label={isPlaying ? t("videoPlayer.pause") : t("videoPlayer.play")}
               className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/15"
             >
               {isPlaying ? (
@@ -296,7 +296,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
               <button
                 type="button"
                 onClick={cycleSpeed}
-                aria-label="playback speed"
+                aria-label={t("videoPlayer.playbackSpeed")}
                 className="flex h-8 min-w-[40px] items-center justify-center rounded-full px-2 text-[11px] font-semibold tabular-nums hover:bg-white/15"
               >
                 {SPEEDS[speedIndex]}x
@@ -305,7 +305,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
               <button
                 type="button"
                 onClick={toggleMute}
-                aria-label={isMuted ? "unmute" : "mute"}
+                aria-label={isMuted ? t("videoPlayer.unmute") : t("videoPlayer.mute")}
                 className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/15"
               >
                 {isMuted ? (
@@ -326,7 +326,7 @@ export function VideoPlayer({ src, poster, className = "" }: Props) {
               <button
                 type="button"
                 onClick={toggleFullscreen}
-                aria-label={isFullscreen ? "exit fullscreen" : "fullscreen"}
+                aria-label={isFullscreen ? t("videoPlayer.exitFullscreen") : t("videoPlayer.fullscreen")}
                 className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/15"
               >
                 {isFullscreen ? (

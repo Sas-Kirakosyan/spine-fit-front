@@ -120,7 +120,7 @@ export function RestTimerModal({
       <div
         role="button"
         tabIndex={-1}
-        aria-label="close rest timer modal"
+        aria-label={t("exerciseSetsPage.restTimerModalCloseAriaLabel")}
         onClick={onClose}
         className="absolute inset-0 cursor-default bg-black/60"
       />

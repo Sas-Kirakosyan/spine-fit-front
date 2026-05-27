@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { AuthStackParamList } from "../navigation/types";
 import type { LoginFormData } from "@spinefit/shared";
@@ -18,6 +19,7 @@ type Nav = NativeStackNavigationProp<AuthStackParamList, "Login">;
 
 export default function LoginScreen() {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -32,12 +34,12 @@ export default function LoginScreen() {
 
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormData> = {};
-    if (!formData.email.trim()) newErrors.email = "Email is required";
+    if (!formData.email.trim()) newErrors.email = t("loginPage.errors.emailRequired");
     else if (!/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "Please enter a valid email";
-    if (!formData.password) newErrors.password = "Password is required";
+      newErrors.email = t("loginPage.errors.emailInvalid");
+    if (!formData.password) newErrors.password = t("loginPage.errors.passwordRequired");
     else if (formData.password.length < 6)
-      newErrors.password = "Password must contain at least 6 characters";
+      newErrors.password = t("loginPage.errors.passwordMinLength");
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -63,35 +65,35 @@ export default function LoginScreen() {
           contentContainerStyle={{ paddingBottom: 20 }}
         >
           <FormCard className="mt-20">
-            <FormHeader title="Login" subtitle="Sign in to your account" />
+            <FormHeader title={t("loginPage.title")} subtitle={t("loginPage.subtitle")} />
 
             <View className="mt-8 gap-5">
               <FormField
-                label="Email"
+                label={t("loginPage.email")}
                 value={formData.email}
                 onChangeText={(v) => handleChange("email", v)}
                 error={errors.email}
-                placeholder="Enter email"
+                placeholder={t("loginPage.emailPlaceholder")}
                 keyboardType="email-address"
               />
 
               <PasswordInput
-                label="Password"
+                label={t("loginPage.password")}
                 value={formData.password}
                 onChangeText={(v) => handleChange("password", v)}
                 error={errors.password}
-                placeholder="Enter password"
+                placeholder={t("loginPage.passwordPlaceholder")}
               />
 
-              <SubmitButton text="Sign In" onPress={handleSubmit} />
+              <SubmitButton text={t("loginPage.signIn")} onPress={handleSubmit} />
               <Divider />
             </View>
           </FormCard>
         </ScrollView>
 
         <AuthSwitchLink
-          question="Don't have an account?"
-          linkText="Register"
+          question={t("loginPage.noAccount")}
+          linkText={t("registrationPage.register")}
           onPress={() => navigation.navigate("Register")}
         />
       </KeyboardAvoidingView>

@@ -20,7 +20,7 @@ export function ActiveWorkoutHeader({
         type="button"
         onClick={onNavigateBack}
         className={buttonClass}
-        ariaLabel="back to workout list"
+        ariaLabel={t("activeWorkoutPage.backToWorkoutListAriaLabel")}
       >
         <svg
           aria-hidden="true"

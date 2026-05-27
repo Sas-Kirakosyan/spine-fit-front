@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface TreeDotButtonProps {
   onClick: () => void;
   ariaLabel?: string;
@@ -7,10 +9,12 @@ interface TreeDotButtonProps {
 
 export function TreeDotButton({
   onClick,
-  ariaLabel = "Actions",
+  ariaLabel,
   className = "rounded-full p-1 text-slate-200",
   svgClassName = "h-5 w-5",
 }: TreeDotButtonProps) {
+  const { t } = useTranslation();
+  const label = ariaLabel ?? t("common.aria.actions");
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     onClick();
@@ -19,7 +23,7 @@ export function TreeDotButton({
   return (
     <button
       type="button"
-      aria-label={ariaLabel}
+      aria-label={label}
       className={className}
       onClick={handleClick}
     >

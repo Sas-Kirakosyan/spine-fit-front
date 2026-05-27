@@ -52,7 +52,13 @@
     "cancel": "Отмена",
     "reset": "Сбросить",
     "yes": "Да",
-    "no": "Нет"
+    "no": "Нет",
+    "aria": {
+      "loading": "Загрузка",
+      "actions": "Действия",
+      "back": "Назад",
+      "close": "Закрыть"
+    }
   },
   "installPrompt": {
     "title": "Установить SpineFit",
@@ -239,7 +245,19 @@
     "bodyweight": "Вес тела",
     "done": "Готово",
     "logged": "Записано",
-    "seatedWarning": "Встать и пройтись между подходами"
+    "seatedWarning": "Встать и пройтись между подходами",
+    "openDetailsAriaLabel": "Открыть детали упражнения: {{name}}",
+    "openActionsAriaLabel": "Открыть действия с упражнением"
+  },
+  "videoPlayer": {
+    "play": "Воспроизвести",
+    "pause": "Пауза",
+    "seek": "Перемотка",
+    "playbackSpeed": "Скорость воспроизведения",
+    "mute": "Без звука",
+    "unmute": "Включить звук",
+    "fullscreen": "Полный экран",
+    "exitFullscreen": "Выйти из полноэкранного режима"
   },
   "bottomNav": {
     "workout": "Тренировка",
@@ -261,7 +279,8 @@
   "activeWorkoutPage": {
     "title": "Активная тренировка",
     "noExercises": "Нет упражнений для сегодняшней тренировки.",
-    "generatePlanHint": "Создайте план на странице Мой План, чтобы начать."
+    "generatePlanHint": "Создайте план на странице Мой План, чтобы начать.",
+    "backToWorkoutListAriaLabel": "Назад к списку тренировок"
   },
   "exitWorkoutModal": {
     "title": "Выйти из тренировки?",
@@ -520,6 +539,14 @@
     "emailPlaceholder": "Введите email",
     "password": "Пароль",
     "passwordPlaceholder": "Введите пароль",
+    "firstName": "Имя",
+    "firstNamePlaceholder": "Имя",
+    "lastName": "Фамилия",
+    "lastNamePlaceholder": "Фамилия",
+    "username": "Имя пользователя",
+    "usernamePlaceholder": "Введите имя пользователя",
+    "confirmPassword": "Подтвердите пароль",
+    "confirmPasswordPlaceholder": "Подтвердите пароль",
     "register": "Зарегистрироваться",
     "continueWithGoogle": "Зарегистрироваться через Google",
     "haveAccount": "Уже есть аккаунт?",
@@ -529,6 +556,12 @@
       "emailInvalid": "Пожалуйста, введите корректный email",
       "passwordRequired": "Пароль обязателен",
       "passwordMinLength": "Пароль должен содержать минимум 6 символов",
+      "firstNameRequired": "Имя обязательно",
+      "lastNameRequired": "Фамилия обязательна",
+      "usernameRequired": "Имя пользователя обязательно",
+      "usernameMinLength": "Имя пользователя должно содержать минимум 3 символа",
+      "confirmPasswordRequired": "Подтверждение пароля обязательно",
+      "passwordsMismatch": "Пароли не совпадают",
       "userExists": "Пользователь с таким email уже существует",
       "network": "Ошибка сети. Повторите попытку.",
       "unknown": "Что-то пошло не так"
@@ -932,6 +965,7 @@
     "back": "Назад"
   },
   "exerciseProgressPage": {
+    "tabsAriaLabel": "Разделы упражнения",
     "tabs": {
       "history": "История",
       "progress": "Прогресс",
@@ -1017,6 +1051,7 @@
   },
   "progressPage": {
     "title": "Прогресс",
+    "tabsAriaLabel": "Разделы прогресса",
     "tabs": {
       "overview": "Обзор",
       "exercise": "Упражнения"
@@ -1097,6 +1132,12 @@
     }
   },
   "exerciseSetsPage": {
+    "backToWorkoutAriaLabel": "Назад к тренировке",
+    "restTimerResumeAriaLabel": "Продолжить",
+    "restTimerPauseAriaLabel": "Пауза",
+    "restTimerStopAriaLabel": "Выключить таймер",
+    "setTimeModalCloseAriaLabel": "Закрыть модальное окно установки времени",
+    "restTimerModalCloseAriaLabel": "Закрыть модальное окно таймера отдыха",
     "toolbar": {
       "timer": "Таймер отдыха",
       "replace": "Заменить",
