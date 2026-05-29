@@ -33,3 +33,22 @@ export function calculateWorkoutVolume(
   }, 0);
 }
 
+// Total reps summed across *all* logged sets (warmup included). For time-based
+// exercises this doubles as the total duration in seconds, since `reps` holds
+// the seconds value there.
+export function calculateExerciseTotalReps(logs: ExerciseSetRow[] = []): number {
+  return logs.reduce((sum, setEntry) => {
+    const reps = Number(setEntry.reps);
+    return Number.isNaN(reps) ? sum : sum + reps;
+  }, 0);
+}
+
+// Heaviest weight lifted across *all* logged sets (warmup included). Returns 0
+// when nothing valid was logged (e.g. bodyweight exercises).
+export function getExerciseMaxWeight(logs: ExerciseSetRow[] = []): number {
+  return logs.reduce((max, setEntry) => {
+    const weight = Number(setEntry.weight);
+    return Number.isNaN(weight) ? max : Math.max(max, weight);
+  }, 0);
+}
+

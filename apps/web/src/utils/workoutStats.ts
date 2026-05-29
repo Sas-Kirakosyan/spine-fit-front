@@ -1,1 +1,6 @@
-export { calculateExerciseVolume, calculateWorkoutVolume } from "@spinefit/shared";
+export {
+  calculateExerciseVolume,
+  calculateWorkoutVolume,
+  calculateExerciseTotalReps,
+  getExerciseMaxWeight,
+} from "@spinefit/shared";

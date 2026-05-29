@@ -120,6 +120,8 @@
   "exerciseCard": {
     "sets": "Sets",
     "reps": "Reps",
+    "totalSuffix": "total",
+    "maxSuffix": "max",
     "bodyweight": "Bodyweight",
     "done": "Done",
     "logged": "Logged",
