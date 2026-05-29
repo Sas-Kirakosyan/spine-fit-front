@@ -1,11 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { type Exercise } from "@/types/exercise";
+import { type ExerciseSetRow } from "@/types/workout";
 import {
   useExerciseName,
   isTimeBasedExercise,
   getExerciseTimeSeconds,
   formatDurationSeconds,
 } from "@spinefit/shared";
+import {
+  calculateExerciseTotalReps,
+  getExerciseMaxWeight,
+} from "@/utils/workoutStats";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import TreeDotButton from "@/components/TreeDotButton/TreeDotButton";
 import { CompletedCheckmark } from "@/components/CompletedCheckmark/CompletedCheckmark";
@@ -18,6 +23,7 @@ interface ExerciseCardProps {
   onActionClick: () => void;
   isCompleted?: boolean;
   seatedWarning?: boolean;
+  loggedSets?: ExerciseSetRow[];
 }
 
 export function ExerciseCard({
@@ -27,12 +33,28 @@ export function ExerciseCard({
   onActionClick,
   isCompleted = false,
   seatedWarning = false,
+  loggedSets,
 }: ExerciseCardProps) {
   const { t } = useTranslation();
   const { getExerciseName } = useExerciseName();
   const name = getExerciseName(exercise);
   const isTimeBased = isTimeBasedExercise(exercise);
-  const timeSeconds = isTimeBased ? getExerciseTimeSeconds(exercise) : 0;
+
+  // Once an exercise has been logged, show the real numbers the user did
+  // (set count, total reps, heaviest weight) instead of the planned template.
+  const hasLogs = (loggedSets?.length ?? 0) > 0;
+  const setsCount = hasLogs ? loggedSets!.length : exercise.sets;
+  const repsValue = hasLogs
+    ? calculateExerciseTotalReps(loggedSets)
+    : exercise.reps;
+  const weightValue = hasLogs
+    ? getExerciseMaxWeight(loggedSets)
+    : exercise.weight;
+  const timeSeconds = !isTimeBased
+    ? 0
+    : hasLogs
+      ? calculateExerciseTotalReps(loggedSets)
+      : getExerciseTimeSeconds(exercise);
   return (
     <div
       className="group flex w-full cursor-pointer items-center gap-5 rounded-[14px] bg-[#1B1E2B] p-3 text-left shadow-xl ring-1 ring-white/5"
@@ -74,23 +96,39 @@ export function ExerciseCard({
           </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1 text-sm font-medium text-slate-200">
-          <span>
-            {exercise.sets} {t("exerciseCard.sets")}
+        <div className="flex flex-wrap items-center gap-1.5 text-sm font-medium text-slate-200">
+          <span className="whitespace-nowrap">
+            {setsCount} {t("exerciseCard.sets")}
           </span>
-          <span className="text-slate-500">•</span>
+          <span className="text-slate-400">•</span>
           {isTimeBased ? (
-            <span>{formatDurationSeconds(timeSeconds)}</span>
+            <span className="whitespace-nowrap">
+              {formatDurationSeconds(timeSeconds)}
+            </span>
           ) : (
             <>
-              <span>
-                {exercise.reps} {t("exerciseCard.reps")}
+              <span className="whitespace-nowrap">
+                {repsValue} {t("exerciseCard.reps")}
+                {hasLogs && (
+                  <span className="ml-1 text-[11px] uppercase tracking-wide text-slate-400">
+                    {t("exerciseCard.totalSuffix")}
+                  </span>
+                )}
               </span>
-              <span className="text-slate-500">•</span>
-              <span>
-                {exercise.equipment === "bodyweight"
-                  ? t("exerciseCard.bodyweight")
-                  : `${exercise.weight} ${exercise.weight_unit}`}
+              <span className="text-slate-400">•</span>
+              <span className="whitespace-nowrap">
+                {exercise.equipment === "bodyweight" ? (
+                  t("exerciseCard.bodyweight")
+                ) : (
+                  <>
+                    {weightValue} {exercise.weight_unit}
+                    {hasLogs && (
+                      <span className="ml-1 text-[11px] uppercase tracking-wide text-slate-400">
+                        {t("exerciseCard.maxSuffix")}
+                      </span>
+                    )}
+                  </>
+                )}
               </span>
             </>
           )}

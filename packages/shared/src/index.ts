@@ -31,7 +31,12 @@ export { calculateTotalStats, calculateStreak, getWeeklyActivity, getProgressDat
 export { getNextAvailableWorkout, getWorkoutsByDay, getTodaysUncompletedWorkouts, markWorkoutCompleted, isWorkoutPlanComplete } from "./utils/workoutQueueManager";
 
 // Utils - workoutStats
-export { calculateExerciseVolume, calculateWorkoutVolume } from "./utils/workoutStats";
+export {
+  calculateExerciseVolume,
+  calculateWorkoutVolume,
+  calculateExerciseTotalReps,
+  getExerciseMaxWeight,
+} from "./utils/workoutStats";
 
 // Utils - calorieEstimator
 export type { EstimateCaloriesInput, CalorieGender } from "./utils/calorieEstimator";

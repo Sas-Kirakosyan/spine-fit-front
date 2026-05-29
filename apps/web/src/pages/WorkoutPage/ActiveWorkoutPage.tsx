@@ -314,6 +314,7 @@ function ActiveWorkoutPage({
                   <ExerciseCard
                     exercise={exercise}
                     isCompleted={isCompleted}
+                    loggedSets={exerciseLogs[exercise.id]}
                     onCardClick={() => onOpenExerciseSets(exercise)}
                     onDetailsClick={() => onOpenExerciseDetails(exercise)}
                     onActionClick={() => setActionExercise(exercise)}

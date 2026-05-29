@@ -242,6 +242,8 @@
   "exerciseCard": {
     "sets": "Подходы",
     "reps": "Повторения",
+    "totalSuffix": "всего",
+    "maxSuffix": "макс.",
     "bodyweight": "Вес тела",
     "done": "Готово",
     "logged": "Записано",
