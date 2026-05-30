@@ -125,6 +125,7 @@
     "bodyweight": "Bodyweight",
     "done": "Done",
     "logged": "Logged",
+    "toggleHistory": "Show set history",
     "seatedWarning": "Stand & walk between sets",
     "openDetailsAriaLabel": "Open exercise details: {{name}}",
     "openActionsAriaLabel": "Open exercise actions"

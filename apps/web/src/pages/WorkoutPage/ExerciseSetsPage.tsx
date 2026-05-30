@@ -188,7 +188,9 @@ function ExerciseSetsPage({
   const [setTimeModalIndex, setSetTimeModalIndex] = useState<number | null>(
     null
   );
-  const [warmupEnabled, setWarmupEnabled] = useState(false);
+  const [warmupEnabled, setWarmupEnabled] = useState(
+    () => exerciseLogs[exercise.id]?.some((s) => s.type === "warmup") ?? false
+  );
   const [replaceModalOpen, setReplaceModalOpen] = useState(false);
   const [replaceQuery, setReplaceQuery] = useState("");
   const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -619,9 +621,11 @@ function ExerciseSetsPage({
       return;
     }
     if (isDuringActiveWorkout && onMarkExerciseComplete) {
+      // Pass all sets (warm-up included); markExerciseComplete keeps the
+      // completed ones, so warm-up sets are persisted and show up in history.
       onMarkExerciseComplete(
         exercise.id,
-        workingSets.map((setEntry) => ({ ...setEntry })),
+        sets.map((setEntry) => ({ ...setEntry })),
         showPainSlider ? painLevel : undefined
       );
       return;

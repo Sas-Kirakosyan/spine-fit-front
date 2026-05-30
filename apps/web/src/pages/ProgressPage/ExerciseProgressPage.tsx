@@ -47,7 +47,10 @@ function useExerciseHistory(
 
       if (!exerciseName) exerciseName = exercise.name;
 
-      const logs = workout.completedExerciseLogs[exerciseId] || [];
+      // Warm-up sets are excluded from progress volume/1RM tracking.
+      const logs = (workout.completedExerciseLogs[exerciseId] || []).filter(
+        (set) => set.type !== "warmup"
+      );
       if (logs.length === 0) return;
 
       const sets = logs.map((set) => ({

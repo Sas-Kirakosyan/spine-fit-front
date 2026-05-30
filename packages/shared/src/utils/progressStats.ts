@@ -279,14 +279,16 @@ export function getPersonalRecords(
       if (logs.length === 0) return;
 
       const estimated1RM = getExerciseEstimated1RM(logs);
-      const exerciseVolume = logs.reduce((sum, set) => {
+      // Warm-up sets don't count toward volume/best-set records.
+      const workingLogs = logs.filter((set) => set.type !== "warmup");
+      const exerciseVolume = workingLogs.reduce((sum, set) => {
         if (!set.completed) return sum;
         const weight = Number(set.weight) || 0;
         const reps = Number(set.reps) || 0;
         return sum + weight * reps;
       }, 0);
 
-      const bestSet = logs.reduce(
+      const bestSet = workingLogs.reduce(
         (best, set) => {
           const weight = Number(set.weight) || 0;
           const reps = Number(set.reps) || 0;
