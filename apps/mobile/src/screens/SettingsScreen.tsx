@@ -147,13 +147,14 @@ export default function SettingsScreen() {
 
         <View className="mx-4 border-t border-white/10 mb-6" />
 
-        <SettingsSection title="Help">
+        <SettingsSection title="Support">
           <SettingsItem label="Contact Support" onPress={handleContactSupport} />
         </SettingsSection>
 
         <View className="mx-4 border-t border-white/10 mb-6" />
 
-        <SettingsSection title="Legal">
+        <SettingsSection title="About">
+          <SettingsItem label="About Us" onPress={() => Linking.openURL("https://spinefit.app/about")} />
           <SettingsItem label="Terms & Conditions" onPress={() => {}} />
           <SettingsItem label="Privacy Policy" onPress={() => {}} />
           <SettingsItem label="Version" value="1.0.0" showArrow={false} />

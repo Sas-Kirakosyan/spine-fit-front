@@ -269,10 +269,6 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           label={t("settingsPage.items.contactSupport")}
           onClick={handleContactSupport}
         />
-        <SettingsItem
-          label={t("settingsPage.items.aboutUs")}
-          onClick={() => window.open("/about", "_blank")}
-        />
       </SettingsSection>
 
       <Divider />
@@ -297,6 +293,10 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
 
       {/* Legal Section */}
       <SettingsSection title={t("settingsPage.sections.legal")}>
+        <SettingsItem
+          label={t("settingsPage.items.aboutUs")}
+          onClick={() => window.open("/about", "_blank")}
+        />
         <SettingsItem
           label={t("settingsPage.items.termsAndConditions")}
           onClick={() => {}}
