@@ -14,6 +14,21 @@ const defaultPlanSettings: PlanSettings = {
   stretching: planFieldsConfig.stretching.defaultValue,
 };
 
+// Backend labels use "Push / Pull / Legs" (spaces around slashes) and may include
+// variant suffixes like "×4" or "A / B / C". Map them to the canonical frontend options.
+function normalizeTrainingSplit(value: string | undefined): string {
+  const defaultSplit = planFieldsConfig.trainingSplit.defaultValue;
+  if (!value) return defaultSplit;
+  const validOptions = planFieldsConfig.trainingSplit.options;
+  if (validOptions.includes(value)) return value;
+  const s = value.toLowerCase();
+  if (s.includes("push") || s.includes("pull") || s.includes("leg")) return "Push/Pull/Legs";
+  if (s.includes("upper") || s.includes("lower")) return "Upper/Lower";
+  if (s.startsWith("full body")) return "Full Body";
+  if (s.includes("fresh") || s.includes("muscle group")) return "Fresh Muscle Groups";
+  return defaultSplit;
+}
+
 let cachedPlan: GeneratedPlan | null = null;
 
 const listeners = new Set<() => void>();
@@ -68,7 +83,11 @@ export function getPlan(): GeneratedPlan | null {
 }
 
 export function getPlanSettings(): PlanSettings {
-  return cachedPlan?.settings ?? defaultPlanSettings;
+  const settings = cachedPlan?.settings ?? defaultPlanSettings;
+  return {
+    ...settings,
+    trainingSplit: normalizeTrainingSplit(settings.trainingSplit),
+  };
 }
 
 export function hasPlan(): boolean {
