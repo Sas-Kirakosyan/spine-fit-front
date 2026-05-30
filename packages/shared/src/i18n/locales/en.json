@@ -602,17 +602,17 @@
       },
       "14": {
         "question": "Anything else we should know?",
-        "placeholder": "E.g., specific injuries, preferences, equipment limitations...",
+        "placeholder": "E.g., goals, preferences, equipment limitations...",
         "templates": [
-          "I have a shoulder injury",
-          "I prefer dumbbells over barbells",
+          "I want to focus more on legs",
+          "I want to focus more on arms",
+          "I want to lose weight",
+          "I want to build muscle mass",
           "I want more core work",
-          "I want to avoid heavy lifting",
           "I want to focus on posture correction",
-          "I prefer lightweight training",
           "I want more cardio",
           "I only have home equipment",
-          "I prefer machines over free weights"
+          "I prefer dumbbells over barbells"
         ]
       }
     }
