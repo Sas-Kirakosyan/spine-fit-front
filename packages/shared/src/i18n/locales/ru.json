@@ -247,6 +247,7 @@
     "bodyweight": "Вес тела",
     "done": "Готово",
     "logged": "Записано",
+    "toggleHistory": "Показать историю подходов",
     "seatedWarning": "Встать и пройтись между подходами",
     "openDetailsAriaLabel": "Открыть детали упражнения: {{name}}",
     "openActionsAriaLabel": "Открыть действия с упражнением"
