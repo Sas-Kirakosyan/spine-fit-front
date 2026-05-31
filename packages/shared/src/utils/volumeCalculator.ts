@@ -143,10 +143,17 @@ function calculateSetsPerExercise(
  * Calculate reps per set based on goal and pain level
  */
 function calculateRepsForGoal(goal: string, painLevel?: number): number {
-  const isMuscleBuildingGoal = goal.toLowerCase().includes("hypertrophy") || goal.toLowerCase().includes("build muscle");
-  const isPainReductionGoal = goal.toLowerCase().includes("reduce pain") ||
-    goal.toLowerCase().includes("back health") ||
-    goal.toLowerCase().includes("structural recovery");
+  const g = goal.toLowerCase();
+  const isMuscleBuildingGoal = g.includes("hypertrophy") || g.includes("build muscle");
+  // Goal labels have been renamed over time. Match the current "Continue Rehab &
+  // Recovery" option (via "rehab"/"recovery") alongside older pain-reduction
+  // labels that may still appear elsewhere.
+  const isPainReductionGoal =
+    g.includes("reduce pain") ||
+    g.includes("back health") ||
+    g.includes("structural recovery") ||
+    g.includes("rehab") ||
+    g.includes("recovery");
 
   // If in significant pain, use higher reps (lighter weight)
   if (painLevel && painLevel > 6) {
@@ -171,15 +178,22 @@ function calculateRepsForGoal(goal: string, painLevel?: number): number {
  * Calculate rest time between sets
  */
 function calculateRestTime(experience: string, goal: string): number {
-  const isMuscleBuildingGoal = goal.toLowerCase().includes("hypertrophy") || goal.toLowerCase().includes("build muscle");
+  const g = goal.toLowerCase();
+  const isMuscleBuildingGoal = g.includes("hypertrophy") || g.includes("build muscle");
 
   // Advanced users with muscle building goals need more rest
   if (experience === "Advanced" && isMuscleBuildingGoal) {
     return 120; // 2 minutes
   }
 
-  // Beginners and pain reduction need less rest (lighter weights)
-  if (experience === "Beginner" || goal.toLowerCase().includes("reduce pain") || goal.toLowerCase().includes("structural recovery")) {
+  // Beginners and rehab/pain-reduction goals need less rest (lighter weights)
+  if (
+    experience === "Beginner" ||
+    g.includes("reduce pain") ||
+    g.includes("structural recovery") ||
+    g.includes("rehab") ||
+    g.includes("recovery")
+  ) {
     return 60; // 1 minute
   }
 

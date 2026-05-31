@@ -7,7 +7,13 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: './src/utils/__tests__/setup.ts',
+    setupFiles: '../../packages/shared/src/utils/__tests__/setup.ts',
+    // Tests live both in this app and in the shared package; include both so a
+    // single `vitest run` from apps/web picks them all up.
+    include: [
+      'src/**/*.{test,spec}.?(c|m)[jt]s?(x)',
+      '../../packages/shared/src/**/*.{test,spec}.?(c|m)[jt]s?(x)',
+    ],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
