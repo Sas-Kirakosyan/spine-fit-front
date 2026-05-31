@@ -303,7 +303,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         />
         <SettingsItem
           label={t("settingsPage.items.privacyPolicy")}
-          onClick={() => {}}
+          onClick={() => window.open("/privacy-policy", "_blank")}
         />
         <SettingsItem
           label={t("settingsPage.items.version")}

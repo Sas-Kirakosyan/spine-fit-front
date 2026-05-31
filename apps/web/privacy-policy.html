@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy — SpineFit</title>
+    <meta
+      name="description"
+      content="SpineFit Privacy Policy. Learn what data we collect, how it is used, and your rights as a user."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#080A14" />
+    <link rel="canonical" href="https://spinefit.app/privacy-policy" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/logo/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="/logo/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="/logo/pwa-192x192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/logo/apple-touch-icon-180x180.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://spinefit.app/privacy-policy" />
+    <meta property="og:title" content="Privacy Policy — SpineFit" />
+    <meta
+      property="og:description"
+      content="How SpineFit collects, uses, and protects your personal and health data."
+    />
+    <meta property="og:site_name" content="SpineFit" />
+    <meta property="og:locale" content="en_US" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --brand: #e77d10;
+        --brand-dim: rgba(231, 125, 16, 0.15);
+        --bg: #080a14;
+        --bg-card: #132f54;
+        --bg-card-light: #1a3a64;
+        --text: #f0f4f8;
+        --text-muted: #94a3b8;
+        --border: rgba(255, 255, 255, 0.08);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.7;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      a { color: var(--brand); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      /* ── Nav ── */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.9rem 2rem;
+        background: rgba(8, 10, 20, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-logo {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--brand);
+        letter-spacing: -0.02em;
+        text-decoration: none;
+      }
+      .nav-cta {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        background: var(--brand);
+        color: #fff;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: filter 0.15s;
+      }
+      .nav-cta:hover { filter: brightness(1.1); text-decoration: none; }
+
+      /* ── Layout ── */
+      .container {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 4rem;
+      }
+
+      h1, h2, h3 { color: var(--text); line-height: 1.25; }
+      h1 { font-size: 2.4rem; margin: 2rem 0 1rem; }
+      h2 { font-size: 1.6rem; margin-top: 2.5rem; }
+      h3 { font-size: 1.15rem; margin-top: 1.5rem; color: var(--brand); }
+      p  { margin: 1rem 0; color: var(--text-muted); }
+      ul { margin: 0.75rem 0 0.75rem 1.5rem; color: var(--text-muted); }
+      li { margin: 0.4rem 0; }
+
+      /* ── Callout box ── */
+      .callout {
+        background: var(--brand-dim);
+        border-left: 4px solid var(--brand);
+        border-radius: 0 10px 10px 0;
+        padding: 1.1rem 1.4rem;
+        margin: 1.5rem 0;
+      }
+      .callout p { margin: 0; color: var(--text); }
+
+      /* ── Divider ── */
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2.5rem 0;
+      }
+
+      /* ── Footer ── */
+      footer {
+        text-align: center;
+        padding: 2rem 1.5rem;
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      footer a { color: var(--text-muted); }
+      footer a:hover { color: var(--brand); }
+
+      @media (max-width: 580px) {
+        h1 { font-size: 1.9rem; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <a class="nav-logo" href="/">SpineFit</a>
+      <a class="nav-cta" href="/">Start for Free</a>
+    </nav>
+
+    <div class="container">
+
+      <h1>Privacy Policy</h1>
+      <p><strong>Last updated: May 31, 2026</strong></p>
+      <p>
+        This Privacy Policy describes how SpineFit ("we," "us," or "our") collects,
+        uses, stores, and protects your personal information when you use the SpineFit
+        web and mobile applications (collectively, the "Service"). By using the Service,
+        you agree to the practices described in this Policy.
+      </p>
+
+      <div class="callout">
+        <p>
+          <strong>Health data notice:</strong> SpineFit processes health-related
+          information you provide (pain conditions, fitness level, body measurements).
+          This data is used solely to generate your personalized workout plan and
+          is never sold or shared with advertisers.
+        </p>
+      </div>
+
+      <h2>1. Who We Are</h2>
+      <p>
+        SpineFit is an AI-assisted spine rehabilitation and fitness tracking application
+        created by Sas Kirakosyan. For questions about this Policy, contact us at
+        <a href="mailto:sas.kirakosian@gmail.com">sas.kirakosian@gmail.com</a>.
+      </p>
+
+      <h2>2. Information We Collect</h2>
+
+      <h3>2.1 Account Information</h3>
+      <p>
+        When you register, we collect your <strong>email address</strong> through
+        Supabase Authentication. We do not collect your name, phone number, or
+        payment information.
+      </p>
+
+      <h3>2.2 Health &amp; Body Profile Data</h3>
+      <p>
+        To generate your personalized workout plan, we collect the following
+        through our onboarding quiz:
+      </p>
+      <ul>
+        <li>Gender and birth year</li>
+        <li>Diagnosed spinal conditions: L5/S1 compression, sciatica, herniated disc</li>
+        <li>Current fitness level and available gym equipment</li>
+        <li>Desired training frequency and goals</li>
+        <li>General activity level</li>
+        <li>Height and weight (web app only — stored in your browser's localStorage, not uploaded to our servers)</li>
+      </ul>
+      <p>Quiz answers are stored in Supabase and associated with your user ID.</p>
+
+      <h3>2.3 Workout Logs</h3>
+      <p>
+        When you track workouts, we store exercises performed, sets/reps/weights,
+        pain level ratings, and session timestamps. This data is stored in Supabase
+        and used for progress tracking and progressive overload recommendations.
+      </p>
+
+      <h3>2.4 AI-Generated Workout Plans</h3>
+      <p>
+        Your AI-generated workout plan is stored in Supabase so it persists
+        across sessions and devices.
+      </p>
+
+      <h3>2.5 Device &amp; Preference Data</h3>
+      <p>
+        Language and theme preferences are stored in localStorage (web) or device
+        storage (mobile) only — they are not uploaded to our servers.
+      </p>
+
+      <h3>2.6 Data We Do NOT Collect</h3>
+      <ul>
+        <li>Location or GPS data</li>
+        <li>Contacts, photos, or camera data</li>
+        <li>Analytics or behavioral tracking data</li>
+        <li>Advertising identifiers</li>
+        <li>Payment information (SpineFit is free)</li>
+      </ul>
+
+      <h2>3. How We Use Your Information</h2>
+      <p>We use the data we collect exclusively to:</p>
+      <ul>
+        <li>Create and maintain your account</li>
+        <li>Generate a personalized, spine-safe AI workout plan tailored to your health profile</li>
+        <li>Display your workout history and progress charts</li>
+        <li>Monitor pain-level patterns to surface training insights</li>
+        <li>Remember your language and theme preferences across sessions</li>
+        <li>Respond to support requests you initiate</li>
+      </ul>
+      <p>We do not use your data for advertising, profiling, or marketing to third parties.</p>
+
+      <h2>4. How Your Data Is Shared — Third-Party Services</h2>
+
+      <h3>4.1 Supabase</h3>
+      <p>
+        We use <a href="https://supabase.com" target="_blank" rel="noopener">Supabase</a>
+        (Supabase, Inc.) as our authentication and database provider.
+        Your account data, quiz answers, workout logs, and AI plans are stored on
+        Supabase servers (US/EU). Supabase is GDPR-compliant and acts as a data
+        processor under a Data Processing Agreement. See
+        <a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a>.
+      </p>
+
+      <h3>4.2 Google Gemini AI</h3>
+      <p>
+        To generate your personalized workout plan, your quiz answers (gender, birth year,
+        pain conditions, fitness level, equipment, training frequency, goals, and activity
+        level) are sent to the
+        <a href="https://deepmind.google/technologies/gemini/" target="_blank" rel="noopener">Google Gemini 2.0 Flash</a>
+        API via our backend server. We do not share your email address or workout history
+        with Google. See
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.
+      </p>
+
+      <h3>4.3 No Other Third-Party Sharing</h3>
+      <p>
+        We use no advertising networks, analytics services, or social login providers.
+        We do not sell, rent, or trade your personal data with any third party.
+      </p>
+
+      <h2>5. Data Retention</h2>
+      <p>
+        We retain your data while your account is active. When you delete your account
+        (Settings → Danger Zone), all data associated with your account is permanently
+        deleted from Supabase. Locally stored preferences are removed from your device
+        when you clear your browser data or uninstall the app.
+      </p>
+
+      <h2>6. Your Rights</h2>
+      <ul>
+        <li><strong>Access:</strong> Request a copy of the data we hold about you.</li>
+        <li><strong>Correction:</strong> Ask us to correct inaccurate data.</li>
+        <li><strong>Deletion:</strong> Delete your account at any time from Settings → Danger Zone,
+            or by emailing us. Account deletion permanently removes all your data.</li>
+        <li><strong>Portability:</strong> Request your data in a portable format.</li>
+        <li><strong>Objection / Restriction:</strong> Object to or request restriction of
+            processing in certain circumstances.</li>
+      </ul>
+      <p>
+        To exercise any right, email
+        <a href="mailto:sas.kirakosian@gmail.com">sas.kirakosian@gmail.com</a>.
+        We will respond within 30 days.
+      </p>
+
+      <h2>7. Data Security</h2>
+      <p>
+        All data in transit is encrypted via HTTPS/TLS. Supabase uses industry-standard
+        encryption at rest. Your records are protected by Supabase Row Level Security (RLS)
+        — only your authenticated session can read or write your data.
+      </p>
+      <p>
+        No method of electronic transmission is 100% secure. We take reasonable technical
+        measures to protect your data but cannot guarantee absolute security.
+      </p>
+
+      <h2>8. Children's Privacy</h2>
+      <p>
+        SpineFit is not directed at children under 16. We do not knowingly collect
+        personal information from children under 16. If you believe a child has provided
+        personal data, please contact us and we will delete it.
+      </p>
+
+      <h2>9. International Data Transfers</h2>
+      <p>
+        Your data may be stored and processed in the United States and EU (via Supabase)
+        and in Google's infrastructure (for AI plan generation). By using the Service,
+        you consent to this transfer. Where required, we rely on Supabase's Standard
+        Contractual Clauses for GDPR-compliant transfers.
+      </p>
+
+      <h2>10. Changes to This Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time. When we do, we will update
+        the "Last updated" date at the top. Continued use of the Service after changes
+        constitutes acceptance of the revised Policy.
+      </p>
+
+      <h2>11. Medical Disclaimer</h2>
+      <p>
+        SpineFit is not a medical device and does not provide medical advice.
+        AI-generated workout plans are informational only and are not a substitute for
+        advice from a licensed physician or physiotherapist. Always consult your doctor
+        before starting any exercise program, especially if you have a diagnosed medical
+        condition.
+      </p>
+
+      <h2>12. Contact</h2>
+      <p>If you have questions about this Privacy Policy or our data practices, please contact:</p>
+      <p>
+        <strong>Sas Kirakosyan</strong><br />
+        Creator, SpineFit<br />
+        <a href="mailto:sas.kirakosian@gmail.com">sas.kirakosian@gmail.com</a>
+      </p>
+
+    </div>
+
+    <footer>
+      <p>
+        &copy; 2026 SpineFit &nbsp;·&nbsp;
+        <a href="/">Open App</a>
+      </p>
+      <p style="margin-top:0.5rem; font-size:0.78rem;">
+        SpineFit is not a medical device and does not provide medical advice.
+        Always consult your physician before beginning any exercise program.
+      </p>
+    </footer>
+  </body>
+</html>

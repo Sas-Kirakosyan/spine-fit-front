@@ -3,6 +3,7 @@ import type { ProgressStackParamList } from "./types";
 import ProgressScreen from "../screens/ProgressScreen";
 import ExerciseProgressScreen from "../screens/ExerciseProgressScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import PrivacyPolicyScreen from "../screens/PrivacyPolicyScreen";
 
 const Stack = createNativeStackNavigator<ProgressStackParamList>();
 
@@ -18,6 +19,7 @@ export default function ProgressStack() {
       <Stack.Screen name="ProgressMain" component={ProgressScreen} />
       <Stack.Screen name="ExerciseProgress" component={ExerciseProgressScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
     </Stack.Navigator>
   );
 }

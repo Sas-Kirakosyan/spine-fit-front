@@ -22,6 +22,7 @@ export type ProgressStackParamList = {
   ProgressMain: undefined;
   ExerciseProgress: { exerciseId: number };
   Settings: undefined;
+  PrivacyPolicy: undefined;
 };
 
 export type HistoryStackParamList = {

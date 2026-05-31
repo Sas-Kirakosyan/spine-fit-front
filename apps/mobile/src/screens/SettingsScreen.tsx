@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { View, Text, Pressable, ScrollView, Alert, Modal, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { ProgressStackParamList } from "../navigation/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import i18n from "i18next";
 import { ChevronLeftIcon, ChevronRightIcon } from "../components/icons/Icons";
@@ -53,7 +55,7 @@ interface ModalConfig {
 }
 
 export default function SettingsScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<ProgressStackParamList>>();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [language, setLanguage] = useState(() => (i18n.language === "ru" ? "Russian" : "English"));
   const [bodyProfileSummary, setBodyProfileSummary] = useState("Not set");
@@ -156,7 +158,7 @@ export default function SettingsScreen() {
         <SettingsSection title="About">
           <SettingsItem label="About Us" onPress={() => Linking.openURL("https://spinefit.app/about")} />
           <SettingsItem label="Terms & Conditions" onPress={() => {}} />
-          <SettingsItem label="Privacy Policy" onPress={() => {}} />
+          <SettingsItem label="Privacy Policy" onPress={() => navigation.navigate("PrivacyPolicy")} />
           <SettingsItem label="Version" value="1.0.0" showArrow={false} />
         </SettingsSection>
       </ScrollView>
