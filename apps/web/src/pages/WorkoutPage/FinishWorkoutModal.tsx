@@ -75,7 +75,7 @@ export function FinishWorkoutModal({
             {t("finishWorkoutModal.calories")}
           </p>
           <p className="text-lg font-semibold text-white">
-            {calories} {t("finishWorkoutModal.caloriesUnit")}
+            ~{calories} {t("finishWorkoutModal.caloriesUnit")}
           </p>
         </div>
         <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">

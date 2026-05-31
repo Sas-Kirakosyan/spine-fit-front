@@ -56,7 +56,7 @@ export function FinishWorkoutModal({
             <View className="gap-3">
               <View className="flex-row gap-3">
                 <StatBox label="VOLUME" value={`${volume.toLocaleString()} kg`} />
-                <StatBox label="CALORIES" value={`${calories} kcal`} />
+                <StatBox label="CALORIES" value={`~${calories} kcal`} />
               </View>
               <View className="flex-row gap-3">
                 <StatBox label="EXERCISES" value={String(completedExercises.length)} />
