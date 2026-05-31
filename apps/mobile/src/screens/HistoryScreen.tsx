@@ -138,7 +138,7 @@ function WorkoutCard({ workout }: { workout: FinishedWorkoutSummary }) {
 
       <View className="flex-row gap-3 mb-3">
         <HistoryMetric label="Volume" value={`${workout.totalVolume.toLocaleString()} kg`} />
-        <HistoryMetric label="Calories" value={`${workout.caloriesBurned} kcal`} />
+        <HistoryMetric label="Calories" value={`~${workout.caloriesBurned} kcal`} />
       </View>
       <View className="flex-row gap-3 mb-3">
         <HistoryMetric label="Exercises" value={`${workout.exerciseCount}`} />

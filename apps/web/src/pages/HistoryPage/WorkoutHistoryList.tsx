@@ -57,7 +57,7 @@ export function WorkoutHistoryList({
               />
               <HistoryMetric
                 label={t("historyPage.metrics.calories")}
-                value={`${workout.caloriesBurned} ${t("historyPage.metrics.kcal")}`}
+                value={`~${workout.caloriesBurned} ${t("historyPage.metrics.kcal")}`}
               />
               <HistoryMetric
                 label={t("historyPage.metrics.exercises")}
