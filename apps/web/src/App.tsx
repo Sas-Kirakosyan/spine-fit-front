@@ -37,7 +37,6 @@ import {
   saveActiveWorkout,
   clearActiveWorkout,
   touchActiveWorkoutHeartbeat,
-  consumeIdleGapSeconds,
   HEARTBEAT_MS,
 } from "@/storage/activeWorkoutStorage";
 import "@/utils/testWorkoutHistoryGenerator";
@@ -240,12 +239,12 @@ function App() {
   const [exercisePainLevels, setExercisePainLevels] = useState<
     Record<number, number>
   >(() => restoredWorkout?.exercisePainLevels ?? {});
-  // Inactive break time excluded from calories / history duration. On a cold
-  // start, fold in the gap that elapsed while the app was fully closed.
-  const [pausedSeconds, setPausedSeconds] = useState<number>(() => {
-    if (!restoredWorkout) return 0;
-    return restoredWorkout.pausedSeconds + consumeIdleGapSeconds();
-  });
+  // Legacy field, kept only for storage/Supabase round-trip compatibility.
+  // The logged duration & calories now use real wall-clock time, so this is no
+  // longer subtracted from anything — we simply preserve whatever was persisted.
+  const [pausedSeconds, setPausedSeconds] = useState<number>(
+    () => restoredWorkout?.pausedSeconds ?? 0
+  );
 
   const [workoutHistory, setWorkoutHistory] = useState<
     FinishedWorkoutSummary[]
@@ -664,8 +663,9 @@ function App() {
     reconciledOnce,
   ]);
 
-  // Heartbeat: prove the session is alive every few seconds, and turn long
-  // hidden/closed gaps into excluded "paused" time. Robust against power-off /
+  // Heartbeat: refresh `lastActiveAt` every few seconds so reconcile can tell a
+  // live session from a stale one, and flush pending state to Supabase when the
+  // tab is backgrounded (it may never come back). Robust against power-off /
   // crash because nothing depends on a clean unload event firing.
   useEffect(() => {
     if (workoutStartTime === null) return;
@@ -679,9 +679,6 @@ function App() {
         // Push any debounced state to Supabase right now — the tab may not
         // come back. Fire-and-forget; the service's queue handles failures.
         void activeWorkoutService.flushPendingUpsert();
-      } else {
-        const extra = consumeIdleGapSeconds();
-        if (extra > 0) setPausedSeconds((prev) => prev + extra);
       }
     };
     document.addEventListener("visibilitychange", handleVisibility);
@@ -1144,7 +1141,6 @@ function App() {
             onFinishWorkout={handleFinishWorkout}
             completedExerciseIds={completedExerciseIds}
             workoutStartTime={workoutStartTime || undefined}
-            pausedSeconds={pausedSeconds}
             exerciseLogs={exerciseLogs}
             exercisePainLevels={exercisePainLevels}
             completedWorkoutIds={completedWorkoutIds}

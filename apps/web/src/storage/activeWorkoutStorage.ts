@@ -5,8 +5,6 @@ const KEY = "activeWorkout";
 
 /** A forgotten session older than this is dropped instead of resurrected. */
 export const STALE_MS = 24 * 60 * 60 * 1000;
-/** Gaps in the heartbeat longer than this count as an inactive break. */
-export const IDLE_GAP_MS = 120_000;
 /** How often the heartbeat timestamp is refreshed while training. */
 export const HEARTBEAT_MS = 5_000;
 
@@ -17,7 +15,7 @@ export interface PersistedActiveWorkout {
   exerciseLogs: Record<number, ExerciseSetRow[]>;
   exercisePainLevels: Record<number, number>;
   isCustomWorkout: boolean;
-  pausedSeconds: number; // accumulated inactive time, excluded from calories/duration
+  pausedSeconds: number; // legacy: persisted for back-compat; no longer affects logged duration/calories
   lastActiveAt: number; // heartbeat timestamp (epoch ms)
   savedAt: number;
 }
@@ -87,25 +85,5 @@ export function touchActiveWorkoutHeartbeat(): void {
     localStorage.setItem(KEY, JSON.stringify(parsed));
   } catch {
     /* corrupt entry — leave it for loadActiveWorkout() to clear */
-  }
-}
-
-/**
- * If the heartbeat is older than the idle threshold, treat the gap as an
- * inactive break and return its length in seconds (0 otherwise). Always resets
- * the heartbeat to now so the next gap is measured from here.
- */
-export function consumeIdleGapSeconds(thresholdMs = IDLE_GAP_MS): number {
-  const raw = localStorage.getItem(KEY);
-  if (!raw) return 0;
-  try {
-    const parsed = JSON.parse(raw) as PersistedActiveWorkout;
-    const now = Date.now();
-    const gap = now - parsed.lastActiveAt;
-    parsed.lastActiveAt = now;
-    localStorage.setItem(KEY, JSON.stringify(parsed));
-    return gap > thresholdMs ? Math.floor(gap / 1000) : 0;
-  } catch {
-    return 0;
   }
 }
