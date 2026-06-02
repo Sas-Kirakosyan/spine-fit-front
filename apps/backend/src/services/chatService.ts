@@ -22,6 +22,7 @@ export async function createChatStream(
   const model = genAI.getGenerativeModel({
     model: "gemini-3.1-flash-lite-preview",
     systemInstruction: SYSTEM_INSTRUCTION,
+    generationConfig: { temperature: 0.6 },
   });
 
   const result = await model.generateContentStream({ contents });

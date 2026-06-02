@@ -73,6 +73,7 @@ export async function generatePlan(
       model: modelName,
       systemInstruction: buildSystemInstruction(parsedQuiz),
       generationConfig: {
+        temperature: 0.3,
         responseMimeType: "application/json",
         responseSchema: PLAN_SCHEMA,
       },
