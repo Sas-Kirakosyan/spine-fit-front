@@ -10,37 +10,27 @@ type ApiPhase = "pending" | "success";
 
 export interface GeneratingPlanPageProps {
   onSuccess: () => void;
+  onFailure: () => void;
 }
 
-const INITIAL_RETRY_DELAY_MS = 1000;
-const MAX_RETRY_DELAY_MS = 10_000;
-
-function GeneratingPlanPage({ onSuccess }: GeneratingPlanPageProps) {
+function GeneratingPlanPage({ onSuccess, onFailure }: GeneratingPlanPageProps) {
   const [apiPhase, setApiPhase] = useState<ApiPhase>("pending");
   const hasStartedRef = useRef(false);
   // Holds the mounted flag in a ref so StrictMode's double-invoke doesn't kill
-  // the in-flight retry loop: the second effect run rebinds mounted=true before
+  // the in-flight request: the second effect run rebinds mounted=true before
   // the original fetch resolves, so its post-await mounted check passes and
-  // setApiPhase still fires. A closure-scoped flag would stay false forever
-  // after the first cleanup, leaving the loader stuck on step 5.
-  const stateRef = useRef<{ mounted: boolean; timerId: number | null }>({
-    mounted: true,
-    timerId: null,
-  });
+  // setApiPhase/onFailure still fire. A closure-scoped flag would stay false
+  // forever after the first cleanup, leaving the loader stuck on step 5.
+  const stateRef = useRef<{ mounted: boolean }>({ mounted: true });
+  // Latest onFailure without re-running the effect on every parent re-render.
+  const onFailureRef = useRef(onFailure);
+  onFailureRef.current = onFailure;
 
   useEffect(() => {
     stateRef.current.mounted = true;
 
     if (hasStartedRef.current) return;
     hasStartedRef.current = true;
-
-    const wait = (ms: number) =>
-      new Promise<void>((resolve) => {
-        stateRef.current.timerId = window.setTimeout(() => {
-          stateRef.current.timerId = null;
-          resolve();
-        }, ms);
-      });
 
     const attemptOnce = async (): Promise<boolean> => {
       const stored = localStorage.getItem("quizAnswers");
@@ -66,22 +56,17 @@ function GeneratingPlanPage({ onSuccess }: GeneratingPlanPageProps) {
       return false;
     };
 
+    // Single attempt: the backend already retries primary→fallback within one
+    // request, so a failure here is a genuine failure. We hand control back to
+    // the parent (toast + navigate to workout), where the user gets a manual
+    // "Generate" retry — instead of the old infinite, silent retry loop.
     const run = async () => {
-      let attempt = 0;
-      while (stateRef.current.mounted) {
-        const ok = await attemptOnce();
-        if (!stateRef.current.mounted) return;
-        if (ok) {
-          setApiPhase("success");
-          return;
-        }
-        attempt++;
-        const delay = Math.min(
-          INITIAL_RETRY_DELAY_MS * 2 ** (attempt - 1),
-          MAX_RETRY_DELAY_MS
-        );
-        await wait(delay);
-        if (!stateRef.current.mounted) return;
+      const ok = await attemptOnce();
+      if (!stateRef.current.mounted) return;
+      if (ok) {
+        setApiPhase("success");
+      } else {
+        onFailureRef.current();
       }
     };
 
@@ -89,18 +74,11 @@ function GeneratingPlanPage({ onSuccess }: GeneratingPlanPageProps) {
 
     return () => {
       stateRef.current.mounted = false;
-      if (stateRef.current.timerId !== null) {
-        window.clearTimeout(stateRef.current.timerId);
-        stateRef.current.timerId = null;
-      }
     };
   }, []);
 
   return (
-    <PlanGeneratingLoader
-      apiPhase={apiPhase}
-      onAllStepsComplete={onSuccess}
-    />
+    <PlanGeneratingLoader apiPhase={apiPhase} onAllStepsComplete={onSuccess} />
   );
 }
 

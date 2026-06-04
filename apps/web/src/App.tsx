@@ -2,10 +2,12 @@ import {
   useState,
   useEffect,
   useRef,
+  useCallback,
   Suspense,
   lazy,
   useTransition,
 } from "react";
+import { useTranslation } from "react-i18next";
 
 // --- LAZY LOADED COMPONENTS ---
 // Note: Using .then() to handle named exports from your files
@@ -42,6 +44,7 @@ import {
 import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
+import { Toast } from "@/components/ui/Toast";
 import { InstallPrompt } from "@/components/InstallPrompt/InstallPrompt";
 import { useAuth } from "@/hooks/useAuth";
 import { retryPendingQuizSync } from "@/lib/quizStorage";
@@ -125,8 +128,40 @@ const PATH_TO_PAGE = Object.fromEntries(
 
 function App() {
   const auth = useAuth();
+  const { t } = useTranslation();
   const [isPagePending, startPageTransition] = useTransition();
   const [autoOpenQuiz, setAutoOpenQuiz] = useState(false);
+
+  // App-level toast: lives above renderPage() so a message triggered right
+  // before navigation (plan-generation failures) stays visible on the
+  // destination page. showToast clears any pending timer before re-arming so
+  // rapid back-to-back toasts don't dismiss each other early.
+  const [toast, setToast] = useState<{
+    message: string;
+    variant: "success" | "error";
+  } | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
+  const showToast = useCallback(
+    (message: string, variant: "success" | "error") => {
+      if (toastTimerRef.current !== null) {
+        window.clearTimeout(toastTimerRef.current);
+      }
+      setToast({ message, variant });
+      toastTimerRef.current = window.setTimeout(() => {
+        setToast(null);
+        toastTimerRef.current = null;
+      }, 4000);
+    },
+    []
+  );
+  useEffect(
+    () => () => {
+      if (toastTimerRef.current !== null) {
+        window.clearTimeout(toastTimerRef.current);
+      }
+    },
+    []
+  );
   const [oauthError] = useState<string | null>(() => {
     // Surface ?error=... or #error=... that Supabase / Google may bounce back
     // with after a failed OAuth, otherwise the user just lands silently on
@@ -779,6 +814,13 @@ function App() {
     );
     startPageTransition(() => setCurrentPage("generatingPlan"));
   };
+  // Regenerate failed (from My Plan or Profile): the existing plan is left
+  // untouched (both paths save only on success), so just explain why and drop
+  // the user back on the workout page with their current plan intact.
+  const handleRegenerateFailed = () => {
+    showToast(t("toasts.regenerateFailed"), "error");
+    navigateToWorkout();
+  };
   const navigateToProgress = () => navigateToPage("progress");
   const navigateToHistory = () => navigateToPage("history");
   const navigateToProfile = () => navigateToPage("profile");
@@ -1039,7 +1081,15 @@ function App() {
           />
         );
       case "generatingPlan":
-        return <GeneratingPlanPage onSuccess={navigateToWorkout} />;
+        return (
+          <GeneratingPlanPage
+            onSuccess={navigateToWorkout}
+            onFailure={() => {
+              showToast(t("toasts.accountCreated"), "success");
+              navigateToWorkout();
+            }}
+          />
+        );
       case "login":
         return (
           <Login
@@ -1081,6 +1131,9 @@ function App() {
               setWorkoutExercises((prev) => prev.filter((ex) => ex.id !== id))
             }
             completedWorkoutIds={completedWorkoutIds}
+            onPlanGenerationFailed={() =>
+              showToast(t("toasts.planGenerationFailed"), "error")
+            }
           />
         );
       case "progress":
@@ -1174,6 +1227,7 @@ function App() {
             onNavigateToProfile={navigateToProfile}
             onNavigateToAI={navigateToAI}
             onNavigateToSettings={navigateToSettings}
+            onRegenerateFailed={handleRegenerateFailed}
             activePage="profile"
           />
         );
@@ -1247,6 +1301,7 @@ function App() {
           <MyPlanPage
             onNavigateBack={navigateToWorkout}
             onNavigateToProfile={navigateToProfile}
+            onRegenerateFailed={handleRegenerateFailed}
           />
         );
       case "availableEquipment":
@@ -1286,6 +1341,7 @@ function App() {
       <Suspense fallback={<PageLoader className="pointer-events-none" />}>
         {renderPage()}
       </Suspense>
+      {toast && <Toast message={toast.message} variant={toast.variant} />}
       <InstallPrompt />
     </>
   );

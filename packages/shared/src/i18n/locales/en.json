@@ -45,7 +45,17 @@
       "defaultDayName": "Pull Day",
       "aiMode": "AI",
       "localMode": "Local"
+    },
+    "noPlan": {
+      "title": "Your plan isn't ready yet",
+      "subtitle": "We couldn't build your personalized plan due to high demand. Tap Generate to try again — it only takes a moment.",
+      "generateButton": "Generate"
     }
+  },
+  "toasts": {
+    "accountCreated": "Account created",
+    "regenerateFailed": "Couldn't update your plan. Please try again.",
+    "planGenerationFailed": "Couldn't generate your plan. Please try again."
   },
   "common": {
     "exercises": "exercises",

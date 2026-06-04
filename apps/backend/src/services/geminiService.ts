@@ -1,7 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { PromptExercise } from "../utils/exerciseFilter.js";
 import type { ParsedQuizData } from "../types.js";
-import { PLAN_SCHEMA, type GeminiPlanResponse } from "../schemas/planSchema.js";
+import {
+  PLAN_SCHEMA,
+  geminiPlanResponseSchema,
+  type GeminiPlanResponseValidated,
+} from "../schemas/planSchema.js";
 import {
   ACTIVE_PAIN_GOAL,
   buildSystemInstruction,
@@ -15,6 +19,58 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 
 const PRIMARY_MODEL = "gemini-2.5-flash";
 const FALLBACK_MODEL = "gemini-3.1-flash-lite-preview";
+
+/**
+ * Thrown when every model attempt fails to produce a valid plan (network error,
+ * blocked/truncated response, unparseable JSON, schema mismatch, or a plan that
+ * resolved to zero usable exercises). Carries per-attempt reasons for logging.
+ * The route layer maps this to HTTP 502 so the client can distinguish a
+ * recoverable AI failure ("try again") from a real server error.
+ */
+export class PlanGenerationError extends Error {
+  readonly attempts: { model: string; reason: string }[];
+  constructor(message: string, attempts: { model: string; reason: string }[]) {
+    super(message);
+    this.name = "PlanGenerationError";
+    this.attempts = attempts;
+  }
+}
+
+/** Defensively strip a ```json … ``` markdown fence the model may wrap around its output. */
+function stripJsonFences(raw: string): string {
+  let s = raw.trim();
+  if (s.startsWith("```")) {
+    s = s
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
+  }
+  return s;
+}
+
+/**
+ * Parse + validate the model's text into a known-good plan shape. Throws a
+ * code-prefixed Error on either failure; the per-model loop records it as the
+ * attempt reason and moves on to the fallback model.
+ */
+function safeParsePlan(rawText: string): GeminiPlanResponseValidated {
+  const cleaned = stripJsonFences(rawText);
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch (err) {
+    throw new Error(
+      `JSON_PARSE_FAILED: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+  const result = geminiPlanResponseSchema.safeParse(parsed);
+  if (!result.success) {
+    throw new Error(
+      `SCHEMA_VALIDATION_FAILED: ${JSON.stringify(result.error.flatten())}`,
+    );
+  }
+  return result.data;
+}
 
 // Shape compatible with the frontend's GeneratedPlan type from @spinefit/shared
 export interface GeneratedPlanResult {
@@ -80,8 +136,27 @@ export async function generatePlan(
     });
 
     const result = await model.generateContent(prompt);
+    const response = result.response;
 
-    const usage = result.response.usageMetadata;
+    // Validate the candidate before reading text. A blocked prompt, a missing
+    // candidate, or a non-STOP finishReason (MAX_TOKENS truncation, SAFETY,
+    // RECITATION, …) means .text() would be empty/partial/invalid — treat it as
+    // a hard failure so the loop falls through to the fallback model instead of
+    // parsing garbage. We do not salvage partial text and do not issue a repair call.
+    const blockReason = response.promptFeedback?.blockReason;
+    if (blockReason) {
+      throw new Error(`PROMPT_BLOCKED: ${blockReason}`);
+    }
+    const candidate = response.candidates?.[0];
+    if (!candidate) {
+      throw new Error("NO_CANDIDATES: model returned no candidates");
+    }
+    const finishReason = candidate.finishReason;
+    if (finishReason && finishReason !== "STOP") {
+      throw new Error(`BAD_FINISH_REASON: ${finishReason}`);
+    }
+
+    const usage = response.usageMetadata;
     if (usage) {
       const thinking =
         (usage as unknown as Record<string, unknown>).thoughtsTokenCount ?? 0;
@@ -90,20 +165,34 @@ export async function generatePlan(
       );
     }
 
-    return result.response.text();
+    return response.text();
   };
 
-  let text: string;
-  try {
-    text = await callGemini(PRIMARY_MODEL);
-  } catch (err) {
-    console.warn(
-      `[Gemini] ⚠ Primary model "${PRIMARY_MODEL}" failed, falling back to "${FALLBACK_MODEL}":`,
-      err instanceof Error ? err.message : err,
-    );
-    text = await callGemini(FALLBACK_MODEL);
+  // Try each model in turn; an attempt = call → finishReason check → parse →
+  // schema validate. A single catch covers BOTH network errors AND parse/
+  // validation failures, so a bad-JSON response from the primary model now
+  // falls through to the fallback (it previously crashed). At most two
+  // round-trips, no repair call. If all fail, throw a typed error → HTTP 502.
+  const models = [PRIMARY_MODEL, FALLBACK_MODEL];
+  const attempts: { model: string; reason: string }[] = [];
+  let geminiPlan: GeminiPlanResponseValidated | null = null;
+  for (const modelName of models) {
+    try {
+      const text = await callGemini(modelName);
+      geminiPlan = safeParsePlan(text);
+      break;
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : String(err);
+      attempts.push({ model: modelName, reason });
+      console.warn(`[Gemini] ⚠ Model "${modelName}" attempt failed: ${reason}`);
+    }
   }
-  const geminiPlan = JSON.parse(text) as GeminiPlanResponse;
+  if (!geminiPlan) {
+    throw new PlanGenerationError(
+      "All model attempts failed to produce a valid plan",
+      attempts,
+    );
+  }
   console.log("geminiPlan", JSON.stringify(geminiPlan));
 
   // Build a lookup map from exercise ID → full exercise object
@@ -154,11 +243,14 @@ export async function generatePlan(
     };
   });
 
-  // Guard: fail fast if any day ended up with 0 exercises
+  // Guard: fail fast if any day ended up with 0 exercises. This means the model
+  // returned exercise IDs we don't recognise (all dropped) — a recoverable AI
+  // quality failure, so surface it as PlanGenerationError → HTTP 502, not 500.
   const emptyDays = workoutDays.filter((d) => d.exercises.length === 0);
   if (emptyDays.length > 0) {
-    throw new Error(
-      `Plan generation failed: days [${emptyDays.map((d) => d.dayName).join(", ")}] have 0 valid exercises (Gemini returned unknown IDs)`,
+    throw new PlanGenerationError(
+      `Days [${emptyDays.map((d) => d.dayName).join(", ")}] have 0 valid exercises (Gemini returned unknown IDs)`,
+      [{ model: "post-validation", reason: "empty_days_after_id_resolution" }],
     );
   }
 

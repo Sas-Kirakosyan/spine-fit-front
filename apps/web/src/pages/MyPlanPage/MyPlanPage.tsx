@@ -14,9 +14,13 @@ import { RegenerateModal } from "./RegenerateModal";
 import { useMyPlanPage } from "./useMyPlanPage";
 import { getTranslatedField } from "./planFieldsI18n";
 
-function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
+function MyPlanPage({
+  onNavigateBack,
+  onNavigateToProfile,
+  onRegenerateFailed,
+}: MyPlanPageProps) {
   const { t } = useTranslation();
-  const plan = useMyPlanPage({ onNavigateBack });
+  const plan = useMyPlanPage({ onNavigateBack, onRegenerateFailed });
   const translatedField = plan.currentField
     ? getTranslatedField(t, plan.currentField)
     : null;
@@ -64,11 +68,7 @@ function MyPlanPage({ onNavigateBack, onNavigateToProfile }: MyPlanPageProps) {
 
       <RegenerateModal
         isOpen={plan.isRegenerateModalOpen && !plan.isRegenerating}
-        error={plan.regenerateError}
-        onCancel={() => {
-          plan.setIsRegenerateModalOpen(false);
-          plan.setRegenerateError(null);
-        }}
+        onCancel={() => plan.setIsRegenerateModalOpen(false)}
         onConfirm={plan.handleRegeneratePlan}
       />
 

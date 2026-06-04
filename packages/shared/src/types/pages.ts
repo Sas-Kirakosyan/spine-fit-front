@@ -31,6 +31,8 @@ export interface HistoryPageProps {
 export interface MyPlanPageProps {
   onNavigateBack: () => void;
   onNavigateToProfile?: () => void;
+  /** Regeneration failed: surface a toast and leave the existing plan untouched. */
+  onRegenerateFailed?: () => void;
 }
 
 export interface AvailableEquipmentPageProps {
@@ -53,6 +55,8 @@ export interface IProfilePageProps {
     onNavigateToProfile: () => void;
     onNavigateToAI: () => void;
     onNavigateToSettings: () => void;
+    /** Regeneration failed: surface a toast and leave the existing plan untouched. */
+    onRegenerateFailed?: () => void;
     activePage: "workout" | "progress" | "history" | "profile" | "ai";
 }
 
