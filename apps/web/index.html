@@ -1,124 +1,132 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
-    />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" href="/logo/favicon-16x16.png" sizes="16x16" />
-    <link rel="icon" type="image/png" href="/logo/favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/png" href="/logo/pwa-192x192.png" sizes="192x192" />
-    <link rel="apple-touch-icon" href="/logo/apple-touch-icon-180x180.png" />
-    <meta name="theme-color" content="#080A14" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="SpineFit" />
-    <title>SpineFit — Safe Gym Training for Back Pain (Sciatica, L5–S1)</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+        />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" href="/logo/favicon-16x16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/logo/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/logo/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/png" href="/logo/pwa-192x192.png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/logo/apple-touch-icon-180x180.png" />
+        <meta name="theme-color" content="#080A14" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="SpineFit" />
+        <title>SpineFit — Safe Gym Training for Back Pain (Sciatica, L5–S1)</title>
 
-    <!-- SEO -->
-    <meta
-      name="description"
-      content="SpineFit creates AI-powered gym plans for back pain, sciatica, and L5–S1. Build muscle without hurting your spine — personalized, spine-safe, and free."
-    />
-    <meta
-      name="keywords"
-      content="back pain workout, sciatica gym exercises, L5 S1 training, safe strength training, back friendly workouts, bodybuilding with back pain"
-    />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://spinefit.app/" />
+        <!-- SEO -->
+        <meta
+                name="description"
+                content="SpineFit creates AI-powered gym plans for back pain, sciatica, and L5–S1. Build muscle without hurting your spine — personalized, spine-safe, and free."
+        />
+        <meta
+                name="keywords"
+                content="back pain workout, sciatica gym exercises, L5 S1 training, safe strength training, back friendly workouts, bodybuilding with back pain"
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://spinefit.app/" />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://spinefit.app/" />
-    <meta
-      property="og:title"
-      content="SpineFit — Safe Gym Training for Back Pain (Sciatica, L5–S1)"
-    />
-    <meta
-      property="og:description"
-      content="Stop skipping the gym. SpineFit is your AI coach for back-safe strength training. Personalized plans for sciatica and L5–S1 protection."
-    />
-    <meta property="og:image" content="https://spinefit.app/logo/logo.png" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:locale:alternate" content="ru_RU" />
-    <meta property="og:site_name" content="SpineFit" />
+        <meta name="thumbnail" content="https://spinefit.app/assets/hiper.png" />
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="SpineFit — AI Gym Coach for Back-Safe Strength"
-    />
-    <meta
-      name="twitter:description"
-      content="Build muscle while protecting your spine. AI-generated workout plans tailored for back pain and L5–S1 safety."
-    />
-    <meta name="twitter:image" content="https://spinefit.app/logo/logo.png" />
-    <!-- Structured data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "SpineFit",
-      "url": "https://spinefit.app",
-      "logo": "https://spinefit.app/logo/logo.png",
-      "description": "AI-powered workout planner for people recovering from herniated discs, sciatica, and L5-S1 compression.",
-      "founder": {
-        "@type": "Person",
-        "name": "Sas Kirakosyan"
-      },
-      "sameAs": []
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "SpineFit",
-      "url": "https://spinefit.app",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://spinefit.app/?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "SpineFit",
-      "url": "https://spinefit.app",
-      "applicationCategory": "HealthApplication",
-      "operatingSystem": "Web, iOS, Android",
-      "description": "AI-generated gym workout plans for people with back pain, sciatica, and L5-S1 herniation. Answer a short medical quiz and get a personalized spine-safe plan.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "featureList": [
-        "AI-generated personalized workout plans",
-        "Spine-safe exercise selection",
-        "Pain level monitoring",
-        "Workout tracking and history",
-        "Progressive overload management"
-      ],
-      "author": {
-        "@type": "Person",
-        "name": "Sas Kirakosyan"
-      }
-    }
-    </script>
-  </head>
-  <body>
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://spinefit.app/" />
+        <meta
+                property="og:title"
+                content="SpineFit — Safe Gym Training for Back Pain (Sciatica, L5–S1)"
+        />
+        <meta
+                property="og:description"
+                content="Stop skipping the gym. SpineFit is your AI coach for back-safe strength training. Personalized plans for sciatica and L5–S1 protection."
+        />
+
+        <meta property="og:image" content="https://spinefit.app/assets/hiper.png" />
+
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:site_name" content="SpineFit" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+                name="twitter:title"
+                content="SpineFit — AI Gym Coach for Back-Safe Strength"
+        />
+        <meta
+                name="twitter:description"
+                content="Build muscle while protecting your spine. AI-generated workout plans tailored for back pain and L5–S1 safety."
+        />
+
+        <meta name="twitter:image" content="https://spinefit.app/assets/hiper.png" />
+
+        <!-- Structured data -->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "SpineFit",
+                "url": "https://spinefit.app",
+                "logo": "https://spinefit.app/logo/logo.png",
+                "description": "AI-powered workout planner for people recovering from herniated discs, sciatica, and L5-S1 compression.",
+                "founder": {
+                    "@type": "Person",
+                    "name": "Sas Kirakosyan"
+                },
+                "sameAs": []
+            }
+        </script>
+
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "SpineFit",
+                "url": "https://spinefit.app",
+                "image": "https://spinefit.app/assets/hiper.png",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": "https://spinefit.app/?q={search_term_string}"
+                    },
+                    "query-input": "required name=search_term_string"
+                }
+            }
+        </script>
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "WebApplication",
+                "name": "SpineFit",
+                "url": "https://spinefit.app",
+                "applicationCategory": "HealthApplication",
+                "operatingSystem": "Web, iOS, Android",
+                "description": "AI-generated gym workout plans for people with back pain, sciatica, and L5-S1 herniation. Answer a short medical quiz and get a personalized spine-safe plan.",
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                },
+                "featureList": [
+                    "AI-generated personalized workout plans",
+                    "Spine-safe exercise selection",
+                    "Pain level monitoring",
+                    "Workout tracking and history",
+                    "Progressive overload management"
+                ],
+                "author": {
+                    "@type": "Person",
+                    "name": "Sas Kirakosyan"
+                }
+            }
+        </script>
+    </head>
+    <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-  </body>
+    </body>
 </html>
