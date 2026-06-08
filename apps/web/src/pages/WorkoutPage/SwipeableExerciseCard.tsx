@@ -63,48 +63,75 @@ export function SwipeableExerciseCard({
 
   // Stops swipe-detection on the parent so a tap on the action button isn't
   // treated as the start of a drag and the subsequent click is delivered.
-  const stopSwipe = (event: React.PointerEvent) => {
-    event.stopPropagation();
-  };
 
   const handleAction = (action: () => void) => {
     action();
     onOpenChange(null);
   };
 
+  const swallowNextClick = () => {
+      const swallowClick = (e: MouseEvent) => {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          window.removeEventListener("click", swallowClick, true);
+      };
+
+      window.addEventListener("click", swallowClick, true);
+
+      setTimeout(() => window.removeEventListener("click", swallowClick, true), 500);
+  }
+
   return (
     <div className="relative overflow-hidden rounded-[14px]">
       <div className="absolute inset-y-0 right-0 flex">
-        <button
-          type="button"
-          onPointerDown={stopSwipe}
-          onClick={(event) => {
-            event.stopPropagation();
-            handleAction(onReplace);
-          }}
-          className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#21243A] text-white"
-          aria-label={t("workoutPage.swipeCard.replace")}
-        >
-          <ReplaceIcon className="h-6 w-6" />
-          <span className="text-xs font-semibold">
-            {t("workoutPage.swipeCard.replace")}
-          </span>
-        </button>
-        <button
-          type="button"
-          onPointerDown={stopSwipe}
-          onClick={(event) => {
-            event.stopPropagation();
-            handleAction(onDelete);
-          }}
-          className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#D04A40] text-white"
-          aria-label={t("workoutPage.swipeCard.delete")}
-        >
-          <TrashIcon className="h-6 w-6" />
-          <span className="text-xs font-semibold">
-            {t("workoutPage.swipeCard.delete")}
-          </span>
-        </button>
+          <button
+              type="button"
+              onPointerDown={(event) => {
+                  if (event.button !== 0) return;
+                  event.stopPropagation();
+              }}
+              onPointerUp={(event) => {
+                  if (event.button !== 0) return;
+                  event.stopPropagation();
+                  event.preventDefault();
+
+                  handleAction(onReplace);
+
+                  swallowNextClick()
+              }}
+              className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#21243A] text-white"
+              aria-label={t("workoutPage.swipeCard.replace")}
+          >
+              <ReplaceIcon className="h-6 w-6" />
+              <span className="text-xs font-semibold">
+                  {t("workoutPage.swipeCard.replace")}
+              </span>
+          </button>
+          <button
+              type="button"
+              onPointerDown={(event) => {
+                  if (event.button !== 0) return;
+                  event.stopPropagation();
+              }}
+              onPointerUp={(event) => {
+                  if (event.button !== 0) return;
+                  event.stopPropagation();
+                  event.preventDefault();
+
+                  handleAction(onDelete);
+
+                  swallowNextClick()
+              }}
+              className="flex h-full w-[88px] flex-col items-center justify-center gap-2 bg-[#D04A40] text-white"
+              aria-label={t("workoutPage.swipeCard.delete")}
+          >
+              <TrashIcon className="h-6 w-6" />
+              <span className="text-xs font-semibold">
+                  {t("workoutPage.swipeCard.delete")}
+              </span>
+          </button>
+
       </div>
 
       <div
