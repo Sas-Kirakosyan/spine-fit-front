@@ -56,6 +56,7 @@ function WorkoutPage({
   isCustomWorkout = false,
   onRemoveExercise,
   completedWorkoutIds = new Set(),
+  onPlanGenerationFailed,
 }: WorkoutPageProps) {
   const { t } = useTranslation();
 
@@ -131,6 +132,10 @@ function WorkoutPage({
     () => (hasGeneratedPlan || isCustomWorkout ? workoutExercises : []),
     [hasGeneratedPlan, isCustomWorkout, workoutExercises]
   );
+  // No saved plan and not a custom workout → first generation never succeeded.
+  // Show a dedicated "generate your plan" empty state instead of the regular
+  // workout layout (plan card / exercise list / Start Workout are all hidden).
+  const showNoPlanState = !hasGeneratedPlan && !isCustomWorkout;
 
   const selectedDayIndex = useSyncExternalStore(
     subscribeSelectedDay,
@@ -176,6 +181,7 @@ function WorkoutPage({
       const quizDataString = localStorage.getItem("quizAnswers");
       if (!quizDataString) {
         setIsRegenerating(false);
+        onPlanGenerationFailed?.();
         return;
       }
       const quizData = JSON.parse(quizDataString);
@@ -200,14 +206,17 @@ function WorkoutPage({
         } else {
           console.error("Regenerate plan returned invalid result:", result);
           setIsRegenerating(false);
+          onPlanGenerationFailed?.();
         }
       } else {
         console.error("Regenerate plan API error:", response.status);
         setIsRegenerating(false);
+        onPlanGenerationFailed?.();
       }
     } catch (err) {
       console.error("Failed to regenerate plan:", err);
       setIsRegenerating(false);
+      onPlanGenerationFailed?.();
     }
   };
 
@@ -282,6 +291,7 @@ function WorkoutPage({
       </div>
       <div ref={cardRef} className="flex flex-col gap-3 pb-[140px]">
         <div className="flex flex-col gap-3">
+        {!showNoPlanState && (
         <div>
         <WorkoutPlanCard
           onPlanSwitched={handlePlanSwitched}
@@ -315,6 +325,7 @@ function WorkoutPage({
           }}
         />
         </div>
+        )}
 
         <section className="flex-1 space-y-3 mx-2.5">
           {isLoadingPlan ? (
@@ -343,6 +354,43 @@ function WorkoutPage({
                 {t("workoutPage.messages.loading")}
               </span>
             </div>
+          ) : showNoPlanState ? (
+            <section className="mt-2 flex flex-col items-center justify-center gap-5 rounded-[14px] bg-[#1B1E2B]/80 p-8 text-center text-slate-100 shadow-xl ring-1 ring-white/5">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-main/20">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-main"
+                >
+                  <path d="m6.5 6.5 11 11" />
+                  <path d="m21 21-1-1" />
+                  <path d="m3 3 1 1" />
+                  <path d="m18 22 4-4" />
+                  <path d="m2 6 4-4" />
+                  <path d="m3 10 7-7" />
+                  <path d="m14 21 7-7" />
+                </svg>
+              </div>
+              <h2 className="text-xl font-semibold">
+                {t("workoutPage.noPlan.title")}
+              </h2>
+              <p className="max-w-xs text-sm text-slate-400">
+                {t("workoutPage.noPlan.subtitle")}
+              </p>
+              <Button
+                onClick={handleRegeneratePlan}
+                className="mt-4 rounded-xl bg-main px-6 py-3 font-semibold text-white transition-colors hover:bg-main/90 cursor-pointer"
+              >
+                {t("workoutPage.noPlan.generateButton")}
+              </Button>
+            </section>
           ) : displayExercises.length > 0 ? (
             displayExercises.map((exercise, index) => {
               const note = exercise.restriction_note ?? "";
@@ -400,6 +448,7 @@ function WorkoutPage({
             </div>
           )}
 
+          {!showNoPlanState && (
           <button
             type="button"
             onClick={() => {
@@ -432,19 +481,22 @@ function WorkoutPage({
               </span>
             </div>
           </button>
+          )}
         </section>
         </div>
       </div>
 
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[440px] md:max-w-none">
-        <div className="flex justify-center items-center md:max-w-[640px] md:mx-auto">
-          <Button
-            onClick={onStartWorkoutSession}
-            className="w-full mx-2.5 flex justify-center items-center mb-[30px] h-[46px] rounded-[10px] bg-main text-white uppercase"
-          >
-            {t("workoutPage.buttons.startWorkout")}
-          </Button>
-        </div>
+        {!showNoPlanState && (
+          <div className="flex justify-center items-center md:max-w-[640px] md:mx-auto">
+            <Button
+              onClick={onStartWorkoutSession}
+              className="w-full mx-2.5 flex justify-center items-center mb-[30px] h-[46px] rounded-[10px] bg-main text-white uppercase"
+            >
+              {t("workoutPage.buttons.startWorkout")}
+            </Button>
+          </div>
+        )}
         <BottomNav
           activePage={activePage}
           onWorkoutClick={onNavigateToWorkout}

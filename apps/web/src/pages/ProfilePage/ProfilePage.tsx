@@ -137,6 +137,7 @@ function ProfilePage({
   onNavigateToProfile,
   onNavigateToAI,
   onNavigateToSettings,
+  onRegenerateFailed,
   activePage,
 }: IProfilePageProps) {
   const { t } = useTranslation();
@@ -167,7 +168,6 @@ function ProfilePage({
   const [regenDialogKind, setRegenDialogKind] = useState<"critical" | "soft" | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [apiPhase, setApiPhase] = useState<"pending" | "success">("pending");
-  const [regenError, setRegenError] = useState<string | null>(null);
 
   const auth = useAuth();
   const userEmail =
@@ -335,8 +335,6 @@ function ProfilePage({
     setRegenDialogKind(null);
     setIsRegenerating(true);
     setApiPhase("pending");
-
-    setRegenError(null);
     try {
       const settings = getPlanSettings();
       const response = await fetch(
@@ -360,8 +358,10 @@ function ProfilePage({
       }
       throw new Error("invalid_plan_payload");
     } catch {
+      // Existing plan is untouched (saved only in the success branch above).
+      // Hand off to the parent: toast + navigate to workout.
       setIsRegenerating(false);
-      setRegenError(t("profilePage.regenErrorMessage", "Failed to regenerate plan. Please try again."));
+      onRegenerateFailed?.();
     }
   };
 
@@ -580,12 +580,6 @@ function ProfilePage({
         </div>
       )}
 
-      {/* Regeneration error toast */}
-      {regenError && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg">
-          {regenError}
-        </div>
-      )}
 
       {/* Critical regeneration dialog (painStatus or painLocation changed) */}
       <ConfirmDialog

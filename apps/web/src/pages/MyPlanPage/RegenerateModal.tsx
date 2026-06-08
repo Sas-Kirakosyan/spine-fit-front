@@ -4,14 +4,12 @@ import { ConfirmDialog } from "@/components/ui/Modal";
 
 interface RegenerateModalProps {
   isOpen: boolean;
-  error?: string | null;
   onCancel: () => void;
   onConfirm: () => void;
 }
 
 export function RegenerateModal({
   isOpen,
-  error,
   onCancel,
   onConfirm,
 }: RegenerateModalProps) {
@@ -27,11 +25,6 @@ export function RegenerateModal({
       <p className="mb-6 text-center text-lg font-semibold text-white">
         {t("myPlanPage.regenerateConfirm")}
       </p>
-      {error && (
-        <div className="mb-4 rounded-lg bg-rose-600/20 border border-rose-500/30 px-4 py-2 text-sm text-rose-300">
-          {error}
-        </div>
-      )}
       <div className="flex gap-3">
         <Button
           onClick={onCancel}

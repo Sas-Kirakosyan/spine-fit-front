@@ -2,7 +2,7 @@ import { Router } from "express";
 import type { Request, Response } from "express";
 import { createRequire } from "module";
 import { prepareExercisesForPrompt } from "../utils/exerciseFilter.js";
-import { generatePlan } from "../services/geminiService.js";
+import { generatePlan, PlanGenerationError } from "../services/geminiService.js";
 import type { ParsedQuizData } from "../types.js";
 import { quizSettingsSchema } from "../schemas/quizSettingsSchema.js";
 import { resolveEffectiveSplit } from "../utils/promptBuilder.js";
@@ -218,6 +218,13 @@ router.post("/", async (req: Request, res: Response) => {
 
     return res.status(200).json(responsePayload);
   } catch (error) {
+    if (error instanceof PlanGenerationError) {
+      console.error("[AI] ❌ Plan generation failed. Attempts:", JSON.stringify(error.attempts));
+      return res.status(502).json({
+        error: "AI failed to generate a valid plan. Please try again.",
+        code: "ai_generation_failed",
+      });
+    }
     console.error("Quiz parsing error:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
@@ -266,6 +273,13 @@ router.post("/regenerate", async (req: Request, res: Response) => {
 
     return res.status(200).json(responsePayload);
   } catch (error) {
+    if (error instanceof PlanGenerationError) {
+      console.error("[AI] ❌ Regenerate failed. Attempts:", JSON.stringify(error.attempts));
+      return res.status(502).json({
+        error: "AI failed to generate a valid plan. Please try again.",
+        code: "ai_generation_failed",
+      });
+    }
     console.error("Regenerate plan error:", error);
     return res.status(500).json({ error: "Internal server error" });
   }

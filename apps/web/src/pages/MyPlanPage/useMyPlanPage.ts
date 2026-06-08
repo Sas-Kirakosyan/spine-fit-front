@@ -1,5 +1,4 @@
 import { useState, useRef, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
 import {
   getPlanSettings,
@@ -10,10 +9,13 @@ import type { GeneratedPlan } from "@spinefit/shared";
 
 interface UseMyPlanPageOptions {
   onNavigateBack: () => void;
+  onRegenerateFailed?: () => void;
 }
 
-export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
-  const { t } = useTranslation();
+export function useMyPlanPage({
+  onNavigateBack,
+  onRegenerateFailed,
+}: UseMyPlanPageOptions) {
   const [warmUpSets, setWarmUpSets] = useState(true);
   const [circuitsAndSupersets, setCircuitsAndSupersets] = useState(true);
   const [planSettings, setPlanSettings] =
@@ -26,7 +28,6 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   const [regenerateApiPhase, setRegenerateApiPhase] = useState<
     "pending" | "success"
   >("pending");
-  const [regenerateError, setRegenerateError] = useState<string | null>(null);
   const initialSettingsRef = useRef<PlanSettings>(getPlanSettings());
   const pendingPlanRef = useRef<GeneratedPlan | null>(null);
 
@@ -79,7 +80,6 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
   const handleRegeneratePlan = async () => {
     setIsRegenerating(true);
     setRegenerateApiPhase("pending");
-    setRegenerateError(null);
     pendingPlanRef.current = null;
     try {
       const response = await fetch(
@@ -107,10 +107,14 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
       pendingPlanRef.current = result.plan;
       setRegenerateApiPhase("success");
     } catch (error) {
+      // Existing plan is untouched (it's saved only in handleRegenerateComplete,
+      // the success path). Reset before any apiPhase="success" so the loader
+      // never mounts → handleRegenerateComplete never runs → no double nav.
       console.error("Failed to regenerate plan:", error);
-      setRegenerateError(t("myPlanPage.regenerateError"));
       setIsRegenerating(false);
       setRegenerateApiPhase("pending");
+      setIsRegenerateModalOpen(false);
+      onRegenerateFailed?.();
     }
   };
 
@@ -142,8 +146,6 @@ export function useMyPlanPage({ onNavigateBack }: UseMyPlanPageOptions) {
     isRegenerateModalOpen,
     isRegenerating,
     regenerateApiPhase,
-    regenerateError,
-    setRegenerateError,
 
     // Toggles
     setWarmUpSets,
