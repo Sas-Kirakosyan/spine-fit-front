@@ -45,7 +45,9 @@ import "@/utils/testWorkoutHistoryGenerator";
 import { trackPageView, trackEvent } from "@/utils/analytics";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { Toast } from "@/components/ui/Toast";
+import { ChunkErrorBoundary } from "@/components/ChunkErrorBoundary/ChunkErrorBoundary";
 import { InstallPrompt } from "@/components/InstallPrompt/InstallPrompt";
+import { CHUNK_RELOAD_KEY } from "@/constants/chunkReload";
 import { useAuth } from "@/hooks/useAuth";
 import { retryPendingQuizSync } from "@/lib/quizStorage";
 import {
@@ -289,6 +291,12 @@ function App() {
     return workoutHistoryService.subscribe(() => {
       setWorkoutHistory(workoutHistoryService.getHistory());
     });
+  }, []);
+
+  // App mounted successfully → clear the stale-chunk reload guard so a future
+  // redeploy is allowed to trigger its own one-time recovery reload.
+  useEffect(() => {
+    sessionStorage.removeItem(CHUNK_RELOAD_KEY);
   }, []);
 
   const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>(() => {
@@ -1338,9 +1346,11 @@ function App() {
   return (
     <>
       {isPagePending ? <PageLoader className="pointer-events-none" /> : null}
-      <Suspense fallback={<PageLoader className="pointer-events-none" />}>
-        {renderPage()}
-      </Suspense>
+      <ChunkErrorBoundary>
+        <Suspense fallback={<PageLoader className="pointer-events-none" />}>
+          {renderPage()}
+        </Suspense>
+      </ChunkErrorBoundary>
       {toast && <Toast message={toast.message} variant={toast.variant} />}
       <InstallPrompt />
     </>

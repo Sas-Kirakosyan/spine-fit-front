@@ -68,6 +68,10 @@
       "actions": "Actions",
       "back": "Back",
       "close": "Close"
+    },
+    "chunkError": {
+      "message": "A new version of SpineFit is available. Please reload to continue.",
+      "reload": "Reload"
     }
   },
   "installPrompt": {
