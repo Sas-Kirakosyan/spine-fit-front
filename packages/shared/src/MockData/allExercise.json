@@ -79,7 +79,7 @@
     "created_at": "2025-10-26T12:00:00Z",
     "updated_at": "2025-10-26T12:30:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 0,
     "weight_unit": "kg",
     "media": [
@@ -401,7 +401,7 @@
     "instructions": "Place rear foot on bench, step forward, brace core. Lower under control without leaning torso forward aggressively.",
     "video_url": "",
     "sets": 3,
-    "reps": 10,
+    "reps": 15,
     "weight": 0,
     "weight_unit": "kg",
     "is_back_friendly": true,
@@ -452,7 +452,7 @@
     "instructions": "Sit tall, hold handles, extend knees under control. Avoid leaning back aggressively.",
     "video_url": "",
     "sets": 4,
-    "reps": 12,
+    "reps": 15,
     "weight": 25,
     "weight_unit": "kg",
     "is_back_friendly": true,
@@ -554,7 +554,7 @@
     "instructions": "Upper back on bench or supported pad, drive hips up without lumbar arch. Ribs down, chin tucked slightly.",
     "video_url": "https://youtu.be/5S8SApGU_Lk?si=S3nbLFQAFgNVEj3_",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 40,
     "weight_unit": "kg",
     "is_back_friendly": true,
@@ -637,7 +637,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 50,
     "weight_unit": "kg",
     "media": [
@@ -716,7 +716,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 8,
+    "reps": 15,
     "weight": 60,
     "weight_unit": "kg",
     "media": [
@@ -771,7 +771,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 4,
-    "reps": 12,
+    "reps": 15,
     "weight": 30,
     "weight_unit": "kg",
     "media": [
@@ -1440,7 +1440,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 80,
     "weight_unit": "kg",
     "media": [
@@ -1495,7 +1495,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 20,
     "weight_unit": "kg",
     "media": [
@@ -1550,7 +1550,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 10,
+    "reps": 15,
     "weight": 8,
     "weight_unit": "kg",
     "media": [
@@ -1605,7 +1605,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 12,
     "weight_unit": "kg",
     "media": [
@@ -2518,7 +2518,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 0,
     "weight_unit": "kg",
     "media": [
@@ -2573,7 +2573,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 10,
+    "reps": 15,
     "weight": 10,
     "weight_unit": "kg",
     "media": [
@@ -2628,7 +2628,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 10,
+    "reps": 15,
     "weight": 20,
     "weight_unit": "kg",
     "media": [
@@ -2683,7 +2683,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 10,
+    "reps": 15,
     "weight": 0,
     "weight_unit": "kg",
     "media": [
@@ -3241,7 +3241,7 @@
     "created_at": "2025-12-20T12:00:00Z",
     "updated_at": "2025-12-20T12:00:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 20,
     "weight_unit": "kg",
     "media": [
@@ -3791,7 +3791,7 @@
     "created_at": "2026-03-29T12:00:00Z",
     "updated_at": "2026-03-29T12:00:00Z",
     "sets": 4,
-    "reps": 8,
+    "reps": 15,
     "weight": 60,
     "weight_unit": "kg",
     "media": [
@@ -4425,7 +4425,7 @@
     "created_at": "2026-04-12T12:00:00Z",
     "updated_at": "2026-04-12T12:00:00Z",
     "sets": 3,
-    "reps": 10,
+    "reps": 15,
     "weight": 40,
     "weight_unit": "kg",
     "media": [
@@ -4498,7 +4498,7 @@
     "created_at": "2026-04-12T12:00:00Z",
     "updated_at": "2026-04-12T12:00:00Z",
     "sets": 3,
-    "reps": 8,
+    "reps": 15,
     "weight": 50,
     "weight_unit": "kg",
     "media": [
@@ -4577,7 +4577,7 @@
     "created_at": "2026-04-12T12:00:00Z",
     "updated_at": "2026-04-12T12:00:00Z",
     "sets": 3,
-    "reps": 6,
+    "reps": 15,
     "weight": 60,
     "weight_unit": "kg",
     "media": [
@@ -4876,7 +4876,7 @@
     "created_at": "2026-04-12T12:00:00Z",
     "updated_at": "2026-04-12T12:00:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 0,
     "weight_unit": "kg",
     "media": [
@@ -4949,7 +4949,7 @@
     "created_at": "2026-04-12T12:00:00Z",
     "updated_at": "2026-04-12T12:00:00Z",
     "sets": 3,
-    "reps": 10,
+    "reps": 15,
     "weight": 0,
     "weight_unit": "kg",
     "media": [
@@ -5022,7 +5022,7 @@
     "created_at": "2026-04-12T12:00:00Z",
     "updated_at": "2026-04-12T12:00:00Z",
     "sets": 4,
-    "reps": 10,
+    "reps": 15,
     "weight": 60,
     "weight_unit": "kg",
     "media": [
@@ -5095,7 +5095,7 @@
     "created_at": "2026-04-12T12:00:00Z",
     "updated_at": "2026-04-12T12:00:00Z",
     "sets": 3,
-    "reps": 5,
+    "reps": 15,
     "weight": 0,
     "weight_unit": "kg",
     "media": [
@@ -5168,7 +5168,7 @@
     "created_at": "2026-04-12T12:00:00Z",
     "updated_at": "2026-04-12T12:00:00Z",
     "sets": 3,
-    "reps": 12,
+    "reps": 15,
     "weight": 30,
     "weight_unit": "kg",
     "media": [
