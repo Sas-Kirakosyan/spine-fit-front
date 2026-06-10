@@ -1,10 +1,15 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import type { PlanFieldId, PlanSettings } from "@/types/planSettings";
 import {
   getPlanSettings,
   savePlanSettings,
   savePlanAndSettings,
 } from "@/lib/planService";
+import {
+  runPlanGenerationLoop,
+  isRetryableStatus,
+  type AttemptOutcome,
+} from "@/lib/planRetry";
 import type { GeneratedPlan } from "@spinefit/shared";
 
 interface UseMyPlanPageOptions {
@@ -30,6 +35,15 @@ export function useMyPlanPage({
   >("pending");
   const initialSettingsRef = useRef<PlanSettings>(getPlanSettings());
   const pendingPlanRef = useRef<GeneratedPlan | null>(null);
+  // Guards the infinite retry loop against the page unmounting mid-poll. Sets
+  // true in the body so StrictMode's dev double-invoke doesn't leave it false.
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const hasChanges = useMemo(() => {
     const fields: PlanFieldId[] = [
@@ -81,41 +95,56 @@ export function useMyPlanPage({
     setIsRegenerating(true);
     setRegenerateApiPhase("pending");
     pendingPlanRef.current = null;
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz/regenerate`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(planSettings),
-        },
-      );
 
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
-
-      const result = (await response.json()) as {
-        success: boolean;
-        plan: GeneratedPlan;
-      };
-
-      if (!result.success || !result.plan) {
-        throw new Error("Invalid regenerate response");
+    const attempt = async (): Promise<AttemptOutcome> => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz/regenerate`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(planSettings),
+          },
+        );
+        if (!response.ok) {
+          console.error("Regenerate plan API error:", response.status);
+          // 503 (AI overloaded) → keep retrying; 502/other → terminal.
+          return isRetryableStatus(response.status) ? "retry" : "giveUp";
+        }
+        const result = (await response.json()) as {
+          success: boolean;
+          plan: GeneratedPlan;
+        };
+        if (!result.success || !result.plan) {
+          console.error("Regenerate returned invalid result:", result);
+          return "giveUp";
+        }
+        if (!mountedRef.current) return "retry";
+        // Hand the plan to the checklist loader; it paces the animation and
+        // calls handleRegenerateComplete once all steps finish.
+        pendingPlanRef.current = result.plan;
+        setRegenerateApiPhase("success");
+        return "success";
+      } catch (error) {
+        // Network error / backend unreachable → transient, keep retrying.
+        console.error("Failed to regenerate plan:", error);
+        return "retry";
       }
+    };
 
-      // Hand the plan to the checklist loader; it paces the animation and
-      // calls handleRegenerateComplete once all steps finish.
-      pendingPlanRef.current = result.plan;
-      setRegenerateApiPhase("success");
-    } catch (error) {
-      // Existing plan is untouched (it's saved only in handleRegenerateComplete,
-      // the success path). Reset before any apiPhase="success" so the loader
-      // never mounts → handleRegenerateComplete never runs → no double nav.
-      console.error("Failed to regenerate plan:", error);
-      setIsRegenerating(false);
-      setRegenerateApiPhase("pending");
-      setIsRegenerateModalOpen(false);
-      onRegenerateFailed?.();
-    }
+    runPlanGenerationLoop({
+      attempt,
+      isMounted: () => mountedRef.current,
+      onGiveUp: () => {
+        // Existing plan is untouched (saved only in handleRegenerateComplete,
+        // the success path). Reset before any apiPhase="success" so the loader
+        // never mounts → handleRegenerateComplete never runs → no double nav.
+        setIsRegenerating(false);
+        setRegenerateApiPhase("pending");
+        setIsRegenerateModalOpen(false);
+        onRegenerateFailed?.();
+      },
+    });
   };
 
   const handleRegenerateComplete = () => {

@@ -219,7 +219,14 @@ router.post("/", async (req: Request, res: Response) => {
     return res.status(200).json(responsePayload);
   } catch (error) {
     if (error instanceof PlanGenerationError) {
-      console.error("[AI] ❌ Plan generation failed. Attempts:", JSON.stringify(error.attempts));
+      if (error.retryable) {
+        console.error("[AI] ⏳ AI unavailable (retryable). Attempts:", JSON.stringify(error.attempts));
+        return res.status(503).json({
+          error: "AI is temporarily unavailable. Please retry.",
+          code: "ai_unavailable",
+        });
+      }
+      console.error("[AI] ❌ Plan generation failed (terminal). Attempts:", JSON.stringify(error.attempts));
       return res.status(502).json({
         error: "AI failed to generate a valid plan. Please try again.",
         code: "ai_generation_failed",
@@ -274,7 +281,14 @@ router.post("/regenerate", async (req: Request, res: Response) => {
     return res.status(200).json(responsePayload);
   } catch (error) {
     if (error instanceof PlanGenerationError) {
-      console.error("[AI] ❌ Regenerate failed. Attempts:", JSON.stringify(error.attempts));
+      if (error.retryable) {
+        console.error("[AI] ⏳ Regenerate: AI unavailable (retryable). Attempts:", JSON.stringify(error.attempts));
+        return res.status(503).json({
+          error: "AI is temporarily unavailable. Please retry.",
+          code: "ai_unavailable",
+        });
+      }
+      console.error("[AI] ❌ Regenerate failed (terminal). Attempts:", JSON.stringify(error.attempts));
       return res.status(502).json({
         error: "AI failed to generate a valid plan. Please try again.",
         code: "ai_generation_failed",

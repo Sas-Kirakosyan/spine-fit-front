@@ -1,5 +1,6 @@
 import type { GeneratedPlan } from "@spinefit/shared";
 import { savePlanAndSettings } from "@/lib/planService";
+import { isRetryableStatus } from "@/lib/planRetry";
 import { trackEvent } from "@/utils/analytics";
 
 export type StoredQuizData = {
@@ -17,7 +18,7 @@ export type StoredQuizData = {
 
 export type PlanGenerationResult =
   | { ok: true; plan: GeneratedPlan }
-  | { ok: false; error: string };
+  | { ok: false; error: string; retryable: boolean };
 
 export async function generatePlanFromQuiz(
   quizData: StoredQuizData
@@ -39,7 +40,16 @@ export async function generatePlanFromQuiz(
     );
 
     if (!response.ok) {
-      throw new Error(`Server error: ${response.status}`);
+      // 503 (ai_unavailable) is transient → retryable; 502/500/4xx are terminal.
+      const retryable = isRetryableStatus(response.status);
+      trackEvent("plan_generation_failed", {
+        error_type: response.status === 503 ? "ai_unavailable" : "server",
+      });
+      return {
+        ok: false,
+        error: `Server error: ${response.status}`,
+        retryable,
+      };
     }
 
     const result = (await response.json()) as {
@@ -48,7 +58,8 @@ export async function generatePlanFromQuiz(
     };
 
     if (!result.success || !result.plan) {
-      throw new Error("invalid_plan_payload");
+      trackEvent("plan_generation_failed", { error_type: "client" });
+      return { ok: false, error: "invalid_plan_payload", retryable: false };
     }
 
     savePlanAndSettings(result.plan);
@@ -72,11 +83,10 @@ export async function generatePlanFromQuiz(
 
     return { ok: true, plan: result.plan };
   } catch (err) {
+    // Network error / backend unreachable → transient, worth retrying.
     console.error("Failed to generate plan:", err);
     const errorMessage = err instanceof Error ? err.message : "unknown";
-    trackEvent("plan_generation_failed", {
-      error_type: errorMessage.includes("Server error") ? "server" : "client",
-    });
-    return { ok: false, error: errorMessage };
+    trackEvent("plan_generation_failed", { error_type: "network" });
+    return { ok: false, error: errorMessage, retryable: true };
   }
 }

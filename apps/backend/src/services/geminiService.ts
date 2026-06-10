@@ -21,18 +21,27 @@ const PRIMARY_MODEL = "gemini-2.5-flash";
 const FALLBACK_MODEL = "gemini-3.1-flash-lite-preview";
 
 /**
- * Thrown when every model attempt fails to produce a valid plan (network error,
- * blocked/truncated response, unparseable JSON, schema mismatch, or a plan that
- * resolved to zero usable exercises). Carries per-attempt reasons for logging.
- * The route layer maps this to HTTP 502 so the client can distinguish a
- * recoverable AI failure ("try again") from a real server error.
+ * Thrown when every model attempt fails to produce a valid plan. Carries
+ * per-attempt reasons for logging plus a `retryable` flag the route uses to
+ * pick the HTTP status:
+ *   - retryable=true  → the AI service itself never delivered a response
+ *     (overload, 5xx, rate limit, network/timeout). Worth polling again → 503.
+ *   - retryable=false → we got a response but its content is unusable (bad
+ *     JSON, schema mismatch, blocked/truncated, zero usable exercises) or the
+ *     request is permanently misconfigured. Retrying won't help → 502.
  */
 export class PlanGenerationError extends Error {
   readonly attempts: { model: string; reason: string }[];
-  constructor(message: string, attempts: { model: string; reason: string }[]) {
+  readonly retryable: boolean;
+  constructor(
+    message: string,
+    attempts: { model: string; reason: string }[],
+    retryable: boolean,
+  ) {
     super(message);
     this.name = "PlanGenerationError";
     this.attempts = attempts;
+    this.retryable = retryable;
   }
 }
 
@@ -135,7 +144,24 @@ export async function generatePlan(
       },
     });
 
-    const result = await model.generateContent(prompt);
+    let result;
+    try {
+      result = await model.generateContent(prompt);
+    } catch (err) {
+      // The HTTP call to Gemini itself failed: overload (503), rate limit (429),
+      // 5xx, network, or timeout — the service never delivered a response.
+      // Tag it AI_SERVICE_ERROR (retryable) so the client keeps polling, EXCEPT
+      // for clearly-permanent client/config errors (bad key, malformed request),
+      // which would otherwise loop forever — those are AI_CONFIG_ERROR (terminal).
+      const msg = err instanceof Error ? err.message : String(err);
+      const permanent =
+        /\b(400|401|403)\b|api[_ ]?key|permission|unauthorized|invalid argument/i.test(
+          msg,
+        );
+      throw new Error(
+        `${permanent ? "AI_CONFIG_ERROR" : "AI_SERVICE_ERROR"}: ${msg}`,
+      );
+    }
     const response = result.response;
 
     // Validate the candidate before reading text. A blocked prompt, a missing
@@ -188,9 +214,16 @@ export async function generatePlan(
     }
   }
   if (!geminiPlan) {
+    // Retry forever (client-side) only when EVERY attempt was a pure service
+    // outage. If any attempt actually returned unusable content, retrying would
+    // likely keep failing the same way → terminal (drop the user to workout).
+    const retryable =
+      attempts.length > 0 &&
+      attempts.every((a) => a.reason.startsWith("AI_SERVICE_ERROR"));
     throw new PlanGenerationError(
       "All model attempts failed to produce a valid plan",
       attempts,
+      retryable,
     );
   }
   console.log("geminiPlan", JSON.stringify(geminiPlan));
@@ -251,6 +284,7 @@ export async function generatePlan(
     throw new PlanGenerationError(
       `Days [${emptyDays.map((d) => d.dayName).join(", ")}] have 0 valid exercises (Gemini returned unknown IDs)`,
       [{ model: "post-validation", reason: "empty_days_after_id_resolution" }],
+      false,
     );
   }
 
