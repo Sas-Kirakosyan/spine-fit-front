@@ -34,6 +34,11 @@ import {
   getStoredPainStatus,
 } from "@/utils/painStatus";
 import { trackEvent } from "@/utils/analytics";
+import { getPlanId, syncExerciseScalarsToPlan } from "@/lib/planService";
+import {
+  getPlannedSetsForExercise,
+  savePlannedSetsForExercise,
+} from "@/storage/plannedSetsStorage";
 
 const toolbarButtons = [
   {
@@ -188,52 +193,84 @@ function ExerciseSetsPage({
   const [setTimeModalIndex, setSetTimeModalIndex] = useState<number | null>(
     null
   );
-  const [warmupEnabled, setWarmupEnabled] = useState(
-    () => exerciseLogs[exercise.id]?.some((s) => s.type === "warmup") ?? false
-  );
   const [replaceModalOpen, setReplaceModalOpen] = useState(false);
   const [replaceQuery, setReplaceQuery] = useState("");
   const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const showPainSlider = shouldShowPainTracking();
   const painRequired = getStoredPainStatus() === "Active Symptoms";
 
+  const planId = getPlanId();
+
   // Get saved logs for this exercise if they exist
   const savedLogs = exerciseLogs[exercise.id];
 
-  const [sets, setSets] = useState<ExerciseSetRow[]>(() => {
-    // If we have saved logs, use them; otherwise create new sets from template
+  // Seeding priority: logs from the current session, then the user's saved
+  // per-exercise defaults, then the plan template.
+  const buildInitialSets = (): ExerciseSetRow[] => {
     if (savedLogs && savedLogs.length > 0) {
       return savedLogs.map((log) => ({
         ...log,
         id: log.id || generateSetId(),
       }));
     }
-
+    const plannedRows = getPlannedSetsForExercise(planId, exercise.id);
+    if (plannedRows) {
+      return plannedRows.map((row) =>
+        createNewSet({ reps: row.reps, weight: row.weight, type: row.type })
+      );
+    }
     const count = Math.max(exercise.sets || 1, 1);
     return Array.from({ length: count }, () => createNewSet());
-  });
+  };
+
+  const [sets, setSets] = useState<ExerciseSetRow[]>(buildInitialSets);
   const [activeSetIndex, setActiveSetIndex] = useState(0);
   const [painLevel, setPainLevel] = useState(2);
+  const [warmupEnabled, setWarmupEnabled] = useState(() =>
+    sets.some((s) => s.type === "warmup")
+  );
+
+  // Tracks pre-workout edits so merely viewing an exercise never freezes its
+  // template into the saved defaults.
+  const plannedDirtyRef = useRef(false);
 
   useEffect(() => {
-    // Restore saved logs if they exist, otherwise reset to template
+    // Restore saved logs / saved defaults if they exist, otherwise reset to template
+    plannedDirtyRef.current = false;
+    const seeded = buildInitialSets();
+    setSets(seeded);
+    setWarmupEnabled(seeded.some((s) => s.type === "warmup"));
     if (savedLogs && savedLogs.length > 0) {
-      setSets(
-        savedLogs.map((log) => ({
-          ...log,
-          id: log.id || generateSetId(),
-        }))
-      );
       // Find first incomplete set or set to -1 if all completed
       const firstIncomplete = savedLogs.findIndex((s) => !s.completed);
       setActiveSetIndex(firstIncomplete !== -1 ? firstIncomplete : -1);
     } else {
-      const count = Math.max(exercise.sets || 1, 1);
-      setSets(Array.from({ length: count }, () => createNewSet()));
       setActiveSetIndex(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exercise, savedLogs]);
+
+  // Persist pre-workout edits as the exercise's new defaults on every change
+  // so they survive back-navigation, START WORKOUT and hard reloads.
+  useEffect(() => {
+    if (isDuringActiveWorkout || !plannedDirtyRef.current) return;
+    savePlannedSetsForExercise(planId, exercise.id, sets);
+  }, [sets, isDuringActiveWorkout, planId, exercise.id]);
+
+  // Commit derived scalars (sets/reps/weight) to the plan once, on leaving the
+  // page or switching exercises — savePlan upserts to Supabase, so it must not
+  // run per keystroke.
+  useEffect(() => {
+    const exerciseId = exercise.id;
+    return () => {
+      if (isDuringActiveWorkout || !plannedDirtyRef.current) return;
+      plannedDirtyRef.current = false;
+      const rows = getPlannedSetsForExercise(planId, exerciseId);
+      if (rows) {
+        syncExerciseScalarsToPlan(exerciseId, rows);
+      }
+    };
+  }, [exercise.id, isDuringActiveWorkout, planId]);
 
   useEffect(() => {
     setActiveSetIndex((prev) => {
@@ -312,6 +349,7 @@ function ExerciseSetsPage({
   };
 
   const handleToggleWarmup = () => {
+    plannedDirtyRef.current = true;
     if (warmupEnabled) {
       // Remove all warmup sets
       setSets((prev) => {
@@ -387,6 +425,7 @@ function ExerciseSetsPage({
       }
     }
 
+    plannedDirtyRef.current = true;
     setActiveSetIndex(index);
     setSets((prev) =>
       prev.map((item, itemIndex) => {
@@ -406,6 +445,7 @@ function ExerciseSetsPage({
   };
 
   const handleAddSet = () => {
+    plannedDirtyRef.current = true;
     setSets((prev) => {
       const completedWeights = prev
         .filter((s) => s.completed && s.type !== "warmup" && s.weight !== "")
@@ -432,6 +472,7 @@ function ExerciseSetsPage({
   };
 
   const handleDeleteSet = (index: number) => {
+    plannedDirtyRef.current = true;
     setSets((prevSets) => {
       // Don't allow deletion if only one set remains
       if (prevSets.length <= 1) return prevSets;

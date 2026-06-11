@@ -22,6 +22,7 @@ import type {
 import type { SwapDurationOption } from "@spinefit/shared";
 import {
   getPlan,
+  getPlanId,
   getPlanSettings,
   hasPlan,
   savePlan,
@@ -34,6 +35,7 @@ import * as activeWorkoutService from "@/lib/activeWorkoutService";
 import type { PersistedActiveWorkout } from "@/storage/activeWorkoutStorage";
 import { getNextAvailableWorkout } from "@/utils/workoutQueueManager";
 import { getSelectedDayIndex } from "@/storage/selectedDayStorage";
+import { copyPlannedSets } from "@/storage/plannedSetsStorage";
 import {
   loadActiveWorkout,
   saveActiveWorkout,
@@ -892,6 +894,9 @@ function App() {
     trackEvent("workout_started");
     if (options?.resetCompleted !== false) {
       setCompletedExerciseIds([]);
+      // Keep exerciseLogs empty: it means "sets the user performed" (ExerciseCard
+      // display, history payload, Supabase snapshot). Pre-workout set edits are
+      // seeded lazily by ExerciseSetsPage from plannedSetsStorage instead.
       setExerciseLogs({});
     }
     setWorkoutStartTime((prevStartTime) => prevStartTime ?? Date.now());
@@ -1021,6 +1026,11 @@ function App() {
     }
 
     setWorkoutExercises((prev) => replaceInList(prev));
+    // Carry the user's saved set defaults over to the replacement; a one-off
+    // swap keeps the source — the old exercise stays on other plan days.
+    copyPlannedSets(getPlanId(), oldExercise.id, replacement.id, {
+      removeSource: duration === "plan",
+    });
     setSelectedExercise(replacement);
     trackEvent("exercise_replaced", {
       old_id: oldExercise.id,

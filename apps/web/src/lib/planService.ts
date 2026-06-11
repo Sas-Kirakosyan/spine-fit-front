@@ -1,6 +1,8 @@
 import type { GeneratedPlan, PlanSettings } from "@spinefit/shared";
 import { planFieldsConfig } from "@spinefit/shared";
 import { supabase } from "@/lib/supabase";
+import { clearAllPlannedSets } from "@/storage/plannedSetsStorage";
+import type { PlannedSetRow } from "@/storage/plannedSetsStorage";
 
 const defaultPlanSettings: PlanSettings = {
   goal: planFieldsConfig.goal.defaultValue,
@@ -82,6 +84,12 @@ export function getPlan(): GeneratedPlan | null {
   return cachedPlan ? structuredClone(cachedPlan) : null;
 }
 
+// Lightweight id accessor — avoids structuredClone of the whole plan when a
+// caller only needs the id (e.g. keying planned-set overrides on every render).
+export function getPlanId(): string | null {
+  return cachedPlan?.id ?? null;
+}
+
 export function getPlanSettings(): PlanSettings {
   const settings = cachedPlan?.settings ?? defaultPlanSettings;
   return {
@@ -140,8 +148,59 @@ export function savePlanAndSettings(
   enqueueUpsert(cachedPlan);
 }
 
+// Write user-edited set defaults back to the plan's scalar fields so exercise
+// cards and warmup generation reflect them. Lossy by design — scalars cannot
+// express per-set variance; the planned-sets override map stays the source of
+// truth for individual rows.
+export function syncExerciseScalarsToPlan(
+  exerciseId: number,
+  rows: PlannedSetRow[]
+): void {
+  if (!cachedPlan) return;
+  const working = rows.filter((r) => r.type !== "warmup");
+  if (working.length === 0) return;
+
+  const sets = working.length;
+  const reps = Number(working[0].reps);
+  const weights = working
+    .map((r) => Number(r.weight))
+    .filter((w) => !Number.isNaN(w) && w > 0);
+
+  let changed = false;
+  const workoutDays = cachedPlan.workoutDays.map((day) => {
+    let dayChanged = false;
+    const exercises = day.exercises.map((ex) => {
+      if (ex.id !== exerciseId) return ex;
+      const next = {
+        ...ex,
+        sets,
+        // Keep template values when the rows hold nothing meaningful
+        // (e.g. bodyweight weight "" or a time-based set left at 0).
+        reps: !Number.isNaN(reps) && reps > 0 ? reps : ex.reps,
+        weight: weights.length > 0 ? Math.max(...weights) : ex.weight,
+      };
+      if (
+        next.sets === ex.sets &&
+        next.reps === ex.reps &&
+        next.weight === ex.weight
+      ) {
+        return ex;
+      }
+      dayChanged = true;
+      return next;
+    });
+    if (!dayChanged) return day;
+    changed = true;
+    return { ...day, exercises };
+  });
+
+  if (!changed) return;
+  savePlan({ ...cachedPlan, workoutDays });
+}
+
 export async function clearPlan(): Promise<void> {
   cachedPlan = null;
+  clearAllPlannedSets();
   notify();
   const userId = await getUserId();
   if (!userId) return;
@@ -194,5 +253,8 @@ export async function fetchPlan(): Promise<void> {
 
 export function resetLocalCache(): void {
   cachedPlan = null;
+  // Drop the previous user's set-defaults so they can't leak to another
+  // account on the same device (mirrors the in-memory plan cache reset).
+  clearAllPlannedSets();
   notify();
 }

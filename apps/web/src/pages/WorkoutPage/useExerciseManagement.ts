@@ -4,6 +4,7 @@ import type { SwapDurationOption } from "@spinefit/shared";
 import type { Exercise } from "@/types/exercise";
 import {
   getPlan,
+  getPlanId,
   savePlan,
   subscribe as subscribeToPlan,
 } from "@/lib/planService";
@@ -12,6 +13,7 @@ import {
   getSelectedDayIndex,
   subscribeSelectedDay,
 } from "@/storage/selectedDayStorage";
+import { copyPlannedSets } from "@/storage/plannedSetsStorage";
 
 interface UseExerciseManagementOptions {
   completedWorkoutIds: Set<string>;
@@ -185,6 +187,12 @@ export function useExerciseManagement({
 
       const replaceInWorkout = (exercises: Exercise[]) =>
         exercises.map((ex) => (ex.id === oldExercise.id ? replacement : ex));
+
+      // Carry the user's saved set defaults over to the replacement; a one-off
+      // swap keeps the source — the old exercise stays on other plan days.
+      copyPlannedSets(getPlanId(), oldExercise.id, replacement.id, {
+        removeSource: duration === "plan",
+      });
 
       try {
         if (isCustomWorkout) {
