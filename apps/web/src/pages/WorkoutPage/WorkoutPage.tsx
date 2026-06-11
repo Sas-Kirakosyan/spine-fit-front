@@ -27,6 +27,11 @@ import {
   savePlan,
   subscribe as subscribeToPlan,
 } from "@/lib/planService";
+import {
+  runPlanGenerationLoop,
+  isRetryableStatus,
+  type AttemptOutcome,
+} from "@/lib/planRetry";
 import type { GeneratedPlan, SwapDurationOption } from "@spinefit/shared";
 import {
   clearSelectedDayIndex,
@@ -65,6 +70,16 @@ function WorkoutPage({
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [apiPhase, setApiPhase] = useState<"pending" | "success">("pending");
+  // Guards the infinite retry loop: stop touching state once the page unmounts.
+  // Sets true in the body (not just cleanup) so StrictMode's dev double-invoke
+  // — mount → cleanup(false) → mount — leaves it true, not stuck false.
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
   const allExercises = allExercisesData as Exercise[];
 
   // DEBUG: keep this log permanently for testing — do not remove during other tasks
@@ -177,47 +192,66 @@ function WorkoutPage({
     if (isRegenerating) return;
     setIsRegenerating(true);
     setApiPhase("pending");
+
+    const quizDataString = localStorage.getItem("quizAnswers");
+    if (!quizDataString) {
+      setIsRegenerating(false);
+      onPlanGenerationFailed?.();
+      return;
+    }
+    let quizData: unknown;
     try {
-      const quizDataString = localStorage.getItem("quizAnswers");
-      if (!quizDataString) {
-        setIsRegenerating(false);
-        onPlanGenerationFailed?.();
-        return;
-      }
-      const quizData = JSON.parse(quizDataString);
-      const response = await fetch(
-        `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(quizData),
+      quizData = JSON.parse(quizDataString);
+    } catch {
+      setIsRegenerating(false);
+      onPlanGenerationFailed?.();
+      return;
+    }
+
+    const attempt = async (): Promise<AttemptOutcome> => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(quizData),
+          }
+        );
+        if (!response.ok) {
+          console.error("Regenerate plan API error:", response.status);
+          // 503 (AI overloaded) → keep retrying; 502/other → terminal.
+          return isRetryableStatus(response.status) ? "retry" : "giveUp";
         }
-      );
-      if (response.ok) {
         const result = (await response.json()) as {
           success: boolean;
           plan: GeneratedPlan;
         };
-        if (result.success && result.plan) {
-          localStorage.removeItem("completedWorkoutIds");
-          clearSelectedDayIndex();
-          savePlan(result.plan);
-          setApiPhase("success");
-        } else {
+        if (!result.success || !result.plan) {
           console.error("Regenerate plan returned invalid result:", result);
-          setIsRegenerating(false);
-          onPlanGenerationFailed?.();
+          return "giveUp";
         }
-      } else {
-        console.error("Regenerate plan API error:", response.status);
+        if (!mountedRef.current) return "retry";
+        localStorage.removeItem("completedWorkoutIds");
+        clearSelectedDayIndex();
+        savePlan(result.plan);
+        setApiPhase("success");
+        return "success";
+      } catch (err) {
+        // Network error / backend unreachable → transient, keep retrying.
+        console.error("Failed to regenerate plan:", err);
+        return "retry";
+      }
+    };
+
+    runPlanGenerationLoop({
+      attempt,
+      isMounted: () => mountedRef.current,
+      onGiveUp: () => {
         setIsRegenerating(false);
         onPlanGenerationFailed?.();
-      }
-    } catch (err) {
-      console.error("Failed to regenerate plan:", err);
-      setIsRegenerating(false);
-      onPlanGenerationFailed?.();
-    }
+      },
+    });
   };
 
   const handleLoaderComplete = () => {

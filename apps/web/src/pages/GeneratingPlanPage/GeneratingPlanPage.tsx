@@ -4,6 +4,7 @@ import {
   generatePlanFromQuiz,
   type StoredQuizData,
 } from "@/lib/planGeneration";
+import { runPlanGenerationLoop, type AttemptOutcome } from "@/lib/planRetry";
 import { trackEvent } from "@/utils/analytics";
 
 type ApiPhase = "pending" | "success";
@@ -17,8 +18,8 @@ function GeneratingPlanPage({ onSuccess, onFailure }: GeneratingPlanPageProps) {
   const [apiPhase, setApiPhase] = useState<ApiPhase>("pending");
   const hasStartedRef = useRef(false);
   // Holds the mounted flag in a ref so StrictMode's double-invoke doesn't kill
-  // the in-flight request: the second effect run rebinds mounted=true before
-  // the original fetch resolves, so its post-await mounted check passes and
+  // the in-flight loop: the second effect run rebinds mounted=true before the
+  // original fetch resolves, so its post-await mounted check passes and
   // setApiPhase/onFailure still fire. A closure-scoped flag would stay false
   // forever after the first cleanup, leaving the loader stuck on step 5.
   const stateRef = useRef<{ mounted: boolean }>({ mounted: true });
@@ -32,45 +33,38 @@ function GeneratingPlanPage({ onSuccess, onFailure }: GeneratingPlanPageProps) {
     if (hasStartedRef.current) return;
     hasStartedRef.current = true;
 
-    const attemptOnce = async (): Promise<boolean> => {
+    const attempt = async (): Promise<AttemptOutcome> => {
       const stored = localStorage.getItem("quizAnswers");
-      if (!stored) return false;
-
+      if (!stored) return "giveUp"; // nothing to generate from → drop to workout
       let quizData: StoredQuizData;
       try {
         quizData = JSON.parse(stored) as StoredQuizData;
       } catch {
-        return false;
+        return "giveUp";
       }
 
       const result = await generatePlanFromQuiz(quizData);
-      if (!stateRef.current.mounted) return false;
+      if (!stateRef.current.mounted) return "retry"; // ignored by loop's mount check
 
       if (result.ok) {
         trackEvent("onboarding_completed", {
           workout_type: quizData.workoutType,
           answer_count: Object.keys(quizData.answers).length,
         });
-        return true;
-      }
-      return false;
-    };
-
-    // Single attempt: the backend already retries primary→fallback within one
-    // request, so a failure here is a genuine failure. We hand control back to
-    // the parent (toast + navigate to workout), where the user gets a manual
-    // "Generate" retry — instead of the old infinite, silent retry loop.
-    const run = async () => {
-      const ok = await attemptOnce();
-      if (!stateRef.current.mounted) return;
-      if (ok) {
         setApiPhase("success");
-      } else {
-        onFailureRef.current();
+        return "success";
       }
+      // Two failure modes:
+      //   - AI unavailable/overloaded (retryable) → keep polling forever;
+      //   - unusable model output (terminal) → drop the user to the workout page.
+      return result.retryable ? "retry" : "giveUp";
     };
 
-    run();
+    runPlanGenerationLoop({
+      attempt,
+      isMounted: () => stateRef.current.mounted,
+      onGiveUp: () => onFailureRef.current(),
+    });
 
     return () => {
       stateRef.current.mounted = false;

@@ -15,6 +15,11 @@ import {
   savePlanAndSettings,
   subscribe as subscribeToPlan,
 } from "@/lib/planService.ts";
+import {
+  runPlanGenerationLoop,
+  isRetryableStatus,
+  type AttemptOutcome,
+} from "@/lib/planRetry.ts";
 import type { GeneratedPlan } from "@spinefit/shared";
 import { ConfirmDialog } from "@/components/ui/Modal.tsx";
 import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGeneratingLoader.tsx";
@@ -168,6 +173,15 @@ function ProfilePage({
   const [regenDialogKind, setRegenDialogKind] = useState<"critical" | "soft" | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [apiPhase, setApiPhase] = useState<"pending" | "success">("pending");
+  // Guards the infinite retry loop against the page unmounting mid-poll. Sets
+  // true in the body so StrictMode's dev double-invoke doesn't leave it false.
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const auth = useAuth();
   const userEmail =
@@ -335,34 +349,50 @@ function ProfilePage({
     setRegenDialogKind(null);
     setIsRegenerating(true);
     setApiPhase("pending");
-    try {
-      const settings = getPlanSettings();
-      const response = await fetch(
-        `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz/regenerate`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(settings),
-        }
-      );
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
 
-      const result = (await response.json()) as {
-        success: boolean;
-        plan: GeneratedPlan;
-      };
-      if (result.success && result.plan) {
+    const attempt = async (): Promise<AttemptOutcome> => {
+      try {
+        const settings = getPlanSettings();
+        const response = await fetch(
+          `${import.meta.env.VITE_GENERATE_PLAN_API}/api/quiz/regenerate`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(settings),
+          }
+        );
+        if (!response.ok) {
+          console.error("Regenerate plan API error:", response.status);
+          // 503 (AI overloaded) → keep retrying; 502/other → terminal.
+          return isRetryableStatus(response.status) ? "retry" : "giveUp";
+        }
+        const result = (await response.json()) as {
+          success: boolean;
+          plan: GeneratedPlan;
+        };
+        if (!result.success || !result.plan) {
+          return "giveUp";
+        }
+        if (!mountedRef.current) return "retry";
         savePlanAndSettings(result.plan);
         setApiPhase("success");
-        return;
+        return "success";
+      } catch {
+        // Network error / backend unreachable → transient, keep retrying.
+        return "retry";
       }
-      throw new Error("invalid_plan_payload");
-    } catch {
-      // Existing plan is untouched (saved only in the success branch above).
-      // Hand off to the parent: toast + navigate to workout.
-      setIsRegenerating(false);
-      onRegenerateFailed?.();
-    }
+    };
+
+    runPlanGenerationLoop({
+      attempt,
+      isMounted: () => mountedRef.current,
+      onGiveUp: () => {
+        // Existing plan is untouched (saved only in the success branch above).
+        // Hand off to the parent: toast + navigate to workout.
+        setIsRegenerating(false);
+        onRegenerateFailed?.();
+      },
+    });
   };
 
   const handleLoaderComplete = () => {
