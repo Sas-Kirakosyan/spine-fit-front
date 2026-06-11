@@ -70,7 +70,7 @@ function WorkoutPage({
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [apiPhase, setApiPhase] = useState<"pending" | "success">("pending");
-  // Guards the infinite retry loop: stop touching state once the page unmounts.
+  // Guards the retry loop: stop touching state once the page unmounts.
   // Sets true in the body (not just cleanup) so StrictMode's dev double-invoke
   // — mount → cleanup(false) → mount — leaves it true, not stuck false.
   const mountedRef = useRef(true);
@@ -220,7 +220,7 @@ function WorkoutPage({
         );
         if (!response.ok) {
           console.error("Regenerate plan API error:", response.status);
-          // 503 (AI overloaded) → keep retrying; 502/other → terminal.
+          // 503 (AI overloaded) → retry (capped by the loop); 502/other → terminal.
           return isRetryableStatus(response.status) ? "retry" : "giveUp";
         }
         const result = (await response.json()) as {
@@ -238,7 +238,7 @@ function WorkoutPage({
         setApiPhase("success");
         return "success";
       } catch (err) {
-        // Network error / backend unreachable → transient, keep retrying.
+        // Network error / backend unreachable → transient, retry (capped by the loop).
         console.error("Failed to regenerate plan:", err);
         return "retry";
       }

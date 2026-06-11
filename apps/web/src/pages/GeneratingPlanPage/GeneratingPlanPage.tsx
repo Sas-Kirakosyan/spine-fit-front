@@ -55,7 +55,8 @@ function GeneratingPlanPage({ onSuccess, onFailure }: GeneratingPlanPageProps) {
         return "success";
       }
       // Two failure modes:
-      //   - AI unavailable/overloaded (retryable) → keep polling forever;
+      //   - AI unavailable/overloaded (retryable) → retry, capped at
+      //     MAX_PLAN_ATTEMPTS by the loop;
       //   - unusable model output (terminal) → drop the user to the workout page.
       return result.retryable ? "retry" : "giveUp";
     };

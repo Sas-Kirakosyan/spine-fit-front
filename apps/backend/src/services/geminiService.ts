@@ -25,7 +25,7 @@ const FALLBACK_MODEL = "gemini-3.1-flash-lite-preview";
  * per-attempt reasons for logging plus a `retryable` flag the route uses to
  * pick the HTTP status:
  *   - retryable=true  → the AI service itself never delivered a response
- *     (overload, 5xx, rate limit, network/timeout). Worth polling again → 503.
+ *     (overload, 5xx, rate limit, network/timeout). Worth retrying → 503.
  *   - retryable=false → we got a response but its content is unusable (bad
  *     JSON, schema mismatch, blocked/truncated, zero usable exercises) or the
  *     request is permanently misconfigured. Retrying won't help → 502.
@@ -150,9 +150,9 @@ export async function generatePlan(
     } catch (err) {
       // The HTTP call to Gemini itself failed: overload (503), rate limit (429),
       // 5xx, network, or timeout — the service never delivered a response.
-      // Tag it AI_SERVICE_ERROR (retryable) so the client keeps polling, EXCEPT
-      // for clearly-permanent client/config errors (bad key, malformed request),
-      // which would otherwise loop forever — those are AI_CONFIG_ERROR (terminal).
+      // Tag it AI_SERVICE_ERROR (retryable) so the client retries a few times,
+      // EXCEPT for clearly-permanent client/config errors (bad key, malformed
+      // request), where retrying is pointless — those are AI_CONFIG_ERROR (terminal).
       const msg = err instanceof Error ? err.message : String(err);
       const permanent =
         /\b(400|401|403)\b|api[_ ]?key|permission|unauthorized|invalid argument/i.test(
@@ -214,9 +214,10 @@ export async function generatePlan(
     }
   }
   if (!geminiPlan) {
-    // Retry forever (client-side) only when EVERY attempt was a pure service
-    // outage. If any attempt actually returned unusable content, retrying would
-    // likely keep failing the same way → terminal (drop the user to workout).
+    // Retry (client-side, capped at 3 attempts) only when EVERY attempt was a
+    // pure service outage. If any attempt actually returned unusable content,
+    // retrying would likely keep failing the same way → terminal (drop the
+    // user to workout).
     const retryable =
       attempts.length > 0 &&
       attempts.every((a) => a.reason.startsWith("AI_SERVICE_ERROR"));
