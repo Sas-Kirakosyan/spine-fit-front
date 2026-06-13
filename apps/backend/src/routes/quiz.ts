@@ -96,7 +96,8 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   const workoutsPerWeek = `${trainingFrequency.replace("+", "")} days per week`;
 
   // Pain status
-  const painStatusOptions = ["Healthy", "Recovered", "Active Symptoms"];
+  // Keep in sync with packages/shared/src/quiz/constants.ts (PAIN_STATUS_QUIZ_OPTIONS order).
+  const painStatusOptions = ["Active Symptoms", "Recovered", "Healthy"];
   const painStatus = typeof answers[QUESTIONS.PAIN_STATUS] === "number" ? painStatusOptions[answers[QUESTIONS.PAIN_STATUS] as number] : undefined;
 
   // Pain location (checkbox → array of indices)
