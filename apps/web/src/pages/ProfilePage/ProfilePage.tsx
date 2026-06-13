@@ -173,7 +173,7 @@ function ProfilePage({
   const [regenDialogKind, setRegenDialogKind] = useState<"critical" | "soft" | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [apiPhase, setApiPhase] = useState<"pending" | "success">("pending");
-  // Guards the infinite retry loop against the page unmounting mid-poll. Sets
+  // Guards the retry loop against the page unmounting mid-retry. Sets
   // true in the body so StrictMode's dev double-invoke doesn't leave it false.
   const mountedRef = useRef(true);
   useEffect(() => {
@@ -363,7 +363,7 @@ function ProfilePage({
         );
         if (!response.ok) {
           console.error("Regenerate plan API error:", response.status);
-          // 503 (AI overloaded) → keep retrying; 502/other → terminal.
+          // 503 (AI overloaded) → retry (capped by the loop); 502/other → terminal.
           return isRetryableStatus(response.status) ? "retry" : "giveUp";
         }
         const result = (await response.json()) as {
@@ -378,7 +378,7 @@ function ProfilePage({
         setApiPhase("success");
         return "success";
       } catch {
-        // Network error / backend unreachable → transient, keep retrying.
+        // Network error / backend unreachable → transient, retry (capped by the loop).
         return "retry";
       }
     };

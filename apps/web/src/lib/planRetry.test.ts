@@ -3,6 +3,7 @@ import {
   planRetryDelay,
   isRetryableStatus,
   runPlanGenerationLoop,
+  MAX_PLAN_ATTEMPTS,
   type AttemptOutcome,
 } from "./planRetry";
 
@@ -50,6 +51,7 @@ describe("runPlanGenerationLoop", () => {
 
   it("retries on transient outcomes until success (with backoff)", async () => {
     vi.useFakeTimers();
+    // Success on the 3rd attempt — the last one MAX_PLAN_ATTEMPTS allows.
     const outcomes: AttemptOutcome[] = ["retry", "retry", "success"];
     let i = 0;
     const attempt = vi.fn(async (): Promise<AttemptOutcome> => outcomes[i++]);
@@ -61,6 +63,19 @@ describe("runPlanGenerationLoop", () => {
 
     expect(attempt).toHaveBeenCalledTimes(3);
     expect(onGiveUp).not.toHaveBeenCalled();
+  });
+
+  it("gives up after MAX_PLAN_ATTEMPTS consecutive retry outcomes", async () => {
+    vi.useFakeTimers();
+    const attempt = vi.fn(async (): Promise<AttemptOutcome> => "retry");
+    const onGiveUp = vi.fn();
+
+    const p = runPlanGenerationLoop({ attempt, isMounted: () => true, onGiveUp });
+    await vi.runAllTimersAsync();
+    await p;
+
+    expect(attempt).toHaveBeenCalledTimes(MAX_PLAN_ATTEMPTS);
+    expect(onGiveUp).toHaveBeenCalledTimes(1);
   });
 
   it("stops cleanly once unmounted mid-retry (no onGiveUp, no infinite loop)", async () => {
