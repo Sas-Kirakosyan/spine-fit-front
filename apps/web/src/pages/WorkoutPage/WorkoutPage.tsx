@@ -10,7 +10,7 @@ import { PlanGeneratingLoader } from "@/components/PlanGeneratingLoader/PlanGene
 import allExercisesData from "@spinefit/shared/src/MockData/allExercise.json";
 import type { Exercise } from "@/types/exercise";
 import { PageContainer } from "@/Layout/PageContainer";
-import type { SavedProgram, WorkoutPageProps } from "@/types/workout";
+import type { WorkoutPageProps } from "@/types/workout";
 import { ExerciseActionSheet } from "@/components/ActionSheet/ExerciseActionSheet";
 import { Button } from "@/components/Buttons/Button";
 import { ExerciseCard } from "@/components/ExerciseCard/ExerciseCard";
@@ -39,6 +39,7 @@ import {
   setSelectedDayIndex,
   subscribeSelectedDay,
 } from "@/storage/selectedDayStorage";
+import { loadSavedPrograms } from "@/storage/savedProgramsStorage";
 import { useTranslation } from "react-i18next";
 
 function WorkoutPage({
@@ -104,13 +105,8 @@ function WorkoutPage({
     try {
       const plan = getPlan();
       if (!plan) return;
-      const savedProgramsString = localStorage.getItem("savedPrograms");
-      if (!savedProgramsString) return;
 
-      const savedPrograms: SavedProgram[] = JSON.parse(savedProgramsString);
-      if (!Array.isArray(savedPrograms)) return;
-
-      const matchingProgram = savedPrograms.find((p) => p.id === plan.id);
+      const matchingProgram = loadSavedPrograms().find((p) => p.id === plan.id);
       if (!matchingProgram) return;
 
       const syncedWorkoutDays = matchingProgram.days.map((day, index) => ({

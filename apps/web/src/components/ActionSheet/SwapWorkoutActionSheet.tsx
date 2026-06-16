@@ -11,6 +11,10 @@ import {
   getSelectedDayIndex,
   subscribeSelectedDay,
 } from "@/storage/selectedDayStorage";
+import {
+  loadSavedPrograms,
+  persistSavedPrograms,
+} from "@/storage/savedProgramsStorage";
 import type { SavedProgram } from "@/types/workout";
 
 interface SwapWorkoutActionSheetProps {
@@ -65,19 +69,6 @@ const customWorkoutOptions = [
     ),
   },
 ];
-
-function loadSavedPrograms(): SavedProgram[] {
-  try {
-    const data = localStorage.getItem("savedPrograms");
-    return data ? JSON.parse(data) : [];
-  } catch {
-    return [];
-  }
-}
-
-function persistSavedPrograms(programs: SavedProgram[]) {
-  localStorage.setItem("savedPrograms", JSON.stringify(programs));
-}
 
 export function SwapWorkoutActionSheet({
   onClose,
