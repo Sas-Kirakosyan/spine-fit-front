@@ -5,8 +5,10 @@ import { PageContainer } from "@/Layout/PageContainer";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons/Icons";
 import { Button } from "@/components/Buttons/Button";
 import { SelectionModal } from "@/components/SelectionModal/SelectionModal";
+import { DeleteAccountModal } from "./DeleteAccountModal";
 import type { SettingsPageProps } from "@/types/pages";
 import { supabase } from "@/lib/supabase";
+import { deleteCurrentUserViaEdgeFunction } from "@/lib/authService";
 import { resetLocalCache } from "@/lib/planService";
 import { resetLocalCache as resetWorkoutHistoryCache } from "@/lib/workoutHistoryService";
 import { resetLocalCache as resetCompletedWorkoutsCache } from "@/lib/completedWorkoutsService";
@@ -80,6 +82,9 @@ function Divider() {
 function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const { t } = useTranslation();
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "Dark"
   );
@@ -100,8 +105,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     };
   }, []);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
+  const clearLocalUserData = () => {
     resetLocalCache();
     resetWorkoutHistoryCache();
     resetCompletedWorkoutsCache();
@@ -122,7 +126,39 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       "userEmail",
     ];
     userKeys.forEach((key) => localStorage.removeItem(key));
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    clearLocalUserData();
     window.location.assign("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    setDeleteError(null);
+    // Delete via the Edge Function BEFORE signing out: it needs a valid JWT to
+    // re-derive the caller's uid server-side (same order as the OAuth flow in App.tsx).
+    const ok = await deleteCurrentUserViaEdgeFunction();
+    if (!ok) {
+      setDeleteError(t("settingsPage.modals.deleteAccountError"));
+      setIsDeleting(false);
+      return;
+    }
+    clearLocalUserData();
+    await supabase.auth.signOut();
+    window.location.assign("/");
+  };
+
+  const openDeleteModal = () => {
+    setDeleteError(null);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    if (isDeleting) return;
+    setIsDeleteModalOpen(false);
+    setDeleteError(null);
   };
 
   const openModal = (config: ModalConfig) => {
@@ -317,7 +353,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
       <SettingsSection title={t("settingsPage.sections.dangerZone")}>
           <SettingsItem
               label={t("settingsPage.items.deleteAccount")}
-              onClick={() => {}}
+              onClick={openDeleteModal}
               showArrow={false}
               className="text-red-500 border-2 border-red-500 rounded-[6px] px-6 py-2"
           />
@@ -335,6 +371,14 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           onSelect={modalConfig.onSelect}
         />
       )}
+
+      <DeleteAccountModal
+        isOpen={isDeleteModalOpen}
+        onCancel={closeDeleteModal}
+        onConfirm={handleDeleteAccount}
+        isDeleting={isDeleting}
+        error={deleteError}
+      />
 
     </PageContainer>
   );

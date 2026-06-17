@@ -61,6 +61,7 @@
     "exercises": "exercises",
     "cancel": "Cancel",
     "reset": "Reset",
+    "delete": "Delete",
     "yes": "Yes",
     "no": "No",
     "aria": {
@@ -314,7 +315,10 @@
       "supportEmailDesc": "Send us an email at support@spinefit.com",
       "supportChatDesc": "Chat with our support team (9AM-6PM EST)",
       "supportFaqDesc": "Browse frequently asked questions",
-      "close": "Close"
+      "close": "Close",
+      "deleteAccountConfirmTitle": "Permanently Delete Account?",
+      "deleteAccountConfirmDescription": "This action cannot be undone. Your account and all your data — training plans and workout history — will be permanently deleted.",
+      "deleteAccountError": "Failed to delete account. Please try again."
     }
   },
   "createProgramPage": {
