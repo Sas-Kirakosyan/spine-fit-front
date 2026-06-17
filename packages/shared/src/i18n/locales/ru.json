@@ -61,6 +61,7 @@
     "exercises": "упражнения",
     "cancel": "Отмена",
     "reset": "Сбросить",
+    "delete": "Удалить",
     "yes": "Да",
     "no": "Нет",
     "aria": {
@@ -436,7 +437,10 @@
       "supportEmailDesc": "Отправьте письмо на support@spinefit.com",
       "supportChatDesc": "Чат с поддержкой (9:00–18:00 МСК)",
       "supportFaqDesc": "Просмотреть частые вопросы",
-      "close": "Закрыть"
+      "close": "Закрыть",
+      "deleteAccountConfirmTitle": "Удалить аккаунт навсегда?",
+      "deleteAccountConfirmDescription": "Это действие необратимо. Ваш аккаунт и все данные — планы тренировок и история тренировок — будут удалены навсегда.",
+      "deleteAccountError": "Не удалось удалить аккаунт. Попробуйте ещё раз."
     }
   },
   "createProgramPage": {
