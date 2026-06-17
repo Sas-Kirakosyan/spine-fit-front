@@ -6,6 +6,10 @@ import { type Exercise } from "@/types/exercise";
 import { useExerciseName } from "@spinefit/shared";
 import { getExerciseImageUrl } from "@/utils/exercise";
 import type { SavedProgram, TrainingDay } from "@/types/workout";
+import {
+  loadSavedPrograms,
+  persistSavedPrograms,
+} from "@/storage/savedProgramsStorage";
 import { LazyImage } from "@/components/ui/LazyImage";
 
 interface CreateProgramPageProps {
@@ -17,19 +21,6 @@ interface CreateProgramPageProps {
   onProgramNameChange: (name: string) => void;
   programName: string;
   editProgramId?: string;
-}
-
-function loadSavedPrograms(): SavedProgram[] {
-  try {
-    const data = localStorage.getItem("savedPrograms");
-    return data ? JSON.parse(data) : [];
-  } catch {
-    return [];
-  }
-}
-
-function persistSavedPrograms(programs: SavedProgram[]) {
-  localStorage.setItem("savedPrograms", JSON.stringify(programs));
 }
 
 export default function CreateProgramPage({
@@ -662,7 +653,7 @@ function ExerciseConfigCard({
       </div>
 
       {/* Config row: sets / reps / weight */}
-      <div className="flex gap-2">
+      <div className="flex gap-1.5">
         <NumberStepper
           label={t("createProgramPage.sets")}
           value={exercise.sets}
@@ -715,25 +706,25 @@ function NumberStepper({
   const displayValue = step % 1 !== 0 ? value.toFixed(1) : String(value);
 
   return (
-    <div className="flex-1 rounded-lg bg-white/5 p-2">
-      <p className="text-[10px] font-semibold text-white/40 uppercase tracking-wider text-center mb-1.5">
+    <div className="min-w-0 flex-1 rounded-lg bg-white/5 p-1.5">
+      <p className="text-[10px] font-semibold text-white/40 uppercase tracking-wider text-center mb-1.5 truncate">
         {label}
       </p>
-      <div className="flex items-center justify-between gap-1">
+      <div className="flex items-center justify-between gap-0.5">
         <button
           onClick={decrement}
           disabled={value <= min}
-          className="w-7 h-7 flex items-center justify-center rounded-md bg-white/5 text-white/60 hover:bg-white/10 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors text-sm font-bold"
+          className="w-6 h-6 shrink-0 flex items-center justify-center rounded-md bg-white/5 text-white/60 hover:bg-white/10 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors text-sm font-bold"
         >
           −
         </button>
-        <span className="text-white font-semibold text-sm min-w-[2rem] text-center">
+        <span className="flex-1 min-w-0 text-white font-semibold text-xs sm:text-sm text-center tabular-nums">
           {displayValue}
         </span>
         <button
           onClick={increment}
           disabled={value >= max}
-          className="w-7 h-7 flex items-center justify-center rounded-md bg-white/5 text-white/60 hover:bg-white/10 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors text-sm font-bold"
+          className="w-6 h-6 shrink-0 flex items-center justify-center rounded-md bg-white/5 text-white/60 hover:bg-white/10 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors text-sm font-bold"
         >
           +
         </button>

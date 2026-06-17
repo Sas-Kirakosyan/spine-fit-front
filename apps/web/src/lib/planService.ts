@@ -3,6 +3,7 @@ import { planFieldsConfig } from "@spinefit/shared";
 import { supabase } from "@/lib/supabase";
 import { clearAllPlannedSets } from "@/storage/plannedSetsStorage";
 import type { PlannedSetRow } from "@/storage/plannedSetsStorage";
+import { syncPlanToSavedProgram } from "@/storage/savedProgramsStorage";
 
 const defaultPlanSettings: PlanSettings = {
   goal: planFieldsConfig.goal.defaultValue,
@@ -113,6 +114,8 @@ export function savePlan(plan: GeneratedPlan): void {
   cachedPlan = plan;
   notify();
   enqueueUpsert(plan);
+  // Mirror edits back into the source saved program (no-op for non-custom plans).
+  syncPlanToSavedProgram(plan);
 }
 
 export function savePlanSettings(settings: PlanSettings): void {

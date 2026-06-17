@@ -771,32 +771,43 @@ function App() {
     try {
       const plan = getPlan();
       if (plan) {
-        const activeWorkout = getNextAvailableWorkout(
-          plan,
-          completedWorkoutIds
-        );
+        // Resolve the target day the same way delete/replace do: prefer the
+        // manually selected day, then fall back to the next available workout.
+        // Otherwise an "add" could land on a different day than the one shown.
+        let workoutIndex = -1;
+        const manualIndex = getSelectedDayIndex();
+        if (
+          manualIndex !== null &&
+          manualIndex >= 0 &&
+          manualIndex < plan.workoutDays.length
+        ) {
+          workoutIndex = manualIndex;
+        }
+        if (workoutIndex === -1) {
+          const activeWorkout = getNextAvailableWorkout(
+            plan,
+            completedWorkoutIds
+          );
+          if (activeWorkout) {
+            workoutIndex = plan.workoutDays.findIndex(
+              (day) =>
+                day.dayNumber === activeWorkout.dayNumber &&
+                day.dayName === activeWorkout.dayName
+            );
+          }
+        }
 
-        if (activeWorkout) {
-          const workoutIndex = plan.workoutDays.findIndex(
-            (day) =>
-              day.dayNumber === activeWorkout.dayNumber &&
-              day.dayName === activeWorkout.dayName
+        if (workoutIndex !== -1) {
+          const existingExerciseIds = new Set(
+            plan.workoutDays[workoutIndex].exercises.map((ex) => ex.id)
+          );
+          const newExercisesToAdd = exercises.filter(
+            (ex) => !existingExerciseIds.has(ex.id)
           );
 
-          if (workoutIndex !== -1) {
-            const existingExerciseIds = new Set(
-              plan.workoutDays[workoutIndex].exercises.map((ex) => ex.id)
-            );
-            const newExercisesToAdd = exercises.filter(
-              (ex) => !existingExerciseIds.has(ex.id)
-            );
-
-            if (newExercisesToAdd.length > 0) {
-              plan.workoutDays[workoutIndex].exercises.push(
-                ...newExercisesToAdd
-              );
-              savePlan(plan);
-            }
+          if (newExercisesToAdd.length > 0) {
+            plan.workoutDays[workoutIndex].exercises.push(...newExercisesToAdd);
+            savePlan(plan);
           }
         }
       }
