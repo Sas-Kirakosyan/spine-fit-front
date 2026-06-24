@@ -32,7 +32,34 @@ function normalizeTrainingSplit(value: string | undefined): string {
   return defaultSplit;
 }
 
-let cachedPlan: GeneratedPlan | null = null;
+// Persist the plan to localStorage (in addition to the in-memory cache and
+// Supabase) so a cold start knows synchronously whether the user has a plan.
+// Without this, hasPlan() is false until the network fetchPlan() resolves, and
+// a returning user briefly sees HomePage before being redirected to /workout.
+const CACHE_KEY = "userPlan";
+
+function readPlanFromLocalStorage(): GeneratedPlan | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    return raw ? (JSON.parse(raw) as GeneratedPlan) : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistCache(): void {
+  try {
+    if (cachedPlan) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cachedPlan));
+    } else {
+      localStorage.removeItem(CACHE_KEY);
+    }
+  } catch {
+    // localStorage is best-effort; the in-memory cache + Supabase remain authoritative.
+  }
+}
+
+let cachedPlan: GeneratedPlan | null = readPlanFromLocalStorage();
 
 const listeners = new Set<() => void>();
 
@@ -112,6 +139,7 @@ export function subscribe(listener: () => void): () => void {
 
 export function savePlan(plan: GeneratedPlan): void {
   cachedPlan = plan;
+  persistCache();
   notify();
   enqueueUpsert(plan);
   // Mirror edits back into the source saved program (no-op for non-custom plans).
@@ -121,6 +149,7 @@ export function savePlan(plan: GeneratedPlan): void {
 export function savePlanSettings(settings: PlanSettings): void {
   if (cachedPlan) {
     cachedPlan = { ...cachedPlan, settings };
+    persistCache();
     notify();
     enqueueUpsert(cachedPlan);
   } else {
@@ -147,6 +176,7 @@ export function savePlanAndSettings(
     // settings === undefined: keep plan.settings as-is
     cachedPlan = plan;
   }
+  persistCache();
   notify();
   enqueueUpsert(cachedPlan);
 }
@@ -203,6 +233,7 @@ export function syncExerciseScalarsToPlan(
 
 export async function clearPlan(): Promise<void> {
   cachedPlan = null;
+  persistCache();
   clearAllPlannedSets();
   notify();
   const userId = await getUserId();
@@ -234,6 +265,7 @@ export async function fetchPlan(): Promise<void> {
   const userId = await getUserId();
   if (!userId) {
     cachedPlan = null;
+    persistCache();
     notify();
     return;
   }
@@ -251,11 +283,15 @@ export async function fetchPlan(): Promise<void> {
   } else {
     cachedPlan = null;
   }
+  persistCache();
   notify();
 }
 
 export function resetLocalCache(): void {
   cachedPlan = null;
+  // Drop the localStorage copy too so the previous user's plan can't leak to
+  // another account on the same device (mirrors the in-memory cache reset).
+  persistCache();
   // Drop the previous user's set-defaults so they can't leak to another
   // account on the same device (mirrors the in-memory plan cache reset).
   clearAllPlannedSets();

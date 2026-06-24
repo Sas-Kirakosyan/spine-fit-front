@@ -251,6 +251,16 @@ function App() {
     if (validResolved === "activeWorkout" && !restoredWorkout) {
       return "workout";
     }
+    // A returning user with a locally-cached plan resumes straight on the
+    // workout page instead of flashing a landing page and then redirecting once
+    // the network fetchPlan() resolves. hasPlan() is now synchronously truthy
+    // because the plan is hydrated from localStorage on module load. The auth
+    // gating effect still bounces them to /login if the session turns out to be
+    // gone, and fetchPlan() refreshes the (possibly stale) cached plan in place.
+    const LANDING_PAGES: Page[] = ["home", "login", "register"];
+    if (LANDING_PAGES.includes(validResolved) && hasPlan()) {
+      return "workout";
+    }
     return validResolved;
   });
 
