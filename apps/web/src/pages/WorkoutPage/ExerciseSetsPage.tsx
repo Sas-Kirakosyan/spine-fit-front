@@ -447,16 +447,9 @@ function ExerciseSetsPage({
   const handleAddSet = () => {
     plannedDirtyRef.current = true;
     setSets((prev) => {
-      const completedWeights = prev
-        .filter((s) => s.completed && s.type !== "warmup" && s.weight !== "")
-        .map((s) => Number(s.weight))
-        .filter((w) => !isNaN(w) && w > 0);
-      const lastWeight =
-        completedWeights.length > 0 ? Math.max(...completedWeights) : null;
+      const lastSet = prev.length > 0 ? prev[prev.length - 1] : null;
       const newSet = createNewSet(
-        lastWeight !== null && !isBodyweight && !isTimeBased
-          ? { weight: String(lastWeight + 2.5) }
-          : undefined
+        lastSet ? { weight: lastSet.weight, reps: lastSet.reps } : undefined
       );
       const next = [...prev, newSet];
       trackEvent("set_added", {
