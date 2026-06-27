@@ -52,7 +52,7 @@ function Registration({
             />
           </div>
 
-          <Divider />
+          <Divider text={t("common.orContinueWith")} />
         </FormCard>
       </div>
 

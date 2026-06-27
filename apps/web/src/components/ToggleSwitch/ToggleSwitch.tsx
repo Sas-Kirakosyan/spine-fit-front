@@ -9,7 +9,7 @@ export function ToggleSwitch({ checked, onChange }: ToggleSwitchProps) {
   return (
     <Button
       onClick={() => onChange(!checked)}
-      className={`relative w-12 h-7 rounded-full transition-colors ${
+      className={`relative w-12 h-7 shrink-0 rounded-full transition-colors ${
         checked ? "bg-main" : "bg-gray-600"
       }`}
     >

@@ -66,11 +66,14 @@ function ProfileIcon(props: SVGProps<SVGSVGElement>) {
 //   );
 // }
 
-const navButtonClass = (isActive: boolean) =>
+const navButtonClass = (isActive: boolean, isRu: boolean) =>
   [
     "flex flex-1 flex-col items-center justify-center gap-1",
     "min-h-[56px] py-2 px-1",
-    "text-[11px] md:text-xs font-semibold uppercase tracking-[0.15em]",
+    "text-[11px] md:text-xs font-semibold uppercase",
+    // Russian nav labels (e.g. "Тренировка") are longer; wide tracking makes
+    // them wrap and desync button heights, so drop it for ru.
+    isRu ? "tracking-normal" : "tracking-[0.15em]",
     "transition-colors",
     isActive
       ? "bg-main text-white"
@@ -87,7 +90,8 @@ export function BottomNav({
   onProfileClick,
   // onAIClick,
 }: BottomNavProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRu = i18n.language.startsWith("ru");
   return (
     <nav
       aria-label={t("bottomNav.workout")}
@@ -96,38 +100,38 @@ export function BottomNav({
       <button
         type="button"
         aria-current={activePage === "workout" ? "page" : undefined}
-        className={navButtonClass(activePage === "workout")}
+        className={navButtonClass(activePage === "workout", isRu)}
         onClick={onWorkoutClick}
       >
         <WorkoutIcon className={iconClass} />
-        <span>{t("bottomNav.workout")}</span>
+        <span className="text-center leading-tight">{t("bottomNav.workout")}</span>
       </button>
       <button
         type="button"
         aria-current={activePage === "progress" ? "page" : undefined}
-        className={navButtonClass(activePage === "progress")}
+        className={navButtonClass(activePage === "progress", isRu)}
         onClick={onProgressClick}
       >
         <ProgressIcon className={iconClass} />
-        <span>{t("bottomNav.progress")}</span>
+        <span className="text-center leading-tight">{t("bottomNav.progress")}</span>
       </button>
       <button
         type="button"
         aria-current={activePage === "history" ? "page" : undefined}
-        className={navButtonClass(activePage === "history")}
+        className={navButtonClass(activePage === "history", isRu)}
         onClick={onHistoryClick}
       >
         <HistoryIcon className={iconClass} />
-        <span>{t("bottomNav.history")}</span>
+        <span className="text-center leading-tight">{t("bottomNav.history")}</span>
       </button>
       <button
         type="button"
         aria-current={activePage === "profile" ? "page" : undefined}
-        className={navButtonClass(activePage === "profile")}
+        className={navButtonClass(activePage === "profile", isRu)}
         onClick={onProfileClick}
       >
         <ProfileIcon className={iconClass} />
-        <span>{t("bottomNav.profile")}</span>
+        <span className="text-center leading-tight">{t("bottomNav.profile")}</span>
       </button>
       {/* <button                         // AI Assisstent zut anjataca navbaric
         type="button"

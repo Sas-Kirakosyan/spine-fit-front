@@ -17,9 +17,9 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div className="flex flex-col gap-2 rounded-[14px] bg-[#1B1E2B]/80 p-4 ring-1 ring-white/5 transition-all hover:ring-white/10">
-      <div className="flex items-center gap-2">
-        <div className={`${accentColor}`}>{icon}</div>
-        <span className="text-xs font-medium uppercase tracking-wider text-slate-400">
+      <div className="flex min-w-0 items-center gap-2">
+        <div className={`${accentColor} shrink-0`}>{icon}</div>
+        <span className="min-w-0 truncate text-xs font-medium uppercase tracking-wider text-slate-400">
           {label}
         </span>
       </div>

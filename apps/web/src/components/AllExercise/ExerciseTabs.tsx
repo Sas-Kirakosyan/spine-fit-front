@@ -10,10 +10,10 @@ interface ExerciseTabsProps {
 export function ExerciseTabs({ activeTab, onTabChange }: ExerciseTabsProps) {
   const { t } = useTranslation();
   return (
-    <div className="flex gap-6 mb-4 border-b border-white/10">
+    <div className="flex gap-6 mb-4 border-b border-white/10 overflow-x-auto scrollbar-hide">
       <button
         onClick={() => onTabChange("all")}
-        className={`pb-2 px-1 text-sm font-medium transition-colors ${
+        className={`shrink-0 whitespace-nowrap pb-2 px-1 text-sm font-medium transition-colors ${
           activeTab === "all"
             ? "text-white border-b-2 border-white"
             : "text-gray-400 hover:text-white"
@@ -23,7 +23,7 @@ export function ExerciseTabs({ activeTab, onTabChange }: ExerciseTabsProps) {
       </button>
       <button
         onClick={() => onTabChange("muscle")}
-        className={`pb-2 px-1 text-sm font-medium transition-colors ${
+        className={`shrink-0 whitespace-nowrap pb-2 px-1 text-sm font-medium transition-colors ${
           activeTab === "muscle"
             ? "text-white border-b-2 border-white"
             : "text-gray-400 hover:text-white"
@@ -33,7 +33,7 @@ export function ExerciseTabs({ activeTab, onTabChange }: ExerciseTabsProps) {
       </button>
       <button
         onClick={() => onTabChange("categories")}
-        className={`pb-2 px-1 text-sm font-medium transition-colors ${
+        className={`shrink-0 whitespace-nowrap pb-2 px-1 text-sm font-medium transition-colors ${
           activeTab === "categories"
             ? "text-white border-b-2 border-white"
             : "text-gray-400 hover:text-white"

@@ -39,15 +39,15 @@ export function TrainingFormatSection({
             )}
             onClick={() => onFieldClick("trainingSplit")}
           />
-          <div className="flex items-center justify-between">
-            <span className="text-base font-medium text-white">
+          <div className="flex items-center justify-between gap-3">
+            <span className="min-w-0 flex-1 text-base font-medium text-white">
               {t("myPlanPage.trainingFormat.warmUpSets")}
             </span>
             <ToggleSwitch checked={warmUpSets} onChange={onWarmUpToggle} />
           </div>
 
-          <div className="flex items-center justify-between">
-            <span className="text-base font-medium text-white">
+          <div className="flex items-center justify-between gap-3">
+            <span className="min-w-0 flex-1 text-base font-medium text-white">
               {t("myPlanPage.trainingFormat.circuitsAndSupersets")}
             </span>
             <ToggleSwitch

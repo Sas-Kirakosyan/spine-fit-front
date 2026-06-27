@@ -25,4 +25,15 @@ i18n
     },
   });
 
+// Keep <html lang> in sync with the active language. Enables language-aware
+// CSS (:lang(ru)), correct hyphenation, and proper screen-reader pronunciation.
+const syncHtmlLang = (lng: string) => {
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = lng.split('-')[0];
+  }
+};
+
+syncHtmlLang(i18n.language);
+i18n.on('languageChanged', syncHtmlLang);
+
 export default i18n;

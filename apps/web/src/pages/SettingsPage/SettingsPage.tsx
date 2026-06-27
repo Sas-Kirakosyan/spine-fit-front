@@ -17,6 +17,7 @@ import {useAuth} from "@/hooks/useAuth.ts";
 interface ModalConfig {
   title: string;
   options: string[];
+  optionLabels?: string[];
   descriptions?: string[];
   headerDescription?: string;
   selectedValue: string;
@@ -44,17 +45,27 @@ function SettingsItem({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center justify-between py-4 text-left transition hover:opacity-80"
+      className="flex w-full items-center justify-between gap-3 py-4 text-left transition hover:opacity-80"
     >
-      <span className={`text-base font-medium ${className ? className : "text-white"}`}>{label}</span>
-      <div className="flex items-center gap-2">
+      <span
+        className={`text-base font-medium ${value ? "min-w-0 flex-1 truncate" : ""} ${
+          className ? className : "text-white"
+        }`}
+      >
+        {label}
+      </span>
+      <div className="flex max-w-[55%] shrink-0 items-center gap-2">
         {value && (
-          <div className="text-right">
-            <span className="text-sm text-slate-400">{value}</span>
-            {subValue && <p className="text-xs text-slate-500">{subValue}</p>}
+          <div className="min-w-0 text-right">
+            <span className="block truncate text-sm text-slate-400">{value}</span>
+            {subValue && (
+              <p className="truncate text-xs text-slate-500">{subValue}</p>
+            )}
           </div>
         )}
-        {showArrow && <ChevronRightIcon className="h-4 w-4 text-slate-500" />}
+        {showArrow && (
+          <ChevronRightIcon className="h-4 w-4 shrink-0 text-slate-500" />
+        )}
       </div>
     </button>
   );
@@ -173,6 +184,11 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     openModal({
       title: t("settingsPage.modals.changeTheme"),
       options: ["Light", "Dark", "System"],
+      optionLabels: [
+        t("settingsPage.modals.themeLight"),
+        t("settingsPage.modals.themeDark"),
+        t("settingsPage.modals.themeSystem"),
+      ],
       descriptions: [
         t("settingsPage.modals.themeLightDesc"),
         t("settingsPage.modals.themeDarkDesc"),
@@ -190,6 +206,10 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     openModal({
       title: t("settingsPage.modals.changeLanguage"),
       options: ["English", "Russian"],
+      optionLabels: [
+        t("settingsPage.modals.langEnglish"),
+        t("settingsPage.modals.langRussian"),
+      ],
       selectedValue: language,
       onSelect: (value) => {
         setLanguage(value);
@@ -204,6 +224,11 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
     openModal({
       title: t("settingsPage.modals.subscriptionPlans"),
       options: ["Free", "Monthly", "Annual"],
+      optionLabels: [
+        t("settingsPage.modals.subFree"),
+        t("settingsPage.modals.subMonthly"),
+        t("settingsPage.modals.subAnnual"),
+      ],
       descriptions: [
         t("settingsPage.modals.subFreeDesc"),
         t("settingsPage.modals.subMonthlyDesc"),
@@ -244,6 +269,18 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
   const auth = useAuth();
   const userEmail = auth.status === "authenticated" ? auth.user.email ?? "" : "";
 
+  // Localized labels for the values shown in the settings list (the stored
+  // values stay "Russian"/"Dark" — used for logic, localStorage and the modal).
+  const languageValueLabel =
+    language === "Russian"
+      ? t("settingsPage.values.languageValueRussian")
+      : t("settingsPage.values.languageValueEnglish");
+  const themeValueLabels: Record<string, string> = {
+    Light: t("settingsPage.modals.themeLight"),
+    Dark: t("settingsPage.modals.themeDark"),
+    System: t("settingsPage.modals.themeSystem"),
+  };
+
   return (
     <PageContainer contentClassName="gap-6 md:max-w-[640px] md:mx-auto md:w-full">
       <header className="flex items-center gap-4 px-4 py-4">
@@ -277,7 +314,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         />
         <SettingsItem
           label={t("settingsPage.items.language")}
-          value={language}
+          value={languageValueLabel}
           onClick={handleLanguageChange}
         />
         <SettingsItem
@@ -286,7 +323,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
         />
         <SettingsItem
           label={t("settingsPage.items.changeTheme")}
-          value={theme}
+          value={themeValueLabels[theme] ?? theme}
           onClick={handleThemeChange}
         />
         <SettingsItem
@@ -365,6 +402,7 @@ function SettingsPage({ onNavigateBack }: SettingsPageProps) {
           onClose={closeModal}
           title={modalConfig.title}
           options={modalConfig.options}
+          optionLabels={modalConfig.optionLabels}
           descriptions={modalConfig.descriptions}
           headerDescription={modalConfig.headerDescription}
           selectedValue={modalConfig.selectedValue}

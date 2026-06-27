@@ -219,7 +219,7 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
               intent="login"
             />
 
-            <Divider />
+            <Divider text={t("common.orContinueWith")} />
 
             {onNavigateToHome && (
               <p className="text-center text-sm text-gray-500">

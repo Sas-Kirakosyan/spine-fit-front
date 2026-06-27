@@ -31,7 +31,13 @@ export function FinishWorkoutModal({
   duration,
   completedExerciseLogs = {},
 }: FinishWorkoutModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRu = i18n.language.startsWith("ru");
+  // Russian stat labels (e.g. "ДЛИТЕЛЬНОСТЬ") are far longer than English;
+  // wide letter-spacing pushes them onto a second line and desyncs the grid.
+  const statLabelClass = `mb-1 text-xs font-semibold uppercase text-slate-400 ${
+    isRu ? "tracking-normal" : "tracking-[0.2em]"
+  }`;
 
   const volume = calculateWorkoutVolume(
     completedExercises,
@@ -63,7 +69,7 @@ export function FinishWorkoutModal({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">
+          <p className={statLabelClass}>
             {t("finishWorkoutModal.volume")}
           </p>
           <p className="text-lg font-semibold text-white">
@@ -71,7 +77,7 @@ export function FinishWorkoutModal({
           </p>
         </div>
         <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">
+          <p className={statLabelClass}>
             {t("finishWorkoutModal.calories")}
           </p>
           <p className="text-lg font-semibold text-white">
@@ -79,7 +85,7 @@ export function FinishWorkoutModal({
           </p>
         </div>
         <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">
+          <p className={statLabelClass}>
             {t("finishWorkoutModal.exercises")}
           </p>
           <p className="text-lg font-semibold text-white">
@@ -87,7 +93,7 @@ export function FinishWorkoutModal({
           </p>
         </div>
         <div className="rounded-[10px] bg-[#13172A] p-4 border border-white/10">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">
+          <p className={statLabelClass}>
             {t("finishWorkoutModal.duration")}
           </p>
           <p className="text-lg font-semibold text-white">{duration}</p>
@@ -97,13 +103,13 @@ export function FinishWorkoutModal({
       <div className="flex gap-3 pt-2">
         <Button
           onClick={onClose}
-          className="flex-1 h-[48px] rounded-[10px] bg-[#1A1F35] text-white font-semibold uppercase tracking-[0.1em] hover:bg-[#242940] transition-colors"
+          className="flex-1 min-h-[48px] px-2 py-2 rounded-[10px] bg-[#1A1F35] text-white text-sm font-semibold uppercase tracking-[0.06em] leading-tight hover:bg-[#242940] transition-colors"
         >
           {t("finishWorkoutModal.resume")}
         </Button>
         <Button
           onClick={onLogWorkout}
-          className="flex-1 h-[48px] rounded-[10px] bg-main text-white font-semibold uppercase tracking-[0.1em]"
+          className="flex-1 min-h-[48px] px-2 py-2 rounded-[10px] bg-main text-white text-sm font-semibold uppercase tracking-[0.06em] leading-tight"
         >
           {t("finishWorkoutModal.logWorkout")}
         </Button>

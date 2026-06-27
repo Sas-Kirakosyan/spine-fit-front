@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@layer base {
+  /* Safety net for long words (esp. Russian, which runs 30–60% longer than
+     English): break a word only when it would otherwise overflow its box.
+     Does not affect normal text — purely prevents layout-breaking overflow. */
+  body {
+    overflow-wrap: break-word;
+  }
+}
+
 @layer components {
     .embla__ios-picker {
         -webkit-font-smoothing: antialiased;

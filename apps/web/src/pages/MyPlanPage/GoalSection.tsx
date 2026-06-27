@@ -15,14 +15,14 @@ export function GoalSection({ goal, onFieldClick }: GoalSectionProps) {
   return (
     <Button
       onClick={() => onFieldClick("goal")}
-      className="w-full rounded-[14px] bg-main p-4 flex items-center justify-between text-white"
+      className="w-full rounded-[14px] bg-main p-4 flex items-center justify-between gap-3 text-white"
     >
-      <span className="text-lg font-semibold">{t("myPlanPage.goal")}</span>
-      <div className="flex items-center gap-2">
-        <span className="text-l ml-10 font-semibold">
+      <span className="shrink-0 text-lg font-semibold">{t("myPlanPage.goal")}</span>
+      <div className="flex min-w-0 items-center gap-2">
+        <span className="min-w-0 truncate text-base font-semibold">
           {getFieldOptionLabel(t, "goal", goal)}
         </span>
-        <ChevronRightIcon className="h-5 w-5" />
+        <ChevronRightIcon className="h-5 w-5 shrink-0" />
       </div>
     </Button>
   );

@@ -64,6 +64,7 @@
     "delete": "Delete",
     "yes": "Yes",
     "no": "No",
+    "orContinueWith": "Or continue with",
     "aria": {
       "loading": "Loading",
       "actions": "Actions",
