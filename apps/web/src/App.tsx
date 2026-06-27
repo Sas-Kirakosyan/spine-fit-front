@@ -63,6 +63,11 @@ import {
 
 const PUBLIC_PAGES: Page[] = ["home", "login", "register", "resetPassword"];
 
+// Pages an authenticated user gets bounced off of after the post-auth route is
+// resolved (to /workout, or /home if they have no plan yet). resetPassword is
+// deliberately excluded — that flow must run to completion.
+const LANDING_PAGES: Page[] = ["home", "login", "register"];
+
 // --- LAZY LOADED COMPONENTS ---
 // Note: Using .then() to handle named exports from your files
 const HomePage = lazy(() => import("@/pages/HomePage/HomePage"));
@@ -257,11 +262,25 @@ function App() {
     // because the plan is hydrated from localStorage on module load. The auth
     // gating effect still bounces them to /login if the session turns out to be
     // gone, and fetchPlan() refreshes the (possibly stale) cached plan in place.
-    const LANDING_PAGES: Page[] = ["home", "login", "register"];
     if (LANDING_PAGES.includes(validResolved) && hasPlan()) {
       return "workout";
     }
     return validResolved;
+  });
+
+  // Keeps a single loader up while the post-auth destination is being resolved,
+  // instead of painting a landing page (home/login) and then redirecting to
+  // /workout once the session + plan load — which reads as a
+  // home→loader→workout flicker, most visibly after a Google OAuth round-trip
+  // (which reloads the app on "/"). Initialized from the OAuth marker so the
+  // very first authenticated render is already gated; the in-app email login
+  // path arms it from the auth effect below. Cleared once the route resolves.
+  const [resolvingAuthRoute, setResolvingAuthRoute] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return (
+      localStorage.getItem(OAUTH_IN_PROGRESS_KEY) !== null &&
+      LANDING_PAGES.includes(currentPage)
+    );
   });
 
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
@@ -422,10 +441,32 @@ function App() {
       setReconciledOnce(false);
       lastSyncedDigestRef.current = null;
       initialRedirectDoneRef.current = false;
+      // A subsequent login on the same device must re-arm the loader gate from
+      // scratch, so drop any leftover "resolving" state here.
+      setResolvingAuthRoute(false);
       return;
     }
     if (auth.status !== "authenticated") return;
     const oauthUser = auth.user;
+
+    // Arm the post-auth loader gate for an in-session email/password login, so
+    // the user sees one continuous loader through to /workout instead of the
+    // login page lingering and then flicking over. The OAuth path already armed
+    // it during the initial render via the OAUTH_IN_PROGRESS marker.
+    //
+    // Deliberately scoped to the login page only — NOT "home". The home page can
+    // have the onboarding QuizModal open (email sign-up happens inside it via
+    // "Get my plan"), and that flow drives its own navigation to
+    // GeneratingPlanPage. Gating home here would swap it for a full-screen
+    // loader, unmount the quiz mid-submit, and strand the just-registered user
+    // back on home. A no-plan user resolves to "home" anyway, so there is
+    // nothing to hide.
+    if (
+      !initialRedirectDoneRef.current &&
+      currentPageRef.current === "login"
+    ) {
+      setResolvingAuthRoute(true);
+    }
 
     let cancelled = false;
 
@@ -568,6 +609,7 @@ function App() {
               "",
               PAGE_TO_PATH["login"]
             );
+            setResolvingAuthRoute(false);
             setCurrentPage("login");
             return;
           }
@@ -588,6 +630,7 @@ function App() {
               "",
               PAGE_TO_PATH["login"]
             );
+            setResolvingAuthRoute(false);
             setCurrentPage("login");
             return;
           }
@@ -604,6 +647,7 @@ function App() {
             );
             // Direct setState (not transition) so the navigation can't be
             // interrupted by a higher-priority update before commit.
+            setResolvingAuthRoute(false);
             setCurrentPage("generatingPlan");
             return;
           }
@@ -624,6 +668,7 @@ function App() {
             );
             setCurrentPage(target);
           }
+          setResolvingAuthRoute(false);
           return;
         }
 
@@ -644,6 +689,7 @@ function App() {
             startPageTransition(() => setCurrentPage(target));
           }
         }
+        setResolvingAuthRoute(false);
       }
     };
     void refetch();
@@ -666,6 +712,15 @@ function App() {
     // not on every navigation. The ref guards the one-shot redirect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.status]);
+
+  // Safety net: once we've actually landed on a non-landing page (e.g. /workout
+  // or /generating-plan), drop the post-auth loader gate even if some branch
+  // forgot to clear it — never leave the user stuck under a permanent loader.
+  useEffect(() => {
+    if (resolvingAuthRoute && !LANDING_PAGES.includes(currentPage)) {
+      setResolvingAuthRoute(false);
+    }
+  }, [currentPage, resolvingAuthRoute]);
 
   useEffect(() => {
     trackPageView(currentPage);
@@ -1370,7 +1425,9 @@ function App() {
     }
   };
 
-  if (auth.status === "loading") {
+  // `resolvingAuthRoute` keeps the loader up across the post-auth redirect so a
+  // landing page never flashes between the auth check and the /workout landing.
+  if (auth.status === "loading" || resolvingAuthRoute) {
     return <PageLoader />;
   }
 

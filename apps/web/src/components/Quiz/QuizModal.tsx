@@ -9,6 +9,7 @@ import {
   type RegistrationSuccessInfo,
 } from "@/components/Form/RegistrationForm/RegistrationForm";
 import { GoogleSignInButton } from "@/components/Form/GoogleSignInButton/GoogleSignInButton";
+import { AuthSwitchLink } from "@/components/Form/AuthSwitchLink/AuthSwitchLink";
 import { questions } from "./questions";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -29,6 +30,7 @@ export function QuizModal({
   isOpen,
   onClose,
   onQuizComplete,
+  onNavigateToLogin,
 }: QuizModalProps) {
   const { t } = useTranslation();
   const [workoutType] = useState<"home" | "gym">("gym");
@@ -674,6 +676,14 @@ export function QuizModal({
                     onError={setOauthError}
                   />
                 </div>
+                <AuthSwitchLink
+                  variant="onLight"
+                  question={t("registrationPage.haveAccount")}
+                  linkText={t("registrationPage.login")}
+                  onClick={() =>
+                    closeWithHistoryCleanup(() => onNavigateToLogin?.())
+                  }
+                />
               </div>
             </div>
             <div className="mt-6 mx-4 mb-5">

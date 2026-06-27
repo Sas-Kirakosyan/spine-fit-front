@@ -104,6 +104,7 @@ function HomePage({
         isOpen={isQuizOpen}
         onClose={handleCloseQuiz}
         onQuizComplete={onNavigateToGeneratingPlan}
+        onNavigateToLogin={onNavigateToLogin}
       />
     </>
   );
