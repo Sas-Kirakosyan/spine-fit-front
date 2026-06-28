@@ -15,11 +15,8 @@ import {
   GOOGLE_LOGIN_NO_ACCOUNT_KEY,
   GOOGLE_REGISTER_EXISTS_KEY,
 } from "@/lib/authService";
-import {
-  generatePlanFromQuiz,
-  type StoredQuizData,
-} from "@/lib/planGeneration";
 import { fetchPlan, hasPlan } from "@/lib/planService";
+import { hydrateQuizFromSupabase } from "@/lib/quizStorage";
 
 import type { LoginFormData, LoginProps } from "@/types/auth";
 
@@ -118,31 +115,17 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
         return;
       }
 
-      // Pull the user's plan from Supabase into the in-memory cache.
+      // Auth succeeded — always do a plain login and land on the workout page.
+      // Plan generation is never triggered here. When there's no plan yet, the
+      // workout page shows its "no plan — generate" empty state; we only recover
+      // the quiz answers from Supabase first (a logout clears them locally; a
+      // brand-new device never had them) so that page's "Generate plan" button
+      // has data to work with when the user chooses to press it.
       await fetchPlan();
-      const pendingQuiz = localStorage.getItem("quizAnswers");
-      let planReady = hasPlan();
-
-      if (pendingQuiz && !planReady) {
-        try {
-          const quizData = JSON.parse(pendingQuiz) as StoredQuizData;
-          const planResult = await generatePlanFromQuiz(quizData);
-          if (!planResult.ok) {
-            setAuthError(t("loginPage.errors.planGenerationFailed"));
-            return;
-          }
-          planReady = true;
-        } catch {
-          setAuthError(t("loginPage.errors.planGenerationFailed"));
-          return;
-        }
+      if (!hasPlan()) {
+        await hydrateQuizFromSupabase(result.user.id);
       }
-
-      if (planReady) {
-        if (onNavigateToWorkout) onNavigateToWorkout();
-      } else if (onNavigateToHome) {
-        onNavigateToHome();
-      }
+      if (onNavigateToWorkout) onNavigateToWorkout();
     } catch (err) {
       setAuthError(
         mapLoginError(err instanceof Error ? err.message : "", t)
