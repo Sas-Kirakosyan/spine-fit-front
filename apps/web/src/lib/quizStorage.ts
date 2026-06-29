@@ -47,6 +47,37 @@ export async function saveQuizToSupabase(
   }
 }
 
+/**
+ * Pulls the user's saved quiz answers from Supabase back into localStorage under
+ * the `quizAnswers` key, so the plan-generation flow (which reads localStorage)
+ * can run after the answers were lost locally — e.g. a logout that cleared
+ * localStorage, or a fresh login on another device. A local in-progress quiz
+ * always wins and is never overwritten. Returns whether quiz answers are
+ * available locally afterwards. Network/parse errors resolve to false.
+ */
+export async function hydrateQuizFromSupabase(userId: string): Promise<boolean> {
+  if (localStorage.getItem("quizAnswers")) return true;
+  try {
+    const { data, error } = await supabase
+      .from("quiz_answers")
+      .select("workout_type, answers, units")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (error || !data) return false;
+    const stored: StoredQuizData = {
+      workoutType:
+        (data.workout_type as StoredQuizData["workoutType"]) ?? "gym",
+      answers: (data.answers as StoredQuizData["answers"]) ?? {},
+      units: (data.units as StoredQuizData["units"]) ?? {},
+      timestamp: new Date().toISOString(),
+    };
+    localStorage.setItem("quizAnswers", JSON.stringify(stored));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function retryPendingQuizSync(userId: string): Promise<void> {
   const pending = localStorage.getItem(PENDING_SYNC_KEY);
   if (!pending) return;

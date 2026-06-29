@@ -51,7 +51,10 @@ import { ChunkErrorBoundary } from "@/components/ChunkErrorBoundary/ChunkErrorBo
 import { InstallPrompt } from "@/components/InstallPrompt/InstallPrompt";
 import { CHUNK_RELOAD_KEY } from "@/constants/chunkReload";
 import { useAuth } from "@/hooks/useAuth";
-import { retryPendingQuizSync } from "@/lib/quizStorage";
+import {
+  retryPendingQuizSync,
+  hydrateQuizFromSupabase,
+} from "@/lib/quizStorage";
 import {
   OAUTH_IN_PROGRESS_KEY,
   GOOGLE_LOGIN_NO_ACCOUNT_KEY,
@@ -672,21 +675,38 @@ function App() {
           return;
         }
 
-        // Already-authenticated user (existing session) landing on a public
-        // auth page. Send them to workout if they have a plan, otherwise home.
+        // Already-authenticated user (email login or an existing session)
+        // landing on a public auth page → send them to the workout page. With no
+        // plan yet, the workout page shows its "no plan — generate" empty state;
+        // we recover the quiz answers from Supabase first (a logout clears them
+        // locally; a new device never had them) so that page's "Generate plan"
+        // button works. We deliberately do NOT auto-start generation — the user
+        // triggers it from the workout page.
+        //
+        // EXCEPTION: a no-plan user on the home page is left untouched. The
+        // onboarding QuizModal lives on home and, after an email sign-up inside
+        // it, drives its own navigation to GeneratingPlanPage. Redirecting to
+        // /workout here would clobber that hand-off and strand the just-
+        // registered user on an empty workout page instead of generating their
+        // plan. (A user who already has a plan is still moved to /workout.)
         const isAuthLandingPage =
           currentPage === "home" ||
           currentPage === "login" ||
           currentPage === "register";
-        if (isAuthLandingPage) {
-          const target: Page = hasPlan() ? "workout" : "home";
-          if (target !== currentPage) {
+        const shouldRouteToWorkout =
+          isAuthLandingPage && (hasPlan() || currentPage !== "home");
+        if (shouldRouteToWorkout) {
+          if (!hasPlan()) {
+            await hydrateQuizFromSupabase(oauthUser.id);
+            if (cancelled) return;
+          }
+          if (currentPage !== "workout") {
             window.history.replaceState(
-              { page: target },
+              { page: "workout" },
               "",
-              PAGE_TO_PATH[target]
+              PAGE_TO_PATH["workout"]
             );
-            startPageTransition(() => setCurrentPage(target));
+            startPageTransition(() => setCurrentPage("workout"));
           }
         }
         setResolvingAuthRoute(false);
