@@ -18,7 +18,7 @@ import { SPLIT_TARGET_MUSCLES, mapSplitType } from "../utils/splitUtils.js";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 
 const PRIMARY_MODEL = "gemini-2.5-flash";
-const FALLBACK_MODEL = "gemini-3.1-flash-lite-preview";
+const FALLBACK_MODEL = "gemini-3.5-flash";
 
 /**
  * Thrown when every model attempt fails to produce a valid plan. Carries
