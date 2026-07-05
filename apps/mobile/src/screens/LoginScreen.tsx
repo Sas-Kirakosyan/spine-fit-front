@@ -1,5 +1,12 @@
-import { useState } from "react";
-import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
@@ -11,11 +18,26 @@ import { FormHeader } from "../components/form/FormHeader";
 import { FormField } from "../components/form/FormField";
 import { PasswordInput } from "../components/form/PasswordInput";
 import { SubmitButton } from "../components/form/SubmitButton";
+import { GoogleSignInButton } from "../components/form/GoogleSignInButton";
 import { Divider } from "../components/form/Divider";
 import { AuthSwitchLink } from "../components/form/AuthSwitchLink";
 import { Logo } from "../components/common/Logo";
+import { ForgotPasswordModal } from "../components/modals/ForgotPasswordModal";
+import { signInWithEmail } from "../lib/authService";
+import { storage } from "../storage/storageAdapter";
 
 type Nav = NativeStackNavigationProp<AuthStackParamList, "Login">;
+
+function mapLoginError(message: string, t: (key: string) => string): string {
+  const lower = message.toLowerCase();
+  if (lower.includes("invalid login credentials")) {
+    return t("loginPage.errors.invalidCredentials");
+  }
+  if (lower.includes("failed to fetch") || lower.includes("network")) {
+    return t("loginPage.errors.network");
+  }
+  return message || t("loginPage.errors.unknown");
+}
 
 export default function LoginScreen() {
   const navigation = useNavigation<Nav>();
@@ -26,10 +48,24 @@ export default function LoginScreen() {
     password: "",
   });
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
+  const [authError, setAuthError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
+
+  // Set by ResetPasswordScreen after a successful password update.
+  useEffect(() => {
+    (async () => {
+      const prefillEmail = await storage.getItem("loginPrefillEmail");
+      if (!prefillEmail) return;
+      setFormData((prev) => ({ ...prev, email: prefillEmail }));
+      await storage.removeItem("loginPrefillEmail");
+    })();
+  }, []);
 
   const handleChange = (field: keyof LoginFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
+    if (authError) setAuthError("");
   };
 
   const validateForm = (): boolean => {
@@ -44,9 +80,27 @@ export default function LoginScreen() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      navigation.getParent()?.navigate("Main");
+  const navigateToMain = () => {
+    navigation.getParent()?.navigate("Main");
+  };
+
+  const handleSubmit = async () => {
+    if (loading) return;
+    if (!validateForm()) return;
+
+    setLoading(true);
+    setAuthError("");
+    try {
+      const result = await signInWithEmail(formData.email, formData.password);
+      if (!result.ok) {
+        setAuthError(mapLoginError(result.error.message, t));
+        return;
+      }
+      navigateToMain();
+    } catch (err) {
+      setAuthError(mapLoginError(err instanceof Error ? err.message : "", t));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,7 +139,31 @@ export default function LoginScreen() {
                 placeholder={t("loginPage.passwordPlaceholder")}
               />
 
-              <SubmitButton text={t("loginPage.signIn")} onPress={handleSubmit} />
+              {authError ? (
+                <Text className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600">
+                  {authError}
+                </Text>
+              ) : null}
+
+              <Pressable onPress={() => setForgotOpen(true)} className="self-end">
+                <Text className="text-sm font-medium text-main">
+                  {t("loginPage.forgotPassword")}
+                </Text>
+              </Pressable>
+
+              <SubmitButton
+                text={t("loginPage.signIn")}
+                onPress={handleSubmit}
+                loading={loading}
+              />
+
+              <GoogleSignInButton
+                label={t("loginPage.continueWithGoogle")}
+                intent="login"
+                onError={setAuthError}
+                onSuccess={navigateToMain}
+              />
+
               <Divider />
             </View>
           </FormCard>
@@ -97,6 +175,12 @@ export default function LoginScreen() {
           onPress={() => navigation.navigate("Register")}
         />
       </KeyboardAvoidingView>
+
+      <ForgotPasswordModal
+        open={forgotOpen}
+        initialEmail={formData.email}
+        onClose={() => setForgotOpen(false)}
+      />
     </SafeAreaView>
   );
 }

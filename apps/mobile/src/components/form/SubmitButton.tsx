@@ -1,19 +1,31 @@
-import { Pressable, Text } from "react-native";
+import { ActivityIndicator, Pressable, Text } from "react-native";
 
 interface SubmitButtonProps {
   text: string;
   onPress?: () => void;
   disabled?: boolean;
+  loading?: boolean;
 }
 
-export function SubmitButton({ text, onPress, disabled = false }: SubmitButtonProps) {
+export function SubmitButton({
+  text,
+  onPress,
+  disabled = false,
+  loading = false,
+}: SubmitButtonProps) {
   return (
     <Pressable
       onPress={onPress}
-      disabled={disabled}
-      className={`w-full rounded-[14px] bg-main py-3 items-center shadow-lg ${disabled ? "opacity-50" : ""}`}
+      disabled={disabled || loading}
+      className={`w-full rounded-[14px] bg-main py-3 items-center justify-center shadow-lg ${
+        disabled || loading ? "opacity-50" : ""
+      }`}
     >
-      <Text className="text-base font-semibold text-white">{text}</Text>
+      {loading ? (
+        <ActivityIndicator size="small" color="#ffffff" />
+      ) : (
+        <Text className="text-base font-semibold text-white">{text}</Text>
+      )}
     </Pressable>
   );
 }

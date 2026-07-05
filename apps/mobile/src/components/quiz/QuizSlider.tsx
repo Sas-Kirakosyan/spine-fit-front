@@ -1,6 +1,7 @@
 import { View, Text, Pressable, PanResponder } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface QuizSliderProps {
   value: string;
@@ -21,6 +22,7 @@ const getColor = (val: number, min: number, max: number) => {
 };
 
 export function QuizSlider({ value, min, max, onChange }: QuizSliderProps) {
+  const { t } = useTranslation();
   const numValue = value ? parseFloat(value) : min;
   const currentColor = getColor(numValue, min, max);
   const numbers = Array.from({ length: max - min + 1 }, (_, i) => i + min);
@@ -58,11 +60,11 @@ export function QuizSlider({ value, min, max, onChange }: QuizSliderProps) {
     <View className="gap-4">
       {/* Header row */}
       <View className="flex-row justify-between items-center">
-        <Text className="text-lg text-gray-500">No pain</Text>
+        <Text className="text-lg text-gray-500">{t("quiz.slider.noPain")}</Text>
         <Text className="text-4xl font-bold" style={{ color: currentColor }}>
           {value || min}
         </Text>
-        <Text className="text-lg text-gray-500">Worst pain</Text>
+        <Text className="text-lg text-gray-500">{t("quiz.slider.worstPain")}</Text>
       </View>
 
       {/* Custom slider */}

@@ -1,4 +1,5 @@
 import { View, Text, Pressable } from "react-native";
+import { useTranslation } from "react-i18next";
 
 interface QuizNavigationButtonsProps {
   currentQuestion: number;
@@ -6,7 +7,6 @@ interface QuizNavigationButtonsProps {
   isAnswered: boolean;
   isInfoScreen: boolean;
   hideNextButton?: boolean;
-  buttonText?: string;
   onBack: () => void;
   onNext: () => void;
   onSubmit: () => void;
@@ -18,24 +18,28 @@ export function QuizNavigationButtons({
   isAnswered,
   isInfoScreen,
   hideNextButton = false,
-  buttonText,
   onBack,
   onNext,
   onSubmit,
 }: QuizNavigationButtonsProps) {
+  const { t } = useTranslation();
   const isLastQuestion = currentQuestion >= totalQuestions - 1;
   const isStartScreen = currentQuestion === 0 && isInfoScreen;
 
   if (isStartScreen) {
     return (
-      <View className="items-center pb-8">
+      <View className="items-center pb-8 mx-4">
         <Pressable
           onPress={onNext}
-          className="w-full max-w-[300px] h-[60px] rounded-[18px] bg-main py-4 items-center"
+          className="w-full rounded-full bg-main py-4 items-center"
         >
-          <Text className="text-2xl font-semibold text-white">{buttonText}</Text>
+          <Text className="text-base font-semibold text-white">
+            {t("quiz.nav.startAssessment")}
+          </Text>
         </Pressable>
-        <Text className="mt-2 text-md text-white/50">Takes less than 1 minute</Text>
+        <Text className="mt-2 text-sm text-white/50">
+          {t("quiz.nav.takesLessThan")}
+        </Text>
       </View>
     );
   }
@@ -46,41 +50,43 @@ export function QuizNavigationButtons({
         {currentQuestion > 0 && (
           <Pressable
             onPress={onBack}
-            className="rounded-[18px] bg-white/10 px-8 py-4"
+            className="rounded-full bg-white/10 px-8 py-4"
           >
-            <Text className="text-2xl font-medium text-white">Back</Text>
+            <Text className="text-base font-medium text-white">
+              {t("quiz.nav.back")}
+            </Text>
           </Pressable>
         )}
         {!hideNextButton && !isLastQuestion ? (
           <Pressable
             onPress={onNext}
             disabled={!isAnswered}
-            className={`rounded-[18px] px-8 py-4 ${
+            className={`rounded-full px-8 py-4 ${
               isAnswered ? "bg-main" : "bg-white/10"
             }`}
           >
             <Text
-              className={`text-2xl font-semibold ${
+              className={`text-base font-semibold ${
                 isAnswered ? "text-white" : "text-white/60"
               }`}
             >
-              {isInfoScreen ? buttonText || "Next" : "Next"}
+              {t("quiz.nav.next")}
             </Text>
           </Pressable>
         ) : !hideNextButton && isLastQuestion ? (
           <Pressable
             onPress={onSubmit}
             disabled={!isAnswered}
-            className={`rounded-[18px] px-8 py-4 ${
-              isAnswered ? "bg-green-500" : "bg-white/10"
+            className={`rounded-full px-8 py-4 ${
+              isAnswered ? "bg-main" : "bg-white/10"
             }`}
           >
             <Text
-              className={`text-2xl font-semibold ${
+              className={`text-base font-semibold ${
                 isAnswered ? "text-white" : "text-white/60"
               }`}
             >
-              Finish
+              {t("quiz.nav.generate")}
             </Text>
           </Pressable>
         ) : null}

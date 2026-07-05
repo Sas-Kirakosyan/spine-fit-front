@@ -64,6 +64,7 @@ export default function HomeScreen() {
         isOpen={isQuizOpen}
         onClose={() => setIsQuizOpen(false)}
         onQuizComplete={handleQuizComplete}
+        onNavigateToLogin={() => navigation.navigate("Login")}
       />
     </>
   );

@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import i18n from "i18next";
 import { ChevronLeftIcon, ChevronRightIcon } from "../components/icons/Icons";
 import { storage } from "../storage/storageAdapter";
+import { getCurrentUser, signOut } from "../lib/authService";
 
 function SettingsItem({
   label,
@@ -64,8 +65,8 @@ export default function SettingsScreen() {
 
   useEffect(() => {
     (async () => {
-      const email = await storage.getItem("userEmail");
-      if (email) setUserEmail(email);
+      const user = await getCurrentUser();
+      if (user?.email) setUserEmail(user.email);
     })();
     loadBodyProfile();
   }, []);
@@ -88,8 +89,10 @@ export default function SettingsScreen() {
     setBodyProfileSummary("Not set");
   };
 
+  // Navigation back to the Auth stack is handled by the SIGNED_OUT listener
+  // in RootNavigator.
   const handleLogout = async () => {
-    await storage.removeItem("userEmail");
+    await signOut();
   };
 
   const openModal = (config: ModalConfig) => {

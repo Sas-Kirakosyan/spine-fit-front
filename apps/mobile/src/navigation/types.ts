@@ -5,6 +5,7 @@ export type AuthStackParamList = {
   Home: undefined;
   Login: undefined;
   Register: undefined;
+  ResetPassword: undefined;
 };
 
 export type WorkoutStackParamList = {

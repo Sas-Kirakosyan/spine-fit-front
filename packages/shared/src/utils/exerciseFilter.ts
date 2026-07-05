@@ -61,7 +61,7 @@ export function filterExercisesByProfile(
 function isEquipmentAvailable(
   requiredEquipment: string,
   availableEquipment: string[],
-  workoutType?: "gym"
+  _workoutType?: "gym"
 ): boolean {
   // Bodyweight exercises are always available
   if (requiredEquipment === "bodyweight") {
