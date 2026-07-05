@@ -23,7 +23,9 @@ import { Divider } from "../components/form/Divider";
 import { AuthSwitchLink } from "../components/form/AuthSwitchLink";
 import { Logo } from "../components/common/Logo";
 import { ForgotPasswordModal } from "../components/modals/ForgotPasswordModal";
-import { signInWithEmail } from "../lib/authService";
+import { signInWithEmail, getCurrentUser } from "../lib/authService";
+import { fetchPlan, hasPlan } from "../lib/planService";
+import { hydrateQuizFromSupabase } from "../lib/quizStorage";
 import { storage } from "../storage/storageAdapter";
 
 type Nav = NativeStackNavigationProp<AuthStackParamList, "Login">;
@@ -84,6 +86,15 @@ export default function LoginScreen() {
     navigation.getParent()?.navigate("Main");
   };
 
+  const handleGoogleSuccess = async () => {
+    await fetchPlan();
+    if (!(await hasPlan())) {
+      const user = await getCurrentUser();
+      if (user) await hydrateQuizFromSupabase(user.id);
+    }
+    navigateToMain();
+  };
+
   const handleSubmit = async () => {
     if (loading) return;
     if (!validateForm()) return;
@@ -95,6 +106,16 @@ export default function LoginScreen() {
       if (!result.ok) {
         setAuthError(mapLoginError(result.error.message, t));
         return;
+      }
+
+      // Plain login always lands on the workout page. When there's no plan
+      // yet it shows its "no plan — generate" empty state; we only recover
+      // the quiz answers from Supabase first (a logout clears them locally;
+      // a brand-new device never had them) so the "Generate" button has data
+      // to work with.
+      await fetchPlan();
+      if (!(await hasPlan())) {
+        await hydrateQuizFromSupabase(result.user.id);
       }
       navigateToMain();
     } catch (err) {
@@ -161,7 +182,7 @@ export default function LoginScreen() {
                 label={t("loginPage.continueWithGoogle")}
                 intent="login"
                 onError={setAuthError}
-                onSuccess={navigateToMain}
+                onSuccess={handleGoogleSuccess}
               />
 
               <Divider />

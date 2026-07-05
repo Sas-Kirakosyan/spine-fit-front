@@ -61,6 +61,17 @@ export { getAllReplacementExercises, getSuggestedReplacementExercises } from "./
 export type { PainStatusValue } from "./utils/painStatus";
 export { getPainStatusFromQuizAnswers } from "./utils/painStatus";
 
+// Utils - planRetry
+export type { AttemptOutcome } from "./utils/planRetry";
+export {
+  RETRY_BASE_MS,
+  RETRY_MAX_MS,
+  MAX_PLAN_ATTEMPTS,
+  planRetryDelay,
+  isRetryableStatus,
+  runPlanGenerationLoop,
+} from "./utils/planRetry";
+
 // Hooks
 export { useExerciseName } from "./hooks/useExerciseName";
 export { useExerciseSearchText } from "./hooks/useExerciseSearchText";

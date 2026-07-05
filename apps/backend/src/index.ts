@@ -30,6 +30,12 @@ app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Cheap reachability probe used by the mobile app before the heavy plan
+// generation request (and handy for deployment health checks).
+app.get("/health", (_req, res) => {
+  res.json({ ok: true });
+});
+
 app.use("/api/quiz", quizRouter);
 app.use("/api/chat", chatRouter);
 

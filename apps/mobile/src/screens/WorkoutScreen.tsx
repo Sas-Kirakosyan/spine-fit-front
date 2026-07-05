@@ -22,6 +22,8 @@ import { loadPlanFromLocalStorage, savePlanToLocalStorage } from "../storage/pla
 import { usePlanStore } from "../store/planStore";
 import { useWorkoutStore } from "../store/workoutStore";
 import { storage } from "../storage/storageAdapter";
+import { navigationRef } from "../navigation/navigationRef";
+import Svg, { Path } from "react-native-svg";
 
 type Nav = NativeStackNavigationProp<WorkoutStackParamList>;
 
@@ -33,6 +35,7 @@ export default function WorkoutScreen() {
 
   const [workoutExercises, setWorkoutExercises] = useState<Exercise[]>([]);
   const [isLoadingPlan, setIsLoadingPlan] = useState(true);
+  const [hasGeneratedPlan, setHasGeneratedPlan] = useState(false);
   const [actionExercise, setActionExercise] = useState<Exercise | null>(null);
   const [replaceExercise, setReplaceExercise] = useState<Exercise | null>(null);
   const [replaceQuery, setReplaceQuery] = useState("");
@@ -47,6 +50,7 @@ export default function WorkoutScreen() {
     try {
       setIsLoadingPlan(true);
       const existingPlan = await loadPlanFromLocalStorage();
+      setHasGeneratedPlan(existingPlan !== null);
 
       if (existingPlan) {
         setPlanName(existingPlan.name || "My Workout Plan");
@@ -172,6 +176,18 @@ export default function WorkoutScreen() {
     navigation.navigate("ActiveWorkout");
   };
 
+  // No saved plan → first generation never succeeded (or was cleared). Show a
+  // dedicated "generate your plan" empty state instead of the regular list.
+  const showNoPlanState = !isLoadingPlan && !hasGeneratedPlan;
+
+  const handleGeneratePlan = () => {
+    // GeneratingPlan lives on the root stack, two navigators up — use the
+    // navigation ref instead of chaining getParent() calls.
+    if (navigationRef.isReady()) {
+      navigationRef.navigate("GeneratingPlan");
+    }
+  };
+
   const muscleCount = new Set(workoutExercises.flatMap((ex) => ex.muscle_groups)).size;
   const duration = `${Math.ceil(workoutExercises.length * 3)} min`;
 
@@ -226,6 +242,7 @@ export default function WorkoutScreen() {
         </Pressable>
 
         {/* Plan card */}
+        {!showNoPlanState && (
         <View className="mx-4 mb-4 rounded-2xl bg-[#13172A] border border-white/5 p-4">
           <Text className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-1">
             {planName}
@@ -246,6 +263,7 @@ export default function WorkoutScreen() {
             </View>
           </View>
         </View>
+        )}
 
         {/* Exercise list */}
         <View className="px-4 gap-3">
@@ -255,6 +273,43 @@ export default function WorkoutScreen() {
               <Text className="text-white/60 mt-3">
                 {t("workoutPage.messages.loading", "Loading plan...")}
               </Text>
+            </View>
+          ) : showNoPlanState ? (
+            <View className="mt-2 items-center justify-center gap-5 rounded-[14px] bg-[#1B1E2B]/80 border border-white/5 p-8">
+              <View className="h-20 w-20 items-center justify-center rounded-full bg-main/20">
+                <Svg
+                  width={40}
+                  height={40}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#e77d10"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <Path d="m6.5 6.5 11 11" />
+                  <Path d="m21 21-1-1" />
+                  <Path d="m3 3 1 1" />
+                  <Path d="m18 22 4-4" />
+                  <Path d="m2 6 4-4" />
+                  <Path d="m3 10 7-7" />
+                  <Path d="m14 21 7-7" />
+                </Svg>
+              </View>
+              <Text className="text-xl font-semibold text-white text-center">
+                {t("workoutPage.noPlan.title")}
+              </Text>
+              <Text className="max-w-[280px] text-sm text-slate-400 text-center">
+                {t("workoutPage.noPlan.subtitle")}
+              </Text>
+              <Pressable
+                onPress={handleGeneratePlan}
+                className="mt-4 rounded-xl bg-main px-6 py-3"
+              >
+                <Text className="text-white font-semibold">
+                  {t("workoutPage.noPlan.generateButton")}
+                </Text>
+              </Pressable>
             </View>
           ) : workoutExercises.length > 0 ? (
             workoutExercises.map((exercise, index) => (
@@ -289,17 +344,19 @@ export default function WorkoutScreen() {
           )}
 
           {/* Add exercise button */}
-          <Pressable
-            onPress={() => navigation.navigate("AllExercise", { returnTo: "workout" })}
-            className="flex-row items-center gap-4 rounded-2xl bg-[#1B1E2B]/90 p-3 border border-white/5"
-          >
-            <View className="h-16 w-16 items-center justify-center rounded-xl border-2 border-stone-500">
-              <PlusIcon size={28} color="#e77d10" />
-            </View>
-            <Text className="text-[#e77d10] text-lg font-semibold">
-              {t("workoutPage.buttons.addExercise", "Add Exercise")}
-            </Text>
-          </Pressable>
+          {!showNoPlanState && (
+            <Pressable
+              onPress={() => navigation.navigate("AllExercise", { returnTo: "workout" })}
+              className="flex-row items-center gap-4 rounded-2xl bg-[#1B1E2B]/90 p-3 border border-white/5"
+            >
+              <View className="h-16 w-16 items-center justify-center rounded-xl border-2 border-stone-500">
+                <PlusIcon size={28} color="#e77d10" />
+              </View>
+              <Text className="text-[#e77d10] text-lg font-semibold">
+                {t("workoutPage.buttons.addExercise", "Add Exercise")}
+              </Text>
+            </Pressable>
+          )}
         </View>
       </ScrollView>
 

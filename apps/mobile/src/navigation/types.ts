@@ -44,4 +44,5 @@ export type MainTabsParamList = {
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>;
   Main: NavigatorScreenParams<MainTabsParamList>;
+  GeneratingPlan: undefined;
 };

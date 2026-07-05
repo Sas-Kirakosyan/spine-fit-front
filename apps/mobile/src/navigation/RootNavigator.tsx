@@ -4,9 +4,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "./types";
 import { navigationRef } from "./navigationRef";
 import { supabase } from "../lib/supabase";
+import { retryPendingQuizSync } from "../lib/quizStorage";
 import { PageLoader } from "../components/common/PageLoader";
 import AuthStack from "./AuthStack";
 import MainTabs from "./MainTabs";
+import GeneratingPlanScreen from "../screens/GeneratingPlanScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -24,7 +26,12 @@ export default function RootNavigator() {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session?.user) {
+        // Upload quiz answers stashed while the email was unconfirmed.
+        retryPendingQuizSync(session.user.id).catch(() => {});
+        return;
+      }
       if (event !== "SIGNED_OUT") return;
       if (!navigationRef.isReady()) return;
       // Only kick the user out of the Main stack. A sign-out that happens
@@ -57,6 +64,11 @@ export default function RootNavigator() {
     >
       <Stack.Screen name="Auth" component={AuthStack} />
       <Stack.Screen name="Main" component={MainTabs} />
+      <Stack.Screen
+        name="GeneratingPlan"
+        component={GeneratingPlanScreen}
+        options={{ gestureEnabled: false }}
+      />
     </Stack.Navigator>
   );
 }

@@ -16,7 +16,7 @@ export default function HomeScreen() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   const handleQuizComplete = () => {
-    navigation.getParent()?.navigate("Main");
+    navigation.getParent()?.navigate("GeneratingPlan");
   };
 
   return (
