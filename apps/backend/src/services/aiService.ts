@@ -1,10 +1,15 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import {
+  APICallError,
+  JSONParseError,
+  NoObjectGeneratedError,
+  TypeValidationError,
+  generateObject,
+} from "ai";
 import type { PromptExercise } from "../utils/exerciseFilter.js";
 import type { ParsedQuizData } from "../types.js";
 import {
-  PLAN_SCHEMA,
-  geminiPlanResponseSchema,
-  type GeminiPlanResponseValidated,
+  planResponseSchema,
+  type PlanResponseValidated,
 } from "../schemas/planSchema.js";
 import {
   ACTIVE_PAIN_GOAL,
@@ -15,10 +20,23 @@ import {
 } from "../utils/promptBuilder.js";
 import { SPLIT_TARGET_MUSCLES, mapSplitType } from "../utils/splitUtils.js";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
+// Model IDs are AI Gateway identifiers ("creator/model"). First entry is the
+// primary, the rest are fallbacks tried in order. Override via PLAN_MODELS
+// (comma-separated) without touching code — handy for A/B testing.
+const DEFAULT_PLAN_MODELS = [
+  "anthropic/claude-haiku-4.5",
+  "openai/gpt-5-mini",
+];
+const PLAN_TEMPERATURE = 0.3;
 
-const PRIMARY_MODEL = "gemini-2.5-flash";
-const FALLBACK_MODEL = "gemini-3.5-flash";
+function getPlanModels(): string[] {
+  const raw = process.env.PLAN_MODELS?.trim();
+  if (!raw) return DEFAULT_PLAN_MODELS;
+  return raw
+    .split(",")
+    .map((m) => m.trim())
+    .filter(Boolean);
+}
 
 /**
  * Thrown when every model attempt fails to produce a valid plan. Carries
@@ -45,40 +63,47 @@ export class PlanGenerationError extends Error {
   }
 }
 
-/** Defensively strip a ```json … ``` markdown fence the model may wrap around its output. */
-function stripJsonFences(raw: string): string {
-  let s = raw.trim();
-  if (s.startsWith("```")) {
-    s = s
-      .replace(/^```(?:json)?\s*/i, "")
-      .replace(/\s*```$/i, "")
-      .trim();
-  }
-  return s;
-}
-
 /**
- * Parse + validate the model's text into a known-good plan shape. Throws a
- * code-prefixed Error on either failure; the per-model loop records it as the
- * attempt reason and moves on to the fallback model.
+ * Map an AI SDK error to the code-prefixed attempt-reason taxonomy. The
+ * prefix drives the retryable/terminal split in generatePlan: only attempts
+ * that are pure service outages (AI_SERVICE_ERROR) are worth retrying.
  */
-function safeParsePlan(rawText: string): GeminiPlanResponseValidated {
-  const cleaned = stripJsonFences(rawText);
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(cleaned);
-  } catch (err) {
-    throw new Error(
-      `JSON_PARSE_FAILED: ${err instanceof Error ? err.message : String(err)}`,
-    );
+function classifyAttemptError(err: unknown): string {
+  if (NoObjectGeneratedError.isInstance(err)) {
+    // The model responded but the content is unusable — always terminal.
+    const finishReason = err.finishReason;
+    if (finishReason === "content-filter") {
+      return `PROMPT_BLOCKED: ${finishReason}`;
+    }
+    if (finishReason && finishReason !== "stop") {
+      return `BAD_FINISH_REASON: ${finishReason}`;
+    }
+    if (TypeValidationError.isInstance(err.cause)) {
+      return `SCHEMA_VALIDATION_FAILED: ${err.cause.message}`;
+    }
+    if (JSONParseError.isInstance(err.cause)) {
+      return `JSON_PARSE_FAILED: ${err.cause.message}`;
+    }
+    return `JSON_PARSE_FAILED: ${err.message}`;
   }
-  const result = geminiPlanResponseSchema.safeParse(parsed);
-  if (!result.success) {
-    throw new Error(
-      `SCHEMA_VALIDATION_FAILED: ${JSON.stringify(result.error.flatten())}`,
-    );
+  if (APICallError.isInstance(err)) {
+    const tag = err.isRetryable ? "AI_SERVICE_ERROR" : "AI_CONFIG_ERROR";
+    return `${tag}: ${err.statusCode ?? "?"} ${err.message}`;
   }
-  return result.data;
+  // Gateway errors (auth, rate limit, …) are not APICallError but carry a
+  // statusCode; otherwise fall back to the permanent-pattern heuristic.
+  const status = (err as { statusCode?: unknown } | null)?.statusCode;
+  const msg = err instanceof Error ? err.message : String(err);
+  if (typeof status === "number") {
+    return status === 429 || status >= 500
+      ? `AI_SERVICE_ERROR: ${status} ${msg}`
+      : `AI_CONFIG_ERROR: ${status} ${msg}`;
+  }
+  const permanent =
+    /\b(400|401|403)\b|api[_ ]?key|permission|unauthorized|invalid argument/i.test(
+      msg,
+    );
+  return `${permanent ? "AI_CONFIG_ERROR" : "AI_SERVICE_ERROR"}: ${msg}`;
 }
 
 // Shape compatible with the frontend's GeneratedPlan type from @spinefit/shared
@@ -130,90 +155,63 @@ export async function generatePlan(
   parsedQuiz: ParsedQuizData,
   exercises: PromptExercise[],
   allExercisesRaw: Record<string, unknown>[],
+  options?: { modelOverride?: string },
 ): Promise<GeneratedPlanResult> {
   const prompt = buildUserPrompt(parsedQuiz, exercises);
+  const system = buildSystemInstruction(parsedQuiz);
 
-  const callGemini = async (modelName: string): Promise<string> => {
-    const model = genAI.getGenerativeModel({
-      model: modelName,
-      systemInstruction: buildSystemInstruction(parsedQuiz),
-      generationConfig: {
-        temperature: 0.3,
-        responseMimeType: "application/json",
-        responseSchema: PLAN_SCHEMA,
-      },
+  const callModel = async (modelId: string): Promise<PlanResponseValidated> => {
+    const result = await generateObject({
+      model: modelId, // plain "creator/model" string → routed via AI Gateway
+      system,
+      prompt,
+      temperature: PLAN_TEMPERATURE,
+      // Preserve "one round-trip per model" semantics; the SDK default of 2
+      // silent retries would blur per-model A/B timing and triple worst-case
+      // latency of the fallback loop.
+      maxRetries: 0,
+      schema: planResponseSchema,
     });
 
-    let result;
-    try {
-      result = await model.generateContent(prompt);
-    } catch (err) {
-      // The HTTP call to Gemini itself failed: overload (503), rate limit (429),
-      // 5xx, network, or timeout — the service never delivered a response.
-      // Tag it AI_SERVICE_ERROR (retryable) so the client retries a few times,
-      // EXCEPT for clearly-permanent client/config errors (bad key, malformed
-      // request), where retrying is pointless — those are AI_CONFIG_ERROR (terminal).
-      const msg = err instanceof Error ? err.message : String(err);
-      const permanent =
-        /\b(400|401|403)\b|api[_ ]?key|permission|unauthorized|invalid argument/i.test(
-          msg,
-        );
-      throw new Error(
-        `${permanent ? "AI_CONFIG_ERROR" : "AI_SERVICE_ERROR"}: ${msg}`,
-      );
-    }
-    const response = result.response;
-
-    // Validate the candidate before reading text. A blocked prompt, a missing
-    // candidate, or a non-STOP finishReason (MAX_TOKENS truncation, SAFETY,
-    // RECITATION, …) means .text() would be empty/partial/invalid — treat it as
-    // a hard failure so the loop falls through to the fallback model instead of
-    // parsing garbage. We do not salvage partial text and do not issue a repair call.
-    const blockReason = response.promptFeedback?.blockReason;
-    if (blockReason) {
-      throw new Error(`PROMPT_BLOCKED: ${blockReason}`);
-    }
-    const candidate = response.candidates?.[0];
-    if (!candidate) {
-      throw new Error("NO_CANDIDATES: model returned no candidates");
-    }
-    const finishReason = candidate.finishReason;
-    if (finishReason && finishReason !== "STOP") {
-      throw new Error(`BAD_FINISH_REASON: ${finishReason}`);
+    const usage = result.usage;
+    console.log(
+      `[AI ${modelId}] Tokens \n prompt: ${usage.inputTokens}\n reasoning: ${usage.outputTokenDetails?.reasoningTokens ?? 0}\n response: ${usage.outputTokens}\n total: ${usage.totalTokens}\n`,
+    );
+    if (result.warnings?.length) {
+      console.warn(`[AI ${modelId}] Warnings:`, JSON.stringify(result.warnings));
     }
 
-    const usage = response.usageMetadata;
-    if (usage) {
-      const thinking =
-        (usage as unknown as Record<string, unknown>).thoughtsTokenCount ?? 0;
-      console.log(
-        `[Gemini ${model.model}] Tokens \n prompt: ${usage.promptTokenCount}\n thinking: ${thinking}\n response: ${usage.candidatesTokenCount}\n total: ${usage.totalTokenCount}\n`,
-      );
-    }
-
-    return response.text();
+    return result.object; // already zod-validated against planResponseSchema
   };
 
-  // Try each model in turn; an attempt = call → finishReason check → parse →
-  // schema validate. A single catch covers BOTH network errors AND parse/
-  // validation failures, so a bad-JSON response from the primary model now
-  // falls through to the fallback (it previously crashed). At most two
-  // round-trips, no repair call. If all fail, throw a typed error → HTTP 502.
-  const models = [PRIMARY_MODEL, FALLBACK_MODEL];
+  // Try each model in turn; an attempt = call → structured-output validation
+  // (JSON parse + zod schema, handled inside generateObject). A single catch
+  // covers BOTH transport errors AND parse/validation failures, so a bad
+  // response from the primary model falls through to the fallback. When a
+  // model override is given (dev A/B testing), only that model is tried so
+  // timing/token logs stay clean. If all fail, throw a typed error.
+  const models = options?.modelOverride
+    ? [options.modelOverride]
+    : getPlanModels();
   const attempts: { model: string; reason: string }[] = [];
-  let geminiPlan: GeminiPlanResponseValidated | null = null;
-  for (const modelName of models) {
+  let aiPlan: PlanResponseValidated | null = null;
+  for (const modelId of models) {
+    const startedAt = Date.now();
     try {
-      const text = await callGemini(modelName);
-      geminiPlan = safeParsePlan(text);
+      aiPlan = await callModel(modelId);
+      console.log(
+        `[AI] model=${modelId} ok in ${((Date.now() - startedAt) / 1000).toFixed(1)}s`,
+      );
       break;
     } catch (err) {
-      const reason = err instanceof Error ? err.message : String(err);
-      attempts.push({ model: modelName, reason });
-      console.warn(`[Gemini] ⚠ Model "${modelName}" attempt failed: ${reason}`);
+      const reason = classifyAttemptError(err);
+      attempts.push({ model: modelId, reason });
+      console.warn(
+        `[AI] ⚠ Model "${modelId}" attempt failed in ${((Date.now() - startedAt) / 1000).toFixed(1)}s: ${reason}`,
+      );
     }
   }
-  if (!geminiPlan) {
+  if (!aiPlan) {
     // Retry (client-side, capped at 3 attempts) only when EVERY attempt was a
     // pure service outage. If any attempt actually returned unusable content,
     // retrying would likely keep failing the same way → terminal (drop the
@@ -227,7 +225,7 @@ export async function generatePlan(
       retryable,
     );
   }
-  console.log("geminiPlan", JSON.stringify(geminiPlan));
+  console.log("aiPlan", JSON.stringify(aiPlan));
 
   // Build a lookup map from exercise ID → full exercise object
   const exerciseMap = new Map<number, Record<string, unknown>>();
@@ -236,18 +234,18 @@ export async function generatePlan(
   }
 
   // Validate returned exercise IDs against the known exercise map
-  const allReturnedIds = geminiPlan.days.flatMap((d) =>
+  const allReturnedIds = aiPlan.days.flatMap((d) =>
     d.exercises.map((e) => e.exerciseId),
   );
   const missingIds = allReturnedIds.filter((id) => !exerciseMap.has(id));
   if (missingIds.length > 0) {
     console.warn(
-      `[Gemini] ⚠ ${missingIds.length} unknown exercise ID(s): [${missingIds.join(", ")}] — these will be dropped`,
+      `[AI] ⚠ ${missingIds.length} unknown exercise ID(s): [${missingIds.join(", ")}] — these will be dropped`,
     );
   }
 
-  // Convert Gemini days → WorkoutDay[] (with full exercise objects)
-  const workoutDays = geminiPlan.days.map((day, index) => {
+  // Convert AI days → WorkoutDay[] (with full exercise objects)
+  const workoutDays = aiPlan.days.map((day, index) => {
     const resolvedExercises = day.exercises
       .map((ge) => {
         const base = exerciseMap.get(ge.exerciseId);
@@ -283,7 +281,7 @@ export async function generatePlan(
   const emptyDays = workoutDays.filter((d) => d.exercises.length === 0);
   if (emptyDays.length > 0) {
     throw new PlanGenerationError(
-      `Days [${emptyDays.map((d) => d.dayName).join(", ")}] have 0 valid exercises (Gemini returned unknown IDs)`,
+      `Days [${emptyDays.map((d) => d.dayName).join(", ")}] have 0 valid exercises (model returned unknown IDs)`,
       [{ model: "post-validation", reason: "empty_days_after_id_resolution" }],
       false,
     );
@@ -304,7 +302,7 @@ export async function generatePlan(
   );
   if (finalSplitLabel !== recommendation.effectiveSplit) {
     console.log(
-      `[Gemini] Split honored from LLM choice: "${finalSplitLabel}" (algorithm primary was "${recommendation.effectiveSplit}", alternates: [${recommendation.alternates.join(", ")}])`,
+      `[AI] Split honored from LLM choice: "${finalSplitLabel}" (algorithm primary was "${recommendation.effectiveSplit}", alternates: [${recommendation.alternates.join(", ")}])`,
     );
   }
   const splitType = mapSplitType(finalSplitLabel);
@@ -352,9 +350,9 @@ export async function generatePlan(
 
   return {
     id: `ai-plan-${Date.now()}`,
-    name: geminiPlan.planName,
+    name: aiPlan.planName,
     splitType,
-    weeks: geminiPlan.weeks,
+    weeks: aiPlan.weeks,
     createdAt: new Date().toISOString(),
     settings: {
       goal: storedGoal,

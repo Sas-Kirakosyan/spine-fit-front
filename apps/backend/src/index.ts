@@ -7,6 +7,12 @@ import chatRouter from "./routes/chat.js";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+if (!process.env.AI_GATEWAY_API_KEY) {
+  console.warn(
+    "⚠ AI_GATEWAY_API_KEY is not set — plan generation and chat will fail. Add it to apps/backend/.env",
+  );
+}
+
 const allowedOrigins = [
   "http://localhost:3000",
   "https://spinefit.app",
