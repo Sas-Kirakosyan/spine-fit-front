@@ -15,7 +15,7 @@ router.post("/", async (req: Request, res: Response) => {
   }
 
   try {
-    const stream = await createChatStream(messages);
+    const stream = createChatStream(messages);
 
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
@@ -23,14 +23,16 @@ router.post("/", async (req: Request, res: Response) => {
     res.setHeader("X-Accel-Buffering", "no");
     res.flushHeaders();
 
+    // Client-disconnect detection: res 'close' before writableEnded means the
+    // connection died mid-stream. (req 'close' is wrong here — in modern Node
+    // it fires as soon as the request body is fully read, i.e. immediately.)
     let closed = false;
-    req.on("close", () => {
-      closed = true;
+    res.on("close", () => {
+      if (!res.writableEnded) closed = true;
     });
 
-    for await (const chunk of stream) {
+    for await (const text of stream) {
       if (closed) break;
-      const text = chunk.text();
       if (text) {
         res.write(`data: ${JSON.stringify({ text })}\n\n`);
       }

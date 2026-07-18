@@ -221,8 +221,8 @@ The following no longer exist and should not be referenced:
 
 ## Debugging Tips
 
-- Check server logs for `[Gemini ...]` token usage output after each generation (`prompt`, `thinking`, `response`, `total`).
-- If Gemini returns unknown exercise IDs, look for `⚠ N unknown exercise ID(s): [...]` in logs.
+- Check server logs for `[AI ...]` token usage output after each generation (`prompt`, `reasoning`, `response`, `total`).
+- If the model returns unknown exercise IDs, look for `⚠ N unknown exercise ID(s): [...]` in logs.
 - If a day has 0 valid exercises after ID resolution, the request throws — check `prepareExercisesForPrompt` output for the user.
-- Set `GEMINI_API_KEY` in backend `.env` — generation will silently fail without it.
+- Set `AI_GATEWAY_API_KEY` in backend `.env` — generation will silently fail without it. Override models via `PLAN_MODELS` (comma-separated AI Gateway IDs) and `CHAT_MODEL`; in dev, force a single model per request with `?model=creator/model-id`.
 - To test prompt changes locally without burning tokens, log the output of `buildSystemInstruction(parsedQuiz)` and `buildUserPrompt(parsedQuiz, exercises)` and inspect them directly.

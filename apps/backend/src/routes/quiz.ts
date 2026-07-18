@@ -2,7 +2,7 @@ import { Router } from "express";
 import type { Request, Response } from "express";
 import { createRequire } from "module";
 import { prepareExercisesForPrompt } from "../utils/exerciseFilter.js";
-import { generatePlan, PlanGenerationError } from "../services/geminiService.js";
+import { generatePlan, PlanGenerationError } from "../services/aiService.js";
 import type { ParsedQuizData } from "../types.js";
 import { quizSettingsSchema } from "../schemas/quizSettingsSchema.js";
 import { resolveEffectiveSplit } from "../utils/promptBuilder.js";
@@ -174,6 +174,15 @@ function parseQuizAnswers(data: QuizAnswers): ParsedQuizData {
   };
 }
 
+// Dev-only A/B override: ?model=creator/model-id forces a single Gateway model
+// (no fallback) so per-model timing/token logs stay clean. Disabled in prod.
+const MODEL_ID_RE = /^[\w.-]+\/[\w.:-]+$/;
+function devModelOverride(req: Request): string | undefined {
+  if (process.env.NODE_ENV === "production") return undefined;
+  const m = req.query.model;
+  return typeof m === "string" && MODEL_ID_RE.test(m) ? m : undefined;
+}
+
 const router = Router();
 
 router.post("/", async (req: Request, res: Response) => {
@@ -197,11 +206,13 @@ router.post("/", async (req: Request, res: Response) => {
     const filteredExercises = prepareExercisesForPrompt(
       allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
       parsed.painStatus,
-      { experience: parsed.experience, painTriggers: parsed.painTriggers },
+      { experience: parsed.experience, painTriggers: parsed.painTriggers, painLocation: parsed.painLocation },
     );
     console.log(`[FILTER] ${filteredExercises.length} exercises sent to AI (from ${allExercisesRaw.length} total)`);
 
-    const plan = await generatePlan(parsed, filteredExercises, allExercisesRaw);
+    const plan = await generatePlan(parsed, filteredExercises, allExercisesRaw, {
+      modelOverride: devModelOverride(req),
+    });
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
     console.log(`[AI] ✅ Done in ${elapsed}s`);
 
@@ -259,11 +270,13 @@ router.post("/regenerate", async (req: Request, res: Response) => {
     const filteredExercises = prepareExercisesForPrompt(
       allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
       parsed.painStatus,
-      { experience: parsed.experience, painTriggers: parsed.painTriggers },
+      { experience: parsed.experience, painTriggers: parsed.painTriggers, painLocation: parsed.painLocation },
     );
     console.log(`[FILTER] ${filteredExercises.length} exercises sent to AI (from ${allExercisesRaw.length} total)`);
 
-    const plan = await generatePlan(parsed, filteredExercises, allExercisesRaw);
+    const plan = await generatePlan(parsed, filteredExercises, allExercisesRaw, {
+      modelOverride: devModelOverride(req),
+    });
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
     console.log(`[AI] ✅ Done in ${elapsed}s`);
 
