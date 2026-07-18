@@ -206,7 +206,7 @@ router.post("/", async (req: Request, res: Response) => {
     const filteredExercises = prepareExercisesForPrompt(
       allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
       parsed.painStatus,
-      { experience: parsed.experience, painTriggers: parsed.painTriggers },
+      { experience: parsed.experience, painTriggers: parsed.painTriggers, painLocation: parsed.painLocation },
     );
     console.log(`[FILTER] ${filteredExercises.length} exercises sent to AI (from ${allExercisesRaw.length} total)`);
 
@@ -270,7 +270,7 @@ router.post("/regenerate", async (req: Request, res: Response) => {
     const filteredExercises = prepareExercisesForPrompt(
       allExercisesRaw as Parameters<typeof prepareExercisesForPrompt>[0],
       parsed.painStatus,
-      { experience: parsed.experience, painTriggers: parsed.painTriggers },
+      { experience: parsed.experience, painTriggers: parsed.painTriggers, painLocation: parsed.painLocation },
     );
     console.log(`[FILTER] ${filteredExercises.length} exercises sent to AI (from ${allExercisesRaw.length} total)`);
 

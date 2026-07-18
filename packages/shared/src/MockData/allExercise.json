@@ -5274,12 +5274,12 @@
   {
     "id": 128,
     "name": "Arnold Press",
-    "description": "A seated dumbbell shoulder press variation developed by Arnold Schwarzenegger. It begins with the palms facing you and rotates to a pronated position during the press, engaging all three deltoid heads through a fuller range of motion.",
+    "description": "A dumbbell shoulder press variation developed by Arnold Schwarzenegger, performed on a reclined bench. It begins with the palms facing you and rotates to a pronated position during the press, engaging all three deltoid heads through a fuller range of motion.",
     "category": "strength",
     "muscle_groups": ["front_delts", "side_delts", "rear_delts", "triceps"],
     "equipment": "dumbbells",
     "difficulty": "intermediate",
-    "instructions": "Sit on a bench with back support, holding dumbbells in front of your shoulders with palms facing your face and elbows forward. As you press upward, rotate your wrists outward so palms face forward at the top. Lower by reversing the rotation. Keep your lower back against the pad and avoid arching.",
+    "instructions": "Set the bench to a 70-degree recline (not fully upright) and sit with your back flat against the pad, holding dumbbells in front of your shoulders with palms facing your face and elbows forward. As you press upward, rotate your wrists outward so palms face forward at the top. Lower by reversing the rotation. Keep your lower back against the pad and avoid arching. A fully upright 90-degree bench allows more lumbar extension under load, so keep the recline at 70 degrees.",
     "video_url": "https://youtu.be/R-RTgOxrj88?si=80g-X8SfZ-WG6QH3",
     "is_back_friendly": true,
     "back_issue_restrictions": [
@@ -5288,7 +5288,7 @@
         "exercise_id": 128,
         "issue_type": "l5_s1",
         "restriction_level": "low",
-        "recommendation": "Seated with back support reduces lumbar load. Use a bench with full back support. Avoid arching the lower back during the press. Use moderate loads.",
+        "recommendation": "Use a 70-degree reclined bench, not a fully upright 90-degree position — the recline limits lumbar extension under load. Keep your lower back flat against the pad throughout and use moderate loads.",
         "created_at": "2026-04-12T12:00:00Z",
         "updated_at": "2026-04-12T12:00:00Z"
       },
@@ -5297,7 +5297,7 @@
         "exercise_id": 128,
         "issue_type": "sciatica",
         "restriction_level": "low",
-        "recommendation": "Seated supported position is spine-friendly. Back-supported bench preferred. Stop if any radiating symptoms occur.",
+        "recommendation": "Use a 70-degree reclined bench (not upright) for a spine-friendly position with maximal back support. Stop if any radiating symptoms occur.",
         "created_at": "2026-04-12T12:00:00Z",
         "updated_at": "2026-04-12T12:00:00Z"
       },
@@ -5306,7 +5306,7 @@
         "exercise_id": 128,
         "issue_type": "herniated_disc",
         "restriction_level": "low",
-        "recommendation": "Use a fully supported back rest. Avoid pressing to complete failure which can cause trunk compensation. Moderate loads with controlled tempo.",
+        "recommendation": "Set the bench to 70 degrees, not fully upright, for maximum back-rest support. Avoid pressing to complete failure which can cause trunk compensation. Moderate loads with controlled tempo.",
         "created_at": "2026-04-12T12:00:00Z",
         "updated_at": "2026-04-12T12:00:00Z"
       }
