@@ -1,4 +1,5 @@
 import type { AuthError, User } from "@supabase/supabase-js";
+import { Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { supabase } from "./supabase";
@@ -150,6 +151,32 @@ export type GoogleSignInResult =
   | { ok: false; reason: "alreadyRegistered" }
   | { ok: false; reason: "error"; message: string };
 
+const AUTH_CALLBACK_PATH = "auth-callback";
+
+/**
+ * On Android (notably in Expo Go) openAuthSessionAsync often resolves with
+ * `{ type: "dismiss" }` when the redirect deep link brings the app back to
+ * the foreground, while the callback URL arrives as a Linking "url" event.
+ * Subscribe before opening the browser so the caller can race both.
+ */
+function listenForAuthCallback(): {
+  promise: Promise<string>;
+  remove: () => void;
+} {
+  let remove: () => void = () => {};
+  const promise = new Promise<string>((resolve) => {
+    const sub = Linking.addEventListener("url", ({ url }) => {
+      if (url.includes(AUTH_CALLBACK_PATH)) resolve(url);
+    });
+    remove = () => sub.remove();
+  });
+  return { promise, remove };
+}
+
+function delay(ms: number): Promise<null> {
+  return new Promise((resolve) => setTimeout(() => resolve(null), ms));
+}
+
 /**
  * Native Google sign-in. Unlike the web flow (full-page redirect handled later
  * in App.tsx), the whole round-trip happens inside this call: an in-app
@@ -157,12 +184,19 @@ export type GoogleSignInResult =
  * resolved inline without localStorage markers.
  *
  * The redirect URL produced by Linking.createURL must be whitelisted in
- * Supabase Auth → URL Configuration → Redirect URLs.
+ * Supabase Auth → URL Configuration → Redirect URLs, otherwise Supabase
+ * silently falls back to the project Site URL (the web app) and the browser
+ * never returns to the app.
  */
 export async function signInWithGoogle(
   intent: OAuthIntent
 ): Promise<GoogleSignInResult> {
-  const redirectTo = Linking.createURL("auth-callback");
+  const redirectTo = Linking.createURL(AUTH_CALLBACK_PATH);
+  if (__DEV__) {
+    // Copy this exact URL into the Supabase redirect allow-list if the
+    // wildcard entries are not accepted.
+    console.log("[google-oauth] redirectTo:", redirectTo);
+  }
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -184,17 +218,53 @@ export async function signInWithGoogle(
     };
   }
 
-  const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
-  if (result.type !== "success") {
-    return { ok: false, reason: "cancelled" };
+  // Subscribe BEFORE opening the browser: on Android the "url" event can
+  // fire before openAuthSessionAsync settles.
+  const listener = listenForAuthCallback();
+  let callbackUrl: string | null = null;
+  try {
+    const result = await Promise.race([
+      WebBrowser.openAuthSessionAsync(data.url, redirectTo),
+      listener.promise.then((url) => ({ type: "success" as const, url })),
+    ]);
+    if (__DEV__) console.log("[google-oauth] browser result:", result.type);
+
+    if (result.type === "success") {
+      callbackUrl = result.url;
+    } else {
+      // "dismiss"/"cancel" may race the deep link on Android; give the
+      // Linking event a short grace period before treating it as a cancel.
+      callbackUrl = await Promise.race([listener.promise, delay(2000)]);
+    }
+  } finally {
+    listener.remove();
+    if (Platform.OS === "ios") {
+      // Close the auth sheet if the deep link won while it was still open.
+      try {
+        WebBrowser.dismissAuthSession();
+      } catch {}
+    } else {
+      // Release the Custom Tabs connection on Android.
+      await WebBrowser.coolDownAsync().catch(() => {});
+    }
   }
 
-  const callbackUrl = new URL(result.url);
-  const code = callbackUrl.searchParams.get("code");
+  if (!callbackUrl) {
+    return { ok: false, reason: "cancelled" };
+  }
+  if (__DEV__) console.log("[google-oauth] callback url:", callbackUrl);
+
+  // Linking.parse handles exp://host/--/path?query reliably, unlike WHATWG
+  // URL parsing of non-http schemes.
+  const { queryParams } = Linking.parse(callbackUrl);
+  const code = typeof queryParams?.code === "string" ? queryParams.code : null;
   if (!code) {
+    // Supabase bounces provider errors back as error/error_description params.
     const description =
-      callbackUrl.searchParams.get("error_description") ??
-      callbackUrl.searchParams.get("error");
+      (typeof queryParams?.error_description === "string" &&
+        queryParams.error_description) ||
+      (typeof queryParams?.error === "string" && queryParams.error) ||
+      null;
     return {
       ok: false,
       reason: "error",

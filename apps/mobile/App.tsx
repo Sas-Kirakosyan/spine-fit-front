@@ -14,6 +14,9 @@ import type { RootStackParamList } from "./src/navigation/types";
 // equivalent in Expo Go) from Supabase emails to the ResetPassword screen.
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.createURL("/"), "spinefit://"],
+  // The OAuth callback is consumed imperatively in signInWithGoogle; keep
+  // React Navigation from acting on it.
+  filter: (url) => !url.includes("auth-callback"),
   config: {
     screens: {
       Auth: {

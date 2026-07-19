@@ -203,7 +203,20 @@ Stores the user's onboarding quiz answers so plans can be regenerated without re
 | Body profile (height, weight) | `localStorage` (`bodyProfile`) | Gender and birth year are collected in the quiz only and not stored here |
 | Language / theme preferences | `localStorage` | Settings page only |
 | Saved custom programs | `localStorage` (`savedPrograms`) | No DB table yet |
-| Mobile app auth | Not wired | `expo-auth-session` installed but unused |
+
+---
+
+## Mobile OAuth Redirect URLs (Expo)
+
+Mobile auth lives in `apps/mobile/src/lib/authService.ts` (`signInWithGoogle`: PKCE + `WebBrowser.openAuthSessionAsync` + `exchangeCodeForSession`). The deep-link redirect must be allowed in **Auth → URL Configuration → Redirect URLs**, currently: `spinefit://auth-callback`, `spinefit://reset-password` (standalone/dev builds) and `exp://**` (Expo Go).
+
+**Critical gotcha:** Supabase auth **hard-rejects any redirect URL whose host is an IP address** (loopback excepted) *before* consulting the allow-list — see `IsRedirectURLValid` in [supabase/auth `internal/utilities/request.go`](https://github.com/supabase/auth/blob/master/internal/utilities/request.go). Expo Go's default LAN URL (`exp://192.168.x.x:8081/--/…`) can therefore **never** be allow-listed. To test OAuth in Expo Go, start Metro in tunnel mode so the redirect host is a DNS name (covered by `exp://**`):
+
+```bash
+cd apps/mobile && pnpm start -- --tunnel
+```
+
+Alternative for Android over USB: `adb reverse tcp:8081 tcp:8081` and open the project via `exp://127.0.0.1:8081` (loopback is always accepted, no allow-list entry needed).
 
 ---
 
