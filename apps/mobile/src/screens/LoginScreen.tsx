@@ -19,9 +19,8 @@ import { FormField } from "../components/form/FormField";
 import { PasswordInput } from "../components/form/PasswordInput";
 import { SubmitButton } from "../components/form/SubmitButton";
 import { GoogleSignInButton } from "../components/form/GoogleSignInButton";
-import { Divider } from "../components/form/Divider";
-import { AuthSwitchLink } from "../components/form/AuthSwitchLink";
 import { Logo } from "../components/common/Logo";
+import { CheckIcon } from "../components/icons/Icons";
 import { ForgotPasswordModal } from "../components/modals/ForgotPasswordModal";
 import { signInWithEmail, getCurrentUser } from "../lib/authService";
 import { fetchPlan, hasPlan } from "../lib/planService";
@@ -53,6 +52,7 @@ export default function LoginScreen() {
   const [authError, setAuthError] = useState("");
   const [loading, setLoading] = useState(false);
   const [forgotOpen, setForgotOpen] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   // Set by ResetPasswordScreen after a successful password update.
   useEffect(() => {
@@ -131,18 +131,18 @@ export default function LoginScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
-        <View className="px-4 pt-4">
-          <Logo size="sm" />
+        <View className="py-4 pl-1">
+          <Logo size="lg" onPress={() => navigation.navigate("Home")} />
         </View>
 
         <ScrollView
-          className="flex-1 mt-8"
+          className="flex-1"
           contentContainerStyle={{ paddingBottom: 20 }}
         >
-          <FormCard className="mt-20">
+          <FormCard>
             <FormHeader title={t("loginPage.title")} subtitle={t("loginPage.subtitle")} />
 
-            <View className="mt-8 gap-5">
+            <View className="mt-7 gap-5">
               <FormField
                 label={t("loginPage.email")}
                 value={formData.email}
@@ -161,16 +161,35 @@ export default function LoginScreen() {
               />
 
               {authError ? (
-                <Text className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600">
+                <Text
+                  accessibilityRole="alert"
+                  className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600"
+                >
                   {authError}
                 </Text>
               ) : null}
 
-              <Pressable onPress={() => setForgotOpen(true)} className="self-end">
-                <Text className="text-sm font-medium text-main">
-                  {t("loginPage.forgotPassword")}
-                </Text>
-              </Pressable>
+              <View className="flex-row items-center justify-between">
+                <Pressable
+                  onPress={() => setRememberMe((prev) => !prev)}
+                  className="flex-row items-center gap-2"
+                >
+                  <View
+                    className={`h-4 w-4 items-center justify-center rounded-sm border ${
+                      rememberMe ? "border-main bg-main" : "border-gray-400 bg-white"
+                    }`}
+                  >
+                    {rememberMe ? <CheckIcon size={12} color="white" /> : null}
+                  </View>
+                  <Text className="text-sm text-gray-900">{t("loginPage.rememberMe")}</Text>
+                </Pressable>
+
+                <Pressable onPress={() => setForgotOpen(true)}>
+                  <Text className="text-sm font-medium text-main">
+                    {t("loginPage.forgotPassword")}
+                  </Text>
+                </Pressable>
+              </View>
 
               <SubmitButton
                 text={t("loginPage.signIn")}
@@ -185,16 +204,17 @@ export default function LoginScreen() {
                 onSuccess={handleGoogleSuccess}
               />
 
-              <Divider />
+              <View className="flex-row items-center justify-center gap-1">
+                <Text className="text-sm text-gray-500">{t("loginPage.noAccount")}</Text>
+                <Pressable onPress={() => navigation.navigate("Home")}>
+                  <Text className="text-sm font-medium text-main">
+                    {t("loginPage.startProgram")}
+                  </Text>
+                </Pressable>
+              </View>
             </View>
           </FormCard>
         </ScrollView>
-
-        <AuthSwitchLink
-          question={t("loginPage.noAccount")}
-          linkText={t("registrationPage.register")}
-          onPress={() => navigation.navigate("Register")}
-        />
       </KeyboardAvoidingView>
 
       <ForgotPasswordModal

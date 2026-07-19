@@ -1,5 +1,8 @@
 import { View, Text, Pressable } from "react-native";
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
+
+const logoSource = require("../../../../../packages/shared/public/logo/logo.png");
 
 interface QuizHeaderProps {
   currentQuestionNumber: number;
@@ -17,13 +20,23 @@ export function QuizHeader({
   const { t } = useTranslation();
 
   return (
-    <View className="flex-row items-start justify-between mt-5 px-2.5">
-      <View className="flex-1 pr-3">
-        <Text className="text-white text-3xl font-semibold">
+    <View className="flex-row items-start gap-1 mt-5 px-2.5">
+      <Pressable
+        onPress={onClose}
+        accessibilityLabel={t("quiz.header.homeAriaLabel")}
+      >
+        <Image
+          source={logoSource}
+          style={{ width: 88, height: 88 }}
+          contentFit="contain"
+        />
+      </Pressable>
+      <View>
+        <Text className="text-white text-2xl font-semibold">
           {t("quiz.header.title")}
         </Text>
         {!isInfoScreen && (
-          <Text className="mt-1 text-lg text-white/80">
+          <Text className="mt-1 text-sm text-white/80">
             {t("quiz.header.questionCount", {
               current: currentQuestionNumber,
               total: totalQuestions,
@@ -31,15 +44,6 @@ export function QuizHeader({
           </Text>
         )}
       </View>
-      <Pressable
-        onPress={onClose}
-        accessibilityLabel={t("quiz.header.homeAriaLabel")}
-        className="items-center rounded-[14px] bg-white/10 px-4 py-2"
-      >
-        <Text className="text-lg font-medium text-white">
-          {t("homePage.home", { defaultValue: "Home" })}
-        </Text>
-      </Pressable>
     </View>
   );
 }

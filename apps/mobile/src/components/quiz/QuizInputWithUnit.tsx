@@ -28,7 +28,7 @@ export function QuizInputWithUnit({
         placeholder={placeholder}
         placeholderTextColor="#9ca3af"
         keyboardType={inputType === "number" ? "numeric" : "default"}
-        className="flex-1 rounded-lg border-2 border-gray-300 px-4 py-3 text-2xl text-gray-900"
+        className="flex-1 rounded-lg border-2 border-gray-300 px-4 py-3 text-lg text-gray-900"
       />
       <View className="flex-row rounded-lg border-2 border-gray-300 overflow-hidden">
         {unitOptions.map((option) => (

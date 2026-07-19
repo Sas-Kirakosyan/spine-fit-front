@@ -11,10 +11,9 @@ export function Divider({ text }: DividerProps) {
     text ?? t("common.orContinueWith", { defaultValue: "Or continue with" });
 
   return (
-    <View className="flex-row items-center gap-3 my-2">
-      <View className="flex-1 h-px bg-gray-200" />
-      <Text className="text-sm text-gray-500">{label}</Text>
-      <View className="flex-1 h-px bg-gray-200" />
+    <View className="my-2 items-center justify-center">
+      <View className="absolute left-0 right-0 h-px bg-gray-200" />
+      <Text className="bg-white px-2 text-sm text-gray-900">{label}</Text>
     </View>
   );
 }

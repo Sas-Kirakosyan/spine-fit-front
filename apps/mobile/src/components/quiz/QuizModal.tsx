@@ -26,6 +26,7 @@ import {
 } from "../form/RegistrationForm";
 import { GoogleSignInButton } from "../form/GoogleSignInButton";
 import { AuthSwitchLink } from "../form/AuthSwitchLink";
+import { WarningIcon } from "../icons/Icons";
 import { QuizHeader } from "./QuizHeader";
 import { QuizProgressBar } from "./QuizProgressBar";
 import { QuizRadioOption } from "./QuizRadioOption";
@@ -329,7 +330,6 @@ export function QuizModal({
     if (!isAnswered()) return;
     const quizData = buildQuizData();
     await storage.setJSON("quizAnswers", quizData);
-    await storage.removeItem("generatedPlan");
     setMode("registration");
   };
 
@@ -470,6 +470,7 @@ export function QuizModal({
       visible={isOpen}
       animationType="slide"
       presentationStyle="fullScreen"
+      statusBarTranslucent
       onRequestClose={handleRequestClose}
     >
       <SafeAreaView className="flex-1 py-5 bg-[#132f54]">
@@ -692,8 +693,14 @@ export function QuizModal({
                         </View>
                         {question.fieldName === "painLocation" &&
                           selectedCheckboxes.includes(3) && (
-                            <View className="mt-3 rounded-md border-l-4 border-red-500 bg-red-50 px-3 py-2">
-                              <Text className="text-sm text-red-900">
+                            <View
+                              accessibilityRole="alert"
+                              className="mt-3 flex-row items-start gap-2 rounded-md border-l-4 border-red-500 bg-red-50 px-3 py-2"
+                            >
+                              <View className="mt-0.5">
+                                <WarningIcon size={16} color="#7f1d1d" />
+                              </View>
+                              <Text className="flex-1 text-sm text-red-900">
                                 {t(
                                   `quiz.questions.${question.id}.calfFootWarning`,
                                   {

@@ -14,17 +14,18 @@ export function AuthSwitchLink({
   onPress,
   variant = "onDark",
 }: AuthSwitchLinkProps) {
+  const isOnLight = variant === "onLight";
   return (
-    <View className="flex-row mb-4 items-center justify-center gap-1 py-4">
-      <Text
-        className={`text-md ${
-          variant === "onLight" ? "text-gray-500" : "text-white/70"
-        }`}
-      >
+    <View className="mt-6 mb-4 flex-row items-center justify-center gap-1">
+      <Text className={`text-sm ${isOnLight ? "text-gray-600" : "text-white"}`}>
         {question}
       </Text>
       <Pressable onPress={onPress}>
-        <Text className="text-sm font-medium text-main">{linkText}</Text>
+        <Text
+          className={`text-sm font-medium ${isOnLight ? "text-main" : "text-white"}`}
+        >
+          {linkText}
+        </Text>
       </Pressable>
     </View>
   );

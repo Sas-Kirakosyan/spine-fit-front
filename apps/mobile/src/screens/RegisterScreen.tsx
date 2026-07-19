@@ -36,11 +36,11 @@ export default function RegisterScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
-        <View className="px-4 pt-4">
-          <Logo size="sm" />
+        <View className="py-4 pl-1">
+          <Logo size="lg" onPress={() => navigation.navigate("Home")} />
         </View>
 
-        <ScrollView className="flex-1 mt-6" contentContainerStyle={{ paddingBottom: 20 }}>
+        <ScrollView className="flex-1 mt-8" contentContainerStyle={{ paddingBottom: 20 }}>
           <FormCard>
             <FormHeader title={t("registrationPage.title")} subtitle={t("registrationPage.subtitle")} />
 
@@ -51,7 +51,10 @@ export default function RegisterScreen() {
 
             <View className="mt-5 gap-3">
               {oauthError ? (
-                <Text className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600">
+                <Text
+                  accessibilityRole="alert"
+                  className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600"
+                >
                   {oauthError}
                 </Text>
               ) : null}

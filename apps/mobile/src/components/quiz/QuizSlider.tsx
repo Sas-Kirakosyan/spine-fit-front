@@ -61,7 +61,7 @@ export function QuizSlider({ value, min, max, onChange }: QuizSliderProps) {
       {/* Header row */}
       <View className="flex-row justify-between items-center">
         <Text className="text-lg text-gray-500">{t("quiz.slider.noPain")}</Text>
-        <Text className="text-4xl font-bold" style={{ color: currentColor }}>
+        <Text className="text-3xl font-bold" style={{ color: currentColor }}>
           {value || min}
         </Text>
         <Text className="text-lg text-gray-500">{t("quiz.slider.worstPain")}</Text>

@@ -16,6 +16,7 @@ export function QuizRadioOption({ option, index, isSelected, onSelect }: QuizRad
       className={`w-full rounded-lg border-2 p-4 ${
         isSelected ? "border-main bg-main/10" : "border-gray-200"
       }`}
+      style={{ minHeight: 56 }}
     >
       <View className="flex-row items-center">
         <View

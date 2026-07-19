@@ -7,7 +7,6 @@ import { FormField } from "@/components/Form/FormField/FormField";
 import { PasswordInput } from "@/components/Form/PasswordInput/PasswordInput";
 import { SubmitButton } from "@/components/Form/SubmitButton/SubmitButton";
 import { GoogleSignInButton } from "@/components/Form/GoogleSignInButton/GoogleSignInButton";
-import { Divider } from "@/components/Form/Divider/Divider";
 import { ForgotPasswordModal } from "@/components/Form/ForgotPasswordModal/ForgotPasswordModal";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
 import {
@@ -139,7 +138,7 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
     <PageContainer widthMode="phone" contentClassName="justify-between">
       <PageHeader onNavigateToHome={onNavigateToHome} />
 
-      <div className="mt-10 flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto">
         <FormCard>
           <FormHeader title={t("loginPage.title")} subtitle={t("loginPage.subtitle")} />
 
@@ -201,8 +200,6 @@ function Login({ onNavigateToHome, onNavigateToWorkout }: LoginProps) {
               onError={setAuthError}
               intent="login"
             />
-
-            <Divider text={t("common.orContinueWith")} />
 
             {onNavigateToHome && (
               <p className="text-center text-sm text-gray-500">

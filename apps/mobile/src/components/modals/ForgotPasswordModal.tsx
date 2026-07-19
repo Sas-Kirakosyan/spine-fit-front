@@ -90,10 +90,11 @@ export function ForgotPasswordModal({
     <Modal
       visible={open}
       transparent
+      statusBarTranslucent
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View className="flex-1 items-center justify-center bg-black/50 px-6">
+      <View className="flex-1 items-center justify-center bg-black/60 px-6">
         <View className="w-full rounded-2xl bg-white p-5">
           <Pressable
             onPress={onClose}

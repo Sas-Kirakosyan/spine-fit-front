@@ -56,6 +56,7 @@ export function QuizYearSelect({
       <Modal
         visible={open}
         transparent
+        statusBarTranslucent
         animationType="fade"
         onRequestClose={() => setOpen(false)}
       >

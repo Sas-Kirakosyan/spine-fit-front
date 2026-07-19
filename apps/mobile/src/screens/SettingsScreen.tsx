@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import i18n from "i18next";
 import { ChevronLeftIcon, ChevronRightIcon } from "../components/icons/Icons";
 import { storage } from "../storage/storageAdapter";
+import { LANGUAGE_STORAGE_KEY } from "../i18n/config";
 import { getCurrentUser, signOut } from "../lib/authService";
 
 function SettingsItem({
@@ -115,7 +116,9 @@ export default function SettingsScreen() {
       selectedValue: language,
       onSelect: (value) => {
         setLanguage(value);
-        i18n.changeLanguage(value === "Russian" ? "ru" : "en");
+        const code = value === "Russian" ? "ru" : "en";
+        i18n.changeLanguage(code);
+        storage.setItem(LANGUAGE_STORAGE_KEY, code);
       },
     });
   };
