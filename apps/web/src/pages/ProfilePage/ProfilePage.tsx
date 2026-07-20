@@ -18,6 +18,8 @@ import {
 import {
   runPlanGenerationLoop,
   isRetryableStatus,
+  describeError,
+  describeHttpError,
   type AttemptOutcome,
 } from "@/lib/planRetry.ts";
 import type { GeneratedPlan } from "@spinefit/shared";
@@ -350,6 +352,10 @@ function ProfilePage({
     setIsRegenerating(true);
     setApiPhase("pending");
 
+    // Reason for the most recent failed attempt, surfaced in the toast if the
+    // loop ultimately gives up.
+    let lastError: string | undefined;
+
     const attempt = async (): Promise<AttemptOutcome> => {
       try {
         const settings = getPlanSettings();
@@ -362,7 +368,8 @@ function ProfilePage({
           }
         );
         if (!response.ok) {
-          console.error("Regenerate plan API error:", response.status);
+          lastError = await describeHttpError(response);
+          console.error("Regenerate plan API error:", lastError);
           // 503 (AI overloaded) → retry (capped by the loop); 502/other → terminal.
           return isRetryableStatus(response.status) ? "retry" : "giveUp";
         }
@@ -371,14 +378,18 @@ function ProfilePage({
           plan: GeneratedPlan;
         };
         if (!result.success || !result.plan) {
+          lastError = "Backend returned success=false or an empty plan";
+          console.error("Regenerate returned invalid result:", result);
           return "giveUp";
         }
         if (!mountedRef.current) return "retry";
         savePlanAndSettings(result.plan);
         setApiPhase("success");
         return "success";
-      } catch {
+      } catch (error) {
         // Network error / backend unreachable → transient, retry (capped by the loop).
+        lastError = describeError(error);
+        console.error("Failed to regenerate plan:", error);
         return "retry";
       }
     };
@@ -390,7 +401,7 @@ function ProfilePage({
         // Existing plan is untouched (saved only in the success branch above).
         // Hand off to the parent: toast + navigate to workout.
         setIsRegenerating(false);
-        onRegenerateFailed?.();
+        onRegenerateFailed?.(lastError);
       },
     });
   };

@@ -4,6 +4,7 @@ export interface HomePageProps {
   onNavigateToLogin: () => void;
   onNavigateToWorkout: () => void;
   onNavigateToGeneratingPlan: () => void;
+  onSyncError?: (message: string) => void;
 }
 
 export interface ProgressPageProps {
@@ -31,8 +32,8 @@ export interface HistoryPageProps {
 export interface MyPlanPageProps {
   onNavigateBack: () => void;
   onNavigateToProfile?: () => void;
-  /** Regeneration failed: surface a toast and leave the existing plan untouched. */
-  onRegenerateFailed?: () => void;
+  /** Regeneration failed: surface a toast and leave the existing plan untouched. `detail` carries the real error (HTTP status / body / network message) for on-device diagnosis. */
+  onRegenerateFailed?: (detail?: string) => void;
 }
 
 export interface AvailableEquipmentPageProps {
@@ -55,8 +56,8 @@ export interface IProfilePageProps {
     onNavigateToProfile: () => void;
     onNavigateToAI: () => void;
     onNavigateToSettings: () => void;
-    /** Regeneration failed: surface a toast and leave the existing plan untouched. */
-    onRegenerateFailed?: () => void;
+    /** Regeneration failed: surface a toast and leave the existing plan untouched. `detail` carries the real error (HTTP status / body / network message) for on-device diagnosis. */
+    onRegenerateFailed?: (detail?: string) => void;
     activePage: "workout" | "progress" | "history" | "profile" | "ai";
 }
 

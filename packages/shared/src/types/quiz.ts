@@ -38,6 +38,7 @@ export interface QuizModalProps {
   onClose: () => void;
   onQuizComplete?: () => void;
   onNavigateToLogin?: () => void;
+  onSyncError?: (message: string) => void;
 }
 
 export interface QuizAnswers {

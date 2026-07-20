@@ -8,13 +8,15 @@ import {
 import {
   runPlanGenerationLoop,
   isRetryableStatus,
+  describeError,
+  describeHttpError,
   type AttemptOutcome,
 } from "@/lib/planRetry";
 import type { GeneratedPlan } from "@spinefit/shared";
 
 interface UseMyPlanPageOptions {
   onNavigateBack: () => void;
-  onRegenerateFailed?: () => void;
+  onRegenerateFailed?: (detail?: string) => void;
 }
 
 export function useMyPlanPage({
@@ -96,6 +98,10 @@ export function useMyPlanPage({
     setRegenerateApiPhase("pending");
     pendingPlanRef.current = null;
 
+    // Reason for the most recent failed attempt, surfaced in the toast if the
+    // loop ultimately gives up.
+    let lastError: string | undefined;
+
     const attempt = async (): Promise<AttemptOutcome> => {
       try {
         const response = await fetch(
@@ -107,7 +113,8 @@ export function useMyPlanPage({
           },
         );
         if (!response.ok) {
-          console.error("Regenerate plan API error:", response.status);
+          lastError = await describeHttpError(response);
+          console.error("Regenerate plan API error:", lastError);
           // 503 (AI overloaded) → retry (capped by the loop); 502/other → terminal.
           return isRetryableStatus(response.status) ? "retry" : "giveUp";
         }
@@ -116,6 +123,7 @@ export function useMyPlanPage({
           plan: GeneratedPlan;
         };
         if (!result.success || !result.plan) {
+          lastError = "Backend returned success=false or an empty plan";
           console.error("Regenerate returned invalid result:", result);
           return "giveUp";
         }
@@ -127,6 +135,7 @@ export function useMyPlanPage({
         return "success";
       } catch (error) {
         // Network error / backend unreachable → transient, retry (capped by the loop).
+        lastError = describeError(error);
         console.error("Failed to regenerate plan:", error);
         return "retry";
       }
@@ -142,7 +151,7 @@ export function useMyPlanPage({
         setIsRegenerating(false);
         setRegenerateApiPhase("pending");
         setIsRegenerateModalOpen(false);
-        onRegenerateFailed?.();
+        onRegenerateFailed?.(lastError);
       },
     });
   };

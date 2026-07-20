@@ -28,6 +28,33 @@ export function isRetryableStatus(status: number): boolean {
   return status === 503;
 }
 
+// TODO(2026-07-20, temporary diagnostics): `describeError` / `describeHttpError`
+// exist to surface raw plan-generation failures in the UI toast while we chase
+// an iOS-only regeneration bug. They leak backend error bodies to end users, so
+// remove them — and the `detail` plumbing through onRegenerateFailed /
+// onPlanGenerationFailed / onSyncError — once that bug is understood, or gate
+// them behind a debug flag if they earn their keep. Revisit by ~2026-09.
+
+/** Message from a thrown value (fetch rejection, JSON parse error, …). */
+export function describeError(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
+/**
+ * Compact description of a failed response — status plus a body snippet — so a
+ * failure can be diagnosed from the on-screen toast alone, without a devtools
+ * console (the usual case on iOS). Truncated to keep the toast readable.
+ */
+export async function describeHttpError(response: Response): Promise<string> {
+  let body = "";
+  try {
+    body = (await response.text()).slice(0, 200);
+  } catch {
+    // Body unreadable/already consumed — the status alone still identifies it.
+  }
+  return body ? `HTTP ${response.status}: ${body}` : `HTTP ${response.status}`;
+}
+
 /**
  * Drive an attempt callback until it succeeds or gives up, backing off between
  * retries. `attempt` owns its own side effects (fetch, save, set loader phase)

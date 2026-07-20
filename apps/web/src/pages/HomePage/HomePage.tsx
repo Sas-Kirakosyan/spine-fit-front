@@ -16,6 +16,7 @@ interface HomePageExtraProps {
 function HomePage({
   onNavigateToLogin,
   onNavigateToGeneratingPlan,
+  onSyncError,
   autoOpenQuiz,
   oauthError,
 }: HomePageProps & HomePageExtraProps) {
@@ -105,6 +106,7 @@ function HomePage({
         onClose={handleCloseQuiz}
         onQuizComplete={onNavigateToGeneratingPlan}
         onNavigateToLogin={onNavigateToLogin}
+        onSyncError={onSyncError}
       />
     </>
   );

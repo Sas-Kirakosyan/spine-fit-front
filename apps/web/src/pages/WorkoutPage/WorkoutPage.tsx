@@ -30,6 +30,8 @@ import {
 import {
   runPlanGenerationLoop,
   isRetryableStatus,
+  describeError,
+  describeHttpError,
   type AttemptOutcome,
 } from "@/lib/planRetry";
 import type { GeneratedPlan, SwapDurationOption } from "@spinefit/shared";
@@ -192,17 +194,23 @@ function WorkoutPage({
     const quizDataString = localStorage.getItem("quizAnswers");
     if (!quizDataString) {
       setIsRegenerating(false);
-      onPlanGenerationFailed?.();
+      onPlanGenerationFailed?.("No saved quiz answers in localStorage");
       return;
     }
     let quizData: unknown;
     try {
       quizData = JSON.parse(quizDataString);
-    } catch {
+    } catch (error) {
       setIsRegenerating(false);
-      onPlanGenerationFailed?.();
+      onPlanGenerationFailed?.(
+        `Saved quiz answers are not valid JSON: ${describeError(error)}`
+      );
       return;
     }
+
+    // Reason for the most recent failed attempt, surfaced in the toast if the
+    // loop ultimately gives up.
+    let lastError: string | undefined;
 
     const attempt = async (): Promise<AttemptOutcome> => {
       try {
@@ -215,7 +223,8 @@ function WorkoutPage({
           }
         );
         if (!response.ok) {
-          console.error("Regenerate plan API error:", response.status);
+          lastError = await describeHttpError(response);
+          console.error("Regenerate plan API error:", lastError);
           // 503 (AI overloaded) → retry (capped by the loop); 502/other → terminal.
           return isRetryableStatus(response.status) ? "retry" : "giveUp";
         }
@@ -224,6 +233,7 @@ function WorkoutPage({
           plan: GeneratedPlan;
         };
         if (!result.success || !result.plan) {
+          lastError = "Backend returned success=false or an empty plan";
           console.error("Regenerate plan returned invalid result:", result);
           return "giveUp";
         }
@@ -235,6 +245,7 @@ function WorkoutPage({
         return "success";
       } catch (err) {
         // Network error / backend unreachable → transient, retry (capped by the loop).
+        lastError = describeError(err);
         console.error("Failed to regenerate plan:", err);
         return "retry";
       }
@@ -245,7 +256,7 @@ function WorkoutPage({
       isMounted: () => mountedRef.current,
       onGiveUp: () => {
         setIsRegenerating(false);
-        onPlanGenerationFailed?.();
+        onPlanGenerationFailed?.(lastError);
       },
     });
   };

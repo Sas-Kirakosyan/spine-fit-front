@@ -31,6 +31,7 @@ export function QuizModal({
   onClose,
   onQuizComplete,
   onNavigateToLogin,
+  onSyncError,
 }: QuizModalProps) {
   const { t } = useTranslation();
   const [workoutType] = useState<"home" | "gym">("gym");
@@ -85,7 +86,14 @@ export function QuizModal({
     (after?: () => void) => {
       const n = pushedCountRef.current;
       pushedCountRef.current = 0;
+      let finalized = false;
+      let safetyTimeoutId: ReturnType<typeof setTimeout> | null = null;
       const finalize = () => {
+        if (finalized) return;
+        finalized = true;
+        if (safetyTimeoutId !== null) window.clearTimeout(safetyTimeoutId);
+        closingRef.current = false;
+        finishCloseRef.current = null;
         onClose();
         after?.();
       };
@@ -96,6 +104,13 @@ export function QuizModal({
       closingRef.current = true;
       finishCloseRef.current = finalize;
       window.history.go(-n);
+      // Safety net: some WebKit contexts (notably iOS standalone/home-screen
+      // PWAs) can fail to fire `popstate` for a multi-step history.go(-n)
+      // jump, which would otherwise strand the user on this screen forever —
+      // e.g. registration succeeds under the hood but the app never advances
+      // to the generating-plan screen. Force the same finalize path if
+      // popstate hasn't landed shortly after.
+      safetyTimeoutId = window.setTimeout(finalize, 700);
     },
     [onClose]
   );
@@ -416,6 +431,7 @@ export function QuizModal({
     const stored = localStorage.getItem("quizAnswers");
     if (!stored) {
       console.error("Quiz data missing after registration");
+      onSyncError?.("Quiz data missing after registration");
       closeWithHistoryCleanup();
       return;
     }
@@ -436,13 +452,21 @@ export function QuizModal({
       try {
         await saveQuizToSupabase(info.userId, quizData);
       } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
         console.error("Failed to persist quiz to Supabase:", err);
+        onSyncError?.(`Quiz sync failed: ${message}`);
       }
     }
 
-    closeWithHistoryCleanup(() => {
-      if (onQuizComplete) onQuizComplete();
-    });
+    try {
+      closeWithHistoryCleanup(() => {
+        if (onQuizComplete) onQuizComplete();
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error("Failed to navigate after registration:", err);
+      onSyncError?.(`Navigation after registration failed: ${message}`);
+    }
   };
 
   useEffect(() => {

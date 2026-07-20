@@ -923,8 +923,13 @@ function App() {
   // Regenerate failed (from My Plan or Profile): the existing plan is left
   // untouched (both paths save only on success), so just explain why and drop
   // the user back on the workout page with their current plan intact.
-  const handleRegenerateFailed = () => {
-    showToast(t("toasts.regenerateFailed"), "error");
+  // `detail` is the raw failure (HTTP status/body, network message). Appended
+  // verbatim so a failure can be diagnosed on-device, where there is no console.
+  // TODO(2026-07-20, temporary diagnostics): drop the `detail` suffix once the
+  // iOS regeneration bug is understood — see planRetry.ts. Revisit by ~2026-09.
+  const handleRegenerateFailed = (detail?: string) => {
+    const base = t("toasts.regenerateFailed");
+    showToast(detail ? `${base} — ${detail}` : base, "error");
     navigateToWorkout();
   };
   const navigateToProgress = () => navigateToPage("progress");
@@ -1190,6 +1195,10 @@ function App() {
             onNavigateToLogin={navigateToLogin}
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToGeneratingPlan={navigateToGeneratingPlan}
+            // TODO(2026-07-20, temporary diagnostics): raw quiz-sync errors are
+            // shown to the user only to debug the iOS registration flow — remove
+            // this prop once resolved. See planRetry.ts.
+            onSyncError={(message: string) => showToast(message, "error")}
             autoOpenQuiz={autoOpenQuiz}
             oauthError={oauthError}
           />
@@ -1245,9 +1254,12 @@ function App() {
               setWorkoutExercises((prev) => prev.filter((ex) => ex.id !== id))
             }
             completedWorkoutIds={completedWorkoutIds}
-            onPlanGenerationFailed={() =>
-              showToast(t("toasts.planGenerationFailed"), "error")
-            }
+            // TODO(2026-07-20, temporary diagnostics): drop the `detail` suffix
+            // once the iOS regeneration bug is understood — see planRetry.ts.
+            onPlanGenerationFailed={(detail?: string) => {
+              const base = t("toasts.planGenerationFailed");
+              showToast(detail ? `${base} — ${detail}` : base, "error");
+            }}
           />
         );
       case "progress":
@@ -1440,6 +1452,7 @@ function App() {
             onNavigateToLogin={navigateToLogin}
             onNavigateToWorkout={navigateToWorkout}
             onNavigateToGeneratingPlan={() => {}}
+            onSyncError={(message: string) => showToast(message, "error")}
           />
         );
     }

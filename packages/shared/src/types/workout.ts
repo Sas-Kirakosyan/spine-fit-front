@@ -76,8 +76,8 @@ export interface WorkoutPageProps {
   isCustomWorkout?: boolean;
   onRemoveExercise?: (exerciseId: number) => void;
   completedWorkoutIds?: Set<string>;
-  /** Called when an in-page plan (re)generation attempt fails, so the parent can surface a toast. */
-  onPlanGenerationFailed?: () => void;
+  /** Called when an in-page plan (re)generation attempt fails, so the parent can surface a toast. `detail` carries the real error (HTTP status / body / network message) for on-device diagnosis. */
+  onPlanGenerationFailed?: (detail?: string) => void;
 }
 
 export interface SavedWorkout {
