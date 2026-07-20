@@ -34,7 +34,7 @@ export function PageContainer({
   const widthClass = widthClasses[widthMode];
 
   const card = (
-    <div className={`relative w-full ${widthClass} min-h-screen`}>
+    <div className={`relative w-full ${widthClass} min-h-dvh`}>
       <div
         className={`absolute inset-0 ${
           hasBackgroundImage
@@ -47,7 +47,7 @@ export function PageContainer({
         <div className={`absolute inset-0 ${overlayClassName}`} />
       )}
       <div
-        className={`relative z-10 flex flex-col min-h-screen ${minHeightClassName} overflow-y-auto`}
+        className={`relative z-10 flex flex-col min-h-dvh ${minHeightClassName} overflow-y-auto`}
       >
         <div className={`relative flex flex-col flex-1 ${contentClassName}`}>
           {children}
@@ -67,7 +67,7 @@ export function PageContainer({
 
   return (
     <div
-      className={`${outerBgClass} flex items-center justify-center min-h-screen`}
+      className={`${outerBgClass} flex items-center justify-center min-h-dvh`}
     >
       {card}
     </div>
